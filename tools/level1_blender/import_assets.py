@@ -3,14 +3,14 @@
 python tools/level1_blender/import_assets.py                   # writes reviewable install.luau only
 python tools/level1_blender/import_assets.py --upload --studio-id <exact id>
 python tools/level1_blender/import_assets.py --install --studio-id <exact id>
-Texture upload results belong in assets/level1/blender/textures/roblox-assets.json,
+Texture upload results belong in assets/level1/blender-v2/textures/roblox-assets.json,
 as {"carpet_albedo.png":"rbxassetid://123",...}. No existing kit is overwritten.
 """
 from pathlib import Path
 import argparse, hashlib, json, sys
 
 ROOT = Path(__file__).resolve().parents[2]
-ASSETS = ROOT / "assets/level1/blender"
+ASSETS = ROOT / "assets/level1/blender-v2"
 EXPORT = ASSETS / "export"
 RESULTS = EXPORT / "roblox-assets.json"
 PLACE = 131311258779917
@@ -130,7 +130,8 @@ return "Level 1 Blender kit installed: " .. #components:GetChildren() .. " compo
 '''
 
 
-def write_installer(data, kit_name="Level1BlenderKit"):
+def write_installer(data, kit_name="Level1BlenderKitV2"):
+    assert kit_name == "Level1BlenderKitV2", "Legacy Level1BlenderKit target retired"
     text = json.dumps(data, separators=(",", ":"))
     assert "]========]" not in text
     code = INSTALL.replace("__PAYLOAD__", text).replace("Level1BlenderKit", kit_name)
@@ -186,11 +187,11 @@ def main():
     p.add_argument("--install", action="store_true")
     p.add_argument("--studio-id")
     p.add_argument("--assets", type=Path, default=ASSETS)
-    p.add_argument("--kit-name", default="Level1BlenderKit")
+    p.add_argument("--kit-name", default="Level1BlenderKitV2", choices=("Level1BlenderKitV2",))
     args = p.parse_args()
     ASSETS = args.assets.resolve()
     assert ASSETS.is_relative_to(ROOT / "assets/level1"), "Only Level 1 asset directories are supported"
-    assert args.kit_name in ("Level1BlenderKit", "Level1BlenderKitV2"), "Explicit Level 1 kit name required"
+    assert not ASSETS.is_relative_to(ROOT / "assets/level1/blender"), "Legacy Level1BlenderKit asset workflow retired"
     EXPORT = ASSETS / "export"
     RESULTS = EXPORT / "roblox-assets.json"
     data, records = payload()

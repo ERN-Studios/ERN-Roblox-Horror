@@ -1,0 +1,373 @@
+--- a/tools/level1_blender/build.py
++++ b/tools/level1_blender/build.py
+@@ -1,7 +1,6 @@
+-"""Build the ImageGen-directed Level 1 kit in an independent headless Blender.
+-
+-D:/Blender/blender.exe -b --factory-startup --python-exit-code 1 -P tools/level1_blender/build.py
+-Only this new kit is written. The open Blender session and Studio are untouched.
++"""Shared Level 1 Blender helpers for V2 and elevator authoring.
++
++The standalone legacy Level1BlenderKit build workflow is retired.
+ """
+ from pathlib import Path
+ import base64, hashlib, json, math, sys
+@@ -530,45 +529,5 @@
+     bpy.ops.render.render(write_still=True, scene=overview.name)
+ 
+ 
+-def main():
+-    OUT.mkdir(parents=True, exist_ok=True)
+-    # This is the throwaway factory-startup process, not the open authoring session.
+-    for ob in list(bpy.data.objects):
+-        bpy.data.objects.remove(ob, do_unlink=True)
+-    build_components()
+-    scene = bpy.context.scene
+-    catalogue = collection("L1 Room Catalogue", scene.collection)
+-    build_rooms(catalogue)
+-    library = collection("L1 Prop Library", scene.collection)
+-    for i, name in enumerate(COMPONENTS):
+-        ob = bpy.data.objects.new(name, COMPONENTS[name]["mesh"])
+-        library.objects.link(ob)
+-        ob.location = ((i % 7) * 10 * S, -220 * S - (i // 7) * 12 * S, 0)
+-        ob["l1_component"] = name
+-    scene.unit_settings.system, scene.unit_settings.scale_length = "METRIC", 1
+-    scene["L1Reference"] = "concepts/room-direction.png"
+-    scene["L1GridContract"] = "Cell24 WallHeight14 FullWallThickness2 OpenMask N+Z1 E+X2 S-Z4 W-X8"
+-    export_chunks()
+-    blend = OUT / "Level1_ModularKit.blend"
+-    # Zero save versions: the owner explicitly declined backup files.
+-    bpy.context.preferences.filepaths.save_version = 0
+-    bpy.ops.wm.save_as_mainfile(filepath=str(blend))
+-    bpy.context.view_layer.update()
+-    # Export each shared component once; .blend collections + manifest preserve room assembly.
+-    # Blender 5.2's FBX exporter warns on linked duplicate material slots despite a valid reimport.
+-    bpy.ops.object.select_all(action="DESELECT")
+-    for ob in library.objects:
+-        ob.select_set(True)
+-    bpy.ops.export_scene.fbx(filepath=str(OUT / "Level1_ModularKit.fbx"), use_selection=True,
+-                             object_types={"MESH"}, apply_unit_scale=True, axis_forward="-Z", axis_up="Y",
+-                             bake_anim=False, path_mode="RELATIVE", mesh_smooth_type="FACE", use_mesh_modifiers=False)
+-    render_previews()
+-    # Save the two review scenes with the native project, without changing its active catalogue scene.
+-    bpy.ops.wm.save_as_mainfile(filepath=str(blend))
+-    files = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (blend, OUT / "Level1_ModularKit.fbx")}
+-    (OUT / "native-files.json").write_text(json.dumps(files, indent=2), encoding="utf-8")
+-    print("L1_DONE=" + json.dumps(files), flush=True)
+-
+-
+ if __name__ == "__main__":
+-    main()
++    raise SystemExit("Legacy Level1BlenderKit build retired; use build_v2.py or elevator_inset.py")
+--- a/tools/level1_blender/import_assets.py
++++ b/tools/level1_blender/import_assets.py
+@@ -3,14 +3,14 @@
+ python tools/level1_blender/import_assets.py                   # writes reviewable install.luau only
+ python tools/level1_blender/import_assets.py --upload --studio-id <exact id>
+ python tools/level1_blender/import_assets.py --install --studio-id <exact id>
+-Texture upload results belong in assets/level1/blender/textures/roblox-assets.json,
++Texture upload results belong in assets/level1/blender-v2/textures/roblox-assets.json,
+ as {"carpet_albedo.png":"rbxassetid://123",...}. No existing kit is overwritten.
+ """
+ from pathlib import Path
+ import argparse, hashlib, json, sys
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-ASSETS = ROOT / "assets/level1/blender"
++ASSETS = ROOT / "assets/level1/blender-v2"
+ EXPORT = ASSETS / "export"
+ RESULTS = EXPORT / "roblox-assets.json"
+ PLACE = 131311258779917
+@@ -130,7 +130,8 @@
+ '''
+ 
+ 
+-def write_installer(data, kit_name="Level1BlenderKit"):
++def write_installer(data, kit_name="Level1BlenderKitV2"):
++    assert kit_name == "Level1BlenderKitV2", "Legacy Level1BlenderKit target retired"
+     text = json.dumps(data, separators=(",", ":"))
+     assert "]========]" not in text
+     code = INSTALL.replace("__PAYLOAD__", text).replace("Level1BlenderKit", kit_name)
+@@ -186,11 +187,11 @@
+     p.add_argument("--install", action="store_true")
+     p.add_argument("--studio-id")
+     p.add_argument("--assets", type=Path, default=ASSETS)
+-    p.add_argument("--kit-name", default="Level1BlenderKit")
++    p.add_argument("--kit-name", default="Level1BlenderKitV2", choices=("Level1BlenderKitV2",))
+     args = p.parse_args()
+     ASSETS = args.assets.resolve()
+     assert ASSETS.is_relative_to(ROOT / "assets/level1"), "Only Level 1 asset directories are supported"
+-    assert args.kit_name in ("Level1BlenderKit", "Level1BlenderKitV2"), "Explicit Level 1 kit name required"
++    assert not ASSETS.is_relative_to(ROOT / "assets/level1/blender"), "Legacy Level1BlenderKit asset workflow retired"
+     EXPORT = ASSETS / "export"
+     RESULTS = EXPORT / "roblox-assets.json"
+     data, records = payload()
+--- a/tools/level1_blender/check_assets.py
++++ b/tools/level1_blender/check_assets.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ import argparse, base64, hashlib, json, math, struct
+ 
+-ROOT = Path(__file__).resolve().parents[2] / "assets/level1/blender"
++ROOT = Path(__file__).resolve().parents[2] / "assets/level1/blender-v2"
+ 
+ 
+ def main():
+@@ -10,6 +10,7 @@
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument("--assets", type=Path, default=ROOT)
+     ROOT = parser.parse_args().assets.resolve()
++    assert not ROOT.is_relative_to(Path(__file__).resolve().parents[2] / "assets/level1/blender"), "Legacy Level1BlenderKit QA retired"
+     d = json.loads((ROOT / "export/manifest.json").read_text())
+     assert (d["cellSize"], d["wallHeight"], d["wallThickness"], d["floorTop"]) == (24, 14, 2, 0)
+     assert len(d["chunks"]) <= 150 and len(d["rooms"]) >= 30
+--- a/tools/level1_blender/verify_native.py
++++ b/tools/level1_blender/verify_native.py
+@@ -1,16 +1,17 @@
+ """Read-only native/interchange QA in an independent headless Blender process.
+ 
+-D:/Blender/blender.exe -b assets/level1/blender/Level1_ModularKit.blend --python-exit-code 1 -P tools/level1_blender/verify_native.py
++D:/Blender/blender.exe -b assets/level1/blender-v2/Level1_ModularKit.blend --python-exit-code 1 -P tools/level1_blender/verify_native.py
+ Does not save the imported FBX scene or mutate the author's open scene.
+ """
+ from pathlib import Path
+ import argparse, hashlib, json, sys
+ import bpy
+ 
+-ROOT = Path(__file__).resolve().parents[2] / "assets/level1/blender"
++ROOT = Path(__file__).resolve().parents[2] / "assets/level1/blender-v2"
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument("--assets", type=Path, default=ROOT)
+ ROOT = parser.parse_args(sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []).assets.resolve()
++assert not ROOT.is_relative_to(Path(__file__).resolve().parents[2] / "assets/level1/blender"), "Legacy Level1BlenderKit QA retired"
+ assert bpy.app.background
+ data = json.loads((ROOT / "export/manifest.json").read_text())
+ texture_names = {filename for material in data["materials"].values() for filename in material["maps"].values()}
+--- a/tools/level1_blender/publish_textures.py
++++ b/tools/level1_blender/publish_textures.py
+@@ -12,7 +12,7 @@
+ sys.path.insert(0, str(ROOT / "tools"))
+ from sync_from_studio import StudioMcpClient, find_mcp_batch, select_studio
+ 
+-SOURCE = ROOT / "assets/level1/blender/textures"
++SOURCE = ROOT / "assets/level1/blender-v2/textures"
+ RECEIPT = SOURCE / "published.json"
+ 
+ 
+@@ -22,6 +22,7 @@
+     args = parser.parse_args()
+     source = args.assets.resolve() / "textures"
+     assert source.is_relative_to(ROOT / "assets/level1"), "Only Level 1 texture directories are supported"
++    assert not source.is_relative_to(ROOT / "assets/level1/blender"), "Legacy Level1BlenderKit publication retired"
+     receipt_path = source / "published.json"
+     manifest = json.loads((source.parent / "export/manifest.json").read_text(encoding="utf-8"))
+     names = sorted({name for material in manifest["materials"].values() for name in material["maps"].values()})
+--- a/tools/export_level1_facelift_verified.py
++++ b/tools/export_level1_facelift_verified.py
+@@ -1,4 +1,4 @@
+-"""Read-only final five-script/editor and imported-kit evidence from Studio Edit.
++"""Read-only final V2 seven-script/editor and imported-kit evidence from Studio Edit.
+ 
+ Does not write Studio, source mirrors, or a native place backup. Every transfer
+ chunk rechecks its source/editor or full-kit fingerprint; partial exports have
+@@ -24,6 +24,8 @@
+     (["ServerScriptService", "Level 1 Systems", "BlenderRoomRenderer"], "ModuleScript"),
+     (["ServerScriptService", "Level1BlenderPreviewAccess"], "Script"),
+     (["StarterPlayer", "StarterPlayerScripts", "Level1BlenderPreviewButton"], "LocalScript"),
++    (["ServerScriptService", "Level 1 Systems", "PuzzleManager"], "Script"),
++    (["ServerScriptService", "Level 1 Systems", "EntityAnimation"], "Script"),
+ ]
+ 
+ COMMON = r'''
+@@ -111,7 +113,7 @@
+ 
+ KIT = r'''
+ local function kitJSON()
+-    local kit=resolve({"ServerStorage","Level1BlenderKit"})
++    local kit=resolve({"ServerStorage","Level1BlenderKitV2"})
+     assert(kit:IsA("Folder"),"Changed kit class")
+     local records={}
+     local counts={instances=0,meshParts=0,surfaceAppearances=0,colliders=0,rooms=0,components=0}
+@@ -150,13 +152,13 @@
+             visit(child,childSegments,childIndices)
+         end
+     end
+-    visit(kit,{"ServerStorage","Level1BlenderKit"},{})
++    visit(kit,{"ServerStorage","Level1BlenderKitV2"},{})
+     local uniqueMeshIds,uniquePbrIds={},{}
+     for id in pairs(meshIds) do uniqueMeshIds[#uniqueMeshIds+1]=id end
+     for id in pairs(pbrIds) do uniquePbrIds[#uniquePbrIds+1]=id end
+     table.sort(uniqueMeshIds);table.sort(uniquePbrIds)
+     return canonical({placeId=game.PlaceId,universeId=game.GameId,
+-        root="ServerStorage.Level1BlenderKit",counts=counts,
++        root="ServerStorage.Level1BlenderKitV2",counts=counts,
+         meshAssetIds=uniqueMeshIds,pbrAssetIds=uniquePbrIds,instances=records})
+ end
+ '''
+@@ -178,12 +180,8 @@
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument("--run", action="store_true", help="Read fresh Studio Edit evidence")
+     parser.add_argument("--output", type=Path, default=DEFAULT_DEST)
+-    parser.add_argument("--revision-v2", action="store_true")
++    parser.add_argument("--revision-v2", action="store_true", help="Compatibility alias; V2 is the active target")
+     args = parser.parse_args()
+-    if args.revision_v2:
+-        SCRIPTS += [(["ServerScriptService", "Level 1 Systems", "PuzzleManager"], "Script"),
+-                    (["ServerScriptService", "Level 1 Systems", "EntityAnimation"], "Script")]
+-        KIT = KIT.replace("Level1BlenderKit", "Level1BlenderKitV2")
+     if not args.run:
+         print("Prepared read-only exporter. Run with --run only when Studio is in Edit.")
+         return
+@@ -273,7 +271,7 @@
+ '''
+         kit_data = transfer(kit_code, kit_baseline["bytes"], kit_baseline["hash"])
+         kit = json.loads(kit_data)
+-        kit_file = ("Level1BlenderKitV2" if args.revision_v2 else "Level1BlenderKit") + ".instances.json"
++        kit_file = "Level1BlenderKitV2.instances.json"
+         (dest / kit_file).write_bytes(kit_data)
+         snapshot["kit"] = dict(kit_baseline, file=kit_file, sha256=hashlib.sha256(kit_data).hexdigest(),
+                                counts=kit["counts"], meshAssetIds=kit["meshAssetIds"], pbrAssetIds=kit["pbrAssetIds"])
+--- a/tools/level1_blender/README.md
++++ b/tools/level1_blender/README.md
+@@ -1,85 +1,57 @@
+-# Level 1 Blender room kit
+-
+-`build.py` authors an independent project from
+-`assets/level1/blender/concepts/room-direction.png`. It never connects to the
+-running Blender session or Studio. All 30 architectural components and props
+-are modelled in Blender, with shared physically scaled UVs. The native project
+-contains 34 named room collections, the shared component gallery and cinematic
+-review scenes. The FBX exports each shared component once; the manifest records
+-how rooms assemble them.
+-
+-```powershell
+-& D:/Blender/blender.exe -b --factory-startup --python-exit-code 1 -P tools/level1_blender/build.py
+-python tools/level1_blender/check_assets.py
+-& D:/Blender/blender.exe -b assets/level1/blender/Level1_ModularKit.blend --python-exit-code 1 -P tools/level1_blender/verify_native.py
+-python tools/level1_blender/import_assets.py
+-```
+-
+-Assets: `assets/level1/blender/Level1_ModularKit.blend`, `.fbx`, `textures/`,
+-`renders/` and `export/manifest.json`. Native file hashes are in
+-`native-files.json`; actual Blender/FBX verification is in
+-`native-verification.json`. No native backups are made, as requested by the
+-owner. `check_assets.py` verifies binary indices, finite attributes, hashes,
+-socket masks, central column clearance, required prop names and PBR maps.
+-
+-Room origins sit at the cell's floor centre. Cell size is 24 studs, wall height
+-14, full wall thickness 2. Room walls are half-walls, 1 stud deep, positioned
+-11.5 studs from the centre so neighbours join at the cell boundary. Open sockets
+-use bits N(+Z)=1, E(+X)=2, S(-Z)=4, W(-X)=8. The 15 possible connected masks each
+-have a quiet and a column variant; maintenance, office, records and elevator
+-pockets add four recognisable variants. Decorative columns remain outside the
+-central 16×16 square and cardinal navigation lanes.
+-
+-`import_assets.py` defaults to writing a reviewable installer; it does not
+-connect to Studio without `--upload` or `--install`. Both require an exact
+-`--studio-id` and bind the destination place ID. The upload uses the existing
+-Level 4 binary mesh builder without modifying any Level 4 file. Receipts are
+-specific to this kit and content hash. Its installer refuses to overwrite an
+-existing `ServerStorage.Level1BlenderKit`; components are staged off-tree and
+-marked Ready only after every mesh, texture and room has loaded. PBR image
+-receipts may come from `textures/published.json` (file hashes checked) or a
+-filename-to-content-ID map in `textures/roblox-assets.json`.
+-
+-All room meshes receive a `RoomRole` attribute (`SurfaceFloor`,
+-`SurfaceCeiling`, `ShellWalls`, `Fixture`, `Detail`), so pits can suppress only
+-the new floor visual. Extra props and pillars receive simple invisible Decor
+-colliders; the original maze keeps floor, wall and ceiling collision. Dynamic
+-objective skins preserve the live game's interaction proxies and need no second
+-collider. The renderer and preview access scripts live outside this asset tool.
+-
+-These asset checks do not certify live gameplay, navigation, multiplayer,
+-performance or developer access. Those require the actual current Studio game.
+-
+-## Quality revision V2
+-
+-`build_v2.py` reuses the component builder and authors `assets/level1/blender-v2`.
+-Its Imagegen references are in `concept/prompts.json`. The exact original
+-wallpaper asset `87947439437597` supplies unchanged albedo pixels; material tint
+-and derived normal/roughness maps provide the stronger yellow finish. The new
+-kit contains 42 weighted room variants, 41 shared components, five-channel
+-grille fixtures, rare columns, short internal dividers and mechanical props.
+-
+-```powershell
+-python tools/level1_blender/check_assets.py --assets assets/level1/blender-v2
+-& D:/Blender/blender.exe -b assets/level1/blender-v2/Level1_ModularKit.blend --python-exit-code 1 -P tools/level1_blender/verify_native.py -- --assets assets/level1/blender-v2
+-python tools/level1_blender/publish_textures.py --assets assets/level1/blender-v2
+-python tools/level1_blender/import_assets.py --assets assets/level1/blender-v2 --kit-name Level1BlenderKitV2
+-```
+-
+-Upload/install still require the explicit action flag and exact Studio ID.
+-Existing mesh assets are reused only when their binary wire hash matches.
+-The independent V2 kit leaves the existing V1 kit intact and creates no backup.
+-Source changes use fresh scoped Source/editor CAS, and shared Play/publication
+-ownership is recorded in `artifacts/level1-quality-20261002/coordination.md`.
+-
+-
+-The final V2 Studio seed 5 audit passes 122 checks in both locked and open exit
+-states, including 1,600 connected rooms, matching PBR/mesh identities, original
+-five-channel lamp geometry, physical low dividers, cable clearance and the
+-cropped exit aperture. The original trigger escape and reset were exercised;
+-two post-fix resets retain zero Animation children/playing tracks and one owned
+-release callback. Records and the current bounded QA summary are in
+-`artifacts/level1-quality-20261002/current-qa-summary.md`. Objective setup used
+-assisted actor positioning and existing developer pause; multiplayer, mobile,
+-server CPU and full-height overhead cable coverage remain unverified. These
+-checks do not themselves establish publication.
++# Level 1 Blender authoring
++
++The active room kit is `Level1BlenderKitV2`, authored by `build_v2.py` in an
++independent headless Blender. The separate elevator workflow uses
++`elevator_inset.py` and `import_elevator_inset.py` to produce
++`Level1ElevatorInsetKit`. `build.py` retains their shared mesh, material, room,
++UV, export and render helpers; its standalone legacy build entry is retired.
++
++```powershell
++python tools/level1_blender/prepare_v2_textures.py
++& D:/Blender/blender.exe -b --factory-startup --python-exit-code 1 -P tools/level1_blender/build_v2.py
++python tools/level1_blender/check_assets.py
++& D:/Blender/blender.exe -b assets/level1/blender-v2/Level1_ModularKit.blend --python-exit-code 1 -P tools/level1_blender/verify_native.py
++python tools/level1_blender/import_assets.py
++```
++
++Check, native QA, texture publication and room import default to
++`assets/level1/blender-v2`. Explicit old `assets/level1/blender` public workflow
++targets and `Level1BlenderKit` installation are retired. Keep that historical
++asset tree: V2 still reuses carpet/ceiling pixels and matching old mesh/texture
++receipts. No receipt IDs or uploaded assets are retired by this tool change.
++
++The V2 kit contains 42 weighted room variants and 41 shared components. It
++preserves the exact original wallpaper asset `87947439437597`, five-channel
++grille fixtures, rare columns, short dividers and mechanical props. Room cells
++remain 24 studs, wall height 14, full wall thickness 2; cardinal socket masks
++and collision authority stay with the original gameplay Parts. Decorative
++columns remain outside the central clear square and navigation lanes.
++
++`import_assets.py` prepares a reviewable V2 installer without connecting to
++Studio. Upload/install require an explicit action flag and exact `--studio-id`.
++Installers refuse an existing target kit and stage their components off-tree.
++Existing meshes are reused only when their binary wire hash matches; PBR
++receipts in `textures/published.json` are checked against actual file hashes.
++The shared INSTALL template's old kit token remains an elevator substitution
++placeholder, not a public legacy install target.
++
++```powershell
++& D:/Blender/blender.exe -b --factory-startup --python-exit-code 1 -P tools/level1_blender/elevator_inset.py
++python tools/level1_blender/import_elevator_inset.py
++python tools/level1_blender/publish_textures.py --assets assets/level1/elevator-inset-20261004
++```
++
++Elevator fixed-size prefabs, UVs, assembly pivots and existing physical door/
++collision proxies remain independent of the room kit. Both publication
++workflows retain resumable texture receipts. Running a texture publisher can
++upload missing maps; run it only when that external action is authorized.
++
++`tools/export_level1_facelift_verified.py` exports the V2 kit and its seven
++script/editor records. `--revision-v2` remains a compatibility alias. Use a new
++`--output` directory for evidence and `--run` only for an authorized fresh
++Studio Edit read. `install_sources.py` is an active gameplay source tool and
++is outside this retirement.
++
++These authoring checks do not establish gameplay, navigation, multiplayer,
++streaming, performance or publication. Historical V2 Studio checks and their
++limits remain in `artifacts/level1-quality-20261002/current-qa-summary.md`.

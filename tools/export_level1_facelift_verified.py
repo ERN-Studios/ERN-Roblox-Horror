@@ -1,4 +1,4 @@
-"""Read-only final five-script/editor and imported-kit evidence from Studio Edit.
+"""Read-only final V2 seven-script/editor and imported-kit evidence from Studio Edit.
 
 Does not write Studio, source mirrors, or a native place backup. Every transfer
 chunk rechecks its source/editor or full-kit fingerprint; partial exports have
@@ -24,6 +24,8 @@ SCRIPTS = [
     (["ServerScriptService", "Level 1 Systems", "BlenderRoomRenderer"], "ModuleScript"),
     (["ServerScriptService", "Level1BlenderPreviewAccess"], "Script"),
     (["StarterPlayer", "StarterPlayerScripts", "Level1BlenderPreviewButton"], "LocalScript"),
+    (["ServerScriptService", "Level 1 Systems", "PuzzleManager"], "Script"),
+    (["ServerScriptService", "Level 1 Systems", "EntityAnimation"], "Script"),
 ]
 
 COMMON = r'''
@@ -111,7 +113,7 @@ end
 
 KIT = r'''
 local function kitJSON()
-    local kit=resolve({"ServerStorage","Level1BlenderKit"})
+    local kit=resolve({"ServerStorage","Level1BlenderKitV2"})
     assert(kit:IsA("Folder"),"Changed kit class")
     local records={}
     local counts={instances=0,meshParts=0,surfaceAppearances=0,colliders=0,rooms=0,components=0}
@@ -150,13 +152,13 @@ local function kitJSON()
             visit(child,childSegments,childIndices)
         end
     end
-    visit(kit,{"ServerStorage","Level1BlenderKit"},{})
+    visit(kit,{"ServerStorage","Level1BlenderKitV2"},{})
     local uniqueMeshIds,uniquePbrIds={},{}
     for id in pairs(meshIds) do uniqueMeshIds[#uniqueMeshIds+1]=id end
     for id in pairs(pbrIds) do uniquePbrIds[#uniquePbrIds+1]=id end
     table.sort(uniqueMeshIds);table.sort(uniquePbrIds)
     return canonical({placeId=game.PlaceId,universeId=game.GameId,
-        root="ServerStorage.Level1BlenderKit",counts=counts,
+        root="ServerStorage.Level1BlenderKitV2",counts=counts,
         meshAssetIds=uniqueMeshIds,pbrAssetIds=uniquePbrIds,instances=records})
 end
 '''
@@ -178,12 +180,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run", action="store_true", help="Read fresh Studio Edit evidence")
     parser.add_argument("--output", type=Path, default=DEFAULT_DEST)
-    parser.add_argument("--revision-v2", action="store_true")
+    parser.add_argument("--revision-v2", action="store_true", help="Compatibility alias; V2 is the active target")
     args = parser.parse_args()
-    if args.revision_v2:
-        SCRIPTS += [(["ServerScriptService", "Level 1 Systems", "PuzzleManager"], "Script"),
-                    (["ServerScriptService", "Level 1 Systems", "EntityAnimation"], "Script")]
-        KIT = KIT.replace("Level1BlenderKit", "Level1BlenderKitV2")
     if not args.run:
         print("Prepared read-only exporter. Run with --run only when Studio is in Edit.")
         return
@@ -273,7 +271,7 @@ assert(#text=={kit_baseline['bytes']} and fingerprint(text)=={kit_baseline['hash
 '''
         kit_data = transfer(kit_code, kit_baseline["bytes"], kit_baseline["hash"])
         kit = json.loads(kit_data)
-        kit_file = ("Level1BlenderKitV2" if args.revision_v2 else "Level1BlenderKit") + ".instances.json"
+        kit_file = "Level1BlenderKitV2.instances.json"
         (dest / kit_file).write_bytes(kit_data)
         snapshot["kit"] = dict(kit_baseline, file=kit_file, sha256=hashlib.sha256(kit_data).hexdigest(),
                                counts=kit["counts"], meshAssetIds=kit["meshAssetIds"], pbrAssetIds=kit["pbrAssetIds"])

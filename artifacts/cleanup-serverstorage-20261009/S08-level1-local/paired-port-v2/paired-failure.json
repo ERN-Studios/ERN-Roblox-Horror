@@ -1,0 +1,30 @@
+{
+  "schema": "level1-legacy-workflow-paired-failure-v2",
+  "pass": false,
+  "productionFilesModified": false,
+  "fixedPythonHashSeed": 0,
+  "sameBeforeInputControlRawWireMismatch": true,
+  "differences": {
+    "control-before": {
+      "blender-v2": [
+        "manifest.json",
+        "chunks/c00015.b64",
+        "chunks/c00038.b64",
+        "chunks/c00041.b64",
+        "chunks/c00081.b64"
+      ],
+      "elevator-inset-20261004": []
+    },
+    "candidate": {
+      "blender-v2": [
+        "manifest.json",
+        "chunks/c00015.b64",
+        "chunks/c00038.b64",
+        "chunks/c00041.b64"
+      ],
+      "elevator-inset-20261004": []
+    }
+  },
+  "StudioCalls": 0,
+  "networkCalls": 0
+}

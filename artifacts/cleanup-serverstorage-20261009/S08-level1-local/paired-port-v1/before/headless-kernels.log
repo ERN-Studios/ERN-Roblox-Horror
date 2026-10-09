@@ -1,0 +1,7 @@
+L1_EXPORT={"components": 41, "rooms": 42, "chunks": 93, "triangles": 22768}
+L1_EXPORT={"components": 16, "rooms": 0, "chunks": 28, "triangles": 2980}
+INSET_EXPORT={"components": 16, "assemblies": 4, "chunks": 28, "triangles": 2980}
+S08_AUTHORING_KERNELS={"blender-v2": {"components": 41, "rooms": 42, "chunks": 93, "uvMeshes": 41, "blender": "5.2.0 LTS"}, "elevator-inset-20261004": {"components": 16, "rooms": 0, "chunks": 28, "uvMeshes": 16, "blender": "5.2.0 LTS"}}
+Blender 5.2.0 LTS (hash fbe6228777e7 built 2026-07-14 01:35:40)
+
+Blender quit

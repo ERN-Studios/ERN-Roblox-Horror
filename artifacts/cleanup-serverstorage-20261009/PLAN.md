@@ -5,6 +5,14 @@ ingen modeswitch, publicering eller GitHub-push. Frisk baseline: HEAD 68e2d839,
 70 ServerStorage-rødder, 220 native scripts/15 remotes, ingen editor-konflikter.
 De ti gamle Codex-mirrors mangler allerede native; de installeres ikke igen.
 
+Aktuel S08-status: syv lokale Level1-legacyværktøjer er afgrænset omskrevet og
+installeret replay bestået. Standalone-main og offentlige gamle targets er
+pensioneret; delte V2/elevator-helpers, INSTALL-token, gamle teksturinput og
+alle 286 Level1-assetfiler/receipts er bevaret. Seks præcise outputs, syv legacy-
+fejlveje og faktisk native Blender/FBX-QA består. Frisk V2-trianguleringsport
+er separat afventende efter uændrede før-kilders variation. Native S04-fjernelse
+er ikke gennemført. [S08 review](S08-level1-local/REVIEW.md).
+
 ## S01 — historiske diagnostikrecords (T15–T17 / ny N05)
 
 Præcise targets under ServerStorage:

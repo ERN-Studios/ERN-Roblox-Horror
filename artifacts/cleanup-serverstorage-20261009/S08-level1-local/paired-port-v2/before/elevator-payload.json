@@ -1,0 +1,2086 @@
+{
+  "aliases": {},
+  "assemblies": {
+    "CabinDepth12": {
+      "anchors": {
+        "GuidePoster": [
+          0,
+          5.1,
+          11.92
+        ],
+        "PointLight": [
+          0,
+          9.7,
+          0.48
+        ],
+        "Selector": [
+          5.93,
+          4.6,
+          1.2
+        ]
+      },
+      "ceilingY": 10,
+      "depth": 12,
+      "fixedSize": true,
+      "front": "-Z",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "placements": [
+        {
+          "cf": [
+            0.0,
+            0.0,
+            12.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinBack12",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinFrontReturn12",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinFloorDepth12",
+          "role": "Floor"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinCeilingDepth12",
+          "role": "Ceiling"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinLinearLight12",
+          "role": "Lamp"
+        },
+        {
+          "cf": [
+            5.91,
+            4.65,
+            3.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinControlPanel",
+          "role": "ControlPlate"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            2.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            2.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            6.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            6.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            10.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        }
+      ],
+      "width": 12
+    },
+    "CabinDepth14": {
+      "anchors": {
+        "GuidePoster": [
+          0,
+          5.1,
+          13.92
+        ],
+        "PointLight": [
+          0,
+          9.7,
+          0.48
+        ],
+        "Selector": [
+          5.93,
+          4.6,
+          1.2
+        ]
+      },
+      "ceilingY": 10,
+      "depth": 14,
+      "fixedSize": true,
+      "front": "-Z",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "placements": [
+        {
+          "cf": [
+            0.0,
+            0.0,
+            14.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinBack12",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinFrontReturn12",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinFloorDepth14",
+          "role": "Floor"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinCeilingDepth14",
+          "role": "Ceiling"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinLinearLight12",
+          "role": "Lamp"
+        },
+        {
+          "cf": [
+            5.91,
+            4.65,
+            3.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinControlPanel",
+          "role": "ControlPlate"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            2.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            2.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            6.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            6.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            10.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            13.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule2",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            13.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule2",
+          "role": "Cabin"
+        }
+      ],
+      "width": 12
+    },
+    "CabinDepth16": {
+      "anchors": {
+        "GuidePoster": [
+          0,
+          5.1,
+          15.92
+        ],
+        "PointLight": [
+          0,
+          9.7,
+          0.48
+        ],
+        "Selector": [
+          5.93,
+          4.6,
+          1.2
+        ]
+      },
+      "ceilingY": 10,
+      "depth": 16,
+      "fixedSize": true,
+      "front": "-Z",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "placements": [
+        {
+          "cf": [
+            0.0,
+            0.0,
+            16.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinBack12",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinFrontReturn12",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinFloorDepth16",
+          "role": "Floor"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinCeilingDepth16",
+          "role": "Ceiling"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinLinearLight12",
+          "role": "Lamp"
+        },
+        {
+          "cf": [
+            5.91,
+            4.65,
+            3.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinControlPanel",
+          "role": "ControlPlate"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            2.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            2.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            6.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            6.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            10.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            14.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            14.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        }
+      ],
+      "width": 12
+    },
+    "CabinDepth18": {
+      "anchors": {
+        "GuidePoster": [
+          0,
+          5.1,
+          17.92
+        ],
+        "PointLight": [
+          0,
+          9.7,
+          0.48
+        ],
+        "Selector": [
+          5.93,
+          4.6,
+          1.2
+        ]
+      },
+      "ceilingY": 10,
+      "depth": 18,
+      "fixedSize": true,
+      "front": "-Z",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "placements": [
+        {
+          "cf": [
+            0.0,
+            0.0,
+            18.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinBack12",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinFrontReturn12",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinFloorDepth18",
+          "role": "Floor"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinCeilingDepth18",
+          "role": "Ceiling"
+        },
+        {
+          "cf": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinLinearLight12",
+          "role": "Lamp"
+        },
+        {
+          "cf": [
+            5.91,
+            4.65,
+            3.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "component": "CabinControlPanel",
+          "role": "ControlPlate"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            2.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            2.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            6.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            6.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            10.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            14.0,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            14.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule4",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            -6.0,
+            0.0,
+            17.000001,
+            -0.0,
+            0.0,
+            -1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "component": "CabinWallModule2",
+          "role": "Cabin"
+        },
+        {
+          "cf": [
+            6.0,
+            0.0,
+            17.000001,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "component": "CabinWallModule2",
+          "role": "Cabin"
+        }
+      ],
+      "width": 12
+    }
+  },
+  "axis": "Blender(x,y,z) to Roblox(x,z,-y)",
+  "build": "level1-elevator-inset-20261004",
+  "cellSize": 24,
+  "chunks": [
+    {
+      "assetId": 130361790990972,
+      "center": [
+        0.0,
+        7.0,
+        1.0
+      ],
+      "component": "ElevatorExterior",
+      "id": 0,
+      "material": "Wallpaper",
+      "sha256": "cea0203bd6f15db6ef0c9533de7d509a1c24a4769ef0870f22eee85b06800535",
+      "size": [
+        24.0,
+        14.0,
+        2.0
+      ],
+      "tris": 36,
+      "verts": 20,
+      "wireSha256": "6e3c7904ff66218092ef0a92e24d82e90ec6e0f06362c38b3b183bc4528a7cf9"
+    },
+    {
+      "assetId": 71748885399317,
+      "center": [
+        -0.625,
+        5.9,
+        0.85
+      ],
+      "component": "ElevatorExterior",
+      "id": 1,
+      "material": "InsetSteel",
+      "sha256": "deba59e693b0c162af43089d83765b81c9fc38ffb08f8845f443cc3b952f66ce",
+      "size": [
+        10.05,
+        11.8,
+        2.3
+      ],
+      "tris": 520,
+      "verts": 272,
+      "wireSha256": "2a57b1fe4e9a84d8d9d594b24a3a3099d19dd7c58db853aafdb966e6ae6bd16c"
+    },
+    {
+      "assetId": 112852893895711,
+      "center": [
+        -5.25,
+        6.1,
+        -0.179
+      ],
+      "component": "ElevatorExterior",
+      "id": 2,
+      "material": "ReadoutBlack",
+      "sha256": "cffbeb9355b0564cdbf3a73923357848cbb7815a271a2f11483025edbde05a01",
+      "size": [
+        0.59,
+        0.62,
+        0.02
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "96b95e48183c3ea88a4f7842b764fa837f6e3c36b9db64ecdd7d467fbe5b2991"
+    },
+    {
+      "assetId": 95375966854097,
+      "center": [
+        -5.14,
+        6.095,
+        -0.196
+      ],
+      "component": "ElevatorExterior",
+      "id": 3,
+      "material": "CallGreen",
+      "sha256": "2adccdb28ccfda0c54ba33646a3790734d670fa392114f0037d1e8f6e69c53bf",
+      "size": [
+        0.042,
+        0.34,
+        0.017
+      ],
+      "tris": 120,
+      "verts": 64,
+      "wireSha256": "56bbff8b82082099989fdf6c4d1ea47b312fb75009bd6c2341f7aed25744fb7b"
+    },
+    {
+      "assetId": 122704769915079,
+      "center": [
+        -5.25,
+        4.275,
+        -0.177
+      ],
+      "component": "ElevatorExterior",
+      "id": 4,
+      "material": "PanelJoint",
+      "sha256": "63f79248b810089aedcfa6c620bb318af5495cf447e351ca110be04a2a3194ee",
+      "size": [
+        0.274,
+        1.224,
+        0.045
+      ],
+      "tris": 184,
+      "verts": 96,
+      "wireSha256": "9562368db686007a61b500a6cc0c5cf1edd4903e17f9c262537e5ae9d2d3b787"
+    },
+    {
+      "assetId": 132256902121121,
+      "center": [
+        0.0,
+        5.0,
+        0.0
+      ],
+      "component": "ElevatorDoorLeaf",
+      "id": 5,
+      "material": "InsetSteel",
+      "sha256": "1b213808eda6af0c903f19703b95f14ed455f0a19f17fea84ccc8a9f2d5b561d",
+      "size": [
+        4.0,
+        10.0,
+        0.45
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "214ee71cf95d9a047e0ee27352da18d3e07030988578ca6bd768047e6cacb3eb"
+    },
+    {
+      "assetId": 87078216067416,
+      "center": [
+        0.0,
+        5.0,
+        0.0
+      ],
+      "component": "ElevatorDoorLeaf",
+      "id": 6,
+      "material": "PanelJoint",
+      "sha256": "d265af016b69c35c25b73df0d1e1109740bbcbcaaccf9eaa4c365c5bf08c08c1",
+      "size": [
+        4.0,
+        9.98,
+        0.452
+      ],
+      "tris": 48,
+      "verts": 32,
+      "wireSha256": "8c7cfb99693e7f7d592baa2618cab1883736b16a9728e89047ea8f872a2ccdf1"
+    },
+    {
+      "assetId": 79656593047876,
+      "center": [
+        0.0,
+        5.0,
+        0.25
+      ],
+      "component": "CabinWallModule4",
+      "id": 7,
+      "material": "InsetSteel",
+      "sha256": "558b1805c8fe4758bca71dd3e5e5d631169b6eb53b0755bf48d18d49f1b44a8a",
+      "size": [
+        3.984,
+        10.0,
+        0.5
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "b56094b705b6a8a32ba7a6641138767cb981822609941ba391254fcd9759d6ed"
+    },
+    {
+      "assetId": 92274565406833,
+      "center": [
+        0.0,
+        5.0,
+        -0.002
+      ],
+      "component": "CabinWallModule4",
+      "id": 8,
+      "material": "PanelJoint",
+      "sha256": "1fe98ea20482ae3df3c7985614e5bc89b944647af0df81ef5a32be19957404fd",
+      "size": [
+        4.0,
+        10.0,
+        0.01
+      ],
+      "tris": 24,
+      "verts": 16,
+      "wireSha256": "89db268e5b78bb263b959b693807059ea57dd344cc6e2d255f47bb43e4cfe560"
+    },
+    {
+      "assetId": 86022051571555,
+      "center": [
+        0.0,
+        5.0,
+        0.25
+      ],
+      "component": "CabinWallModule2",
+      "id": 9,
+      "material": "InsetSteel",
+      "sha256": "d799208c4a22dd82340a9964449bf98c87a8a9803a5f8e08f85862752d758d9c",
+      "size": [
+        1.984,
+        10.0,
+        0.5
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "3ab802a98bf5b71499b221f9a88adcd6ca4ccf4d3a6694e70cf37991b9890b1a"
+    },
+    {
+      "assetId": 98605811403694,
+      "center": [
+        0.0,
+        5.0,
+        -0.002
+      ],
+      "component": "CabinWallModule2",
+      "id": 10,
+      "material": "PanelJoint",
+      "sha256": "7c3c0cc980eea23764a6b2c36bb019f36d71157285fb49ccacce30974805e8a5",
+      "size": [
+        2.0,
+        10.0,
+        0.01
+      ],
+      "tris": 24,
+      "verts": 16,
+      "wireSha256": "15ae9b52202d616845a03a1c2362bd5aaf42a29b46d457a86c5b22b64984625b"
+    },
+    {
+      "assetId": 117653487012158,
+      "center": [
+        0.0,
+        5.0,
+        0.25
+      ],
+      "component": "CabinBack12",
+      "id": 11,
+      "material": "InsetSteel",
+      "sha256": "8605245a2517d9ebf0399745c6b12da0d67858b6b1ba5514c4351b202f348b8a",
+      "size": [
+        11.984,
+        10.0,
+        0.5
+      ],
+      "tris": 180,
+      "verts": 96,
+      "wireSha256": "b5b0108ce6b12f4b18a884c22d1f39a204d88b880d7afd2e2dce176ea83b5b9d"
+    },
+    {
+      "assetId": 103495645845516,
+      "center": [
+        0.0,
+        5.0,
+        -0.002
+      ],
+      "component": "CabinBack12",
+      "id": 12,
+      "material": "PanelJoint",
+      "sha256": "913b5963de22bccbef6d677370bee97473ee10e18edd97ec38bca87b0668951c",
+      "size": [
+        4.018,
+        10.0,
+        0.01
+      ],
+      "tris": 24,
+      "verts": 16,
+      "wireSha256": "ddf7de8aa2a0eab7e50c40c2fb834f90b16f65af24002c9f4445bcf1e327e25c"
+    },
+    {
+      "assetId": 114242983692935,
+      "center": [
+        0.0,
+        5.1,
+        -0.0365
+      ],
+      "component": "CabinFrontReturn12",
+      "id": 13,
+      "material": "InsetSteel",
+      "sha256": "82c55ed94aae2bef8c525dcf37452ee0c0ec906e38bae7e7d5de2d4b4ac4be07",
+      "size": [
+        12.0,
+        10.2,
+        0.267
+      ],
+      "tris": 300,
+      "verts": 160,
+      "wireSha256": "2d92fd852947d1b4164c60bf4b27a110c45cf21750666e03c6bc0a3bfe2d2f5e"
+    },
+    {
+      "assetId": 117493003144746,
+      "center": [
+        -0.02375,
+        0.0,
+        0.0
+      ],
+      "component": "CabinControlPanel",
+      "id": 14,
+      "material": "InsetSteel",
+      "sha256": "7ec25c186f16f51085ea1589f6e4b279eef54a68d89870cf405d7b0407e80f23",
+      "size": [
+        0.1875,
+        3.3,
+        0.8
+      ],
+      "tris": 244,
+      "verts": 128,
+      "wireSha256": "ce3598b1fd2b9e92b51a3718495f4ac62b164c09826a15568d056125eb8e0f6d"
+    },
+    {
+      "assetId": 73143920327945,
+      "center": [
+        -0.078,
+        1.0,
+        0.0
+      ],
+      "component": "CabinControlPanel",
+      "id": 15,
+      "material": "ReadoutBlack",
+      "sha256": "b27fc6b7b8742c86ee44044c9bdc8d8929a3a6cc3d1cf380da4ef99b3f768d19",
+      "size": [
+        0.02,
+        0.58,
+        0.59
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "db6f030b94b352ad96a9f05ca62800805d2221e84c557e18d8715a4e80cd1369"
+    },
+    {
+      "assetId": 75187278317010,
+      "center": [
+        -0.091,
+        1.0,
+        0.09
+      ],
+      "component": "CabinControlPanel",
+      "id": 16,
+      "material": "CallGreen",
+      "sha256": "209c4f188fe351574f3af237b987f37947b6f162510900b04dcdeb1374744a8f",
+      "size": [
+        0.017,
+        0.3,
+        0.045
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "f05466a9d16bc1009caefc879b21d440c411b28427924ac38fbf93f1a6e6d2ba"
+    },
+    {
+      "assetId": 117711209583297,
+      "center": [
+        -0.078,
+        -0.48,
+        0.0
+      ],
+      "component": "CabinControlPanel",
+      "id": 17,
+      "material": "PanelJoint",
+      "sha256": "8c0407924af8eca1d2a6a3fc8038ff48eab3433ed897a6d6c697216ecb675dbb",
+      "size": [
+        0.045,
+        1.032,
+        0.272
+      ],
+      "tris": 184,
+      "verts": 96,
+      "wireSha256": "9924e0663451f08c4634f425a1705eae783fa4ce24e5e8396df0f7163c0b4923"
+    },
+    {
+      "assetId": 111332507420740,
+      "center": [
+        0.0,
+        0.1,
+        6.0
+      ],
+      "component": "CabinFloorDepth12",
+      "id": 18,
+      "material": "InsetSteel",
+      "sha256": "bca6a98853641d6defe2bda85c94285dc17ded1a00342b18408ee8514426e4b1",
+      "size": [
+        12.4,
+        0.2,
+        12.2
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "9c65883ec62697aea57c6b152d6b1073738fea4af398d5a02023c5d5d10e2a83"
+    },
+    {
+      "assetId": 140182496120560,
+      "center": [
+        0.0,
+        10.1,
+        6.0
+      ],
+      "component": "CabinCeilingDepth12",
+      "id": 19,
+      "material": "InsetSteel",
+      "sha256": "49aa4ab73b735d232387ce147cb5edf0377de328b9804cbc6d8225bbf2c21621",
+      "size": [
+        12.4,
+        0.2,
+        12.2
+      ],
+      "tris": 48,
+      "verts": 24,
+      "wireSha256": "fcfb991288200b818303ccfa442dde69df903f038e8d06df2435c80cdeb7d0c4"
+    },
+    {
+      "assetId": 76486706491399,
+      "center": [
+        0.0,
+        0.1,
+        7.0
+      ],
+      "component": "CabinFloorDepth14",
+      "id": 20,
+      "material": "InsetSteel",
+      "sha256": "fb0eb208faaac4668f80d79a07d0e193a5c5efc2ec1932aff876bfc8792034a8",
+      "size": [
+        12.4,
+        0.2,
+        14.2
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "4af58ed8afba1e684b5e1d0145637540b3b959fa14dcc9a9f3ada0c2607b9f7b"
+    },
+    {
+      "assetId": 96770842264533,
+      "center": [
+        0.0,
+        10.1,
+        7.0
+      ],
+      "component": "CabinCeilingDepth14",
+      "id": 21,
+      "material": "InsetSteel",
+      "sha256": "af8de96934ad15b5eea049d150fb28c55763b513034e6e48b2c8056ebd8d4ca6",
+      "size": [
+        12.4,
+        0.2,
+        14.2
+      ],
+      "tris": 48,
+      "verts": 24,
+      "wireSha256": "36237e0111ff97d8cc296a0c8d935f0fe339f57589bda7022c6c09d183d9a8f3"
+    },
+    {
+      "assetId": 100080858566719,
+      "center": [
+        0.0,
+        0.1,
+        8.0
+      ],
+      "component": "CabinFloorDepth16",
+      "id": 22,
+      "material": "InsetSteel",
+      "sha256": "53dfe8ef9bc39ad36b9ebb8fdd2c92426556d9c7884aa420aee8d74f4c287107",
+      "size": [
+        12.4,
+        0.2,
+        16.2
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "19fce8aa7e32dc0737f3b15de4d423723b5653404d8e3a5542f1af2581dad8f2"
+    },
+    {
+      "assetId": 73435357499698,
+      "center": [
+        0.0,
+        10.1,
+        8.0
+      ],
+      "component": "CabinCeilingDepth16",
+      "id": 23,
+      "material": "InsetSteel",
+      "sha256": "4e5e69c7ff4fffa8bd6f1eb3374d963d5c3bcb5b41853ece6d2fb06c2ab2a102",
+      "size": [
+        12.4,
+        0.2,
+        16.2
+      ],
+      "tris": 48,
+      "verts": 24,
+      "wireSha256": "5d0c1fcd3c161f50b2ee3b29cdf8071dfb84a5cf812b4e8021f94371b4a323f0"
+    },
+    {
+      "assetId": 100861695977620,
+      "center": [
+        0.0,
+        0.1,
+        9.0
+      ],
+      "component": "CabinFloorDepth18",
+      "id": 24,
+      "material": "InsetSteel",
+      "sha256": "deb2f679b58a9cbc488dd098c7af7101da8075f5c57989903ad4079d5f1eaf4e",
+      "size": [
+        12.4,
+        0.2,
+        18.2
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "c6e390e122c0f2d0f3849bf59bc73ef5d4432e70f434b1e7df856cb669ca3a23"
+    },
+    {
+      "assetId": 91528651227885,
+      "center": [
+        0.0,
+        10.1,
+        9.0
+      ],
+      "component": "CabinCeilingDepth18",
+      "id": 25,
+      "material": "InsetSteel",
+      "sha256": "f50553364d2a46d150a9074faf72e52923ceb93fe13b118dbd1ca24ecc383a96",
+      "size": [
+        12.4,
+        0.2,
+        18.2
+      ],
+      "tris": 48,
+      "verts": 24,
+      "wireSha256": "bb0cf22dbec2dd8af73ab9cb1ff55538e73a1789abe2cd03f17fb996fa84fbdc"
+    },
+    {
+      "assetId": 84184817527737,
+      "center": [
+        0.0,
+        9.993,
+        0.48
+      ],
+      "component": "CabinLinearLight12",
+      "id": 26,
+      "material": "Lamp",
+      "sha256": "2c12468f253c42929d262f0a95d59a15ff0192905136874f1aa1e2593a3f565c",
+      "size": [
+        11.2,
+        0.018,
+        0.22
+      ],
+      "tris": 60,
+      "verts": 32,
+      "wireSha256": "f42e467ed9d527f74d229aec637b96fd1568d1fcdbd9b40cb9b868ae5fea6237"
+    },
+    {
+      "assetId": 117226170325521,
+      "center": [
+        0.0,
+        10.025,
+        0.48
+      ],
+      "component": "CabinLinearLight12",
+      "id": 27,
+      "material": "InsetSteel",
+      "sha256": "0787e9dcbfa51681991043519d04e5e8b3740904e2e097525dead307c8c17157",
+      "size": [
+        11.286,
+        0.07,
+        0.269
+      ],
+      "tris": 240,
+      "verts": 128,
+      "wireSha256": "f732a99224cc2f74bfce23385b14f8eaf79e68ff419f6e440463e326480859a9"
+    }
+  ],
+  "components": {
+    "CabinBack12": {
+      "chunks": [
+        11,
+        12
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinCeilingDepth12": {
+      "chunks": [
+        19
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinCeilingDepth14": {
+      "chunks": [
+        21
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinCeilingDepth16": {
+      "chunks": [
+        23
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinCeilingDepth18": {
+      "chunks": [
+        25
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinControlPanel": {
+      "chunks": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinFloorDepth12": {
+      "chunks": [
+        18
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinFloorDepth14": {
+      "chunks": [
+        20
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinFloorDepth16": {
+      "chunks": [
+        22
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinFloorDepth18": {
+      "chunks": [
+        24
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinFrontReturn12": {
+      "chunks": [
+        13
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinLinearLight12": {
+      "chunks": [
+        26,
+        27
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinWallModule2": {
+      "chunks": [
+        9,
+        10
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "CabinWallModule4": {
+      "chunks": [
+        7,
+        8
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "ElevatorDoorLeaf": {
+      "chunks": [
+        5,
+        6
+      ],
+      "colliders": [],
+      "movingVisual": true,
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    },
+    "ElevatorExterior": {
+      "anchors": {
+        "FrontFloor": [
+          0,
+          0,
+          0
+        ],
+        "Opening": [
+          0,
+          5,
+          1
+        ]
+      },
+      "chunks": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "colliders": [],
+      "pivot": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "contract": {
+    "cabinPivot": "cabin front floor at xFront",
+    "cabinWidth": 12,
+    "collisionAuthority": "Original Level1 gameplay Parts; new visual meshes never collide/query/touch",
+    "depths": [
+      12,
+      14,
+      16,
+      18
+    ],
+    "doorProxyWorldSize": [
+      0.45,
+      10,
+      4
+    ],
+    "doorSizeAuthored": [
+      4,
+      10,
+      0.45
+    ],
+    "doorSlideStuds": 3.6,
+    "exteriorHeaderHeight": 1.8,
+    "exteriorJambWidth": 0.4,
+    "exteriorPivot": "front wall floor at x1",
+    "front": "-Z",
+    "openDoorClearWidth": 7.2,
+    "openingHeight": 10,
+    "openingWidth": 8,
+    "placementPolicy": "Clone fixed UV components and PivotTo; never resize the complete facade/cabin",
+    "wallHeight": 14,
+    "wallWidth": 24,
+    "worldYawDegrees": -90
+  },
+  "floorTop": 0,
+  "kitName": "Level1ElevatorInsetKit",
+  "manifestSha256": "68dcba4e34a92815e9cb9b4df59182eb4d2de340023de18189eb860bbb90dfc6",
+  "materialFiles": {
+    "steel_albedo.png": "4ada3a88d6e1a6456b761153c97c19e7f3e226ef6d6a629fcba9989a8d39dc0b",
+    "steel_height.png": "26b0f0c8035adea430dc0ebfcdf90e883c1dbf0053f23a0c610c00c48397415a",
+    "steel_metal.png": "702a09b9549b64b7c7d5c660d974201a9123d33bc63fb817fdfd5ec9d9e464ea",
+    "steel_normal.png": "78ffdf725bd3decf898cf8c0f35c7471cf731901c6b934aa02818f20aaf0a66d",
+    "steel_rough.png": "6ab3d4cd503bc40879ac4690de48782822eb4eec43ed44df3b785ea5c81e961e",
+    "wallpaper_albedo.png": "342e97e0f53df9e1cf50dae255c8e8f867cbe3d33a07ce29988827054ba46980",
+    "wallpaper_normal.png": "e6870bf029a5bd8323e15a2a58e0e24ed6ad2a0760d99a265898fe6d407d2203",
+    "wallpaper_rough.png": "d1d35a86fcbeea6e63ce58db28ef92931e7b6dd22bd73a3f0b861fadd0b89221"
+  },
+  "materials": {
+    "CallGreen": {
+      "color": [
+        115,
+        235,
+        155
+      ],
+      "emission": 0.8,
+      "maps": {},
+      "metalness": 0,
+      "robloxMaps": {},
+      "robloxMaterial": "Neon",
+      "roughness": 0.4,
+      "tileStuds": 2
+    },
+    "InsetSteel": {
+      "color": [
+        255,
+        255,
+        255
+      ],
+      "emission": 0,
+      "maps": {
+        "albedo": "steel_albedo.png",
+        "metal": "steel_metal.png",
+        "normal": "steel_normal.png",
+        "rough": "steel_rough.png"
+      },
+      "metalness": 0.8,
+      "robloxMaps": {
+        "albedo": "rbxassetid://91807512336692",
+        "metal": "rbxassetid://76319635380604",
+        "normal": "rbxassetid://115249450797513",
+        "rough": "rbxassetid://105745940919181"
+      },
+      "robloxMaterial": "Metal",
+      "roughness": 0.38,
+      "source": "Imagegen-directed cool gray satin brushed stainless steel, 2026-10-04",
+      "tileStuds": 2
+    },
+    "Lamp": {
+      "color": [
+        235,
+        241,
+        249
+      ],
+      "emission": 2,
+      "maps": {},
+      "metalness": 0,
+      "robloxMaps": {},
+      "robloxMaterial": "Neon",
+      "roughness": 0.45,
+      "tileStuds": 2
+    },
+    "PanelJoint": {
+      "color": [
+        34,
+        39,
+        45
+      ],
+      "emission": 0,
+      "maps": {},
+      "metalness": 0.3,
+      "robloxMaps": {},
+      "robloxMaterial": "Metal",
+      "roughness": 0.52,
+      "tileStuds": 2
+    },
+    "ReadoutBlack": {
+      "color": [
+        7,
+        12,
+        16
+      ],
+      "emission": 0,
+      "maps": {},
+      "metalness": 0,
+      "robloxMaps": {},
+      "robloxMaterial": "SmoothPlastic",
+      "roughness": 0.28,
+      "tileStuds": 2
+    },
+    "ReviewCarpet": {
+      "color": [
+        151,
+        135,
+        84
+      ],
+      "emission": 0,
+      "maps": {},
+      "metalness": 0,
+      "robloxMaps": {},
+      "robloxMaterial": "SmoothPlastic",
+      "roughness": 0.98,
+      "tileStuds": 6
+    },
+    "Wallpaper": {
+      "color": [
+        255,
+        235,
+        150
+      ],
+      "emission": 0,
+      "maps": {
+        "albedo": "wallpaper_albedo.png",
+        "normal": "wallpaper_normal.png",
+        "rough": "wallpaper_rough.png"
+      },
+      "metalness": 0,
+      "originalColorMap": 87947439437597,
+      "robloxMaps": {
+        "albedo": "rbxassetid://87947439437597",
+        "normal": "rbxassetid://122804131972663",
+        "rough": "rbxassetid://133006943807590"
+      },
+      "robloxMaterial": "SmoothPlastic",
+      "roughness": 0.88,
+      "tileStuds": 6,
+      "tintTexture": true
+    }
+  },
+  "reference": "concepts/room-direction.png",
+  "referenceStatus": "Root owns visual comparison to attached owner references",
+  "rooms": {},
+  "scaleMetresPerStud": 0.28,
+  "socketBits": {
+    "E_xPlus": 2,
+    "N_zPlus": 1,
+    "S_zMinus": 4,
+    "W_xMinus": 8
+  },
+  "version": 3,
+  "wallHeight": 14,
+  "wallThickness": 2,
+  "wallpaperSourceAsset": 87947439437597
+}

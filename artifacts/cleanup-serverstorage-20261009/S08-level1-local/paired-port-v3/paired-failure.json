@@ -1,0 +1,21 @@
+{
+  "schema": "level1-legacy-workflow-paired-failure-v3",
+  "pass": false,
+  "reason": "Exact generated mesh geometry digest differs in same-before-source control; no numeric tolerance added",
+  "differences": {
+    "blender-v2": [
+      {
+        "id": 41,
+        "component": "LeverHandle",
+        "material": "Red",
+        "fields": [
+          "exactGeometrySHA256"
+        ]
+      }
+    ],
+    "elevator-inset-20261004": []
+  },
+  "originalSourceOrAssetWrites": 0,
+  "nativeStudioCalls": 0,
+  "networkCalls": 0
+}

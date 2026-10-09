@@ -1,0 +1,57 @@
+{
+  "schema": "level1-legacy-workflow-installed-proof-index-v1",
+  "pass": true,
+  "applicationPerformedBy": "root",
+  "nativeWrites": 0,
+  "networkCalls": 0,
+  "manifestUnmodified": true,
+  "proposalManifestSHA256": "f6e32b53ec086fa071487d18e0c9941bc7430f9192000510567d6b5d64af07c6",
+  "beforePackagePort": "current-package-port-v2/paired-result.json",
+  "afterInstalledPackagePort": "installed-package-port-v1/paired-result.json",
+  "installedResult": "installed-result.json",
+  "applicationSourceIsEvidenceOnly": true,
+  "applicationSourceRerunProhibited": "Exclusive checkpoint and installed receipt already exist; never rerun this historical application. Use the contracts runner with --verify-installed and a new destination for rechecks.",
+  "canonicalCandidatesVerified": 7,
+  "portableOriginalSources": [
+    "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/build.py.bin",
+    "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/import_assets.py.bin",
+    "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/check_assets.py.bin",
+    "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/verify_native.py.bin",
+    "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/publish_textures.py.bin",
+    "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/export_level1_facelift_verified.py.bin",
+    "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/README.md.bin"
+  ],
+  "all286AssetBytesCurrentlyEqualCheckpoint": true,
+  "allSixRetainedPythonDependenciesCurrentlyEqualCheckpoint": true,
+  "portableCheckpointInputs": [
+    {
+      "path": "installed-apply-source.py",
+      "source": ".git/mongotv-cleanup-20261009/apply-s08.py",
+      "bytes": 5955,
+      "sha256": "682da803a954b2b5e96f513a31815892f981079b138a0490d85fa7c334618e88",
+      "byteIdenticalCopy": true
+    },
+    {
+      "path": "installed-before-assets.bin",
+      "source": ".git/mongotv-cleanup-20261009/s08-application-before/asset-hashes.json",
+      "bytes": 31838,
+      "sha256": "3e0aba8681e511c630b590d6618996839fba2d01b24153e4ba27edeca5eb7708",
+      "byteIdenticalCopy": true
+    },
+    {
+      "path": "installed-before-dependencies.bin",
+      "source": ".git/mongotv-cleanup-20261009/s08-application-before/dependencies.json",
+      "bytes": 692,
+      "sha256": "61a066ca57fc078fde72df2c36877bc54e4aac1deb17e2aabcc0b6ac4ef8f837",
+      "byteIdenticalCopy": true
+    }
+  ],
+  "rawBytesBefore": 75572,
+  "rawBytesAfter": 71720,
+  "fileByteReduction": 3852,
+  "remainingGates": [
+    "Fresh V2 rebuild raw/triangle equality unresolved including unchanged-before controls",
+    "Native old-kit restoration/removal gate",
+    "Actual gameplay/multiplayer/streaming/live upload/import/export were not exercised by this local port"
+  ]
+}

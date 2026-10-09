@@ -1,16 +1,17 @@
 """Read-only native/interchange QA in an independent headless Blender process.
 
-D:/Blender/blender.exe -b assets/level1/blender/Level1_ModularKit.blend --python-exit-code 1 -P tools/level1_blender/verify_native.py
+D:/Blender/blender.exe -b assets/level1/blender-v2/Level1_ModularKit.blend --python-exit-code 1 -P tools/level1_blender/verify_native.py
 Does not save the imported FBX scene or mutate the author's open scene.
 """
 from pathlib import Path
 import argparse, hashlib, json, sys
 import bpy
 
-ROOT = Path(__file__).resolve().parents[2] / "assets/level1/blender"
+ROOT = Path(__file__).resolve().parents[2] / "assets/level1/blender-v2"
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--assets", type=Path, default=ROOT)
 ROOT = parser.parse_args(sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []).assets.resolve()
+assert not ROOT.is_relative_to(Path(__file__).resolve().parents[2] / "assets/level1/blender"), "Legacy Level1BlenderKit QA retired"
 assert bpy.app.background
 data = json.loads((ROOT / "export/manifest.json").read_text())
 texture_names = {filename for material in data["materials"].values() for filename in material["maps"].values()}

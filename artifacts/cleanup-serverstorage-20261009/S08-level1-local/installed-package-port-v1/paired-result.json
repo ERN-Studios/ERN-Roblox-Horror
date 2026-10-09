@@ -1,0 +1,189 @@
+{
+  "schema": "level1-legacy-workflow-paired-contracts-v1",
+  "pass": true,
+  "productionFilesModified": false,
+  "nativeStudioCalls": 0,
+  "networkCalls": 0,
+  "portScope": "Current immutable package selectors/import/publish/export/native-FBX QA only",
+  "authoringKernel": "Separate v1/v2/v3 actual kernels completed; full fresh V2 exact generation gate remains pending baseline LeverHandle triangulation variability",
+  "nativeFileQA": "Actual V2 .blend and fresh FBX import before/after exact verification record",
+  "retainedCanonicalAssetTreesUnchanged": true,
+  "retainedSharedHelpersUnchanged": true,
+  "equalOutputs": 6,
+  "legacyNegativeGates": 7,
+  "phaseRecords": {
+    "before": {
+      "actualV2Assets": {
+        "meshes": 93,
+        "rooms": 42,
+        "components": 41
+      },
+      "cachedPublish": {
+        "V2": "All PBR maps already uploaded at these hashes.",
+        "elevator": "All PBR maps already uploaded at these hashes."
+      },
+      "reusedReceipt": {
+        "chunkId": 0,
+        "assetId": 100871634863945,
+        "wireSha256": "77a88b21d9f7e93f2473597188c73f6e15511f11c90b9bae26b4bcb58299d1e6"
+      },
+      "badTextureReceiptRejected": true,
+      "legacyRefusals": {},
+      "checkAssetsOutput": "PASS: 93 meshes, 42 rooms; binary indices/hashes, all 15 socket masks, clear columns and PBR maps",
+      "exporterScripts": [
+        [
+          [
+            "ServerScriptService",
+            "GameManager"
+          ],
+          "Script"
+        ],
+        [
+          [
+            "ServerScriptService",
+            "Level 1 Systems",
+            "MazeGenerator"
+          ],
+          "Script"
+        ],
+        [
+          [
+            "ServerScriptService",
+            "Level 1 Systems",
+            "BlenderRoomRenderer"
+          ],
+          "ModuleScript"
+        ],
+        [
+          [
+            "ServerScriptService",
+            "Level1BlenderPreviewAccess"
+          ],
+          "Script"
+        ],
+        [
+          [
+            "StarterPlayer",
+            "StarterPlayerScripts",
+            "Level1BlenderPreviewButton"
+          ],
+          "LocalScript"
+        ],
+        [
+          [
+            "ServerScriptService",
+            "Level 1 Systems",
+            "PuzzleManager"
+          ],
+          "Script"
+        ],
+        [
+          [
+            "ServerScriptService",
+            "Level 1 Systems",
+            "EntityAnimation"
+          ],
+          "Script"
+        ]
+      ],
+      "exporterOutput": "Prepared read-only exporter. Run with --run only when Studio is in Edit.",
+      "networkCalls": 0,
+      "StudioCalls": 0,
+      "generatedCompile": "O0/O1 V2+elevator, O0 exporter PASS"
+    },
+    "candidate": {
+      "actualV2Assets": {
+        "meshes": 93,
+        "rooms": 42,
+        "components": 41
+      },
+      "cachedPublish": {
+        "V2": "All PBR maps already uploaded at these hashes.",
+        "elevator": "All PBR maps already uploaded at these hashes."
+      },
+      "reusedReceipt": {
+        "chunkId": 0,
+        "assetId": 100871634863945,
+        "wireSha256": "77a88b21d9f7e93f2473597188c73f6e15511f11c90b9bae26b4bcb58299d1e6"
+      },
+      "badTextureReceiptRejected": true,
+      "legacyRefusals": {
+        "importLegacyName": "SystemExit: 2",
+        "importLegacyPath": "AssertionError: Legacy Level1BlenderKit asset workflow retired",
+        "checkLegacyPath": "AssertionError: Legacy Level1BlenderKit QA retired",
+        "publishLegacyPath": "AssertionError: Legacy Level1BlenderKit publication retired",
+        "helperLegacyName": "AssertionError before output"
+      },
+      "checkAssetsOutput": "PASS: 93 meshes, 42 rooms; binary indices/hashes, all 15 socket masks, clear columns and PBR maps",
+      "exporterScripts": [
+        [
+          [
+            "ServerScriptService",
+            "GameManager"
+          ],
+          "Script"
+        ],
+        [
+          [
+            "ServerScriptService",
+            "Level 1 Systems",
+            "MazeGenerator"
+          ],
+          "Script"
+        ],
+        [
+          [
+            "ServerScriptService",
+            "Level 1 Systems",
+            "BlenderRoomRenderer"
+          ],
+          "ModuleScript"
+        ],
+        [
+          [
+            "ServerScriptService",
+            "Level1BlenderPreviewAccess"
+          ],
+          "Script"
+        ],
+        [
+          [
+            "StarterPlayer",
+            "StarterPlayerScripts",
+            "Level1BlenderPreviewButton"
+          ],
+          "LocalScript"
+        ],
+        [
+          [
+            "ServerScriptService",
+            "Level 1 Systems",
+            "PuzzleManager"
+          ],
+          "Script"
+        ],
+        [
+          [
+            "ServerScriptService",
+            "Level 1 Systems",
+            "EntityAnimation"
+          ],
+          "Script"
+        ]
+      ],
+      "exporterOutput": "Prepared read-only exporter. Run with --run only when Studio is in Edit.",
+      "networkCalls": 0,
+      "StudioCalls": 0,
+      "generatedCompile": "O0/O1 V2+elevator, O0 exporter PASS"
+    }
+  },
+  "sameSourceControl": "Historical paired-port-v2/v3 same-before control retained; fresh V2 byte/triangle exactness still pending",
+  "rawGeneratedWireDifferences": {},
+  "geometryNormalization": "Exact f32 pool multiplicities and oriented corner tuples; index/triangle order only, no numerical tolerance",
+  "geometryGuardFixtures": 6,
+  "contractsRunnerSHA256": "1f831659c4960e1c8a54e8678f404ecee5a806eab67a19d3a60f8cdca0a22ddf",
+  "proposalManifestSHA256": "f6e32b53ec086fa071487d18e0c9941bc7430f9192000510567d6b5d64af07c6",
+  "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+  "headlessProbeSHA256": "a91dc1e1c0283317be5d033f4e88c631ec461721b4fcc446c7fa476086ab09ab",
+  "limits": "No render regeneration, full authoring main invocation, Studio gameplay, uploads, live import/export, multiplayer/streaming or performance gain certified."
+}

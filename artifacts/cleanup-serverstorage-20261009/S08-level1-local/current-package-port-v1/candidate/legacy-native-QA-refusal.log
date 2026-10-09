@@ -1,0 +1,10 @@
+Blender 5.2.0 LTS (hash fbe6228777e7 built 2026-07-14 01:35:40)
+
+Blender quit
+Traceback (most recent call last):
+  File "C:\Users\mikke\AppData\Local\Temp\MongoTV-S08-shfrtbq8\tools\level1_blender\verify_native.py", line 14, in <module>
+    assert not ROOT.is_relative_to(Path(__file__).resolve().parents[2] / "assets/level1/blender"), "Legacy Level1BlenderKit QA retired"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Legacy Level1BlenderKit QA retired
+
+Error: script failed, file: 'C:\Users\mikke\AppData\Local\Temp\MongoTV-S08-shfrtbq8\tools\level1_blender\verify_native.py', exiting.

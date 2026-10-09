@@ -1,0 +1,34 @@
+{
+  "blenderVersion": "5.2.0 LTS",
+  "nativeRoomCollections": 42,
+  "fbxComponentMeshes": 41,
+  "fbxUVMeshes": 41,
+  "fbxMaterialsMatchNative": true,
+  "nativeFiles": {
+    "Level1_ModularKit.blend": "a013867927a33b45217486fb0a920a9433f848f59fa018d9d5e64a968070ea87",
+    "Level1_ModularKit.fbx": "3fb9fa5beb9bbc46b1fb476cb1a7ea448f03ed15c7a919bb82043968683794e8"
+  },
+  "relativeTextureReferences": {
+    "carpet_albedo.png": "//textures/carpet_albedo.png",
+    "carpet_normal.png": "//textures/carpet_normal.png",
+    "carpet_rough.png": "//textures/carpet_rough.png",
+    "ceiling_albedo.png": "//textures/ceiling_albedo.png",
+    "ceiling_normal.png": "//textures/ceiling_normal.png",
+    "ceiling_rough.png": "//textures/ceiling_rough.png",
+    "prop_copper_albedo.png": "//textures/prop_copper_albedo.png",
+    "prop_cream_albedo.png": "//textures/prop_cream_albedo.png",
+    "prop_metal.png": "//textures/prop_metal.png",
+    "prop_normal.png": "//textures/prop_normal.png",
+    "prop_ochre_albedo.png": "//textures/prop_ochre_albedo.png",
+    "prop_olive_albedo.png": "//textures/prop_olive_albedo.png",
+    "prop_paintmetal.png": "//textures/prop_paintmetal.png",
+    "prop_porcelain_albedo.png": "//textures/prop_porcelain_albedo.png",
+    "prop_red_albedo.png": "//textures/prop_red_albedo.png",
+    "prop_rough.png": "//textures/prop_rough.png",
+    "prop_steel_albedo.png": "//textures/prop_steel_albedo.png",
+    "wallpaper_albedo.png": "//textures/wallpaper_albedo.png",
+    "wallpaper_normal.png": "//textures/wallpaper_normal.png",
+    "wallpaper_rough.png": "//textures/wallpaper_rough.png"
+  },
+  "studioGameplayVerified": false
+}

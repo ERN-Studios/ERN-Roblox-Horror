@@ -3,8 +3,9 @@
 Studio er source of truth: place **131311258779917**, universe **10559217407**.
 De tidligere gennemførte, testede batches er lokalt committed. Intet er publiceret eller
 pushet til GitHub. Ejeren har igen godkendt Studio-arbejde; to andre sessions
-arbejder samtidig og har igen startet Play. Deres session bevares. Yderligere
-native porte og afsluttende Edit-parity gennemføres, når Edit er tilgængelig.
+arbejder samtidig og skifter selv mellem Edit og Play. Deres sessioner bevares.
+Seneste read-only Edit-census viste 212 scripts og 52 ServerStorage-rødder;
+afsluttende parity kræver en frisk samlet før/efter-kontrol.
 Vores valgte afventende runtimeforslag står stadig uimplementeret; eksternt
 implementerede ændringer beskrives særskilt uden oprydningskredit.
 
@@ -18,6 +19,42 @@ dele af blandede fund har deres egen status og testport.
 
 ## Aktuel ServerStorage-oprydning
 
+S08 har nu pensioneret Level1-legacybuildens standalone `main` og de offentlige
+gamle import-/QA-/publish-/exporttargets i syv lokale filer. Aktive defaults
+vælger V2; elevatorens delte INSTALL-template og alle 12 delte build-definitioner
+og initializers er bevaret. Det installerede replay bestod seks byte-identiske
+V2/elevator-payloads, installers, exporter og native-verification-record, syv
+legacy-afvisninger før assetwrites/netværk og faktisk Blender V2/FBX-QA.
+Alle 286 Level1-assetfiler, gamle teksturinput og receipt IDs er bevaret.
+Scope reducerer de syv lokale filer fra 75.572 til 71.720 raw bytes.
+Tre bredere genereringsforsøg fejlede på frisk V2 wire/triangulering; en gentaget
+uændret før-kilde viste også forskellen. Ingen tolerance eller ID-normalisering
+blev brugt til at godkende den port, som stadig afventer. Det blokerer stadig
+native pakke-fjernelse og enhver påstand om fuld ny V2-build-equivalence.
+[Præcise scopes, før-kilder og installerede porte](artifacts/cleanup-serverstorage-20261009/S08-level1-local/REVIEW.md).
+
+S06's read-only full-object arkiv indeholder alle 23 træer, som en anden session
+tog ud af ServerStorage: 14.079 objekter, 12 scripts og 2.739.764 native bytes,
+SHA `139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca`.
+Lossless gzip bevarer alle 41.912.358 facts-bytes i 3.017.503 Git-bytes; det er
+arkivstørrelse, ingen runtimegevinst. Native deserialize/reopen genskabte alle
+objekter/scripts og ti interne referencer, men `TEMP_PipeEntityValidation` og
+`TrelloPoolSlideReleaseBackup_20260910` havde property/subtreeforskelle.
+Fuld restoration er ikke godkendt. Alle 23 testkopier blev destrueret, mens
+originalernes Source/editor og native arkivhash forblev uændrede. Det separate
+source-only downstream-scope fjerner kun 12 allerede fraværende mirrors/rows
+efter sin egen friske port; ingen native fjernelse tilskrives denne oprydning.
+
+S04's første native capture afviste en uafklaret baselineændring. Det andet
+afviste en tom SerializeInstancesAsync-liste fra testværktøjet; alle originale
+guards bestod, nul kopier/writes. Testværktøjets tomme capability-kald er rettet
+og den positive fem-root-kodevej testet, uden at svække originale guards.
+Tredje capture bestod med 1.617 objekter og 8.050.869 native bytes, SHA
+`e808f055403bd331b76e0831955b192abc8b4a914865c3936aa9b2d23ed2a8d7`.
+Source/editor, properties og samtlige originale guards bestod; nul writes/kopier.
+Alle fem pakker er stadig bevaret, og native arkiv/reopen og aktive featureporte
+skal bestå, før de må fjernes.
+
 S07 har pensioneret17 lokale Lobby R1/R2/R3/R3B-authoringfiler og bevaret alle
 133.791 originalbytes i off-mirror arkiv. 162 andre authoringfiler er identiske.
 Faktisk R4 package-validering og ny isoleret Blender R4-build/prop-QA bestod
@@ -28,6 +65,7 @@ otte Python AST-checks bestod. Første trial blev tilbagerullet med alle17
 filer gendannet, før den præcise metadataforskel blev afklaret. Ingen Studio-
 ændring eller gameplay-/performancepass udledes af denne lokale pensionering.
 [Endeligt review og rollback](artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/REVIEW.md).
+Lokal commit: `9b0c046864d18789728e0ddcccade30606e6c651`.
 
 S02 har fjernet ti stale Codex-mirrors fra runtime-mapperne og manifestet
 (lokal commit `52be2b82`).

@@ -1,0 +1,6 @@
+*.bin -text -whitespace
+*.py -text -whitespace
+*.luau -text -whitespace
+*.json -text -whitespace
+*.patch -text -whitespace
+*.log -text -whitespace

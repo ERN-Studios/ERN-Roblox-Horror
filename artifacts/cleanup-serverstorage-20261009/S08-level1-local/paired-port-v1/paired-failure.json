@@ -1,0 +1,25 @@
+{
+  "schema": "level1-legacy-workflow-paired-failure-v1",
+  "pass": false,
+  "reason": "Generated V2 wire-hash inventory differs between independent Blender processes; same-source control pending",
+  "differingV2Files": [
+    "manifest.json",
+    "chunks/c00015.b64",
+    "chunks/c00038.b64",
+    "chunks/c00041.b64",
+    "chunks/c00081.b64"
+  ],
+  "equalExistingPackageOutputs": [
+    "V2-payload.json",
+    "V2-installer.luau",
+    "elevator-payload.json",
+    "elevator-installer.luau",
+    "V2-exporter.luau",
+    "headless-kernels.json",
+    "V2-native-verification.json"
+  ],
+  "elevatorGeneratedRawExportEqual": true,
+  "productionFilesModified": false,
+  "nativeStudioCalls": 0,
+  "networkCalls": 0
+}

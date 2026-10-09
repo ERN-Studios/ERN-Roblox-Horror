@@ -1,0 +1,90 @@
+{
+  "schema": "level1-legacy-workflow-retirement-proposal-v1",
+  "status": "klar til parent review and scoped local application",
+  "productionFilesModified": false,
+  "nativeCalls": 0,
+  "sourceFiles": [
+    {
+      "path": "tools/level1_blender/build.py",
+      "beforeSHA256": "cf9e5ee4355d50abbf911ac9ecd60485fadbc8f19b5beb32d80a220e9d57dec8",
+      "candidateSHA256": "68729c56a1db477f2f075f80cb0caa7cb967432c445ad290b27077123dd81624",
+      "beforeBytes": 30296,
+      "candidateBytes": 27997,
+      "beforePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/build.py.bin",
+      "candidatePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/candidate/tools/level1_blender/build.py.bin",
+      "status": "klar",
+      "gate": "Narrow current-package port PASS; preserved helper definitions/callers; fresh triangulation gate separate pending"
+    },
+    {
+      "path": "tools/level1_blender/import_assets.py",
+      "beforeSHA256": "523ea6e2314f0655d53ae7170a589c7713030fdf6f14edc33e8f976a314584ba",
+      "candidateSHA256": "b98e4fc2a1d3ee4d439f2a76ff842f8eb3a390538cbbd7858190e6cc7ce1fe05",
+      "beforeBytes": 13235,
+      "candidateBytes": 13375,
+      "beforePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/import_assets.py.bin",
+      "candidatePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/candidate/tools/level1_blender/import_assets.py.bin",
+      "status": "klar",
+      "gate": "Narrow current-package port PASS; preserved helper definitions/callers; fresh triangulation gate separate pending"
+    },
+    {
+      "path": "tools/level1_blender/check_assets.py",
+      "beforeSHA256": "8d7c6bbc672c5ad1abb251d16765e191ee0ab199e8a352c8707d3878a2e7ec58",
+      "candidateSHA256": "26e3e16934e23c5b1441ad91dfd6628b91ae91f21e4b9f3f22f4067704de41e1",
+      "beforeBytes": 5863,
+      "candidateBytes": 6002,
+      "beforePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/check_assets.py.bin",
+      "candidatePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/candidate/tools/level1_blender/check_assets.py.bin",
+      "status": "klar",
+      "gate": "Narrow current-package port PASS; preserved helper definitions/callers; fresh triangulation gate separate pending"
+    },
+    {
+      "path": "tools/level1_blender/verify_native.py",
+      "beforeSHA256": "0ed56e39457dc198bad1be6a7493ad28c8de60346ace8746fb64323aa7fbee0e",
+      "candidateSHA256": "eb59cae535c2dd8f7387e72e1862dae48cae810d08ae49b6ffb23696e1731b45",
+      "beforeBytes": 3327,
+      "candidateBytes": 3465,
+      "beforePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/verify_native.py.bin",
+      "candidatePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/candidate/tools/level1_blender/verify_native.py.bin",
+      "status": "klar",
+      "gate": "Narrow current-package port PASS; preserved helper definitions/callers; fresh triangulation gate separate pending"
+    },
+    {
+      "path": "tools/level1_blender/publish_textures.py",
+      "beforeSHA256": "21121ae1250f5c0c0a4df9933609711183625d4e67b3655cff88af835d36f17e",
+      "candidateSHA256": "5e30df254b493316d2c7f15c8afed76f00a0801ec8a80e7e521ab5a8f496111d",
+      "beforeBytes": 2735,
+      "candidateBytes": 2855,
+      "beforePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/publish_textures.py.bin",
+      "candidatePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/candidate/tools/level1_blender/publish_textures.py.bin",
+      "status": "klar",
+      "gate": "Narrow current-package port PASS; preserved helper definitions/callers; fresh triangulation gate separate pending"
+    },
+    {
+      "path": "tools/export_level1_facelift_verified.py",
+      "beforeSHA256": "e144083b63e63fcb3d990fc9ae073ab29df5efe98a940d7cb614d69716eb4adc",
+      "candidateSHA256": "526ecc86521690c4f94475a975375ba3b532648985e6c04cf5231f997d20f6cb",
+      "beforeBytes": 14859,
+      "candidateBytes": 14744,
+      "beforePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/export_level1_facelift_verified.py.bin",
+      "candidatePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/candidate/tools/export_level1_facelift_verified.py.bin",
+      "status": "klar",
+      "gate": "Narrow current-package port PASS; preserved helper definitions/callers; fresh triangulation gate separate pending"
+    },
+    {
+      "path": "tools/level1_blender/README.md",
+      "beforeSHA256": "739cc6b817ff879a65dc8fb2ca15e46f9c4db70f7dd6a57ace8b19f4a8e89207",
+      "candidateSHA256": "9824cc9ba42d92e08f6cf770d379bda8e9bdf0d72c49c0c45ba4f73e3bdf7733",
+      "beforeBytes": 5257,
+      "candidateBytes": 3282,
+      "beforePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/before/tools/level1_blender/README.md.bin",
+      "candidatePath": "artifacts/cleanup-serverstorage-20261009/S08-level1-local/candidate/tools/level1_blender/README.md.bin",
+      "status": "klar",
+      "gate": "Narrow current-package port PASS; preserved helper definitions/callers; fresh triangulation gate separate pending"
+    }
+  ],
+  "retainedAssets": "All assets/level1 trees and receipt IDs",
+  "scope": "Legacy standalone build entry/default public targets only; shared INSTALL/helper bodies and active V2/elevator source tools retained",
+  "currentPackagePort": "PASS: current-package-port-v1/paired-result.json",
+  "freshV2RebuildPort": "afventer test: same-before control LeverHandle/Red chunk41 exact triangulation variability; failures v1/v2/v3 preserved",
+  "independentReview": "levels_core PASS; shared initializers/12 definitions/INSTALL/payload/upload and actual retained callers unchanged"
+}

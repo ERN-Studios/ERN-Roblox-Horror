@@ -2,7 +2,7 @@
 from pathlib import Path
 import argparse, base64, hashlib, json, math, struct
 
-ROOT = Path(__file__).resolve().parents[2] / "assets/level1/blender"
+ROOT = Path(__file__).resolve().parents[2] / "assets/level1/blender-v2"
 
 
 def main():
@@ -10,6 +10,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--assets", type=Path, default=ROOT)
     ROOT = parser.parse_args().assets.resolve()
+    assert not ROOT.is_relative_to(Path(__file__).resolve().parents[2] / "assets/level1/blender"), "Legacy Level1BlenderKit QA retired"
     d = json.loads((ROOT / "export/manifest.json").read_text())
     assert (d["cellSize"], d["wallHeight"], d["wallThickness"], d["floorTop"]) == (24, 14, 2, 0)
     assert len(d["chunks"]) <= 150 and len(d["rooms"]) >= 30

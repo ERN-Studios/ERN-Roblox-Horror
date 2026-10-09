@@ -1,0 +1,79 @@
+{
+  "actualV2Assets": {
+    "meshes": 93,
+    "rooms": 42,
+    "components": 41
+  },
+  "cachedPublish": {
+    "V2": "All PBR maps already uploaded at these hashes.",
+    "elevator": "All PBR maps already uploaded at these hashes."
+  },
+  "reusedReceipt": {
+    "chunkId": 0,
+    "assetId": 100871634863945,
+    "wireSha256": "77a88b21d9f7e93f2473597188c73f6e15511f11c90b9bae26b4bcb58299d1e6"
+  },
+  "badTextureReceiptRejected": true,
+  "legacyRefusals": {},
+  "checkAssetsOutput": "PASS: 93 meshes, 42 rooms; binary indices/hashes, all 15 socket masks, clear columns and PBR maps",
+  "exporterScripts": [
+    [
+      [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "Script"
+    ],
+    [
+      [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "MazeGenerator"
+      ],
+      "Script"
+    ],
+    [
+      [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "BlenderRoomRenderer"
+      ],
+      "ModuleScript"
+    ],
+    [
+      [
+        "ServerScriptService",
+        "Level1BlenderPreviewAccess"
+      ],
+      "Script"
+    ],
+    [
+      [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level1BlenderPreviewButton"
+      ],
+      "LocalScript"
+    ],
+    [
+      [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "PuzzleManager"
+      ],
+      "Script"
+    ],
+    [
+      [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAnimation"
+      ],
+      "Script"
+    ]
+  ],
+  "exporterOutput": "Prepared read-only exporter. Run with --run only when Studio is in Edit.",
+  "networkCalls": 0,
+  "StudioCalls": 0,
+  "generatedCompile": "O0/O1 V2+elevator, O0 exporter PASS"
+}

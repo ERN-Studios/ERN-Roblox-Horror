@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools"))
 from sync_from_studio import StudioMcpClient, find_mcp_batch, select_studio
 
-SOURCE = ROOT / "assets/level1/blender/textures"
+SOURCE = ROOT / "assets/level1/blender-v2/textures"
 RECEIPT = SOURCE / "published.json"
 
 
@@ -22,6 +22,7 @@ def main():
     args = parser.parse_args()
     source = args.assets.resolve() / "textures"
     assert source.is_relative_to(ROOT / "assets/level1"), "Only Level 1 texture directories are supported"
+    assert not source.is_relative_to(ROOT / "assets/level1/blender"), "Legacy Level1BlenderKit publication retired"
     receipt_path = source / "published.json"
     manifest = json.loads((source.parent / "export/manifest.json").read_text(encoding="utf-8"))
     names = sorted({name for material in manifest["materials"].values() for name in material["maps"].values()})

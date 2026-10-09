@@ -1,7 +1,6 @@
-"""Build the ImageGen-directed Level 1 kit in an independent headless Blender.
+"""Shared Level 1 Blender helpers for V2 and elevator authoring.
 
-D:/Blender/blender.exe -b --factory-startup --python-exit-code 1 -P tools/level1_blender/build.py
-Only this new kit is written. The open Blender session and Studio are untouched.
+The standalone legacy Level1BlenderKit build workflow is retired.
 """
 from pathlib import Path
 import base64, hashlib, json, math, sys
@@ -530,45 +529,5 @@ def render_previews():
     bpy.ops.render.render(write_still=True, scene=overview.name)
 
 
-def main():
-    OUT.mkdir(parents=True, exist_ok=True)
-    # This is the throwaway factory-startup process, not the open authoring session.
-    for ob in list(bpy.data.objects):
-        bpy.data.objects.remove(ob, do_unlink=True)
-    build_components()
-    scene = bpy.context.scene
-    catalogue = collection("L1 Room Catalogue", scene.collection)
-    build_rooms(catalogue)
-    library = collection("L1 Prop Library", scene.collection)
-    for i, name in enumerate(COMPONENTS):
-        ob = bpy.data.objects.new(name, COMPONENTS[name]["mesh"])
-        library.objects.link(ob)
-        ob.location = ((i % 7) * 10 * S, -220 * S - (i // 7) * 12 * S, 0)
-        ob["l1_component"] = name
-    scene.unit_settings.system, scene.unit_settings.scale_length = "METRIC", 1
-    scene["L1Reference"] = "concepts/room-direction.png"
-    scene["L1GridContract"] = "Cell24 WallHeight14 FullWallThickness2 OpenMask N+Z1 E+X2 S-Z4 W-X8"
-    export_chunks()
-    blend = OUT / "Level1_ModularKit.blend"
-    # Zero save versions: the owner explicitly declined backup files.
-    bpy.context.preferences.filepaths.save_version = 0
-    bpy.ops.wm.save_as_mainfile(filepath=str(blend))
-    bpy.context.view_layer.update()
-    # Export each shared component once; .blend collections + manifest preserve room assembly.
-    # Blender 5.2's FBX exporter warns on linked duplicate material slots despite a valid reimport.
-    bpy.ops.object.select_all(action="DESELECT")
-    for ob in library.objects:
-        ob.select_set(True)
-    bpy.ops.export_scene.fbx(filepath=str(OUT / "Level1_ModularKit.fbx"), use_selection=True,
-                             object_types={"MESH"}, apply_unit_scale=True, axis_forward="-Z", axis_up="Y",
-                             bake_anim=False, path_mode="RELATIVE", mesh_smooth_type="FACE", use_mesh_modifiers=False)
-    render_previews()
-    # Save the two review scenes with the native project, without changing its active catalogue scene.
-    bpy.ops.wm.save_as_mainfile(filepath=str(blend))
-    files = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (blend, OUT / "Level1_ModularKit.fbx")}
-    (OUT / "native-files.json").write_text(json.dumps(files, indent=2), encoding="utf-8")
-    print("L1_DONE=" + json.dumps(files), flush=True)
-
-
 if __name__ == "__main__":
-    main()
+    raise SystemExit("Legacy Level1BlenderKit build retired; use build_v2.py or elevator_inset.py")

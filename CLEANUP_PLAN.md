@@ -3,6 +3,28 @@
 Studio er source of truth. PlaceId **131311258779917**, universe **10559217407**.
 Denne opgave publicerer ikke det offentlige spil. Ingen GitHub-push er planlagt.
 
+Seneste afgrænsede fremdrift, 2026-10-10: S07 er lokalt committed i `9b0c0468`.
+S08 har pensioneret Level1-legacyværktøjernes standalone-entry og offentlige
+gamle targets i syv filer. Installeret replay bestod seks præcise V2/elevator-
+outputs, syv negative legacy-porte og faktisk Blender V2/FBX-QA; alle 286
+Level1-assetfiler og øvrige delte Python-helpers er bevaret. Fuld frisk V2-
+triangulering varierer også ved uændrede før-kilder og er fortsat afventende.
+Ingen af de fem native S04-pakker er fjernet af denne oprydning.
+[S08 closure og porte](artifacts/cleanup-serverstorage-20261009/S08-level1-local/REVIEW.md).
+
+S04's tredje friske native capture bestod: 1.617 objekter, 8.050.869 bytes,
+SHA `e808f055403bd331b76e0831955b192abc8b4a914865c3936aa9b2d23ed2a8d7`.
+Alle original-/Source-/editor-/property-/leaseguards bestod. Nul originalwrites
+eller testkopier. Native reopen og aktive featureporte er fortsat separate.
+
+S06 har komplet native arkiv af de 23 eksternt fjernede træer: 14.079 objekter,
+12 scripts og 2.739.764 native bytes. Den separate native reopen-port genskabte
+alle objekter/scripts og ti interne referencer, men to gamle modeltræers
+properties afveg. Fuld gendannelse er derfor **afventende**, og alle 23
+testkopier blev ryddet væk med originalerne uændrede. S06's separate lokale
+12-mirror/manifest-oprydning afventer sin friske før/efter-port; den ændrer
+ingen runtimefeature eller native objekt.
+
 ## Aktuel ServerStorage-batch efter ny tilladelse
 
 Ejeren har igen godkendt Studio-arbejde og oplyst, at to andre sessions arbejder
@@ -99,7 +121,8 @@ verificeret reopen/reconstruction, bytebevarede før-kilder, aktive R4/V2-
 forbrugerchecks før/efter, guarded reversibel fjernelse i små grupper og præcis
 repo/Studio/manifest-delta. Risiko: tab af kildeassets/shared dependencies;
 gevinst: pensionerede revisioner og workflows ude af den aktive projektstruktur.
-Status: afventer dependency- og arkiv-/authoringtest; ingen af de fem pakker er
+Status: caller-closure, lokale authoringporte og native før-arkiv bestået;
+afventer native reopen og nødvendige featureporte. Ingen af de fem pakker er
 endnu fjernet. Aktive fallbackcallers kræver særskilt bevaret/remedieret closure.
 
 ## Nye afgrænsede batches efter genkontrol

@@ -1,0 +1,20 @@
+{
+  "blender-v2": {
+    "components": 41,
+    "rooms": 42,
+    "chunks": 93,
+    "uvMeshes": 41,
+    "blender": "5.2.0 LTS",
+    "pythonHashSeed": "0",
+    "hashProbe": 7547714892034229553
+  },
+  "elevator-inset-20261004": {
+    "components": 16,
+    "rooms": 0,
+    "chunks": 28,
+    "uvMeshes": 16,
+    "blender": "5.2.0 LTS",
+    "pythonHashSeed": "0",
+    "hashProbe": 7547714892034229553
+  }
+}
