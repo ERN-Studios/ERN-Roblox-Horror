@@ -1079,8 +1079,12 @@ local LEVEL2_WADE_RESISTANCE_SPEC = {
 	duration = 1.431083,
 	gain = 1.00,
 }
-local LEVEL2_WADE_CORE_VOLUME = 0.49
-local LEVEL2_WADE_RESISTANCE_VOLUME = 0.095
+-- WADE_QUIETER_20261010 (owner): the strides were the loudest thing in the flooded
+-- halls (0.49 base, so 0.46 / 0.34 / 1.20 per take at a walk). Both levels are
+-- about 10 dB lower; the per-take gains still level the three recordings, and
+-- the 1.2 clamp below no longer squeezes the third take.
+local LEVEL2_WADE_CORE_VOLUME = 0.16
+local LEVEL2_WADE_RESISTANCE_VOLUME = 0.03
 local LEVEL2_WADE_CORE_VOICE_COUNT = 5
 -- Brief direction changes in knee-deep water can drive measured horizontal
 -- speed below the movement threshold for a few frames. Keep the cadence phase
