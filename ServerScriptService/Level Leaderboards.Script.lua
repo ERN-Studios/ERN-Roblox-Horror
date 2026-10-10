@@ -22,6 +22,12 @@ local ServerStorage = game:GetService("ServerStorage")
 local RunService = game:GetService("RunService")
 
 local ServerKind = require(script.Parent:WaitForChild("ServerKind"))
+-- BOARD_NO_DEVS_20261010 (owner: "Begge DEVs: Mikkelczar og LaverSneglen skal begge ekskluderes fra leaderboards for
+-- level completion tid"). DevAccess.IsAllowed is exactly those two accounts. Their times are never saved, never shown,
+-- and a row of theirs that a read meets is removed from the store (a time is only ever lowered, so a row that is
+-- there stays there until it is taken out).
+local DevAccess = require(game:GetService("ReplicatedStorage"):WaitForChild("DevAccess"))
+local DEVELOPERS = 2
 
 local LEVELS, TOP = 6, 10
 local STORE_PREFIX = "LevelBestTimes_v1_L"
@@ -45,6 +51,7 @@ local function submit(player, level, seconds)
 	if level < 1 or level > LEVELS or not seconds or seconds ~= seconds
 		or seconds < MIN_SECONDS or seconds > MAX_SECONDS then return end
 	if typeof(player) ~= "Instance" or not player:IsA("Player") or player.UserId <= 0 or IS_STUDIO then return end
+	if DevAccess.IsAllowed(player) then return end
 	local ms, key, better = math.floor(seconds * 1000 + 0.5), tostring(player.UserId), false
 	for attempt = 1, 3 do
 		local ok, problem = pcall(function()
@@ -277,7 +284,7 @@ local function read(level)
 	end
 	-- Studio has no access to the data stores here, and the engine prints every refused call: do not ask.
 	if IS_STUDIO then return {} end
-	local ok, pages = pcall(function() return store(level):GetSortedAsync(true, TOP, MIN_SECONDS * 1000) end)
+	local ok, pages = pcall(function() return store(level):GetSortedAsync(true, TOP + DEVELOPERS, MIN_SECONDS * 1000) end)
 	if not ok then
 		warn("[LevelLeaderboards] could not read Level " .. level .. ": " .. tostring(pages))
 		return nil
@@ -285,7 +292,14 @@ local function read(level)
 	local rows = {}
 	for _, entry in ipairs(pages:GetCurrentPage()) do
 		local id = tonumber(entry.key)
-		if id and type(entry.value) == "number" then table.insert(rows, {id = id, ms = entry.value}) end
+		if id and DevAccess.IsAllowed(id) then
+			task.spawn(function()
+				local removed, problem = pcall(function() store(level):RemoveAsync(entry.key) end)
+				if not removed then warn("[LevelLeaderboards] could not remove a developer row from Level " .. level .. ": " .. tostring(problem)) end
+			end)
+		elseif id and type(entry.value) == "number" and #rows < TOP then
+			table.insert(rows, {id = id, ms = entry.value})
+		end
 	end
 	return rows
 end
