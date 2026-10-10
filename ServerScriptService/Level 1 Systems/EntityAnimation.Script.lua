@@ -1,4 +1,5 @@
 local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- Blender action mapping. Empty slots are safe: the controller falls back to a
 -- compatible clip until the exported action has received its Roblox asset id.
@@ -220,6 +221,9 @@ bindEvent("CancelKill", function(captureId)
 end)
 
 connect(workspace:GetAttributeChangedSignal("EntityLunge"), function()
+	-- ENTITY_MOTION_20261010: the data layer owns the three-part lunge.
+	-- Check here so installing the folder after startup also takes effect.
+	if ReplicatedStorage:FindFirstChild("Level1EntityMotion") then return end
 	playAction(tracks.LungeFromRun or tracks.Lunge)
 end)
 

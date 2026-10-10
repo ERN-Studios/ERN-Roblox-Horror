@@ -1,0 +1,24 @@
+{
+  "pass": true,
+  "ownershipCases": 8,
+  "ownershipChecks": 20,
+  "stdout": "OWNERSHIP_CHECKS=20\n",
+  "compile": [
+    {
+      "optimization": 0,
+      "pass": true
+    },
+    {
+      "optimization": 1,
+      "pass": true
+    }
+  ],
+  "programSHA256": "c2b00ece9937aa52f3af445d37157f27c886917374eeaac33e13bd072415981b",
+  "templateSHA256": "d6821c9542384adcfbc7a379b9cadc069788127261d0f76b74d933cdee30f658",
+  "toolSHA256": "9b11dcd52e633c4a8313878d9b500690c931ac12d824dcd254c170dcc742f149",
+  "extractorPath": "tools/cleanup_20261009/prepare_latch_mode_probe_v2.py",
+  "extractorSHA256": "0cfad2b65a34cca5912a58ea525d5f040e506d6d49c86a3f38d6c9813fd81351",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0
+}

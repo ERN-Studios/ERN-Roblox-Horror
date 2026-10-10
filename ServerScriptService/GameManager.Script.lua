@@ -778,6 +778,7 @@ local function setLevelOneEntityActive(active)
   local root = entity:FindFirstChild("HumanoidRootPart")
   if root then root.Anchored = true end
   entity.Name = active and "Entity" or STORED_LEVEL_ONE_ENTITY_NAME
+  pcall(function() entity.ModelStreamingMode = Enum.ModelStreamingMode.Persistent end) -- ENTITY_SCREAM_20261010 (entity): distant root audio needs the model on every client.
   entity.Parent = active and workspace or ServerStorage
  end
  for _, name in ipairs(LEVEL_ONE_ENTITY_SCRIPTS) do

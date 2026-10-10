@@ -1,0 +1,548 @@
+{
+  "schema": "s17-scoped-commit-curation-v1",
+  "pass": true,
+  "head": "2e67231d95520eb1bef50a9db0274b357a8d5877",
+  "scope": "21 verified concurrent Studio mirror Sources + manifest36-row scoped metadata/count reconciliation + two cleanup docs + baseline/readonly and prepared C06 proofs. No other-developer gameplay implementation credit or native writes.",
+  "files": [
+    {
+      "path": "ReplicatedStorage/LoadingCardView.ModuleScript.lua",
+      "bytes": 8923,
+      "sha256": "0f2d4b561ae206ffd07c4345a5e7372853c54863071946e525bd3fa0970c4a7b"
+    },
+    {
+      "path": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
+      "bytes": 21531,
+      "sha256": "ede7dd4a687e76d0aefba2356869e0e31d70dc953b963680ae8fd607ea32e165"
+    },
+    {
+      "path": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+      "bytes": 76673,
+      "sha256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559"
+    },
+    {
+      "path": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "bytes": 313853,
+      "sha256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6"
+    },
+    {
+      "path": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+      "bytes": 12426,
+      "sha256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3"
+    },
+    {
+      "path": "ServerScriptService/GameManager.Script.lua",
+      "bytes": 195000,
+      "sha256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1"
+    },
+    {
+      "path": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
+      "bytes": 67280,
+      "sha256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01"
+    },
+    {
+      "path": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
+      "bytes": 10869,
+      "sha256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9"
+    },
+    {
+      "path": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
+      "bytes": 93377,
+      "sha256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f"
+    },
+    {
+      "path": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+      "bytes": 115391,
+      "sha256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40"
+    },
+    {
+      "path": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
+      "bytes": 105852,
+      "sha256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
+      "bytes": 27789,
+      "sha256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
+      "bytes": 12165,
+      "sha256": "2b12a543132bc0af7e624e50559756236f7f1b717bfe764433f6fbea5be81e4b"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Found Footage HUD.LocalScript.lua",
+      "bytes": 22328,
+      "sha256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
+      "bytes": 11661,
+      "sha256": "a2c09bc7e9bba5ebd04462bfd7d0e0dba49f7453cf3a0403dfb0b0db8d7b5651"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 1 Entity Motion.LocalScript.lua",
+      "bytes": 25299,
+      "sha256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 1 Hardware Client.LocalScript.lua",
+      "bytes": 12239,
+      "sha256": "dd27aa5bb7e87e75f54c3d4b0c60340b5037213b078e156a7ea0e980298d83fa"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "bytes": 66400,
+      "sha256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
+      "bytes": 8315,
+      "sha256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+      "bytes": 244615,
+      "sha256": "f524a7e6865c01b412581b46e64c12c2c2c786bf9c84c23f3b7d7a359d3f422c"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
+      "bytes": 71742,
+      "sha256": "0fc2ce5ee4787d7196193f2849ca3dc9fdfbc85e5f5286a11901543a610d327f"
+    },
+    {
+      "path": "studio-sync-manifest.json",
+      "bytes": 154383,
+      "sha256": "4a69d3db73d8a3140aa19538364277f4e5ee0ce48be974c2528b5959af11272b"
+    },
+    {
+      "path": "CLEANUP_PLAN.md",
+      "bytes": 48340,
+      "sha256": "6f57edac900fa9f0378533cb3ef1e30e2dd1d0cbc136293bf518230aaf2df6f7"
+    },
+    {
+      "path": "CLEANUP_RESULTS.md",
+      "bytes": 48210,
+      "sha256": "e5e823e26f9e2f807d628b3b9a35bc00c09aa7271d0e38d3040abef1fde92bab"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/.gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-begin.json",
+      "bytes": 339,
+      "sha256": "1e124a7ab3d0a33c02ab16a4fb42a0894a57de5b1eb9a77aa286796a83e20a4b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-end.json",
+      "bytes": 339,
+      "sha256": "caac216b7fd143ef14137482f31eafa71e2bb907da36211c25593cb1a5863434"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-page-00.json",
+      "bytes": 15028,
+      "sha256": "39fc63ae00935f1a6b850556fa5758e1294b6ccf26997b9df2aa8a262817f33c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-page-01.json",
+      "bytes": 25635,
+      "sha256": "fa79831abe68ededcabd830410b0a43d10f789c7c01a52fc6b9e0b5948400c0a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-page-02.json",
+      "bytes": 26313,
+      "sha256": "3e95230b23e798651dda24337dae754cfd2d9a8962f13b1a87d4b7a3b05b5433"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-page-03.json",
+      "bytes": 26129,
+      "sha256": "0ed1b51c32aace756ca6c1b9ed09087e6043ce4621bf3a331147b818d7e987c9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-page-04.json",
+      "bytes": 26142,
+      "sha256": "a1df3fe47342e38e12af9fbf1e0dcb5f0654fae97ee78bba7b98462422d3a433"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-page-05.json",
+      "bytes": 25717,
+      "sha256": "5e69d46b2f212d83e41a065ff8fd34d50c993bb45aab8b5727701e3a16e86381"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-page-06.json",
+      "bytes": 27971,
+      "sha256": "9788908bf43988250be3dda8aa91f5d0cc57c19240ae7b8db250b84ac6264107"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-page-07.json",
+      "bytes": 28338,
+      "sha256": "6aee08a2cef4fe4b214e1301d032f50ae090513164b8cac9e3b70c578ab6181d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-page-08.json",
+      "bytes": 28197,
+      "sha256": "bcab4499fef58cce7e0292452dfef272226f8b2ea820b4a20b48416eb4faf793"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-page-09.json",
+      "bytes": 14197,
+      "sha256": "38613d6395a4b68305cc4fb9fb7db9f0b52a991ff3adfd996474ea5bdc55391d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/native-reader.luau",
+      "bytes": 3293,
+      "sha256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/parity-reader.py",
+      "bytes": 12746,
+      "sha256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/repo-after-metadata.json",
+      "bytes": 63282,
+      "sha256": "6d789d02be51ef506de637410143c0d7092ed3bad6d9c594ac3b3cba6ac8db3a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/repo-before-metadata.json",
+      "bytes": 63462,
+      "sha256": "8346b4878c71f824d07dd15eab78c3618152a00ba5e4dbcd1166771b05cc3b46"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/result.json",
+      "bytes": 2044,
+      "sha256": "d2fca5200d7efd5d31198dc460cb0b4563220a603b290cb7670a7b55b1fe9134"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/studio-state-before.json",
+      "bytes": 128,
+      "sha256": "cfec3c6eefac0d8b6a7b4b5cb66ed015049a38533a7f7597a4a9ff92fa10802a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/after/studio-state-before.txt",
+      "bytes": 98,
+      "sha256": "468832371ef314e6b747656d478af6c841e116d9cfea9f2f3ea1d5cc2fbf1b5f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/.gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-begin.json",
+      "bytes": 339,
+      "sha256": "df717029c92d5e154b64668389d1c07d3bc93d3851fd3d406d4bed338677f093"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-end.json",
+      "bytes": 339,
+      "sha256": "5880f88cbd1eb7b851f6547b93fa33443cc3ad72f903be533c6d99cc82777c62"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-page-00.json",
+      "bytes": 15028,
+      "sha256": "c7eb6049fc47caa733bbd9554a85f40a99f47a7f75a7af29ec87a20ccb108d10"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-page-01.json",
+      "bytes": 25635,
+      "sha256": "90f9eeb7cff9a1e9b61f67c337c38d1acc8ca058d7878645db5612f54a0e7ffd"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-page-02.json",
+      "bytes": 26313,
+      "sha256": "3e71ddfb92f9e0a3d274f4d06a3237384c05ae32e876e4fc3729ca1b0053270d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-page-03.json",
+      "bytes": 26129,
+      "sha256": "455b17c16315db9ee63c15d44fe680aa6f9e7bcd543812a3e411aa04fa6bfe0c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-page-04.json",
+      "bytes": 26142,
+      "sha256": "bcef171df9db8c30a3b0bca9010b54791c9680f19bb20569aa5a00e4cd0e26a9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-page-05.json",
+      "bytes": 25717,
+      "sha256": "bd26147a15bab210ca77bd663e8ce71b5bf8433410e91d6e822b50af6971137c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-page-06.json",
+      "bytes": 27971,
+      "sha256": "c5b971d968bc18e46823fa487e1bb5e9cbe38777c44f4305f763dfeef7f6b54f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-page-07.json",
+      "bytes": 28338,
+      "sha256": "01032d911045e4098349a8784a585d618ab620257843ff06416744e9d812e0a3"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-page-08.json",
+      "bytes": 28197,
+      "sha256": "6721d3df3ffb62d3d982a5b023125dc9912c803c64cf959e442c8cbc0a403356"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-page-09.json",
+      "bytes": 14197,
+      "sha256": "96fb6a924ebd9d5587645a9e50f7479fd2dc2da380fb5129bf3fdde9a07c1497"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/native-reader.luau",
+      "bytes": 3293,
+      "sha256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/parity-reader.py",
+      "bytes": 12746,
+      "sha256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/repo-after-metadata.json",
+      "bytes": 62993,
+      "sha256": "1729bba3f786ba6c321f3c5cdffdcac0e804d761aca1179a0e9c04d7f3d91afe"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/repo-before-metadata.json",
+      "bytes": 63173,
+      "sha256": "0bdde2c91bf51b7db0b1147ea054fe4bc54f5e1c304b7a3ed53150dd73fcb5a1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/result.json",
+      "bytes": 15395,
+      "sha256": "6802b323ed8abf84cfdea46e5fc5aa38f917d05ae51eba26c742c123256c2483"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/studio-state-before.json",
+      "bytes": 128,
+      "sha256": "cfec3c6eefac0d8b6a7b4b5cb66ed015049a38533a7f7597a4a9ff92fa10802a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/before/studio-state-before.txt",
+      "bytes": 98,
+      "sha256": "468832371ef314e6b747656d478af6c841e116d9cfea9f2f3ea1d5cc2fbf1b5f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/console-after.api.json",
+      "bytes": 977,
+      "sha256": "c66f1f6ce41461f5c93db3e43faa90db3f9548f2f1a39c6d394b118f93618f29"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/console-before.api.json",
+      "bytes": 977,
+      "sha256": "c66f1f6ce41461f5c93db3e43faa90db3f9548f2f1a39c6d394b118f93618f29"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/export-capture.json",
+      "bytes": 39033,
+      "sha256": "6cb2155a6b7e8483ee3e77402c54261af75f81ec6577a374d90df8c713849b4d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/export-drift-v1.py",
+      "bytes": 9514,
+      "sha256": "0fbc0fdf7588a88af40ffd57b330a032abc8cbd4cfec57c2ab34fd00569a00ca"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/export-preflight-rejection.json",
+      "bytes": 451,
+      "sha256": "fa0598174a4bdf6fdb9123d0c46569e55a1560f970944cc7a9b23a621ec79a92"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/export-result.json",
+      "bytes": 3013,
+      "sha256": "fa1d5af11aa21830986c45e8b69144fb6fa261f0460b2f69db21b070c11d57aa"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/export-scope.json",
+      "bytes": 35769,
+      "sha256": "48a5901e74607ac258a24b178fc751ed902b2b51f09d064be5e2ce6509b310db"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/export-verification.json",
+      "bytes": 10101,
+      "sha256": "84ddb81cf307ca09c6e0307802a1b28018ad1abe5ccb7c993b4fa5298a384602"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/peer-review-v1.json",
+      "bytes": 11222,
+      "sha256": "e8c17b4fd68068c0ee9a43fcf551aa616887b796c1dc758a7b976cccdb3811e6"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/reader-preflight.json",
+      "bytes": 446,
+      "sha256": "0b6c294a5b4a1269ffab6118dd5d3a3f9e91d5e304be6a0b03256d3b5727b5a2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/studio-list.api.json",
+      "bytes": 294,
+      "sha256": "bae055dec85ee443397154aba72b9d9805d672db5258fe14cf2d0c4e7a142c90"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/studio-state-after.api.json",
+      "bytes": 194,
+      "sha256": "2a40348153521a53d613a95b46111de11e0796537f953bd5b2af04224487407f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/studio-state-before.api.json",
+      "bytes": 194,
+      "sha256": "2a40348153521a53d613a95b46111de11e0796537f953bd5b2af04224487407f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/studio-state-final.api.json",
+      "bytes": 194,
+      "sha256": "2a40348153521a53d613a95b46111de11e0796537f953bd5b2af04224487407f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/test_full_sync_contract.py.after.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/test_full_sync_contract.py.after.stdout.txt",
+      "bytes": 6711,
+      "sha256": "458662219d914f681dbd74bee010e56587ea764e32576bff9bbe3c8d478a55f5"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/test_studio_source_contract.py.after.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/resume-baseline-v1/test_studio_source_contract.py.after.stdout.txt",
+      "bytes": 2851,
+      "sha256": "8a37d8e19af509fc0434e8c1c027d72f2ad1eda25c096864604f99d98c57c029"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/authoring-gates-v1.json",
+      "bytes": 2007,
+      "sha256": "4fae7a9761e18c28adc10bc5cf1282eee237cc4d49c2a42343ccb895e047d8b1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/binding-rejection-v1.json",
+      "bytes": 1226,
+      "sha256": "cbb806836da3ea6c9f36c4c64828fcf1670a75b972705396b01dd2fa25cd7d72"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/capture-native-binding-input.py",
+      "bytes": 3561,
+      "sha256": "79aea2a7cfa4c73b8dc777e903647b6b49b7895e27e23d1e91ac04350419b2f1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/closure-v1.json",
+      "bytes": 9248,
+      "sha256": "90d2ea227c0b8044f81705a74f173634a6e24de6c86db3d4e5f5b42bf9003550"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/native-binding-input-v1.json",
+      "bytes": 82821,
+      "sha256": "ae2b9f893d0452442351cf669bcfa6b6b3bc229f2f1bdce3bb37f5cb3088f540"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/native-binding-v1/binding.json",
+      "bytes": 2454,
+      "sha256": "33297c6591dceb3f3345e417ab1a2a3aa339ee89f28c843e5af8f41091764db8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/native-binding-v1/native-before.luau",
+      "bytes": 52046,
+      "sha256": "3126993ffb25e6f1fac426162ada278af5b2d68ca33173c22a50b932fee1ef92"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/native-binding-v1/native-installed.luau",
+      "bytes": 52045,
+      "sha256": "4c1f01191e99ac61b55cb78383c51e6cc0820dbbd5911bf717661a74b7ca0dfc"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/ownership-gates-v1.json",
+      "bytes": 729,
+      "sha256": "ab9ed056861310982f98e223f850bbf8e7ac271779795b02dac3a93785dfe569"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/prepare_preview_probe.py",
+      "bytes": 15790,
+      "sha256": "2c1160dfcd1cb3c08763b7947c2f53fa74aefc3292d8a06338263b9daf70d033"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/preview-contract-host.luau",
+      "bytes": 8544,
+      "sha256": "bf43c4074a24363ac3b1952289811a523e1ab40d75fdbe2e230fe606003c6d9c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/preview-offline-engine.luau",
+      "bytes": 2076,
+      "sha256": "ad2834c04fa8cfc376a90f62ef7f65e908bb62d3f2395c36e79ec29b3e0b1c37"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/before.module.luau",
+      "bytes": 10240,
+      "sha256": "4e31eea8d0e3a1e8033162a9b68e75f4572206ab5b7d626ef0f07b702683ebba"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/before.source.luau",
+      "bytes": 1622,
+      "sha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/candidate.module.luau",
+      "bytes": 10025,
+      "sha256": "7383de84efb3be4288f05f3a1cab20a219715836a99555ff6cc3522951f61a34"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/candidate.source.luau",
+      "bytes": 1407,
+      "sha256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/native-template.luau",
+      "bytes": 8963,
+      "sha256": "d6821c9542384adcfbc7a379b9cadc069788127261d0f76b74d933cdee30f658"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/proposal.json",
+      "bytes": 8617,
+      "sha256": "2f9ccc27d2c478b5b1f262205845c3e23748bf7d98b28bc877e65afb5330c3d0"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/publicNegative.module.luau",
+      "bytes": 10059,
+      "sha256": "7e506cfbf034ab8f8c355787286bb0e770c13dd1fd14ea40bf51fe891be7ff81"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/truthyNegative.module.luau",
+      "bytes": 10017,
+      "sha256": "e05534cb4919da0664fc4209e34797f1e2707e7c44f33817b3c6ee1c8d373178"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/REVIEW.md",
+      "bytes": 7946,
+      "sha256": "9051c2b5cac2bd8c8b28b5f1f8946d902af293d7a0e609a246d32dd0ae75d8e6"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/run-root-native-probe.py",
+      "bytes": 2118,
+      "sha256": "b8bccbc315856806b0681d536dfafc4981656c4f581a32d7de3b0867c5ac5b25"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/verify_preview_authoring.py",
+      "bytes": 6931,
+      "sha256": "e70cc830d6114de4d0320471044341c8f51e3818f80a60da6803d1a56fa5553f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-next-v1/verify_preview_ownership.py",
+      "bytes": 2658,
+      "sha256": "9b11dcd52e633c4a8313878d9b500690c931ac12d824dcd254c170dcc742f149"
+    }
+  ]
+}

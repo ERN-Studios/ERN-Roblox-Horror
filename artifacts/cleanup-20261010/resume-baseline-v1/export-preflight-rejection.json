@@ -1,0 +1,11 @@
+{
+  "pass": false,
+  "phase": "local import before Studio client initialization",
+  "error": "ModuleNotFoundError: No module named 'sync_from_studio'",
+  "cause": "Wrong project-root parent index in the first local preflight",
+  "fix": "Path(__file__).resolve().parents[3] resolves the project root; HERE.parents[2] would be equivalent",
+  "nativeCalls": 0,
+  "sourceMirrorWrites": 0,
+  "manifestWrites": 0,
+  "rejectedToolPreservedPrivately": true
+}

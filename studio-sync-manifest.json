@@ -11,9 +11,9 @@
   "universeId": 10559217407,
   "datamodel": "Edit",
   "counts": {
-    "scripts": 212,
+    "scripts": 213,
     "remoteEvents": 15,
-    "total": 227,
+    "total": 228,
     "created": 12,
     "updated": 18,
     "unchanged": 215,
@@ -140,15 +140,16 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/LoadingCardView.ModuleScript.lua",
-      "bytes": 8831,
-      "sha256": "9e8e46048ed89e632b67b6d49d075f96013adff2437a991e398fd04aa465a0dd",
+      "bytes": 8923,
+      "sha256": "0f2d4b561ae206ffd07c4345a5e7372853c54863071946e525bd3fa0970c4a7b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
         "Archivable": true,
         "LinkedSource": ""
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.MasterConfiguration",
@@ -158,15 +159,16 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
-      "bytes": 21208,
-      "sha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "bytes": 21531,
+      "sha256": "ede7dd4a687e76d0aefba2356869e0e31d70dc953b963680ae8fd607ea32e165",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
         "Archivable": true,
         "LinkedSource": ""
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.ProtectionClient",
@@ -194,15 +196,16 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
-      "bytes": 64014,
-      "sha256": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "bytes": 76673,
+      "sha256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
         "Archivable": true,
         "LinkedSource": ""
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.SlideContinuationSafety",
@@ -248,15 +251,16 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 313535,
-      "sha256": "605da83a331022949004dab143012b408b899500f9e6c84188b8d71a31771aca",
+      "bytes": 313853,
+      "sha256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
         "Archivable": true,
         "LinkedSource": ""
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.UIStyle",
@@ -266,15 +270,16 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
-      "bytes": 11842,
-      "sha256": "28ac2bf612994737da4e0e5c307401f5c4508b8561491670528c73889e01a1d5",
+      "bytes": 12426,
+      "sha256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
         "Archivable": true,
         "LinkedSource": ""
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.ZyntraChallenges",
@@ -493,18 +498,19 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 194825,
-      "sha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+      "bytes": 195000,
+      "sha256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "ServerScriptService.HazmatSkinVisuals",
@@ -555,18 +561,19 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
-      "bytes": 58731,
-      "sha256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "bytes": 67280,
+      "sha256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "ServerScriptService.Level 1 Systems.EntityAnimation",
@@ -577,18 +584,19 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
-      "bytes": 10588,
-      "sha256": "3c15ac60553c52c133bbbdd8e6d70efd52022c9e722065153b76e73986417508",
+      "bytes": 10869,
+      "sha256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "ServerScriptService.Level 1 Systems.EntityKill",
@@ -621,18 +629,19 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
-      "bytes": 89825,
-      "sha256": "f3bf0447db60f17eb6c83f005fbde4df9bb2d10232427c6494c0352d3851f106",
+      "bytes": 93377,
+      "sha256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
@@ -643,18 +652,19 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
-      "bytes": 105502,
-      "sha256": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
+      "bytes": 115391,
+      "sha256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
@@ -1630,8 +1640,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
-      "bytes": 99338,
-      "sha256": "12cec0a73f8631026474661cc853856cf053f09d1c0d05291888100ef763abb2",
+      "bytes": 105852,
+      "sha256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1641,7 +1651,8 @@
       "attributes": {
         "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
         "Level6SourceSha256": "c08f474cedd3c0aae0aef242f212dd592e154467a1241ff83bcec837e72a8a88"
-      }
+      },
+      "tags": []
     },
     {
       "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Room Dressing",
@@ -3023,18 +3034,19 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
-      "bytes": 26547,
-      "sha256": "fdcec2e0a2790cd880094a65a26b0212f11bddc0b94ad7dce63524a8b8e23245",
+      "bytes": 27789,
+      "sha256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
@@ -3045,18 +3057,19 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
-      "bytes": 10450,
-      "sha256": "8084b8ec48f09fa62889d22257d76dd8946cda5a11a7977b8f800bb5674bd0b4",
+      "bytes": 12165,
+      "sha256": "2b12a543132bc0af7e624e50559756236f7f1b717bfe764433f6fbea5be81e4b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.First Entry Guide",
@@ -3111,18 +3124,19 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Found Footage HUD.LocalScript.lua",
-      "bytes": 9745,
-      "sha256": "c21f23d514a20a6be3ba48f2c03ff0f788e372d73b80b1ea733657b64698b24b",
+      "bytes": 22328,
+      "sha256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
@@ -3199,18 +3213,19 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
-      "bytes": 10507,
-      "sha256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "bytes": 11661,
+      "sha256": "a2c09bc7e9bba5ebd04462bfd7d0e0dba49f7453cf3a0403dfb0b0db8d7b5651",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Hardware Client",
@@ -3221,18 +3236,19 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 1 Hardware Client.LocalScript.lua",
-      "bytes": 11762,
-      "sha256": "252c7b86be07131d4f13d6f74c3a20178b60085ec98e3898adc02b72a3831e4a",
+      "bytes": 12239,
+      "sha256": "dd27aa5bb7e87e75f54c3d4b0c60340b5037213b078e156a7ea0e980298d83fa",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
@@ -3620,18 +3636,19 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
-      "bytes": 66128,
-      "sha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "bytes": 66400,
+      "sha256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client",
@@ -4013,20 +4030,21 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
-      "bytes": 5602,
-      "sha256": "a35eba8da9854126d7522d2efe569ba0cf61af5ff0b0b3fb06d2f61ff5fb1fa5",
+      "bytes": 8315,
+      "sha256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
       "attributes": {
         "ObjectiveUIVersion": "20260902_1"
-      }
+      },
+      "tags": []
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
@@ -4128,20 +4146,21 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 238896,
-      "sha256": "98d2c871dd5cbd33e3a0d633e6afcc3a7a0012c777418bd57cc272c5f35eb5dc",
+      "bytes": 244615,
+      "sha256": "f524a7e6865c01b412581b46e64c12c2c2c786bf9c84c23f3b7d7a359d3f422c",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
+        "Disabled": false,
         "RunContext": "Enum.RunContext.Legacy",
-        "Enabled": true
+        "Archivable": true
       },
       "attributes": {
         "ObjectiveUIVersion": "20260902_1"
-      }
+      },
+      "tags": []
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
@@ -4174,8 +4193,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 68062,
-      "sha256": "022342ec4e78d46d28319198f05174ffae84261e9e075cc42820b5219fc0bf02",
+      "bytes": 71742,
+      "sha256": "0fc2ce5ee4787d7196193f2849ca3dc9fdfbc85e5f5286a11901543a610d327f",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4399,7 +4418,11 @@
       "bytes": 170,
       "sha256": "f8c6ce631bbf6ab6e69966618e76d4359465010bbe69b86b454646f3cbac48a3",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientReport",
@@ -4416,7 +4439,11 @@
       "attributes": {
         "Protocol": 1,
         "Generation": 0
-      }
+      },
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Level 2 Remotes.Level 2 Alert Event",
@@ -4430,7 +4457,11 @@
       "bytes": 167,
       "sha256": "26bf154da9416e7c5f98ba918e084848db7292756f66e645f5a7c67e1eea8a74",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Level 2 Remotes.Level 2 Sound Event",
@@ -4444,7 +4475,11 @@
       "bytes": 167,
       "sha256": "c23ba42f37f52788f595b7decf891889c7f694c8bb5e0cd9b3fce37bac6b9b1a",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Level 3 Remotes.ClientEvent",
@@ -4458,7 +4493,11 @@
       "bytes": 160,
       "sha256": "58c0db0a2621b63c09704a8d2d1e3bbe31ee80929c9ce9dd06cc7b2a96d293fc",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Level 3 Remotes.Level3HideRequest",
@@ -4472,7 +4511,11 @@
       "bytes": 165,
       "sha256": "19deb874115fb53555fb3fc4e9e66733fe278dad0fc84c5758882c25d0b38529",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.DevControl",
@@ -4486,7 +4529,11 @@
       "bytes": 840,
       "sha256": "dbd7924fe5a7e22f42f21b8b78844f8ab8074feb0115362824f76e3741ab8aae",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.DevTuning",
@@ -4500,7 +4547,11 @@
       "bytes": 917,
       "sha256": "cf0ed6289143bbf873ebfc26307e6e62d7db82c7df12ece9b39d240a6b9d6efd",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.DropGlowstick",
@@ -4514,7 +4565,11 @@
       "bytes": 245,
       "sha256": "86458c8756ae1a2f91c93a642d3da93fd077d24ac6ad6698873b92ae84cb0194",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.Jumpscare",
@@ -4528,7 +4583,11 @@
       "bytes": 287,
       "sha256": "068d83d9ce039cf5463c14220281cd81551d798a2e904b0032e02497c15582c8",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.PuzzleStatus",
@@ -4542,7 +4601,11 @@
       "bytes": 293,
       "sha256": "fb3fef07cca8935942f386596e3a31179b31adf436e897e65ba973e233e42523",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.ReportNoise",
@@ -4556,7 +4619,11 @@
       "bytes": 433,
       "sha256": "d401c12504541bcd6429628945f25c6640a18ef14800e4baac30dc6028e61f82",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.RoundStatus",
@@ -4570,7 +4637,11 @@
       "bytes": 288,
       "sha256": "c04870c6bd6b7fac25e394f12b69c13cb705155f5d9d495b430214c0debb6f46",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.SetCrouching",
@@ -4584,7 +4655,11 @@
       "bytes": 151,
       "sha256": "2422f7966311e4bc878e551342a570271b4eb60799c829bbc7c647c28d22ba54",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.ToggleFlashlight",
@@ -4598,7 +4673,11 @@
       "bytes": 456,
       "sha256": "da41e03f2bcf356e13a5b840ec7508d99c312bb8a07ceb9353cbadeaea81b216",
       "status": "synced",
-      "attributes": []
+      "attributes": [],
+      "properties": {
+        "Archivable": true
+      },
+      "tags": []
     },
     {
       "studioPath": "ServerScriptService.LevelWorldStorage",
@@ -4656,6 +4735,29 @@
       "bytes": 3537,
       "sha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
       "status": "synced",
+      "sourceEditorMatches": true
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Entity Motion",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Entity Motion.LocalScript.lua",
+      "status": "created",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Entity Motion"
+      ],
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "attributes": [],
+      "tags": [],
+      "bytes": 25299,
+      "sha256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238",
       "sourceEditorMatches": true
     }
   ]

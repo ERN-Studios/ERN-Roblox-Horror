@@ -43,10 +43,10 @@ local ENTITY_STEP_STARTS = {0.70, 0.23}
 -- Fill any of the 3 — it works with just one; empty slots are skipped.
 local IDLE_SOUNDS     = { "", "", "" }
 local CHASE_SOUND     = "rbxassetid://79246919959914" -- loops while the Entity is actively CHASING you (positional)
--- distant entity screams, heard by EVERYONE on the server at the same moment,
+-- distant entity screams, scheduled for nearby players at the same moment,
 -- 3D from wherever the Entity is. EntityAI picks the timing and the take and
 -- publishes them (EntityScream / EntityScreamIndex attributes) so every player
--- hears the SAME scream. Fill any of the 4; empty slots stay silent.
+-- hears the SAME scream within its reach. Fill any of the 4; empty slots stay silent.
 local SCREAM_SOUNDS   = {
 	"", -- Level 1 Distant Entity Scream 1
 	"", -- Level 1 Distant Entity Scream 2
@@ -83,6 +83,8 @@ local RUN_WALKSPEED = 22     -- your WalkSpeed at/above which it counts as runni
 local FOOT_FADE     = 6      -- how fast the loop fades in as you move / out as you stop
 local FLASHLIGHT_VOLUME = 0.6 -- the flashlight toggle click (2D)
 
+-- ENTITY_SCREAM_20261010 (entity): the siren needs a known level to restore after each howl.
+local ALERT_VOLUME     = 1.4
 local ENTITY_VOLUME    = 1.0  -- the Entity's growl (positional)
 local DEATH_VOLUME     = .5    -- the scream ALIVE players hear when someone dies (Level 1 only, positional)
 local JUMPSCARE_VOLUME = 0.82  -- the dying player's own impact sound (2D, intentionally restrained)
@@ -91,13 +93,12 @@ local IDLE_VOLUME      = 0.7   -- the Entity's idle vocalisations (positional)
 local IDLE_MIN_GAP     = 6     -- min seconds between idle vocalisations
 local IDLE_MAX_GAP     = 14    -- max seconds between them
 local CHASE_VOLUME     = 1.105  -- the Entity's chase sound (positional, looping)
-local SCREAM_VOLUME    = 0.95  -- distant entity screams (positional at the Entity, map-wide)
+-- ENTITY_SCREAM_20261010 (entity): shared warnings carry across nearby cells without covering the map.
+local SCREAM_VOLUME    = 0.95  -- distant entity screams (positional, bounded to the map scale)
 local CHASE_FADE       = 0.6   -- seconds to fade the chase loop in / out
 local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it loses
 -- sight and is only tracking blindly (match TRACK_TIME)
-local SPOT_VOLUME      = 0.45   -- quieter spatial warning for the spotted player
-local SPOT_MIN_DISTANCE = 8     -- full volume only beside the Entity
-local SPOT_MAX_DISTANCE = 96    -- local warning; silent beyond four maze cells
+local SPOT_VOLUME      = 0.85  -- shared spatial warning from the Entity's howl position
 local LUNGE_VOLUME     = 1     -- the lunge telegraph (positional)
 local STEP_WALK_VOLUME = 1.014 -- entity walk impact (30% louder)
 local STEP_RUN_VOLUME  = 1.30  -- entity chase impact (30% louder)
@@ -110,6 +111,28 @@ local STEP_PITCH_JITTER   = 0.015
 -- ──────────────────────────────────────────────────────────
 
 local player = Players.LocalPlayer
+
+local function finite(n)
+	return type(n) == "number" and n == n and math.abs(n) < math.huge
+end
+
+-- A configured motion layer uses nil to mean no foot contact (including lunge,
+-- action poses and missing clip data). Legacy timers only apply without it.
+local motionConfigured = RS:FindFirstChild("Level1EntityMotion") ~= nil
+RS.ChildAdded:Connect(function(child)
+	if child.Name == "Level1EntityMotion" then motionConfigured = true end
+end)
+RS.ChildRemoved:Connect(function(child)
+	if child.Name == "Level1EntityMotion" then
+		motionConfigured = RS:FindFirstChild("Level1EntityMotion") ~= nil
+	end
+end)
+-- ENTITY_MOTION_LIVE_20261010: ...and only while the layer is beating. If it is off, has no data or has died,
+-- nil means nothing and the legacy timers below carry the footsteps, so the Entity is never silent.
+local function motionLive()
+	local beat = workspace:GetAttribute("L1EntityMotionBeat")
+	return motionConfigured and type(beat) == "number" and os.clock() - beat < 1.5 -- 10 Hz beat; a slow client hitches
+end
 
 -- SPECTATE_AUDIO_PARITY_20260914 -- whose ears this controller is mixing for.
 -- Alive: your own body. Dead or escaped and spectating: the player
@@ -303,7 +326,7 @@ task.spawn(function()
 end)
 
 -- alert siren: plays whenever the maze enters ALERT (red pulsing) mode
-local alert = makeLoop(ALERT_SOUND, 1.4)
+local alert = makeLoop(ALERT_SOUND, ALERT_VOLUME)
 local function refreshAlert()
 	if ALERT_SOUND == "" then return end
 	if workspace:GetAttribute("LightMode") == "ALERT" then
@@ -315,24 +338,64 @@ end
 workspace:GetAttributeChangedSignal("LightMode"):Connect(refreshAlert)
 refreshAlert()
 
--- the Entity's own growl: a looping POSITIONAL sound on the entity, so you hear
--- which direction it's coming from (attached client-side from here)
-task.spawn(function()
-	if ENTITY_SOUND == "" then return end
-	local entity = workspace:WaitForChild("Entity", 60)
-	local er = entity and entity:WaitForChild("HumanoidRootPart", 15)
-	if not er then return end
-	local s = Instance.new("Sound")
-	s.Name = "EntitySound"
-	s.Looped = true
-	s.Volume = ENTITY_VOLUME
-	s.SoundId = ENTITY_SOUND
-	s.RollOffMode = Enum.RollOffMode.InverseTapered
-	s.RollOffMinDistance = 8
-	s.RollOffMaxDistance = 140
-	s.Parent = er
-	s:Play()
-end)
+-- Follow the round's NEW Entity and an initially missing/replaced root. No
+-- per-Entity connection or old-root Heartbeat survives its removal.
+local function watchEntityRoot(onRoot)
+	local entity, root, rootAdded, rootRemoved
+	local function refreshRoot()
+		local candidate = entity and entity.Parent == workspace
+			and entity:FindFirstChild("HumanoidRootPart") or nil
+		if candidate and not candidate:IsA("BasePart") then candidate = nil end
+		if candidate == root then return end
+		root = candidate
+		onRoot(root)
+	end
+	local function unbind()
+		if rootAdded then rootAdded:Disconnect(); rootAdded = nil end
+		if rootRemoved then rootRemoved:Disconnect(); rootRemoved = nil end
+		entity, root = nil, nil
+		onRoot(nil)
+	end
+	local function bind(candidate)
+		if not candidate:IsA("Model") or candidate.Name ~= "Entity" or candidate == entity then return end
+		unbind()
+		entity = candidate
+		rootAdded = entity.ChildAdded:Connect(refreshRoot)
+		rootRemoved = entity.ChildRemoved:Connect(refreshRoot)
+		refreshRoot()
+	end
+	local added = workspace.ChildAdded:Connect(bind)
+	local removed = workspace.ChildRemoved:Connect(function(child)
+		if child == entity then unbind() end
+	end)
+	script.Destroying:Connect(function()
+		added:Disconnect()
+		removed:Disconnect()
+		unbind()
+	end)
+	local existing = workspace:FindFirstChild("Entity")
+	if existing then bind(existing) end
+end
+
+-- the Entity's own growl: positional and rebound for every round.
+if ENTITY_SOUND ~= "" then
+	local growl
+	watchEntityRoot(function(er)
+		if growl then growl:Destroy(); growl = nil end
+		if not er then return end
+		local s = Instance.new("Sound")
+		s.Name = "EntitySound"
+		s.Looped = true
+		s.Volume = ENTITY_VOLUME
+		s.SoundId = ENTITY_SOUND
+		s.RollOffMode = Enum.RollOffMode.InverseTapered
+		s.RollOffMinDistance = 8
+		s.RollOffMaxDistance = 140
+		s.Parent = er
+		growl = s
+		s:Play()
+	end)
+end
 
 -- YOUR OWN jumpscare scream (2D): fired on the SAME Jumpscare remote as the
 -- face image (JumpscareUI). The scream starts the INSTANT the Entity captures
@@ -443,28 +506,56 @@ roundStatus.OnClientEvent:Connect(function(ev)
 	end
 end)
 
--- the Entity's yell/roar: EntityAI bumps the EntityYell attribute each time it
--- shoves a pit player, and we play the roar POSITIONALLY at the entity
+-- ENTITY_SCREAM_20261010 (entity): live maze dimensions keep every shared vocal's reach bounded when GRID changes.
+local SCREAM = { MinCells = 1.25, Share = 0.30, LoCells = 9, HiCells = 12 }
+local function screamReach()
+	local grid = tonumber(workspace:GetAttribute("GRID")) or 40
+	local cell = tonumber(workspace:GetAttribute("CELL")) or 24
+	return SCREAM.MinCells * cell, math.clamp(SCREAM.Share * grid, SCREAM.LoCells, SCREAM.HiCells) * cell
+end
+
+-- ENTITY_SCREAM_20261010 (entity): a workspace source stays audible without requiring the streamed Entity.
+local function playEntityVoice(id, volume, pos, name)
+	if id == "" or typeof(pos) ~= "Vector3" then return end
+	local holder = Instance.new("Part")
+	holder.Name = name .. "Holder"
+	holder.Anchored = true
+	holder.CanCollide = false
+	holder.CanTouch = false
+	holder.CanQuery = false
+	holder.Transparency = 1
+	holder.Size = Vector3.new(1, 1, 1)
+	holder.CFrame = CFrame.new(pos)
+	holder.Parent = workspace
+	local s = Instance.new("Sound")
+	s.Name = name
+	s.SoundId = id
+	s.Volume = volume
+	s.RollOffMode = Enum.RollOffMode.LinearSquare
+	s.RollOffMinDistance, s.RollOffMaxDistance = screamReach()
+	s.Parent = holder
+	s.Ended:Connect(function() holder:Destroy() end)
+	s:Play()
+	task.delay(12, function() holder:Destroy() end)
+end
+
+-- ENTITY_SCREAM_20261010 (entity): the pit roar shares the howl's bounded positional curve.
+-- EntityAI publishes the source before bumping EntityYell so no streamed root is needed.
 if YELL_SOUND ~= "" then
 	workspace:GetAttributeChangedSignal("EntityYell"):Connect(function()
-		local entity = workspace:FindFirstChild("Entity")
-		local er = entity and entity:FindFirstChild("HumanoidRootPart")
-		if not er then return end
-		local s = Instance.new("Sound")
-		s.SoundId = YELL_SOUND
-		s.Volume = YELL_VOLUME
-		s.RollOffMode = Enum.RollOffMode.InverseTapered
-		s.RollOffMinDistance = 10
-		s.RollOffMaxDistance = 200
-		s.Parent = er
-		s:Play()
-		s.Ended:Connect(function() s:Destroy() end)
-		task.delay(8, function() if s then s:Destroy() end end)
+		local pos = workspace:GetAttribute("EntityYellPos")
+		if typeof(pos) ~= "Vector3" then
+			local entity = workspace:FindFirstChild("Entity")
+			local er = entity and entity:FindFirstChild("HumanoidRootPart")
+			if not er or not er:IsA("BasePart") then return end
+			pos = er.Position
+		end
+		playEntityVoice(YELL_SOUND, YELL_VOLUME, pos, "EntityYell")
 	end)
 end
 
--- Chase ambience remains positional. The spotted warning is private to its
--- target and comes from the Entity with native 3D distance falloff.
+-- Chase ambience and shared howl warnings remain positional for participants
+-- and spectators listening through a living player's camera.
 local function chaseActive()
 	return workspace:GetAttribute("SelectedLevel") == 1
 		and workspace:GetAttribute("RoundActive") == true
@@ -475,30 +566,32 @@ end
 
 local lastSpotScreamAt = -math.huge
 
-local function playEntitySpotScream()
-	if not chaseActive() or player:GetAttribute("InRound") ~= true
-		or player:GetAttribute("Escaped") == true then return false end
-	local character = player.Character
-	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	if not humanoid or humanoid.Health <= 0 then return false end
-	if SPOT_SOUND == "" or (os.clock() - lastSpotScreamAt) < 4 then return false end
-	local entity = workspace:FindFirstChild("Entity")
-	local er = entity and (entity:FindFirstChild("HumanoidRootPart") or entity:FindFirstChildWhichIsA("BasePart", true))
-	if not er or not er:IsA("BasePart") then return false end
-	lastSpotScreamAt = os.clock()
-	local sound = Instance.new("Sound")
-	sound.Name = "SpotScream"
-	sound.SoundId = SPOT_SOUND
-	sound.Volume = SPOT_VOLUME
-	sound.RollOffMode = Enum.RollOffMode.InverseTapered
-	sound.RollOffMinDistance = SPOT_MIN_DISTANCE
-	sound.RollOffMaxDistance = SPOT_MAX_DISTANCE
-	sound.Parent = er
-	sound:Play()
-	sound.Ended:Connect(function() sound:Destroy() end)
-	task.delay(12, function() sound:Destroy() end)
-	return true
-end
+-- ENTITY_SCREAM_20261010 (entity): all nearby listeners share one source; the 2D siren must not mask it.
+workspace:GetAttributeChangedSignal("EntityHowl"):Connect(function()
+	if not chaseActive() or SPOT_SOUND == "" then return end
+	local now = os.clock()
+	if now - lastSpotScreamAt < 4 then return end
+	local pos = workspace:GetAttribute("EntityHowlPos")
+	if typeof(pos) ~= "Vector3" then
+		local entity = workspace:FindFirstChild("Entity")
+		local er = entity and (entity:FindFirstChild("HumanoidRootPart") or entity:FindFirstChildWhichIsA("BasePart", true))
+		if not er or not er:IsA("BasePart") then return end
+		pos = er.Position
+	end
+	lastSpotScreamAt = now
+	playEntityVoice(SPOT_SOUND, SPOT_VOLUME, pos, "SpotScream")
+	-- Match the default camera listener, including the living player's spectate camera.
+	-- A silent, out-of-range howl must not give the whole map a 2D siren cue.
+	local camera = workspace.CurrentCamera
+	local _, reach = screamReach()
+	if alert.IsPlaying and camera and (camera.CFrame.Position - pos).Magnitude < reach then
+		TweenService:Create(alert, TweenInfo.new(0.15), {Volume = 0.7}):Play()
+		task.delay(2.6, function()
+			if lastSpotScreamAt ~= now then return end
+			TweenService:Create(alert, TweenInfo.new(0.8), {Volume = ALERT_VOLUME}):Play()
+		end)
+	end
+end)
 
 -- Preload the authored transient so the important first attack is not lost to
 -- a cold asset fetch on a player's first encounter.
@@ -511,10 +604,6 @@ if SPOT_SOUND ~= "" then
 		warm.Parent = SoundService
 		pcall(function() ContentProvider:PreloadAsync({warm}) end)
 		warm:Destroy()
-	end)
-
-	player:GetAttributeChangedSignal("Level1EntityAlertSerial"):Connect(function()
-		playEntitySpotScream()
 	end)
 end
 
@@ -548,9 +637,8 @@ end)
 
 -- distant entity screams: EntityAI publishes EntityScreamIndex then bumps the
 -- EntityScream counter at a random cadence. Every client plays the SAME take
--- positionally at the Entity, so the whole server shares one scream from the
--- Entity's direction — audible clear across the maze, pushed "far away" in the
--- mix by the same Linear-falloff + EQ recipe as the death scream.
+-- positionally at the Entity, within the same bounded reach as the howl.
+-- ENTITY_SCREAM_20261010 (entity): future asset fills must not turn this into map-wide audio.
 workspace:GetAttributeChangedSignal("EntityScream"):Connect(function()
 	local idx = workspace:GetAttribute("EntityScreamIndex")
 	local id = typeof(idx) == "number" and SCREAM_SOUNDS[idx] or nil
@@ -558,27 +646,11 @@ workspace:GetAttributeChangedSignal("EntityScream"):Connect(function()
 	local entity = workspace:FindFirstChild("Entity")
 	local er = entity and entity:FindFirstChild("HumanoidRootPart")
 	if not er then return end
-	local s = Instance.new("Sound")
-	s.Name = "DistantScream"
-	s.SoundId = id
-	s.Volume = SCREAM_VOLUME
-	s.PlaybackSpeed = 0.97 + math.random() * 0.06
-	s.RollOffMode = Enum.RollOffMode.Linear
-	s.RollOffMinDistance = 60
-	s.RollOffMaxDistance = 2200
-	local eq = Instance.new("EqualizerSoundEffect")
-	eq.HighGain = -6
-	eq.MidGain = -2
-	eq.LowGain = 0
-	eq.Parent = s
-	s.Parent = er
-	s:Play()
-	s.Ended:Connect(function() s:Destroy() end)
-	task.delay(12, function() if s then s:Destroy() end end)
+	playEntityVoice(id, SCREAM_VOLUME, er.Position, "DistantScream")
 end)
 
 -- the chase audio: when the Entity SPOTS someone (EntityState → CHASE) it
--- fades in the positional chase loop. Target warnings use their own private signal.
+-- fades in the positional chase loop. Shared howl warnings use their own signal.
 -- Level 1 can begin after a long lobby wait and can rebuild its Entity between
 -- rounds, so this binding follows every replacement instead of timing out once.
 local chaseEntity
@@ -607,7 +679,7 @@ local function refreshChase()
 	local tracking = eligible and st == "TRACK"
 
 	if chasing then
-		-- Warning playback comes only from this player's server-issued alert serial.
+		-- The shared warning is already driven by the server's howl counter.
 		fadeChase(CHASE_VOLUME, CHASE_FADE)
 	elseif tracking then
 		-- Lost sight but still tracking → slowly withdraw the chase loop.
@@ -717,76 +789,89 @@ end
 
 -- The Entity's two alternating steps. Both supplied clips are one-shot impacts
 -- with long tails and different leading silence, so each foot gets its own voice.
--- Actual position delta suppresses fake stomps while the Entity is stuck.
-task.spawn(function()
-	if ENTITY_STEP_SOUNDS[1] == "" and ENTITY_STEP_SOUNDS[2] == "" then return end
-	local entity = workspace:WaitForChild("Entity", 60)
-	local er = entity and entity:WaitForChild("HumanoidRootPart", 15)
-	if not er then return end
-
+-- Actual position delta suppresses fake stomps in the legacy timer fallback.
+if ENTITY_STEP_SOUNDS[1] ~= "" or ENTITY_STEP_SOUNDS[2] ~= "" then
+	local heartbeat
 	local voices = {}
-	for index, id in ipairs(ENTITY_STEP_SOUNDS) do
-		local step = Instance.new("Sound")
-		step.Name = "EntityStep" .. index
-		step.SoundId = id
-		step.RollOffMode = Enum.RollOffMode.InverseTapered
-		step.RollOffMinDistance = 8
-		step.RollOffMaxDistance = 140
-		step.Parent = er
-		voices[index] = step
-	end
-	pcall(function()
-		ContentProvider:PreloadAsync(voices)
+	watchEntityRoot(function(er)
+		if heartbeat then heartbeat:Disconnect(); heartbeat = nil end
+		for _, voice in ipairs(voices) do voice:Destroy() end
+		table.clear(voices)
+		if not er then return end
+
+		for index, id in ipairs(ENTITY_STEP_SOUNDS) do
+			local step = Instance.new("Sound")
+			step.Name = "EntityStep" .. index
+			step.SoundId = id
+			step.RollOffMode = Enum.RollOffMode.InverseTapered
+			step.RollOffMinDistance = 8
+			step.RollOffMaxDistance = 140
+			step.Parent = er
+			voices[index] = step
+		end
+		-- Preloading may yield; capture this round's bank rather than a reused table.
+		local preloadVoices = table.clone(voices)
+		task.spawn(function()
+			pcall(function() ContentProvider:PreloadAsync(preloadVoices) end)
+		end)
+
+		local clock = math.huge -- land a step immediately when legacy movement begins
+		local nextInterval = STEP_WALK_INT
+		local nextFoot = 1
+		local lastPos = er.Position
+		local movementGrace = 0
+		local lastMotionStep = nil
+		heartbeat = RunService.Heartbeat:Connect(function(dt)
+			-- Baseline the first finite number; consume contacts even when far away.
+			local motionStep = workspace:GetAttribute("L1EntityStep")
+			local motionSynced = finite(motionStep)
+			local motionContact = motionSynced and lastMotionStep ~= nil
+				and motionStep ~= lastMotionStep
+			lastMotionStep = motionSynced and motionStep or nil
+			if not er.Parent or not finite(dt) or dt < 0 then return end
+			local now = er.Position
+			local moved = Vector3.new(now.X - lastPos.X, 0, now.Z - lastPos.Z).Magnitude
+			lastPos = now
+			local spd = dt > 0 and moved / dt or 0
+			if spd >= 3 then
+				-- Hold movement briefly between physics replication packets.
+				movementGrace = 0.14
+			else
+				movementGrace = math.max(0, movementGrace - dt)
+			end
+			if motionSynced then
+				clock = 0
+				if not motionContact then return end
+			elseif motionLive() or movementGrace <= 0 then
+				clock = math.huge
+				return
+			end
+
+			-- State still selects the impact tone when contacts select its timing.
+			local chasing = workspace:GetAttribute("EntityState") == "CHASE"
+			local cadence = chasing and STEP_RUN_INT or STEP_WALK_INT
+			if not motionSynced then
+				clock += dt
+				if clock < nextInterval then return end
+				clock = 0
+			end
+
+			local step = voices[nextFoot]
+			if step then
+				step:Stop()
+				step.TimePosition = ENTITY_STEP_STARTS[nextFoot]
+				step.Volume = chasing and STEP_RUN_VOLUME or STEP_WALK_VOLUME
+				local basePlayback = chasing and STEP_RUN_PLAYBACK or STEP_WALK_PLAYBACK
+				step.PlaybackSpeed = basePlayback
+					+ ((math.random() * 2 - 1) * STEP_PITCH_JITTER)
+				step:Play()
+			end
+			nextFoot = nextFoot == #voices and 1 or nextFoot + 1
+			nextInterval = math.max(0.1, cadence
+				+ ((math.random() * 2 - 1) * STEP_CADENCE_JITTER))
+		end)
 	end)
-
-	local clock = math.huge -- land a step immediately when real movement begins
-	local nextInterval = STEP_WALK_INT
-	local nextFoot = 1
-	local lastPos = er.Position
-	local movementGrace = 0
-	RunService.Heartbeat:Connect(function(dt)
-		local now = er.Position
-		local moved = Vector3.new(now.X - lastPos.X, 0, now.Z - lastPos.Z).Magnitude
-		lastPos = now
-		local spd = (dt > 0) and (moved / dt) or 0
-		if spd >= 3 then
-			-- Physics replication can arrive in tiny bursts. Hold the moving state
-			-- briefly between packets so one real stride never becomes many first steps.
-			movementGrace = 0.14
-		else
-			movementGrace = math.max(0, movementGrace - dt)
-		end
-		if movementGrace <= 0 then
-			clock = math.huge
-			return
-		end
-
-		-- EntityAnimation uses Run only in CHASE. TRACK/SEARCH deliberately keeps
-		-- the walk cycle even when it moves faster, so key the gait to the same state.
-		local chasing = workspace:GetAttribute("EntityState") == "CHASE"
-		-- Use animation state for cadence rather than raw per-frame speed: networked
-		-- physics can arrive in bursts even while the visual movement is smooth.
-		local cadence = chasing and STEP_RUN_INT or STEP_WALK_INT
-
-		clock += dt
-		if clock < nextInterval then return end
-		clock = 0
-
-		local step = voices[nextFoot]
-		if step then
-			step:Stop()
-			step.TimePosition = ENTITY_STEP_STARTS[nextFoot]
-			step.Volume = chasing and STEP_RUN_VOLUME or STEP_WALK_VOLUME
-			local basePlayback = chasing and STEP_RUN_PLAYBACK or STEP_WALK_PLAYBACK
-			step.PlaybackSpeed = basePlayback
-				+ ((math.random() * 2 - 1) * STEP_PITCH_JITTER)
-			step:Play()
-		end
-		nextFoot = nextFoot == #voices and 1 or nextFoot + 1
-		nextInterval = math.max(0.1, cadence
-			+ ((math.random() * 2 - 1) * STEP_CADENCE_JITTER))
-	end)
-end)
+end
 
 -- FOOTSTEPS: the clips are continuous LOOPS (several seconds), not one-shot thumps
 -- — so we run ONE looping sound that only plays while you MOVE and FADES OUT when

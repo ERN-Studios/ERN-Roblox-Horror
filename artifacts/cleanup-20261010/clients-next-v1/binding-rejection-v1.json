@@ -1,0 +1,16 @@
+{
+  "pass": true,
+  "expectedRejection": "stale212census against current213workingmanifest before any binding output",
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\clients-next-v1\\prepare_preview_probe.py\", line 226, in <module>\n    bind(args.bind_native, args.destination)\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\clients-next-v1\\prepare_preview_probe.py\", line 177, in bind\n    assert manifest[\"counts\"][\"scripts\"] == len(scripts), \"Fresh complete census must match current mirror\"\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Fresh complete census must match current mirror\n",
+  "staleInputSHA256": "aea14d1e85013a994613af7da8d0e961772f04891a2043ec0bb176a6cebbfffa",
+  "manifestSHA256": "4a69d3db73d8a3140aa19538364277f4e5ee0ce48be974c2528b5959af11272b",
+  "sourceRawSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+  "toolSHA256": "2c1160dfcd1cb3c08763b7947c2f53fa74aefc3292d8a06338263b9daf70d033",
+  "noBindingFilesCreated": true,
+  "canonicalFilesUnchanged": true,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0
+}

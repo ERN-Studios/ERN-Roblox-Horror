@@ -45,7 +45,14 @@ end
 
 -- ── tuning ────────────────────────────────────────────────
 local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
-local GRID       = Master.Effective("L1_Grid", 40)      -- maze is GRID x GRID cells
+-- MAZE_SMALLER_20261010 (owner): "the map is too big and should be about 20% smaller". 40 -> 32
+-- takes 20% off the side (960 -> 768 studs), which an offline estimate puts at about a fifth off
+-- every walk. CELL stays 24, because the Blender rooms, the cabin and the pit holes are all built on
+-- 24-stud cells. Everything else in this script, PuzzleManager and EntityAI follows GRID by itself.
+-- Keep floor(GRID / 2) EVEN when retuning: lights only exist at even cells, and the two guaranteed
+-- lamps by the elevator sit at (ELEV_X + 2, ELEV_Y) and (ELEV_X, ELEV_Y - 2). 34 or 38 would lose
+-- both without a warning.
+local GRID       = Master.Effective("L1_Grid", 32)      -- maze is GRID x GRID cells
 local CELL       = Master.Effective("L1_Cell", 24)      -- studs per cell (corridor width)
 local WALL_H     = 14      -- wall/ceiling height
 local WALL_T     = 2       -- wall thickness
@@ -68,6 +75,14 @@ local PIT_HOLE       = 12    -- hole size in studs
 local PIT_GAP        = 1     -- beam width between holes, in studs (tight but walkable)
 local PIT_DEPTH      = 50    -- how far down the shaft goes
 local PIT_SAFE_CELLS = 0     -- min cell distance from the start/entity corners
+-- MAZE_SMALLER_20261010: the entity cannot cross a pit cell, so two zones beside its start corner
+-- could seal it in. With no route out it used to walk straight at the walls; since EntityAI's
+-- ENTITY_UNSTUCK_20261010 it stops at the edge of its pocket instead, and either way it cannot
+-- come out to hunt until PuzzleManager moves it at the first fuse insert. Offline, over 10 000
+-- layouts: 0.7% of rounds at 40 and 1.6% at 32 without this margin, 0.6% at 32 with it (what is
+-- left are walls plus zones further out). A margin of its own, because PIT_SAFE_CELLS also feeds
+-- the plaza's and the elevator's.
+local ENTITY_CORNER_CLEAR = 3 -- cells kept free of pit zones round the entity's start
 
 local LIGHT_EVERY = 2      -- ceiling light every N cells
 local LIGHT_SIZE  = 4      -- light panel size — matches CEILING_TILE so one
@@ -310,8 +325,17 @@ end
 
 -- ── one GUARANTEED plaza, regardless of noise ─────────────
 local margin = PIT_SAFE_CELLS + PLAZA_R
-local fx = math.random(margin + 1, GRID - margin)
-local fz = math.random(margin + 1, GRID - margin)
+-- MAZE_SMALLER_20261010: the plaza's centre is also where the first big furniture heap is built
+-- (heapCells below), and nothing kept it off the elevator. On the cabin's own cell or the one in
+-- front of the doors the crew steps out into a pile of solid props; a smaller grid has fewer other
+-- places for it to land. Roll again while it is within ELEV_CLEAR + 1 cells. Bounded on purpose:
+-- a grid too small to have such a cell (the test size 10) keeps its last roll instead of spinning.
+local fx, fz
+for _ = 1, 200 do
+	fx = math.random(margin + 1, GRID - margin)
+	fz = math.random(margin + 1, GRID - margin)
+	if math.max(math.abs(fx - ELEV_X), math.abs(fz - ELEV_Y)) > ELEV_CLEAR + 1 then break end
+end
 
 for x = fx - PLAZA_R, fx + PLAZA_R - 1 do
 	for z = fz - PLAZA_R, fz + PLAZA_R do
@@ -366,7 +390,7 @@ local function zoneOK(zx, zz)
 			and zz <= cz0 + margin and zz + hi >= cz0 - margin
 	end
 	return not (nearPoint(ELEV_X, ELEV_Y, PIT_SAFE_CELLS + ELEV_CLEAR)
-		or nearPoint(GRID - 1, GRID - 1, PIT_SAFE_CELLS))
+		or nearPoint(GRID - 1, GRID - 1, ENTITY_CORNER_CLEAR))
 end
 
 -- pit zones placed randomly, avoiding the elevator room, the entity corner,
@@ -1289,12 +1313,40 @@ do
 			clusterNote.Size = UDim2.new(1, -36, 0, 36)
 			clusterNote.BackgroundTransparency = 1
 			clusterNote.Font = Enum.Font.Code
-			clusterNote.Text = "VERY BRIGHT CEILING CLUSTER = FUSE RELAY"
+			-- LEVER_PATH_20261010 (owner: relays must be easier to find): PuzzleManager's ceiling hint
+			-- over a relay that still holds a fuse has its own amber hue now (RELAY_FINDABLE_20261010
+			-- there) instead of being a little brighter than its neighbours, and this line has to
+			-- name what the crew will really see. It read "VERY BRIGHT CEILING CLUSTER = FUSE RELAY".
+			clusterNote.Text = "AMBER CEILING LIGHTS = FUSE RELAY"
 			clusterNote.TextColor3 = Color3.fromRGB(255, 232, 145)
 			clusterNote.TextSize = 15
 			clusterNote.TextWrapped = true
 			clusterNote.TextXAlignment = Enum.TextXAlignment.Left
 			clusterNote.Parent = paper
+
+			-- LEVER_PATH_20261010 (owner: "go back, follow the cable, pull the lever" must be obvious):
+			-- one fixed line with the whole order, there to be read on the ride down. It sits in the
+			-- 16 px between the lowest place RelayHint can reach (it ends at 350 with all six rows
+			-- shown; a round has three at most) and the footer at 366, so nothing has to move it in
+			-- refreshCableGuidePoster. 51 Code characters at size 14 should be about 357 px of the
+			-- 394; that width was reckoned, not seen, so the label may shrink the text (never under
+			-- 9) rather than cut the last word off at the paper's edge.
+			local steps = Instance.new("TextLabel")
+			steps.Name = "ProcedureStrip"
+			steps.Position = UDim2.new(0, 13, 0, 350)
+			steps.Size = UDim2.new(1, -26, 0, 16)
+			steps.BackgroundTransparency = 1
+			steps.Font = Enum.Font.Code
+			steps.Text = "1 RELAY  >  2 FUSE BOX  >  3 CABLE BACK  >  4 LEVER"
+			steps.TextColor3 = Color3.fromRGB(210, 202, 155)
+			steps.TextSize = 14
+			steps.TextScaled = true
+			steps.TextXAlignment = Enum.TextXAlignment.Left
+			steps.Parent = paper
+			local stepsLimit = Instance.new("UITextSizeConstraint")
+			stepsLimit.MinTextSize = 9
+			stepsLimit.MaxTextSize = 14
+			stepsLimit.Parent = steps
 
 			local footer = Instance.new("TextLabel")
 			footer.Name = "CircuitFocusHint"

@@ -7,13 +7,22 @@ aktuelle sted som v2924 efter sit optimeringsarbejde; det er særskilt arbejde,
 registreret i commit `9635a38c` og [ejerens receipt](tools/optimization_20261009/publication-receipt.json).
 Ejeren har igen godkendt Studio-arbejde; to andre sessions
 arbejder samtidig og skifter selv mellem Edit og Play. Deres sessioner bevares.
-Afsluttende frisk Edit-parity00:42:34–00:42:44Z viste212 scripts,15 remotes og
+Historisk afsluttende Edit-parity00:42:34–00:42:44Z viste212 scripts,15 remotes og
 52 ServerStorage-rødder; Source/editor/class/registrerede properties matcher
 working-mirror og manifest med nul mismatch. Scopegrænser er angivet nedenfor.
+Ny opfølgning S17 efter ejerens fortsæt-instruktion:213 scripts,15 remotes og
+228 rows matcher Source/editor/class/registrerede properties i arbejdskopien
+og manifestet ved07:41:08–07:41:18Z;52 ServerStorage-rødder.20 nye samtidige
+Source-ændringer og ét nyt native script blev eksporteret nedstrøms; deres
+gameplayimplementering tilskrives de andre udviklere. Tidligere dirty RoundUI
+er bevaret byte-exact i privat checkpoint før den nye Studio-version blev
+spejlet. Ingen native writes. Hele scopes og testgrænser er registreret nedenfor.
 Vores valgte afventende runtimeforslag står stadig uimplementeret; eksternt
 implementerede ændringer beskrives særskilt uden oprydningskredit.
 
-Alle **129** oprindelige fund er genkontrolleret og disponeret i
+Alle **129** oprindelige fund var genkontrolleret og disponeret ved den foregående
+afslutning. De nye samtidige Sources betyder, at berørte hypoteser skal
+genbekræftes i hver kommende batch; gamle fixes gentages ikke. Grundlaget står i
 [CLEANUP_PLAN.md](CLEANUP_PLAN.md) og de tre delrapporter:
 [repo/tools](artifacts/cleanup-20261009/repo-tools-recheck.md),
 [klienter](artifacts/cleanup-20261009/clients-recheck.md) og
@@ -22,6 +31,30 @@ De er hypoteser; eksisterende rettelser er ikke implementeret igen. Afgrænsede
 dele af blandede fund har deres egen status og testport.
 
 ## Aktuel ServerStorage-oprydning
+
+### S17 — frisk Studio→repo-baseline, gennemført
+
+Før: stabilt native213/15/228 mod repo212/15/227,20 Source-afvigelser og nyt
+`Level 1 Entity Motion`. Ingen Source/editor-konflikter. Dirty/diverged lokale
+filer, alle20 eksisterende berørte spejle og manifest har recoverable privat
+checkpoint; den nye fils fraværsbaseline er registreret. Frisk S13 getter læste
+36 rows:21 Sources inklusive ny LocalScript
+og15 remotes med manglende Archivable-metadata. Source/editor/instance/parent/
+class/properties/attrs/tags blev kontrolleret omkring hver chunklæsning og
+igen før landing. Alle øvrige spejle er byte-uændrede; historiske manifest-
+operationstællere er bevaret. Eksporten implementerer ikke andres gameplayfixes.
+
+Efter:42O0/O1 compile-porte for21 Sources PASS; source39/full-sync65-kontrakter
+PASS før/efter. Faktisk ny komplet native hash/property-parity PASS213/15/228
+med nul mismatch,missing,extra,Source/editor-conflict eller Enabled/Disabled/
+RunContext-gaps. Catalog SHA25791b08093d08bb5048a6110744a90f2340848a2b2272d4179915687d225049
+var stabilt før/capture/landing/efter. Console er identisk med eksisterende
+fejl; ingen clean-console-,gameplay-,MP-,streaming-,asset- eller performancepass.
+
+Et lokalt importpreflight havde forkert root-parent og fejlede før MCP-
+initialisering eller Source/manifestwrites. Afvist toolcopy og årsag er bevaret;
+rettet eksport bestod. [Capture/landing/tests/parity](artifacts/cleanup-20261010/resume-baseline-v1/export-result.json).
+Ingen native Source-/objekt-/property-/modewrites, publicering eller GitHub-push.
 
 S08 har nu pensioneret Level1-legacybuildens standalone `main` og de offentlige
 gamle import-/QA-/publish-/exporttargets i syv lokale filer. Aktive defaults

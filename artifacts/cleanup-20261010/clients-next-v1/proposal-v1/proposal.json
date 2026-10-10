@@ -1,0 +1,248 @@
+{
+  "schema": "preview-noop-proposal-v1",
+  "finding": "C06",
+  "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+  "pass": true,
+  "beforeSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+  "candidateSHA256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3",
+  "beforeBytes": 1622,
+  "candidateBytes": 1407,
+  "removedBytes": 215,
+  "checksPerVersion": 455,
+  "casesPerVersion": 12,
+  "pairedChecks": 910,
+  "reentryChecks": 910,
+  "semanticNegativeControls": 2,
+  "compile": [
+    {
+      "name": "before",
+      "kind": "source",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436"
+    },
+    {
+      "name": "before",
+      "kind": "source",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436"
+    },
+    {
+      "name": "before",
+      "kind": "nativePayload",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "4e31eea8d0e3a1e8033162a9b68e75f4572206ab5b7d626ef0f07b702683ebba"
+    },
+    {
+      "name": "before",
+      "kind": "nativePayload",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "4e31eea8d0e3a1e8033162a9b68e75f4572206ab5b7d626ef0f07b702683ebba"
+    },
+    {
+      "name": "before",
+      "kind": "offlinePayload",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "0ee8d597dcaced6c898cc2955c995c09c47f7f875841dc8ffcb1cbfe06d89d73"
+    },
+    {
+      "name": "before",
+      "kind": "offlinePayload",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "0ee8d597dcaced6c898cc2955c995c09c47f7f875841dc8ffcb1cbfe06d89d73"
+    },
+    {
+      "name": "candidate",
+      "kind": "source",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+    },
+    {
+      "name": "candidate",
+      "kind": "source",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+    },
+    {
+      "name": "candidate",
+      "kind": "nativePayload",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "7383de84efb3be4288f05f3a1cab20a219715836a99555ff6cc3522951f61a34"
+    },
+    {
+      "name": "candidate",
+      "kind": "nativePayload",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "7383de84efb3be4288f05f3a1cab20a219715836a99555ff6cc3522951f61a34"
+    },
+    {
+      "name": "candidate",
+      "kind": "offlinePayload",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "18f17a6f2733e20ae4687ce32fb6985063298556e7893eca77e027edefde0616"
+    },
+    {
+      "name": "candidate",
+      "kind": "offlinePayload",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "18f17a6f2733e20ae4687ce32fb6985063298556e7893eca77e027edefde0616"
+    },
+    {
+      "name": "publicNegative",
+      "kind": "source",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "8a69307cfa7afc9a724859d0c487fcc72a9c246e287f04948260a016ab1f8555"
+    },
+    {
+      "name": "publicNegative",
+      "kind": "source",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "8a69307cfa7afc9a724859d0c487fcc72a9c246e287f04948260a016ab1f8555"
+    },
+    {
+      "name": "publicNegative",
+      "kind": "nativePayload",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "7e506cfbf034ab8f8c355787286bb0e770c13dd1fd14ea40bf51fe891be7ff81"
+    },
+    {
+      "name": "publicNegative",
+      "kind": "nativePayload",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "7e506cfbf034ab8f8c355787286bb0e770c13dd1fd14ea40bf51fe891be7ff81"
+    },
+    {
+      "name": "publicNegative",
+      "kind": "offlinePayload",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "5ba3b6aae36a6d801b1fe05d45b715b76fc940c9d8267533975b33b6b50a3e65"
+    },
+    {
+      "name": "publicNegative",
+      "kind": "offlinePayload",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "5ba3b6aae36a6d801b1fe05d45b715b76fc940c9d8267533975b33b6b50a3e65"
+    },
+    {
+      "name": "truthyNegative",
+      "kind": "source",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "b758ae6884f27d80029fb2b3b2cc2720c3b6b97c3a1a6628987df624adee1732"
+    },
+    {
+      "name": "truthyNegative",
+      "kind": "source",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "b758ae6884f27d80029fb2b3b2cc2720c3b6b97c3a1a6628987df624adee1732"
+    },
+    {
+      "name": "truthyNegative",
+      "kind": "nativePayload",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "e05534cb4919da0664fc4209e34797f1e2707e7c44f33817b3c6ee1c8d373178"
+    },
+    {
+      "name": "truthyNegative",
+      "kind": "nativePayload",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "e05534cb4919da0664fc4209e34797f1e2707e7c44f33817b3c6ee1c8d373178"
+    },
+    {
+      "name": "truthyNegative",
+      "kind": "offlinePayload",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "467396d4712c1b94f9702721ee807b32132e272fc8cd5671aef49de98d6137e7"
+    },
+    {
+      "name": "truthyNegative",
+      "kind": "offlinePayload",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "467396d4712c1b94f9702721ee807b32132e272fc8cd5671aef49de98d6137e7"
+    }
+  ],
+  "compiledBodies": [
+    {
+      "name": "before",
+      "optimization": 0,
+      "functionCount": 4,
+      "rawBinarySHA256": "664d184a1f1f9867f0a2f6d74c4065393edbe25fc64c4e43aca49dc56d728751",
+      "canonicalBinarySHA256": "9052c8a72643365f86a0261ba8d6b974858ab3bb7e8a02316153874b7320ff1b"
+    },
+    {
+      "name": "before",
+      "optimization": 1,
+      "functionCount": 4,
+      "rawBinarySHA256": "c68942bc8fbd477c5553dc30b1e306365618721a84f501e733ff0abf66feb4ad",
+      "canonicalBinarySHA256": "6e8587b98e6dea2f5ab010a170da12c2bf200cdbbcc7005f625ed2797ee1f10b"
+    },
+    {
+      "name": "candidate",
+      "optimization": 0,
+      "functionCount": 4,
+      "rawBinarySHA256": "c5e1ebd988bf58124c2b6d72ee22f1c0b8c8e5c93ab7f3a0f4f16507945bf812",
+      "canonicalBinarySHA256": "f95d63c68723225b9990457ea0a65905b2652c064c93f78c311e16657b3c585d"
+    },
+    {
+      "name": "candidate",
+      "optimization": 1,
+      "functionCount": 4,
+      "rawBinarySHA256": "1ce9951f0f9ddfbc9388020148c071a77f18dbcfaf5f26d3409365059886a6ef",
+      "canonicalBinarySHA256": "aef02ba5e3ce1285c23e1e8c22832428c64062c8202dc5ae63cc0da330c94891"
+    }
+  ],
+  "sourceEquivalence": [
+    {
+      "optimization": 0,
+      "canonicalBinaryIdentical": false,
+      "instructionConstantDumpIdentical": false
+    },
+    {
+      "optimization": 1,
+      "canonicalBinaryIdentical": false,
+      "instructionConstantDumpIdentical": false
+    }
+  ],
+  "payloadHashes": {
+    "before": "4e31eea8d0e3a1e8033162a9b68e75f4572206ab5b7d626ef0f07b702683ebba",
+    "candidate": "7383de84efb3be4288f05f3a1cab20a219715836a99555ff6cc3522951f61a34",
+    "publicNegative": "7e506cfbf034ab8f8c355787286bb0e770c13dd1fd14ea40bf51fe891be7ff81",
+    "truthyNegative": "e05534cb4919da0664fc4209e34797f1e2707e7c44f33817b3c6ee1c8d373178"
+  },
+  "nativeTemplateSHA256": "d6821c9542384adcfbc7a379b9cadc069788127261d0f76b74d933cdee30f658",
+  "reusedWrapperPath": "tools/cleanup_20261009/usher_private_locals_probe.luau",
+  "reusedWrapperSHA256": "2737a0918fa304feae6da3b379b606d0babefcb2d59a367a93bf977232f216c9",
+  "toolSHA256": "2c1160dfcd1cb3c08763b7947c2f53fa74aefc3292d8a06338263b9daf70d033",
+  "hostSHA256": "bf43c4074a24363ac3b1952289811a523e1ab40d75fdbe2e230fe606003c6d9c",
+  "offlineEngineSHA256": "ad2834c04fa8cfc376a90f62ef7f65e908bb62d3f2395c36e79ec29b3e0b1c37",
+  "canonicalParserSHA256": "84c837efe229131e2dbccbbf374541aeb72a6c80842a3b3b3593eabe02890d39",
+  "preparationRawTargetSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+  "preparationManifestSHA256": "bd211a5a7fdf2491603e5e9d2e3e168e43cd45bb2b3b53872cbfcca3f06f64ad",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "status": "Offline full-source tests pass; count-agnostic Root fresh-native binding, before/installed native ports and scoped CAS remain pending",
+  "limits": "Offline fake signals do not certify native events. Root-run native runner uses actual test-owned prompts/property signals; fake Players/DevAccess/services are explicit controlled boundaries. No Play switch, live client/access/gameplay/multiplayer/streaming/teleport/performance pass."
+}

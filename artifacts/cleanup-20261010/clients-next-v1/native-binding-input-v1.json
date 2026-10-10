@@ -1,0 +1,2573 @@
+{
+  "schema": "preview-native-binding-input-v1",
+  "pass": true,
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "rows": [
+    {
+      "studioPath": "ReplicatedFirst.Lobby Loading Screen",
+      "className": "LocalScript",
+      "segments": [
+        "ReplicatedFirst",
+        "Lobby Loading Screen"
+      ],
+      "instanceId": "1_31065",
+      "parentId": "1_9074",
+      "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92"
+    },
+    {
+      "studioPath": "ReplicatedStorage.DeathAdvice",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "DeathAdvice"
+      ],
+      "instanceId": "1_42705",
+      "parentId": "1_408323",
+      "sha256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2"
+    },
+    {
+      "studioPath": "ReplicatedStorage.DevAccess",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "DevAccess"
+      ],
+      "instanceId": "1_42694",
+      "parentId": "1_408323",
+      "sha256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "tags": [],
+      "bytes": 2835,
+      "sourceEditorMatches": true
+    },
+    {
+      "studioPath": "ReplicatedStorage.FlashlightProfiles",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "FlashlightProfiles"
+      ],
+      "instanceId": "1_42696",
+      "parentId": "1_408323",
+      "sha256": "4c2db65af38dd00092ab2af74d670b22fd5af9a1d3cf1e80af95fd5ffba4a230"
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 2 Entity Audio Bank",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Entity Audio Bank"
+      ],
+      "instanceId": "1_42701",
+      "parentId": "1_408323",
+      "sha256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f"
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 4 Usher Animations",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 4 Usher Animations"
+      ],
+      "instanceId": "1_42711",
+      "parentId": "1_408323",
+      "sha256": "7cae5a9d4208e6e03605b27360c63be020f9f70bcabdfad0818051fb1008201d"
+    },
+    {
+      "studioPath": "ReplicatedStorage.LoadingCardView",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "LoadingCardView"
+      ],
+      "instanceId": "0_43635647",
+      "parentId": "1_408323",
+      "sha256": "0f2d4b561ae206ffd07c4345a5e7372853c54863071946e525bd3fa0970c4a7b"
+    },
+    {
+      "studioPath": "ReplicatedStorage.MasterConfiguration",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "MasterConfiguration"
+      ],
+      "instanceId": "1_42699",
+      "parentId": "1_408323",
+      "sha256": "ede7dd4a687e76d0aefba2356869e0e31d70dc953b963680ae8fd607ea32e165"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ProtectionClient",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ProtectionClient"
+      ],
+      "instanceId": "1_42700",
+      "parentId": "1_408323",
+      "sha256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649"
+    },
+    {
+      "studioPath": "ReplicatedStorage.RoundHud",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "RoundHud"
+      ],
+      "instanceId": "1_42712",
+      "parentId": "1_408323",
+      "sha256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559"
+    },
+    {
+      "studioPath": "ReplicatedStorage.SceneEffectBudget",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "SceneEffectBudget"
+      ],
+      "instanceId": "0_79286917",
+      "parentId": "1_408323",
+      "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+    },
+    {
+      "studioPath": "ReplicatedStorage.SlideContinuationSafety",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "SlideContinuationSafety"
+      ],
+      "instanceId": "1_42707",
+      "parentId": "1_408323",
+      "sha256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40"
+    },
+    {
+      "studioPath": "ReplicatedStorage.UIDevice",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "UIDevice"
+      ],
+      "instanceId": "1_42697",
+      "parentId": "1_408323",
+      "sha256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede"
+    },
+    {
+      "studioPath": "ReplicatedStorage.UIRegression",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "UIRegression"
+      ],
+      "instanceId": "1_42698",
+      "parentId": "1_408323",
+      "sha256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6"
+    },
+    {
+      "studioPath": "ReplicatedStorage.UIStyle",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "UIStyle"
+      ],
+      "instanceId": "1_42702",
+      "parentId": "1_408323",
+      "sha256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraChallenges",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraChallenges"
+      ],
+      "instanceId": "1_42709",
+      "parentId": "1_408323",
+      "sha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraConfig",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraConfig"
+      ],
+      "instanceId": "1_42695",
+      "parentId": "1_408323",
+      "sha256": "b52815530258702531d3365eee447c0361abdb2c2d62aac98001b830437e0202"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraDailyResearch",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDailyResearch"
+      ],
+      "instanceId": "1_42708",
+      "parentId": "1_408323",
+      "sha256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraDetectorVisual",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDetectorVisual"
+      ],
+      "instanceId": "1_42706",
+      "parentId": "1_408323",
+      "sha256": "9c5cefbe50c5dd637f751d83b6c374eedce35ad6a7032beca397c6b96e9a3d09"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraShopUI.ShopBinder",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraShopUI",
+        "ShopBinder"
+      ],
+      "instanceId": "1_42703",
+      "parentId": "1_15602",
+      "sha256": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraShopUI.ShopData",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraShopUI",
+        "ShopData"
+      ],
+      "instanceId": "1_42704",
+      "parentId": "1_15602",
+      "sha256": "665da0c8a0f0b7a45cc7bfa6181ffbafff5a6322e3f1113891804a044ff8a365"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraSkins",
+      "className": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraSkins"
+      ],
+      "instanceId": "1_42710",
+      "parentId": "1_408323",
+      "sha256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4"
+    },
+    {
+      "studioPath": "ServerScriptService.AvatarNormalize",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "AvatarNormalize"
+      ],
+      "instanceId": "1_408342",
+      "parentId": "1_409634",
+      "sha256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de"
+    },
+    {
+      "studioPath": "ServerScriptService.Crouch State Server",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Crouch State Server"
+      ],
+      "instanceId": "1_408351",
+      "parentId": "1_409634",
+      "sha256": "2d9ded3b5b786cccf1f54a4e8e94d28781d0869f57141353946ad8634499d512"
+    },
+    {
+      "studioPath": "ServerScriptService.FlashlightSync",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "FlashlightSync"
+      ],
+      "instanceId": "1_408340",
+      "parentId": "1_409634",
+      "sha256": "6a6dedd4b3de72d8ad729b29c7eb56a1e82b00700913f1ec0d62568b8978d06b"
+    },
+    {
+      "studioPath": "ServerScriptService.FriendBoost",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "FriendBoost"
+      ],
+      "instanceId": "1_42758",
+      "parentId": "1_409634",
+      "sha256": "3ecdd96e368146fdfad94aaced595ec96ad26b89de2172f521aabdaa42e6cd0a"
+    },
+    {
+      "studioPath": "ServerScriptService.GameManager",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "instanceId": "1_408341",
+      "parentId": "1_409634",
+      "sha256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1"
+    },
+    {
+      "studioPath": "ServerScriptService.HazmatSkinVisuals",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "HazmatSkinVisuals"
+      ],
+      "instanceId": "1_408358",
+      "parentId": "1_409634",
+      "sha256": "f279e4816d991f37b336c381a25feccc0b6dfc829d683a9a97841f70d615e156"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.BlenderRoomRenderer",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "BlenderRoomRenderer"
+      ],
+      "instanceId": "1_42752",
+      "parentId": "1_15621",
+      "sha256": "0f217e5a3f56751e7672efc035861a2cec1b5f23d581a52020411a8d081790cf"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.EntityAI",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAI"
+      ],
+      "instanceId": "1_408348",
+      "parentId": "1_15621",
+      "sha256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAnimation"
+      ],
+      "instanceId": "1_408349",
+      "parentId": "1_15621",
+      "sha256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.EntityKill",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityKill"
+      ],
+      "instanceId": "1_408350",
+      "parentId": "1_15621",
+      "sha256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "MazeGenerator"
+      ],
+      "instanceId": "1_408346",
+      "parentId": "1_15621",
+      "sha256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "PuzzleManager"
+      ],
+      "instanceId": "1_408347",
+      "parentId": "1_15621",
+      "sha256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Configuration"
+      ],
+      "instanceId": "1_42715",
+      "parentId": "1_15619",
+      "sha256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Exit Transition Test Suite",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Exit Transition Test Suite"
+      ],
+      "instanceId": "1_42728",
+      "parentId": "1_15619",
+      "sha256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Objective Controller"
+      ],
+      "instanceId": "1_42718",
+      "parentId": "1_15619",
+      "sha256": "e1ad3a0a111a9c0053b321b7ba82e20a85f348a9a6ff73fdf765f1860573f758"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Animation Adapter"
+      ],
+      "instanceId": "1_42723",
+      "parentId": "1_15619",
+      "sha256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Configuration"
+      ],
+      "instanceId": "1_42721",
+      "parentId": "1_15619",
+      "sha256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Controller"
+      ],
+      "instanceId": "1_42727",
+      "parentId": "1_15619",
+      "sha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Navigator"
+      ],
+      "instanceId": "1_42724",
+      "parentId": "1_15619",
+      "sha256": "3af9563be049c290b3ac9877cca94e8679bf8a9094eebd999a84b7d932a604e8"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Observer"
+      ],
+      "instanceId": "1_42725",
+      "parentId": "1_15619",
+      "sha256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Proxy Factory"
+      ],
+      "instanceId": "1_42722",
+      "parentId": "1_15619",
+      "sha256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Configuration",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Configuration"
+      ],
+      "instanceId": "1_42729",
+      "parentId": "1_15619",
+      "sha256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Controller"
+      ],
+      "instanceId": "1_42732",
+      "parentId": "1_15619",
+      "sha256": "69275a49cf43bb2174cda313fdb3ad41f13f8efb5ee6bb04acbc1811c211e44c"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Navigator"
+      ],
+      "instanceId": "1_42730",
+      "parentId": "1_15619",
+      "sha256": "ab318044f367b69dc643c065f81f549c0c22e7c903bdd01cb398f4a07ad95549"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Rig Adapter"
+      ],
+      "instanceId": "1_42731",
+      "parentId": "1_15619",
+      "sha256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Poolrooms Runtime",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Poolrooms Runtime"
+      ],
+      "instanceId": "0_33155104",
+      "parentId": "1_15619",
+      "sha256": "8608150767d697f3f6fda087748bc2b31ddb2a67c552d14922cd46b75c556cfa"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Round Adapter"
+      ],
+      "instanceId": "1_42719",
+      "parentId": "1_15619",
+      "sha256": "6f77656fb77fb4ee10053b5e6ea0eb5d3313e4ed5fda08b8694eea3ff06c7dd9"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Slide Ragdoll Service"
+      ],
+      "instanceId": "1_408344",
+      "parentId": "1_15619",
+      "sha256": "8b7a60f37ea7c4687be0063d15e4e8d3852b56421e94219fa33890c89c09c689"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 World Builder"
+      ],
+      "instanceId": "0_33155141",
+      "parentId": "1_15619",
+      "sha256": "d74c6a33207209df2c7e546b3d4f1527918c04019639f37283f2ad8cd3d43537"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.README - LEVEL 2 POOL FOAM",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 POOL FOAM"
+      ],
+      "instanceId": "1_42726",
+      "parentId": "1_15619",
+      "sha256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 TWEAKS"
+      ],
+      "instanceId": "1_42720",
+      "parentId": "1_15619",
+      "sha256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Kit Warmup",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Kit Warmup"
+      ],
+      "instanceId": "1_42771",
+      "parentId": "1_409634",
+      "sha256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Balloon Dressing",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Balloon Dressing"
+      ],
+      "instanceId": "1_42748",
+      "parentId": "1_15620",
+      "sha256": "81118f18a222559da860961d23727b876a46298d12609d91c3fbd460425e2ce6"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Configuration"
+      ],
+      "instanceId": "1_42736",
+      "parentId": "1_15620",
+      "sha256": "76752edb0cb176b14f98c41478f4858efbfaed31c2f1d90db82fdad901d08500"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Crayon Wall Art",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Crayon Wall Art"
+      ],
+      "instanceId": "1_42747",
+      "parentId": "1_15620",
+      "sha256": "19a59fc800920a881463159c0f724179671355936e4cfca2e8b2fd588e1a6911"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Hiding Controller"
+      ],
+      "instanceId": "1_42743",
+      "parentId": "1_15620",
+      "sha256": "5b7f7df412af8d7292687a25064f04fcdd10bf93e52ee72ea33efa95477b90f7"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Layout Generator"
+      ],
+      "instanceId": "1_42744",
+      "parentId": "1_15620",
+      "sha256": "cf309386c0cd5aef85c3f8208ea28d51f2c8206d27019d86e4d58902f2cc325f"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Mall Manager AI Controller"
+      ],
+      "instanceId": "1_42742",
+      "parentId": "1_15620",
+      "sha256": "3b8e0734183af35e2aba7b258cd0e3c87c377cb9d323f4a5586bcb06f6663b3e"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Music Sequence Controller"
+      ],
+      "instanceId": "1_42741",
+      "parentId": "1_15620",
+      "sha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Objective Controller"
+      ],
+      "instanceId": "1_42738",
+      "parentId": "1_15620",
+      "sha256": "195c1bb7bfb87aad6172dfedeb66fb146938462cb31f65eb4cbe43c9b9ba1cf7"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Round Adapter"
+      ],
+      "instanceId": "1_42739",
+      "parentId": "1_15620",
+      "sha256": "bfb6470711f716e4ea94c25fd3d3ac45bf6e6cc85eb50418c7e1aac61e566ef1"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Test Suite"
+      ],
+      "instanceId": "1_42740",
+      "parentId": "1_15620",
+      "sha256": "6c67aace5c22ab1eb62381d864cd2c328e8762756390f43a0aadf2f9d96eab75"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 World Builder"
+      ],
+      "instanceId": "1_42737",
+      "parentId": "1_15620",
+      "sha256": "41b4e318bfaf693d95cdba96f4378524496884a236e74fbdb66ef03904afb1c8"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Worn Party Room Dressing"
+      ],
+      "instanceId": "1_42745",
+      "parentId": "1_15620",
+      "sha256": "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Worn Party Visual Adapter"
+      ],
+      "instanceId": "1_42746",
+      "parentId": "1_15620",
+      "sha256": "0b5d4034c3a9016f6e4405024d713244ad936cf97988f13e03296ed016b39035"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Configuration"
+      ],
+      "instanceId": "1_42772",
+      "parentId": "1_15624",
+      "sha256": "af6225d22fb998db4cd2417cd552f934c75ff2c82cb223c4dd9e27daefd98aa6"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Light Director"
+      ],
+      "instanceId": "1_42773",
+      "parentId": "1_15624",
+      "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Objective Controller"
+      ],
+      "instanceId": "1_42774",
+      "parentId": "1_15624",
+      "sha256": "a01afa1615437ecec70f7b77acef4b1ad3feb30ba11c2d040f01bc1ace9bb9c2"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Test Suite"
+      ],
+      "instanceId": "1_42776",
+      "parentId": "1_15624",
+      "sha256": "59f1cd5e87c72c89a60e0f1c4119a5d931b9084ba9689df1e1b94f06a3869335"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Usher Controller"
+      ],
+      "instanceId": "1_42775",
+      "parentId": "1_15624",
+      "sha256": "ec4252424a0a513ca370851a5ff45b212bab4c2bfcbe20cba58c0a740a2b2a2f"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Nav",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Usher Nav"
+      ],
+      "instanceId": "1_42777",
+      "parentId": "1_15624",
+      "sha256": "a0ebc21544cf40e7a8d8280dc431ce65b396473b8c9b3cb5ae43fe4cbd3d60e5"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Balloon Dressing",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Balloon Dressing"
+      ],
+      "instanceId": "1_42791",
+      "parentId": "1_15625",
+      "sha256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Configuration",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Configuration"
+      ],
+      "instanceId": "1_42779",
+      "parentId": "1_15625",
+      "sha256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Crayon Wall Art",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Crayon Wall Art"
+      ],
+      "instanceId": "1_42792",
+      "parentId": "1_15625",
+      "sha256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Hiding Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Hiding Controller"
+      ],
+      "instanceId": "1_42780",
+      "parentId": "1_15625",
+      "sha256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Kit Metadata",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Kit Metadata"
+      ],
+      "instanceId": "1_42781",
+      "parentId": "1_15625",
+      "sha256": "468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Layout Generator",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Layout Generator"
+      ],
+      "instanceId": "1_42782",
+      "parentId": "1_15625",
+      "sha256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Mall Manager AI Controller"
+      ],
+      "instanceId": "1_42783",
+      "parentId": "1_15625",
+      "sha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Music Sequence Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Music Sequence Controller"
+      ],
+      "instanceId": "1_42784",
+      "parentId": "1_15625",
+      "sha256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Objective Controller"
+      ],
+      "instanceId": "1_42785",
+      "parentId": "1_15625",
+      "sha256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Playground Game",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Playground Game"
+      ],
+      "instanceId": "1_42786",
+      "parentId": "1_15625",
+      "sha256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Room Dressing",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Room Dressing"
+      ],
+      "instanceId": "1_42789",
+      "parentId": "1_15625",
+      "sha256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Visual Adapter"
+      ],
+      "instanceId": "1_42787",
+      "parentId": "1_15625",
+      "sha256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 World Builder"
+      ],
+      "instanceId": "1_42788",
+      "parentId": "1_15625",
+      "sha256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level6BlenderRuntimeBake"
+      ],
+      "instanceId": "1_42790",
+      "parentId": "1_15625",
+      "sha256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc"
+    },
+    {
+      "studioPath": "ServerScriptService.Level Leaderboards",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level Leaderboards"
+      ],
+      "instanceId": "1_408363",
+      "parentId": "1_409634",
+      "sha256": "710ed195de3f6c24ba59682597857514cf34053e9018afee60a373a67011d159"
+    },
+    {
+      "studioPath": "ServerScriptService.Level2Generator",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level2Generator"
+      ],
+      "instanceId": "1_42735",
+      "parentId": "1_409634",
+      "sha256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76"
+    },
+    {
+      "studioPath": "ServerScriptService.Level3Generator",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level3Generator"
+      ],
+      "instanceId": "1_42749",
+      "parentId": "1_409634",
+      "sha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d"
+    },
+    {
+      "studioPath": "ServerScriptService.Level4RoundGenerator",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level4RoundGenerator"
+      ],
+      "instanceId": "1_42778",
+      "parentId": "1_409634",
+      "sha256": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566"
+    },
+    {
+      "studioPath": "ServerScriptService.Level5PreviewAccess",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level5PreviewAccess"
+      ],
+      "instanceId": "1_408360",
+      "parentId": "1_409634",
+      "sha256": "0ba8eeef1d824195f6fd69abe899bd04471581e3de853503f1beb8783273cfef"
+    },
+    {
+      "studioPath": "ServerScriptService.Level6PreviewAccess",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level6PreviewAccess"
+      ],
+      "instanceId": "1_408355",
+      "parentId": "1_409634",
+      "sha256": "62c22dbcde5c87ff6d0054be7d60a0890298ed5ebb9b1bf6f61e431f45e38655"
+    },
+    {
+      "studioPath": "ServerScriptService.LevelWorldStorage",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LevelWorldStorage"
+      ],
+      "instanceId": "0_76182544",
+      "parentId": "1_409634",
+      "sha256": "42a3baf2011c779ab72e8e6ff71eda8add9da05e2ac0cb44c79ec91de323bc7a"
+    },
+    {
+      "studioPath": "ServerScriptService.Live Level Server",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Live Level Server"
+      ],
+      "instanceId": "1_408362",
+      "parentId": "1_409634",
+      "sha256": "e93da983c1dc485dbe6435cf9cb09feb7f773167967d043f4473b9db8b262e00"
+    },
+    {
+      "studioPath": "ServerScriptService.Lobby DJ",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Lobby DJ"
+      ],
+      "instanceId": "1_408357",
+      "parentId": "1_409634",
+      "sha256": "34844a50d05b1840e591863f77f5861f982dcd48b4b1344d33632bef93eb294c"
+    },
+    {
+      "studioPath": "ServerScriptService.Lobby Tunnel Reach",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Lobby Tunnel Reach"
+      ],
+      "instanceId": "1_408361",
+      "parentId": "1_409634",
+      "sha256": "db9b3b4c8b8180a476b1ce5e8a6ddb061049109e4bc6585e4acf999a30d39bce"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyPartyModeController",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "LobbyPartyModeController"
+      ],
+      "instanceId": "1_408345",
+      "parentId": "1_409634",
+      "sha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "Bootstrap"
+      ],
+      "instanceId": "1_408356",
+      "parentId": "1_15622",
+      "sha256": "997e0052ad6e0f5418be32493f7b16ad833f7cdc9e6ae0ee54b5a48fca05901a"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "Builder"
+      ],
+      "instanceId": "1_42764",
+      "parentId": "1_15622",
+      "sha256": "efd4d294e896e6a319211a791267470cf3378854447f56fbdf9c5044d5938e4b"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.DevBayAccessGuard",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "DevBayAccessGuard"
+      ],
+      "instanceId": "1_42770",
+      "parentId": "1_15622",
+      "sha256": "398525b604d917c7c47ddcc20ae886e140fd0e21a5f534ccb80ae720ceb47957"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "EndBlockades"
+      ],
+      "instanceId": "1_42766",
+      "parentId": "1_15622",
+      "sha256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "LobbyPolishBays"
+      ],
+      "instanceId": "1_42768",
+      "parentId": "1_15622",
+      "sha256": "534482ac3380b2d3070fd7e4aec9ae9197e2d3b2e06a32a5e692888047aa770e"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "LobbyPolishScene"
+      ],
+      "instanceId": "1_42769",
+      "parentId": "1_15622",
+      "sha256": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.MaterialPolish",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "MaterialPolish"
+      ],
+      "instanceId": "1_42767",
+      "parentId": "1_15622",
+      "sha256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "QueueBridge"
+      ],
+      "instanceId": "1_42765",
+      "parentId": "1_15622",
+      "sha256": "6c7135608842a9a2ca5b7588d7c1327dddd768f6b71e31900f7f757b44a092c5"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "RuntimeBake"
+      ],
+      "instanceId": "1_42763",
+      "parentId": "1_15622",
+      "sha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyShopDisplay",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LobbyShopDisplay"
+      ],
+      "instanceId": "1_42757",
+      "parentId": "1_409634",
+      "sha256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7"
+    },
+    {
+      "studioPath": "ServerScriptService.LunaTribute",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "LunaTribute"
+      ],
+      "instanceId": "1_408353",
+      "parentId": "1_409634",
+      "sha256": "d04548421adab66453a12a5cc829d0810a96e096a55bac0d2bfbd4d1b59f245d"
+    },
+    {
+      "studioPath": "ServerScriptService.NoiseRegistry",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "NoiseRegistry"
+      ],
+      "instanceId": "1_42713",
+      "parentId": "1_409634",
+      "sha256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7"
+    },
+    {
+      "studioPath": "ServerScriptService.PlayerProtection",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "PlayerProtection"
+      ],
+      "instanceId": "1_42755",
+      "parentId": "1_409634",
+      "sha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b"
+    },
+    {
+      "studioPath": "ServerScriptService.PurchaseAlerts",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "PurchaseAlerts"
+      ],
+      "instanceId": "1_42756",
+      "parentId": "1_409634",
+      "sha256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2"
+    },
+    {
+      "studioPath": "ServerScriptService.ReentryPlacement",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "ReentryPlacement"
+      ],
+      "instanceId": "1_42760",
+      "parentId": "1_409634",
+      "sha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c"
+    },
+    {
+      "studioPath": "ServerScriptService.Round Completion Routing",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Round Completion Routing"
+      ],
+      "instanceId": "1_42750",
+      "parentId": "1_409634",
+      "sha256": "cba82006005ee3b0ff64dffca769839ba863048ecc973dd461ab3bc89aff5960"
+    },
+    {
+      "studioPath": "ServerScriptService.Round Completion Test Suite",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Round Completion Test Suite"
+      ],
+      "instanceId": "1_42751",
+      "parentId": "1_409634",
+      "sha256": "7a79483f659df16b76837a01e20d06f895c1f3e142aa96b4138f5072be4018a0"
+    },
+    {
+      "studioPath": "ServerScriptService.Round Loading Runtime",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Round Loading Runtime"
+      ],
+      "instanceId": "1_42753",
+      "parentId": "1_409634",
+      "sha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd"
+    },
+    {
+      "studioPath": "ServerScriptService.Round Loading Test Suite",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Round Loading Test Suite"
+      ],
+      "instanceId": "1_42754",
+      "parentId": "1_409634",
+      "sha256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b"
+    },
+    {
+      "studioPath": "ServerScriptService.RouteMarkerService",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "RouteMarkerService"
+      ],
+      "instanceId": "1_408352",
+      "parentId": "1_409634",
+      "sha256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7"
+    },
+    {
+      "studioPath": "ServerScriptService.ServerKind",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "ServerKind"
+      ],
+      "instanceId": "1_42793",
+      "parentId": "1_409634",
+      "sha256": "f402876ad679c6f324368342239db8d850d2a8e18faf378051556e1ec3dcc31c"
+    },
+    {
+      "studioPath": "ServerScriptService.TeamObjectives",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "TeamObjectives"
+      ],
+      "instanceId": "1_42759",
+      "parentId": "1_409634",
+      "sha256": "4e5f91990b1d2cddcca1310ef877f709cf308ef450d43ff48b4399b0d1cd40b2"
+    },
+    {
+      "studioPath": "ServerScriptService.TunnelLobbyBuilder",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "TunnelLobbyBuilder"
+      ],
+      "instanceId": "1_42714",
+      "parentId": "1_409634",
+      "sha256": "ee5ef0360a0e2e45ed0af25ade662e8ac6fd6fb8c1b5e6bd7f9b8c266bc83e1a"
+    },
+    {
+      "studioPath": "ServerScriptService.ZyntraAnalytics",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraAnalytics"
+      ],
+      "instanceId": "1_42762",
+      "parentId": "1_409634",
+      "sha256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818"
+    },
+    {
+      "studioPath": "ServerScriptService.ZyntraDetectorSensing",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraDetectorSensing"
+      ],
+      "instanceId": "1_42761",
+      "parentId": "1_409634",
+      "sha256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab"
+    },
+    {
+      "studioPath": "ServerScriptService.ZyntraDetectorService",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraDetectorService"
+      ],
+      "instanceId": "1_408354",
+      "parentId": "1_409634",
+      "sha256": "ff79be5f3812aa0c2c932c87edf50ca8d31e89a3d780530722e8fea82b74eb8e"
+    },
+    {
+      "studioPath": "ServerScriptService.ZyntraMonetization",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraMonetization"
+      ],
+      "instanceId": "1_408343",
+      "parentId": "1_409634",
+      "sha256": "2b9194ab62391f61b2ec7292d8d3c10bfe798adf1922c5959b44a62e749b18af"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.Field Notes Client",
+      "className": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "Field Notes Client"
+      ],
+      "instanceId": "1_31130",
+      "parentId": "1_15639",
+      "sha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.FieldNotesService",
+      "className": "Script",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "FieldNotesService"
+      ],
+      "instanceId": "1_408365",
+      "parentId": "1_15639",
+      "sha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotes",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "ZyntraFieldNotes"
+      ],
+      "instanceId": "1_42805",
+      "parentId": "1_15639",
+      "sha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotesPage",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "ZyntraFieldNotesPage"
+      ],
+      "instanceId": "1_42806",
+      "parentId": "1_15639",
+      "sha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Kids Skylight Backup 20260806.Level 2 World Builder Before Kids Skylights",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Skylight Backup 20260806",
+        "Level 2 World Builder Before Kids Skylights"
+      ],
+      "instanceId": "1_42799",
+      "parentId": "1_15634",
+      "sha256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Kids Texture Backup 20260806.Level 2 World Builder Before Kids Textures",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Texture Backup 20260806",
+        "Level 2 World Builder Before Kids Textures"
+      ],
+      "instanceId": "1_42798",
+      "parentId": "1_15633",
+      "sha256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 Configuration",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 Configuration"
+      ],
+      "instanceId": "1_42800",
+      "parentId": "1_15635",
+      "sha256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 World Builder",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 World Builder"
+      ],
+      "instanceId": "1_42801",
+      "parentId": "1_15635",
+      "sha256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Configuration",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Configuration"
+      ],
+      "instanceId": "1_42796",
+      "parentId": "1_15631",
+      "sha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Objective Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Objective Controller"
+      ],
+      "instanceId": "1_42795",
+      "parentId": "1_15631",
+      "sha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 World Builder",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 World Builder"
+      ],
+      "instanceId": "1_42794",
+      "parentId": "1_15631",
+      "sha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Pump Scale Backup 20260806.Level 2 World Builder Before 40 Percent Reduction",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Pump Scale Backup 20260806",
+        "Level 2 World Builder Before 40 Percent Reduction"
+      ],
+      "instanceId": "1_42797",
+      "parentId": "1_15632",
+      "sha256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Configuration",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Configuration"
+      ],
+      "instanceId": "1_42802",
+      "parentId": "1_15636",
+      "sha256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Sound Controller",
+      "className": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Sound Controller"
+      ],
+      "instanceId": "1_31128",
+      "parentId": "1_15636",
+      "sha256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Client",
+      "className": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Client"
+      ],
+      "instanceId": "1_31129",
+      "parentId": "1_15637",
+      "sha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Controller",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Controller"
+      ],
+      "instanceId": "1_42803",
+      "parentId": "1_15637",
+      "sha256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Test Suite",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Test Suite"
+      ],
+      "instanceId": "1_42804",
+      "parentId": "1_15637",
+      "sha256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.RetiredLobbyAssets.Miso.MisoPatrol",
+      "className": "Script",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "RetiredLobbyAssets",
+        "Miso",
+        "MisoPatrol"
+      ],
+      "instanceId": "1_408364",
+      "parentId": "1_41654",
+      "sha256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b"
+    },
+    {
+      "studioPath": "ServerStorage.Level 4 Cinema Blender.Doors.PushDoors",
+      "className": "Script",
+      "segments": [
+        "ServerStorage",
+        "Level 4 Cinema Blender",
+        "Doors",
+        "PushDoors"
+      ],
+      "instanceId": "1_408338",
+      "parentId": "1_15491",
+      "sha256": "58a68c6b32aa9e7aa03f5cf2649e7ccbaf70b88db991e2061b6558ac66add55c"
+    },
+    {
+      "studioPath": "ServerStorage.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "className": "Script",
+      "segments": [
+        "ServerStorage",
+        "Level 4 Cinema Blender",
+        "OccasionalFixtureFlicker"
+      ],
+      "instanceId": "1_408339",
+      "parentId": "1_40071",
+      "sha256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991"
+    },
+    {
+      "studioPath": "ServerStorage.Project Mirror.IMPORTANT",
+      "className": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "Project Mirror",
+        "IMPORTANT"
+      ],
+      "instanceId": "1_31131",
+      "parentId": "1_15640",
+      "sha256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da"
+    },
+    {
+      "studioPath": "ServerStorage.Project Mirror.Script",
+      "className": "Script",
+      "segments": [
+        "ServerStorage",
+        "Project Mirror",
+        "Script"
+      ],
+      "instanceId": "1_408366",
+      "parentId": "1_15640",
+      "sha256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacter.Animate",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacter",
+        "Animate"
+      ],
+      "instanceId": "1_31127",
+      "parentId": "1_41651",
+      "sha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacterScripts.DanceEmote",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DanceEmote"
+      ],
+      "instanceId": "1_31126",
+      "parentId": "1_410028",
+      "sha256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DisableDefaultWalkingSound"
+      ],
+      "instanceId": "1_31124",
+      "parentId": "1_410028",
+      "sha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacterScripts.SetRunAnimation",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "SetRunAnimation"
+      ],
+      "instanceId": "1_31125",
+      "parentId": "1_410028",
+      "sha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Achievements Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Achievements Client"
+      ],
+      "instanceId": "1_31107",
+      "parentId": "1_410029",
+      "sha256": "cf4d7e6356197d4609ab105e41b039aed668d96a064684e3874445fd7754e771"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.DevCheats",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "DevCheats"
+      ],
+      "instanceId": "1_31072",
+      "parentId": "1_410029",
+      "sha256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "EntityShakeController"
+      ],
+      "instanceId": "1_31074",
+      "parentId": "1_410029",
+      "sha256": "2b12a543132bc0af7e624e50559756236f7f1b717bfe764433f6fbea5be81e4b"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.First Entry Guide",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "First Entry Guide"
+      ],
+      "instanceId": "1_31095",
+      "parentId": "1_410029",
+      "sha256": "19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "FlashlightController"
+      ],
+      "instanceId": "1_31067",
+      "parentId": "1_410029",
+      "sha256": "b1b1322a39a3a9a493b265f9317f7ba530f8726d5a2b2dfb294d7b3826dcc3aa"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Found Footage HUD",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Found Footage HUD"
+      ],
+      "instanceId": "1_31120",
+      "parentId": "1_410029",
+      "sha256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Friend Boost Client"
+      ],
+      "instanceId": "1_31103",
+      "parentId": "1_410029",
+      "sha256": "156a290c6ee54e73ba271438681e70ac2de76f9d1b75d693c684445350aa6562"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.HazmatSkinDriver",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "HazmatSkinDriver"
+      ],
+      "instanceId": "1_31100",
+      "parentId": "1_410029",
+      "sha256": "f5d078e43ea5054252c621c86450867782f5fd504a1bb07c2e0205cfca89df84"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.JumpscareUI",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "JumpscareUI"
+      ],
+      "instanceId": "1_31068",
+      "parentId": "1_410029",
+      "sha256": "7e5cedc84631a6af3f7edc126cb6775c9c498f42e851484c4980c3a3a6846a88"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Cable Current",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Cable Current"
+      ],
+      "instanceId": "1_31099",
+      "parentId": "1_410029",
+      "sha256": "a2c09bc7e9bba5ebd04462bfd7d0e0dba49f7453cf3a0403dfb0b0db8d7b5651"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Entity Motion",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Entity Motion"
+      ],
+      "instanceId": "9_5659704",
+      "parentId": "1_410029",
+      "sha256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Hardware Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Hardware Client"
+      ],
+      "instanceId": "1_31116",
+      "parentId": "1_410029",
+      "sha256": "dd27aa5bb7e87e75f54c3d4b0c60340b5037213b078e156a7ea0e980298d83fa"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Sound Controller"
+      ],
+      "instanceId": "1_31077",
+      "parentId": "1_410029",
+      "sha256": "0246c4f92a20dcb448c4e4d6784bf9c96edd43758cff72d30f588e5703777f03"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Entity Audio"
+      ],
+      "instanceId": "1_31097",
+      "parentId": "1_410029",
+      "sha256": "5d6405b2b806e286966c63b0f19959d348ef7b6b6f36f87257afb2ef21b294a8"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Lighting Controller"
+      ],
+      "instanceId": "1_31078",
+      "parentId": "1_410029",
+      "sha256": "26ea6117a24bbed904ff0f22fb486148eb34332bd466b84fa19d47d3d6d72b39"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Objective UI"
+      ],
+      "instanceId": "1_31080",
+      "parentId": "1_410029",
+      "sha256": "26d18cbc58573adca1d32b0d5004667ea22be0ff90141880177609a79031a733"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Pool Foam Client"
+      ],
+      "instanceId": "1_31081",
+      "parentId": "1_410029",
+      "sha256": "8240023062cb4c0502d187bbddab7fa3dcbeda4b92144ae3a31478d074b4a2de"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Poolrooms Ambience",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Poolrooms Ambience"
+      ],
+      "instanceId": "9_998682",
+      "parentId": "1_410029",
+      "sha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Slide Controller"
+      ],
+      "instanceId": "1_31087",
+      "parentId": "1_410029",
+      "sha256": "60489c6dc4f7383fc606b00fda0cea104258c232407b8625bff30c7bdde51181"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Sound Controller"
+      ],
+      "instanceId": "1_31079",
+      "parentId": "1_410029",
+      "sha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Lighting Controller"
+      ],
+      "instanceId": "1_31083",
+      "parentId": "1_410029",
+      "sha256": "a549b23d2d8b201b3d293c889c9efd5fccd4ee13f160b6c0459dd6352ccf49f0"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Mall Manager Visual Smoother"
+      ],
+      "instanceId": "1_31085",
+      "parentId": "1_410029",
+      "sha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Reader Client"
+      ],
+      "instanceId": "1_31082",
+      "parentId": "1_410029",
+      "sha256": "560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Sound Controller"
+      ],
+      "instanceId": "1_31084",
+      "parentId": "1_410029",
+      "sha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Table Hiding Client"
+      ],
+      "instanceId": "1_31086",
+      "parentId": "1_410029",
+      "sha256": "2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 4 Lighting Controller"
+      ],
+      "instanceId": "1_31114",
+      "parentId": "1_410029",
+      "sha256": "57ade12fbaee0f8507316b79987b26105f530823ff6eebd427c7330734a3d29a"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 4 Round Client"
+      ],
+      "instanceId": "1_31118",
+      "parentId": "1_410029",
+      "sha256": "6909fa9518d2c6ff5d58f6958871bdf7ec18eb8115118a8311900c04f38bfd27"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 5 Lighting Controller",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 5 Lighting Controller"
+      ],
+      "instanceId": "1_31108",
+      "parentId": "1_410029",
+      "sha256": "7be4083ac513eac0e89d512be2e0caffccee9a0f558f578d184ffec15d077c64"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Dev ESP",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Dev ESP"
+      ],
+      "instanceId": "1_31092",
+      "parentId": "1_410029",
+      "sha256": "4195aac0219e5abaca0324a03c2005603bb695cb87b4cb2659e36e419b27db30"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Playground Client"
+      ],
+      "instanceId": "1_31113",
+      "parentId": "1_410029",
+      "sha256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Reader Client"
+      ],
+      "instanceId": "1_31109",
+      "parentId": "1_410029",
+      "sha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Sound Controller",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Sound Controller"
+      ],
+      "instanceId": "1_31110",
+      "parentId": "1_410029",
+      "sha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level2AlertClient",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level2AlertClient"
+      ],
+      "instanceId": "1_31075",
+      "parentId": "1_410029",
+      "sha256": "61db652abcb787fb31454fdeea4f906396fd82c99c4818164afedfa3c28f20f4"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level2PoolroomsPresentation"
+      ],
+      "instanceId": "1_31119",
+      "parentId": "1_410029",
+      "sha256": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level4PreviewPrompt"
+      ],
+      "instanceId": "1_31106",
+      "parentId": "1_410029",
+      "sha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "attributes": [],
+      "tags": [],
+      "bytes": 1622,
+      "sourceEditorMatches": true
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level6PreviewTransport"
+      ],
+      "instanceId": "1_31112",
+      "parentId": "1_410029",
+      "sha256": "3b660cc8958f45e34413662285d25af841abab53f001daa6da21e1de883daf41"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Lobby DJ Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lobby DJ Client"
+      ],
+      "instanceId": "1_31111",
+      "parentId": "1_410029",
+      "sha256": "5722867c4602ee8d248473dd78f3ce9afe9ec494c8d1767c8a91b7c7d9635163"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Lobby Tunnel Reach Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lobby Tunnel Reach Client"
+      ],
+      "instanceId": "1_31122",
+      "parentId": "1_410029",
+      "sha256": "11a493d5423d1234eaa20f2ff6248a3807fa7baf0455b7f6f9814d7e190b22c9"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyCeilingSweeps"
+      ],
+      "instanceId": "1_31094",
+      "parentId": "1_410029",
+      "sha256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyLevel3GateFlicker"
+      ],
+      "instanceId": "1_31091",
+      "parentId": "1_410029",
+      "sha256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyMusicController",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyMusicController"
+      ],
+      "instanceId": "1_31089",
+      "parentId": "1_410029",
+      "sha256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyReimaginedQueueController"
+      ],
+      "instanceId": "1_31115",
+      "parentId": "1_410029",
+      "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lucky Wheel Client"
+      ],
+      "instanceId": "1_31102",
+      "parentId": "1_410029",
+      "sha256": "b6405e22690cc004eb2e4d088f4ea541618125dbcdc51a11c99655778ffa9576"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.MasterTuningClient",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "MasterTuningClient"
+      ],
+      "instanceId": "1_31088",
+      "parentId": "1_410029",
+      "sha256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "NoiseReporter"
+      ],
+      "instanceId": "1_31066",
+      "parentId": "1_410029",
+      "sha256": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.ProtectionHUD",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ProtectionHUD"
+      ],
+      "instanceId": "1_31093",
+      "parentId": "1_410029",
+      "sha256": "795901a09d859556d2efeaf433c6d3fb592030dfa71f5ab171c32f3b110fc12c"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "PuzzleUI"
+      ],
+      "instanceId": "1_31071",
+      "parentId": "1_410029",
+      "sha256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "R4DevGateController"
+      ],
+      "instanceId": "1_31117",
+      "parentId": "1_410029",
+      "sha256": "431e40732f1c568993cfaae749dd12893a3a8c7abc03fbef3fb9acd81ea11868"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Entry Client"
+      ],
+      "instanceId": "1_31090",
+      "parentId": "1_410029",
+      "sha256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Exit Client"
+      ],
+      "instanceId": "1_31096",
+      "parentId": "1_410029",
+      "sha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Round HUD",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round HUD"
+      ],
+      "instanceId": "0_17377448",
+      "parentId": "1_410029",
+      "sha256": "310c422c1e7ec3b853ae8afcab071c0fa8fb8fdcebbfbcc30c948a91fe2bf7ae"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "RoundUI"
+      ],
+      "instanceId": "1_31069",
+      "parentId": "1_410029",
+      "sha256": "f524a7e6865c01b412581b46e64c12c2c2c786bf9c84c23f3b7d7a359d3f422c"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SceneEffectBudgetClient"
+      ],
+      "instanceId": "0_79286921",
+      "parentId": "1_410029",
+      "sha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Shop Display Client"
+      ],
+      "instanceId": "1_31098",
+      "parentId": "1_410029",
+      "sha256": "0abe08bcdf612c2b8d38b554a61ecdb55c70538326e124d75f73275c45cacfa1"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SoundController"
+      ],
+      "instanceId": "1_31070",
+      "parentId": "1_410029",
+      "sha256": "0fc2ce5ee4787d7196193f2849ca3dc9fdfbc85e5f5286a11901543a610d327f"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SpectateController"
+      ],
+      "instanceId": "1_31073",
+      "parentId": "1_410029",
+      "sha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Team Objective Feed",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Team Objective Feed"
+      ],
+      "instanceId": "1_31104",
+      "parentId": "1_410029",
+      "sha256": "3a6b69f7cd382bb9584775b173dc6b20289ebb07725952e0429bb5df59246dfa"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Zyntra Daily L4",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Zyntra Daily L4"
+      ],
+      "instanceId": "1_31101",
+      "parentId": "1_410029",
+      "sha256": "9b9772bdd2cb6f3bff76b779a7d05971b08c7a9b9512340e09ac4b637252e8f7"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Zyntra Dev L4",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Zyntra Dev L4"
+      ],
+      "instanceId": "1_31123",
+      "parentId": "1_410029",
+      "sha256": "4a0c96c62010ba65d3a6953f4888e3714754f0a17e6d0df72deb62adb58fe476"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Zyntra Shop L4",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Zyntra Shop L4"
+      ],
+      "instanceId": "1_31121",
+      "parentId": "1_410029",
+      "sha256": "36840bc50c391816388d98ace74548610e90ca386380fd43ee0e41fa9f8da364"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraDetectorClient",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraDetectorClient"
+      ],
+      "instanceId": "1_31105",
+      "parentId": "1_410029",
+      "sha256": "10a6bda3853afdf1c9fe4dbf46ef45ef6ee3f3bb15030cfa0e0f8b5cda092bdd"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraStore"
+      ],
+      "instanceId": "1_31076",
+      "parentId": "1_410029",
+      "sha256": "1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5"
+    }
+  ],
+  "begin": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T07:46:36Z",
+    "sceneCount": 416286,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "25791b08093d08bb5048a6110744a90f2340848a2b2272d4179915687d225049",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "end": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T07:46:37Z",
+    "sceneCount": 416286,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "25791b08093d08bb5048a6110744a90f2340848a2b2272d4179915687d225049",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "manifestSHA256": "4a69d3db73d8a3140aa19538364277f4e5ee0ce48be974c2528b5959af11272b",
+  "limits": "Complete native Source/class/identity census; fresh properties/attributes/tags only for the two selected target/DevAccess originals. Other rows are used only for the census and do not pretend metadata coverage."
+}

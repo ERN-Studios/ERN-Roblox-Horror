@@ -10,11 +10,10 @@
 --   • before its box is powered, the current runs TOWARD the fuse box, so the
 --     cable answers "where do I take this fuse?" from anywhere in the maze.
 --   • the instant that box is powered the server sets Powered on the circuit
---     and the current REVERSES: out of the box, back past the elevator, and on
---     to the lever — the route the objectives column has just asked for in
---     words ("FOLLOW THE CURRENT TO A LEVER").
+--     and the current REVERSES: out of the box, back to the cable junction, and
+--     on to the lever — the route the objectives column has just asked for.
 --
--- ONE Heartbeat and one small Neon bead per pulse — at most twelve parts on a
+-- ONE Heartbeat and one small Neon bead per pulse — at most 72 parts on a
 -- six-player round — rather than a tween or a colour write per cable segment.
 -- A full maze lays several hundred ObjectiveCable parts per circuit, and a
 -- per-segment animation is several hundred property writes a frame for a visual
@@ -22,9 +21,8 @@
 --
 -- ACCESSIBILITY: ReduceFlashing. There is no blink here at any setting — a bead
 -- travelling at a constant speed never turns anything on and off — but the
--- setting still halves the speed and drops to a single pulse per circuit, so
--- the effect reads as a slow glide rather than a train of lights crossing the
--- edge of vision.
+-- setting still halves the speed and density (one pulse while unpowered), so
+-- the effect reads as a slow glide at the edge of vision.
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -38,6 +36,12 @@ local REDUCED_SPEED = 13      -- ReduceFlashing: a glide, not a procession
 local REDUCED_PULSES = 1
 local BEAD_SIZE = 0.55        -- the cable itself is 0.34 x 0.09
 local RESCAN_INTERVAL = 0.4   -- at most one rebuild this often while building
+-- LEVER_PATH_20261010 (puzzle-client): keep long powered routes easy to follow.
+local POWERED_SPACING = 40
+local MAX_POWERED = 24
+local REDUCED_POWERED_SPACING = 80
+local REDUCED_MAX_POWERED = 12
+local POWERED_BEAD_SIZE = 0.8
 -- ──────────────────────────────────────────────────────────
 
 local function active()
@@ -120,14 +124,19 @@ local function buildCircuit(circuit)
 
 	-- Unpowered: the elevator witness point out to the fuse box.
 	local boxPoints = polyline(boxParts)
-	-- Powered: the same half walked backwards — out of the box, past the
-	-- elevator — and then straight on down the lever half. Both halves were laid
-	-- from the one witness point, so the reversed box half ends where the lever
-	-- half begins and the two join without a seam.
+	-- LEVER_PATH_20261010 (puzzle-client): shared trunk pieces are omitted from the lever half.
+	-- Turn at its first point instead of walking past the junction to the elevator.
 	local leverPoints = polyline(leverParts)
 	local poweredPoints = {}
-	for i = #boxPoints, 1, -1 do poweredPoints[#poweredPoints + 1] = boxPoints[i] end
-	for i = 2, #leverPoints do poweredPoints[#poweredPoints + 1] = leverPoints[i] end
+	local join, gap = 1, math.huge
+	if leverPoints[1] then
+		for i, p in ipairs(boxPoints) do
+			local d = (p - leverPoints[1]).Magnitude
+			if d < gap then join, gap = i, d end
+		end
+	end
+	for i = #boxPoints, join, -1 do poweredPoints[#poweredPoints + 1] = boxPoints[i] end
+	for i = (gap < 0.5) and 2 or 1, #leverPoints do poweredPoints[#poweredPoints + 1] = leverPoints[i] end
 
 	return {
 		model = circuit,
@@ -173,13 +182,18 @@ local function rescan()
 	holder.Name = "Level1CableCurrent"
 	holder.Parent = camera
 
-	local pulses = (player:GetAttribute("ReduceFlashing") == true)
-		and REDUCED_PULSES or PULSES
+	local reduce = player:GetAttribute("ReduceFlashing") == true
+	local pulses = reduce and REDUCED_PULSES or PULSES
 	for _, child in ipairs(folder:GetChildren()) do
 		if child.Name:sub(1, 12) == "CircuitCable" then
 			local state = buildCircuit(child)
 			if state then
-				for index = 1, pulses do
+				-- LEVER_PATH_20261010 (puzzle-client): reserve the train once, then hide unused pulses.
+				state.unpoweredCount = pulses
+				state.poweredCount = math.clamp(math.ceil(state.toLever.length /
+					(reduce and REDUCED_POWERED_SPACING or POWERED_SPACING)), pulses,
+					reduce and REDUCED_MAX_POWERED or MAX_POWERED)
+				for index = 1, math.max(pulses, state.poweredCount) do
 					local bead = Instance.new("Part")
 					bead.Name = "CableCurrentPulse"
 					bead.Shape = Enum.PartType.Ball
@@ -191,6 +205,7 @@ local function rescan()
 					bead.CastShadow = false
 					bead.Material = Enum.Material.Neon
 					bead.Color = state.colour
+					bead.Transparency = index <= pulses and 0 or 1
 					bead.Parent = holder
 					-- Evenly spaced round the route, so the cable reads as a
 					-- continuous flow rather than one lonely dot.
@@ -243,13 +258,23 @@ RunService.Heartbeat:Connect(function(dt)
 			-- wherever its old pulse happened to be. The other circuits are not
 			-- touched — one player's box is not everyone's.
 			state.travelled = 0
-			for _, bead in ipairs(state.beads) do bead.i = 1 end
+			-- LEVER_PATH_20261010 (puzzle-client): only the power edge changes pulse density and size.
+			-- Steady frames only move visible pulses.
+			state.activeCount = powered and state.poweredCount or state.unpoweredCount
+			local size = powered and POWERED_BEAD_SIZE or BEAD_SIZE
+			for index, bead in ipairs(state.beads) do
+				bead.i = 1
+				bead.offset = (index - 1) / state.activeCount
+				bead.part.Transparency = index <= state.activeCount and 0 or 1
+				bead.part.Size = Vector3.new(size, size, size)
+			end
 		else
 			state.travelled += step
 		end
 		local path = powered and state.toLever or state.toBox
 		if path.length > 1 then
-			for _, bead in ipairs(state.beads) do
+			for index = 1, state.activeCount do
+				local bead = state.beads[index]
 				local s = (state.travelled + bead.offset * path.length) % path.length
 				bead.part.Position = pointAt(path, s, bead)
 			end

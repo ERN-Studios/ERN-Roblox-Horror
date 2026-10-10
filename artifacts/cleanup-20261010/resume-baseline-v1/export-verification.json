@@ -1,0 +1,275 @@
+{
+  "pass": true,
+  "compileChecks": [
+    {
+      "file": "ReplicatedStorage/LoadingCardView.ModuleScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "0f2d4b561ae206ffd07c4345a5e7372853c54863071946e525bd3fa0970c4a7b"
+    },
+    {
+      "file": "ReplicatedStorage/LoadingCardView.ModuleScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "0f2d4b561ae206ffd07c4345a5e7372853c54863071946e525bd3fa0970c4a7b"
+    },
+    {
+      "file": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "ede7dd4a687e76d0aefba2356869e0e31d70dc953b963680ae8fd607ea32e165"
+    },
+    {
+      "file": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "ede7dd4a687e76d0aefba2356869e0e31d70dc953b963680ae8fd607ea32e165"
+    },
+    {
+      "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559"
+    },
+    {
+      "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559"
+    },
+    {
+      "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6"
+    },
+    {
+      "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6"
+    },
+    {
+      "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3"
+    },
+    {
+      "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3"
+    },
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1"
+    },
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40"
+    },
+    {
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6"
+    },
+    {
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "2b12a543132bc0af7e624e50559756236f7f1b717bfe764433f6fbea5be81e4b"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "2b12a543132bc0af7e624e50559756236f7f1b717bfe764433f6fbea5be81e4b"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Found Footage HUD.LocalScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Found Footage HUD.LocalScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "a2c09bc7e9bba5ebd04462bfd7d0e0dba49f7453cf3a0403dfb0b0db8d7b5651"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "a2c09bc7e9bba5ebd04462bfd7d0e0dba49f7453cf3a0403dfb0b0db8d7b5651"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Entity Motion.LocalScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Entity Motion.LocalScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Hardware Client.LocalScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "dd27aa5bb7e87e75f54c3d4b0c60340b5037213b078e156a7ea0e980298d83fa"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Hardware Client.LocalScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "dd27aa5bb7e87e75f54c3d4b0c60340b5037213b078e156a7ea0e980298d83fa"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "f524a7e6865c01b412581b46e64c12c2c2c786bf9c84c23f3b7d7a359d3f422c"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "f524a7e6865c01b412581b46e64c12c2c2c786bf9c84c23f3b7d7a359d3f422c"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
+      "optimization": 0,
+      "pass": true,
+      "sourceSHA256": "0fc2ce5ee4787d7196193f2849ca3dc9fdfbc85e5f5286a11901543a610d327f"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
+      "optimization": 1,
+      "pass": true,
+      "sourceSHA256": "0fc2ce5ee4787d7196193f2849ca3dc9fdfbc85e5f5286a11901543a610d327f"
+    }
+  ],
+  "contractTests": [
+    {
+      "test": "test_studio_source_contract.py",
+      "pass": true,
+      "exitCode": 0,
+      "stdoutSHA256": "8a37d8e19af509fc0434e8c1c027d72f2ad1eda25c096864604f99d98c57c029"
+    },
+    {
+      "test": "test_full_sync_contract.py",
+      "pass": true,
+      "exitCode": 0,
+      "stdoutSHA256": "458662219d914f681dbd74bee010e56587ea764e32576bff9bbe3c8d478a55f5"
+    }
+  ],
+  "scope": "Compile/export contracts for 21 faithfully mirrored other-developer native Sources; no gameplay certification",
+  "nativeCalls": 0,
+  "sourceWrites": 0,
+  "manifestWrites": 0
+}

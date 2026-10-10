@@ -1,0 +1,85 @@
+{
+  "pass": true,
+  "nativeInputPath": "artifacts/cleanup-20261010/clients-next-v1/native-binding-input-v1.json",
+  "nativeInputSHA256": "ae2b9f893d0452442351cf669bcfa6b6b3bc229f2f1bdce3bb37f5cb3088f540",
+  "manifestSHA256": "4a69d3db73d8a3140aa19538364277f4e5ee0ce48be974c2528b5959af11272b",
+  "expected": {
+    "nativeScriptCount": 213,
+    "contractChecks": 455,
+    "originals": [
+      {
+        "studioPath": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt",
+        "className": "LocalScript",
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level4PreviewPrompt"
+        ],
+        "instanceId": "1_31106",
+        "parentId": "1_410029",
+        "sha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "attributes": [],
+        "tags": [],
+        "bytes": 1622,
+        "sourceEditorMatches": true,
+        "sourceSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436"
+      },
+      {
+        "studioPath": "ReplicatedStorage.DevAccess",
+        "className": "ModuleScript",
+        "segments": [
+          "ReplicatedStorage",
+          "DevAccess"
+        ],
+        "instanceId": "1_42694",
+        "parentId": "1_408323",
+        "sha256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "attributes": [],
+        "tags": [],
+        "bytes": 2835,
+        "sourceEditorMatches": true,
+        "sourceSHA256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5"
+      }
+    ]
+  },
+  "compile": [
+    {
+      "phase": "before",
+      "optimization": 0,
+      "pass": true
+    },
+    {
+      "phase": "before",
+      "optimization": 1,
+      "pass": true
+    },
+    {
+      "phase": "installed",
+      "optimization": 0,
+      "pass": true
+    },
+    {
+      "phase": "installed",
+      "optimization": 1,
+      "pass": true
+    }
+  ],
+  "nativeCodeHashes": {
+    "before": "3126993ffb25e6f1fac426162ada278af5b2d68ca33173c22a50b932fee1ef92",
+    "installed": "4c1f01191e99ac61b55cb78383c51e6cc0820dbbd5911bf717661a74b7ca0dfc"
+  },
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0
+}

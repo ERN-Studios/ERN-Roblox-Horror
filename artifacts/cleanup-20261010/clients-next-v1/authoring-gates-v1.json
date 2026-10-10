@@ -1,0 +1,43 @@
+{
+  "pass": true,
+  "stdout": "AUTHORING_CHECKS=12\n",
+  "programSHA256": "f400a50cef318fabbc1ad04f1f848e9df244e5d437d16ba4ee83c66e96e4b408",
+  "toolSHA256": "e70cc830d6114de4d0320471044341c8f51e3818f80a60da6803d1a56fa5553f",
+  "releaseToolPath": "tools/level6_playground/release_level6.py",
+  "releaseToolSHA256": "f6e1d61f451bee759e0493b52862e2e6ab6663d0d985123455d511ed449619d7",
+  "installerPath": "tools/level6_build/import/install_level6_gameplay.luau",
+  "installerSHA256": "1c488647d675a849b1ec890d6188286ee2b6d48ee418b663fe20327fffef4e8e",
+  "existingTargetRow": {
+    "studioPath": "ServerScriptService.Level6PreviewAccess",
+    "segments": [
+      "ServerScriptService",
+      "Level6PreviewAccess"
+    ],
+    "className": "Script",
+    "file": "ServerScriptService/Level6PreviewAccess.Script.lua",
+    "bytes": 35534,
+    "sha256": "62c22dbcde5c87ff6d0054be7d60a0890298ed5ebb9b1bf6f61e431f45e38655",
+    "status": "synced",
+    "sourceEditorMatches": true,
+    "properties": {
+      "Disabled": false,
+      "LinkedSource": "",
+      "Archivable": true,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Enabled": true
+    },
+    "attributes": {
+      "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+      "Level6SourceSha256": "8377f1b0d366e0571e6c99fceb164cb42c032743200c4722e824a4573ef2fead"
+    }
+  },
+  "manifestSHA256": "4a69d3db73d8a3140aa19538364277f4e5ee0ce48be974c2528b5959af11272b",
+  "immutableInputHashes": {
+    "before": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+    "candidate": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+  },
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "scope": "Actual current release PATCH for only Level4PreviewPrompt is an idempotent skip before/after. Actual old installer prefix rejects the already-existing Level6PreviewAccess at its unchanged preflight. Explicit controlled service/world boundary tables; not full authoring or native install certification."
+}

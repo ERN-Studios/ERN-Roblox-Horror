@@ -4245,7 +4245,7 @@ do
 		pd.reentry.Selectable = pd.reentry.Active
 		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or credits > 0
 			and ("USE CREDIT \u{B7} " .. credits .. " OWNED")
-			or ("BUY \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--") .. " \u{B7} 0 OWNED"))
+			or ("REVIVE \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
 		local colour = credits > 0 and Color3.fromRGB(68,221,196) or Color3.fromRGB(232,160,36)
 		for _, node in ipairs(pd.reentry:GetDescendants()) do
 			if node:IsA("UIStroke") then node.Color = colour end
@@ -4310,6 +4310,24 @@ do
 		pd.card.AnchorPoint = Vector2.new(0.5, 0.5)
 		pd.card.Position = UIDevice.LocalPosition(gui, (layout.Safe.Left + layout.Safe.Right) / 2,
 			(layout.Safe.Top + layout.Safe.Bottom) / 2 + (touch and 18 or 0))
+		-- Stack rows start at the left edge; keep the narrower imported timer track centered.
+		local track = pd.parts.PartyDownTrack
+		local trackRow = Instance.new("Frame")
+		trackRow.Name = "PartyDownTrackRow"
+		trackRow.BackgroundTransparency = 1
+		trackRow.BorderSizePixel = 0
+		trackRow.LayoutOrder = track.LayoutOrder
+		local function syncTrackRow()
+			trackRow.Visible = track.Visible
+			trackRow.Size = UDim2.new(1, 0, 0, track.Size.Y.Offset)
+		end
+		syncTrackRow()
+		trackRow.Parent = pd.card
+		track.Parent = trackRow
+		track.AnchorPoint = Vector2.new(0.5, 0)
+		track.Position = UDim2.fromScale(0.5, 0)
+		track:GetPropertyChangedSignal("Visible"):Connect(syncTrackRow)
+		track:GetPropertyChangedSignal("Size"):Connect(syncTrackRow)
 		for _, node in ipairs(pd.card:GetDescendants()) do
 			if node:IsA("GuiObject") then node.ZIndex = 114 end
 		end
@@ -4672,6 +4690,29 @@ local function mimicSpawnBehind(root)
  local down = RaycastParams.new()
  down.FilterType = Enum.RaycastFilterType.Include
  down.FilterDescendantsInstances = { maze }
+ -- MIMIC_DARK_20261010 (owner): the spot itself has to be dark, not only the round. While the ceiling
+ -- lamps burn (the last relay stage, the red alert) three in four are still lit, so the Mimic may only
+ -- appear outside the throw of every working one: 0.7 of the lamp's own Range. "Working" is Enabled,
+ -- or a diffuser still at its lit colour: a flicker switches Enabled off between flashes and leaves the
+ -- colour, while dead and powered-down panels are dark. Brightness is ignored on purpose, so the
+ -- lights-out scare and a relay's flicker, which only dim a lamp for a second, cannot fake a dark spot.
+ local LAMP_REACH = 0.7
+ local lamps = {}
+ do
+  -- One thin slab at ceiling height finds them: every fixture is a panel in the ceiling plane with its
+  -- SurfaceLight as a child (MazeGenerator). 100 studs covers the guesses plus the longest reach there is.
+  local around = OverlapParams.new()
+  around.FilterType = Enum.RaycastFilterType.Include
+  around.FilterDescendantsInstances = { maze }
+  local centre = root.Position - root.CFrame.LookVector * 19
+  for _, panel in ipairs(workspace:GetPartBoundsInBox(
+   CFrame.new(centre.X, workspace:GetAttribute("WALL_H") or 14, centre.Z), Vector3.new(100, 0.4, 100), around)) do
+   local light = panel:FindFirstChildOfClass("SurfaceLight")
+   if light and (light.Enabled or panel.Color.R > 0.6) then
+    lamps[#lamps + 1] = { panel.Position, light.Range * LAMP_REACH }
+   end
+  end
+ end
  for _ = 1, 12 do
   local guess = root.Position - root.CFrame.LookVector * math.random(16, 22)
    + root.CFrame.RightVector * math.random(-6, 6)
@@ -4679,7 +4720,12 @@ local function mimicSpawnBehind(root)
   if hit and hit.Normal.Y > 0.6 then
    local pos = hit.Position + Vector3.new(0, 3, 0)
    local toSpawn = pos - root.Position
-   if toSpawn.Magnitude > 1 and root.CFrame.LookVector:Dot(toSpawn.Unit) < -0.25 then
+   local lit = false
+   for _, lamp in ipairs(lamps) do
+    if (lamp[1] - pos).Magnitude < lamp[2] then lit = true break end
+   end
+   -- lit is tested first, so no path is worked out for a spot that is refused anyway
+   if not lit and toSpawn.Magnitude > 1 and root.CFrame.LookVector:Dot(toSpawn.Unit) < -0.25 then
     local path = MimicPathfinding:CreatePath({AgentRadius=2, AgentHeight=5, AgentCanJump=false})
     local ok = pcall(function() path:ComputeAsync(pos, root.Position) end)
     if ok and path.Status == Enum.PathStatus.Success then return pos end
@@ -5006,22 +5052,66 @@ if RunService:IsStudio() then
   end
  end)
  player:GetAttributeChangedSignal("DevSpawnMimic"):Connect(devSpawnMimicNow)
+ -- MIMIC_DARK_20261010: play-test hook for the spot rule alone, without the darkness gate, the roll or
+ -- the cooldown. Write any new value to DevMimicProbe; DevMimicProbeResult is the position a Mimic
+ -- would be given behind the player, or false, and DevMimicProbeDone echoes the value once it is in
+ -- (the search yields on pathfinding, and two refusals in a row would otherwise look like no answer).
+ player:GetAttributeChangedSignal("DevMimicProbe"):Connect(function()
+  local asked = player:GetAttribute("DevMimicProbe")
+  local _, _, root, alive = mimicLocalAlive()
+  player:SetAttribute("DevMimicProbeResult", alive and mimicSpawnBehind(root) or false)
+  player:SetAttribute("DevMimicProbeDone", asked)
+ end)
 end
 
 task.spawn(function()
+ -- MIMIC_DARK_20261010 (owner: the Mimic may only spawn once the surroundings are far darker). It used
+ -- to be due the moment the elevator opened, in the brightest light the level has. The measure is the
+ -- luma of Lighting.Ambient, which applyPlayerLighting above holds on this client for the whole round:
+ --   start .365 | relays >= 1/3 out .237 | relays >= 2/3 out .132 | red alert .093 | power-down, escape .015
+ -- 0.16 shuts the two bright relay stages out and opens from the darkest one on; a round only ever gets
+ -- darker, so once open it stays open. If those presets are retuned, keep 0.16 between .237 and .132.
+ local DARK_AMBIENT = 0.16
+ local DARK_SETTLE = 20 -- seconds of darkness first, so it never arrives on the beat the light changes
+ local DARK_NEEDS_TORCH = 0.05 -- at or under this the ceiling lamps are out (.015): see torchMissing below
+ local darkSince, armedUntil = nil, 0
  while true do
   task.wait(5)
   if activeMimic and (not activeMimic.model or not activeMimic.model.Parent) then activeMimic=nil end
-  local _, _, root, alive = mimicLocalAlive()
-  if not activeMimic and workspace:GetAttribute("RoundActive") and alive
+  local char, _, root, alive = mimicLocalAlive()
+  local ambient = Lighting.Ambient
+  local luma = ambient.R * 0.299 + ambient.G * 0.587 + ambient.B * 0.114
+  local dark = workspace:GetAttribute("RoundActive") == true and luma <= DARK_AMBIENT
+  if dark then darkSince = darkSince or os.clock() else darkSince, armedUntil = nil, 0 end
+  -- In the blackout the Mimic is silent and unlit, and "seen" (mimicVisible) is geometry, not light: with
+  -- the torch off it would be noticed, bolt and spend the long cooldown with nothing on the screen. So
+  -- there it waits for the player's own torch (FlashlightSync's replicated BoolValue on the character).
+  local torch = char and char:FindFirstChild("FlashlightOn")
+  local torchMissing = luma <= DARK_NEEDS_TORCH and not (torch and torch:IsA("BoolValue") and torch.Value)
+  if RunService:IsStudio() then -- client-local play-test readback: "<state> <luma>"
+   player:SetAttribute("MimicGate", string.format("%s %.3f", not dark and "bright"
+    or os.clock() - darkSince < DARK_SETTLE and "settling" or torchMissing and "torchoff"
+    or os.clock() < armedUntil and "armed" or "rolling", luma))
+  end
+  if dark and os.clock() - darkSince >= DARK_SETTLE and not torchMissing and not activeMimic and alive
    and player:GetAttribute("Escaped") ~= true and not mimicTeammateNearby(root)
    and os.clock() >= nextMimicChance then
-   nextMimicChance = os.clock() + math.random(15, 28)
-   if math.random() < 0.45 then
+   if os.clock() >= armedUntil then
+    nextMimicChance = os.clock() + math.random(15, 28)
+    -- A window that ran out without a dark spot is paid for with the usual gap, not an instant new roll.
+    if armedUntil > 0 then armedUntil = 0
+    elseif math.random() < 0.45 then armedUntil = os.clock() + 45 end
+   end
+   -- While lamps burn most spots behind the player are in lamplight, so a won roll is kept for 45 s and
+   -- only the search repeats: the Mimic appears at the first dark pocket the player walks past.
+   if os.clock() < armedUntil then
     local spawnPos = mimicSpawnBehind(root)
     if spawnPos then
+     armedUntil = 0
      nextMimicChance = os.clock() + math.random(100, 180)
      mimicRun(spawnPos)
+    else
+     nextMimicChance = os.clock() -- look again on the next tick
     end
    end
   end

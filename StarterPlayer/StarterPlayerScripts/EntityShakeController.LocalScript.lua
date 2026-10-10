@@ -14,6 +14,7 @@
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local RS = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 
 -- ── tuning ────────────────────────────────────────────────
@@ -54,6 +55,25 @@ local CROUCH_CAMERA_OFFSET = Vector3.new(0, -0.92, 0.12)
 
 local impulse = 0     -- decaying footstep-kick amount
 local stompTimer = 0
+local lastMotionStep = nil -- ENTITY_MOTION_20261010
+local motionConfigured = RS:FindFirstChild("Level1EntityMotion") ~= nil
+RS.ChildAdded:Connect(function(child)
+	if child.Name == "Level1EntityMotion" then motionConfigured = true end
+end)
+RS.ChildRemoved:Connect(function(child)
+	if child.Name == "Level1EntityMotion" then
+		motionConfigured = RS:FindFirstChild("Level1EntityMotion") ~= nil
+	end
+end)
+-- ENTITY_MOTION_LIVE_20261010: the layer owns the stomp timing only while it is beating (see SoundController).
+local function motionLive()
+	local beat = workspace:GetAttribute("L1EntityMotionBeat")
+	return motionConfigured and type(beat) == "number" and os.clock() - beat < 1.5 -- 10 Hz beat; a slow client hitches
+end
+
+local function finite(n)
+	return type(n) == "number" and n == n and math.abs(n) < math.huge
+end
 local bobT = 0        -- bob phase
 local bobAmp = 0      -- eased bob amplitude (0 when standing)
 local alertElapsed = math.huge
@@ -78,6 +98,15 @@ player:GetAttributeChangedSignal("Level1EntityAlertSerial"):Connect(function()
 end)
 
 RunService.RenderStepped:Connect(function(dt)
+	-- Consume outside proximity/health gates so entering range never replays a step.
+	local motionStep = workspace:GetAttribute("L1EntityStep")
+	local motionSynced = finite(motionStep)
+	local motionContact = motionSynced and lastMotionStep ~= nil
+		and motionStep ~= lastMotionStep
+	lastMotionStep = motionSynced and motionStep or nil
+	if motionSynced or motionLive() then stompTimer = 0 end
+	if not finite(dt) or dt < 0 then return end
+	dt = math.min(dt, 1) -- a hitch must not overflow the head-bob phase
 	local hum, char = humanoidNow()
 	if not hum then return end
 
@@ -85,6 +114,8 @@ RunService.RenderStepped:Connect(function(dt)
 	local entity = workspace:FindFirstChild("Entity")
 	local eroot = entity and entity:FindFirstChild("HumanoidRootPart")
 	local myRoot = char and char:FindFirstChild("HumanoidRootPart")
+	if eroot and not eroot:IsA("BasePart") then eroot = nil end
+	if myRoot and not myRoot:IsA("BasePart") then myRoot = nil end
 
 	local ambient = 0
 	if cam and eroot and myRoot and hum.Health > 0 then
@@ -98,11 +129,18 @@ RunService.RenderStepped:Connect(function(dt)
 				local targeted = player:GetAttribute("BeingChased") == true
 				ambient = (prox ^ CHASE_CURVE) * CHASE_RUMBLE
 					* (targeted and CHASE_TARGET_MULT or 1)
-				stompTimer += dt
-				local stompInterval = state == "CHASE"
-					and STOMP_CHASE_INTERVAL or STOMP_TRACK_INTERVAL
-				if stompTimer >= stompInterval then
-					stompTimer -= stompInterval
+				-- Nil is inactive with the motion layer; timers serve legacy rigs only.
+				local stomp = motionContact
+				if not motionSynced and not motionLive() then
+					stompTimer += dt
+					local stompInterval = state == "CHASE"
+						and STOMP_CHASE_INTERVAL or STOMP_TRACK_INTERVAL
+					if stompTimer >= stompInterval then
+						stompTimer -= stompInterval
+						stomp = true
+					end
+				end
+				if stomp then
 					-- footstep punch — full force for the target, softer for bystanders
 					impulse = math.min(1, impulse + prox * (targeted and 1 or 0.65))
 				end

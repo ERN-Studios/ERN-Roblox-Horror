@@ -77,6 +77,11 @@ local CONFIG = {
 	ArenaHuntReplan = {1.6, 1.1, 0.7},  -- seconds before it looks again at where you are now
 	ArenaHuntReplanMin = 0.5,
 	WinChoiceSeconds = 15,              -- LEVEL 6 CLEARED stays up this long, as every level's ending does
+	-- POST_RING_20261010 (owner): the ring and lamp glow red; a counted step into the ring holds green for two seconds.
+	PostRing = {Radius = 8.4, Reach = 8.8, GreenSeconds = 2, Segments = 32, Tube = 0.3, Lift = 0.1, Bulb = 1.0,
+		LightRange = 14, MinChange = 0.5,
+		Red = Color3.fromRGB(255, 40, 28), Dim = Color3.fromRGB(110, 18, 12), Green = Color3.fromRGB(60, 255, 120),
+		Dark = Color3.fromRGB(26, 24, 22), Bright = {red = 1.3, dim = 0.3, green = 2.2, off = 0}},
 }
 
 local arenaSlides = {busy = false, job = false}
@@ -534,6 +539,8 @@ local function newSession(info)
 	elseif info.arena then
 		warn("[Level6] the arena has no navigation graph: the Counter falls back to PathfindingService")
 	end
+	-- POST_RING_20261010 (owner): a prop failure must leave the round playable with the original touch distance.
+	do local ok, why = pcall(s.ringBuild, s); if not ok then warn("[Level6] post ring: " .. tostring(why)); s.ring = nil end end
 	s.heartbeat = RunService.Heartbeat:Connect(function(dt) s:animate(dt) end)
 	return s
 end
@@ -560,6 +567,8 @@ function Session:animate(dt)
 	if child:GetAttribute("AnimSerial") ~= a.serial then child:SetAttribute("AnimSerial", a.serial) end
 	if child:GetAttribute("Speed") ~= speed then child:SetAttribute("Speed", speed) end
 	child:SetAttribute("Chasing", self.chase ~= nil)
+	-- POST_RING_20261010 (owner): the shared signal must keep updating while the party holds the round clock.
+	self:ringTick()
 end
 
 -- Stand still and play a clip from its first frame.
@@ -1005,6 +1014,95 @@ function Session:living()
 	return n
 end
 
+-- POST_RING_20261010 (owner): runtime props stay outside the finale's moving parts and the client's light repaint.
+function Session:ringBuild()
+	local info, c = self.info, CONFIG.PostRing
+	if not info.arena then return end
+	local model = info.model
+	local old = model:FindFirstChild("Finale_PostRing"); if old then old:Destroy() end
+	local posts, cap = model:FindFirstChild("Finale_Post"), nil
+	for _, p in ipairs(posts and posts:GetChildren() or {}) do
+		if p:IsA("BasePart") and (not cap or p.Position.Y > cap.Position.Y) then cap = p end
+	end
+	if not cap then return end
+	local home, folder, glow = info.home, Instance.new("Folder"), {}
+	folder.Name = "Finale_PostRing"
+	local function make(name, shape, size, cf)
+		local p = Instance.new("Part")
+		p.Name, p.Shape, p.Size, p.CFrame = name, shape, size, cf
+		p.Anchored, p.CanCollide, p.CanTouch, p.CanQuery, p.CastShadow = true, false, false, false, false
+		p.TopSurface, p.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
+		p.Parent = folder
+		return p
+	end
+	local half = math.pi / c.Segments
+	local centre = Vector3.new(home.X, info.floorY + 0.9 + c.Lift, home.Z)
+	local length = 2 * c.Radius * math.sin(half) + c.Tube * 0.4
+	for i = 0, c.Segments - 1 do
+		local a = (2 * i + 1) * half
+		local out = Vector3.new(math.cos(a), 0, math.sin(a))
+		glow[#glow + 1] = make("Cord", Enum.PartType.Cylinder, Vector3.new(length, c.Tube, c.Tube),
+			CFrame.fromMatrix(centre + out * (c.Radius * math.cos(half)), Vector3.new(-out.Z, 0, out.X), Vector3.yAxis))
+	end
+	local top = cap.Position.Y + cap.Size.X / 2        -- the cylinder's length is its X, so its top clears the cap
+	local base = make("LampBase", Enum.PartType.Cylinder, Vector3.new(0.24, 1.2, 1.2),
+		CFrame.new(home.X, top + 0.09, home.Z) * CFrame.Angles(0, 0, math.rad(90)))
+	base.Color, base.Material = Color3.fromRGB(24, 24, 28), Enum.Material.Metal
+	local bulb = make("Lamp", Enum.PartType.Ball, Vector3.one * c.Bulb, CFrame.new(home.X, top + 0.21 + 0.3 * c.Bulb, home.Z))
+	glow[#glow + 1] = bulb
+	local light = Instance.new("PointLight")
+	light.Name, light.Range, light.Shadows = "Glow", c.LightRange, false
+	light.Parent = bulb
+	folder.Parent = model                       -- publish once, after every part is ready
+	self.ring = {folder = folder, glow = glow, lamp = {base, bulb}, light = light, greenUntil = 0, changedAt = 0}
+	self:ringShow("dim")
+end
+
+-- POST_RING_20261010 (owner): steady materials and one light make the shared colour readable without a pulse.
+function Session:ringShow(mode)
+	local ring, c = self.ring, CONFIG.PostRing
+	if not ring or ring.mode == mode or not ring.folder.Parent then return end
+	ring.mode, ring.changedAt = mode, realClock()
+	local colour = (mode == "green" and c.Green) or (mode == "red" and c.Red) or (mode == "dim" and c.Dim) or c.Dark
+	local material = mode == "off" and Enum.Material.SmoothPlastic or Enum.Material.Neon
+	for _, p in ipairs(ring.glow) do p.Color, p.Material = colour, material end
+	ring.light.Color, ring.light.Brightness, ring.light.Enabled = colour, c.Bright[mode], mode ~= "off"
+	self.info.model:SetAttribute("Level6PostRing", mode)
+end
+
+-- POST_RING_20261010 (owner): another counted touch extends the same green instead of restarting a flash.
+function Session:ringGreen()
+	local ring = self.ring
+	if not ring then return end
+	ring.greenUntil = realClock() + CONFIG.PostRing.GreenSeconds
+	self:ringShow("green")
+end
+
+-- POST_RING_20261010 (owner): real time expires green during the party; red strength shows whether the post is open.
+function Session:ringTick()
+	local ring = self.ring
+	if not ring then return end
+	local now, mode = realClock(), nil
+	if now < ring.greenUntil then mode = "green"
+	elseif self.phase == "escape" or self.phase == "over" then mode = "off"
+	elseif self.phase == "seek" and not self.partyOn and not self.wipedAt
+		and now - (self.partyEndedAt or -10) > 1   -- same settling second the touch itself waits out after the party
+		and flat(self:feet() - self.info.home).Magnitude >= CONFIG.ArenaDunkSafeDistance then mode = "red"
+	else mode = "dim" end
+	if mode ~= ring.mode and (mode == "green" or mode == "off" or ring.mode == "green"
+		or now - ring.changedAt >= CONFIG.PostRing.MinChange) then self:ringShow(mode) end
+end
+
+-- POST_RING_20261010 (owner): only the lamp follows the post down; the dark cord stays round the open shaft.
+function Session:ringSink()
+	local ring = self.ring
+	if not ring then return end
+	for _, p in ipairs(ring.lamp) do
+		TweenService:Create(p, TweenInfo.new(3.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+			{CFrame = p.CFrame + Vector3.new(0, -18.5, 0)}):Play()
+	end
+end
+
 -- Every death in the level lands here once, whether the doll did it or the player reset. Same events on the
 -- same remote GameManager uses for its own rounds, so RoundUI, the spectate band and the store behave as in
 -- any level: "death" to the party, and "partydown" with its 15 seconds when nobody is left standing.
@@ -1341,16 +1439,21 @@ function Session:seekPhase()
 		-- dunks
 		local feet = self:feet()
 		local home = self.info.home
+		-- POST_RING_20261010 (owner): the cord is the touch boundary; stale party-slot positions must settle first.
+		local reach = self.ring and CONFIG.PostRing.Reach or CONFIG.DunkRadius
+		local settled = realClock() - (self.partyEndedAt or -10) > 1
 		local allDunked = true
 		for player, state in pairs(self.players) do
 			local root = rootOf(player)
 			if not state.caught and not state.dunked then
 				allDunked = false
-				if root and flat(root.Position - home).Magnitude <= CONFIG.DunkRadius and math.abs(root.Position.Y - home.Y) < 9
+				if root and settled and flat(root.Position - home).Magnitude <= reach and math.abs(root.Position.Y - home.Y) < 9
 					and flat(feet - home).Magnitude >= safeDistance then
 					state.dunked = true
 					self.dunks = self:tagged()
-					broadcast(self, "dunk", player.DisplayName, self.dunks, self:target())
+					-- POST_RING_20261010 (owner): only a counted touch turns green; the id identifies its card on the client.
+					broadcast(self, "dunk", player.DisplayName, self.dunks, self:target(), player.UserId)
+					self:ringGreen()
 					achieve(player, "L6HomeFree")
 					self.noise = home
 					-- the winning tag belongs to the angry line alone
@@ -1366,6 +1469,8 @@ function Session:seekPhase()
 			end
 			self.dunks = self:tagged()
 			broadcast(self, "dunk", "TEST", self.dunks, self:target())
+			-- POST_RING_20261010 (owner): Studio's counted-tag hook exercises the same green as a player's touch.
+			self:ringGreen()
 		end
 		-- a player caught after tagging no longer counts either way: the tally is always of the living
 		self.dunks = self:tagged()
@@ -1544,6 +1649,8 @@ function Session:finalePhase()
 							{CFrame = item.frame + Vector3.new(0, -18.5, 0)}):Play()
 					end
 				end
+				-- POST_RING_20261010 (owner): the separate lamp must sink with the post on the same timing.
+				self:ringSink()
 				if f.glow then
 					for _, light in ipairs(f.glow:GetDescendants()) do
 						if light:IsA("Light") then
@@ -1853,6 +1960,8 @@ function Session:party(by)
 	broadcast(self, "party", false)
 	pausedTotal += realClock() - pausedAt
 	pausedAt = nil
+	-- POST_RING_20261010 (owner): give returning bodies a second to settle outside the party slots before a touch counts.
+	self.partyEndedAt = realClock()
 	self.partyOn = false
 	return true
 end
@@ -1935,6 +2044,9 @@ function Session:finish()
 	if self.child then self.child:Destroy() end
 	self.info.model:SetAttribute("Level6Enraged", nil)
 	if self.info.arena then pcall(finaleReset, self.info.model) end
+	-- POST_RING_20261010 (owner): runtime props and their readback belong to this session, never the parked map.
+	if self.ring then self.ring.folder:Destroy(); self.ring = nil end
+	if session == self then self.info.model:SetAttribute("Level6PostRing", nil) end
 	if session == self then session = nil end
 end
 

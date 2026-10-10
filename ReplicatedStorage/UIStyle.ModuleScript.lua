@@ -143,6 +143,13 @@ UIStyle.Hud = {
 		[6] = Color3.fromRGB(97, 83, 158),
 	},
 	Soft = {From = 0.35, To = 1},
+	-- EXIT_COMPASS_20261010 (owner: "Make the compass marker to the exit more distinct."): the one
+	-- colour the HUD keeps for the way out, so the exit compass stops reading as one more piece of
+	-- the level's accent. It is the green of the exit door's own header (PuzzleManager makeExit,
+	-- htext 90,255,135; Level 2's door header carries the same). Nothing else on the HUD is green:
+	-- the level accents are above, Coral is danger, RailTeal the team, Amber the feed. Not per
+	-- level on purpose: Level 3's and Level 4's GET OUT wear it too.
+	Exit = Color3.fromRGB(90, 255, 135),
 }
 
 local EMPTY: {[string]: any} = {}

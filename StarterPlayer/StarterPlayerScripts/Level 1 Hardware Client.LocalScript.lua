@@ -1,11 +1,10 @@
 -- Level 1 relay and lever motion. PuzzleManager owns every state change and every final pose;
 -- this script only animates them locally so they read as physical objects:
---   * holding E on a relay unlatches its door so it stands ajar and works the fuse loose; letting
---     go eases everything back
---   * "relayextract" swings the door fully open and pulls the fuse out to whoever took it
+--   * holding E on a relay works the fuse loose; letting go eases it back
+--   * "relayextract" pulls the fuse out to whoever took it
 --   * "leverpull" throws the lever from up to down: a short lift off the latch, a firm throw, a
 --     rebound off the bottom stop and a settle
--- Geometry comes from attributes PuzzleManager publishes on each model (DoorHinge, LeverHinge ...).
+-- Lever geometry comes from attributes PuzzleManager publishes on each model (LeverHinge ...).
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
@@ -13,7 +12,6 @@ local ProximityPromptService = game:GetService("ProximityPromptService")
 local status = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PuzzleStatus")
 local player = Players.LocalPlayer
 
-local HOLD_DOOR = .3 -- the door stands ajar while E is held; the full swing waits for the extraction
 local LEVER_THROW = { -- {degrees, seconds, style, direction}; nil degrees = the server's down pose
 	{-18, .10, Enum.EasingStyle.Quad, Enum.EasingDirection.Out},
 	{-160, .24, Enum.EasingStyle.Quad, Enum.EasingDirection.In},
@@ -48,51 +46,20 @@ end
 
 local relays = setmetatable({}, { __mode = "k" })
 
+-- RELAY_OPEN_20261010 (puzzle-client): the fuse still animates when the server removes the door.
 local function relayState(model)
 	if typeof(model) ~= "Instance" or not model:IsDescendantOf(workspace) then return nil end
 	local s = relays[model]
 	if s then return s end
-	local door, core = model:FindFirstChild("RelayDoor"), model:FindFirstChild("Fuse")
-	local hinge, offset = model:GetAttribute("DoorHinge"), model:GetAttribute("DoorHingeOffset")
-	if not (door and core and typeof(hinge) == "CFrame" and type(offset) == "number") then return nil end -- streamed out
+	local core = model:FindFirstChild("Fuse")
+	if not core then return nil end -- streamed out
 	local parts = { core }
 	for _, child in ipairs(model:GetChildren()) do
 		if child.Name == "FuseCap" and child:IsA("BasePart") then parts[#parts + 1] = child end
 	end
-	s = { model = model, door = door, parts = parts, hinge = hinge, offset = offset,
-		open = math.rad(model:GetAttribute("DoorOpenDegrees") or 86), angle = 0, token = 0 }
+	s = { model = model, parts = parts, token = 0 }
 	relays[model] = s
 	return s
-end
-
--- The door leaf and everything welded to it (label, lamp, handle, Blender art).
-local function doorPieces(s)
-	if not s.pieces then
-		s.pieces = {}
-		for _, part in ipairs(s.door:GetConnectedParts(false)) do
-			s.pieces[#s.pieces + 1] = part
-			for _, item in ipairs(part:GetDescendants()) do
-				if item:IsA("BasePart") then s.pieces[#s.pieces + 1] = item end
-			end
-		end
-	end
-	return s.pieces
-end
-
-local function setDoor(s, amount)
-	s.angle = amount
-	if not s.door.Parent then return end
-	s.door.CFrame = s.hinge * CFrame.Angles(0, s.open * amount, 0) * CFrame.new(s.offset, 0, 0)
-	-- A centred first-person camera stands inside the full swing; let the leaf ghost out while it
-	-- passes through the view instead of flashing a dark panel across the screen.
-	local camera, fade = workspace.CurrentCamera, 0
-	if camera then
-		local eye = s.hinge:PointToObjectSpace(camera.CFrame.Position)
-		if math.abs(eye.Y) < 3.4 and eye.X * eye.X + eye.Z * eye.Z < 5.4 * 5.4 then
-			fade = math.clamp(1 - math.abs(math.atan2(-eye.Z, eye.X) - s.open * amount) / .3, 0, 1)
-		end
-	end
-	for _, piece in ipairs(doorPieces(s)) do piece.LocalTransparencyModifier = fade end
 end
 
 local function hideOriginal(s, hidden)
@@ -141,9 +108,9 @@ local function alive(s)
 	return false
 end
 
--- Ease the door shut and the fuse back into its seat, then hand the real parts back.
+-- Ease the fuse back into its seat, then hand the real parts back.
 local function settle(s)
-	local from, ghost = s.angle, s.ghost
+	local ghost = s.ghost
 	local start = ghost and ghost.Parent and ghost:GetPivot()
 	if start then -- a refused extraction can arrive mid-flight: full size and opaque again
 		ghost:ScaleTo(1)
@@ -154,7 +121,6 @@ local function settle(s)
 	run(s, function(t)
 		if not alive(s) then return false end
 		local k = ease(t / .35, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-		setDoor(s, from * (1 - k))
 		if start then ghost:PivotTo(start:Lerp(s.seat, k)) end
 		if k < 1 then return true end
 		dropGhost(s)
@@ -179,7 +145,7 @@ local function extract(model, who)
 	s.extracting, s.holding = true, false
 	s.token += 1
 	local ghost = ghostOf(s)
-	local from, start = s.angle, ghost:GetPivot()
+	local start = ghost:GetPivot()
 	local out = s.seat * CFrame.new(0, 0, -1.3) -- clear of the cabinet, straight out of the socket
 	local pieces = {}
 	for _, item in ipairs(ghost:GetDescendants()) do
@@ -187,7 +153,6 @@ local function extract(model, who)
 	end
 	run(s, function(t)
 		if not alive(s) then return false end
-		setDoor(s, from + (1 - from) * ease(t / .32, Enum.EasingStyle.Back))
 		if t < .14 then -- a sharp pull out of the clips
 			ghost:PivotTo(start:Lerp(out, ease(t / .14)))
 			return true
@@ -202,7 +167,6 @@ local function extract(model, who)
 		for _, piece in ipairs(pieces) do piece.LocalTransparencyModifier = fade end
 		if t < .64 then return true end
 		dropGhost(s)
-		setDoor(s, 1)
 		return false
 	end)
 end
@@ -214,14 +178,11 @@ ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt)
 	s.holding, s.triggered = true, false
 	s.token += 1
 	local hold = math.max(prompt.HoldDuration, .1)
-	local from = s.angle
 	local ghost = ghostOf(s)
 	run(s, function(t)
 		if not s.holding or not alive(s) then return false end
 		local progress = t / hold
-		-- unlatch with a small kick so the door stands ajar
-		setDoor(s, from + (HOLD_DOOR - from) * ease(progress / .45, Enum.EasingStyle.Back))
-		-- then work the fuse loose: a tightening wobble while it creeps out of the clips
+		-- Work the fuse loose: a tightening wobble while it creeps out of the clips.
 		local loose = math.clamp((progress - .4) / .6, 0, 1)
 		local wobble = loose > 0 and math.sin(t * 38) * .03 * (1 - loose * .5) or 0
 		ghost:PivotTo(s.seat * CFrame.new(wobble, 0, -.45 * loose * loose) * CFrame.Angles(0, 0, wobble * 1.5))
@@ -241,8 +202,8 @@ ProximityPromptService.PromptButtonHoldEnded:Connect(function(prompt)
 	if not s or not s.holding then return end
 	s.holding = false
 	local token = s.token
-	-- A completed hold also ends here. Wait for the server's "relayextract" before closing; a
-	-- refused trigger (dead, out of range) closes after a moment.
+	-- A completed hold also ends here. Wait for the server's "relayextract" before settling; a
+	-- refused trigger (dead, out of range) settles after a moment.
 	task.delay(.2, function()
 		if s.token ~= token or s.extracting then return end
 		if s.triggered then
@@ -302,3 +263,77 @@ status.OnClientEvent:Connect(function(event, model, who)
 		throwLever(model)
 	end
 end)
+
+-- RELAY_FINDABLE_20261010 (puzzle-client): local lights guide the search without fighting server
+-- lamps, and stay steady for players who reduce flashing. Streamed-out stations need no light.
+do
+	local beacons = {}
+	local elapsed, scanElapsed = 0, .5
+
+	local function beaconHost(model)
+		if not model:IsA("Model") then return nil end
+		if model.Name == "FuseRelay" and model:GetAttribute("ContainsFuse") == true then
+			return model:FindFirstChild("RelayIndicator"), 1.2, Color3.fromRGB(255, 170, 50), 22
+		elseif string.sub(model.Name, 1, 6) == "Lever_" and model:GetAttribute("LeverState") == "READY" then
+			return model:FindFirstChild("StatusLight"), 1.2, Color3.fromRGB(215, 235, 255), 26 -- 2.0 over the server beacon blew out (seen in play)
+		end
+		return nil
+	end
+
+	local function discard(model)
+		beacons[model].light:Destroy()
+		beacons[model] = nil
+	end
+
+	local function scanBeacons()
+		local folder = workspace:FindFirstChild("PuzzleItems")
+		local count = 0
+		for model, state in pairs(beacons) do
+			local host = beaconHost(model)
+			if not folder or model.Parent ~= folder or not host or state.light.Parent ~= host
+				or not host:IsDescendantOf(workspace) then
+				discard(model)
+			else
+				count += 1
+			end
+		end
+		if not folder then return end
+		for _, model in ipairs(folder:GetChildren()) do
+			if count >= 9 then break end
+			if not beacons[model] then
+				local host, peak, color, range = beaconHost(model)
+				if host and host:IsA("BasePart") then
+					local light = Instance.new("PointLight")
+					light.Name = "LocalBeacon"
+					light.Color = color
+					light.Range = range
+					light.Shadows = false
+					light.Parent = host
+					beacons[model] = { light = light, peak = peak }
+					count += 1
+				end
+			end
+		end
+	end
+
+	RunService.Heartbeat:Connect(function(dt)
+		elapsed += dt
+		scanElapsed += dt
+		if scanElapsed >= .5 then
+			scanElapsed = 0
+			scanBeacons()
+		end
+		local swell = player:GetAttribute("ReduceFlashing") == true and .75
+			or .75 + .25 * math.sin(2 * math.pi * .6 * elapsed)
+		local folder = workspace:FindFirstChild("PuzzleItems")
+		for model, state in pairs(beacons) do
+			local host = beaconHost(model)
+			if not folder or model.Parent ~= folder or not host or state.light.Parent ~= host
+				or not host:IsDescendantOf(workspace) then
+				discard(model)
+			else
+				state.light.Brightness = state.peak * swell
+			end
+		end
+	end)
+end

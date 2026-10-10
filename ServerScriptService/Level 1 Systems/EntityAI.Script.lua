@@ -83,6 +83,11 @@ local entity = workspace:WaitForChild("Entity")
 local humanoid = entity:WaitForChild("Humanoid")
 local root = entity:WaitForChild("HumanoidRootPart")
 
+-- ENTITY_UNSTUCK_20261010 (entity): impacts must not leave the walker toppled or climbing a wall.
+for _, n in ipairs({ "FallingDown", "Ragdoll", "Climbing", "Swimming", "Seated" }) do
+	pcall(function() humanoid:SetStateEnabled(Enum.HumanoidStateType[n], false) end)
+end
+
 -- Hold the entity still until the maze floor exists. Its Studio position has no
 -- floor under it, so at server start it free-falls during map generation and is
 -- destroyed at FallenPartsDestroyHeight → "the entity never spawns". Anchor it,
@@ -499,6 +504,21 @@ local function crossesPitZone(from, to)
 	return false
 end
 
+-- ENTITY_UNSTUCK_20261010 (entity): the elevator shell is a sibling of Maze and its cabin can be rebuilt.
+local function elevCell()
+	return workspace:GetAttribute("ELEV_X"), workspace:GetAttribute("ELEV_Y")
+end
+local function isElev(x, z)
+	local ex, ez = elevCell()
+	return x == ex and z == ez
+end
+local function wallQuery()
+	local maze = workspace:FindFirstChild("Maze")
+	if not maze then return nil end
+	local elev = workspace:FindFirstChild("Elevator")
+	return elev and { maze, elev } or { maze }
+end
+
 -- is a maze wall between the entity and a target? Single flat ray at body height
 -- — if it hits, a straight run would ram the wall, so hand off to pathfinding to
 -- go AROUND the corner. (A wider body-width check made it pathfind INTO corners
@@ -506,9 +526,9 @@ end
 local wbParams = RaycastParams.new()
 wbParams.FilterType = Enum.RaycastFilterType.Include
 local function wallBetween(targetPos)
-	local maze = workspace:FindFirstChild("Maze")
-	if not maze then return false end
-	wbParams.FilterDescendantsInstances = { maze }
+	local walls = wallQuery()
+	if not walls then return false end
+	wbParams.FilterDescendantsInstances = walls
 	local from = root.Position + Vector3.new(0, 2, 0)
 	local flat = Vector3.new(targetPos.X - from.X, 0, targetPos.Z - from.Z)
 	local d = flat.Magnitude
@@ -526,9 +546,9 @@ end
 -- pathfinding movement; with grid navigation the fallback is safe.)
 local BEELINE_HALF_W = 2.6 -- half the body width the straight line must clear
 local function wallBetweenWide(targetPos)
-	local maze = workspace:FindFirstChild("Maze")
-	if not maze then return false end
-	wbParams.FilterDescendantsInstances = { maze }
+	local walls = wallQuery()
+	if not walls then return false end
+	wbParams.FilterDescendantsInstances = walls
 	local from = root.Position + Vector3.new(0, 2, 0)
 	local flat = Vector3.new(targetPos.X - from.X, 0, targetPos.Z - from.Z)
 	local d = flat.Magnitude
@@ -598,7 +618,8 @@ local function pickLurkTarget()
 		local z = math.random(2, GRID - 1)
 		local cx = O + (x - 0.5) * CELL
 		local cz = O + (z - 0.5) * CELL
-		if not inPitZone(Vector3.new(cx, y, cz)) then
+		-- ENTITY_UNSTUCK_20261010 (entity): patrols must not park in the narrow elevator cabin.
+		if not inPitZone(Vector3.new(cx, y, cz)) and not isElev(x, z) then
 			local score = openness(cx, cz, y)
 			if not bestScore or score > bestScore then
 				best, bestScore = Vector3.new(cx, y, cz), score
@@ -630,6 +651,8 @@ local function tryYell(char, hrp)
 		-- the roar SOUND has an inhale before the yell, so start it FIRST and
 		-- let the inhale play; then trigger the animation so the visual lands on
 		-- the actual yell (id lives in SoundController, keyed off this attribute)
+		-- ENTITY_SCREAM_20261010 (entity): every listener needs the same source even without a streamed root.
+		workspace:SetAttribute("EntityYellPos", root.Position)
 		workspace:SetAttribute("EntityYell", (workspace:GetAttribute("EntityYell") or 0) + 1)
 		local ev = entity:FindFirstChild("PlayYell")
 		if ev then ev:Fire() end
@@ -782,6 +805,8 @@ local function canSee(char, hrp)
 end
 
 local function findVisiblePlayer()
+	-- ENTITY_UNSTUCK_20261010 (entity): deterministic patrol checks must never disable sight in live servers.
+	if RunService:IsStudio() and workspace:GetAttribute("TestEntityBlind") == true then return nil end
 	local bestChar, bestRoot, bestDist = nil, nil, math.huge
 	for _, p in ipairs(Players:GetPlayers()) do
 		local char = p.Character
@@ -838,18 +863,25 @@ local function edgeKey(x, z, nx, nz)
 	return nx .. "_" .. nz .. "_" .. x .. "_" .. z
 end
 local function edgeOpen(x, z, nx, nz)
+	-- ENTITY_UNSTUCK_20261010 (entity): a probe before generation must not poison the lifetime cache.
+	local maze = workspace:FindFirstChild("Maze")
+	if not maze then return false end
 	local k = edgeKey(x, z, nx, nz)
 	local c = navOpen[k]; if c ~= nil then return c end
 	local res = false
-	local maze = workspace:FindFirstChild("Maze")
-	if maze then
-		local ax, az = cellXZ(x, z)
-		local bx, bz = cellXZ(nx, nz)
-		local fya, fyb = floorAt(ax, az), floorAt(bx, bz)
-		-- both cells must have floor and not be pit cells (it can't cross a pit)
-		if fya and fyb
-			and not inPitZone(Vector3.new(ax, 0, az))
-			and not inPitZone(Vector3.new(bx, 0, bz)) then
+	local ax, az = cellXZ(x, z)
+	local bx, bz = cellXZ(nx, nz)
+	local fya, fyb = floorAt(ax, az), floorAt(bx, bz)
+	-- both cells must have floor and not be pit cells (it can't cross a pit)
+	if fya and fyb
+		and not inPitZone(Vector3.new(ax, 0, az))
+		and not inPitZone(Vector3.new(bx, 0, bz)) then
+		-- ENTITY_UNSTUCK_20261010 (entity): closed doors during learning must not hide the east-only doorway.
+		if isElev(x, z) or isElev(nx, nz) then
+			local ex, ez = elevCell()
+			local ox, oz = isElev(x, z) and nx or x, isElev(x, z) and nz or z
+			res = ox == ex + 1 and oz == ez
+		else
 			navParams.FilterDescendantsInstances = { maze }
 			local a = Vector3.new(ax, fya + 3, az)
 			local b = Vector3.new(bx, fyb + 3, bz)
@@ -860,13 +892,32 @@ local function edgeOpen(x, z, nx, nz)
 	return res
 end
 
+-- ENTITY_UNSTUCK_20261010 (entity): the visible shoulders need more parking clearance than the root collider.
+local BODY_CLEAR = 4.5
+local function clearOfWalls(pos)
+	local GRID, CELL = gAttr()
+	local x, z = cellOf(pos)
+	local cx, cz = cellXZ(x, z)
+	local lim = CELL / 2 - 1 - BODY_CLEAR
+	local dx, dz = pos.X - cx, pos.Z - cz
+	if dx > lim and not (x < GRID and edgeOpen(x, z, x + 1, z)) then dx = lim end
+	if dx < -lim and not (x > 1 and edgeOpen(x, z, x - 1, z)) then dx = -lim end
+	if dz > lim and not (z < GRID and edgeOpen(x, z, x, z + 1)) then dz = lim end
+	if dz < -lim and not (z > 1 and edgeOpen(x, z, x, z - 1)) then dz = -lim end
+	return Vector3.new(cx + dx, root.Position.Y, cz + dz)
+end
+
+-- ENTITY_UNSTUCK_20261010 (entity): an unreachable goal still has a safe nearest reachable stopping cell.
 local function gridBFS(sx, sz, gx, gz)
-	if sx == gx and sz == gz then return { { sx, sz } } end
+	if sx == gx and sz == gz then return { { sx, sz } }, true end
 	local GRID = gAttr()
 	local key = function(x, z) return x * 1000 + z end
 	local q, seen, prev, head = { { sx, sz } }, { [key(sx, sz)] = true }, {}, 1
+	local nearest, nearestDist = q[1], math.huge
 	while head <= #q do
 		local cur = q[head]; head += 1
+		local dist = (cur[1] - gx) ^ 2 + (cur[2] - gz) ^ 2
+		if dist < nearestDist then nearest, nearestDist = cur, dist end
 		if cur[1] == gx and cur[2] == gz then break end
 		for _, d in ipairs({ { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }) do
 			local nx, nz = cur[1] + d[1], cur[2] + d[2]
@@ -878,19 +929,21 @@ local function gridBFS(sx, sz, gx, gz)
 			end
 		end
 	end
-	if not seen[key(gx, gz)] then return nil end
-	local path, cur = {}, { gx, gz }
+	local reached = seen[key(gx, gz)] == true
+	local path, cur = {}, reached and { gx, gz } or nearest
 	while cur do
 		table.insert(path, 1, cur)
 		cur = prev[key(cur[1], cur[2])]
 	end
-	return path
+	return path, reached
 end
 
 -- learn the whole layout up front, one row per frame (no hitch), so in-game
 -- path queries hit the cache and never raycast
 task.spawn(function()
-	workspace:WaitForChild("Maze", 60)
+	-- ENTITY_UNSTUCK_20261010 (entity): generation can outlast a timeout; only learn real geometry.
+	while not workspace:FindFirstChild("Maze") and root.Parent do task.wait(0.25) end
+	if not root.Parent then return end
 	task.wait(1)
 	local GRID = gAttr()
 	for x = 1, GRID do
@@ -908,26 +961,49 @@ end)
 -- (see/hear a player) every tick instead of committing to a whole path.
 local navPath, navIndex, navGoal = nil, 1, nil
 local function resetNav() navPath = nil end
-local function stepToward(destPos, speed)
+-- ENTITY_UNSTUCK_20261010 (entity): keep recovery and new route timing in one state table.
+local watch = { pos = root.Position, since = os.clock(), level = 0, last = root.Position,
+	soft = 0, reseats = 0, objBlockedUntil = 0, navReached = false, navPlannedAt = 0 }
+local function stepToward(destPos, speed, exact)
+	if not workspace:FindFirstChild("Maze") then humanoid.WalkSpeed = 0; return end
 	humanoid.WalkSpeed = speed
+	local now = os.clock()
 	local gx, gz = cellOf(destPos)
-	if not navPath or not navGoal or navGoal[1] ~= gx or navGoal[2] ~= gz or navIndex > #navPath then
+	if not navPath or not navGoal or navGoal[1] ~= gx or navGoal[2] ~= gz
+		or (watch.navReached and navIndex > #navPath)
+		or (not watch.navReached and now - watch.navPlannedAt > 2) then
 		local sx, sz = cellOf(root.Position)
-		navPath = gridBFS(sx, sz, gx, gz)
+		navPath, watch.navReached = gridBFS(sx, sz, gx, gz)
+		watch.navPlannedAt = now
 		navGoal = { gx, gz }
-		navIndex = 2 -- cell 1 is where we already are
-	end
-	if not navPath then -- unreachable on the grid (e.g. across a pit) → straight walk
-		humanoid:MoveTo(Vector3.new(destPos.X, root.Position.Y, destPos.Z))
-		return
+		-- Align on both sides of the narrow doorway. An unreachable singleton must
+		-- also walk off the wall to its nearest reachable centre before holding.
+		local entersCabin = navPath[2] and isElev(navPath[2][1], navPath[2][2])
+		navIndex = (isElev(sx, sz) or entersCabin or (not watch.navReached and #navPath == 1)) and 1 or 2
 	end
 	while navIndex <= #navPath do -- pop any waypoints we've reached
 		local cx, cz = cellXZ(navPath[navIndex][1], navPath[navIndex][2])
 		local dx, dz = root.Position.X - cx, root.Position.Z - cz
-		if dx * dx + dz * dz < 30 then navIndex += 1 else break end
+		local doorway = navIndex < #navPath
+			and (isElev(navPath[navIndex][1], navPath[navIndex][2])
+				or isElev(navPath[navIndex + 1][1], navPath[navIndex + 1][2]))
+		-- The usual 5.5-stud tolerance is wider than the doorway. Keep its X
+		-- tolerance (the shallow cabin's back can obstruct the centre), but align Z.
+		if dx * dx + dz * dz < 30 and (not doorway or math.abs(dz) <= 1) then
+			navIndex += 1
+		else
+			break
+		end
 	end
-	if navIndex > #navPath then -- in the goal cell → walk to the exact target
-		humanoid:MoveTo(Vector3.new(destPos.X, root.Position.Y, destPos.Z))
+	if navIndex > #navPath then
+		-- ENTITY_UNSTUCK_20261010 (entity): blind parking stays clear; pit pockets never trigger a straight wall charge.
+		if watch.navReached then
+			humanoid:MoveTo(exact and Vector3.new(destPos.X, root.Position.Y, destPos.Z) or clearOfWalls(destPos))
+		else
+			humanoid.WalkSpeed = 0
+			humanoid:MoveTo(root.Position)
+			faceFlat(destPos)
+		end
 	else
 		local cx, cz = cellXZ(navPath[navIndex][1], navPath[navIndex][2])
 		humanoid:MoveTo(Vector3.new(cx, floorAt(cx, cz) or root.Position.Y, cz))
@@ -935,22 +1011,9 @@ local function stepToward(destPos, speed)
 end
 
 -- ── anti-stuck watchdog ───────────────────────────────────
--- if it hasn't moved while it should be walking, drop the cached route so it
--- re-plans from where it actually is — and force the chase onto the GRID for a
--- moment (cell-centre waypoints pull it cleanly off whatever corner caught it)
+-- Recovery is ticked with movement below, so stopped howls and paused captures
+-- cannot be mistaken for a blocked route.
 local forceGridUntil = 0
-task.spawn(function()
-	local last = root.Position
-	while task.wait(1.2) do
-		if humanoid.Health <= 0 then break end
-		local moved = (root.Position - last).Magnitude
-		last = root.Position
-		if moved < 2 and humanoid.WalkSpeed > 0.1 then
-			resetNav()
-			forceGridUntil = os.clock() + 1.5 -- brief grid detour to unwedge
-		end
-	end
-end)
 
 -- ── lunge (the only velocity override left) ───────────────
 -- Movement is now the grid-walk in the main loop (which never clips a wall). The
@@ -1019,7 +1082,14 @@ RunService.Heartbeat:Connect(function()
 		local landed = flightAge > 0.28
 			and humanoid.FloorMaterial ~= Enum.Material.Air
 			and root.AssemblyLinearVelocity.Y <= 0
-		if toTarget.Magnitude <= 2.5 or landed or now >= lungeUntil then
+		-- ENTITY_UNSTUCK_20261010 (entity): stop forcing dash velocity before the collider reaches a wall.
+		local walls = wallQuery()
+		local blocked = false
+		if walls then
+			wbParams.FilterDescendantsInstances = walls
+			blocked = workspace:Raycast(root.Position, lungeDirection * BODY_CLEAR, wbParams) ~= nil
+		end
+		if toTarget.Magnitude <= 2.5 or landed or blocked or now >= lungeUntil then
 			lungePhase = 0
 			workspace:SetAttribute("EntityIsLunging", false)
 			lungeRecoverUntil = now + LUNGE_RECOVER
@@ -1064,6 +1134,12 @@ RunService.Heartbeat:Connect(function()
 		humanoid:MoveTo(root.Position)
 		faceFlat(hrp.Position)
 		if now >= lungeWindupUntil then
+			-- ENTITY_UNSTUCK_20261010 (entity): the player can move behind cover during the wind-up.
+			if wallBetween(hrp.Position) or crossesPitZone(root.Position, hrp.Position) then
+				lungePhase = 0
+				lungeRecoverUntil = now + 0.15
+				return
+			end
 			launchBallisticLunge(hrp.Position, now, chasePlayer, char)
 		end
 		return
@@ -1117,6 +1193,8 @@ local lastChaseTarget = nil -- who currently carries the BeingChased attribute
 
 local function wanderPos(now)
 	local objectiveTarget = workspace:GetAttribute("EntityObjectiveTarget")
+	-- ENTITY_UNSTUCK_20261010 (entity): leave a blocked objective briefly instead of retrying it forever.
+	if now < watch.objBlockedUntil then objectiveTarget = nil end
 	if typeof(objectiveTarget) == "Vector3" then
 		if activeObjectiveTarget ~= objectiveTarget then
 			activeObjectiveTarget = objectiveTarget
@@ -1196,6 +1274,110 @@ end
 
 PlayerProtection.Activated:Connect(releaseProtectedPlayer)
 
+-- ENTITY_UNSTUCK_20261010 (entity): reseat only on real floor, never in a pit or the cabin shell.
+workspace:SetAttribute("EntityStuckCount", watch.soft)
+workspace:SetAttribute("EntityReseatCount", watch.reseats)
+local function seatCell(x, z)
+	local GRID = gAttr()
+	if x < 1 or x > GRID or z < 1 or z > GRID or isElev(x, z) then return nil end
+	local cx, cz = cellXZ(x, z)
+	if inPitZone(Vector3.new(cx, 0, cz)) then return nil end
+	local fy = floorAt(cx, cz)
+	if fy == nil then return nil end
+	return Vector3.new(cx, fy, cz)
+end
+local function reseat(reason, now)
+	local x, z = cellOf(root.Position)
+	if isElev(x, z) then x += 1 end
+	local seat = seatCell(x, z)
+	if not seat then
+		local nearestDist = math.huge
+		for ring = 1, 3 do
+			for dx = -ring, ring do
+				for dz = -ring, ring do
+					if math.max(math.abs(dx), math.abs(dz)) == ring then
+						local candidate = seatCell(x + dx, z + dz)
+						if candidate then
+							local dist = (candidate.X - root.Position.X) ^ 2 + (candidate.Z - root.Position.Z) ^ 2
+							if dist < nearestDist then seat, nearestDist = candidate, dist end
+						end
+					end
+				end
+			end
+		end
+	end
+	if not seat then return false end
+	local bbox, size = entity:GetBoundingBox()
+	local pivot = entity:GetPivot()
+	local _, yaw = pivot:ToOrientation()
+	entity:PivotTo(CFrame.new(seat.X, seat.Y + 0.5 + (pivot.Y - (bbox.Y - size.Y / 2)), seat.Z)
+		* CFrame.Angles(0, yaw, 0))
+	root.AssemblyLinearVelocity = Vector3.zero
+	root.AssemblyAngularVelocity = Vector3.zero
+	humanoid:MoveTo(root.Position)
+	resetNav()
+	forceGridUntil = now + 2.5
+	-- Keep the original stall timer, and do not classify our own snap as an external teleport.
+	watch.pos, watch.last = root.Position, root.Position
+	watch.reseats += 1
+	workspace:SetAttribute("EntityReseatCount", watch.reseats)
+	local sx, sz = cellOf(root.Position)
+	warn("[EntityAI] reseat " .. tostring(current) .. " cell " .. sx .. "," .. sz .. ": " .. reason)
+	return true
+end
+
+-- ENTITY_UNSTUCK_20261010 (entity): clear blind pursuit as well as its timer so SEARCH cannot restart it.
+local function abandon(now)
+	wanderTarget, wanderRetargetAt = nil, 0
+	watch.objBlockedUntil = now + 20
+	searchUntil, trackPlayer, trackUntil = 0, nil, 0
+	lastKnownPos, lastKnownPlayer = nil, nil
+	chasePlayer, current = nil, State.LURK
+	setChaseMarker(nil)
+	resetNav()
+end
+
+-- ENTITY_UNSTUCK_20261010 (entity): escalate real lack of progress, leaving stationary animations alone.
+local function watchTick(now)
+	local p = root.Position
+	if root.Anchored or not workspace:FindFirstChild("Maze") or lungePhase ~= 0 or now < lungeRecoverUntil then
+		watch.pos, watch.last, watch.since, watch.level = p, p, now, 0
+		return
+	end
+	if p.Y < -6 or p.Y > 20 then
+		reseat("out of bounds", now)
+		watch.pos, watch.last, watch.since, watch.level = root.Position, root.Position, now, 0
+		return
+	end
+	if (p - watch.last).Magnitude > 14 then
+		resetNav()
+		watch.pos, watch.since, watch.level = p, now, 0
+	end
+	watch.last = p
+	local g = humanoid.WalkToPoint
+	local toGoal = Vector3.new(g.X - p.X, 0, g.Z - p.Z).Magnitude
+	local want = humanoid.WalkSpeed > 0.5 and toGoal > 2
+	local moved = Vector3.new(p.X - watch.pos.X, 0, p.Z - watch.pos.Z).Magnitude
+	if not want or moved >= 3 then
+		watch.pos, watch.since, watch.level = p, now, 0
+		return
+	end
+	local t = now - watch.since
+	if watch.level == 0 and t >= 1.2 then
+		watch.level = 1
+		resetNav()
+		forceGridUntil = now + 2
+		watch.soft += 1
+		workspace:SetAttribute("EntityStuckCount", watch.soft)
+	elseif watch.level == 1 and t >= 3 then
+		watch.level = 2
+		reseat("no progress", now)
+	elseif watch.level == 2 and t >= 7 then
+		watch.level, watch.since = 0, now
+		abandon(now)
+	end
+end
+
 -- distant scream scheduler: at a random cadence, publish which of the four
 -- scream takes plays. Every client's SoundController reacts to the
 -- EntityScream counter and plays SCREAM_SOUNDS[EntityScreamIndex] positionally
@@ -1224,6 +1406,8 @@ task.spawn(function()
 			chasePlayer = nil
 			setChaseMarker(nil)
 			resetNav()
+			-- ENTITY_UNSTUCK_20261010 (entity): a capture pause cannot accumulate a recovery deadline.
+			watch.pos, watch.last, watch.since, watch.level = root.Position, root.Position, os.clock(), 0
 			continue
 		end
 		NoiseRegistry.Prune()
@@ -1247,6 +1431,7 @@ task.spawn(function()
 			if shrp then faceFlat(shrp.Position) end
 			setChaseMarker(spottingPlayer)
 			workspace:SetAttribute("EntityState", "ALERT")
+			watchTick(now)
 			continue
 		elseif current == State.ALERT then
 			current = State.CHASE
@@ -1269,8 +1454,9 @@ task.spawn(function()
 					faceFlat(hrp.Position)
 					local ev = entity:FindFirstChild("PlayHowl")
 					if ev then ev:Fire() end
-					-- Only the spotted player plays the local warning and alert shake.
-					-- The pit-shove roar keeps its separate spatial EntityYell channel.
+					-- ENTITY_SCREAM_20261010 (entity): share one spatial source while the shake stays target-only.
+					workspace:SetAttribute("EntityHowlPos", root.Position)
+					workspace:SetAttribute("EntityHowl", (workspace:GetAttribute("EntityHowl") or 0) + 1)
 					if visiblePlayer then
 						visiblePlayer:SetAttribute(
 							"Level1EntityAlertSerial",
@@ -1280,6 +1466,7 @@ task.spawn(function()
 
 					setChaseMarker(visiblePlayer)
 					workspace:SetAttribute("EntityState", "ALERT")
+					watchTick(now)
 					continue
 				else
 					current = State.CHASE
@@ -1323,7 +1510,8 @@ task.spawn(function()
 					faceFlat(targetHrp.Position)
 					yelling = tryYell(char, targetHrp) or now < yellActiveUntil
 				else
-					stepToward(edge, SPEED_CHASE * speedMul())
+					-- ENTITY_UNSTUCK_20261010 (entity): the pit edge and a visible victim must retain exact reach.
+					stepToward(edge, SPEED_CHASE * speedMul(), true)
 				end
 			elseif not seen then
 				stepToward(targetHrp.Position, SPEED_LOST * speedMul())
@@ -1331,7 +1519,7 @@ task.spawn(function()
 				if now < forceGridUntil
 					or wallBetweenWide(targetHrp.Position)
 					or crossesPitZone(root.Position, targetHrp.Position) then
-					stepToward(targetHrp.Position, SPEED_CHASE * speedMul())
+					stepToward(targetHrp.Position, SPEED_CHASE * speedMul(), true)
 				else
 					humanoid.WalkSpeed = SPEED_CHASE * speedMul()
 					humanoid:MoveTo(Vector3.new(targetHrp.Position.X, root.Position.Y, targetHrp.Position.Z))
@@ -1371,6 +1559,8 @@ task.spawn(function()
 			end
 		end
 
+		-- ENTITY_UNSTUCK_20261010 (entity): tick after each issued move so recovery measures actual intent.
+		watchTick(now)
 		local pubState = current
 		if current == State.CHASE and not char then pubState = "TRACK" end
 		if yelling or now < yellActiveUntil then pubState = "YELL" end

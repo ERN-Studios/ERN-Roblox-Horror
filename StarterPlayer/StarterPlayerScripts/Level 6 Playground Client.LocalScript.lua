@@ -666,7 +666,8 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		if d == "seek" then
 			dunked = false
 			markerMode = "post"
-			objective("TOUCH THE POST", "Everyone alive must touch the post in the middle, three searches in a row. Do not let it see you.")
+			-- POST_RING_20261010 (owner): the floor ring shows where a touch counts.
+			objective("TOUCH THE POST", "Step into the red ring round the post. Everyone alive, three searches in a row. Do not let it see you.")
 		elseif d == "arrival" then
 			-- ARENA_20261006: a party arrives in the tunnel, looking straight at the PLAY ZONE sign; the round starts
 			-- when they are through the gate. No card here: it sits exactly where the sign is.
@@ -697,7 +698,8 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		status("HERE I COME!", 2.5, Color3.fromRGB(255, 70, 70))
 		hintLabel.Text = ""
 		markerMode = "post"
-		objective("TOUCH THE POST", "Everyone alive must touch the post in the middle, three searches in a row. Do not let it see you.")
+		-- POST_RING_20261010 (owner): the floor ring shows where a touch counts.
+		objective("TOUCH THE POST", "Step into the red ring round the post. Everyone alive, three searches in a row. Do not let it see you.")
 		task.delay(2.2, function() if countLabel.Text == "READY OR NOT . . ." then countLabel.Text = "" end end)
 	elseif kind == "party" then
 		if a then status("PARTY MODE  ·  30 SECONDS", 5, Color3.fromRGB(255, 64, 176)) else status("Back to hiding.", 3, Color3.fromRGB(255, 90, 90)) end
@@ -705,16 +707,17 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		timerLabel.Text = string.format("%d:%02d", a // 60, a % 60)
 	elseif kind == "dunk" then
 		dunkLabel.Text = touched(b, c)
-	elseif kind == "roundwon" then
-		-- every living player touched the post in this search: one of the three it takes. The tape winds up a stage.
-		status(string.format("EVERYONE TOUCHED THE POST   ·   %d / %d", a or 0, b or 3), 4, Color3.fromRGB(255, 220, 60))
-		if (a or 0) < (b or 3) then changeTrack("l6_music", math.min((a or 0) + 1, 3)) end
-		if a == player.DisplayName then
+		-- POST_RING_20261010 (owner): confirm the touch on its event; ids keep equal display names separate.
+		if d == player.UserId then
 			dunked = true
 			markerMode = nil
 			objective("TAGGED!", "Hide until everyone alive has touched the post.", Color3.fromRGB(120, 255, 150))
 		end
-		status(string.upper(a) .. " TAGGED THE POST!", 2.5, Color3.fromRGB(120, 255, 150))
+		status(string.upper(tostring(a)) .. " TAGGED THE POST!", 2.5, Color3.fromRGB(120, 255, 150))
+	elseif kind == "roundwon" then
+		-- every living player touched the post in this search: one of the three it takes. The tape winds up a stage.
+		status(string.format("EVERYONE TOUCHED THE POST   ·   %d / %d", a or 0, b or 3), 4, Color3.fromRGB(255, 220, 60))
+		if (a or 0) < (b or 3) then changeTrack("l6_music", math.min((a or 0) + 1, 3)) end
 	elseif kind == "chase" then
 		vignette.ImageTransparency = a and 0.35 or 1
 		if a then status("IT SEES YOU. RUN!", 2, Color3.fromRGB(255, 60, 60)) end

@@ -1,0 +1,225 @@
+{
+  "schema": "preview-noop-closure-v1",
+  "finding": "C06",
+  "target": {
+    "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+    "readDepth": "target; full source",
+    "rawBytes": 1622,
+    "rawSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+    "LFBytes": 1622,
+    "LFSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+    "workingManifestRow": {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level4PreviewPrompt"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+      "bytes": 1622,
+      "sha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Enabled": true
+      },
+      "attributes": []
+    }
+  },
+  "dependenciesAndContext": [
+    {
+      "file": "ReplicatedStorage/DevAccess.ModuleScript.lua",
+      "readDepth": "direct retained require; full source",
+      "rawBytes": 2835,
+      "rawSHA256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+      "LFBytes": 2835,
+      "LFSHA256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+      "workingManifestRow": {
+        "studioPath": "ReplicatedStorage.DevAccess",
+        "segments": [
+          "ReplicatedStorage",
+          "DevAccess"
+        ],
+        "className": "ModuleScript",
+        "file": "ReplicatedStorage/DevAccess.ModuleScript.lua",
+        "bytes": 2835,
+        "sha256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "attributes": []
+      }
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/R4DevGateController.LocalScript.lua",
+      "readDepth": "contextual independent L5/L6 filters; full source",
+      "rawBytes": 15632,
+      "rawSHA256": "431e40732f1c568993cfaae749dd12893a3a8c7abc03fbef3fb9acd81ea11868",
+      "LFBytes": 15632,
+      "LFSHA256": "431e40732f1c568993cfaae749dd12893a3a8c7abc03fbef3fb9acd81ea11868",
+      "workingManifestRow": {
+        "studioPath": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "R4DevGateController"
+        ],
+        "className": "LocalScript",
+        "file": "StarterPlayer/StarterPlayerScripts/R4DevGateController.LocalScript.lua",
+        "bytes": 15632,
+        "sha256": "431e40732f1c568993cfaae749dd12893a3a8c7abc03fbef3fb9acd81ea11868",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Enabled": true
+        },
+        "attributes": {
+          "InstalledSourceSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+          "LobbyReimaginedOwned": true
+        }
+      }
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level6PreviewTransport.LocalScript.lua",
+      "readDepth": "contextual independent transport; full source",
+      "rawBytes": 2561,
+      "rawSHA256": "3b660cc8958f45e34413662285d25af841abab53f001daa6da21e1de883daf41",
+      "LFBytes": 2561,
+      "LFSHA256": "3b660cc8958f45e34413662285d25af841abab53f001daa6da21e1de883daf41",
+      "workingManifestRow": {
+        "studioPath": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level6PreviewTransport"
+        ],
+        "className": "LocalScript",
+        "file": "StarterPlayer/StarterPlayerScripts/Level6PreviewTransport.LocalScript.lua",
+        "bytes": 2561,
+        "sha256": "3b660cc8958f45e34413662285d25af841abab53f001daa6da21e1de883daf41",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Enabled": true
+        },
+        "attributes": {
+          "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+          "Level6SourceSha256": "7c29bea1bbdeb2cd2aeca53da8d0ce9a6b4dccbf57ce74e902abb848a62c2457"
+        }
+      }
+    },
+    {
+      "file": "ServerScriptService/Level6PreviewAccess.Script.lua",
+      "readDepth": "contextual independent server prompts/admission; relevant sections",
+      "rawBytes": 35534,
+      "rawSHA256": "62c22dbcde5c87ff6d0054be7d60a0890298ed5ebb9b1bf6f61e431f45e38655",
+      "LFBytes": 35534,
+      "LFSHA256": "62c22dbcde5c87ff6d0054be7d60a0890298ed5ebb9b1bf6f61e431f45e38655",
+      "workingManifestRow": {
+        "studioPath": "ServerScriptService.Level6PreviewAccess",
+        "segments": [
+          "ServerScriptService",
+          "Level6PreviewAccess"
+        ],
+        "className": "Script",
+        "file": "ServerScriptService/Level6PreviewAccess.Script.lua",
+        "bytes": 35534,
+        "sha256": "62c22dbcde5c87ff6d0054be7d60a0890298ed5ebb9b1bf6f61e431f45e38655",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Enabled": true
+        },
+        "attributes": {
+          "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+          "Level6SourceSha256": "8377f1b0d366e0571e6c99fceb164cb42c032743200c4722e824a4573ef2fead"
+        }
+      }
+    },
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "readDepth": "contextual independent queue/access; relevant sections",
+      "rawBytes": 195000,
+      "rawSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "LFBytes": 195000,
+      "LFSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "workingManifestRow": {
+        "studioPath": "ServerScriptService.GameManager",
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "className": "Script",
+        "file": "ServerScriptService/GameManager.Script.lua",
+        "bytes": 195000,
+        "sha256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "attributes": [],
+        "tags": []
+      }
+    },
+    {
+      "file": "tools/level6_playground/release_level6.py",
+      "readDepth": "actual targeted authoring PATCH; full source",
+      "rawBytes": 4725,
+      "rawSHA256": "f6e1d61f451bee759e0493b52862e2e6ab6663d0d985123455d511ed449619d7",
+      "LFBytes": 4639,
+      "LFSHA256": "d1c53291807db0febd0981d7f9dc8ff58f283c87fd35bb6a7a315328e0de324a"
+    },
+    {
+      "file": "tools/level6_build/import/prepare_preview_patches.py",
+      "readDepth": "dated sourcepack generator; full source",
+      "rawBytes": 7533,
+      "rawSHA256": "2e722fc4932a11712fedd6645f64c8cbc82485532652f73e952f9e5a5fb49432",
+      "LFBytes": 7438,
+      "LFSHA256": "30f064af5398c265afc759ed357fde075369ed491484542f702e84b7b0dea6a0"
+    },
+    {
+      "file": "tools/level6_build/import/install_level6_gameplay.luau",
+      "readDepth": "actual prefix and exact shared Source guard; relevant sections",
+      "rawBytes": 11717,
+      "rawSHA256": "1c488647d675a849b1ec890d6188286ee2b6d48ee418b663fe20327fffef4e8e",
+      "LFBytes": 11486,
+      "LFSHA256": "c9f8991637478a95f947aa52ba840602449371a8638e082f4972396ad5be6a88"
+    }
+  ],
+  "privateBlock": "Exact215-byte BLOCK after allowed true early return; guard/UserId read plus2nil-to-nil writes and stale comment only",
+  "retained": "All services, require/IsAllowed/WaitForChild, PROMPTS literal, watching/hide, Enabled watchers, DescendantAdded and initial enumeration; no remote/attribute dependencies in target",
+  "userIdDomain": "Normal enabled Legacy LocalScript with engine LocalPlayer/UserId; nilLocalPlayer or throwing synthetic UserId getter unsupported and not certified equivalent",
+  "risk": "low, conditional on fresh Source/editor/class/metadata/nativeports",
+  "benefit": "215source bytes; no FPS/CPU/memory claim",
+  "status": "afventer test",
+  "nativeBinding": "Root must bind fresh full native source-catalog count plus target/DevAccess strict metadata and execute before/installed probe; old212census forbidden",
+  "workingManifestRawSHA256": "4a69d3db73d8a3140aa19538364277f4e5ee0ce48be974c2528b5959af11272b",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0
+}

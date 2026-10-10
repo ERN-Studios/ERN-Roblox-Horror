@@ -1,0 +1,11 @@
+{
+  "schema": "resume-baseline-reader-preflight-v1",
+  "pass": true,
+  "reader": "before/parity-reader.py",
+  "bytes": 12746,
+  "sha256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d",
+  "copyOf": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/parity-reader.py",
+  "noNativeWrites": true,
+  "checkpoint": "private .git/mongotv-cleanup-20261010/resume-before-v1",
+  "originalRoundUIUnchanged": true
+}

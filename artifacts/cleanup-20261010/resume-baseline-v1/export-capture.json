@@ -1,0 +1,1074 @@
+{
+  "pass": true,
+  "headAtCapture": "2e67231d95520eb1bef50a9db0274b357a8d5877",
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "sourceMirrorWrites": 0,
+  "manifestWrites": 0,
+  "start": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T07:39:22Z",
+    "sceneCount": 416286,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "25791b08093d08bb5048a6110744a90f2340848a2b2272d4179915687d225049",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "end": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T07:39:35Z",
+    "sceneCount": 416286,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "25791b08093d08bb5048a6110744a90f2340848a2b2272d4179915687d225049",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "records": [
+    {
+      "file": "ReplicatedStorage/Level 2 Pool Foam Remotes/ClientEvent.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientEvent",
+        "instanceId": "1_408320",
+        "placeId": 131311258779917,
+        "parentId": "1_15594",
+        "segments": [
+          "ReplicatedStorage",
+          "Level 2 Pool Foam Remotes",
+          "ClientEvent"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "f8c6ce631bbf6ab6e69966618e76d4359465010bbe69b86b454646f3cbac48a3",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Level 2 Pool Foam Remotes/ClientReport.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientReport",
+        "instanceId": "1_408319",
+        "placeId": 131311258779917,
+        "parentId": "1_15594",
+        "segments": [
+          "ReplicatedStorage",
+          "Level 2 Pool Foam Remotes",
+          "ClientReport"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {
+          "Protocol": 1,
+          "Generation": 0
+        },
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "0c43f7f0767d158e450b0d5bab2add9650a26dcf1bbe4e9a810a0bb4010a65ee",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Level 2 Remotes/Level 2 Alert Event.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Level 2 Remotes.Level 2 Alert Event",
+        "instanceId": "1_408317",
+        "placeId": 131311258779917,
+        "parentId": "1_15588",
+        "segments": [
+          "ReplicatedStorage",
+          "Level 2 Remotes",
+          "Level 2 Alert Event"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "26bf154da9416e7c5f98ba918e084848db7292756f66e645f5a7c67e1eea8a74",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Level 2 Remotes/Level 2 Sound Event.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Level 2 Remotes.Level 2 Sound Event",
+        "instanceId": "1_408318",
+        "placeId": 131311258779917,
+        "parentId": "1_15588",
+        "segments": [
+          "ReplicatedStorage",
+          "Level 2 Remotes",
+          "Level 2 Sound Event"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "c23ba42f37f52788f595b7decf891889c7f694c8bb5e0cd9b3fce37bac6b9b1a",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Level 3 Remotes/ClientEvent.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Level 3 Remotes.ClientEvent",
+        "instanceId": "1_408321",
+        "placeId": 131311258779917,
+        "parentId": "1_15597",
+        "segments": [
+          "ReplicatedStorage",
+          "Level 3 Remotes",
+          "ClientEvent"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "58c0db0a2621b63c09704a8d2d1e3bbe31ee80929c9ce9dd06cc7b2a96d293fc",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Level 3 Remotes/Level3HideRequest.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Level 3 Remotes.Level3HideRequest",
+        "instanceId": "1_408322",
+        "placeId": 131311258779917,
+        "parentId": "1_15597",
+        "segments": [
+          "ReplicatedStorage",
+          "Level 3 Remotes",
+          "Level3HideRequest"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "99c6d08a5c0ebf026bd9479a68f03d7964faf20a34590371fea0717c15518eda",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/LoadingCardView.ModuleScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ReplicatedStorage.LoadingCardView",
+        "tags": [],
+        "instanceId": "0_43635647",
+        "rawEditorSHA256": "0f2d4b561ae206ffd07c4345a5e7372853c54863071946e525bd3fa0970c4a7b",
+        "placeId": 131311258779917,
+        "parentId": "1_408323",
+        "canonicalBytes": 8923,
+        "sourceSHA256": "0f2d4b561ae206ffd07c4345a5e7372853c54863071946e525bd3fa0970c4a7b",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "segments": [
+          "ReplicatedStorage",
+          "LoadingCardView"
+        ],
+        "className": "ModuleScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "0f2d4b561ae206ffd07c4345a5e7372853c54863071946e525bd3fa0970c4a7b",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "9e8e46048ed89e632b67b6d49d075f96013adff2437a991e398fd04aa465a0dd",
+      "capturedSHA256": "0f2d4b561ae206ffd07c4345a5e7372853c54863071946e525bd3fa0970c4a7b"
+    },
+    {
+      "file": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ReplicatedStorage.MasterConfiguration",
+        "tags": [],
+        "instanceId": "1_42699",
+        "rawEditorSHA256": "ede7dd4a687e76d0aefba2356869e0e31d70dc953b963680ae8fd607ea32e165",
+        "placeId": 131311258779917,
+        "parentId": "1_408323",
+        "canonicalBytes": 21531,
+        "sourceSHA256": "ede7dd4a687e76d0aefba2356869e0e31d70dc953b963680ae8fd607ea32e165",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "segments": [
+          "ReplicatedStorage",
+          "MasterConfiguration"
+        ],
+        "className": "ModuleScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "ede7dd4a687e76d0aefba2356869e0e31d70dc953b963680ae8fd607ea32e165",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "capturedSHA256": "ede7dd4a687e76d0aefba2356869e0e31d70dc953b963680ae8fd607ea32e165"
+    },
+    {
+      "file": "ReplicatedStorage/Remotes/DevControl.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Remotes.DevControl",
+        "instanceId": "1_408313",
+        "placeId": 131311258779917,
+        "parentId": "1_15587",
+        "segments": [
+          "ReplicatedStorage",
+          "Remotes",
+          "DevControl"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "dbd7924fe5a7e22f42f21b8b78844f8ab8074feb0115362824f76e3741ab8aae",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Remotes/DevTuning.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Remotes.DevTuning",
+        "instanceId": "1_408315",
+        "placeId": 131311258779917,
+        "parentId": "1_15587",
+        "segments": [
+          "ReplicatedStorage",
+          "Remotes",
+          "DevTuning"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "cf0ed6289143bbf873ebfc26307e6e62d7db82c7df12ece9b39d240a6b9d6efd",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Remotes/DropGlowstick.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Remotes.DropGlowstick",
+        "instanceId": "1_408314",
+        "placeId": 131311258779917,
+        "parentId": "1_15587",
+        "segments": [
+          "ReplicatedStorage",
+          "Remotes",
+          "DropGlowstick"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "86458c8756ae1a2f91c93a642d3da93fd077d24ac6ad6698873b92ae84cb0194",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Remotes/Jumpscare.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Remotes.Jumpscare",
+        "instanceId": "1_408310",
+        "placeId": 131311258779917,
+        "parentId": "1_15587",
+        "segments": [
+          "ReplicatedStorage",
+          "Remotes",
+          "Jumpscare"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "068d83d9ce039cf5463c14220281cd81551d798a2e904b0032e02497c15582c8",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Remotes/PuzzleStatus.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Remotes.PuzzleStatus",
+        "instanceId": "1_408312",
+        "placeId": 131311258779917,
+        "parentId": "1_15587",
+        "segments": [
+          "ReplicatedStorage",
+          "Remotes",
+          "PuzzleStatus"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "fb3fef07cca8935942f386596e3a31179b31adf436e897e65ba973e233e42523",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Remotes/ReportNoise.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Remotes.ReportNoise",
+        "instanceId": "1_408308",
+        "placeId": 131311258779917,
+        "parentId": "1_15587",
+        "segments": [
+          "ReplicatedStorage",
+          "Remotes",
+          "ReportNoise"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "d401c12504541bcd6429628945f25c6640a18ef14800e4baac30dc6028e61f82",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Remotes/RoundStatus.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Remotes.RoundStatus",
+        "instanceId": "1_408311",
+        "placeId": 131311258779917,
+        "parentId": "1_15587",
+        "segments": [
+          "ReplicatedStorage",
+          "Remotes",
+          "RoundStatus"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "c04870c6bd6b7fac25e394f12b69c13cb705155f5d9d495b430214c0debb6f46",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Remotes/SetCrouching.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Remotes.SetCrouching",
+        "instanceId": "1_408316",
+        "placeId": 131311258779917,
+        "parentId": "1_15587",
+        "segments": [
+          "ReplicatedStorage",
+          "Remotes",
+          "SetCrouching"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "dfb71f6fa1ab627cb00f814e17cf421d48d2d70982c2e25c7ec961d705ce2031",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/Remotes/ToggleFlashlight.RemoteEvent.txt",
+      "reason": "fresh-remote-property-gap",
+      "native": {
+        "path": "ReplicatedStorage.Remotes.ToggleFlashlight",
+        "instanceId": "1_408309",
+        "placeId": 131311258779917,
+        "parentId": "1_15587",
+        "segments": [
+          "ReplicatedStorage",
+          "Remotes",
+          "ToggleFlashlight"
+        ],
+        "className": "RemoteEvent",
+        "tags": [],
+        "attributes": {},
+        "properties": {
+          "Archivable": true
+        },
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "da41e03f2bcf356e13a5b840ec7508d99c312bb8a07ceb9353cbadeaea81b216",
+      "capturedSHA256": null
+    },
+    {
+      "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ReplicatedStorage.RoundHud",
+        "tags": [],
+        "instanceId": "1_42712",
+        "rawEditorSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
+        "placeId": 131311258779917,
+        "parentId": "1_408323",
+        "canonicalBytes": 76673,
+        "sourceSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "segments": [
+          "ReplicatedStorage",
+          "RoundHud"
+        ],
+        "className": "ModuleScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "capturedSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559"
+    },
+    {
+      "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ReplicatedStorage.UIRegression",
+        "tags": [],
+        "instanceId": "1_42698",
+        "rawEditorSHA256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6",
+        "placeId": 131311258779917,
+        "parentId": "1_408323",
+        "canonicalBytes": 313853,
+        "sourceSHA256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "segments": [
+          "ReplicatedStorage",
+          "UIRegression"
+        ],
+        "className": "ModuleScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "605da83a331022949004dab143012b408b899500f9e6c84188b8d71a31771aca",
+      "capturedSHA256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6"
+    },
+    {
+      "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ReplicatedStorage.UIStyle",
+        "tags": [],
+        "instanceId": "1_42702",
+        "rawEditorSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
+        "placeId": 131311258779917,
+        "parentId": "1_408323",
+        "canonicalBytes": 12426,
+        "sourceSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "segments": [
+          "ReplicatedStorage",
+          "UIStyle"
+        ],
+        "className": "ModuleScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "28ac2bf612994737da4e0e5c307401f5c4508b8561491670528c73889e01a1d5",
+      "capturedSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3"
+    },
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ServerScriptService.GameManager",
+        "tags": [],
+        "instanceId": "1_408341",
+        "rawEditorSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+        "placeId": 131311258779917,
+        "parentId": "1_409634",
+        "canonicalBytes": 195000,
+        "sourceSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "className": "Script",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+      "capturedSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ServerScriptService.Level 1 Systems.EntityAI",
+        "tags": [],
+        "instanceId": "1_408348",
+        "rawEditorSHA256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01",
+        "placeId": 131311258779917,
+        "parentId": "1_15621",
+        "canonicalBytes": 67280,
+        "sourceSHA256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "ServerScriptService",
+          "Level 1 Systems",
+          "EntityAI"
+        ],
+        "className": "Script",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "b854cc0f160212dd79e0719093a753b61f8375a519f71a58be3c6ab6fd57015c",
+      "capturedSHA256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ServerScriptService.Level 1 Systems.EntityAnimation",
+        "tags": [],
+        "instanceId": "1_408349",
+        "rawEditorSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
+        "placeId": 131311258779917,
+        "parentId": "1_15621",
+        "canonicalBytes": 10869,
+        "sourceSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "ServerScriptService",
+          "Level 1 Systems",
+          "EntityAnimation"
+        ],
+        "className": "Script",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "3c15ac60553c52c133bbbdd8e6d70efd52022c9e722065153b76e73986417508",
+      "capturedSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+        "tags": [],
+        "instanceId": "1_408346",
+        "rawEditorSHA256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f",
+        "placeId": 131311258779917,
+        "parentId": "1_15621",
+        "canonicalBytes": 93377,
+        "sourceSHA256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "ServerScriptService",
+          "Level 1 Systems",
+          "MazeGenerator"
+        ],
+        "className": "Script",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "f3bf0447db60f17eb6c83f005fbde4df9bb2d10232427c6494c0352d3851f106",
+      "capturedSHA256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ServerScriptService.Level 1 Systems.PuzzleManager",
+        "tags": [],
+        "instanceId": "1_408347",
+        "rawEditorSHA256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40",
+        "placeId": 131311258779917,
+        "parentId": "1_15621",
+        "canonicalBytes": 115391,
+        "sourceSHA256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "ServerScriptService",
+          "Level 1 Systems",
+          "PuzzleManager"
+        ],
+        "className": "Script",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
+      "capturedSHA256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40"
+    },
+    {
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ServerScriptService.Level 6 Systems.Level 6 Playground Game",
+        "tags": [],
+        "instanceId": "1_42786",
+        "rawEditorSHA256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6",
+        "placeId": 131311258779917,
+        "parentId": "1_15625",
+        "canonicalBytes": 105852,
+        "sourceSHA256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "segments": [
+          "ServerScriptService",
+          "Level 6 Systems",
+          "Level 6 Playground Game"
+        ],
+        "className": "ModuleScript",
+        "sourceEditorMatches": true,
+        "attributes": {
+          "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+          "Level6SourceSha256": "c08f474cedd3c0aae0aef242f212dd592e154467a1241ff83bcec837e72a8a88"
+        },
+        "rawSourceSHA256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "12cec0a73f8631026474661cc853856cf053f09d1c0d05291888100ef763abb2",
+      "capturedSHA256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.DevCheats",
+        "tags": [],
+        "instanceId": "1_31072",
+        "rawEditorSHA256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 27789,
+        "sourceSHA256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "DevCheats"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "fdcec2e0a2790cd880094a65a26b0212f11bddc0b94ad7dce63524a8b8e23245",
+      "capturedSHA256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
+        "tags": [],
+        "instanceId": "1_31074",
+        "rawEditorSHA256": "2b12a543132bc0af7e624e50559756236f7f1b717bfe764433f6fbea5be81e4b",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 12165,
+        "sourceSHA256": "2b12a543132bc0af7e624e50559756236f7f1b717bfe764433f6fbea5be81e4b",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "EntityShakeController"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "2b12a543132bc0af7e624e50559756236f7f1b717bfe764433f6fbea5be81e4b",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "8084b8ec48f09fa62889d22257d76dd8946cda5a11a7977b8f800bb5674bd0b4",
+      "capturedSHA256": "2b12a543132bc0af7e624e50559756236f7f1b717bfe764433f6fbea5be81e4b"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Found Footage HUD.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.Found Footage HUD",
+        "tags": [],
+        "instanceId": "1_31120",
+        "rawEditorSHA256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 22328,
+        "sourceSHA256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Found Footage HUD"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "c21f23d514a20a6be3ba48f2c03ff0f788e372d73b80b1ea733657b64698b24b",
+      "capturedSHA256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 1 Cable Current",
+        "tags": [],
+        "instanceId": "1_31099",
+        "rawEditorSHA256": "a2c09bc7e9bba5ebd04462bfd7d0e0dba49f7453cf3a0403dfb0b0db8d7b5651",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 11661,
+        "sourceSHA256": "a2c09bc7e9bba5ebd04462bfd7d0e0dba49f7453cf3a0403dfb0b0db8d7b5651",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 1 Cable Current"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "a2c09bc7e9bba5ebd04462bfd7d0e0dba49f7453cf3a0403dfb0b0db8d7b5651",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "capturedSHA256": "a2c09bc7e9bba5ebd04462bfd7d0e0dba49f7453cf3a0403dfb0b0db8d7b5651"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Entity Motion.LocalScript.lua",
+      "reason": "new-native-script",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 1 Entity Motion",
+        "tags": [],
+        "instanceId": "9_5659704",
+        "rawEditorSHA256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 25299,
+        "sourceSHA256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 1 Entity Motion"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": null,
+      "capturedSHA256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Hardware Client.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 1 Hardware Client",
+        "tags": [],
+        "instanceId": "1_31116",
+        "rawEditorSHA256": "dd27aa5bb7e87e75f54c3d4b0c60340b5037213b078e156a7ea0e980298d83fa",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 12239,
+        "sourceSHA256": "dd27aa5bb7e87e75f54c3d4b0c60340b5037213b078e156a7ea0e980298d83fa",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 1 Hardware Client"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "dd27aa5bb7e87e75f54c3d4b0c60340b5037213b078e156a7ea0e980298d83fa",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "252c7b86be07131d4f13d6f74c3a20178b60085ec98e3898adc02b72a3831e4a",
+      "capturedSHA256": "dd27aa5bb7e87e75f54c3d4b0c60340b5037213b078e156a7ea0e980298d83fa"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+        "tags": [],
+        "instanceId": "1_31113",
+        "rawEditorSHA256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 66400,
+        "sourceSHA256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 6 Playground Client"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "capturedSHA256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
+        "tags": [],
+        "instanceId": "1_31071",
+        "rawEditorSHA256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 8315,
+        "sourceSHA256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "PuzzleUI"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {
+          "ObjectiveUIVersion": "20260902_1"
+        },
+        "rawSourceSHA256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "c0f368cb4056c59b24e6695a6dab6262b224ac1aee57339df75afd08c780cad0",
+      "capturedSHA256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+        "tags": [],
+        "instanceId": "1_31069",
+        "rawEditorSHA256": "f524a7e6865c01b412581b46e64c12c2c2c786bf9c84c23f3b7d7a359d3f422c",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 244615,
+        "sourceSHA256": "f524a7e6865c01b412581b46e64c12c2c2c786bf9c84c23f3b7d7a359d3f422c",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "RoundUI"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {
+          "ObjectiveUIVersion": "20260902_1"
+        },
+        "rawSourceSHA256": "f524a7e6865c01b412581b46e64c12c2c2c786bf9c84c23f3b7d7a359d3f422c",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73",
+      "capturedSHA256": "f524a7e6865c01b412581b46e64c12c2c2c786bf9c84c23f3b7d7a359d3f422c"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.SoundController",
+        "tags": [],
+        "instanceId": "1_31070",
+        "rawEditorSHA256": "0fc2ce5ee4787d7196193f2849ca3dc9fdfbc85e5f5286a11901543a610d327f",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 71742,
+        "sourceSHA256": "0fc2ce5ee4787d7196193f2849ca3dc9fdfbc85e5f5286a11901543a610d327f",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SoundController"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "0fc2ce5ee4787d7196193f2849ca3dc9fdfbc85e5f5286a11901543a610d327f",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "022342ec4e78d46d28319198f05174ffae84261e9e075cc42820b5219fc0bf02",
+      "capturedSHA256": "0fc2ce5ee4787d7196193f2849ca3dc9fdfbc85e5f5286a11901543a610d327f"
+    }
+  ],
+  "limits": "Read-time scoped Source/editor/class/property/attribute/tag capture; no gameplay or complete asset validation"
+}
