@@ -1,0 +1,246 @@
+{
+ "read_at": "2026-10-10 about 20:50 local, campaign paused by the owner that day",
+ "note": "Plays are attributed up to 48 hours late: on this read 9 Oct had spend and clicks but no plays yet. Compare pictures on 8 Oct only.",
+ "account": {
+  "ad_credit_left": 36.35,
+  "campaign_spend": 21.11
+ },
+ "by_day_local": {
+  "2026-10-08": {
+   "impressions": 88692,
+   "clicks": 4397,
+   "plays": 2226,
+   "spend": 11.24
+  },
+  "2026-10-09": {
+   "impressions": 81093,
+   "clicks": 4242,
+   "plays": null,
+   "spend": 9.26
+  },
+  "2026-10-10": {
+   "impressions": 158,
+   "clicks": 3,
+   "plays": null,
+   "spend": 0.02
+  }
+ },
+ "game_daily": {
+  "DailyActiveUsers": {
+   "10-03": 47,
+   "10-04": 84,
+   "10-05": 41,
+   "10-06": 50,
+   "10-07": 198,
+   "10-08": 2376
+  },
+  "Visits": {
+   "10-03": 91,
+   "10-04": 128,
+   "10-05": 63,
+   "10-06": 72,
+   "10-07": 252,
+   "10-08": 2856
+  },
+  "AverageSessionLengthMinutes": {
+   "10-03": 4.49,
+   "10-04": 7.87,
+   "10-05": 6.41,
+   "10-06": 5.18,
+   "10-07": 3.14,
+   "10-08": 4.79
+  },
+  "AveragePlayTimeMinutesPerDAU": {
+   "10-03": 8.7,
+   "10-04": 11.99,
+   "10-05": 9.85,
+   "10-06": 7.45,
+   "10-07": 4.0,
+   "10-08": 5.76
+  },
+  "D1Retention": {
+   "10-05": 0.026,
+   "10-06": 0.091,
+   "10-07": 0,
+   "10-08": 0.301
+  },
+  "PayingUsers": {
+   "10-08": 6,
+   "earlier days": 0
+  }
+ },
+ "whole_run": {
+  "campaign": "fc071f73-178a-491c-8257-c8be9e222e3c",
+  "start": "2026-10-07T00:00:00.000Z",
+  "end": "2026-10-10T18:47:50.000Z",
+  "ads": {
+   "0a1bb234-9ec3-49cf-8cf6-01ba432dfaa9": {
+    "picture": "T01_hero_office_hide",
+    "asset_id": 85334319149309,
+    "impressions": 58990,
+    "clicks": 2663,
+    "spend": 7.016141,
+    "plays": 828
+   },
+   "132fc3d8-9d39-42d9-ae41-1379c4b203a0": {
+    "picture": "A03_ad_table_check",
+    "asset_id": 130462922453042,
+    "impressions": 8563,
+    "clicks": 541,
+    "spend": 1.056882,
+    "plays": 101
+   },
+   "1c9aff9d-69f9-463d-962f-e37ded1120d6": {
+    "picture": "A01_ad_office_run",
+    "asset_id": 86971162315270,
+    "impressions": 19663,
+    "clicks": 984,
+    "spend": 2.323744,
+    "plays": 347
+   },
+   "5474982b-c554-4f0b-95b8-9fc59133d836": {
+    "picture": "A04_ad_usher_torch",
+    "asset_id": 89268799631436,
+    "impressions": 4885,
+    "clicks": 256,
+    "spend": 0.655457,
+    "plays": 69
+   },
+   "7b130cbb-5a37-4580-82a0-7fbe61bd9c1d": {
+    "picture": "A02_ad_poolrooms_hall",
+    "asset_id": 79426727575422,
+    "impressions": 51326,
+    "clicks": 2742,
+    "spend": 6.354398,
+    "plays": 569
+   },
+   "9042dfd0-d12c-4541-90aa-42be0efc88be": {
+    "picture": "T04_hero_shh",
+    "asset_id": 109659855098434,
+    "impressions": 7676,
+    "clicks": 372,
+    "spend": 0.806867,
+    "plays": 133
+   },
+   "9d346178-e3ef-4ad1-8302-9f57feaec4de": {
+    "picture": "T03_hero_playground",
+    "asset_id": 103797698944118,
+    "impressions": 14629,
+    "clicks": 904,
+    "spend": 1.700247,
+    "plays": 229
+   },
+   "d7b98ab0-dd7b-4ce5-9557-f4ed7d9461f0": {
+    "picture": "A09_ad_meet_the_staff",
+    "asset_id": 112386003934119,
+    "impressions": 1867,
+    "clicks": 72,
+    "spend": 0.256364,
+    "plays": 20
+   },
+   "eec64dfd-5315-45bf-bb4f-f1e98c6a6ed5": {
+    "picture": "A08_ad_poolrooms_rotunda",
+    "asset_id": 107182923833121,
+    "impressions": 4288,
+    "clicks": 222,
+    "spend": 0.395798,
+    "plays": 46
+   },
+   "f373206a-dbc9-4dc1-98eb-b994cbe3a478": {
+    "picture": "T05_hero_cinema",
+    "asset_id": 131830288383893,
+    "impressions": 3292,
+    "clicks": 171,
+    "spend": 0.336587,
+    "plays": 42
+   }
+  }
+ },
+ "oct8_only": {
+  "campaign": "fc071f73-178a-491c-8257-c8be9e222e3c",
+  "start": "2026-10-07T22:00:00.000Z",
+  "end": "2026-10-08T22:00:00.000Z",
+  "ads": {
+   "0a1bb234-9ec3-49cf-8cf6-01ba432dfaa9": {
+    "picture": "T01_hero_office_hide",
+    "asset_id": 85334319149309,
+    "impressions": 27644,
+    "clicks": 1236,
+    "spend": 3.423742,
+    "plays": 728
+   },
+   "132fc3d8-9d39-42d9-ae41-1379c4b203a0": {
+    "picture": "A03_ad_table_check",
+    "asset_id": 130462922453042,
+    "impressions": 3799,
+    "clicks": 252,
+    "spend": 0.501322,
+    "plays": 97
+   },
+   "1c9aff9d-69f9-463d-962f-e37ded1120d6": {
+    "picture": "A01_ad_office_run",
+    "asset_id": 86971162315270,
+    "impressions": 13318,
+    "clicks": 657,
+    "spend": 1.646297,
+    "plays": 337
+   },
+   "5474982b-c554-4f0b-95b8-9fc59133d836": {
+    "picture": "A04_ad_usher_torch",
+    "asset_id": 89268799631436,
+    "impressions": 2815,
+    "clicks": 131,
+    "spend": 0.42171,
+    "plays": 69
+   },
+   "7b130cbb-5a37-4580-82a0-7fbe61bd9c1d": {
+    "picture": "A02_ad_poolrooms_hall",
+    "asset_id": 79426727575422,
+    "impressions": 20471,
+    "clicks": 1045,
+    "spend": 2.747245,
+    "plays": 569
+   },
+   "9042dfd0-d12c-4541-90aa-42be0efc88be": {
+    "picture": "T04_hero_shh",
+    "asset_id": 109659855098434,
+    "impressions": 4133,
+    "clicks": 217,
+    "spend": 0.514297,
+    "plays": 110
+   },
+   "9d346178-e3ef-4ad1-8302-9f57feaec4de": {
+    "picture": "T03_hero_playground",
+    "asset_id": 103797698944118,
+    "impressions": 9436,
+    "clicks": 551,
+    "spend": 1.19647,
+    "plays": 215
+   },
+   "d7b98ab0-dd7b-4ce5-9557-f4ed7d9461f0": {
+    "picture": "A09_ad_meet_the_staff",
+    "asset_id": 112386003934119,
+    "impressions": 1535,
+    "clicks": 62,
+    "spend": 0.235783,
+    "plays": 20
+   },
+   "eec64dfd-5315-45bf-bb4f-f1e98c6a6ed5": {
+    "picture": "A08_ad_poolrooms_rotunda",
+    "asset_id": 107182923833121,
+    "impressions": 3289,
+    "clicks": 130,
+    "spend": 0.290361,
+    "plays": 46
+   },
+   "f373206a-dbc9-4dc1-98eb-b994cbe3a478": {
+    "picture": "T05_hero_cinema",
+    "asset_id": 131830288383893,
+    "impressions": 2252,
+    "clicks": 116,
+    "spend": 0.263329,
+    "plays": 35
+   }
+  }
+ }
+}
