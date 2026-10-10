@@ -1,0 +1,87 @@
+{
+  "pass": true,
+  "schema": "mongotv-c26-comments-source-cas-offline-proposal-v1",
+  "bytesRemoved": 7195,
+  "scope": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+  "beforeSHA256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+  "afterSHA256": "605da83a331022949004dab143012b408b899500f9e6c84188b8d71a31771aca",
+  "compileChecks": [
+    {
+      "operation": "capture",
+      "optimization": "-O0",
+      "sourceSHA256": "33c04f19b67a6abf9f251bfba838b69ee2b3eb53840d02c2f7335590b4d430e2",
+      "pass": true
+    },
+    {
+      "operation": "capture",
+      "optimization": "-O1",
+      "sourceSHA256": "33c04f19b67a6abf9f251bfba838b69ee2b3eb53840d02c2f7335590b4d430e2",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O0",
+      "sourceSHA256": "42017af35ffc1af8a7b546a914502965a2e9626ad54ef005eb6a65be8b96b4ae",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O1",
+      "sourceSHA256": "42017af35ffc1af8a7b546a914502965a2e9626ad54ef005eb6a65be8b96b4ae",
+      "pass": true
+    },
+    {
+      "operation": "target",
+      "optimization": "-O0",
+      "sourceSHA256": "049072c7c6f8dc63852af0c1be7c16d4f792ec896229ef4b6e611d95e64d1450",
+      "pass": true
+    },
+    {
+      "operation": "target",
+      "optimization": "-O1",
+      "sourceSHA256": "049072c7c6f8dc63852af0c1be7c16d4f792ec896229ef4b6e611d95e64d1450",
+      "pass": true
+    },
+    {
+      "operation": "verify",
+      "optimization": "-O0",
+      "sourceSHA256": "cae96b0a22f0498700dc94a042e774ace44b6d0a5568cdd59084b79033adbd98",
+      "pass": true
+    },
+    {
+      "operation": "verify",
+      "optimization": "-O1",
+      "sourceSHA256": "cae96b0a22f0498700dc94a042e774ace44b6d0a5568cdd59084b79033adbd98",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O0",
+      "sourceSHA256": "400dea3d19f5618e43831e4f363ca5e604eb591d7fc09d76881a12d5c3d2662d",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O1",
+      "sourceSHA256": "400dea3d19f5618e43831e4f363ca5e604eb591d7fc09d76881a12d5c3d2662d",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O0",
+      "sourceSHA256": "cbec69c768ad699eb29a62408bb019faca7607a8210fa6723fd6796bb916e2e3",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O1",
+      "sourceSHA256": "cbec69c768ad699eb29a62408bb019faca7607a8210fa6723fd6796bb916e2e3",
+      "pass": true
+    }
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "templateSHA256": "efe3a75876d3768eb41342cfba1ee93853ded375db1c29a420862ded5237ded6",
+  "status": "pending independent wrapper/negative review and Root native CAS/installed verification"
+}

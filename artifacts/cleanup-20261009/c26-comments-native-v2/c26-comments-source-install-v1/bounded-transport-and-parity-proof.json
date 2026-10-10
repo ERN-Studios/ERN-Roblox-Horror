@@ -1,0 +1,54 @@
+{
+  "schema": "c26-installed-bounded-transport-and-parity-proof-v1",
+  "pass": true,
+  "generatedAtUtc": "2026-10-10T00:37:47.403440+00:00",
+  "nativeSourceRows": 212,
+  "targetOnlySourceDrift": [
+    {
+      "instanceId": "1_42698",
+      "studioPath": "ReplicatedStorage.UIRegression",
+      "fields": {
+        "bytes": {
+          "before": 320730,
+          "after": 313535
+        },
+        "sha256": {
+          "before": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+          "after": "605da83a331022949004dab143012b408b899500f9e6c84188b8d71a31771aca"
+        }
+      }
+    }
+  ],
+  "identitiesClassesParentsPropertiesAttrsTagsUnchanged": true,
+  "afterAndFinalRowsByteEquivalent": true,
+  "metadataPagesPerSnapshot": 11,
+  "totalSavedMetadataPages": 33,
+  "maxSavedPrettyPageBytes": 14809,
+  "wireMetadataResponseCapEnforcedByExecutedWrapper": 20000,
+  "wireSourceResponseCapEnforcedByExecutedWrapper": 8000,
+  "actualSourceReadChunkLines": 64,
+  "staticAlignedBeforeSource": {
+    "chunks": 103,
+    "maxBytes": 4409,
+    "lines": 6540
+  },
+  "staticAlignedCandidateSource": {
+    "chunks": 101,
+    "maxBytes": 4409,
+    "lines": 6422
+  },
+  "sourceChunkSizeScope": "Static exact Source bytes at the actual 64-line alignment; actual response caps enforced before parsing, no measured wire size claimed.",
+  "privateOriginalSourceSHA256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+  "privateOriginalEditorSHA256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+  "privateOriginalEditorExact": true,
+  "actualCASCodeSHA256": "6d00f024f81616b6fe9b5e9a98f0436bf87704959ea272b18c8fdb8057b7f566",
+  "actualResultSHA256": "46699a902f331e80276d7e4ae54315af505b2bb6a3b96b5fad220f4e05da1a4c",
+  "actualInstalledReplaySHA256": "9fdf1226e5d41b1e538457ff4b4643b1ed0a7bae1664ca28c9c89b47b3559ce8",
+  "actualInstalledContractSHA256": "3b1bb18a036b2d2f5e3a1e88554356c3140115243adf67dbb3280ede2b3ff15d",
+  "consoleBeforeAfterExact": true,
+  "other211SourceRowsPreserved": true,
+  "noRollbackNeeded": true,
+  "nativeCallsByProofDerivation": 0,
+  "productionWritesByProofDerivation": 0,
+  "scope": "Point-time original Source/editor/recorded metadata and pure-comment executable/UI authoring contracts. No new native UI/gameplay/assets/multiplayer/streaming/performance certificate."
+}

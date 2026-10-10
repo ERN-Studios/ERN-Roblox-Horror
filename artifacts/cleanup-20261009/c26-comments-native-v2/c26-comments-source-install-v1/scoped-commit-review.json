@@ -1,0 +1,17 @@
+{
+  "schema": "s15-root-scoped-staging-review-v1",
+  "pass": true,
+  "curationSHA256": "f62d9322548a67dd605f209b8203a3076067a9952dec3b4c262b3732df128c57",
+  "curatedPaths": 36,
+  "stagedPaths": 39,
+  "runtimeSource": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+  "sourceSHA256": "605da83a331022949004dab143012b408b899500f9e6c84188b8d71a31771aca",
+  "sourceBytes": 313535,
+  "removedCommentBytes": 7195,
+  "scopedManifestSHA256": "7dd44945d97302320d2ef6dece94b0381dd906b63525a5218cd81c784501bc7f",
+  "manifestDelta": "Only target sha256 and bytes; working-only original RoundUI source fields excluded.",
+  "excludedRoundUISourceSHA256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73",
+  "modeSwitches": 0,
+  "publishedByThisBatch": false,
+  "pushedByThisBatch": false
+}

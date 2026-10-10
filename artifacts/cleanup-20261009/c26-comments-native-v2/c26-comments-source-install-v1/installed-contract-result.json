@@ -1,0 +1,7 @@
+{
+  "pass": true,
+  "exitCode": 0,
+  "stdout": "{\"pass\": true, \"commentReplacements\": 10, \"removedBytes\": 7195, \"functions\": 197, \"sharedChecksPerVersion\": 105, \"nativeCalls\": 0}\n",
+  "stderr": "",
+  "proofSHA256": "3b1bb18a036b2d2f5e3a1e88554356c3140115243adf67dbb3280ede2b3ff15d"
+}

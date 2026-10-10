@@ -1,0 +1,33 @@
+{
+  "schema": "c26-native-metadata-read-only-v1",
+  "pass": true,
+  "toolSHA256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6",
+  "nativeCodeSHA256": "47290fdb4ad85c62020d081febad51e975ddb41ed2489249d36626f163768cbf",
+  "result": {
+    "path": "ReplicatedStorage.UIRegression",
+    "tags": [],
+    "instanceId": "1_42698",
+    "rawEditorSHA256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+    "placeId": 131311258779917,
+    "parentId": "1_408323",
+    "canonicalBytes": 320730,
+    "sourceSHA256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    },
+    "segments": [
+      "ReplicatedStorage",
+      "UIRegression"
+    ],
+    "className": "ModuleScript",
+    "sourceEditorMatches": true,
+    "attributes": [],
+    "rawSourceSHA256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+    "universeId": 10559217407
+  },
+  "nativeGetterCalls": 1,
+  "nativeSourceWrites": 0,
+  "modeSwitches": 0,
+  "objectsCreated": 0
+}

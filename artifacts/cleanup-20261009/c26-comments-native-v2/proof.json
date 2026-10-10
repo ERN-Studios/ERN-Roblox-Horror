@@ -1,0 +1,197 @@
+{
+  "schema": "mongotv-c26-comment-only-preparation-v2",
+  "pass": true,
+  "installedVerification": false,
+  "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+  "beforeSHA256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+  "candidateSHA256": "605da83a331022949004dab143012b408b899500f9e6c84188b8d71a31771aca",
+  "beforeBytes": 320730,
+  "candidateBytes": 313535,
+  "removedBytes": 7195,
+  "portableInputs": {
+    "before": "artifacts/cleanup-20261009/client-local-proofs/b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64.lua",
+    "historicalCandidate": "artifacts/cleanup-20261009/client-local-proofs/e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150.lua"
+  },
+  "historicalCandidateSHA256": "e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150",
+  "candidateDerivation": {
+    "old": "-- current shared objective for Level 1 and Level 3 across the device fixtures.\n",
+    "new": "-- current shared objective for Levels 1 through 4 across the device fixtures.\n",
+    "reason": "Current shared body explicitly loops levels 1,2,3,4. Correct its coverage comment without changing that loop.",
+    "fullCandidateCopies": "Owned temporary directory only, automatically cleaned on either outcome."
+  },
+  "commentPatches": [
+    {
+      "old": "-- Used by BriefingFitMatrix only. GetTextBoundsAsync is the ONE way to ask what\n",
+      "new": "-- Retained analytical text helper. GetTextBoundsAsync can ask what\n",
+      "beforeLine": 23,
+      "candidateLine": 23
+    },
+    {
+      "old": "-- and wrap width the client is not currently rendering. Hoisted here from\n-- BriefingFitMatrix, which now shares it rather than keeping a second copy.\n",
+      "new": "-- and wrap width the client is not currently rendering. The current shared\n-- HUD matrix uses native TextBounds; it does not call this analytical helper.\n",
+      "beforeLine": 1897,
+      "candidateLine": 1897
+    },
+    {
+      "old": "-- Briefing text fit, resolved per device\n",
+      "new": "-- BriefingFitMatrix: compatibility alias for the shared HUD matrix.\n",
+      "beforeLine": 4087,
+      "candidateLine": 4087
+    },
+    {
+      "old": "--\n-- The dispatch panel is the one place in the HUD where the layout sizes a\n-- rectangle and something else entirely fills it with a sentence. RoundUI's\n-- `updateLevelOneGuideLayout` reserves the subtitle box arithmetically --\n-- `textTop = math.max(28, controlsTop + controlsHeight + (touch and 0 or 2))`,\n-- RoundUI L2425 -- and on a TOUCH row that picks OwnBand with two 44px columns\n-- that lands the box top at exactly y = 74, the same pixel where the MUTE/STOP\n-- row ends. Nothing hard-codes 74; it falls out of the arithmetic, and the two\n-- rectangles ABUT by design. Abutment is fine. One pixel of real penetration is\n-- the defect this file already exists to catch, and neither case was ever\n-- asserted anywhere but at whatever viewport Studio happened to be rendering.\n--\n-- Worse, the boxes were the only thing ever checked. Whether the COPY fits the\n-- box it was handed had exactly one automated assertion -- `TextFitTargets`\n-- inside RunAll -- and that one reads the engine's `TextBounds` PROPERTY, which\n-- can only describe the string currently on screen at the size currently\n-- rendered. RunAll also refuses to start while `UIRegressionViewport` is set,\n-- so it can never speak about any viewport but the real one. Every claim that\n-- a 113-character cue fits on a 568x320 phone came from a human looking at the\n-- Device Simulator.\n--\n-- This matrix asks arithmetically instead: ResolveRect for the boxes,\n-- TextService:GetTextBoundsAsync for the copy. It is deliberately pessimistic\n-- about what it may resolve. `BriefingControls` holds a UIListLayout, so the\n-- two buttons inside it are ENGINE-placed and ResolveRect correctly refuses\n-- them -- so the CONTAINER is resolved, and the buttons are measured against\n-- its resolved extent and the list layout's own declared padding, rather than\n-- pretending the resolver can place what the engine places.\n\n-- LOCALISATION STRESS CORPUS.\n--\n-- This is a PROXY for the shipped copy, not a mirror of it. UIRegression lives\n-- in ReplicatedStorage and the cues live in a LocalScript under\n-- StarterPlayerScripts, which cannot be required from here, so the strings are\n-- transcribed by hand and MUST be re-synced when the cue tables change. Their\n-- sources, all in StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua:\n--\n--   L1917-1932  briefingCues             -- Level 1\n--   L1952-1971  levelThreeBriefing.cues  -- Level 3\n--   L1525-1543  lobbyBriefing.cues       -- the concourse briefing\n--\n-- The Level 2 briefing and its 113-character \"a pump alerts an entity\" line,\n-- which used to lead this corpus verbatim, are deleted (owner, 2026-10-08), and\n-- its row went with them. The longest authored line left is Level 1's at 91\n-- characters. LONG_DISPATCH_CUE (L610 of this file, 142 characters) is the\n-- string the live `briefing` scenario already forces into the panel, so it is\n-- now the worst English case for both matrices. The last entry is SYNTHETIC:\n-- 181 characters, a German localisation of that deleted line, kept unchanged as\n-- the stress case. German is the useful shape here -- the same sentence runs\n-- long AND carries compounds the wrapper cannot break.\n\n-- Speech is disabled for now, so MUTE is deliberately absent from the input\n-- stack. Keep its instance for a future voice release, but measure only the\n-- visible dismiss control and the caption it actually prints.\n\n-- The rows of MODAL_DEVICES this matrix sweeps: every PORTRAIT row, plus the\n-- four short landscape shapes where the panel has the least vertical room and\n-- the layout is driven into its compromise pass. Landscape rows are keyed by\n-- size rather than by device name, so a renamed row cannot silently drop out.\n\n\n-- The overlap predicate for ANALYTICAL rects.\n--\n-- `rectsOverlap` above carries a one-pixel slack in every direction, and it is\n-- right to: it compares MEASURED AbsolutePosition, where a shared edge can\n-- round into a pixel of apparent penetration. These rects are not measured,\n-- they are exact arithmetic over the UDim2 values production sets, so the same\n-- slack would swallow a genuine one-pixel collision -- precisely the failure\n-- this matrix exists to find, given the subtitle box is authored to land ON the\n-- controls' lower edge. Half-open comparison instead, which is what the\n-- rectsOverlap COMMENT describes: a shared edge (subtitle top 74, controls\n-- bottom 74) is abutment and passes; one pixel of real penetration (subtitle\n-- top 73) is an overlap and fails.\n",
+      "new": "-- Preserves this public lane name, token ownership and borrow/restore behavior.\n-- Current coverage is Fit.bodyRoundHudMatrix: shared objectives and native\n-- text bounds across device fixtures, plus admitted feed/caption checks.\n-- It does not run the retired analytical briefing layout or localisation corpus.\n",
+      "beforeLine": 4089,
+      "candidateLine": 4089
+    },
+    {
+      "old": "-- BriefingExclusionMatrix -- briefing, queue modal and the L4 shop window (was the Zyntra terminal)\n",
+      "new": "-- BriefingExclusionMatrix: compatibility alias for the shared HUD matrix.\n",
+      "beforeLine": 4172,
+      "candidateLine": 4103
+    },
+    {
+      "old": "--\n-- WHAT SHIPPED BROKEN, in pixels, at 705x338: the Zyntra opener occupied\n-- (345,66)-(529,110), which is ENTIRELY inside the dispatch briefing panel\n-- (12,66)-(529,141) and overlaps its MUTE/STOP row by 172x42. The briefing\n-- panel in turn overlapped QueueHostPanel (290,66)-(529,326) by 239x75 and\n-- covered its CloseQueue button completely. The panel draws above both\n-- (DisplayOrder 110 against RoundGui 100 and ZyntraStore 55) and is opaque at\n-- BackgroundTransparency .18 -- but its Frame is not Active, so a tap that\n-- missed MUTE or STOP fell straight through onto a button the player could not\n-- see. On a phone that is the entire top strip of the screen.\n--\n-- The rule is now one expression in one place (RoundUI's dispatchAudio.refresh),\n-- published as the player attribute DispatchBriefingOpen. Queue always wins;\n-- an already-open terminal suppresses only the panel while the transmission\n-- keeps running. This matrix drives each state machine in BOTH orders because a\n-- flag that is only ever set one way round is a flag that sticks.\n--\n-- Three things are asserted that a \"does the panel hide\" test would not:\n--\n--   * ZyntraDispatchClientActive must NOT follow DispatchBriefingOpen. The\n--     transmission keeps running while its panel is suppressed; if it were torn\n--     down, claimLobbyBriefing's one-shot claim would be burned by opening a\n--     modal and the player would never hear the briefing at all.\n--   * the suppression is UNCONDITIONAL, not touch-only, so the sweep runs at a\n--     desktop viewport as well as at the phone.\n--   * no rect anywhere under CommandSubtitles may intersect any rect anywhere\n--     under QueueHostShade, in any state -- descendants included, because the\n--     overlap that shipped was between two CHILDREN, not the two panels.\n--\n-- Then the developer-page captions, which are a different fault with the same\n-- shape: they were chosen by UIDevice.IsTouch(), so a handheld that reports a\n-- keyboard -- a tablet with a case, a hybrid -- was told to press J, B, V, P,\n-- I, U and C on a device with no keys. They now follow\n-- UIDevice.SuppressesKeyboardGlyphs(), which is true for EITHER touch input or\n-- a handheld form factor, and they are re-rendered on UIDevice.Changed rather\n-- than only at build time.\n\n-- command -> the key the caption must name when glyphs are shown. Mirrored by\n-- hand from Zyntra Dev L4's ROWS (the legacy DEV tab's control table, which\n-- the go-live deleted, carried the same keys) so a silent rebinding fails here.\n-- Each row Dev_<command> draws them on its KeyChip as \"KEY <key>\".\n-- B really does drive esp and fastQueue together (DevCheats' InputBegan toggles\n-- both), so the repeat is correct and must not be \"fixed\".\n",
+      "new": "-- Current checks are delegated to Fit.bodyRoundHudMatrix. This entrypoint no\n-- longer independently sweeps legacy briefing/terminal exclusion state or\n-- developer-page keyboard captions. Those old claims are not current coverage.\n",
+      "beforeLine": 4174,
+      "candidateLine": 4105
+    },
+    {
+      "old": "-- All three levels' persistent objective readouts, forced into every state they\n-- have, at every device in the matrix. The question it answers is the one the\n-- old suite could not even ask: not \"does this rectangle avoid the movement\n-- zones\" -- the corridor and bottom-band placements it replaced both did -- but\n-- \"is it in the UPPER RIGHT of the true safe area\", which is where the player\n-- was told to look for it.\n",
+      "new": "-- ObjectiveCornerMatrix delegates to the shared HUD matrix. It stages the\n-- current shared objective for Levels 1 through 4 across the device fixtures.\n-- The legacy placement history below explains why the helper keeps a single\n-- expected corner; the shared card reserves 16 px on touch or 24 px on PC.\n",
+      "beforeLine": 4230,
+      "candidateLine": 4121
+    },
+    {
+      "old": "-- touch, 18 on a pointer), within AnchorSlack.\n",
+      "new": "-- touch, 18 on a pointer), within AnchorSlack. Shared callers reserve their\n-- additional authored 16/24 px through Fit.anchorProblems rightInset.\n",
+      "beforeLine": 4254,
+      "candidateLine": 4143
+    },
+    {
+      "old": "-- The compact contract for the phone briefing, asserted as a MAXIMUM footprint\n-- rather than as the absence of an overlap. BriefingFitMatrix already proves\n-- the panel's internals fit each other and that the panel fits its band; what\n-- it cannot say -- and what the owner measured on a real iPhone 16 Pro Max --\n-- is that a band-filling 768x117 panel for two readouts and one sentence is far\n-- too much of the screen.\n--\n-- The reference device carries a HARD bound: 560 wide and 100 high on 956x440,\n-- i.e. 59% and 23%. Every other phone is bound by what it PUBLISHES -- the\n-- compact target it computed, and the ladder rung it had to climb -- so a\n-- smaller screen may take the extra its own copy needs and nothing more.\n",
+      "new": "-- DispatchCompactMatrix is a compatibility alias for Fit.bodyRoundHudMatrix.\n-- It no longer asserts the legacy phone-briefing maximum footprint below.\n-- Keep DispatchReference as retained metadata; no current matrix reads it.\n",
+      "beforeLine": 4772,
+      "candidateLine": 4662
+    },
+    {
+      "old": "\t-- Same contract, same reason: BriefingFitMatrix owns the override too, and\n\t-- it is the only thing in this file that can say whether the dispatch copy\n\t-- fits its box on a viewport Studio is not currently rendering.\n",
+      "new": "\t-- Run the shared HUD matrix once. The four compatibility aliases delegate\n\t-- to that same body, so repeating them would repeat identical fixture work.\n\t-- This lane measures current shared objectives and admitted feed/captions.\n",
+      "beforeLine": 6378,
+      "candidateLine": 6260
+    }
+  ],
+  "compiler": [
+    {
+      "optimization": 0,
+      "functions": 197,
+      "canonicalSHA256": "cd0fd2374c155a203f72b7a7f70d21c095e7b0c06cd804e9f3d10625f90302fa",
+      "rawBinarySHA256": {
+        "before": "c5b2361eefa690d640577f10ffd6f820a6122b8cecd3f238b769f288b0211196",
+        "candidate": "213b7483762ae441a4e3d34d401e4c1bbe6f8e1ad92adc52f0648f282048d08b"
+      },
+      "instructionConstantDumpSHA256": "f81b78653c68a128ebc0f2111192f4de07cc55d216d798124dc3a2b34c10d0c2",
+      "functionsWithChangedLineDefinition": 58,
+      "pass": true,
+      "canonicalization": "Only Proto.linedefined varints are zeroed and enclosing Proto-size varints resized; every other byte is retained."
+    },
+    {
+      "optimization": 1,
+      "functions": 197,
+      "canonicalSHA256": "d04059ceec2802fb84120f2889a49ed62737b879d9ce26c0aa64930f5d643177",
+      "rawBinarySHA256": {
+        "before": "be1d63a33c9077a6030b985a7f39bdd47713b1e02719f30fa614dba978cb4aba",
+        "candidate": "bb15536cbd706ef9d83729422ed89223076bfbb2283db768887d7eee9970d765"
+      },
+      "instructionConstantDumpSHA256": "1eeeeb5f7562f1ab6ce7b20ea832d0dd0493b6fb5212a48c534b281bce2e486f",
+      "functionsWithChangedLineDefinition": 58,
+      "pass": true,
+      "canonicalization": "Only Proto.linedefined varints are zeroed and enclosing Proto-size varints resized; every other byte is retained."
+    }
+  ],
+  "actualSharedPorts": [
+    {
+      "phase": "before",
+      "exitCode": 0,
+      "stdout": "UIRegression shared restore: 105 checks passed (production seam + real imported fixtures)\n",
+      "stderr": "",
+      "command": [
+        "C:\\Users\\mikke\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-B",
+        "-c",
+        "from pathlib import Path;import sys;import test_ui_regression_shared as t;t.REGRESSION=Path(sys.argv[1]);t.main()",
+        "artifacts\\cleanup-20261009\\client-local-proofs\\b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64.lua"
+      ]
+    },
+    {
+      "phase": "candidate",
+      "exitCode": 0,
+      "stdout": "UIRegression shared restore: 105 checks passed (production seam + real imported fixtures)\n",
+      "stderr": "",
+      "command": [
+        "C:\\Users\\mikke\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-B",
+        "-c",
+        "from pathlib import Path;import sys;import test_ui_regression_shared as t;t.REGRESSION=Path(sys.argv[1]);t.main()",
+        "owned temporary candidate: 605da83a331022949004dab143012b408b899500f9e6c84188b8d71a31771aca"
+      ]
+    }
+  ],
+  "actualTransform": {
+    "fixtureSHA256": "c3fe21886f629ede6ee46c1aa33947e9a4300df3172dfab6e0dbaddc89fa63d5",
+    "compileChecks": [
+      {
+        "optimization": 0,
+        "pass": true
+      },
+      {
+        "optimization": 1,
+        "pass": true
+      }
+    ],
+    "stdout": "C26 actual comment transform: 2 exact directions, 4 rejected negatives\n",
+    "scope": "Actual function fragment forwards/reverses exact saved source; missing/duplicate/SHA negatives under known byte-to-SHA fixture. No native callback test."
+  },
+  "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+  "runtimeSHA256": "2cab978f10cb8f1b4a77c8108c7d27b0503d4196bbfa0ace459b9b55ee19e09c",
+  "toolSHA256": "6588ae6128e718406c09e100b8362999dcd46a71c67bd807924c2a5f7ad3a7d5",
+  "dependencySHA256": {
+    "ReplicatedStorage/UIRegression.ModuleScript.lua": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+    "studio-sync-manifest.json": "eeacad05bcb9ccf0a04679ab0adc473cbe7b3a9283fda4b1fa3e80318d78bdbe",
+    "tools/tests/test_ui_regression_shared.py": "5f0f99572dc51ebbd55e557c2c13c0cdd886554ccbc5049aa60b5fbd33047718",
+    "tools/tests/test_round_hud.py": "77b8d0da9c121f61887c504eb090b64b4ab0a2d00526c8048c00035121f60b6f",
+    "tools/tests/hud_harness.luau": "8c43e49fa7350bbda1ab311fff0c0f83dbe4caf882d3c44c135734f5491fe7ef",
+    "tools/tests/fixtures/hud/framewisp-dump.HUD_PC.json": "ddf3bdccfbdfcadb1424c46ce44d735f4fe1f15587eb26b83b2cbb7bf31da1e5",
+    "tools/tests/fixtures/hud/framewisp-dump.HUD_Touch.json": "603c6c85cd6adf96b4df334db0330956a3825c62451eaf10991a42a2c186b2f6",
+    "ReplicatedStorage/RoundHud.ModuleScript.lua": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+    "ReplicatedStorage/ZyntraShopUI/ShopBinder.ModuleScript.lua": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467",
+    "ReplicatedStorage/UIStyle.ModuleScript.lua": "28ac2bf612994737da4e0e5c307401f5c4508b8561491670528c73889e01a1d5",
+    "ReplicatedStorage/ZyntraDetectorVisual.ModuleScript.lua": "9c5cefbe50c5dd637f751d83b6c374eedce35ad6a7032beca397c6b96e9a3d09",
+    "artifacts/cleanup-20261009/verify_C08.py": "84c837efe229131e2dbccbbf374541aeb72a6c80842a3b3b3593eabe02890d39"
+  },
+  "sourceEditorMatchesFromCurrentRecordedRow": true,
+  "currentManifestRow": {
+    "studioPath": "ReplicatedStorage.UIRegression",
+    "segments": [
+      "ReplicatedStorage",
+      "UIRegression"
+    ],
+    "className": "ModuleScript",
+    "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+    "bytes": 320730,
+    "sha256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+    "status": "synced",
+    "sourceEditorMatches": true,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    },
+    "attributes": []
+  },
+  "functionFragmentSHA256": "eaee17ddf3e76178fa0638625546dd4cad4af10b62c456db40776dc04db75e09",
+  "nativeCalls": 0,
+  "productionSourceWrites": 0,
+  "manifestWrites": 0,
+  "status": "offline paired PASS; fresh native Source/editor/identity/property/attribute/tag baseline and Root CAS/verified export still pending",
+  "limits": "Comment-only executable equivalence and actual current synthetic UI shared/error/borrow/restore/reentry contracts. No new engine/font/full UI/gameplay/multiplayer/performance coverage. Public aliases and all runtime statements retained."
+}

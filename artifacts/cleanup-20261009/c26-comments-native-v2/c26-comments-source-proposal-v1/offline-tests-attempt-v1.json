@@ -1,0 +1,9 @@
+{
+  "pass": false,
+  "error": "ValueError: substring not found: local replacements={",
+  "actualWrapperCasesCompleted": 16,
+  "actualNativeTransformGate": "not executed; extractor anchor still referenced S14 table literal",
+  "nativeCalls": 0,
+  "productionSourceWrites": 0,
+  "testSHA256": "6b030166414dd8e21120e51703bf87fec6f58c647cfd0242fcc818980c27ba3b"
+}

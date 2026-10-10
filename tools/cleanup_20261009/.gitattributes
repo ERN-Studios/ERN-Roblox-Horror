@@ -46,3 +46,7 @@ room_private_locals_probe.luau -text
 apply_room_private_locals_cleanup.py -text
 room_private_locals_source_cas.luau -text
 test_apply_room_private_locals_cleanup.py -text
+prepare_c26_comments.py -text
+apply_c26_comments_cleanup.py -text
+c26_comments_source_cas.luau -text
+test_apply_c26_comments_cleanup.py -text

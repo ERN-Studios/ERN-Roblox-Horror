@@ -1,0 +1,52 @@
+{
+  "schema": "mongotv-c26-comments-source-install-v1",
+  "pass": true,
+  "publishedByThisBatch": false,
+  "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+  "bytesRemoved": 7195,
+  "headAtStart": "5ad5c03dcf7da4f07868faa562904e14a1865d1f",
+  "productionNativeWritesRequested": 1,
+  "rollback": {},
+  "limits": "Comment-only executable equivalence and actual synthetic UI authoring/error/restore/reentry; no new native UI/gameplay/assets/performance certificate. File CAS is checked immediately before atomic replacement.",
+  "beforeParity": {
+    "pass": true,
+    "scripts": 212,
+    "manifestRemoteEvents": 15,
+    "sourceEditorCoverage": 212,
+    "scope": "Source/editor/class/path/recorded properties/attributes. No non-script asset, remote behavior, round or streaming certificate."
+  },
+  "consoleBefore": "Failed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[EntityAnimations] Transition controller active\n[EntityAI] eye markers: Workspace.Entity.EyeL · Workspace.Entity.EyeR\n[EntityAI] glowing eyes active: 2/2\n[TunnelLobbyBuilder] bays open: 1, 2, 3, 4  |  launch stations: 16\nFailed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[LobbyLoading] lobby in 20.0 s, 87 assets, 0 failed\n[LevelLoading] level 6 covered for 3.1 s\n[LevelLoading] level 6 covered for 3.5 s\nAssistantCommand:8: assertion failed!\nStack Begin\nScript 'AssistantCommand', Line 8\nStack End\nAssistantCommand:78: bounded scene census exceeded\nStack Begin\nScript 'AssistantCommand', Line 78\nStack End\nStreamingMinRadius is not a valid member of Workspace \"Workspace\"\nStack Begin\nScript 'AssistantCommand', Line 1\nStack End",
+  "nativeApply": {
+    "bytes": 313535,
+    "path": "ReplicatedStorage.UIRegression",
+    "readAtUtc": "2026-10-10T00:33:56Z",
+    "instanceId": "1_42698",
+    "operation": "apply",
+    "guardSemantics": "Exact final point-in-time originals guard after yielding census; no continuous external-change certificate.",
+    "pass": true,
+    "objectsCreated": 0,
+    "modeSwitches": 0,
+    "originalParentWrites": 0,
+    "originalPropertyWrites": 0,
+    "otherOriginalSourceWrites": 0,
+    "sourceEditorMatches": true,
+    "originalSourceWrites": 1,
+    "originalSourceCoverage": 212,
+    "sourceSHA256": "605da83a331022949004dab143012b408b899500f9e6c84188b8d71a31771aca"
+  },
+  "afterParity": {
+    "pass": true,
+    "scripts": 212,
+    "manifestRemoteEvents": 15,
+    "sourceEditorCoverage": 212,
+    "scope": "Source/editor/class/path/recorded properties/attributes. No non-script asset, remote behavior, round or streaming certificate."
+  },
+  "consoleAfter": "Failed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[EntityAnimations] Transition controller active\n[EntityAI] eye markers: Workspace.Entity.EyeL · Workspace.Entity.EyeR\n[EntityAI] glowing eyes active: 2/2\n[TunnelLobbyBuilder] bays open: 1, 2, 3, 4  |  launch stations: 16\nFailed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[LobbyLoading] lobby in 20.0 s, 87 assets, 0 failed\n[LevelLoading] level 6 covered for 3.1 s\n[LevelLoading] level 6 covered for 3.5 s\nAssistantCommand:8: assertion failed!\nStack Begin\nScript 'AssistantCommand', Line 8\nStack End\nAssistantCommand:78: bounded scene census exceeded\nStack Begin\nScript 'AssistantCommand', Line 78\nStack End\nStreamingMinRadius is not a valid member of Workspace \"Workspace\"\nStack Begin\nScript 'AssistantCommand', Line 1\nStack End",
+  "beforeSourceSHA256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+  "afterSourceSHA256": "605da83a331022949004dab143012b408b899500f9e6c84188b8d71a31771aca",
+  "other211SourceRowsPreserved": true,
+  "workingOtherManifestRowsPreserved": true,
+  "scopedHeadManifestSHA256": "7dd44945d97302320d2ef6dece94b0381dd906b63525a5218cd81c784501bc7f",
+  "installedContractPassed": true,
+  "completedAtUtc": "2026-10-10T00:34:24.128459+00:00"
+}

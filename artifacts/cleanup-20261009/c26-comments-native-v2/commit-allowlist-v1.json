@@ -1,0 +1,191 @@
+{
+  "schema": "C26-comment-only-commit-allowlist-v1",
+  "generatedAtUtc": "2026-10-10T00:38:43.709637+00:00",
+  "scope": "Four reviewed tools, their four new explicit shared -text rules, exact historical/offline/actual C26 evidence and derivation. Root separately stages verified mirror and scoped HEAD manifest. No staging by preparer.",
+  "fileCountExcludingSelf": 35,
+  "totalBytesExcludingSelf": 948474,
+  "files": [
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v1/comment-transform.fragment.luau",
+      "bytes": 925,
+      "sha256": "eaee17ddf3e76178fa0638625546dd4cad4af10b62c456db40776dc04db75e09"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v1/preparer.executed-v1.py.txt",
+      "bytes": 12573,
+      "sha256": "13e6cf82058d1c74dcc1ad53798553e1b2a7001fb7aeafc77d827bfdab12c32a"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v1/proof.json",
+      "bytes": 18746,
+      "sha256": "d8475894c9415f880716230302c8d3c3ed294294750fa124e218ace2b44fc384"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/apply.luau",
+      "bytes": 120470,
+      "sha256": "6d00f024f81616b6fe9b5e9a98f0436bf87704959ea272b18c8fdb8057b7f566"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/bounded-transport-and-parity-proof.json",
+      "bytes": 2349,
+      "sha256": "527683caf3e090f1f83f14e7dfd37fa1ade771d77b7bdf31ebd489e37361e840"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/installed-contract/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/installed-contract/comment-transform.fragment.luau",
+      "bytes": 925,
+      "sha256": "eaee17ddf3e76178fa0638625546dd4cad4af10b62c456db40776dc04db75e09"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/installed-contract/proof.json",
+      "bytes": 19220,
+      "sha256": "3b1bb18a036b2d2f5e3a1e88554356c3140115243adf67dbb3280ede2b3ff15d"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/installed-contract-result.json",
+      "bytes": 297,
+      "sha256": "9fdf1226e5d41b1e538457ff4b4643b1ed0a7bae1664ca28c9c89b47b3559ce8"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/native-after-source-originals-final.luau",
+      "bytes": 120563,
+      "sha256": "083590e5d9f2949ca10f3029551dcf2bba40e99bc68d8b9485085120c4b794d3"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/native-after.json",
+      "bytes": 130533,
+      "sha256": "1e6cee988559c2836a25699b20de10e59ec8877ad20713513178a6c9813868f3"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/native-before-source-originals-final.luau",
+      "bytes": 120563,
+      "sha256": "7fe42f2e540190e87d13ae85987378bd0870d42a735b3307c697918360241c5b"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/native-before.json",
+      "bytes": 130533,
+      "sha256": "3563dd21e6b270998b81d64bae962428ff5769e5318a105cb23602da89154266"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/native-final.json",
+      "bytes": 130533,
+      "sha256": "1e6cee988559c2836a25699b20de10e59ec8877ad20713513178a6c9813868f3"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/result.json",
+      "bytes": 4013,
+      "sha256": "46699a902f331e80276d7e4ae54315af505b2bb6a3b96b5fad220f4e05da1a4c"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-proposal-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-proposal-v1/offline-tests-attempt-v1.json",
+      "bytes": 360,
+      "sha256": "533dc12cd5cdecc19b57bad4c3ef041e6518b25801bb80b271b88aa2e304ef2d"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-proposal-v1/offline-wrapper-tests-final.json",
+      "bytes": 3549,
+      "sha256": "044f9a0469e0c7e36e3859d2d749db87b4b98e33220fba34117f7bdd0e93e3b6"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-proposal-v1/proposal.json",
+      "bytes": 2792,
+      "sha256": "0726db5f5e7b2b428612ef943be57196de348fdfc527cf29af21210e2f495044"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-proposal-v1/test_apply_c26_comments_cleanup.initial-offline.py.txt",
+      "bytes": 17471,
+      "sha256": "6b030166414dd8e21120e51703bf87fec6f58c647cfd0242fcc818980c27ba3b"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/comment-transform.fragment.luau",
+      "bytes": 925,
+      "sha256": "eaee17ddf3e76178fa0638625546dd4cad4af10b62c456db40776dc04db75e09"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/curate-installed-proof.py",
+      "bytes": 9146,
+      "sha256": "2a4f58aa671530e9da6829f0fa6695a4633a30e462e30e5aa0ccbfc85d57afb6"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/native-baseline-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/native-baseline-v1/read-native.luau",
+      "bytes": 3702,
+      "sha256": "47290fdb4ad85c62020d081febad51e975ddb41ed2489249d36626f163768cbf"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/native-baseline-v1/result.json",
+      "bytes": 1077,
+      "sha256": "aa10f9b9ab52bf5bf481dc27fb7505e5dbefd29d8a2585bb2d40e803b0bae2af"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/proof.json",
+      "bytes": 19279,
+      "sha256": "dbdcfb3db8eac1073ead4a2180679042f7862a73c49fa47b5c38e8614883bd0f"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/REVIEW.md",
+      "bytes": 11174,
+      "sha256": "4319fbf824a8edcc82c1423abc645164d31540702d38610de08a92849bffc691"
+    },
+    {
+      "path": "tools/cleanup_20261009/.gitattributes",
+      "bytes": 2106,
+      "sha256": "de6b220b791a4ae2a0634ead92a4212896e5eb367138182530868a1532e7cc74"
+    },
+    {
+      "path": "tools/cleanup_20261009/apply_c26_comments_cleanup.py",
+      "bytes": 25589,
+      "sha256": "69dd186d018e4a4385e8f91a95a0af43e807d382cc621fb3b9a83d7bd24a3817"
+    },
+    {
+      "path": "tools/cleanup_20261009/c26_comments_source_cas.luau",
+      "bytes": 8503,
+      "sha256": "efe3a75876d3768eb41342cfba1ee93853ded375db1c29a420862ded5237ded6"
+    },
+    {
+      "path": "tools/cleanup_20261009/prepare_c26_comments.py",
+      "bytes": 14145,
+      "sha256": "6588ae6128e718406c09e100b8362999dcd46a71c67bd807924c2a5f7ad3a7d5"
+    },
+    {
+      "path": "tools/cleanup_20261009/test_apply_c26_comments_cleanup.py",
+      "bytes": 16365,
+      "sha256": "952a05d584a69483014cecda70b8fa1e22f0114cfe3ad4f052d302a1bd6872ff"
+    }
+  ],
+  "exclude": [
+    "private .git checkpoints/raw Source-editor bodies/raw catalog page checkpoints",
+    "already committed portable full before/historical-candidate Source duplicates",
+    "Room/Usher tools or proofs",
+    "owner RoundUI and all unrelated runtime/manifest/mainDocs edits"
+  ],
+  "limits": "212 original Source/editor/recorded metadata plus pure-comment executable and actual synthetic UI authoring ports. No new native UI/gameplay/assets/multiplayer/streaming/performance certificate."
+}

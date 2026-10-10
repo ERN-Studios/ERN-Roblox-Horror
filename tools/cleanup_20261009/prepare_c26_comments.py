@@ -1,0 +1,205 @@
+"""Recheck only C26 comment edits; no Studio, game-source or manifest writes.
+
+Uses existing immutable portable sources, the actual bytecode parser and current
+UI shared authoring/error/restore fixtures. --verify-installed is read-only too.
+The emitted transform is a function fragment, not a native installation command.
+Root must supply fresh identity/Source/editor/property CAS before any native edit.
+"""
+from pathlib import Path
+import argparse
+import difflib
+import hashlib
+import importlib.util
+import json
+import os
+import subprocess
+import sys
+import tempfile
+
+sys.dont_write_bytecode = True
+ROOT = Path(__file__).resolve().parents[2]
+FILE = "ReplicatedStorage/UIRegression.ModuleScript.lua"
+BEFORE = "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64"
+HISTORICAL_CANDIDATE = "e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150"
+AFTER = "605da83a331022949004dab143012b408b899500f9e6c84188b8d71a31771aca"
+DEFAULT_DEST = ROOT / "artifacts/cleanup-20261009/c26-comments-native-v2"
+PROOFS = ROOT / "artifacts/cleanup-20261009/client-local-proofs"
+DEPENDENCIES = [
+    FILE, "studio-sync-manifest.json", "tools/tests/test_ui_regression_shared.py",
+    "tools/tests/test_round_hud.py", "tools/tests/hud_harness.luau",
+    "tools/tests/fixtures/hud/framewisp-dump.HUD_PC.json",
+    "tools/tests/fixtures/hud/framewisp-dump.HUD_Touch.json",
+    "ReplicatedStorage/RoundHud.ModuleScript.lua",
+    "ReplicatedStorage/ZyntraShopUI/ShopBinder.ModuleScript.lua",
+    "ReplicatedStorage/UIStyle.ModuleScript.lua",
+    "ReplicatedStorage/ZyntraDetectorVisual.ModuleScript.lua",
+    "artifacts/cleanup-20261009/verify_C08.py",
+]
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+
+
+def save(path, raw):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("xb") as stream:
+        assert stream.write(raw) == len(raw)
+    assert path.read_bytes() == raw
+
+
+def encoded(value):
+    return (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode()
+
+
+def lua_literal(value):
+    delimiter = "="
+    while "]" + delimiter + "]" in value:
+        delimiter += "="
+    return "string.sub([" + delimiter + "[_" + value + "]" + delimiter + "],2)"
+
+
+def main(dest, installed):
+    with tempfile.TemporaryDirectory(prefix="mongotv-c26-derived-source-") as directory:
+        prepare(dest, installed, Path(directory))
+
+
+def prepare(dest, installed, temporary):
+    assert not dest.exists(), "Preserve immutable prior preparation; use a new destination"
+    raw = {name: (ROOT / name).read_bytes() for name in DEPENDENCIES}
+    portable = {"before": PROOFS / (BEFORE + ".lua"), "historicalCandidate": PROOFS / (HISTORICAL_CANDIDATE + ".lua")}
+    portable_raw = {name: path.read_bytes() for name, path in portable.items()}
+    assert sha(portable_raw["before"]) == BEFORE and sha(portable_raw["historicalCandidate"]) == HISTORICAL_CANDIDATE
+    old_comment = b"-- current shared objective for Level 1 and Level 3 across the device fixtures.\n"
+    new_comment = b"-- current shared objective for Levels 1 through 4 across the device fixtures.\n"
+    assert portable_raw["historicalCandidate"].count(old_comment) == 1
+    assert b"for _, level in ipairs({1, 2, 3, 4}) do" in portable_raw["before"]
+    sources = {"before": portable_raw["before"], "candidate": portable_raw["historicalCandidate"].replace(old_comment, new_comment, 1)}
+    assert sha(sources["candidate"]) == AFTER
+    paths = {"before": portable["before"], "candidate": temporary / "candidate.lua"}
+    paths["candidate"].write_bytes(sources["candidate"])
+    assert sha(raw[FILE]) == (AFTER if installed else BEFORE), "Current source is no longer exact reviewed phase"
+    manifest = json.loads(raw["studio-sync-manifest.json"])
+    row, = [r for r in manifest["items"] if r.get("file") == FILE]
+    expected = sources["candidate" if installed else "before"]
+    assert row["sha256"] == sha(expected) and row["bytes"] == len(expected) and row["sourceEditorMatches"] is True
+    assert row["className"] == "ModuleScript" and row["segments"] == ["ReplicatedStorage", "UIRegression"]
+    lines = {name: source.decode().splitlines(True) for name, source in sources.items()}
+    patches = []
+    for kind, a, b, c, d in difflib.SequenceMatcher(None, lines["before"], lines["candidate"], autojunk=False).get_opcodes():
+        if kind == "equal":
+            continue
+        assert kind == "replace", "Require independently reversible nonempty comment replacements"
+        old, new = "".join(lines["before"][a:b]), "".join(lines["candidate"][c:d])
+        assert old and new and all(not line.strip() or line.lstrip().startswith("--") for line in (old + new).splitlines())
+        assert sources["before"].decode().count(old) == sources["candidate"].decode().count(new) == 1
+        patches.append({"old": old, "new": new, "beforeLine": a + 1, "candidateLine": c + 1})
+    def transform(source, reverse=False):
+        for patch in reversed(patches) if reverse else patches:
+            old, new = (patch["new"], patch["old"]) if reverse else (patch["old"], patch["new"])
+            assert source.count(old) == 1
+            source = source.replace(old, new, 1)
+        return source
+    assert transform(sources["before"].decode()).encode() == sources["candidate"]
+    assert transform(sources["candidate"].decode(), True).encode() == sources["before"]
+    spec = importlib.util.spec_from_file_location("c26_bytecode_parser", ROOT / "artifacts/cleanup-20261009/verify_C08.py")
+    parser = importlib.util.module_from_spec(spec); spec.loader.exec_module(parser)
+    compiler = Path(os.environ["TEMP"]) / "codex-luau-0.737/luau-compile.exe"
+    runtime = compiler.with_name("luau.exe")
+    binaries = []
+    for optimization in (0, 1):
+        canonical, dumps, metadata, binary_hashes = {}, {}, {}, {}
+        for phase, path in paths.items():
+            args = ["-g0", f"-O{optimization}", str(path)]
+            binary = subprocess.run([str(compiler), "--binary", *args], capture_output=True, check=True, timeout=30).stdout
+            canonical[phase], metadata[phase] = parser.canonical(binary)
+            binary_hashes[phase] = sha(binary)
+            dumps[phase] = subprocess.run([str(compiler), "--text", "--dump-constants", *args], capture_output=True, check=True, timeout=30).stdout
+        assert canonical["before"] == canonical["candidate"] and dumps["before"] == dumps["candidate"]
+        binaries.append({"optimization": optimization, "functions": len(metadata["before"]), "canonicalSHA256": sha(canonical["before"]),
+            "rawBinarySHA256": binary_hashes, "instructionConstantDumpSHA256": sha(dumps["before"]),
+            "functionsWithChangedLineDefinition": sum(a["line"] != b["line"] for a, b in zip(metadata["before"], metadata["candidate"])),
+            "pass": True, "canonicalization": "Only Proto.linedefined varints are zeroed and enclosing Proto-size varints resized; every other byte is retained."})
+    env = os.environ.copy()
+    env.update(PYTHONPATH=str(ROOT / "tools/tests"), LUAU_BIN=str(runtime), PYTHONDONTWRITEBYTECODE="1")
+    code = "from pathlib import Path;import sys;import test_ui_regression_shared as t;t.REGRESSION=Path(sys.argv[1]);t.main()"
+    ports = []
+    for phase, path in paths.items():
+        run = subprocess.run([sys.executable, "-B", "-c", code, str(path)], env=env, capture_output=True, text=True, timeout=120)
+        assert run.returncode == 0 and "105 checks passed" in run.stdout, run.stdout + run.stderr
+        ports.append({"phase": phase, "exitCode": run.returncode, "stdout": run.stdout, "stderr": run.stderr,
+            "command": [sys.executable, "-B", "-c", code, str(path.relative_to(ROOT)) if phase == "before" else "owned temporary candidate: " + AFTER]})
+    assert all((ROOT / name).read_bytes() == value for name, value in raw.items()), "Source/manifest/test dependency changed during gate"
+    assert all(path.read_bytes() == portable_raw[name] for name, path in portable.items()), "Immutable proof source changed"
+    assert paths["candidate"].read_bytes() == sources["candidate"], "Owned derived candidate changed"
+    fragment = '''-- Function fragment only; Root must wrap fresh native exact identity/metadata/Source/editor CAS.
+-- SHA and patches must come from the reviewed immutable proposal. No native calls here.
+local function transformC26(current, reverse, patches, fromSHA256, toSHA256, sha)
+ assert(sha(current)==fromSHA256,"Current native Source changed")
+ local result=current
+ for i=1,#patches do
+  local index=if reverse then #patches-i+1 else i
+  local patch=patches[index]
+  local old,new=if reverse then patch.new else patch.old,if reverse then patch.old else patch.new
+  assert(#old>0 and #new>0,"Exact nonempty comment anchors required")
+  local start,finish=result:find(old,1,true)
+  assert(start and not result:find(old,finish+1,true),"Unique exact comment anchor changed")
+  result=result:sub(1,start-1)..new..result:sub(finish+1)
+ end
+ assert(sha(result)==toSHA256,"Comment transform differs from reviewed Source")
+ return result
+end
+'''.encode()
+    patch_table = "{" + ",".join("{old=" + lua_literal(p["old"]) + ",new=" + lua_literal(p["new"]) + "}" for p in patches) + "}"
+    fixture = fragment.decode() + "\nlocal before=" + lua_literal(sources["before"].decode()) + "\nlocal candidate=" + lua_literal(sources["candidate"].decode())
+    fixture += "\nlocal patches=" + patch_table + "\nlocal beforeSHA=" + lua_literal(BEFORE) + "\nlocal candidateSHA=" + lua_literal(AFTER)
+    fixture += '''
+local function sha(source)
+ if source==before then return beforeSHA elseif source==candidate then return candidateSHA else return "foreign bytes" end
+end
+assert(transformC26(before,false,patches,beforeSHA,candidateSHA,sha)==candidate)
+assert(transformC26(candidate,true,patches,candidateSHA,beforeSHA,sha)==before)
+local failures=0
+for _,call in {
+ function()return transformC26(before,false,patches,"foreign baseline",candidateSHA,sha)end,
+ function()return transformC26(before,false,patches,beforeSHA,"foreign candidate",sha)end,
+ function()local bad=table.clone(patches);bad[1]={old="missing comment anchor",new=patches[1].new};return transformC26(before,false,bad,beforeSHA,candidateSHA,sha)end,
+ function()local duplicate=before..patches[1].old;return transformC26(duplicate,false,patches,"foreign bytes",candidateSHA,sha)end,
+} do local ok=pcall(call);assert(not ok);failures+=1 end
+print("C26 actual comment transform: 2 exact directions, "..failures.." rejected negatives")
+'''
+    transform_compiles = []
+    with tempfile.TemporaryDirectory(prefix="mongotv-c26-comments-") as directory:
+        path = Path(directory) / "actual-transform.luau"
+        path.write_bytes(fixture.encode())
+        for optimization in (0, 1):
+            compiled = subprocess.run([str(compiler), "--binary", f"-O{optimization}", str(path)], capture_output=True, timeout=30)
+            assert compiled.returncode == 0, compiled.stderr.decode(errors="replace")
+            transform_compiles.append({"optimization": optimization, "pass": True})
+        run = subprocess.run([str(runtime), str(path)], capture_output=True, text=True, timeout=30)
+        assert run.returncode == 0, run.stdout + run.stderr
+    assert all((ROOT / name).read_bytes() == value for name, value in raw.items()), "Dependency changed during transform gate"
+    proof = {"schema": "mongotv-c26-comment-only-preparation-v2", "pass": True, "installedVerification": installed,
+        "file": FILE, "beforeSHA256": BEFORE, "candidateSHA256": AFTER, "beforeBytes": len(sources["before"]),
+        "candidateBytes": len(sources["candidate"]), "removedBytes": len(sources["before"]) - len(sources["candidate"]),
+        "portableInputs": {name: str(path.relative_to(ROOT)).replace("\\", "/") for name, path in portable.items()},
+        "historicalCandidateSHA256": HISTORICAL_CANDIDATE,
+        "candidateDerivation": {"old": old_comment.decode(), "new": new_comment.decode(), "reason": "Current shared body explicitly loops levels 1,2,3,4. Correct its coverage comment without changing that loop.", "fullCandidateCopies": "Owned temporary directory only, automatically cleaned on either outcome."},
+        "commentPatches": patches, "compiler": binaries, "actualSharedPorts": ports,
+        "actualTransform": {"fixtureSHA256": sha(fixture.encode()), "compileChecks": transform_compiles, "stdout": run.stdout,
+            "scope": "Actual function fragment forwards/reverses exact saved source; missing/duplicate/SHA negatives under known byte-to-SHA fixture. No native callback test."},
+        "compilerSHA256": sha(compiler.read_bytes()), "runtimeSHA256": sha(runtime.read_bytes()),
+        "toolSHA256": sha(Path(__file__).read_bytes()), "dependencySHA256": {name: sha(value) for name, value in raw.items()},
+        "sourceEditorMatchesFromCurrentRecordedRow": True, "currentManifestRow": row,
+        "functionFragmentSHA256": sha(fragment), "nativeCalls": 0, "productionSourceWrites": 0, "manifestWrites": 0,
+        "status": "offline paired PASS; fresh native Source/editor/identity/property/attribute/tag baseline and Root CAS/verified export still pending" if not installed else "installed local compiler/authoring PASS; native parity remains Root-owned",
+        "limits": "Comment-only executable equivalence and actual current synthetic UI shared/error/borrow/restore/reentry contracts. No new engine/font/full UI/gameplay/multiplayer/performance coverage. Public aliases and all runtime statements retained."}
+    save(dest / ".gitattributes", b"* -text\n")
+    save(dest / "comment-transform.fragment.luau", fragment)
+    save(dest / "proof.json", encoded(proof))
+    print(json.dumps({"pass": True, "commentReplacements": len(patches), "removedBytes": proof["removedBytes"], "functions": binaries[0]["functions"], "sharedChecksPerVersion": 105, "nativeCalls": 0}))
+
+
+if __name__ == "__main__":
+    args = argparse.ArgumentParser(description=__doc__)
+    args.add_argument("--dest", type=Path, default=DEFAULT_DEST)
+    args.add_argument("--verify-installed", action="store_true")
+    parsed = args.parse_args()
+    main(parsed.dest, parsed.verify_installed)
