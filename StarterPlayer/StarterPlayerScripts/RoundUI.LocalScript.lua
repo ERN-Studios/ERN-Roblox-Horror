@@ -4050,6 +4050,16 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			task.delay(0.85, function()
 				if dead and player:GetAttribute("InRound") == true then startSpectating() end
 			end)
+			-- WELCOME_REENTRY_20261010 (owner: "informer dem om ved første død at de har 1 gratis reentry de kan bruge"):
+			-- said once, when the kill is over and the re-entry button is on screen, on whichever death screen that is.
+			if not completion.freeReentryTold and player:GetAttribute("ZyntraFreeReentry") == true then
+				completion.freeReentryTold = true
+				task.delay(3, function()
+					if dead and player:GetAttribute("ZyntraFreeReentry") == true and player:GetAttribute("ZyntraReentryUsed") ~= true then
+						completion.Hud.Feed({Kind = "SYSTEM", Detail = "You have 1 FREE Emergency Re-entry. Use it to get back in.", Key = "freereentry"})
+					end
+				end)
+			end
 		end
 		-- A teammate dying used to drop this file's own spectate target so the
 		-- ticker would re-pick. There is no target here any more:
@@ -4243,7 +4253,10 @@ do
 		pd.parts.Reentry.Visible = eligible
 		pd.reentry.Active = eligible and pd.armed and not pd.waiting
 		pd.reentry.Selectable = pd.reentry.Active
-		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or credits > 0
+		-- WELCOME_REENTRY_20261010 (owner: "informer dem om ved første død at de har 1 gratis reentry de kan bruge").
+		-- The HUD feed is stood down while a death card covers the screen, so the card's own button carries the news.
+		local free = credits > 0 and player:GetAttribute("ZyntraFreeReentry") == true
+		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or free and "YOU HAVE 1 FREE RE-ENTRY \u{B7} USE IT" or credits > 0
 			and ("USE CREDIT \u{B7} " .. credits .. " OWNED")
 			or ("REVIVE \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
 		local colour = credits > 0 and Color3.fromRGB(68,221,196) or Color3.fromRGB(232,160,36)
@@ -4438,7 +4451,7 @@ do
 		if pd.card then pd.applyLayout() end
 	end)
 	player:GetAttributeChangedSignal("InRound"):Connect(function() if player:GetAttribute("InRound") ~= true then pd.hide() end end)
-	for _, attr in ipairs({"ZyntraReentryUsed", "ZyntraReentryCredits", "ZyntraReentryPrice", "DevRespawnBusy"}) do
+	for _, attr in ipairs({"ZyntraReentryUsed", "ZyntraReentryCredits", "ZyntraFreeReentry", "ZyntraReentryPrice", "DevRespawnBusy"}) do
 		player:GetAttributeChangedSignal(attr):Connect(pd.refresh)
 	end
 	workspace:GetAttributeChangedSignal("RoundActive"):Connect(pd.refresh)

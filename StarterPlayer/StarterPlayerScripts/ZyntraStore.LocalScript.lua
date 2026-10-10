@@ -573,7 +573,10 @@ local function updateReentry()
 	player:SetAttribute("ZyntraReentryOpen",
 		(reentryGui.Enabled or cardOpen) and true or nil)
 	local credits = profile and profile.ReentryCredits or 0
-	reentryButton.Text = credits > 0
+	-- WELCOME_REENTRY_20261010: a new player's one free credit is called what it is, here and on RoundUI's card.
+	local free = credits > 0 and profile ~= nil and profile.FreeReentry == true
+	player:SetAttribute("ZyntraFreeReentry", free)
+	reentryButton.Text = free and "YOU HAVE 1 FREE RE-ENTRY  //  USE IT" or credits > 0
 		and ("USE RE-ENTRY CREDIT  //  " .. credits .. " OWNED")
 		or (tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$  //  BUY CREDIT")
 	-- The smallest public surface for the card, which is in another script and

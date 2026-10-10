@@ -1022,55 +1022,6 @@ do
 	-- nothing pokes through the yellow shell.
 	local cabin
 
-	local function refreshCableGuidePoster()
-		if not cabin then return end
-		local poster = cabin:FindFirstChild("CableGuidePoster")
-		if not poster then return end
-		local pg = poster:FindFirstChild("CableGuideSurface")
-		local paper = pg and pg:FindFirstChild("CableGuidePaper")
-		if not paper then return end
-
-		local count = math.clamp(
-			math.floor((tonumber(workspace:GetAttribute("Level1ActiveCircuitCount")) or 0) + 0.5),
-			0,
-			6
-		)
-		poster:SetAttribute("ActiveCircuitCount", count)
-		poster:SetAttribute("CableGuideVersion", 2)
-
-		for index = 1, 6 do
-			local row = paper:FindFirstChild(("CircuitRow%02d"):format(index))
-			if row then row.Visible = index <= count end
-		end
-
-		local summary = paper:FindFirstChild("CrewCircuitSummary")
-		if summary then
-			if count == 0 then
-				summary.Text = "CIRCUIT ALLOCATION PENDING // CREW ASSIGNMENT IN PROGRESS"
-			elseif count == 1 then
-				summary.Text = "1 ACTIVE CABLE // RED ONLY // FUSE BOX + LEVER AT OPPOSITE ENDS"
-			else
-				summary.Text = ("%d ACTIVE CABLES // EACH COLOUR LINKS ONE FUSE BOX + ONE LEVER"):format(count)
-			end
-		end
-
-		local clusterNote = paper:FindFirstChild("RelayHint")
-		if clusterNote then
-			clusterNote.Position = UDim2.new(0, 18, 0, 98 + count * 36)
-		end
-
-		local footer = paper:FindFirstChild("CircuitFocusHint")
-		if footer then
-			if count == 0 then
-				footer.Text = "ACTIVE COLOURS APPEAR WHEN THE ROUND STARTS"
-			elseif count == 1 then
-				footer.Text = "FOCUS ONLY ON RED // CHECK BOTH ENDS"
-			else
-				footer.Text = ("FOCUS ONLY ON THE %d COLOURS SHOWN // CHECK BOTH ENDS"):format(count)
-			end
-		end
-	end
-
 	local function buildCabin(depth)
 		depth = math.clamp(depth, blender and 12 or 8, 18)
 		if cabin then cabin:Destroy() end
@@ -1197,169 +1148,8 @@ do
 			end
 		end
 
-		-- Worn maintenance-routing poster. It owns six stable row containers, but
-		-- displays only the circuits that PuzzleManager actually generated for this
-		-- round's crew. Spectators and late joins therefore never add false colours.
-		do
-			local poster = part(
-				Vector3.new(0.12, 6.5, 7.2),
-				CFrame.new(xBack + 0.08, 5.1, cz),
-				Color3.fromRGB(58, 54, 42),
-				Enum.Material.Metal,
-				cabin
-			)
-			poster.Name = "CableGuidePoster"
-			poster.CanCollide = false
-			poster.CanQuery = false
-
-			local pg = Instance.new("SurfaceGui")
-			pg.Name = "CableGuideSurface"
-			pg.Face = Enum.NormalId.Right
-			pg.CanvasSize = Vector2.new(420, 400)
-			pg.LightInfluence = 0.25
-			pg.Brightness = 1.0
-			pg.Parent = poster
-
-			local paper = Instance.new("Frame")
-			paper.Name = "CableGuidePaper"
-			paper.Size = UDim2.fromScale(1, 1)
-			paper.BackgroundColor3 = Color3.fromRGB(72, 68, 52)
-			paper.BorderSizePixel = 0
-			paper.Parent = pg
-			local outline = Instance.new("UIStroke")
-			outline.Color = Color3.fromRGB(150, 140, 96)
-			outline.Thickness = 4
-			outline.Transparency = 0.35
-			outline.Parent = paper
-
-			local title = Instance.new("TextLabel")
-			title.Name = "Title"
-			title.Size = UDim2.new(1, -26, 0, 36)
-			title.Position = UDim2.new(0, 13, 0, 10)
-			title.BackgroundTransparency = 1
-			title.Font = Enum.Font.Code
-			title.Text = "MAINTENANCE CABLE ROUTING"
-			title.TextColor3 = Color3.fromRGB(210, 202, 155)
-			title.TextSize = 23
-			title.TextXAlignment = Enum.TextXAlignment.Left
-			title.Parent = paper
-
-			local sub = Instance.new("TextLabel")
-			sub.Name = "CrewCircuitSummary"
-			sub.Size = UDim2.new(1, -26, 0, 40)
-			sub.Position = UDim2.new(0, 13, 0, 48)
-			sub.BackgroundTransparency = 1
-			sub.Font = Enum.Font.Code
-			sub.Text = "CIRCUIT ALLOCATION PENDING // CREW ASSIGNMENT IN PROGRESS"
-			sub.TextColor3 = Color3.fromRGB(180, 178, 155)
-			sub.TextSize = 14
-			sub.TextWrapped = true
-			sub.TextYAlignment = Enum.TextYAlignment.Top
-			sub.TextXAlignment = Enum.TextXAlignment.Left
-			sub.Parent = paper
-
-			local function posterRow(index, color, label)
-				local row = Instance.new("Frame")
-				row.Name = ("CircuitRow%02d"):format(index)
-				row.Position = UDim2.new(0, 0, 0, 96 + (index - 1) * 36)
-				row.Size = UDim2.new(1, 0, 0, 34)
-				row.BackgroundTransparency = 1
-				row.Visible = false
-				row:SetAttribute("CircuitIndex", index)
-				row.Parent = paper
-
-				local wire = Instance.new("Frame")
-				wire.Name = "Cable"
-				wire.Position = UDim2.new(0, 18, 0, 13)
-				wire.Size = UDim2.new(0, 105, 0, 8)
-				wire.BackgroundColor3 = color
-				wire.BorderSizePixel = 0
-				wire.Parent = row
-				local dot = Instance.new("Frame")
-				dot.Name = "Terminal"
-				dot.AnchorPoint = Vector2.new(0.5, 0.5)
-				dot.Position = UDim2.new(0, 122, 0, 17)
-				dot.Size = UDim2.new(0, 18, 0, 18)
-				dot.BackgroundColor3 = color
-				dot.BorderSizePixel = 0
-				dot.Parent = row
-				local dc = Instance.new("UICorner")
-				dc.CornerRadius = UDim.new(1, 0)
-				dc.Parent = dot
-
-				local txt = Instance.new("TextLabel")
-				txt.Name = "CircuitName"
-				txt.Position = UDim2.new(0, 145, 0, 0)
-				txt.Size = UDim2.new(1, -160, 0, 34)
-				txt.BackgroundTransparency = 1
-				txt.Font = Enum.Font.Code
-				txt.Text = label
-				txt.TextColor3 = color
-				txt.TextSize = 19
-				txt.TextXAlignment = Enum.TextXAlignment.Left
-				txt.Parent = row
-			end
-
-			posterRow(1, Color3.fromRGB(255, 55, 55),  "01  RED CIRCUIT")
-			posterRow(2, Color3.fromRGB(55, 135, 255), "02  BLUE CIRCUIT")
-			posterRow(3, Color3.fromRGB(95, 255, 95),  "03  GREEN CIRCUIT")
-			posterRow(4, Color3.fromRGB(255, 220, 45), "04  YELLOW CIRCUIT")
-			posterRow(5, Color3.fromRGB(245, 70, 255), "05  MAGENTA CIRCUIT")
-			posterRow(6, Color3.fromRGB(20, 235, 235), "06  CYAN CIRCUIT")
-
-			local clusterNote = Instance.new("TextLabel")
-			clusterNote.Name = "RelayHint"
-			clusterNote.Position = UDim2.new(0, 18, 0, 98)
-			clusterNote.Size = UDim2.new(1, -36, 0, 36)
-			clusterNote.BackgroundTransparency = 1
-			clusterNote.Font = Enum.Font.Code
-			-- LEVER_PATH_20261010 (owner: relays must be easier to find): PuzzleManager's ceiling hint
-			-- over a relay that still holds a fuse has its own amber hue now (RELAY_FINDABLE_20261010
-			-- there) instead of being a little brighter than its neighbours, and this line has to
-			-- name what the crew will really see. It read "VERY BRIGHT CEILING CLUSTER = FUSE RELAY".
-			clusterNote.Text = "AMBER CEILING LIGHTS = FUSE RELAY"
-			clusterNote.TextColor3 = Color3.fromRGB(255, 232, 145)
-			clusterNote.TextSize = 15
-			clusterNote.TextWrapped = true
-			clusterNote.TextXAlignment = Enum.TextXAlignment.Left
-			clusterNote.Parent = paper
-
-			-- LEVER_PATH_20261010 (owner: "go back, follow the cable, pull the lever" must be obvious):
-			-- one fixed line with the whole order, there to be read on the ride down. It sits in the
-			-- 16 px between the lowest place RelayHint can reach (it ends at 350 with all six rows
-			-- shown; a round has three at most) and the footer at 366, so nothing has to move it in
-			-- refreshCableGuidePoster. 51 Code characters at size 14 should be about 357 px of the
-			-- 394; that width was reckoned, not seen, so the label may shrink the text (never under
-			-- 9) rather than cut the last word off at the paper's edge.
-			local steps = Instance.new("TextLabel")
-			steps.Name = "ProcedureStrip"
-			steps.Position = UDim2.new(0, 13, 0, 350)
-			steps.Size = UDim2.new(1, -26, 0, 16)
-			steps.BackgroundTransparency = 1
-			steps.Font = Enum.Font.Code
-			steps.Text = "1 RELAY  >  2 FUSE BOX  >  3 CABLE BACK  >  4 LEVER"
-			steps.TextColor3 = Color3.fromRGB(210, 202, 155)
-			steps.TextSize = 14
-			steps.TextScaled = true
-			steps.TextXAlignment = Enum.TextXAlignment.Left
-			steps.Parent = paper
-			local stepsLimit = Instance.new("UITextSizeConstraint")
-			stepsLimit.MinTextSize = 9
-			stepsLimit.MaxTextSize = 14
-			stepsLimit.Parent = steps
-
-			local footer = Instance.new("TextLabel")
-			footer.Name = "CircuitFocusHint"
-			footer.Size = UDim2.new(1, -26, 0, 30)
-			footer.Position = UDim2.new(0, 13, 1, -34)
-			footer.BackgroundTransparency = 1
-			footer.Font = Enum.Font.Code
-			footer.Text = "ACTIVE COLOURS APPEAR WHEN THE ROUND STARTS"
-			footer.TextColor3 = Color3.fromRGB(125, 122, 98)
-			footer.TextSize = 15
-			footer.TextXAlignment = Enum.TextXAlignment.Left
-			footer.Parent = paper
-		end
+		-- CABIN_POSTER_REMOVED_20261010 (owner: "fjerne den der board i elevatoren som skulle guide spillerne ... den er
+		-- gammel og fungerer ikke længere"): the cable-routing poster on the cabin's back wall is gone, with its refresher.
 
 		pad.Size = Vector3.new(math.max(depth - 3, 4), 1, CAB_W - 2)
 		pad.Position = Vector3.new(bx, 0.5, cz)
@@ -1369,7 +1159,6 @@ do
 				{back, sideA, sideB, roof, floorP, lightPanel})
 		end
 		cabin.Parent = elev
-		refreshCableGuidePoster()
 	end
 
 	local largestCabinDepth = blender and 12 or 10
@@ -1380,7 +1169,6 @@ do
 		return largestCabinDepth
 	end
 	buildCabin(cabinDepth())
-	workspace:GetAttributeChangedSignal("Level1ActiveCircuitCount"):Connect(refreshCableGuidePoster)
 	Players.PlayerAdded:Connect(function()
 		task.delay(0.1, function() buildCabin(cabinDepth()) end)
 	end)

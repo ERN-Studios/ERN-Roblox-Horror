@@ -793,6 +793,9 @@ local function normalizeProfile(data)
 	data.Records = Challenges.NormalizeRecords(data.Records, Config.Challenges)
 	data.Challenges = Challenges.NormalizeDone(data.Challenges, Config.Challenges)
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
+	-- WELCOME_REENTRY_20261010: "granted" while a new player's one free credit is unspent, "used" after. Nil = an
+	-- account from before this existed, which gets nothing.
+	data.WelcomeReentry = (data.WelcomeReentry == "granted" or data.WelcomeReentry == "used") and data.WelcomeReentry or nil
 	data.Items = normalizeItems(data.Items)
 	data.Skins = Skins.Normalize(data.Skins)
 	data.Daily = normalizeDaily(data.Daily)
@@ -1024,6 +1027,7 @@ local function publicProfile(data, player)
 		Records = data.Records,
 		Challenges = data.Challenges,
 		ReentryCredits = data.ReentryCredits,
+		FreeReentry = data.WelcomeReentry == "granted" and data.ReentryCredits > 0,
 		ProtectionCharges = protectionState(data) and data.Protection.Charges or 0,
 		ProtectionRevision = protectionState(data) and data.Protection.Revision or 0,
 		ProtectionLastResult = protectionResult(data.Protection),
@@ -2288,6 +2292,27 @@ local function loadProfile(player, loadState)
 		end
 	end)
 	if Analytics then Analytics.ProfileLoaded(player, firstLogin) end
+	-- WELCOME_REENTRY_20261010 (owner: "giv alle nye spillere 1 gratis banked reentry og informer dem om ved første
+	-- død at de har 1 gratis reentry de kan bruge"). A first login banks one Emergency Re-entry credit, once: the
+	-- WelcomeReentry field is written in the same save, so a second join can never bank another. Three tries, because
+	-- a first join is also when the DataStore is busiest for this key.
+	if firstLogin then
+		task.spawn(function()
+			for attempt = 1, 3 do
+				if not player.Parent or sessions[player] == nil then return end
+				local banked = mutate(player, function(data)
+					if data.WelcomeReentry ~= nil then return false end
+					data.WelcomeReentry = "granted"
+					data.ReentryCredits += 1
+					return true
+				end)
+				local loaded = sessions[player]
+				if banked or (loaded and loaded.data.WelcomeReentry ~= nil) then return end
+				task.wait(1.5 * attempt)
+			end
+			warn("[Zyntra] Welcome re-entry could not be banked for userId", player.UserId)
+		end)
+	end
 	local pendingSnapshot = pendingDispatchSnapshots[player.UserId]
 	if pendingSnapshot then
 		pendingDispatchSnapshots[player.UserId] = nil
@@ -3081,11 +3106,16 @@ local function useReentry(player)
 
 	local token = {}
 	reentryAttempts[player] = token
+	local spentWelcome = false   -- WELCOME_REENTRY_20261010: a refused respawn hands the free one back as free
 	local reserved = mutate(player, function(data)
 		if data.ReentryCredits < 1 then
 			return false, "You do not have an Emergency Re-entry credit.", "error"
 		end
 		data.ReentryCredits -= 1
+		if data.WelcomeReentry == "granted" then
+			data.WelcomeReentry = "used"
+			spentWelcome = true
+		end
 		-- Deliberately no message: the credit is only RESERVED here. Announcing
 		-- success now is how a player would read "activated" one frame before
 		-- being told the respawn was refused. The push still carries the new
@@ -3116,6 +3146,7 @@ local function useReentry(player)
 	-- left, so it names the userId to make the credit reconcilable by hand.
 	local function refund(data)
 		data.ReentryCredits += 1
+		if spentWelcome and data.WelcomeReentry == "used" then data.WelcomeReentry = "granted" end
 		return true, "Re-entry is only available after death during an active round.", "error"
 	end
 	for attempt = 1, 3 do

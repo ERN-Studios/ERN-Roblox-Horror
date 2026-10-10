@@ -1390,6 +1390,7 @@ task.spawn(function()
 		if humanoid.Health <= 0 then break end
 		if workspace:GetAttribute("RoundActive") ~= true then continue end
 		if not root.Parent then continue end
+		if workspace:GetAttribute("EntityDormant") == true then continue end   -- nothing screams before it exists
 		local st = workspace:GetAttribute("EntityState")
 		if st == "ALERT" or st == "CHASE" or st == "YELL" or st == "TRACK" then continue end
 		workspace:SetAttribute("EntityScreamIndex", math.random(1, SCREAM_TAKES))
@@ -1397,9 +1398,59 @@ task.spawn(function()
 	end
 end)
 
+-- SPAWN_AFTER_RELAY_20261010 (owner: "sørge for at entity i level 1 først spawner efter den første fuse relay er taget
+-- ud"). From the start of a Level 1 round until the first relay has given up its fuse the Entity is not in the maze at
+-- all: it is held, anchored, far above the ceiling, where nobody sees, hears or touches it. PuzzleManager counts the
+-- extractions in workspace.Level1RelaysExtracted (0 at round start, nil with no round); the first one puts the Entity
+-- on its start mark and it screams once, from there. `workspace.EntityDormant` says which of the two it is.
+local DORMANT_HEIGHT = 600
+local dormantParked = false
+local function dormantNow()
+	return workspace:GetAttribute("RoundActive") == true and workspace:GetAttribute("SelectedLevel") == 1
+		and workspace:GetAttribute("Level1RelaysExtracted") == 0
+end
+local function standOnStart()
+	local es = workspace:FindFirstChild("EntityStart")
+	local bbox, size = entity:GetBoundingBox()
+	local pivot = entity:GetPivot()
+	local x, z = es and es.CFrame.X or pivot.X, es and es.CFrame.Z or pivot.Z
+	entity:PivotTo(CFrame.new(x, 0.5 + (pivot.Y - (bbox.Y - size.Y / 2)), z))
+	root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+	root.Anchored = false
+	pcall(function() root:SetNetworkOwner(nil) end)
+end
+
 task.spawn(function()
 	while task.wait(0.1) do
 		if humanoid.Health <= 0 then break end
+		if dormantNow() then
+			if not dormantParked or root.Position.Y < DORMANT_HEIGHT - 100 then
+				dormantParked = true
+				root.Anchored = true
+				root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+				local pivot = entity:GetPivot()
+				entity:PivotTo(CFrame.new(pivot.X, DORMANT_HEIGHT, pivot.Z))
+				workspace:SetAttribute("EntityDormant", true)
+				chasePlayer = nil
+				setChaseMarker(nil)
+				resetNav()
+				current = State.LURK
+				workspace:SetAttribute("EntityState", "LURK")
+			end
+			humanoid.WalkSpeed = 0
+			watch.pos, watch.last, watch.since, watch.level = root.Position, root.Position, os.clock(), 0
+			continue
+		elseif dormantParked then
+			dormantParked = false
+			standOnStart()
+			workspace:SetAttribute("EntityDormant", false)
+			watch.pos, watch.last, watch.since, watch.level = root.Position, root.Position, os.clock(), 0
+			if workspace:GetAttribute("RoundActive") == true then
+				-- the fuse came out: it wakes, and says so
+				workspace:SetAttribute("EntityScreamIndex", math.random(1, SCREAM_TAKES))
+				workspace:SetAttribute("EntityScream", (workspace:GetAttribute("EntityScream") or 0) + 1)
+			end
+		end
 		if isPaused() then
 			humanoid.WalkSpeed = 0
 			humanoid:MoveTo(root.Position)

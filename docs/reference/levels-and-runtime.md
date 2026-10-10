@@ -1628,3 +1628,30 @@ recovery, a natural lunge by eye, the camcorder look in Levels 2 to 6 and on the
   is not the picture they will accept; show a still before building the next thing like it.
 - "The kill cam is horrible" may mean more than the face. Only the face was ordered out, so only the face went; the
   drag itself (pool, figure rising, arms, sinking, fade to black) is unchanged and its verdict is still owed.
+
+### Added 2026-10-10 (late night) - New players: a free re-entry, a sleeping Entity, no cabin poster; where phone players go
+
+- **Owner**: "giv alle nye spillere 1 gratis banked reentry og informer dem om ved første død at de har 1 gratis
+  reentry de kan bruge. ... entity i level 1 først spawner efter den første fuse relay er taget ud. ... fjerne den der
+  board i elevatoren ... Find ud af hvad der gør at telefon og tablet spillere skrider så hurtigt."
+- `WELCOME_REENTRY_20261010` (ZyntraMonetization): a first login banks one Emergency Re-entry credit, once
+  (profile field `WelcomeReentry` "granted" then "used"; public profile `FreeReentry`; client attribute
+  `ZyntraFreeReentry`). Both death screens name it: the PARTY DOWN card's button reads "YOU HAVE 1 FREE RE-ENTRY ·
+  USE IT", the store's modal the same. The HUD feed is stood down under a death card, so the button carries it.
+  Accounts from before get nothing (the owner said new players). Test in Studio: `workspace.DevSimulateFirstLogin`.
+- `SPAWN_AFTER_RELAY_20261010` (EntityAI): from round start until `workspace.Level1RelaysExtracted` leaves 0 the
+  Entity is anchored 600 studs up (`workspace.EntityDormant`); the first extraction stands it on EntityStart and it
+  screams once. GameManager's own placement at round start is put back up by the same loop.
+- `CABIN_POSTER_REMOVED_20261010` (MazeGenerator): the cable-routing poster in the elevator cabin and its refresher
+  are gone. GameManager still publishes `Level1ActiveCircuitCount`; nothing reads it for a poster now.
+- **Where the bought players go (8 Oct, by device; first rounds = round starts minus relaunches):** phone 1,472
+  players, about 176 first rounds (12%); tablet 729, about 183 (25%); computer 366, about 181 (49%). Of those who
+  played, a first objective was reached by 68, 44 and 88. `zq_round_start` is logged after the elevator ride, so
+  "never started" includes people who left in the queue, the teleport, the loading and the 20-second ride.
+- **Code review of the touch experience** (Codex, High, read-only): `docs/reference/mobile-review-20261010.md`. Every
+  round action has a touch control. Its ranked reasons: the first round is behind a physical pad and a party dialog
+  with nothing that starts it for you; the tutorial card shrinks to 10-12 px text on a phone; on touch the
+  objective's directions collapse after six seconds; four waits (queue 10 s, teleport, loading, 20 s lift) come
+  before the first task; fixed 620-700 px status labels overflow a phone. Unmeasured: frame rate on a real phone.
+- Seen in Studio play as a simulated new player: credit banked, free button text, Entity at y=600 until the counter
+  went to 1, then on its mark and a kill, the free re-entry spent (credits 0, alive). Not seen: any of it on a phone.
