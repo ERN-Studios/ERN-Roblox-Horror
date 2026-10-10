@@ -1655,3 +1655,58 @@ recovery, a natural lunge by eye, the camcorder look in Levels 2 to 6 and on the
   before the first task; fixed 620-700 px status labels overflow a phone. Unmeasured: frame rate on a real phone.
 - Seen in Studio play as a simulated new player: credit banked, free button text, Entity at y=600 until the counter
   went to 1, then on its mark and a kill, the free re-entry spent (credits 0, alive). Not seen: any of it on a phone.
+
+### Changed 2026-10-10 (late night) - Level 5 is rebuilt for phones (v4): short gaps, checkpoints in the rooms, a fall is not a death, jump assist (in Studio, NOT published by this session)
+
+Owner: "Jeg ved at level 5 er fuldkommen umuligt på telefon" and then "Bare fix og lave hele level 5 om. Gør det
+nemmere på telefon og tablet som du siger". This replaces v3 ("much harder", 2026-10-05) and two earlier rules:
+"a fall is a death" (2026-10-04) and the fall half of DEATH_PARITY_20261008.
+
+- **The map** (`tools/level5_void/build_level5.py`, v4; the room-by-room rewrite is Codex's, High). 50 gaps (187
+  before), every one 40 to 54% of the 8.15-stud walking reach (60 to 95% before), straight (no turn at a gap), with a
+  landing at least 7 wide and 14 long (10 x 10 tops in Teal). Walkways are 5 to 8 wide, Mint's beams 4.4. 2,700
+  studs long in x (4,373 before), 3,883 studs of route. Ten rooms, same colours, shells, lamps, plates and doors:
+  Rose four practice jumps, the first over a pit 2.5 deep that cannot kill; Blue L-ledges and the nested frames;
+  Amber touching blocks that step up and down with two +3 hops and one gap; Mint beams, with a guarded no-jump way
+  round each of its two forks; Violet terraces you walk off and drop; Coral a stair with no gap; Orange a flat
+  square coil in and out; Crimson a square stair two and a half turns round a square pillar; Teal a grid of big
+  tops with a second chain; Ivory a square stair five and a half turns round a square column, 10 wide at the foot
+  and 5 at the top. The corridor and the end room are unchanged.
+- **New in the json:** 161 checkpoints (32 before; one at least every three gaps and 90 studs) with `yaw`; `alts`
+  (second routes: two in Mint, one in Teal); parts named `Guard` (946, invisible side walls 8 high along every
+  narrow walkway and across each gap's sides; outer side only on Crimson's stair, both sides on Ivory's, which
+  narrows away from its column) and `Edge` (100 neon strips on each take-off and landing edge); `hop` on a route
+  point that is a jump up onto a touching block. The script asserts all of it. `plan_level5.py` draws one plan and
+  side elevation per room into `artifacts/level5-void-20261003/plan/` (needs PIL: `/usr/local/bin/python3`).
+- **`import_level5.py`** removes the old model from Workspace AND ServerStorage, builds in Workspace and parks the
+  result in ServerStorage (LevelWorldStorage keeps a map nobody is in there). Guards and edges get
+  `CanQuery = false`.
+- **Server** (`Level5PreviewAccess`, EASY_PHONE_20261010): a fall runs for `FALL_BACK` 0.8 s under the same fall
+  camera and the body is stood on the LAST CHECKPOINT it reached, alive, facing along the route (word to the
+  client: "returned", frame, count). The old rule is one attribute away: `ReplicatedStorage.Level5Void` attribute
+  `FallKills = true`. A body standing on the route BEHIND its checkpoint is never falling. The checkpoint box is
+  8 x 8 (11 x 13 reached a later lane's checkpoint from an earlier lane in Orange). The corridor's walls take 21 s
+  (15.5). Death in the corridor, a Reset, spectating and the re-entry are as before.
+- **Client, jump assist** (the block at the end of `Level 5 Lighting Controller`, Level 5 only): a jump asked for up
+  to 0.2 s after the floor is lost is still made; one asked for in the air is kept 0.2 s for the landing; and on
+  touch (`UIDevice.IsTouch()`) the body jumps by itself at an edge when a landing is ahead within its reach, and
+  hops onto a block up to 4.6 high that it walks into. A step down is walked off. NoiseReporter's touch JUMP
+  button fires `PlayerScripts.Level5JumpTap` on every tap. `workspace.Level5AutoJumpAll` (client side, true or
+  false) forces auto-jump on or off for a test. On arrival a touch player reads "WALK AT A GAP AND YOU JUMP BY
+  YOURSELF"; the first-entry guide's Level 5 line no longer says a fall is death.
+- **What the engine taught:** `Humanoid.MoveDirection` stays zero under `MoveTo`, so a test has to give the assist
+  the body's velocity (that is what `Level5AutoJumpAll = true` also does). The floor is lost when the body's middle
+  is 0.8 past an edge and the state stays Running for another 0.1 s. At sprint speed a 3.7-stud gap is simply run
+  across. A forced Jumping state sets the upward speed to 50 whatever the body was doing. After a teleport of a
+  thousand studs the room stays black for up to a minute in a Studio capture (the lights are there; a walking
+  player does not see this).
+- **Tested in Studio play** with a walker that takes each room's route (`tools/level5_void/qa/walk.py`; modes
+  manual, early = 1 to 2 studs before the edge, late = a tap 2.5 studs past it, auto = no press at all): all 48
+  jumps and hops in all ten rooms in every mode at walking speed, auto also at sprint speed, both of Mint's ways
+  round and Teal's second chain; a fall from the tower returned to the checkpoint just passed, facing along the
+  stair, 1.5 to 2.2 s after it began; the corridor walked at 12 studs/s reached the end room 3.7 s before the walls
+  shut, and the finish gave LEVEL 5 CLEARED. NOT tested: a real phone or tablet, two players, any sound.
+  `tools/tests/test_level5_access.py` and `test_death_advice.py` fail as they did before this change (a marker
+  missing from GameManager; the known hud_b8 caption check).
+- **Left out:** 2-3 layouts per room chosen per round (my own idea in the list given to the owner). The rooms differ
+  from each other, and Mint and Teal offer a choice, but a room is the same every round.

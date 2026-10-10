@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-10T19:12:53.482825+00:00",
+  "capturedAtUtc": "2026-10-10T20:52:05.952841+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -1803,8 +1803,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level5PreviewAccess.Script.lua",
-      "bytes": 64927,
-      "sha256": "ae61bb7bed1d379cb2e0f27498d583eeed6c4aad521ad8188ea83dfea64bdd00",
+      "bytes": 72365,
+      "sha256": "9c3d54c1b557913352a82d62c6d057596efa6775509c0b2259b5245322627a96",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3460,8 +3460,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
-      "bytes": 31986,
-      "sha256": "19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788",
+      "bytes": 32002,
+      "sha256": "11bfe1d4435e998d0dbc14e51aafc8c811d7f0607cf9c09108c2709addde8d3d",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3922,8 +3922,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 5 Lighting Controller.LocalScript.lua",
-      "bytes": 46203,
-      "sha256": "7be4083ac513eac0e89d512be2e0caffccee9a0f558f578d184ffec15d077c64",
+      "bytes": 54668,
+      "sha256": "08e0757afa1209baed3e810fd3804f82a9c58f3d7862c63ae085f3e3d21416de",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4301,8 +4301,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
-      "bytes": 54956,
-      "sha256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+      "bytes": 55305,
+      "sha256": "b636773e68ef2016d397669d19287db853ec2f5deed1b1bd97aae7e57f087f6b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

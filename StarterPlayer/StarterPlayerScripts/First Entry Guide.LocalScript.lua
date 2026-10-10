@@ -276,7 +276,7 @@ local TOPICS = {
 		{"2  Poolrooms", "Start the pumps to open the exit. Keep an eye on what is in the water."},
 		{"3  Mall", "Find the CDs. Hide under tables, but the Manager checks them."},
 		{"4  Cinema", "The power is out. Find the breaker order and stay away from the Usher."},
-		{"5  Void rooms", "Jump the ledges. Doors open when the whole team stands on the plate. A fall is death."},
+		{"5  Void rooms", "Cross the gaps. Doors open when the whole team stands on the plate. A fall sets you back a few steps."},
 		{"6  Playground", "Hide and seek. Touch the yellow post in three searches without being seen, then run for the exit."},
 	}},
 	{"PLAYING TOGETHER", {

@@ -7,7 +7,8 @@ Native Parts only. The model carries the attributes Level5PreviewAccess checks, 
 `Level5Finish`, `Level5Reentry`, the loose `Balls` (unanchored, each with its `Home`), one folder per pressure
 plate under `Plates` (`Plate`, `Gate`, attributes `Section` and `SectionIndex`), the moving parts of the last
 room's corridor under `Finale` (`CrusherWall` x2 with `Side`, `CrusherBlock`, `CrusherGate`), and StringValues
-`Route` / `Checkpoints` / `FinaleData` (JSON) for the walk-through test, the plates and the corridor.
+`Route` / `Checkpoints` / `FinaleData` / `Alts` (JSON) for the walk-through test, the plates and the corridor.
+The finished model is parked in ServerStorage, where LevelWorldStorage keeps a map nobody is in.
 
 The plaster is `MaterialService."L5 Void Plaster"` (base material Plaster). Its three maps are the PNGs the
 Blender build writes; their asset ids go in TEXTURES below once they are uploaded (Asset Manager > Import).
@@ -42,8 +43,12 @@ if ids.colour and ids.normal and ids.roughness then
 	variant.StudsPerTile = 14
 	variant.MaterialPattern = Enum.MaterialPattern.Organic
 end
-local old = workspace:FindFirstChild("Level 5 Void")
-if old then old:Destroy() end
+-- LevelWorldStorage parks the map in ServerStorage while nobody is in it (always, in Edit): the old one is taken
+-- out of both places, the new one is built in Workspace and parked at the end
+for _, holder in ipairs({workspace, game:GetService("ServerStorage")}) do
+	local old = holder:FindFirstChild("Level 5 Void")
+	if old then old:Destroy() end
+end
 local model = Instance.new("Model")
 model.Name = "Level 5 Void"
 for _, name in ipairs({"Geometry", "Lights", "Balls", "Plates"}) do
@@ -78,6 +83,11 @@ for _, row in ipairs(data.parts) do
 	part.CFrame = CFrame.new(O + Vector3.new(row.p[1], row.p[2], row.p[3]))
 		* CFrame.Angles(0, -math.rad(row.yaw), 0) * CFrame.Angles(0, 0, math.rad(row.roll or 0))
 	if row.t then part.Transparency = row.t end
+	-- EASY_PHONE_20261010: an invisible side guard stops a body and nothing else (no ray finds it: the camera,
+	-- the jump assist and the footsteps look through it); a lit edge strip is only seen
+	if row.n == "Guard" or row.n == "Edge" then
+		part.CanQuery, part.CastShadow = false, false
+	end
 	if row.side then part:SetAttribute("Side", row.side) end
 	if row.light then
 		local glow = Instance.new("PointLight")
@@ -221,7 +231,7 @@ for _, row in ipairs(data.plates) do
 	end
 	folder.Parent = model.Plates
 end
-for name, value in pairs({Route = data.route, Checkpoints = data.checkpoints, FinaleData = data.finale}) do
+for name, value in pairs({Route = data.route, Checkpoints = data.checkpoints, FinaleData = data.finale, Alts = data.alts or {}}) do
 	local holder = Instance.new("StringValue")
 	holder.Name = name
 	holder.Value = Http:JSONEncode(value)
@@ -235,6 +245,8 @@ model:SetAttribute("Level5PreviewReady", true)
 local cf, size = model:GetBoundingBox()
 model:SetAttribute("BoundsCenter", cf.Position)
 model:SetAttribute("BoundsSize", size)
-return "instances " .. #model:GetDescendants() .. ", bounds " .. tostring(size)
-''' % (ORIGIN, json.dumps({k: data[k] for k in ('start', 'finish', 'plates', 'sections', 'colours', 'route', 'checkpoints', 'finale')}), -420)))
+local count = #model:GetDescendants()
+model.Parent = game:GetService("ServerStorage")
+return "instances " .. count .. ", bounds " .. tostring(size) .. ", parked in ServerStorage"
+''' % (ORIGIN, json.dumps({k: data[k] for k in ('start', 'finish', 'plates', 'sections', 'colours', 'route', 'checkpoints', 'finale', 'alts') if k in data}), -420)))
 print('built', total)

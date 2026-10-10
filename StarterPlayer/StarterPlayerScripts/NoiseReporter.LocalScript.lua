@@ -669,6 +669,13 @@ if touchJumpButton then -- HUD_B2_TOUCH: nil when its template is missing (D14)
 	}
 	touchJumpButton.Activated:Connect(function()
 		if not inRound() then return end
+		-- EASY_PHONE_20261010: Level 5's jump assist hears every tap, the ones refused below too (a tap a moment
+		-- after an edge, or just before a landing)
+		do
+			local scripts = player:FindFirstChild("PlayerScripts")
+			local tap = scripts and scripts:FindFirstChild("Level5JumpTap")
+			if tap and tap:IsA("BindableEvent") then tap:Fire() end
+		end
 		local character, hum = currentChar()
 		if character and character:GetAttribute("Level2_ForcedSliding") == true then return end
 		if not (hum and hum.Health > 0) then return end

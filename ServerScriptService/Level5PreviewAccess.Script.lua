@@ -8,6 +8,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
+local WorldStorage = require(script.Parent:WaitForChild("LevelWorldStorage"))
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 local IN_LEVEL, LIVE = "Level5VoidRound", "Level6PlaygroundPreview"
 local Void = {}
@@ -60,8 +61,9 @@ local function liveSpawn()
 	return spawn and spawn:IsA("BasePart") and spawn or nil
 end
 
-local function readyPreview()
-	local model = workspace:FindFirstChild(MODEL_NAME)
+local function readyPreview(liveOnly)
+	local model = WorldStorage.Get(5)
+	if liveOnly and model and model.Parent ~= workspace then return nil end
 	if not (model and model:IsA("Model") and model:GetAttribute("Level5Preview") == true
 		and model:GetAttribute("PreviewOnly") == true
 		and model:GetAttribute("Level5PreviewReady") == true) then return nil end
@@ -126,7 +128,7 @@ local function onEnter(player, prompt)
 	local model, exit = readyPreview()
 	local returnPrompt = exit and exit:FindFirstChild(RETURN_PROMPT)
 	if not model or not returnPrompt or not returnPrompt:IsA("ProximityPrompt")
-		or not returnPrompt.Enabled or not hasFloor(model, exit) then
+		or not returnPrompt.Enabled then
 		warn("[Level5PreviewAccess] ready preview, return prompt or landing floor is missing")
 		return
 	end
@@ -136,10 +138,13 @@ local function onEnter(player, prompt)
 		nextUse[player] = os.clock() + COOLDOWN
 		return
 	end
+	if not hasFloor(model, exit) then Void.LetGo(group); return end
+	local lease = Void.BeginEntry(player, group)
+	if not lease then Void.LetGo(group); return end
 	nextUse[player] = math.huge
  local r3Owner = beginR3Entry(door)
 	local ok, err = pcall(function()
-		if not stream(player, exit.Position) then return end
+		if not stream(player, exit.Position) or not Void.PendingValid(player, lease) then return end
 		local nowCharacter, nowRoot = readyPlayer(player)
 		local nowModel, nowExit = readyPreview()
 		if nowCharacter ~= character or nowModel ~= model or nowExit ~= exit
@@ -148,10 +153,13 @@ local function onEnter(player, prompt)
 			or returnPrompt.Parent ~= exit or not returnPrompt.Enabled
 			or not hasFloor(model, exit) then return end
 		local frame = upright(exit.Position, exit.CFrame.LookVector)
+		local previous = character:GetPivot()
 		character:PivotTo(frame)
-		if Void.Join(player, group) then task.spawn(Void.Suit, player, frame) end
+		if Void.Join(player, group, lease) then task.spawn(Void.Suit, player, frame)
+		else character:PivotTo(previous) end
 	end)
  finishR3Entry(r3Owner)
+	Void.EndEntry(player, lease)
 	release(player)
 	if player:GetAttribute(IN_LEVEL) ~= true then Void.LetGo(group) end
 	if not ok then warn("[Level5PreviewAccess] entry failed:", err) end
@@ -193,7 +201,7 @@ do
     local model, exit = readyPreview()
     local prompt = exit and exit:FindFirstChild(RETURN_PROMPT)
     if not model or not prompt or not prompt:IsA("ProximityPrompt") or not prompt.Enabled
-     or not hasFloor(model, exit) then return nil end
+     then return nil end
     return model, exit
    end,
    launch = function(context)
@@ -211,11 +219,31 @@ do
     local returnPrompt = exit and exit:FindFirstChild(RETURN_PROMPT)
     if not model or not returnPrompt or not returnPrompt:IsA("ProximityPrompt")
      or not returnPrompt.Enabled or not hasFloor(model, exit) then Void.LetGo(group); return false, "PREVIEW_NOT_READY" end
-    local entries, problem = bridge.PreparePreviewGroup(context, model, exit, stream)
-    if not entries then Void.LetGo(group); return false, problem end
-    local committed, commitProblem = bridge.CommitPreviewGroup(context, entries, function(entry)
-     return Void.Join(entry.player, group)
-    end, function(entry) Void.Leave(entry.player, true) end)
+    local leases = {}
+    for player, lock in pairs(queueLocks) do
+     if lock == context then
+      local lease = Void.BeginEntry(player, group)
+      if not lease then
+       for owner, owned in pairs(leases) do Void.EndEntry(owner, owned) end
+       Void.LetGo(group); return false, "ENTRY_PENDING"
+      end
+      leases[player] = lease
+     end
+    end
+    local ok, committed, commitProblem, entries = pcall(function()
+     local entries, problem = bridge.PreparePreviewGroup(context, model, exit, function(player, position)
+      return Void.PendingValid(player, leases[player]) and stream(player, position) == true
+       and Void.PendingValid(player, leases[player])
+     end)
+     if not entries then return false, problem end
+     local joined, why = bridge.CommitPreviewGroup(context, entries, function(entry)
+      return Void.Join(entry.player, group, leases[entry.player])
+     end, function(entry) Void.RollbackEntry(entry.player, leases[entry.player]) end)
+     return joined, why, entries
+    end)
+    -- Keep the leases through the whole cohort commit, including yielding callbacks.
+    for player, lease in pairs(leases) do Void.EndEntry(player, lease) end
+    if not ok then Void.LetGo(group); return false, tostring(committed) end
     if not committed then Void.LetGo(group) end
     -- The queue validates each member's lobby character through the commit, so the round body goes on after it.
     if committed then
@@ -239,23 +267,35 @@ do
 	local launchParty = Instance.new("BindableFunction")
 	launchParty.Name = "Level5LaunchParty"
 	launchParty.OnInvoke = function(players, token)
-		if type(players) ~= "table" or type(token) ~= "table" then return false, 0, "BAD_REQUEST" end
+		if type(players) ~= "table" or not (type(token) == "table" or (type(token) == "string" and token ~= "")) then return false, 0, "BAD_REQUEST" end
 		local model, exit = readyPreview()
-		if not model or not hasFloor(model, exit) then return false, 0, "PREVIEW_NOT_READY" end
-		if not Void.Claim(token) then
+		if not model then return false, 0, "PREVIEW_NOT_READY" end
+		local claimed, canonicalGroup = Void.Claim(token)
+		if not claimed then
 			for _, player in ipairs(players) do Void.TellBusy(player) end
 			return false, 0, "LEVEL_IN_USE"
 		end
-		local party = {}
+		token = canonicalGroup
+		if not hasFloor(model, exit) then Void.LetGo(token); return false, 0, "PREVIEW_NOT_READY" end
+		local party, selected = {}, {}
 		for _, player in ipairs(players) do
 			if typeof(player) == "Instance" and player:IsA("Player") and (nextUse[player] or 0) <= os.clock()
 				and readyPlayer(player) then
-				table.insert(party, player)
+				if not selected[player] then table.insert(party, player); selected[player] = true end
 			end
 		end
 		local bridge = r3Bridge()
 		local frames = bridge and bridge.PartyLandings and bridge.PartyLandings(model, exit, party) or {}
 		-- everybody's client has the place before anybody is moved, so the party arrives together
+		local leases = {}
+		for _, player in ipairs(party) do
+			local lease = Void.BeginEntry(player, token)
+			if not lease then
+				for owner, owned in pairs(leases) do Void.EndEntry(owner, owned) end
+				Void.LetGo(token); return false, 0, "ENTRY_PENDING"
+			end
+			leases[player] = lease
+		end
 		local streamed, waiting = {}, #party
 		for _, player in ipairs(party) do
 			nextUse[player] = math.huge
@@ -271,6 +311,7 @@ do
 		local joined = 0
 		for _, player in ipairs(party) do
 			local ok, problem = pcall(function()
+				if not Void.PendingValid(player, leases[player]) then error("entry expired") end
 				if not streamed[player] then error("streaming did not finish") end
 				local character, root = readyPlayer(player)
 				local nowModel, nowExit = readyPreview()
@@ -278,7 +319,7 @@ do
 				local previous = character:GetPivot()
 				root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
 				character:PivotTo(frames[player])
-				local entered, reason = Void.Join(player, token)
+				local entered, reason = Void.Join(player, token, leases[player])
 				if not entered then
 					character:PivotTo(previous)
 					error("join rejected: " .. tostring(reason))
@@ -287,6 +328,7 @@ do
 				task.spawn(Void.Suit, player, frames[player])
 			end)
 			if not ok then warn("[Level5PreviewAccess] party launch, " .. player.Name .. ": " .. tostring(problem)) end
+			Void.EndEntry(player, leases[player])
 			release(player)
 		end
 		if joined == 0 then Void.LetGo(token) end
@@ -340,7 +382,7 @@ watchPreview(workspace:FindFirstChild(MODEL_NAME))
 task.spawn(function()
 	local boundedModel, bounds, half
 	while task.wait(0.5) do
-		local model = readyPreview()
+		local model = readyPreview(true)
 		local spawn = liveSpawn()
 		if model and spawn then
 			if boundedModel ~= model then
@@ -390,6 +432,8 @@ watchR3Lobby(workspace:FindFirstChild("LobbyReimaginedPreview"))
 --   NO CHECKPOINTS (owner, 2026-10-04): A FALL IS A DEATH. A body that drops well below the stretch it was on is
 --   killed, and any death (a Reset too) ends that player's run: back to the lobby. The `Checkpoints` list is
 --   still read, but only to know which room a player has reached (the plates and the room names need it).
+--   EASY_PHONE_20261010 replaces that: a fall stands the body on the last checkpoint it reached, alive (see
+--   FALL_BACK below), and the rebuilt map has a checkpoint every few jumps inside each room.
 --   PLATES: the door out of a room goes down when every member of a party who has not passed it yet stands on
 --   the room's plate, and it STAYS down (owner, 2026-10-05: "it stays down permanently and does not go up
 --   again"). It comes back up only when nobody is left in the level, so the next party finds every door shut.
@@ -410,7 +454,8 @@ do
 	local BALL_RETURN = 35
 	-- the corridor: the walls take CLOSE_SECONDS to come within SHUT_GAP of each other, then shut; a body between
 	-- them is dead from KILL_GAP. Walking the 198 studs from the gate takes 12.4 s, a sprint 7.6 s.
-	local CLOSE_SECONDS, SHUT_GAP, KILL_GAP = 15.5, 5.0, 3.0
+	-- EASY_PHONE_20261010: 21 s (it was 15.5). On a thumb stick the walk is slower and less straight than 12.4 s.
+	local CLOSE_SECONDS, SHUT_GAP, KILL_GAP = 21.0, 5.0, 3.0
 	local REENTRY_WINDOW, CHOICE_SECONDS, NEXT_LEVEL = 15, 15, 6
 	-- DEATH_PARITY_20261008 (owner: "no kill cam like all the other maps, you just die and are thrown back to the
 	-- lobby; there has to be spectating, buying a re-entry or using a banked one, and you spawn at the start of
@@ -421,6 +466,13 @@ do
 	-- SECTION they had reached. A fall is shown before it is a death: the client's camera lets go and watches
 	-- the body drop for FALL_CAM seconds.
 	local FALL_CAM = 2.4
+	-- EASY_PHONE_20261010 (owner: "Jeg ved at level 5 er fuldkommen umuligt på telefon" ... "Bare fix og lave hele
+	-- level 5 om. Gør det nemmere på telefon og tablet"). A FALL IS NO LONGER A DEATH: the body drops for
+	-- FALL_BACK seconds (the same fall camera, shorter) and stands on the LAST CHECKPOINT it had reached, which the
+	-- rebuilt map now has every few jumps inside each room. This replaces "a fall is a death" of 2026-10-04 and
+	-- the fall half of DEATH_PARITY_20261008; the corridor still kills, and a death is still handled as there.
+	-- The old rule is one attribute away: ReplicatedStorage.Level5Void `FallKills` = true.
+	local FALL_BACK, FALL_GRACE = 0.8, 1.2
 	local SECTION = {rose = 1, blue = 2, amber = 3, mint = 4, violet = 5, coral = 6, orange = 7, crimson = 8, teal = 9, ivory = 10}
 	local SOUND_IDS = {
 		-- filled by tools/level5_void/install_sounds.py (ReplicatedStorage.Level5Void.Sounds carries the same)
@@ -499,7 +551,13 @@ do
 	end
 	local function checkpointFrame(model, row)
 		local origin = model:GetAttribute("Origin")
-		return upright(origin + Vector3.new(row.x, row.y + 3.5, row.z), Vector3.xAxis)
+		-- EASY_PHONE_20261010: facing along the route there (`yaw`, the build's heading), not always east: on a
+		-- stair round a column east is the drop
+		local look = Vector3.xAxis
+		if type(row.yaw) == "number" then
+			look = Vector3.new(math.cos(math.rad(row.yaw)), 0, math.sin(math.rad(row.yaw)))
+		end
+		return upright(origin + Vector3.new(row.x, row.y + 3.5, row.z), look)
 	end
 	local function sound(parent, name, volume, looped)
 		local template = folder:FindFirstChild("Sounds") and folder.Sounds:FindFirstChild(name)
@@ -522,21 +580,69 @@ do
 	-- or an E entry is refused while another party is inside or on its way in, and the refused players are told why.
 	-- A party is the `group` table of one launch. `entered` tells a party that is inside from one still streaming in,
 	-- whose hold has to outlast its streaming.
+	local finale = {state = "idle"}
 	local hold = {token = nil, untilClock = 0, entered = false}
+	local entryLeases = {}
+	local function pendingEntries()
+	 local busy = false
+	 for player, lease in pairs(entryLeases) do
+	  if player.Parent ~= Players or os.clock() >= lease.deadline or lease.token ~= hold.token then
+	   entryLeases[player] = nil
+	  else busy = true end
+	 end
+	 return busy
+	end
+	function Void.PendingValid(player, lease)
+	 return lease ~= nil and entryLeases[player] == lease and player.Parent == Players
+	  and os.clock() < lease.deadline and hold.token == lease.token
+	end
+	function Void.BeginEntry(player, token, kind)
+	 pendingEntries()
+	 if player.Parent ~= Players or hold.token ~= token or entryLeases[player] then return nil end
+	 local lease = {token = token, deadline = os.clock() + 90, kind = kind}
+	 hold.untilClock = math.max(hold.untilClock, lease.deadline)
+	 entryLeases[player] = lease
+	 return lease
+	end
+	function Void.EndEntry(player, lease)
+	 if lease and entryLeases[player] == lease then
+	  entryLeases[player] = nil
+	  Void.LetGo(lease.token)
+	 end
+	end
+	function Void.DropEntry(player)
+	 Void.EndEntry(player, entryLeases[player])
+	end
+	function Void.RollbackEntry(player, lease)
+	 if lease and ((members[player] and members[player].entryLease == lease) or Void.PendingValid(player, lease)) then
+	  Void.Leave(player, true)
+	 end
+	end
 	function Void.Claim(group)
 		if group == nil then return false end
+		if next(members) == nil and finale.state ~= "idle" then return false end
+		-- Invoke copies tables: scalar live-party IDs resolve only through this hold.
+		if type(group) == "string" then
+			if group == "" then return false end
+			group = if type(hold.token) == "table" and hold.token.livePartyToken == group then hold.token else {livePartyToken = group}
+		end
 		if next(members) ~= nil then
 			if hold.token ~= group then return false end
-		elseif hold.token ~= nil and hold.token ~= group and os.clock() < hold.untilClock then
+		elseif hold.token ~= nil and hold.token ~= group and (os.clock() < hold.untilClock or pendingEntries()) then
 			return false
 		end
 		if hold.token ~= group then hold.entered = false end
-		hold.token, hold.untilClock = group, os.clock() + 90
-		return true
+		if hold.token ~= group or not pendingEntries() then hold.untilClock = os.clock() + 90 end
+		hold.token = group
+		if not WorldStorage.Activate(5) then
+			hold.token, hold.untilClock, hold.entered = nil, 0, false
+			return false
+		end
+		return true, group
 	end
 	-- LetGo(group): that party did not get in. LetGo(nil): somebody left; free if that emptied the level.
 	function Void.LetGo(group)
-		if next(members) ~= nil then return end
+		if next(members) ~= nil or pendingEntries() then return end
 		if (group ~= nil and hold.token == group) or (group == nil and hold.entered) then
 			hold.token, hold.untilClock, hold.entered = nil, 0, false
 		end
@@ -576,17 +682,18 @@ do
 	-- replicated, for anything that wants to show it (a sign at the gate, a test): somebody is in the level or on the way in
 	task.spawn(function()
 		while true do
-			workspace:SetAttribute("Level5InUse", next(members) ~= nil or (hold.token ~= nil and os.clock() < hold.untilClock))
+			workspace:SetAttribute("Level5InUse", next(members) ~= nil or pendingEntries() or (hold.token ~= nil and os.clock() < hold.untilClock))
 			task.wait(1)
 		end
 	end)
 
-	function Void.Join(player, group)
+	function Void.Join(player, group, lease)
+		if lease and not Void.PendingValid(player, lease) then return false, "ENTRY_EXPIRED" end
 		if player.Parent ~= Players or members[player] then return false, "ALREADY_IN_LEVEL" end
 		group = group or {}
 		if not Void.Claim(group) then return false, "LEVEL_IN_USE" end
 		hold.entered = true
-		members[player] = {cp = 1, group = group, began = os.clock()}
+		members[player] = {cp = 1, group = group, began = os.clock(), entryLease = lease}
 		members[player].group.total = (members[player].group.total or 0) + 1
 		player:SetAttribute(IN_LEVEL, true)
 		player:SetAttribute(LIVE, true)            -- before InRound: the round features read both
@@ -640,6 +747,11 @@ do
 	function Void.Leave(player, quiet)
 		local record = members[player]
 		members[player], leaving[player] = nil, nil
+		Void.DropEntry(player)
+		if record and record.continuing and record.group.level6PartyToken then
+			local destination = ServerStorage:FindFirstChild("Level6EnterFromLevel")
+			if destination then pcall(destination.Invoke, destination, player, "cancel", record.group.level6PartyToken) end
+		end
 		Void.LetGo(nil)                                 -- PARTY_LOCK_20261008: the last one out frees the level
 		local live = player:GetAttribute(LIVE) == true
 		player:SetAttribute(IN_LEVEL, nil)
@@ -676,21 +788,26 @@ do
 		local record = members[player]
 		if not record or record.continuing then return end
 		record.continuing = true
+		local group = record.group
+		group.level6PartyToken = group.level6PartyToken or group.livePartyToken or HttpService:GenerateGUID(false)
+		local token = group.level6PartyToken
 		local enter = ServerStorage:FindFirstChild("Level6EnterFromLevel")
-		local ok, ready = pcall(function() return enter ~= nil and enter:Invoke(player, "prepare", record.group) end)
+		local ok, ready = pcall(function() return enter ~= nil and enter:Invoke(player, "prepare", token) end)
 		if ok and ready == true and members[player] == record and player.Parent == Players then
 			tell(player, "lobby")                      -- clears LEVEL CLEARED
 			-- This level's own marker goes first: its client stands down and the loading cover for Level 6 comes
 			-- up while the body is still here. The shared marker and InRound stay set throughout.
 			player:SetAttribute(IN_LEVEL, nil)
 			local entered
-			ok, entered = pcall(function() return enter:Invoke(player, "enter", record.group) end)
+			ok, entered = pcall(function() return enter:Invoke(player, "enter", token) end)
 			if ok and entered == true then
 				members[player], leaving[player] = nil, nil
+				Void.LetGo(nil)
 				return
 			end
 			if members[player] == record and player.Parent == Players then player:SetAttribute(IN_LEVEL, true) end
 		end
+		if enter then pcall(enter.Invoke, enter, player, "cancel", token) end
 		record.continuing = nil
 		if members[player] ~= record then return end
 		warn("[Level5PreviewAccess] Level 6 did not take " .. player.Name .. "; back to the lobby")
@@ -700,7 +817,7 @@ do
 		end)
 	end
 
-	Players.PlayerRemoving:Connect(function(player) members[player] = nil; Void.LetGo(nil) end)
+	Players.PlayerRemoving:Connect(function(player) members[player] = nil; Void.DropEntry(player); Void.LetGo(nil) end)
 	-- PARTY_LOCK_20261008: with one party at a time, somebody standing in here away from the keyboard would close the
 	-- level to the whole server until Roblox's own 20 minutes are up. A living member who has not moved four studs
 	-- in five minutes goes back to the lobby. Not while they wait out an ending (the cleared screen, a death in
@@ -780,7 +897,6 @@ do
 
 	-- FINALE_20261005: the corridor. The map carries the moving parts under `Finale` and the numbers in
 	-- `FinaleData` (tools/level5_void/build_level5.py writes both); positions there are relative to `Origin`.
-	local finale = {state = "idle"}
 	local function finaleOf(model)
 		if finale.model ~= model then
 			finale.model, finale.data, finale.state = model, nil, "idle"
@@ -1087,7 +1203,7 @@ do
 	task.spawn(function()
 		while true do
 			task.wait(0.15)
-			local model = readyPreview()
+			local model = readyPreview(true)
 			local origin = model and model:GetAttribute("Origin")
 			local list = model and checkpoints(model)
 			local finish = model and model:FindFirstChild("Level5Finish")
@@ -1097,6 +1213,7 @@ do
 				-- Level6PreviewAccess may have answered a leave for the shared marker: finish it here
 				if player:GetAttribute(LIVE) ~= true and player:GetAttribute("InRound") ~= true and record.suited then
 					members[player] = nil
+					Void.LetGo(nil)
 					player:SetAttribute(IN_LEVEL, nil)
 					continue
 				end
@@ -1122,7 +1239,10 @@ do
 				end
 				for index = record.cp + 1, #list do
 					local row = list[index]
-					if math.abs(at.X - row.x) < 11 and math.abs(at.Z - row.z) < 13 and math.abs(at.Y - 3 - row.y) < 7 then
+					-- EASY_PHONE_20261010: 8 x 8 (it was 11 x 13). The rebuilt map has 161 checkpoints and lanes ten
+					-- studs apart (Orange): the wide box reached a later lane's checkpoint from an earlier lane. One
+					-- that is walked past on a wide landing is made up for by the next.
+					if math.abs(at.X - row.x) < 8 and math.abs(at.Z - row.z) < 8 and math.abs(at.Y - 3 - row.y) < 7 then
 						reach(index)
 					end
 				end
@@ -1140,6 +1260,10 @@ do
 						if reached > record.cp then reach(reached) end
 						row = list[record.cp]
 						below = at.Y < row.low - FALL_MARGIN
+					elseif route and routeAhead(route, 1, at) then
+						-- EASY_PHONE_20261010: on the route BEHIND its checkpoint (walked back into a lower room): a body
+						-- standing on the route is never falling. Its checkpoint stays where it was.
+						below = false
 					end
 				end
 				local section = SECTION[row.sec]
@@ -1149,6 +1273,8 @@ do
 				-- (a developer who is noclipping flies: GameManager's setServerNoclip puts the body in this group)
 				local dropping = below and root.CollisionGroup ~= "DevNoclip"
 					and (record.fallingAt ~= nil or root.AssemblyLinearVelocity.Y < -25)
+					and os.clock() - (record.returnedAt or 0) > FALL_GRACE
+				local kills = folder:GetAttribute("FallKills") == true
 				if record.fallingAt and not dropping then
 					record.fallingAt = nil
 					event:FireClient(player, "fallover")
@@ -1158,8 +1284,17 @@ do
 					if not record.fallingAt then
 						-- DEATH_PARITY_20261008: the fall is shown first (the client's fall camera), then it is a death
 						record.fallingAt = os.clock()
-						event:FireClient(player, "falling", FALL_CAM)
-					elseif os.clock() - record.fallingAt >= FALL_CAM then
+						event:FireClient(player, "falling", kills and FALL_CAM or FALL_BACK, not kills)
+					elseif not kills and os.clock() - record.fallingAt >= FALL_BACK then
+						-- EASY_PHONE_20261010: back on the last checkpoint, alive. The client moves its own body too
+						-- (it owns it: a server move alone arrives late and still carrying the fall's speed).
+						local frame = checkpointFrame(model, row)
+						record.fallingAt, record.returnedAt = nil, os.clock()
+						record.falls = (record.falls or 0) + 1
+						root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+						character:PivotTo(frame)
+						event:FireClient(player, "returned", frame, record.falls)
+					elseif kills and os.clock() - record.fallingAt >= FALL_CAM then
 						record.fellNow = true
 						local humanoid = character:FindFirstChildOfClass("Humanoid")
 						if humanoid then humanoid.Health = 0 end   -- the Died hook keeps them in the level, dead
@@ -1329,6 +1464,10 @@ do
 				end
 			end
 			tendBalls(model)
+			-- Keep the authored instance and its reset state for the next entry.
+			if empty and finale.state == "idle" and not pendingEntries() and (hold.token == nil or os.clock() >= hold.untilClock) then
+				WorldStorage.Deactivate(5)
+			end
 		end
 	end)
 end
