@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-10T09:33:12.385894+00:00",
+  "capturedAtUtc": "2026-10-10T14:56:14.291791+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -1618,8 +1618,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
-      "bytes": 105852,
-      "sha256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6",
+      "bytes": 109313,
+      "sha256": "9221dab9d086afab7a2b4c1cbcfb5dfe3ebb4b30d4bb362d7b0a0a824e500334",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1729,8 +1729,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level Leaderboards.Script.lua",
-      "bytes": 15171,
-      "sha256": "710ed195de3f6c24ba59682597857514cf34053e9018afee60a373a67011d159",
+      "bytes": 16065,
+      "sha256": "8a8226408a4b76f4e9694762379f5cef03178a550b228d20c954699bf448af52",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3967,8 +3967,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
-      "bytes": 66400,
-      "sha256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc",
+      "bytes": 66639,
+      "sha256": "f4d6dc8247a1116ac762548012a4b5d03772fc4c4d6b6f1ea24113926300237e",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4942,8 +4942,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Poolrooms Ambience.LocalScript.lua",
-      "bytes": 18933,
-      "sha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+      "bytes": 31837,
+      "sha256": "55ab78bc83db326fc577366abeb12dd0b77befac019fed5b2f3de46ab5b94372",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
