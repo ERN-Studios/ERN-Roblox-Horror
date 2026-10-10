@@ -1,0 +1,205 @@
+{
+ "read_at": "2026-10-10 about 21:15 local",
+ "campaigns": {
+  "f2d59fc1 \"Stay Quiet\" (2 Sep, stopped after a day; lifetime 42 over 7 days, 15 pictures, a user's own credit)": {
+   "spend": 3.49,
+   "impressions": 25788,
+   "clicks": 2605,
+   "plays": 983
+  },
+  "369312d1 \"Stay Quiet Again\" (9-15 Sep; lifetime 38.49 over 7 days, 12 pictures, everyone, a user's own credit)": {
+   "spend": 38.49,
+   "impressions": 340269,
+   "clicks": 23334,
+   "plays": 8734
+  },
+  "fc071f73 (8-9 Oct, paused 10 Oct; 11 a day, 10 pictures, group credit)": {
+   "spend": 21.1,
+   "impressions": 175179,
+   "clicks": 8927,
+   "plays_reported_so_far": 2384
+  }
+ },
+ "sept_campaign_by_day": {
+  "2026-09-09": {
+   "impressions": 27267,
+   "clicks": 2108,
+   "spend": 2893256,
+   "plays": 754
+  },
+  "2026-09-10": {
+   "impressions": 36967,
+   "clicks": 3394,
+   "spend": 6017790,
+   "plays": 1191
+  },
+  "2026-09-11": {
+   "impressions": 56207,
+   "clicks": 3405,
+   "spend": 6021586,
+   "plays": 1205
+  },
+  "2026-09-12": {
+   "impressions": 80048,
+   "clicks": 4165,
+   "spend": 6006756,
+   "plays": 1560
+  },
+  "2026-09-13": {
+   "impressions": 60710,
+   "clicks": 3647,
+   "spend": 6001822,
+   "plays": 1396
+  },
+  "2026-09-14": {
+   "impressions": 35903,
+   "clicks": 3449,
+   "spend": 5985824,
+   "plays": 1269
+  },
+  "2026-09-15": {
+   "impressions": 43167,
+   "clicks": 3166,
+   "spend": 5472243,
+   "plays": 1210
+  },
+  "2026-09-16": {
+   "plays": 53
+  },
+  "2026-09-17": {
+   "plays": 21
+  },
+  "2026-09-18": {
+   "plays": 10
+  },
+  "2026-09-19": {
+   "plays": 11
+  },
+  "2026-09-20": {
+   "plays": 7
+  },
+  "2026-09-21": {
+   "plays": 2
+  },
+  "2026-09-22": {
+   "plays": 7
+  },
+  "2026-09-23": {
+   "plays": 4
+  },
+  "2026-09-24": {
+   "plays": 1
+  },
+  "2026-09-25": {
+   "plays": 2
+  },
+  "2026-09-26": {
+   "plays": 2
+  },
+  "2026-09-27": {
+   "plays": 4
+  },
+  "2026-09-28": {
+   "plays": 3
+  },
+  "2026-09-29": {
+   "plays": 1
+  },
+  "2026-09-30": {
+   "plays": 2
+  },
+  "2026-10-02": {
+   "plays": 4
+  },
+  "2026-10-04": {
+   "plays": 3
+  },
+  "2026-10-05": {
+   "plays": 1
+  },
+  "2026-10-06": {
+   "plays": 1
+  },
+  "2026-10-07": {
+   "plays": 1
+  },
+  "2026-10-08": {
+   "plays": 9
+  }
+ },
+ "sept_campaign_by_ad": {
+  "01b3bc45-6101-4acf-b2bf-53c696652763": {
+   "impressions": 88414,
+   "clicks": 6588,
+   "spend": 9901186,
+   "plays": 2411
+  },
+  "7ce2c35c-e9b0-471b-afbe-b7a1c242b6b0": {
+   "impressions": 87353,
+   "clicks": 5987,
+   "spend": 9730563,
+   "plays": 2390
+  },
+  "12b2c8e1-674f-4422-aaad-47a02350e8fb": {
+   "impressions": 58117,
+   "clicks": 3927,
+   "spend": 6994833,
+   "plays": 1509
+  },
+  "90531295-ce58-41cc-a00b-7e1c082924ce": {
+   "impressions": 32231,
+   "clicks": 1898,
+   "spend": 3049037,
+   "plays": 745
+  },
+  "4a1ea7ef-2a2c-4298-8550-01cc9e6ce515": {
+   "impressions": 30087,
+   "clicks": 1840,
+   "spend": 2976737,
+   "plays": 628
+  },
+  "027652c3-4265-4f07-8a1a-fe431db684c5": {
+   "impressions": 10930,
+   "clicks": 773,
+   "spend": 1320077,
+   "plays": 250
+  },
+  "83b3ad56-e166-4c34-8397-f93864345c68": {
+   "impressions": 7828,
+   "clicks": 564,
+   "spend": 1145778,
+   "plays": 206
+  },
+  "b2df21aa-56ce-41c0-9258-fc92a19d9637": {
+   "impressions": 7297,
+   "clicks": 541,
+   "spend": 1020253,
+   "plays": 172
+  },
+  "97b2fb15-96ee-4af0-8cd6-be68d22e86cb": {
+   "impressions": 7193,
+   "clicks": 537,
+   "spend": 925744,
+   "plays": 151
+  },
+  "63fb8d3a-bb04-47f1-87c2-d2dcc8c062a2": {
+   "impressions": 5288,
+   "clicks": 344,
+   "spend": 646350,
+   "plays": 115
+  },
+  "cc6ec90d-c396-4881-a3b3-fc3cc3409cd6": {
+   "impressions": 4007,
+   "clicks": 252,
+   "spend": 506771,
+   "plays": 84
+  },
+  "460be19d-f7af-4fac-9a2e-91cb69d6567f": {
+   "impressions": 1524,
+   "clicks": 83,
+   "spend": 181948,
+   "plays": 26
+  }
+ },
+ "game_daily_note": "DailyActiveUsers 4-30 before, 992-1999 during 9-15 Sep, 168/218/410/250/140 the five days after, 25-50 by late September. D1Retention 0.125 on 9 Sep then 0.01-0.03; D7Retention at most 0.002. DailyRevenue (Robux) 9-14 Sep: 120, 182, 42, 168, 100, 126; 15 Sep 14070 (five payers, one very large purchase); 8 Oct 397."
+}
