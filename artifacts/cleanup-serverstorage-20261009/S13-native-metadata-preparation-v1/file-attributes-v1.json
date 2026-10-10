@@ -1,0 +1,37 @@
+{
+  "schema": "s13-owned-file-attributes-v1",
+  "before": [
+    {
+      "path": "tools/.gitattributes",
+      "exists": false
+    },
+    {
+      "path": "tools/tests/.gitattributes",
+      "exists": false
+    }
+  ],
+  "after": [
+    {
+      "path": "tools/.gitattributes",
+      "rawBytes": 26,
+      "rawSHA256": "9bb13e184de8dfecf5b310f3f59807e776a52dc93656e67aad959eb69001716d",
+      "rules": [
+        "sync_from_studio.py -text"
+      ]
+    },
+    {
+      "path": "tools/tests/.gitattributes",
+      "rawBytes": 108,
+      "rawSHA256": "f92960e835f0eed8bba66e957493645c74df2603bbe22918e5ea18760502ab39",
+      "rules": [
+        "test_full_sync_contract.py -text",
+        "test_sync_native_metadata.py -text",
+        "test_sync_native_metadata_luau.py -text"
+      ]
+    }
+  ],
+  "selectedFilesText": "unset",
+  "otherFilesText": "unchanged unspecified",
+  "canonicalSourceWrites": 0,
+  "scope": "Exactly four filename-specific -text rules; no wildcard or folder-wide normalization change."
+}

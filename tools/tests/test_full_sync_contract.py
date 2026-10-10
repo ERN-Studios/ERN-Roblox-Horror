@@ -24,6 +24,7 @@ Runs entirely offline: no Studio, no MCP, no place file.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import shutil
@@ -79,6 +80,7 @@ class FakeStudioClient:
         self.editor_sources = dict(sources)
         self.editor_reads: list[str] = []
         self.chunk_reads: list[tuple[str, int, int]] = []
+        self.metadata_reads: list[str] = []
 
     def initialize(self) -> None:
         self.initialized = True
@@ -133,6 +135,21 @@ class FakeStudioClient:
             )
         if tool == "execute_luau":
             code = arguments["code"]
+            for target in list(self.sources) + self.remotes:
+                class_name = "ModuleScript" if target in self.sources else "RemoteEvent"
+                if code == sync.native_metadata_code(target.split("."), class_name, sync.EXPECTED_PLACE_ID, sync.EXPECTED_UNIVERSE_ID):
+                    self.metadata_reads.append(target)
+                    result = {"segments": target.split("."), "path": target, "className": class_name,
+                              "instanceId": "fake-node-" + target, "parentId": "fake-parent-" + target.rsplit(".", 1)[0],
+                              "placeId": sync.EXPECTED_PLACE_ID, "universeId": sync.EXPECTED_UNIVERSE_ID,
+                              "properties": {"Archivable": True}, "attributes": {}, "tags": []}
+                    if class_name != "RemoteEvent":
+                        result["properties"]["LinkedSource"] = ""
+                        raw = self.sources[target].encode("utf8")
+                        canonical = contract.canonical_bytes(self.sources[target])
+                        result.update(rawSourceSHA256=hashlib.sha256(raw).hexdigest(), rawEditorSHA256=hashlib.sha256(raw).hexdigest(),
+                                      sourceSHA256=hashlib.sha256(canonical).hexdigest(), canonicalBytes=len(canonical), sourceEditorMatches=True)
+                    return json.dumps(result)
             for target, raw in self.sources.items():
                 literals = ", ".join(push.luau_string(s) for s in target.split("."))
                 text = contract.normalize(raw)

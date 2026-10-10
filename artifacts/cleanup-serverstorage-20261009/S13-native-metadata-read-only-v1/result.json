@@ -1,0 +1,46 @@
+{
+  "schema": "s13-root-native-metadata-read-only-v1",
+  "pass": false,
+  "nativeCalls": 4,
+  "nativeWrites": 0,
+  "sourceWrites": 0,
+  "manifestWrites": 0,
+  "modeSwitches": 0,
+  "requires": 0,
+  "objectsCreated": 0,
+  "records": [
+    {
+      "phase": "before",
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Crouch State Server"
+      ],
+      "nativeCodeSHA256": "c498eb4711dfd5796584707153401b6477b23bdb36bb0b7ccbea21920cbc3b95",
+      "pass": true
+    },
+    {
+      "phase": "before",
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "RoundUI"
+      ],
+      "nativeCodeSHA256": "c6140b34456bfd47fa619c90d75b383fd93f7a4607628bf7df4facb25dad40ce",
+      "pass": true
+    },
+    {
+      "phase": "before",
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Kit Warmup"
+      ],
+      "nativeCodeSHA256": "a26389e99e7beefe102c881a3d85a54e191ff8a7fe2da61ae8e1a3526697f2d4",
+      "pass": true
+    }
+  ],
+  "scope": "Four exact native getter classes; read-only metadata and Source/editor hashes against working mirrors. No full-sync, runtime initializer, full-game/assets or continuous ownership certificate.",
+  "error": "'properties'"
+}

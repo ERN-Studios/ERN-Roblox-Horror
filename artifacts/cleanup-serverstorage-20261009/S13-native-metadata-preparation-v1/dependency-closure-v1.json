@@ -1,0 +1,523 @@
+{
+  "schema": "s13-sync-dependency-closure-v1",
+  "syncToolRawSHA256": "90a9b1f6058dc7ff7cbd88fed743603133f6cc567a947307d757bc749c7a2130",
+  "beforeToolRawSHA256": "f2055f5af65ec8c4f00d45e36fc2eda9d491a4556985655418b43394602a0c07",
+  "changedExistingDefinitions": [
+    "sync"
+  ],
+  "addedDefinitions": [
+    "native_metadata_code",
+    "read_native_record",
+    "require_edit_state",
+    "validate_native_metadata"
+  ],
+  "unchangedExistingDefinitions": [
+    "StudioMcpClient",
+    "StudioMcpError",
+    "accepted_studio_names",
+    "checked_components",
+    "decode_script_read",
+    "find_mcp_batch",
+    "load_manifest",
+    "main",
+    "mirrored_candidates",
+    "normalize_existing_case",
+    "normalized_destination",
+    "parse_args",
+    "read_canonical",
+    "reconcile_source",
+    "remote_marker",
+    "search_instances",
+    "select_studio",
+    "sha256_bytes",
+    "studio_display_name",
+    "studio_place_id",
+    "trailing_newline_flags",
+    "verify_mirrored",
+    "write_if_changed"
+  ],
+  "callers": [
+    {
+      "path": "tools/capture_elevator_90s.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/capture_entity_actions.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/capture_flashlight_test.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/capture_ui_regressions.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/apply_latch_mode_cleanup.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/apply_latch_mode_cleanup_v2.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/export_general_sound.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/external_storage_archive.py",
+      "imports": [
+        "RELEASE_STUDIO_NAME",
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/external_storage_archive_reopen.py",
+      "imports": [
+        "RELEASE_STUDIO_NAME",
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/prepare_latch_mode_probe.py",
+      "imports": [
+        "RELEASE_STUDIO_NAME",
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/prepare_latch_mode_probe_v2.py",
+      "imports": [
+        "RELEASE_STUDIO_NAME",
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/retire_external_mirror_sources.py",
+      "imports": [
+        "RELEASE_STUDIO_NAME",
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/retire_external_mirror_sources_v4.py",
+      "imports": [
+        "RELEASE_STUDIO_NAME",
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/retired_authoring_archive_receiver.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/cleanup_20261009/storage_record_archive.py",
+      "imports": [
+        "RELEASE_STUDIO_NAME",
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/export_entity_keyframes_retargeted.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/export_level1_facelift_baseline.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/export_level1_facelift_verified.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/install_new_scripts.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/install_trello_new_scripts.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/level1_blender/export_fixture_reference.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/level1_blender/import_assets.py",
+      "imports": [
+        "*"
+      ]
+    },
+    {
+      "path": "tools/level1_blender/import_elevator_inset.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/level1_blender/install_sources.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/level1_blender/publish_textures.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/level2_blender/import_kit.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "studio_place_id"
+      ]
+    },
+    {
+      "path": "tools/level4_blender/place_driver.py",
+      "imports": [
+        "*"
+      ]
+    },
+    {
+      "path": "tools/level4_blender/studio_upload.py",
+      "imports": [
+        "*"
+      ]
+    },
+    {
+      "path": "tools/luna/mcp.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/luna/studio.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/apply_effect_attributes.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final_asset_check.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/run_geometry.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/install_sources.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/native_probe_runner.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/budget_smoke.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/distant_spectate_smoke.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/l2_binding_smoke.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/l4_prompt_smoke.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/l6_deck_smoke.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/run_call.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "path": "tools/performance_research/capture_sources.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/performance_research/verify_snapshot.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/playtest_dev_phone.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/playtest_devcheats_level2.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/playtest_entity_kill.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/playtest_fuse_relays.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/playtest_level1.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/playtest_level1_cleanup.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/playtest_lobby_avatar_transition.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/playtest_ui_pit_regressions.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/publish_elevator_textures.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/publish_entity_animations.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/publish_lobby_concrete_textures.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/publish_table_hide_animation.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/pull_source_from_studio.py",
+      "imports": [
+        "MIRRORED_SERVICES",
+        "StudioMcpClient",
+        "StudioMcpError",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/push_repo_to_studio.py",
+      "imports": [
+        "StudioMcpClient",
+        "StudioMcpError",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/studio_tool_info.py",
+      "imports": [
+        "StudioMcpClient",
+        "find_mcp_batch",
+        "select_studio"
+      ]
+    },
+    {
+      "path": "tools/tests/test_full_sync_contract.py",
+      "imports": [
+        "*"
+      ]
+    },
+    {
+      "path": "tools/tests/test_sync_native_metadata.py",
+      "imports": [
+        "*"
+      ]
+    },
+    {
+      "path": "tools/tests/test_sync_native_metadata_luau.py",
+      "imports": [
+        "*"
+      ]
+    }
+  ],
+  "dependencyPaths": [
+    "tools/push_repo_to_studio.py",
+    "tools/studio_source_contract.py"
+  ],
+  "dependenciesUnmodifiedByS13": true,
+  "runtimeLuaMirrorsModifiedByS13": false,
+  "sharedClientAndBootstrapDefinitionsUnchanged": true,
+  "scope": "Read-only AST closure. Only sync() changed among prior definitions; added fresh metadata helpers reuse the unchanged native chunk reader and canonical Source contract. CLI/import callers keep their existing shared client/selection/bootstrap contracts. No scripts imported or initializer/network/native service executed by this scan."
+}

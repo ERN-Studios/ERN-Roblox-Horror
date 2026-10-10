@@ -1,0 +1,22 @@
+{
+  "schema": "s13-root-observed-preflight-rejection-v1",
+  "source": "Root message: preflight rejected before destination/client/MCP on v1 remote target segments absent from current manifest.",
+  "preparedV1IndexRawSHA256": "0e5c992bf9b042cbc716c398bcb2843d3584f9f9b15b44c335bf4330898276d6",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "fullSyncs": 0,
+  "canonicalWrites": 0,
+  "attemptedSegments": [
+    "ReplicatedStorage",
+    "RoundStatus"
+  ],
+  "actualSegments": [
+    "ReplicatedStorage",
+    "Remotes",
+    "RoundStatus"
+  ],
+  "productionToolChanged": false,
+  "preparedV1Retained": true,
+  "qualification": "Root-reported preflight outcome, not a runtime/native API failure; compile-only v1 preparation remains historical."
+}

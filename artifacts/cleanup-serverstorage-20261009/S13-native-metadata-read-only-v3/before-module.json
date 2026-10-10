@@ -1,0 +1,25 @@
+{
+  "path": "ServerScriptService.Level 3 Kit Warmup",
+  "tags": [],
+  "instanceId": "1_42771",
+  "rawEditorSHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+  "placeId": 131311258779917,
+  "parentId": "1_409634",
+  "canonicalBytes": 2965,
+  "sourceSHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+  "properties": {
+    "Archivable": true,
+    "LinkedSource": ""
+  },
+  "segments": [
+    "ServerScriptService",
+    "Level 3 Kit Warmup"
+  ],
+  "className": "ModuleScript",
+  "sourceEditorMatches": true,
+  "attributes": {
+    "Level3PromotionOwned": "20261002"
+  },
+  "rawSourceSHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+  "universeId": 10559217407
+}

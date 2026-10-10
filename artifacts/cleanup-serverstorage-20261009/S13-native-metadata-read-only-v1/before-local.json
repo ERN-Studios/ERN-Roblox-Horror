@@ -1,0 +1,29 @@
+{
+  "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+  "tags": [],
+  "instanceId": "1_31069",
+  "rawEditorSHA256": "c42eafe2755344a2fbe1148db1b5df080a19a423a8866d1e4fa814a28bba6210",
+  "placeId": 131311258779917,
+  "parentId": "1_410029",
+  "canonicalBytes": 239616,
+  "sourceSHA256": "c42eafe2755344a2fbe1148db1b5df080a19a423a8866d1e4fa814a28bba6210",
+  "properties": {
+    "Enabled": true,
+    "LinkedSource": "",
+    "Disabled": false,
+    "RunContext": "Enum.RunContext.Legacy",
+    "Archivable": true
+  },
+  "segments": [
+    "StarterPlayer",
+    "StarterPlayerScripts",
+    "RoundUI"
+  ],
+  "className": "LocalScript",
+  "sourceEditorMatches": true,
+  "attributes": {
+    "ObjectiveUIVersion": "20260902_1"
+  },
+  "rawSourceSHA256": "c42eafe2755344a2fbe1148db1b5df080a19a423a8866d1e4fa814a28bba6210",
+  "universeId": 10559217407
+}

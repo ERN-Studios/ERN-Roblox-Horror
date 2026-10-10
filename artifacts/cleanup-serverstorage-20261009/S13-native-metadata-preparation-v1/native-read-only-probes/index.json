@@ -1,0 +1,55 @@
+{
+  "schema": "s13-native-read-only-probe-preparation-v1",
+  "pass": true,
+  "toolRawSHA256": "90a9b1f6058dc7ff7cbd88fed743603133f6cc567a947307d757bc749c7a2130",
+  "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+  "compileUnits": 4,
+  "compileChecks": 8,
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "records": [
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S13-native-metadata-preparation-v1/native-read-only-probes/server.luau",
+      "segments": [
+        "ServerScriptService",
+        "Crouch State Server"
+      ],
+      "className": "Script",
+      "rawBytes": 3705,
+      "rawSHA256": "c498eb4711dfd5796584707153401b6477b23bdb36bb0b7ccbea21920cbc3b95"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S13-native-metadata-preparation-v1/native-read-only-probes/local.luau",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "RoundUI"
+      ],
+      "className": "LocalScript",
+      "rawBytes": 3716,
+      "rawSHA256": "c6140b34456bfd47fa619c90d75b383fd93f7a4607628bf7df4facb25dad40ce"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S13-native-metadata-preparation-v1/native-read-only-probes/module.luau",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Kit Warmup"
+      ],
+      "className": "ModuleScript",
+      "rawBytes": 3710,
+      "rawSHA256": "a26389e99e7beefe102c881a3d85a54e191ff8a7fe2da61ae8e1a3526697f2d4"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S13-native-metadata-preparation-v1/native-read-only-probes/remote.luau",
+      "segments": [
+        "ReplicatedStorage",
+        "RoundStatus"
+      ],
+      "className": "RemoteEvent",
+      "rawBytes": 3700,
+      "rawSHA256": "5971f44d361110692015a066286864341be75b4d74dc15ac2750b6982e2024c5"
+    }
+  ],
+  "scope": "Prepared read-only exact metadata Getter code. Root owns native Edit invocation and fresh Source/editor/class/property comparison. No source bodies, initializer or full sync."
+}

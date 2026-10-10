@@ -1,0 +1,89 @@
+{
+  "schema": "sync-native-metadata-offline-python-v1",
+  "pass": true,
+  "caseCount": 19,
+  "assertions": 128,
+  "cases": [
+    {
+      "case": "all-classes-fresh-metadata",
+      "pass": true
+    },
+    {
+      "case": "empty-attributes",
+      "pass": true
+    },
+    {
+      "case": "actual-editor-conflict",
+      "pass": true
+    },
+    {
+      "case": "class",
+      "pass": true
+    },
+    {
+      "case": "required-property",
+      "pass": true
+    },
+    {
+      "case": "nonboolean",
+      "pass": true
+    },
+    {
+      "case": "noninverse",
+      "pass": true
+    },
+    {
+      "case": "unsupported-attribute",
+      "pass": true
+    },
+    {
+      "case": "wrong-place",
+      "pass": true
+    },
+    {
+      "case": "wrong-universe",
+      "pass": true
+    },
+    {
+      "case": "malformed",
+      "pass": true
+    },
+    {
+      "case": "identity-drift",
+      "pass": true
+    },
+    {
+      "case": "parent-drift",
+      "pass": true
+    },
+    {
+      "case": "property-drift",
+      "pass": true
+    },
+    {
+      "case": "attribute-drift",
+      "pass": true
+    },
+    {
+      "case": "tag-drift",
+      "pass": true
+    },
+    {
+      "case": "mode-drift",
+      "pass": true
+    },
+    {
+      "case": "initial-play",
+      "pass": true
+    },
+    {
+      "case": "returned-source-mismatch",
+      "pass": true
+    }
+  ],
+  "nativeCalls": 0,
+  "productionSourceWrites": 0,
+  "scope": "Actual sync loop/reader protocol with fake native boundaries and owned temporary mirrors; not native/gameplay/atomic full-export certification.",
+  "toolRawSHA256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6",
+  "testRawSHA256": "4e40fa3cdf3b1f86bc0d243ca666ce7408fcf3baa24905cd208046b2a7b0ce08"
+}

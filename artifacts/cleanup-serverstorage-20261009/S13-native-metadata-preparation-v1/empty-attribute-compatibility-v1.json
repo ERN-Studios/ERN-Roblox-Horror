@@ -1,0 +1,71 @@
+{
+  "schema": "s13-empty-attribute-output-compatibility-v1",
+  "pass": true,
+  "beforeToolRawSHA256": "90a9b1f6058dc7ff7cbd88fed743603133f6cc567a947307d757bc749c7a2130",
+  "finalToolRawSHA256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6",
+  "onlyToolChange": "Manifest output attributes=native_record[attributes] or []; the strict internal dictionary and getter/chunk/safety guards are unchanged.",
+  "nativeTemplateByteIdentical": true,
+  "actualNativeResultPath": "artifacts/cleanup-serverstorage-20261009/S13-native-metadata-read-only-v3/result.json",
+  "actualNativeResultRawSHA256": "55680e351911d184f96cc2d12eb48a3f6f9a76a45b7180e9fb9e2625adfa28f1",
+  "actualNativeReads": 8,
+  "nativeWrites": 0,
+  "manifestWrites": 0,
+  "fullSyncs": 0,
+  "generatedCode": [
+    {
+      "className": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Crouch State Server"
+      ],
+      "rawSHA256": "c498eb4711dfd5796584707153401b6477b23bdb36bb0b7ccbea21920cbc3b95",
+      "nativeBeforeAfterMatched": true
+    },
+    {
+      "className": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "RoundUI"
+      ],
+      "rawSHA256": "c6140b34456bfd47fa619c90d75b383fd93f7a4607628bf7df4facb25dad40ce",
+      "nativeBeforeAfterMatched": true
+    },
+    {
+      "className": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Kit Warmup"
+      ],
+      "rawSHA256": "a26389e99e7beefe102c881a3d85a54e191ff8a7fe2da61ae8e1a3526697f2d4",
+      "nativeBeforeAfterMatched": true
+    },
+    {
+      "className": "RemoteEvent",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "RoundStatus"
+      ],
+      "rawSHA256": "90d633e524cabddbf10b975e9b4a88048cf61da6a88b12d2183ffba8efd72b9d",
+      "nativeBeforeAfterMatched": true
+    }
+  ],
+  "consumerEvidence": [
+    {
+      "path": "tools/cleanup_20261009/apply_latch_mode_cleanup_v2.py",
+      "line": 135,
+      "contract": "Strict existing manifest attributes == native JSON attributes comparison."
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/check_eight_sources.py",
+      "line": 127,
+      "contract": "primitive_map accepts equivalent empty list/dictionary and compares fresh attributes."
+    }
+  ],
+  "manifestObservedRows": 227,
+  "manifestObservedEmptyList": 179,
+  "manifestObservedEmptyDictionary": 0,
+  "manifestObservedNonemptyDictionary": 48,
+  "scope": "Preserve existing native-JSON empty-list manifest convention without changing the internal validation or reusing stale repository metadata. This bridge does not execute a new native call or claim full-sync native coverage."
+}

@@ -1,0 +1,26 @@
+{
+  "path": "ServerScriptService.Crouch State Server",
+  "tags": [],
+  "instanceId": "1_408351",
+  "rawEditorSHA256": "2d9ded3b5b786cccf1f54a4e8e94d28781d0869f57141353946ad8634499d512",
+  "placeId": 131311258779917,
+  "parentId": "1_409634",
+  "canonicalBytes": 7325,
+  "sourceSHA256": "2d9ded3b5b786cccf1f54a4e8e94d28781d0869f57141353946ad8634499d512",
+  "properties": {
+    "Enabled": true,
+    "LinkedSource": "",
+    "Disabled": false,
+    "RunContext": "Enum.RunContext.Legacy",
+    "Archivable": true
+  },
+  "segments": [
+    "ServerScriptService",
+    "Crouch State Server"
+  ],
+  "className": "Script",
+  "sourceEditorMatches": true,
+  "attributes": {},
+  "rawSourceSHA256": "2d9ded3b5b786cccf1f54a4e8e94d28781d0869f57141353946ad8634499d512",
+  "universeId": 10559217407
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "s13-existing-regression-proof-v1",
+  "pass": true,
+  "gates": [
+    {
+      "command": "python -B tools/tests/test_studio_source_contract.py",
+      "checks": 39,
+      "exitCode": 0
+    },
+    {
+      "command": "python -B tools/tests/test_full_sync_contract.py",
+      "checks": 65,
+      "exitCode": 0
+    }
+  ],
+  "records": [
+    {
+      "path": "tools/sync_from_studio.py",
+      "rawBytes": 36904,
+      "rawSHA256": "90a9b1f6058dc7ff7cbd88fed743603133f6cc567a947307d757bc749c7a2130",
+      "canonicalLFSHA256": "90a9b1f6058dc7ff7cbd88fed743603133f6cc567a947307d757bc749c7a2130",
+      "rawCRLFCount": 0,
+      "astPass": true,
+      "headRawBytes": 27061,
+      "headRawSHA256": "f2055f5af65ec8c4f00d45e36fc2eda9d491a4556985655418b43394602a0c07"
+    },
+    {
+      "path": "tools/tests/test_full_sync_contract.py",
+      "rawBytes": 32800,
+      "rawSHA256": "e8577da0a538968497fba39b00e01ae202409c5c093f5d598f5e7ba015cfd7b1",
+      "canonicalLFSHA256": "e8577da0a538968497fba39b00e01ae202409c5c093f5d598f5e7ba015cfd7b1",
+      "rawCRLFCount": 0,
+      "astPass": true,
+      "headRawBytes": 31378,
+      "headRawSHA256": "4592ab62c7350823709fd998429024d4c1f46cf56fd4e2615510e1dc0e91fa84"
+    },
+    {
+      "path": "tools/tests/test_studio_source_contract.py",
+      "rawBytes": 14204,
+      "rawSHA256": "09eb677e8377c64fa932a2a38534afd0d2c2afd1949e7616ddef8d4e9e922b5a",
+      "canonicalLFSHA256": "09eb677e8377c64fa932a2a38534afd0d2c2afd1949e7616ddef8d4e9e922b5a",
+      "rawCRLFCount": 0,
+      "astPass": true,
+      "headRawBytes": 14204,
+      "headRawSHA256": "09eb677e8377c64fa932a2a38534afd0d2c2afd1949e7616ddef8d4e9e922b5a"
+    },
+    {
+      "path": "tools/tests/test_sync_native_metadata.py",
+      "rawBytes": 10635,
+      "rawSHA256": "488eee296e634e83d64942aa1e67a25c49e1e9c00ac69eb6abf62def8b088d1a",
+      "canonicalLFSHA256": "488eee296e634e83d64942aa1e67a25c49e1e9c00ac69eb6abf62def8b088d1a",
+      "rawCRLFCount": 0,
+      "astPass": true
+    },
+    {
+      "path": "tools/tests/test_sync_native_metadata_luau.py",
+      "rawBytes": 14387,
+      "rawSHA256": "d0cd6604fe4d1948261864548d673f279a5aea5bb12598713eaeb5bb8552e48a",
+      "canonicalLFSHA256": "d0cd6604fe4d1948261864548d673f279a5aea5bb12598713eaeb5bb8552e48a",
+      "rawCRLFCount": 0,
+      "astPass": true
+    }
+  ],
+  "nativeCalls": 0,
+  "canonicalSourceWrites": 0,
+  "canonicalManifestWrites": 0,
+  "scope": "Actual existing Source and full-sync regression suites; fake MCP/native services and owned temporary test mirror writes only. Production checkout comparisons are read-only. These checks do not execute a real full sync or certify gameplay."
+}

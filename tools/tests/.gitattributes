@@ -1,0 +1,3 @@
+test_full_sync_contract.py -text
+test_sync_native_metadata.py -text
+test_sync_native_metadata_luau.py -text

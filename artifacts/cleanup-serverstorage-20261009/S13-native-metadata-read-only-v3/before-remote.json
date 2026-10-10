@@ -1,0 +1,18 @@
+{
+  "path": "ReplicatedStorage.Remotes.RoundStatus",
+  "instanceId": "1_408311",
+  "placeId": 131311258779917,
+  "parentId": "1_15587",
+  "segments": [
+    "ReplicatedStorage",
+    "Remotes",
+    "RoundStatus"
+  ],
+  "className": "RemoteEvent",
+  "tags": [],
+  "attributes": {},
+  "properties": {
+    "Archivable": true
+  },
+  "universeId": 10559217407
+}

@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import queue
@@ -63,6 +64,93 @@ UPDATE_STUDIO_NAME = "(UPDATE) BACKROOMS: STAY QUIET"
 UPDATE_STUDIO_NAME_BRACKETS = "[UPDATE] BACKROOMS: STAY QUIET"  # renamed again by the evening of 2026-10-08
 KNOWN_STUDIO_NAMES = frozenset((LEGACY_STUDIO_NAME, RELEASE_STUDIO_NAME, UPDATE_STUDIO_NAME, UPDATE_STUDIO_NAME_BRACKETS))
 EXPECTED_PLACE_ID = 131311258779917
+EXPECTED_UNIVERSE_ID = 10559217407
+
+# Read-only per-instance snapshot. Source stays in the existing chunk reader;
+# only bounded hashes/metadata cross this response. Never reuse old repo props.
+NATIVE_METADATA_LUAU = r'''
+-- sync-native-metadata-v1
+local H=game:GetService("HttpService")
+local SES=game:GetService("ScriptEditorService")
+local ENC=game:GetService("EncodingService")
+local CS=game:GetService("CollectionService")
+local RS=game:GetService("RunService")
+local wanted={__SEGMENTS__}
+local expectedClass=__CLASS__
+local expectedPlace=__PLACE__
+local expectedUniverse=__UNIVERSE__
+assert(not RS:IsRunning(),"Native metadata requires Edit")
+assert(expectedPlace==nil or game.PlaceId==expectedPlace,"Wrong place")
+assert(expectedUniverse==nil or game.GameId==expectedUniverse,"Wrong universe")
+local cur=game
+for _,name in wanted do
+ local found=nil
+ for _,child in cur:GetChildren() do
+  if child.Name==name then assert(found==nil,"Ambiguous native path");found=child end
+ end
+ assert(found,"Missing native path");cur=found
+end
+assert(cur.ClassName==expectedClass,"Native class changed")
+local parent=cur.Parent
+assert(parent,"Detached native instance")
+local function sha(text)
+ local b=ENC:ComputeBufferHash(buffer.fromstring(text),Enum.HashAlgorithm.Sha256)
+ local out={} for i=0,buffer.len(b)-1 do out[#out+1]=string.format("%02x",buffer.readu8(b,i)) end
+ return table.concat(out)
+end
+local function properties()
+ local p={Archivable=cur.Archivable}
+ assert(type(p.Archivable)=="boolean","Archivable unreadable")
+ if expectedClass~="RemoteEvent" then
+  p.LinkedSource=cur.LinkedSource
+  assert(type(p.LinkedSource)=="string","LinkedSource unreadable")
+  if expectedClass~="ModuleScript" then
+   p.Enabled=cur.Enabled;p.Disabled=cur.Disabled
+   assert(type(p.Enabled)=="boolean" and type(p.Disabled)=="boolean" and p.Enabled~=p.Disabled,"Invalid Enabled aliases")
+   local context=cur.RunContext
+   assert(typeof(context)=="EnumItem","RunContext unreadable")
+   p.RunContext=tostring(context)
+  end
+ end
+ return p
+end
+local function attributes()
+ local a=cur:GetAttributes()
+ for key,value in a do
+  local t=type(value)
+  assert(type(key)=="string" and (t=="string" or t=="boolean" or (t=="number" and value==value and math.abs(value)<math.huge)),"Unsupported native attribute")
+ end
+ return a
+end
+local function tags()
+ local values=CS:GetTags(cur)
+ for _,value in values do assert(type(value)=="string","Invalid native tag") end
+ table.sort(values)
+ return values
+end
+local function same(a,b)
+ for key,value in a do assert(type(b[key])==type(value) and b[key]==value,"Native metadata changed during read") end
+ for key in b do assert(a[key]~=nil,"Native metadata changed during read") end
+end
+local props,attrs,labels=properties(),attributes(),tags()
+local result={segments=wanted,path=cur:GetFullName(),className=cur.ClassName,
+ instanceId=cur:GetDebugId(16),parentId=parent:GetDebugId(16),
+ placeId=game.PlaceId,universeId=game.GameId,properties=props,attributes=attrs,tags=labels}
+if expectedClass~="RemoteEvent" then
+ local source=cur.Source
+ local editor=SES:GetEditorSource(cur)
+ assert(type(source)=="string" and type(editor)=="string" and source==editor,"Native Source/editor conflict")
+ local canonical=source:gsub("\r\n","\n")
+ result.rawSourceSHA256=sha(source);result.rawEditorSHA256=sha(editor)
+ result.sourceSHA256=sha(canonical);result.canonicalBytes=#canonical
+ result.sourceEditorMatches=true
+ assert(cur.Source==source and SES:GetEditorSource(cur)==editor,"Native Source/editor changed during read")
+end
+same(props,properties());same(attrs,attributes());same(labels,tags())
+assert(cur.Parent==parent and cur.ClassName==expectedClass and cur:GetFullName()==result.path,"Native identity changed during read")
+assert(not RS:IsRunning() and game.PlaceId==result.placeId and game.GameId==result.universeId,"Native mode/place changed")
+return H:JSONEncode(result)
+'''
 
 # StudioMCP.exe needs a moment after launch before it can reach Studio's plugin;
 # the wording of that transient failure has changed between Studio builds.
@@ -384,6 +472,86 @@ def normalized_destination(root: Path, item: dict[str, Any]) -> Path:
     return root.joinpath(*components[:-1], filename)
 
 
+def require_edit_state(client: StudioMcpClient, studio_id: str) -> None:
+    state = client.call("get_studio_state", {"studio_id": studio_id})
+    modes = re.findall(r"^\s*-?\s*Current Studio Mode:\s*(.*?)\s*$", state, re.MULTILINE)
+    if modes != ["Edit"] or "Available DataModels: Edit" not in state:
+        raise StudioMcpError("Studio must currently be in Edit mode; no mode switch performed")
+
+
+def native_metadata_code(segments: list[str], class_name: str, place_id: int | None, universe_id: int | None) -> str:
+    from push_repo_to_studio import luau_string
+    if class_name not in SCRIPT_CLASSES | {"RemoteEvent"}:
+        raise StudioMcpError("Unsupported native metadata class")
+    return (NATIVE_METADATA_LUAU.replace("__SEGMENTS__", ", ".join(luau_string(s) for s in segments))
+            .replace("__CLASS__", luau_string(class_name))
+            .replace("__PLACE__", "nil" if place_id is None else str(int(place_id)))
+            .replace("__UNIVERSE__", "nil" if universe_id is None else str(int(universe_id))))
+
+
+def validate_native_metadata(value: Any, segments: list[str], class_name: str, place_id: int | None, universe_id: int | None) -> None:
+    def demand(condition: bool) -> None:
+        if not condition:
+            raise StudioMcpError("Invalid or conflicting native metadata; no stale repo metadata accepted")
+    demand(isinstance(value, dict))
+    demand(value.get("segments") == segments and value.get("path") == ".".join(segments) and value.get("className") == class_name)
+    demand(all(isinstance(value.get(k), str) and value[k] for k in ("instanceId", "parentId")))
+    demand(all(type(value.get(k)) is int and value[k] >= 0 for k in ("placeId", "universeId")))
+    demand(place_id is None or value["placeId"] == place_id)
+    demand(universe_id is None or value["universeId"] == universe_id)
+    props = value.get("properties")
+    wanted = {"Archivable"} if class_name == "RemoteEvent" else {"Archivable", "LinkedSource"}
+    if class_name in {"Script", "LocalScript"}: wanted |= {"Enabled", "Disabled", "RunContext"}
+    demand(isinstance(props, dict) and set(props) == wanted and type(props.get("Archivable")) is bool)
+    if class_name != "RemoteEvent": demand(isinstance(props.get("LinkedSource"), str))
+    if class_name in {"Script", "LocalScript"}:
+        demand(type(props.get("Enabled")) is bool and type(props.get("Disabled")) is bool and props["Enabled"] is not props["Disabled"])
+        demand(isinstance(props.get("RunContext"), str) and props["RunContext"].startswith("Enum.RunContext."))
+    attrs, tags = value.get("attributes"), value.get("tags")
+    demand(isinstance(attrs, dict) and all(isinstance(k, str) and (type(v) in (str, bool, int) or (type(v) is float and math.isfinite(v))) for k,v in attrs.items()))
+    demand(isinstance(tags, list) and all(isinstance(t, str) for t in tags) and tags == sorted(set(tags)))
+    if class_name != "RemoteEvent":
+        demand(value.get("sourceEditorMatches") is True and type(value.get("canonicalBytes")) is int and value["canonicalBytes"] >= 0)
+        demand(all(isinstance(value.get(k), str) and re.fullmatch(r"[0-9a-f]{64}", value[k]) for k in ("sourceSHA256", "rawSourceSHA256", "rawEditorSHA256")))
+        demand(value["rawSourceSHA256"] == value["rawEditorSHA256"])
+
+
+def read_native_record(client: StudioMcpClient, studio_id: str, item: dict[str, Any], place_id: int | None, universe_id: int | None) -> tuple[str | None, dict[str, Any]]:
+    """Bracket the native chunk read with fresh same-instance metadata snapshots.
+
+    Read-time per-row consistency, not a continuous epoch or atomic full export.
+    Required/read/editor errors abort before this row's mirror is written.
+    """
+    from push_repo_to_studio import read_studio_source
+    segments, class_name = checked_components(item["fullPath"]), item["className"]
+    code = native_metadata_code(segments, class_name, place_id, universe_id)
+
+    def capture() -> dict[str, Any]:
+        try:
+            value = json.loads(client.call("execute_luau", {"studio_id": studio_id, "datamodel_type": "Edit", "code": code}))
+        except (ValueError, TypeError) as error:
+            raise StudioMcpError("Unreadable native metadata response") from error
+        # HttpService can encode an empty native attribute dictionary as [].
+        # In this fixed schema only the empty form is equivalent to no attrs.
+        if isinstance(value, dict) and value.get("attributes") == []:
+            value["attributes"] = {}
+        validate_native_metadata(value, segments, class_name, place_id, universe_id)
+        return value
+
+    require_edit_state(client, studio_id)
+    before = capture()
+    source = None if class_name == "RemoteEvent" else read_studio_source(client, studio_id, segments)
+    after = capture()
+    require_edit_state(client, studio_id)
+    if before != after:
+        raise StudioMcpError("Native Source/identity/properties/attributes/tags changed during chunk read")
+    if source is not None:
+        data = canonical_bytes(source)
+        if len(data) != before["canonicalBytes"] or hashlib.sha256(data).hexdigest() != before["sourceSHA256"]:
+            raise StudioMcpError("Native metadata/chunk Source hash mismatch")
+    return source, before
+
+
 def normalize_existing_case(path: Path) -> None:
     if not path.parent.is_dir():
         return
@@ -556,16 +724,15 @@ def sync(args: argparse.Namespace, client_factory=None) -> dict[str, Any]:
 
     # The guarded push tool imports this MCP client, so resolve its shared
     # native reader only after this module has finished loading.
-    from push_repo_to_studio import read_studio_source
-
     client = (client_factory or (lambda: StudioMcpClient(find_mcp_batch())))()
     try:
         client.initialize()
         studio = select_studio(client, args.studio_name, args.connect_timeout)
         studio_id = studio["id"]
-        state = client.call("get_studio_state", {"studio_id": studio_id})
-        if "Available DataModels: Edit" not in state:
-            raise StudioMcpError(f"Studio is not available in Edit mode: {state}")
+        require_edit_state(client, studio_id)
+        expected_place = EXPECTED_PLACE_ID if args.studio_name in KNOWN_STUDIO_NAMES else studio_place_id(studio)
+        expected_universe = EXPECTED_UNIVERSE_ID if args.studio_name in KNOWN_STUDIO_NAMES else None
+        native_place: tuple[int, int] | None = None
 
         scripts = search_instances(client, studio_id, "LuaSourceContainer")
         remotes = search_instances(client, studio_id, "RemoteEvent")
@@ -591,6 +758,11 @@ def sync(args: argparse.Namespace, client_factory=None) -> dict[str, Any]:
             destination = normalized_destination(project_root, item)
             relative = destination.relative_to(project_root).as_posix()
             print(f"[{index:02d}/{len(items):02d}] {full_path} -> {relative}", flush=True)
+            studio_text, native_record = read_native_record(client, studio_id, item, expected_place, expected_universe)
+            identity = (native_record["placeId"], native_record["universeId"])
+            if native_place is not None and identity != native_place:
+                raise StudioMcpError("Native place/universe changed during export")
+            native_place = identity
 
             if class_name == "RemoteEvent":
                 if destination.is_file():
@@ -602,9 +774,7 @@ def sync(args: argparse.Namespace, client_factory=None) -> dict[str, Any]:
                     content = remote_marker(item)
                     status = write_if_changed(destination, content)
             else:
-                studio_text = read_studio_source(
-                    client, studio_id, checked_components(full_path)
-                )
+                assert studio_text is not None
                 existing = read_canonical(destination) if destination.is_file() else None
                 flagged = full_path in flagged_paths
                 action, content, verdict = reconcile_source(
@@ -637,7 +807,13 @@ def sync(args: argparse.Namespace, client_factory=None) -> dict[str, Any]:
                 "bytes": len(canonical),
                 "sha256": sha256_of(content),
                 "status": status,
+                "segments": native_record["segments"],
+                "properties": native_record["properties"],
+                "attributes": native_record["attributes"] or [],
+                "tags": native_record["tags"],
             }
+            if class_name in SCRIPT_CLASSES:
+                item["sourceEditorMatches"] = native_record["sourceEditorMatches"]
             # Re-derived from the observed landing. An exact source clears a
             # stale historical flag; only the one verified +LF outcome retains it.
             if verdict == TRAILING_NEWLINE:

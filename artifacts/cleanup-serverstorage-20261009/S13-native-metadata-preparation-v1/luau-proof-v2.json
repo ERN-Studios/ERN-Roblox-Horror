@@ -1,0 +1,32 @@
+{
+  "schema": "sync-native-metadata-luau-fixture-v1",
+  "pass": true,
+  "cases": 30,
+  "checks": 103,
+  "syntheticObjectWrites": 0,
+  "compileChecks": [
+    {
+      "optimization": "-O0",
+      "pass": true
+    },
+    {
+      "optimization": "-O1",
+      "pass": true
+    }
+  ],
+  "generatedCodeSHA256": {
+    "Script": "bd585dd7d85b4276f358d2c32c1306615c1fc9c4727c83730c49bcd9a9964076",
+    "LocalScript": "fac9d8273182a720d342329faf74824609d0291efbb143f109aab3d9c5c15519",
+    "ModuleScript": "3131347bdf8456b433c514d209a82cc612eedd10269b3b3bb33b3c181708857b",
+    "RemoteEvent": "f5034b1f597501f716defc5e48aaa1f2341c354eff8b8bdc6263913ef28904f9"
+  },
+  "fixtureSHA256": "7306c986e9096a835e92b3b7b10912376788aa6056aebbd59ecffc7d3268ca9b",
+  "syncToolSHA256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6",
+  "testSHA256": "d0cd6604fe4d1948261864548d673f279a5aea5bb12598713eaeb5bb8552e48a",
+  "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+  "runtimeSHA256": "2cab978f10cb8f1b4a77c8108c7d27b0503d4196bbfa0ace459b9b55ee19e09c",
+  "temporaryFixtureCleaned": true,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "limits": "Actual generated Luau and property/editor/identity guards under fake services. JSON boundary returns the metadata table; EncodingService uses exact known SHA buffers. No real Roblox API, serialization, gameplay, authoring assets, multiplayer or performance certification."
+}
