@@ -1,0 +1,22 @@
+{
+ "ExitLamp_Base": {
+  "id": 138036981110651,
+  "sha256": "833f44b6fc87ab910fcb8ac3b941c317062db6d151a81196a59612ca42992be6"
+ },
+ "ExitLamp_Cage": {
+  "id": 74295766504484,
+  "sha256": "e3b5f2855a4759ca06cee50505fcddf671011fa18bed115d8d43751ffad38967"
+ },
+ "ExitLamp_Lens": {
+  "id": 107570296145943,
+  "sha256": "70a40bf968ea9d3985fafdd9946e800e72800961229eda71c186976b3eda417b"
+ },
+ "PoolLamp_Bezel": {
+  "id": 89369179872830,
+  "sha256": "027ee209f452712650a0d25ad9e07394f791a30335cf2380ca03b52596c917f3"
+ },
+ "PoolLamp_Lens": {
+  "id": 94249926739422,
+  "sha256": "7e312de93cbc679750a40e848f7ec6e088414d01c56a4b36ccd9cacbecf4caf2"
+ }
+}
