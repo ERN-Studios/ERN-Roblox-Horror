@@ -1,0 +1,9 @@
+phone 1920x1080, 23 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, RoundHud, FoundFootageHUD, RoundHudThreat, Achievements, LobbyDJ, Level3ReaderGui, ZyntraStore, ZyntraLobbyPillL4, ZyntraShopL4, SpectateGui, StaminaGui, FriendBoostGui, FlashlightPopup, RoundExitGui, Level2PoolFoamGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ProtectionHUD), 30 pieces measured, 8 findings
+THUMB   ProtectionHUD.EquipmentPanel 'Q' (292,1032)-(301,1052) is 10x20 px inside the Thumbstick zone
+THUMB   ProtectionHUD.EquipmentPanel 'Z' (364,1032)-(373,1052) is 10x20 px inside the Thumbstick zone
+THUMB   ProtectionHUD.EquipmentPanel > Face (264,980)-(328,1044) is 64x64 px inside the Thumbstick zone
+THUMB   ProtectionHUD.EquipmentPanel > Face (336,980)-(400,1044) is 64x64 px inside the Thumbstick zone
+THUMB   ProtectionHUD.EquipmentPanel > KeyChip (282,1028)-(311,1056) is 29x28 px inside the Thumbstick zone
+THUMB   ProtectionHUD.EquipmentPanel > KeyChip (354,1028)-(383,1056) is 29x28 px inside the Thumbstick zone
+THUMB   ProtectionHUD.EquipmentPanel > Point (287,996)-(305,1014) is 18x18 px inside the Thumbstick zone
+THUMB   ProtectionHUD.EquipmentPanel > Top (287,992)-(305,1004) is 18x12 px inside the Thumbstick zone

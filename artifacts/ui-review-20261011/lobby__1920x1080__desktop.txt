@@ -1,0 +1,32 @@
+phone 1920x1080, 20 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, RoundHud, RoundHudThreat, Achievements, LobbyDJ, Level3ReaderGui, ZyntraStore, ZyntraLobbyPillL4, ZyntraShopL4, SpectateGui, StaminaGui, FriendBoostGui, RoundExitGui, Level2PoolFoamGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui), 40 pieces measured, 31 findings
+CUT     ZyntraLobbyPillL4.TokenPill '+' (1879,94)-(1888,110)
+THUMB   Achievements.Open 'Badges' (18,762)-(62,774) is 44x13 px inside the Thumbstick zone
+THUMB   Achievements.Open (8,753)-(72,783) is 64x30 px inside the Thumbstick zone
+THUMB   HelpButton.Open 'Help' (26,800)-(54,812) is 27x13 px inside the Thumbstick zone
+THUMB   HelpButton.Open (8,791)-(72,821) is 64x30 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton 'MUTE' (28,729)-(52,740) is 24x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton (8,681)-(72,745) is 64x64 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Face (8,681)-(72,745) is 64x64 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Icon (13,686)-(67,740) is 55x55 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Plate (8,727)-(72,743) is 64x16 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton 'UPGRADES' (18,513)-(62,524) is 44x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton (8,465)-(72,529) is 64x64 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Face (8,465)-(72,529) is 64x64 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Icon (13,470)-(67,524) is 55x55 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Plate (8,511)-(72,527) is 64x16 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton 'REWARDS' (20,585)-(60,596) is 40x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton (8,537)-(72,601) is 64x64 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Face (8,537)-(72,601) is 64x64 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Icon (13,542)-(67,596) is 55x55 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Plate (8,583)-(72,599) is 64x16 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraShopButton 'SHOP' (28,441)-(52,452) is 23x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraShopButton (8,393)-(72,457) is 64x64 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraShopButton > Face (8,393)-(72,457) is 64x64 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraShopButton > Icon (13,398)-(67,452) is 55x55 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraShopButton > Plate (8,439)-(72,455) is 64x16 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton 'WHEEL' (26,657)-(54,668) is 28x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton (8,609)-(72,673) is 64x64 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Face (8,609)-(72,673) is 64x64 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Icon (13,614)-(67,668) is 55x55 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > NotificationDot (58,613)-(68,623) is 10x10 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Plate (8,655)-(72,671) is 64x16 px inside the Thumbstick zone

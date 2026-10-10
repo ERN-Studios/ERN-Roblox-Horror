@@ -1,0 +1,12 @@
+phone 1024x768, 23 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, RoundHud, FoundFootageHUD, RoundHudThreat, Achievements, LobbyDJ, Level3ReaderGui, ZyntraStore, ZyntraLobbyPillL4, ZyntraShopL4, SpectateGui, StaminaGui, FriendBoostGui, FlashlightPopup, RoundExitGui, Level2PoolFoamGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ProtectionHUD), 29 pieces measured, 11 findings
+THUMB   ProtectionHUD.KitToggle '+' (896,623)-(910,652) is 14x29 px inside the Controls zone
+THUMB   ProtectionHUD.KitToggle '+' (896,623)-(910,652) is 14x29 px inside the Jump zone
+THUMB   ProtectionHUD.KitToggle 'KIT' (889,655)-(917,675) is 28x20 px inside the Controls zone
+THUMB   ProtectionHUD.KitToggle 'KIT' (889,655)-(917,675) is 28x20 px inside the Jump zone
+THUMB   ProtectionHUD.KitToggle (871,615)-(935,679) is 64x63 px inside the Jump zone
+THUMB   ProtectionHUD.KitToggle (871,615)-(935,679) is 64x64 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse 'SHIELD' (948,655)-(1006,675) is 26x20 px inside the Jump zone
+THUMB   ProtectionHUD.ProtectionUse 'SHIELD' (948,655)-(1006,675) is 57x20 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse (945,615)-(1009,679) is 29x63 px inside the Jump zone
+THUMB   ProtectionHUD.ProtectionUse (945,615)-(1009,679) is 64x64 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse > Glyph (970,629)-(984,643) is 14x14 px inside the Controls zone
