@@ -1,0 +1,8 @@
+{
+  "pass": true,
+  "head": "2dc4fa409a26b686c9ee0c0798f120bf20f0dcca",
+  "rawPinsChecked": 40,
+  "peer": "artifacts/cleanup-20261010/storage-exit-peer-v1/V2_REVIEW.json",
+  "peerSHA256": "6d2f9bfa30a92cbb4e451bde1416682bd179078a2b4086836301933545023541",
+  "limits": "Read-only file/index preflight; current native baseline is collected within actual installer."
+}

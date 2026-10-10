@@ -1,0 +1,37 @@
+{
+  "schema": "exit-literal-fresh-native-target-v1",
+  "pass": true,
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "metadata": {
+    "path": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+    "tags": [],
+    "instanceId": "1_31096",
+    "rawEditorSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+    "placeId": 131311258779917,
+    "parentId": "1_410029",
+    "canonicalBytes": 17956,
+    "sourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    },
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Round Exit Client"
+    ],
+    "className": "LocalScript",
+    "sourceEditorMatches": true,
+    "attributes": {},
+    "rawSourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+    "universeId": 10559217407
+  },
+  "bytes": 17956,
+  "sourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+  "manifestSHA256": "e92f6cb057c01b66f595caa2e4b8601d5522e99af375ca7b4bb0bc74bf60d414",
+  "limits": "One fresh target Source/editor/identity/class/properties/attributes/tags read. No all-script epoch, gameplay or feature certificate."
+}

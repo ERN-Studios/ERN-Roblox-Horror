@@ -1,0 +1,23 @@
+{
+  "schema": "mongotv-exit-installer-fixture-development-failures-v1",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "failures": [
+    {
+      "command": "python -B artifacts/cleanup-20261010/clients-exit-v1/installer-v1/test_apply_exit_literal_cleanup.py",
+      "stage": "actual_transform_checks after all 40 wrapper scenarios",
+      "message": "actual transform rejects changed/ambiguous anchor",
+      "cause": "The missing-anchor fixture passed a string containing '--' to Lua gsub as a pattern; it did not replace the literal anchor.",
+      "correction": "Use the unambiguous 'local HINT_HEIGHT' token in the fixture. The actual native transform already uses find(old,1,true); no production/native change occurred."
+    },
+    {
+      "command": "python -B artifacts/cleanup-20261010/clients-exit-v1/installer-v1/test_exit_parser_faults.py",
+      "stage": "first controlled stable()/targetIdentity() execution",
+      "message": "attempt to concatenate string with boolean",
+      "cause": "The controlled H.JSONEncode returned primitives unchanged, while actual stable() expects JSON strings.",
+      "correction": "Encode controlled scalar values and retain table return only for captured report objects. The actual native implementation was unchanged."
+    }
+  ],
+  "limits": "Two local fixture construction failures, preserved as diagnostic evidence. No native runtime regression or production rollback was triggered."
+}

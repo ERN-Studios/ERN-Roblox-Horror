@@ -52,7 +52,6 @@ local HOLD_SECONDS = 1.5
 local HOLD_KEY = Enum.KeyCode.L
 local MESSAGE_SECONDS = 3   -- how long a refusal stays on the chip
 local NO_ANSWER_SECONDS = 8 -- silence after which the player may ask again
-local HINT_HEIGHT = 36      -- two wrapped lines of the explanation band
 
 local prompt = playerScripts:FindFirstChild("RoundExitPrompt")
 if not prompt then

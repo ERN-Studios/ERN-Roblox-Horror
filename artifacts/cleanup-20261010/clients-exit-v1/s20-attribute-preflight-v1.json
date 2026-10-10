@@ -1,0 +1,9 @@
+{
+  "schema": "s20-local-artifact-attribute-guard-v1",
+  "phase": "Root raw-artifact Git curation, after successful native batch",
+  "firstAttemptExitCode": 1,
+  "error": "FileExistsError on already-existing storage-exit-peer-v1/.gitattributes",
+  "sideEffects": "Only own previously absent clients-exit-v1/.gitattributes created; no frozen file, Source, manifest, native, mode or index mutation in this attempt.",
+  "correction": "Fresh V3 verifies both existing attributes byte-exact; deduplicates already-curated peer attribute. Original failed script kept privately.",
+  "nativeBatchStillPassed": true
+}

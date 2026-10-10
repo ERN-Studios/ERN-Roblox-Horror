@@ -1,0 +1,99 @@
+{
+  "pass": true,
+  "schema": "mongotv-exit-source-cas-offline-proposal-v1",
+  "bytesRemoved": 73,
+  "scope": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+  "beforeSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+  "afterSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+  "compileChecks": [
+    {
+      "operation": "capture",
+      "optimization": "-O0",
+      "sourceSHA256": "fbec93f6209cb15109b6a9ddb66c5e8392ddf82cddff12b0853a1b1eb5234b88",
+      "pass": true
+    },
+    {
+      "operation": "capture",
+      "optimization": "-O1",
+      "sourceSHA256": "fbec93f6209cb15109b6a9ddb66c5e8392ddf82cddff12b0853a1b1eb5234b88",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O0",
+      "sourceSHA256": "d1aaa5de4d2567558cd9ec6ac1bb30f9449f516368e440af7dbd1a8e5ed4aae1",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O1",
+      "sourceSHA256": "d1aaa5de4d2567558cd9ec6ac1bb30f9449f516368e440af7dbd1a8e5ed4aae1",
+      "pass": true
+    },
+    {
+      "operation": "target",
+      "optimization": "-O0",
+      "sourceSHA256": "a97b74088ccca02a09328b9b95ae22b5508ced5747d18c33caf37c90f28ea444",
+      "pass": true
+    },
+    {
+      "operation": "target",
+      "optimization": "-O1",
+      "sourceSHA256": "a97b74088ccca02a09328b9b95ae22b5508ced5747d18c33caf37c90f28ea444",
+      "pass": true
+    },
+    {
+      "operation": "verify",
+      "optimization": "-O0",
+      "sourceSHA256": "65dc77c5ec095680c725afc3a7831360388d5bc2146b83f1280934cf479052bd",
+      "pass": true
+    },
+    {
+      "operation": "verify",
+      "optimization": "-O1",
+      "sourceSHA256": "65dc77c5ec095680c725afc3a7831360388d5bc2146b83f1280934cf479052bd",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O0",
+      "sourceSHA256": "a9b925ba198ac1d1f03d1cecf89f28d6b2136c7521a6fe9c853dd4cfb9f1a5d0",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O1",
+      "sourceSHA256": "a9b925ba198ac1d1f03d1cecf89f28d6b2136c7521a6fe9c853dd4cfb9f1a5d0",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O0",
+      "sourceSHA256": "6aca78df048f3562cba9958ca7a6ee760b926f566d6dfef333d0bc5563b6557d",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O1",
+      "sourceSHA256": "6aca78df048f3562cba9958ca7a6ee760b926f566d6dfef333d0bc5563b6557d",
+      "pass": true
+    },
+    {
+      "operation": "compile",
+      "optimization": "-O0",
+      "sourceSHA256": "48bdc1c6d4aeaf0427c25f11925c77be951bee0761301d10681857decd4ab13d",
+      "pass": true
+    },
+    {
+      "operation": "compile",
+      "optimization": "-O1",
+      "sourceSHA256": "48bdc1c6d4aeaf0427c25f11925c77be951bee0761301d10681857decd4ab13d",
+      "pass": true
+    }
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "templateSHA256": "0ceb60f45ed5f96aeaa42cf2be2757ec4b4bb114771e89aba38f5073ce49e1e8",
+  "status": "prepared only; independent wrapper/native guard/parser cleanup review and Root native execution pending"
+}

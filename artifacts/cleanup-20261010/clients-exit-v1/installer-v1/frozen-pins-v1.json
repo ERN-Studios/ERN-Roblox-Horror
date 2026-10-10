@@ -1,0 +1,146 @@
+{
+  "schema": "mongotv-exit-literal-installer-frozen-pins-v1",
+  "pass": true,
+  "status": "frozen prepared candidate; independent peer/native parser/CAS/export/after parity pending",
+  "scope": "Only one unused private pure number literal and its trailing comment; exact 73 LF bytes",
+  "files": [
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/apply_exit_literal_cleanup.py",
+      "rawBytes": 31754,
+      "rawSHA256": "1411ba4f3a0450cfe909c8f9d4ac75195cadcae3babc56ab2da9716189f319dc"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/exit_literal_source_cas.luau",
+      "rawBytes": 13408,
+      "rawSHA256": "6075321c2c3d504ed8966c88453dbee8e08126caaac8ca34e9c1df62d1b49398"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/test_apply_exit_literal_cleanup.py",
+      "rawBytes": 27165,
+      "rawSHA256": "ea1ee07f3dcc27368dab5b184f2d88eda05a30e95ad63e756033550609b053ed"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/test_exit_native_cas_guards.py",
+      "rawBytes": 9982,
+      "rawSHA256": "4b4f3cff4cbf107770f03abcb6922b088f4b988976e410cb3a8a3677653b6a44"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/test_exit_parser_faults.py",
+      "rawBytes": 13029,
+      "rawSHA256": "61ff0f083cf8f1617e965664f561dc5918f4c13e6804a97c88bba074ed306f66"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/verify_exit_install_proposal.py",
+      "rawBytes": 3046,
+      "rawSHA256": "15fd61342f15f55e6893dbdf79bc3ca56aa2204fcc6244e01783c29d4eff8a9e"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/REVIEW.md",
+      "rawBytes": 7919,
+      "rawSHA256": "41cda1391806d7c450fdfd98075868393e0f195b58071fe0d6de5cd4c9a0db8f"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/build_scoped_installer.py",
+      "rawBytes": 16379,
+      "rawSHA256": "1956c29be82c9eedd83ddf1516bd0365b8e78f72588b4b61ebdc8c9218f3f443"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/build_offline_tests.py",
+      "rawBytes": 9585,
+      "rawSHA256": "b93b48cde409993e5e834c16b994f8ffcbbff8ac91f44c6a8f36a3bf9e1a736a"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/development-failures-v1.json",
+      "rawBytes": 1459,
+      "rawSHA256": "83393e06e97ecba1450aab804ff612dd79b05ee3d50cfbe83b5aa4444889d45d"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/freeze_installer.py",
+      "rawBytes": 3611,
+      "rawSHA256": "174c597894dd546a93d2524d7ff45819bf0773543e965e1756c5ce654fed76bb"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-wrapper-tests-v3.json",
+      "rawBytes": 9001,
+      "rawSHA256": "88a9d70723c93db9b521446d16e2fbe485850b15110cb77a58ca0042f97b8b96"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/native-guard-tests-v2.json",
+      "rawBytes": 1350,
+      "rawSHA256": "6cfc4f0d9af1d796313c921c51f9f4fa766822ef3182153dea2e562b8301cb56"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/parser-fault-tests-v2.json",
+      "rawBytes": 1462,
+      "rawSHA256": "78f6523c57be1f3dcfa978e72645ff807c2f773aa1e004cfc1c502c478dfb71f"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-refresh-v2/result.json",
+      "rawBytes": 7868,
+      "rawSHA256": "a49e137ddd503b18406e0f497a6df94fab87832b4aa2778f10bfc0ed7fb7bbcf"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-refresh-v2/offline-helper/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-refresh-v2/offline-helper/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/native-target-read-v1.json",
+      "rawBytes": 1338,
+      "rawSHA256": "54903ac3e9d3dc1d8f3135f7f821f6b361134f972b53e7593f6839799dd38233"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/proposal.json",
+      "rawBytes": 13528,
+      "rawSHA256": "768309e0db3e61d9da7fe345470f2d3ebf1db7b28dcc38903a4260b795fb6e19"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/before.source.luau",
+      "rawBytes": 17956,
+      "rawSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/candidate.source.luau",
+      "rawBytes": 17883,
+      "rawSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/prepare_exit_literal.py",
+      "rawBytes": 12969,
+      "rawSHA256": "2129bf95bfbf86cfe894d54a7b246975b555f1db5bd000f2375df6dd4758f33c"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/verify_exit_neighbors.py",
+      "rawBytes": 4155,
+      "rawSHA256": "38aa3ef65e5cd805f19d40b209d15993379010a9bd49b76cc4039a4778f70f47"
+    }
+  ],
+  "offlineGateSummary": {
+    "wrapperCases": 46,
+    "wrapperChecks": 373,
+    "exclusiveFileCASCases": 2,
+    "exclusiveFileCASChecks": 8,
+    "actualTransformCases": 5,
+    "actualTransformChecks": 8,
+    "parserReceiptCases": 9,
+    "actualNativeGuardCases": 15,
+    "actualNativeGuardChecks": 75,
+    "actualParserFaultCases": 31,
+    "actualParserFaultChecks": 317,
+    "templateCompiles": 14,
+    "pairedChecksPerVersion": 50,
+    "reentryChecksPerVersion": 50,
+    "neighborChecksPerVersion": 92,
+    "semanticMutants": 2,
+    "canonicalO1Equivalent": true
+  },
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "limits": "Control boundaries explicitly documented; native execution and final parity remain Root-owned. No gameplay/multiplayer/streaming/teleport/asset/performance claims."
+}

@@ -1,0 +1,31 @@
+{
+  "pass": true,
+  "cases": 31,
+  "checks": 317,
+  "compileChecks": [
+    {
+      "optimization": 0,
+      "pass": true
+    },
+    {
+      "optimization": 1,
+      "pass": true
+    }
+  ],
+  "stdout": "PARSER_FAULT_CASES=31 CHECKS=317\n",
+  "templateSHA256": "6075321c2c3d504ed8966c88453dbee8e08126caaac8ca34e9c1df62d1b49398",
+  "fixtureSHA256": "36f2e400d0061df22826bf2451322fcf9537ae46f76673828cec2dc4e5ae710a",
+  "toolSHA256": "61ff0f083cf8f1617e965664f561dc5918f4c13e6804a97c88bba074ed306f66",
+  "actualSectionHashes": {
+    "__MODE__": "b2f2befc8f46f1ce2a202910f692a02dd1d717ca20d3701a501834fc5627d653",
+    "__STABLE__": "8abe766ce3fcabd29e2524b5b251754ea232c34525b5f4ffcc0d2f6924fe09f2",
+    "__IDENTITY__": "8db35d899c915983a56b83ac8e985799c149cad4a006c587cecce7bf7d64bf80",
+    "__GUARD__": "f11f86a7e6fdfd75cbf3fea2371b20ed51aa0c30ea67b12c1590e53b716a30d0",
+    "__ANCHORS__": "c7e942cbdd2d27f26883932cd549e4abb5d5f7019731bba8f00186a6fe4d8da6",
+    "__PARSER__": "792f1a39f10ca6864887e865cb9e9f04e4e1495de4d34844cd5394ae7d2558bc"
+  },
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "limits": "Actual original guards, lease compare/claim/release, empty ModuleScript staging callback, parser factory-type check, failure completion and owned cleanup code. Instance/SES/metadata/hash/require outcomes are controlled local boundaries. Not an actual native parser, editor identity, asset/gameplay/multiplayer/streaming certificate."
+}

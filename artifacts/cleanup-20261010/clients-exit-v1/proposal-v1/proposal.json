@@ -1,0 +1,386 @@
+{
+  "schema": "mongotv-exit-unread-literal-proposal-v1",
+  "pass": true,
+  "candidate": "C04/B12",
+  "status": "offline gates passed; fresh parent native before/candidate/installed and scoped CAS pending",
+  "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+  "beforeSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+  "candidateSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+  "beforeBytes": 17956,
+  "candidateBytes": 17883,
+  "bytesRemoved": 73,
+  "removedLine": 55,
+  "targetManifest": {
+    "studioPath": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Round Exit Client"
+    ],
+    "className": "LocalScript",
+    "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+    "bytes": 17956,
+    "sha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+    "status": "synced",
+    "sourceEditorMatches": true,
+    "properties": {
+      "Disabled": false,
+      "LinkedSource": "",
+      "Archivable": true,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Enabled": true
+    },
+    "attributes": []
+  },
+  "nativeScriptCountObserved": 213,
+  "sourceCompiler": [
+    {
+      "pass": true,
+      "optimization": 0,
+      "debug": 0,
+      "functions": {
+        "before": 37,
+        "candidate": 37,
+        "linePreserved": 37
+      },
+      "canonicalIdentical": false,
+      "textWithConstantsIdentical": false,
+      "linePreservedBinaryIdentical": false,
+      "beforeBinarySHA256": "4b9d22bb7febea45295f11f81cd5c4fc804b4880c3197004a1250a985597f9d4",
+      "candidateBinarySHA256": "6ae27089dd31b426b74eef71457072c6766753b83c1589e5666f662497887d32",
+      "beforeCanonicalSHA256": "fdb472c6bfd6d533131610d9cfcded793ade4849f29f3cb10047a607eb6818d7",
+      "candidateCanonicalSHA256": "3b327dfbb62a577d2c6dfe56226dd13d152ed4832d6f6e0fb332d57a34bfebb6"
+    },
+    {
+      "pass": true,
+      "optimization": 1,
+      "debug": 0,
+      "functions": {
+        "before": 37,
+        "candidate": 37,
+        "linePreserved": 37
+      },
+      "canonicalIdentical": true,
+      "textWithConstantsIdentical": true,
+      "linePreservedBinaryIdentical": true,
+      "beforeBinarySHA256": "165db1386b356149b23febbd134d5407878cefd0835f904f68a2ab01a4d35485",
+      "candidateBinarySHA256": "af22b83254f9bc33fe1e5af9ef503f1ccedbed15e6605bed09231b162571364c",
+      "beforeCanonicalSHA256": "d94c6bf87444391acacd37da96cb8bfddccaedbd89cead998b76ce8709202866",
+      "candidateCanonicalSHA256": "d94c6bf87444391acacd37da96cb8bfddccaedbd89cead998b76ce8709202866"
+    }
+  ],
+  "contractPorts": [
+    {
+      "phase": "before",
+      "pass": true,
+      "checks": 50,
+      "reentryChecks": 50,
+      "compile": [
+        {
+          "pass": true,
+          "optimization": 0
+        },
+        {
+          "pass": true,
+          "optimization": 1
+        }
+      ],
+      "payloadSHA256": "6567549a584d138c6953232c5e615118882eaf039c1df48cbf0351f3653ce96f"
+    },
+    {
+      "phase": "candidate",
+      "pass": true,
+      "checks": 50,
+      "reentryChecks": 50,
+      "compile": [
+        {
+          "pass": true,
+          "optimization": 0
+        },
+        {
+          "pass": true,
+          "optimization": 1
+        }
+      ],
+      "payloadSHA256": "2b198e77a8d10362ae3c39c09fd1d9aa103bfb352e8f8b59e72d43fe9f101902"
+    },
+    {
+      "phase": "timingNegative",
+      "pass": true,
+      "expectedFailure": "no early hold at",
+      "compile": [
+        {
+          "pass": true,
+          "optimization": 0
+        },
+        {
+          "pass": true,
+          "optimization": 1
+        }
+      ],
+      "payloadSHA256": "cfef149f6b9f405701af7d252614427410908b90c480ba3cae61501dfeab8a2c",
+      "scope": "Expected semantic control rejected; no production mutation"
+    },
+    {
+      "phase": "requestNegative",
+      "pass": true,
+      "expectedFailure": "card cannot duplicate held request",
+      "compile": [
+        {
+          "pass": true,
+          "optimization": 0
+        },
+        {
+          "pass": true,
+          "optimization": 1
+        }
+      ],
+      "payloadSHA256": "c0bdfce6d56fc38b959622542508c4246a53000f9a28019641268e97ab83f2f8",
+      "scope": "Expected semantic control rejected; no production mutation"
+    }
+  ],
+  "closure": [
+    {
+      "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+      "rawBytes": 76673,
+      "rawSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
+      "lfSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
+      "manifest": {
+        "studioPath": "ReplicatedStorage.RoundHud",
+        "segments": [
+          "ReplicatedStorage",
+          "RoundHud"
+        ],
+        "className": "ModuleScript",
+        "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+        "bytes": 76673,
+        "sha256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "attributes": [],
+        "tags": []
+      }
+    },
+    {
+      "file": "ReplicatedStorage/ZyntraShopUI/ShopBinder.ModuleScript.lua",
+      "rawBytes": 35972,
+      "rawSHA256": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467",
+      "lfSHA256": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467",
+      "manifest": {
+        "studioPath": "ReplicatedStorage.ZyntraShopUI.ShopBinder",
+        "segments": [
+          "ReplicatedStorage",
+          "ZyntraShopUI",
+          "ShopBinder"
+        ],
+        "className": "ModuleScript",
+        "file": "ReplicatedStorage/ZyntraShopUI/ShopBinder.ModuleScript.lua",
+        "bytes": 35972,
+        "sha256": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "attributes": []
+      }
+    },
+    {
+      "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+      "rawBytes": 12426,
+      "rawSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
+      "lfSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
+      "manifest": {
+        "studioPath": "ReplicatedStorage.UIStyle",
+        "segments": [
+          "ReplicatedStorage",
+          "UIStyle"
+        ],
+        "className": "ModuleScript",
+        "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+        "bytes": 12426,
+        "sha256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "attributes": [],
+        "tags": []
+      }
+    },
+    {
+      "file": "ReplicatedStorage/ZyntraDetectorVisual.ModuleScript.lua",
+      "rawBytes": 16287,
+      "rawSHA256": "9c5cefbe50c5dd637f751d83b6c374eedce35ad6a7032beca397c6b96e9a3d09",
+      "lfSHA256": "9c5cefbe50c5dd637f751d83b6c374eedce35ad6a7032beca397c6b96e9a3d09",
+      "manifest": {
+        "studioPath": "ReplicatedStorage.ZyntraDetectorVisual",
+        "segments": [
+          "ReplicatedStorage",
+          "ZyntraDetectorVisual"
+        ],
+        "className": "ModuleScript",
+        "file": "ReplicatedStorage/ZyntraDetectorVisual.ModuleScript.lua",
+        "bytes": 16287,
+        "sha256": "9c5cefbe50c5dd637f751d83b6c374eedce35ad6a7032beca397c6b96e9a3d09",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "attributes": []
+      }
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+      "rawBytes": 18399,
+      "rawSHA256": "42e9b241bf5f83ee0869ee9b31b1eb312161ab73b6e5b1f512de9f1202de56b5",
+      "lfSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "manifest": {
+        "studioPath": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Round Exit Client"
+        ],
+        "className": "LocalScript",
+        "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+        "bytes": 17956,
+        "sha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Enabled": true
+        },
+        "attributes": []
+      }
+    },
+    {
+      "file": "tools/tests/hud_harness.luau",
+      "rawBytes": 24951,
+      "rawSHA256": "8c43e49fa7350bbda1ab311fff0c0f83dbe4caf882d3c44c135734f5491fe7ef",
+      "lfSHA256": "8c43e49fa7350bbda1ab311fff0c0f83dbe4caf882d3c44c135734f5491fe7ef"
+    },
+    {
+      "file": "tools/tests/test_hud_b6_b7.py",
+      "rawBytes": 15886,
+      "rawSHA256": "345b55c0496240b5e51216dc6bff267c23097d74dc31d0d03493f6c34191b430",
+      "lfSHA256": "32e7f4692980a337e9c6f901f3eae937d92c2b8471c2810d6f78a8fa26de48b4"
+    },
+    {
+      "file": "tools/tests/test_round_hud.py",
+      "rawBytes": 28636,
+      "rawSHA256": "77b8d0da9c121f61887c504eb090b64b4ab0a2d00526c8048c00035121f60b6f",
+      "lfSHA256": "77b8d0da9c121f61887c504eb090b64b4ab0a2d00526c8048c00035121f60b6f"
+    },
+    {
+      "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
+      "rawBytes": 100997,
+      "rawSHA256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+      "lfSHA256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+      "manifest": {
+        "studioPath": "ReplicatedStorage.UIDevice",
+        "segments": [
+          "ReplicatedStorage",
+          "UIDevice"
+        ],
+        "className": "ModuleScript",
+        "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
+        "bytes": 100997,
+        "sha256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "attributes": []
+      }
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+      "rawBytes": 20082,
+      "rawSHA256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+      "lfSHA256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+      "manifest": {
+        "studioPath": "StarterPlayer.StarterPlayerScripts.SpectateController",
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SpectateController"
+        ],
+        "className": "LocalScript",
+        "file": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+        "bytes": 20082,
+        "sha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Enabled": true
+        },
+        "attributes": []
+      }
+    },
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "rawBytes": 195000,
+      "rawSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "lfSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "manifest": {
+        "studioPath": "ServerScriptService.GameManager",
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "className": "Script",
+        "file": "ServerScriptService/GameManager.Script.lua",
+        "bytes": 195000,
+        "sha256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+        "status": "synced",
+        "sourceEditorMatches": true,
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "attributes": [],
+        "tags": []
+      }
+    },
+    {
+      "file": "tools/tests/fixtures/hud/framewisp-dump.HUD_PC.json",
+      "rawBytes": 136113,
+      "rawSHA256": "ddf3bdccfbdfcadb1424c46ce44d735f4fe1f15587eb26b83b2cbb7bf31da1e5",
+      "lfSHA256": "ddf3bdccfbdfcadb1424c46ce44d735f4fe1f15587eb26b83b2cbb7bf31da1e5"
+    },
+    {
+      "file": "tools/tests/fixtures/hud/framewisp-dump.HUD_Touch.json",
+      "rawBytes": 96458,
+      "rawSHA256": "603c6c85cd6adf96b4df334db0330956a3825c62451eaf10991a42a2c186b2f6",
+      "lfSHA256": "603c6c85cd6adf96b4df334db0330956a3825c62451eaf10991a42a2c186b2f6"
+    }
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "scope": "One unread private number literal only; no runtime feature, constructor, callback, require or protocol removed",
+  "limits": "Actual full production sources run with fake engine/player/input/transport/timer/UIDevice and historical imported asset fixture boundaries; not a native asset/gameplay/multiplayer/streaming/performance certificate."
+}

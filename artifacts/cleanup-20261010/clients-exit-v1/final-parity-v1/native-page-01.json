@@ -1,0 +1,674 @@
+{
+  "meta": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T09:04:45Z",
+    "sceneCount": 416286,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "2e8e5240fafdb8e82947ba13851b97a4b49334acb68be92306e8242f4278609e",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "rows": [
+    {
+      "minusOneTrailingLFSHA256": "5482636f07c798a88f77363d725e90fde4e16a328a17bf787c9bea84f02e0ba1",
+      "instanceId": "1_42712",
+      "rawEditorSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "RoundHud"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 76673,
+      "readStable": true,
+      "canonicalBytes": 76673,
+      "sourceSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
+      "rawSourceSHA256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
+      "path": "ReplicatedStorage.RoundHud"
+    },
+    {
+      "minusOneTrailingLFSHA256": "563b14b1c217c8a99369c51ae082fe5ecc371f8b88f74981c28355ee3c886c5d",
+      "instanceId": "0_79286917",
+      "rawEditorSHA256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "SceneEffectBudget"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 10221,
+      "readStable": true,
+      "canonicalBytes": 10221,
+      "sourceSHA256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "rawSourceSHA256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "path": "ReplicatedStorage.SceneEffectBudget"
+    },
+    {
+      "minusOneTrailingLFSHA256": "0ca1293262c6c25c2ddfb391d90812ce1c9dcc8a24c523aa2aba9f0edc04cdf3",
+      "instanceId": "1_42707",
+      "rawEditorSHA256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "SlideContinuationSafety"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 3945,
+      "readStable": true,
+      "canonicalBytes": 3945,
+      "sourceSHA256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "rawSourceSHA256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "path": "ReplicatedStorage.SlideContinuationSafety"
+    },
+    {
+      "minusOneTrailingLFSHA256": "f56e7c11c046f83eef8938b4afffab921254cc8c5caee158956fd8ea0d85b4ca",
+      "instanceId": "1_42697",
+      "rawEditorSHA256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "UIDevice"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 100997,
+      "readStable": true,
+      "canonicalBytes": 100997,
+      "sourceSHA256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+      "rawSourceSHA256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+      "path": "ReplicatedStorage.UIDevice"
+    },
+    {
+      "minusOneTrailingLFSHA256": "8e22384d0e9193a4510d3b61840ade9195cf59e248d93aebf121fb1d22baa688",
+      "instanceId": "1_42698",
+      "rawEditorSHA256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "UIRegression"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 313853,
+      "readStable": true,
+      "canonicalBytes": 313853,
+      "sourceSHA256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6",
+      "rawSourceSHA256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6",
+      "path": "ReplicatedStorage.UIRegression"
+    },
+    {
+      "minusOneTrailingLFSHA256": "4c09764647ed2660a6b8aaeae62590735f1f71a81fc25c2a691ce9cb551137a9",
+      "instanceId": "1_42702",
+      "rawEditorSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "UIStyle"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 12426,
+      "readStable": true,
+      "canonicalBytes": 12426,
+      "sourceSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
+      "rawSourceSHA256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
+      "path": "ReplicatedStorage.UIStyle"
+    },
+    {
+      "minusOneTrailingLFSHA256": "e85f04446483f10a1dcf8dae830885a826ad6356b1181ad0c8bed1f74029a06c",
+      "instanceId": "1_42709",
+      "rawEditorSHA256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraChallenges"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 6018,
+      "readStable": true,
+      "canonicalBytes": 6018,
+      "sourceSHA256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "rawSourceSHA256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "path": "ReplicatedStorage.ZyntraChallenges"
+    },
+    {
+      "minusOneTrailingLFSHA256": "c66bca10cc9c64f86e3a5ec6a9b71fa52d4e14787e41b3aa8eefe78c201aaeb7",
+      "instanceId": "1_42695",
+      "rawEditorSHA256": "b52815530258702531d3365eee447c0361abdb2c2d62aac98001b830437e0202",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraConfig"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 21638,
+      "readStable": true,
+      "canonicalBytes": 21638,
+      "sourceSHA256": "b52815530258702531d3365eee447c0361abdb2c2d62aac98001b830437e0202",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "b52815530258702531d3365eee447c0361abdb2c2d62aac98001b830437e0202",
+      "rawSourceSHA256": "b52815530258702531d3365eee447c0361abdb2c2d62aac98001b830437e0202",
+      "path": "ReplicatedStorage.ZyntraConfig"
+    },
+    {
+      "minusOneTrailingLFSHA256": "4d9a7b779a4e9d54d33e653dcaff485fdef06314ffb6bcd902e3da68db360b5e",
+      "instanceId": "1_42708",
+      "rawEditorSHA256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDailyResearch"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 1496,
+      "readStable": true,
+      "canonicalBytes": 1496,
+      "sourceSHA256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "rawSourceSHA256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "path": "ReplicatedStorage.ZyntraDailyResearch"
+    },
+    {
+      "minusOneTrailingLFSHA256": "f18cba8554bb328ee8f56c69758f84a6ddaeaefaeab54efaff620fb6b6c8477d",
+      "instanceId": "1_42706",
+      "rawEditorSHA256": "9c5cefbe50c5dd637f751d83b6c374eedce35ad6a7032beca397c6b96e9a3d09",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDetectorVisual"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 16287,
+      "readStable": true,
+      "canonicalBytes": 16287,
+      "sourceSHA256": "9c5cefbe50c5dd637f751d83b6c374eedce35ad6a7032beca397c6b96e9a3d09",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "9c5cefbe50c5dd637f751d83b6c374eedce35ad6a7032beca397c6b96e9a3d09",
+      "rawSourceSHA256": "9c5cefbe50c5dd637f751d83b6c374eedce35ad6a7032beca397c6b96e9a3d09",
+      "path": "ReplicatedStorage.ZyntraDetectorVisual"
+    },
+    {
+      "minusOneTrailingLFSHA256": "086cfb7d66a6b81e4810b8865c9f04cc1624d1c096abe06b44a5b69d8983a0e9",
+      "instanceId": "1_42703",
+      "rawEditorSHA256": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraShopUI",
+        "ShopBinder"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 35972,
+      "readStable": true,
+      "canonicalBytes": 35972,
+      "sourceSHA256": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467",
+      "parentId": "1_15602",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467",
+      "rawSourceSHA256": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467",
+      "path": "ReplicatedStorage.ZyntraShopUI.ShopBinder"
+    },
+    {
+      "minusOneTrailingLFSHA256": "4f5c7b93902f2f03e91b9345e862c0527d8b420f29d63e09ede4ab84cca2cf99",
+      "instanceId": "1_42704",
+      "rawEditorSHA256": "665da0c8a0f0b7a45cc7bfa6181ffbafff5a6322e3f1113891804a044ff8a365",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraShopUI",
+        "ShopData"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 23228,
+      "readStable": true,
+      "canonicalBytes": 23228,
+      "sourceSHA256": "665da0c8a0f0b7a45cc7bfa6181ffbafff5a6322e3f1113891804a044ff8a365",
+      "parentId": "1_15602",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "665da0c8a0f0b7a45cc7bfa6181ffbafff5a6322e3f1113891804a044ff8a365",
+      "rawSourceSHA256": "665da0c8a0f0b7a45cc7bfa6181ffbafff5a6322e3f1113891804a044ff8a365",
+      "path": "ReplicatedStorage.ZyntraShopUI.ShopData"
+    },
+    {
+      "minusOneTrailingLFSHA256": "65c14416ed170f30efb48a234a6c54c850113b2b0ab43555f91ee5d0fd5b8c0d",
+      "instanceId": "1_42710",
+      "rawEditorSHA256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraSkins"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 5823,
+      "readStable": true,
+      "canonicalBytes": 5823,
+      "sourceSHA256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "rawSourceSHA256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "path": "ReplicatedStorage.ZyntraSkins"
+    },
+    {
+      "minusOneTrailingLFSHA256": "79b78844b94dade200c61e4933be2317b391041f1b4449347935de4834dbc177",
+      "instanceId": "1_408342",
+      "rawEditorSHA256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "AvatarNormalize"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 2567,
+      "readStable": true,
+      "canonicalBytes": 2567,
+      "sourceSHA256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "parentId": "1_409634",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "rawSourceSHA256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "path": "ServerScriptService.AvatarNormalize"
+    },
+    {
+      "minusOneTrailingLFSHA256": "f78cd48c6a1b0f18d32a118e73b328e8e268cd700ce3febaab5c7b43472d701a",
+      "instanceId": "1_408351",
+      "rawEditorSHA256": "2d9ded3b5b786cccf1f54a4e8e94d28781d0869f57141353946ad8634499d512",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Crouch State Server"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 7325,
+      "readStable": true,
+      "canonicalBytes": 7325,
+      "sourceSHA256": "2d9ded3b5b786cccf1f54a4e8e94d28781d0869f57141353946ad8634499d512",
+      "parentId": "1_409634",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "2d9ded3b5b786cccf1f54a4e8e94d28781d0869f57141353946ad8634499d512",
+      "rawSourceSHA256": "2d9ded3b5b786cccf1f54a4e8e94d28781d0869f57141353946ad8634499d512",
+      "path": "ServerScriptService.Crouch State Server"
+    },
+    {
+      "minusOneTrailingLFSHA256": "46ffba2d4c89cd3eb429f9c4160ed047f5587bead7f874706fbb9ceff40118f5",
+      "instanceId": "1_408340",
+      "rawEditorSHA256": "6a6dedd4b3de72d8ad729b29c7eb56a1e82b00700913f1ec0d62568b8978d06b",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "FlashlightSync"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 6494,
+      "readStable": true,
+      "canonicalBytes": 6494,
+      "sourceSHA256": "6a6dedd4b3de72d8ad729b29c7eb56a1e82b00700913f1ec0d62568b8978d06b",
+      "parentId": "1_409634",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "6a6dedd4b3de72d8ad729b29c7eb56a1e82b00700913f1ec0d62568b8978d06b",
+      "rawSourceSHA256": "6a6dedd4b3de72d8ad729b29c7eb56a1e82b00700913f1ec0d62568b8978d06b",
+      "path": "ServerScriptService.FlashlightSync"
+    },
+    {
+      "minusOneTrailingLFSHA256": "867540ad8b159a0e3abc71bd2e3fa3c6d6bddb7f9d8ac404d39b7d3fcf0a36c9",
+      "instanceId": "1_42758",
+      "rawEditorSHA256": "3ecdd96e368146fdfad94aaced595ec96ad26b89de2172f521aabdaa42e6cd0a",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "FriendBoost"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 7763,
+      "readStable": true,
+      "canonicalBytes": 7763,
+      "sourceSHA256": "3ecdd96e368146fdfad94aaced595ec96ad26b89de2172f521aabdaa42e6cd0a",
+      "parentId": "1_409634",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "3ecdd96e368146fdfad94aaced595ec96ad26b89de2172f521aabdaa42e6cd0a",
+      "rawSourceSHA256": "3ecdd96e368146fdfad94aaced595ec96ad26b89de2172f521aabdaa42e6cd0a",
+      "path": "ServerScriptService.FriendBoost"
+    },
+    {
+      "minusOneTrailingLFSHA256": "20de2832e8f9bc2ffa39e32155b73ac5fc10deb3b2b8546a5ac10b7184dff471",
+      "instanceId": "1_408341",
+      "rawEditorSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 195000,
+      "readStable": true,
+      "canonicalBytes": 195000,
+      "sourceSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "parentId": "1_409634",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "rawSourceSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "path": "ServerScriptService.GameManager"
+    },
+    {
+      "minusOneTrailingLFSHA256": "0f1b09f491f2fac68dd8466e354a632feb27e7ae87d45dd46e5180b2480add04",
+      "instanceId": "1_408358",
+      "rawEditorSHA256": "f279e4816d991f37b336c381a25feccc0b6dfc829d683a9a97841f70d615e156",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "HazmatSkinVisuals"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 16903,
+      "readStable": true,
+      "canonicalBytes": 16903,
+      "sourceSHA256": "f279e4816d991f37b336c381a25feccc0b6dfc829d683a9a97841f70d615e156",
+      "parentId": "1_409634",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "f279e4816d991f37b336c381a25feccc0b6dfc829d683a9a97841f70d615e156",
+      "rawSourceSHA256": "f279e4816d991f37b336c381a25feccc0b6dfc829d683a9a97841f70d615e156",
+      "path": "ServerScriptService.HazmatSkinVisuals"
+    },
+    {
+      "minusOneTrailingLFSHA256": "10d59fc35d2f472365240b8673b48a63c4828e0596ec1e3461a6d9130080cd06",
+      "instanceId": "1_42752",
+      "rawEditorSHA256": "0f217e5a3f56751e7672efc035861a2cec1b5f23d581a52020411a8d081790cf",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "BlenderRoomRenderer"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 31759,
+      "readStable": true,
+      "canonicalBytes": 31759,
+      "sourceSHA256": "0f217e5a3f56751e7672efc035861a2cec1b5f23d581a52020411a8d081790cf",
+      "parentId": "1_15621",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "0f217e5a3f56751e7672efc035861a2cec1b5f23d581a52020411a8d081790cf",
+      "rawSourceSHA256": "0f217e5a3f56751e7672efc035861a2cec1b5f23d581a52020411a8d081790cf",
+      "path": "ServerScriptService.Level 1 Systems.BlenderRoomRenderer"
+    },
+    {
+      "minusOneTrailingLFSHA256": "5d648b777ccecec8337c016b4adc38099a1e7f83cdefd01d43bd975786fbadaf",
+      "instanceId": "1_408348",
+      "rawEditorSHA256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAI"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 67280,
+      "readStable": true,
+      "canonicalBytes": 67280,
+      "sourceSHA256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01",
+      "parentId": "1_15621",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01",
+      "rawSourceSHA256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01",
+      "path": "ServerScriptService.Level 1 Systems.EntityAI"
+    },
+    {
+      "minusOneTrailingLFSHA256": "3ee2ac017d900ecf3f499e1e90543e745a5dab41d8427f83ff22ee53f8ea77b8",
+      "instanceId": "1_408349",
+      "rawEditorSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAnimation"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 10869,
+      "readStable": true,
+      "canonicalBytes": 10869,
+      "sourceSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
+      "parentId": "1_15621",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
+      "rawSourceSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
+      "path": "ServerScriptService.Level 1 Systems.EntityAnimation"
+    },
+    {
+      "minusOneTrailingLFSHA256": "01a888581a8366a8efcd597d401bacfce1143031b2582be997b500890fb0a114",
+      "instanceId": "1_408350",
+      "rawEditorSHA256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityKill"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 11569,
+      "readStable": true,
+      "canonicalBytes": 11569,
+      "sourceSHA256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "parentId": "1_15621",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "rawSourceSHA256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "path": "ServerScriptService.Level 1 Systems.EntityKill"
+    },
+    {
+      "minusOneTrailingLFSHA256": "ecc40ffeec79fef1ac3eeb36de626835f877cc06e5295ed527345bf70e096c68",
+      "instanceId": "1_408346",
+      "rawEditorSHA256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "MazeGenerator"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 93377,
+      "readStable": true,
+      "canonicalBytes": 93377,
+      "sourceSHA256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f",
+      "parentId": "1_15621",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f",
+      "rawSourceSHA256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f",
+      "path": "ServerScriptService.Level 1 Systems.MazeGenerator"
+    }
+  ]
+}

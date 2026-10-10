@@ -1,0 +1,28 @@
+{
+  "schema": "mongotv-exit-installer-v1-transport-review-addendum-v1",
+  "reviewedAtUtc": "2026-10-10T08:47:14Z",
+  "reviewer": "/root/storage_next",
+  "v1OfflineGatesPassed": true,
+  "nativeExecutionReady": false,
+  "status": "Root found an actual apply-transport ambiguity after the four V1 offline reruns. Native execution is held pending a new immutable reviewed delta. REVIEW.json remains evidence of V1 offline passes; its conditional eligibility is superseded by this blocker.",
+  "driver": {
+    "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/apply_exit_literal_cleanup.py",
+    "rawSHA256": "1411ba4f3a0450cfe909c8f9d4ac75195cadcae3babc56ab2da9716189f319dc"
+  },
+  "actualTransport": {
+    "file": "tools/sync_from_studio.py",
+    "rawBytes": 36910,
+    "rawSHA256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6",
+    "requestLines": [256, 287],
+    "callLines": [309, 321],
+    "mismatchedResponseDiscardLines": [279, 280],
+    "observation": "call() uses _request's default 60-second timeout. _request sends the request then polls its response queue, raising at the deadline without a cancellation, native terminal-status check or join. A subsequent request ignores/discards messages with the old request ID. No native-finished guarantee accompanies a transport exception."
+  },
+  "blocker": "The V1 wrapper sets productionNativeWritesRequested before call('apply'). A transport exception enters recovery and may immediately issue rollback-observe, further native reads and rollback while the previous request outcome is unknown. Its commit-then-error fixture currently returns a synchronously completed injected failure and does not demonstrate a still-pending request boundary.",
+  "requiredDelta": "Conservatively mark mutating native outcome pending before submission. A transport exception or response without a sufficient terminal completion must stop further native requests, retries and rollback, retain checkpoints/receipts/available mirrors, and require Root fresh reconciliation after positive completion evidence. Preserve definitive completed failures separately. Add the actual pending-call fault path and re-review immutable new code/pins.",
+  "limits": "This is a concrete actual-client/wrapper control-flow defect; no native request was made to reproduce it and no claim is made that a real request was still running. Existing V1 reruns/failures and all frozen inputs remain unchanged.",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "mongotv-exit-literal-frozen-v1",
+  "frozenAtUtc": "2026-10-10T08:12:14.167099+00:00",
+  "status": "prepared only; parent native binding/appropriate pure-literal gate/CAS/export/installed parity pending",
+  "files": [
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/prepare_exit_literal.py",
+      "bytes": 12969,
+      "sha256": "2129bf95bfbf86cfe894d54a7b246975b555f1db5bd000f2375df6dd4758f33c"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/verify_exit_neighbors.py",
+      "bytes": 4155,
+      "sha256": "38aa3ef65e5cd805f19d40b209d15993379010a9bd49b76cc4039a4778f70f47"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/REVIEW.md",
+      "bytes": 6664,
+      "sha256": "3e6c34bf91f9694209168b22e2af8dea81b1b535cf3756ac2d22ebaeb8aaa45e"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/proposal.json",
+      "bytes": 13528,
+      "sha256": "768309e0db3e61d9da7fe345470f2d3ebf1db7b28dcc38903a4260b795fb6e19"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/before.source.luau",
+      "bytes": 17956,
+      "sha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/candidate.source.luau",
+      "bytes": 17883,
+      "sha256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/before.module.luau",
+      "bytes": 445879,
+      "sha256": "6567549a584d138c6953232c5e615118882eaf039c1df48cbf0351f3653ce96f"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/candidate.module.luau",
+      "bytes": 445806,
+      "sha256": "2b198e77a8d10362ae3c39c09fd1d9aa103bfb352e8f8b59e72d43fe9f101902"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/timingNegative.module.luau",
+      "bytes": 445806,
+      "sha256": "cfef149f6b9f405701af7d252614427410908b90c480ba3cae61501dfeab8a2c"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/requestNegative.module.luau",
+      "bytes": 445771,
+      "sha256": "c0bdfce6d56fc38b959622542508c4246a53000f9a28019641268e97ab83f2f8"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/neighbor-gates-v2.json",
+      "bytes": 1025,
+      "sha256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installed-guard-negative-v1.json",
+      "bytes": 316,
+      "sha256": "a5fda548f4fb400d8e19d39a2a8dc98115f4b7b591e0db92d494ea5e01fc27f0"
+    }
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "beforeSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+  "candidateSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+  "bytesRemoved": 73,
+  "offline": {
+    "wholeSourceChecksPerVersion": 50,
+    "sameRunnerReentryChecksPerVersion": 50,
+    "semanticNegativeControlsRejected": 2,
+    "existingEntireNeighborSuiteChecksPerVersion": 92,
+    "sourceCompilerO1CanonicalIdentity": true,
+    "sourceCompilerO1LinePreservedBinaryIdentity": true,
+    "sourceCompilerO0Identity": false
+  },
+  "portCommand": "python -B artifacts/cleanup-20261010/clients-exit-v1/verify_exit_neighbors.py --receipt artifacts/cleanup-20261010/clients-exit-v1/neighbor-root-review-v1.json",
+  "limits": "No native write or native contract pass claimed. Whole actual source/contracts use controlled fake engine/input/transport/timer/UIDevice and historical asset fixtures. No gameplay/multiplayer/streaming/hardware/performance certificate."
+}

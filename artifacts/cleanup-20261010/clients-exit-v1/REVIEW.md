@@ -1,0 +1,33 @@
+# C04/B12: Round Exit Client, one private literal
+
+Status: prepared only. No Studio/native Source, production file, manifest, index, commit, mode or publish writes were made by this preparation. Root's next native gate is storage recovery. Native binding, peer review, scoped CAS, source export and installed port remain pending; no 445 kB payload wrapper or installer was integrated.
+
+Exact target: `StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua`, line 55, `local HINT_HEIGHT = 36      -- two wrapped lines of the explanation band`. This one 73-byte LF line is the complete change. The fresh downstream S17 source is 17956 LF bytes, SHA256 `13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3`; the proposed source is 17883 bytes, SHA256 `bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752`. These bytes were freshly checked against the current mirror/manifest, not accepted merely from the matching historical proposal. Root must still read current native Source/editor and properties before any edit. The target is an enabled Legacy LocalScript with Disabled=false, LinkedSource empty, Archivable=true and no recorded attributes.
+
+The entire current target was read. `HINT_HEIGHT` occurs only in that declaration; it is not exported, captured, passed or used as an attribute/API key. Its initializer is the number literal 36, with no call, property read, constructor, require, event or visible side effect. Every other source byte is exact. Both GUI construction and all active hold/confirmation callbacks remain. Risk is low for this private literal. Gain is 73 fewer source bytes; no FPS, CPU, memory or gameplay gain was measured or claimed.
+
+Concrete closure and retained contracts:
+
+- Services Players, ReplicatedStorage, GuiService, RunService and UserInputService; complete target scope and its local functions.
+- Direct dependencies UIDevice, RoundHud and ZyntraShopUI.ShopBinder; RoundHud's actual current ShopBinder/UIStyle/ZyntraDetectorVisual dependencies are copied byte-exact into the controlled contract. Module initializers and all required module calls remain. `proposal-v1/proposal.json` pins the current runtime mirrors and their manifest rows, harness, existing tests, caller/controller source and imported fixture inputs.
+- PlayerScripts.RoundExitPrompt's existing-or-create BindableEvent and SpectateController's caller; RoundExitPromptOpen attribute used by SpectateController and RoundHud. Existing RoundStatus remote protocol (`leaveround`, `leaveack`, `leavefailed`, lobby/loadinggame/lose/win) and GameManager's per-player leave path remain. Actual server decisions and reserved-server teleports are not tested by the fake transport.
+- Authored LeaveChip, LeaveChipWide, LeaveChipTouch, RoundExitNotice and RoundExitCard; nested HoldFill/HoldHint, BackToLobby/Stay, RingSlot and KeyChip; PC/touch/gamepad routing, hold-blocking attributes, pending/latch/serials and character/device callbacks remain.
+- Existing `test_round_exit_hold.py` delegates to `test_hud_b6_b7.py`; production source extraction, shared fixture trees and original assertions are retained. Historical `prepare_client_locals.py` is a dated proposal generator, not a gameplay caller; its current Loading preflight already rejects the active announced helper. No historical proof blob or combined Loading candidate was rewritten. Active Loading announced, changed current RoundHud/UIRegression and completed S18 are untouched.
+
+Tests completed:
+
+- Whole target before/candidate and a line-preserved trial compile at O0/O1. All 37 function structures remain. O1 opcodes, constants, upvalues, children and all other canonical bytes match exactly after removing only source-line metadata; the line-preserved O1 raw binary is also identical. O0 does differ and is reported as such.
+- The same whole actual Exit source plus actual current source dependencies runs through the unchanged Exit portion of B6/B7: 50 assertions before and 50 candidate, with another 50 each on same-runner reentry. Includes hold timing at 15/60/240 FPS, early release, cancel gates, typing/menu/focus/death/round-end/character removal, modal/device changes, refusal/retry, acknowledgement, duplicate card request and stale timeouts. Three additional assertions cover missing-import early return, warning and destruction of its partial owned GUI. All runtime/player/input/transport/timer/UIDevice/GUI objects in this port are controlled fake boundaries; reentry is fresh fake contexts, not a live respawn or multiplayer pass.
+- Two semantic controls are rejected by the real assertions: reducing HOLD_SECONDS to 0.5 fails the early-hold gate; removing the requestPending guard fails duplicate-request prevention. All four generated payloads compile at O0/O1. Fresh factories avoid loadstring permission and shared script cloning; the complete source bodies are preserved inside them.
+- Existing entire B6/B7 suite: 92 before/92 candidate, including neighboring footage/prompt/hiding tests, by substituting only this target's Path reader. `neighbor-gates-v2.json` adds strict input and dependency pins. Current source/manifest bytes are unchanged.
+- The real `--verify-installed` CLI rejects the current before source before writing its requested receipt. `installed-guard-negative-v1.json` records this expected failure and unchanged production/manifest.
+
+Repeatable read-only port, using a fresh receipt path:
+
+```powershell
+python -B artifacts/cleanup-20261010/clients-exit-v1/verify_exit_neighbors.py --receipt artifacts/cleanup-20261010/clients-exit-v1/neighbor-root-review-v1.json
+```
+
+After Root's native install/export, add `--verify-installed` with another fresh receipt. This verifies the actual canonical candidate hash and manifest row before running the paired existing suite. It does not certify native parity or supply an install operation. `prepare_exit_literal.py` is one-shot: its existing proposal directory is immutable and must not be overwritten.
+
+Native work still pending: fresh target/dependency Source/editor/class/properties/attributes/tags and census binding; review the sufficient pure-literal test port; use only fresh empty ModuleScripts for any native isolated contract and guard authoritative originals on success/failure; test-owned cleanup and same-port installed replay; exact scoped source CAS/export and manifest row update, console/diff/final parity. The prepared fake-engine payloads are available as input if Root chooses them, but neither native execution nor actual assets/hardware/gameplay/multiplayer/streaming/performance is claimed. No Play-mode change is needed or authorized by this preparation.

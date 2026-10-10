@@ -17,7 +17,7 @@ Source-ændringer og ét nyt native script blev eksporteret nedstrøms; deres
 gameplayimplementering tilskrives de andre udviklere. Tidligere dirty RoundUI
 er bevaret byte-exact i privat checkpoint før den nye Studio-version blev
 spejlet. Ingen native writes. Hele scopes og testgrænser er registreret nedenfor.
-S18 har siden fjernet den genbekræftede private C06 no-op-blok. Øvrige
+S18 har siden fjernet den private C06 no-op-blok, og S20 den private C04 Exit-konstant. Øvrige
 afventende runtimeforslag står stadig uimplementeret; eksternt implementerede
 ændringer beskrives særskilt uden oprydningskredit.
 
@@ -159,6 +159,45 @@ fejlfixture er ikke en native authoring-/transportcertificering.
 
 S19 lokal commit: `51d3095afb3e6f62bb73c7fd0a8c6b491a205d82`.
 
+### S20 / C04 — privat Exit-konstant, gennemført
+
+Kun den73-LFbyte ubrugte `HINT_HEIGHT = 36`-deklaration er fjernet fra
+`Round Exit Client`:17956→17883 Sourcebytes. Hele closure er frisk kontrolleret;
+ingen initializer, GUI-constructor, callbacks, remotes, attributes eller
+leave-protokol fjernes. O1 whole-bytecode med37 funktioner og padded rawbinary
+er identiske; O0 forskelle er registreret. Raw repo18399CRLF→17883LFbytes:
+516 rawbytes inkluderer line endings og er ikke516 bytes fjernet kode.
+
+Før og installeret: controlled whole-source Exit50/50 plus reentry50/50,
+missing-import cleanup, to semantic mutants og hele aktuelle B6/B7 neighbor92/92
+PASS. Native parser før09:03:26Z/installeret09:03:45Z: to friske tomme Modules
+pr. port skabt og fjernet,0 tilbage, egen lease frigivet, ingen clientbody kørt.
+213 originalers Source/editor/identity/class/properties/attrs/tags guards PASS.
+Frisk Source-CAS09:03:28Z skrev kun target; efterfølgende bounded eksport og
+manifest ændrede alene target sha256/bytes. Øvrige212 Sources og fields bevares.
+Console før/efter eksakt identisk med eksisterende fejl; ingen rollback nødvendig.
+
+Unexecuted V1 havde en reel mutating-transportgrænse: timeout kunne forveksles
+med completed fejl og starte recovery mod et stadig kørende native kald.
+Frosset V2 løser dette for apply/rollback/compile; unknown stopper senere native
+kald og lokal recovery. Completed rollback-fejl kræver frisk exact before-export
+og originalguards før lokal restore. Peer replay54cases/500checks,15guardcases/
+75checks,31parserfaultcases/317checks samt helper/14compile PASS. Oversized
+completed svar arkiveres ikke fuldt; deres error/checkpoint/known-state bevares.
+Ingen V1 native write eller faktisk timeout-race blev udført.
+
+Root after Source39/full-sync65 og installeret O0/O1 compile PASS. Separat actual
+parity09:04:43–09:04:53Z:213 scripts/15 remotes/228rows,52 ServerStorage-rødder,
+416286 sceneobjekter, nul mismatch/missing/extra/Source-editor-conflict/property-
+coveragegap. Sceneændringen siden S19's416284 tilskrives ikke denne Source-batch.
+Finalreader dækker Source/recordedproperties; egne213 guards dækkede scriptattrs/
+tags. Ingen gameplay/hardware/respawn/MP/streaming/teleport/asset- eller målt
+performancepass, native packagefjernelse, publicering eller GitHub-push.
+[Actual installation](artifacts/cleanup-20261010/clients-exit-v1/exit-literal-install-v2/result.json),
+[peer](artifacts/cleanup-20261010/storage-exit-peer-v1/V2_REVIEW.json),
+[native provenance](artifacts/cleanup-20261010/clients-exit-v1/native-response-provenance-v1/root-provenance.json),
+[parity](artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/result.json).
+
 ### F01 / T06-extension — authoringinstaller, forberedt og afventer native test
 
 Det aktuelle generic installer-workflow er genkontrolleret; fem actual-main
@@ -191,6 +230,8 @@ certificerer write-transporten. Ingen Source- eller assetfjernelse er godkendt.
 [Frosset V6 scope](artifacts/cleanup-20261010/foundation-next-v1/installer-v6/REVIEW.md),
 [arvet native portdesign, kræver V6-binding](artifacts/cleanup-20261010/foundation-next-v1/installer-v5/NATIVE_AUTHORING_PLAN.md),
 [præcis beviscuration](artifacts/cleanup-20261010/foundation-next-v1/CURATION-v2.json).
+
+F01-kandidat/beviser er lokalt committed i `2dc4fa409a26b686c9ee0c0798f120bf20f0dcca`; produktion/native uændrede.
 
 S08 har nu pensioneret Level1-legacybuildens standalone `main` og de offentlige
 gamle import-/QA-/publish-/exporttargets i syv lokale filer. Aktive defaults

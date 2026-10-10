@@ -1,0 +1,107 @@
+{
+  "schema": "mongotv-exit-installer-v2-independent-peer-review-v1",
+  "reviewedAtUtc": "2026-10-10T09:00:41Z",
+  "reviewer": "/root/storage_next",
+  "pass": true,
+  "status": "Prepared V2 passes independent bounded offline review and reruns. The V1 mutating-transport/local-recovery blocker is resolved by this delta. Eligible for Root-owned fresh native parser/CAS/export/installed/final-parity trial; no native trial performed by this reviewer.",
+  "supersededReadinessBlocker": "artifacts/cleanup-20261010/storage-exit-peer-v1/TRANSPORT_ADDENDUM.json",
+  "frozenInput": {
+    "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/frozen-pins-v1.json",
+    "rawSHA256": "23bc2453f28b5d66d7de670ab62191cb025645102e5296abcbaa766b9e81954f",
+    "v2RawPinsVerifiedBeforeAndAfter": 17,
+    "v1RawPinsVerifiedBeforeAndAfter": 23,
+    "v1FreezeRawSHA256": "474551f2f33654b5589aa1c405cc93eed5e8b350b888083dfd73f9fe3aed1890",
+    "driverRawBytes": 35344,
+    "driverRawSHA256": "91b2bd82d72d91ef3ec6e857d35743791ef789d31d4524c9681f02f79a3b8efc",
+    "wrapperTestRawBytes": 31992,
+    "wrapperTestRawSHA256": "9511904b1b85356125efdd869b6b1fe72b9dd287e3723b67c4a0f99b66c0acc8",
+    "templateRawBytes": 13408,
+    "templateRawSHA256": "6075321c2c3d504ed8966c88453dbee8e08126caaac8ca34e9c1df62d1b49398",
+    "nativeTemplateByteIdenticalToV1": true
+  },
+  "reviewedDelta": [
+    "The shared mutating_request path sets the operation/code SHA/180-second bound and pending flag before submitting apply, rollback or compile through the actual _request protocol. The flag stays set on transport exceptions or an absent completed result/content envelope.",
+    "An actual returned tool result/content envelope clears pending before error/JSON validation. Completed tool isError is distinguished from transport ambiguity. Native code/error responses that completed remain eligible for scoped observation; no completion is inferred from local file bytes or elapsed time.",
+    "An unknown apply, rollback or compile outcome makes no subsequent native call, retry, observation or CAS reversal. It also suspends local Source/manifest recovery and retains current mirrors/checkpoints/pending-operation provenance. Closing the local transport is not represented as Lua cancellation or completion.",
+    "A completed rollback error is followed only by fresh bounded target observation. Local recovery is allowed only after exact before Source/editor is freshly exported and all213 originals guarded; candidate, foreign or unreadable restoration retains the current mirrors for reconciliation. The native rollback is never retried.",
+    "The eight additional actual-wrapper scenarios distinguish apply/rollback timeout before/after simulated commit, completed malformed/oversized apply replies, and completed rollback-isError before/after commit. They assert pending operation, last native call, at most one apply and rollback, correct observed mirror preservation, and verified-before-only local restoration.",
+    "Source scope, exact forward/reverse anchors, actual native guards/parser/owned cleanup and actual bounded source reader remain unchanged. Distinct immutable V2 install/checkpoint paths preserve V1 evidence."
+  ],
+  "independentReruns": [
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-wrapper-v1.json",
+      "rawBytes": 10359,
+      "rawSHA256": "97b12ce2a364ad1c12ab91343815bcb0760ff8c7595fe920fff84c8ad244ff31",
+      "cases": 54,
+      "checks": 500,
+      "additionalPorts": "Actual transform 5 cases/8 checks, exclusive temp creation 2 cases/8 checks, parser receipt validator 9 cases.",
+      "pass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-native-guard-v1.json",
+      "rawBytes": 1350,
+      "rawSHA256": "6cfc4f0d9af1d796313c921c51f9f4fa766822ef3182153dea2e562b8301cb56",
+      "cases": 15,
+      "checks": 75,
+      "pass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-parser-faults-v1.json",
+      "rawBytes": 1462,
+      "rawSHA256": "78f6523c57be1f3dcfa978e72645ff807c2f773aa1e004cfc1c502c478dfb71f",
+      "cases": 31,
+      "checks": 317,
+      "pass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-actual-helper-v1/result.json",
+      "rawBytes": 7868,
+      "rawSHA256": "e83ad827f9760380db052a6ddf7d5c2451cd35955e57b8f0c9c425e40fb39b98",
+      "templateCompiles": 14,
+      "canonicalO1Equivalent": true,
+      "canonicalO0Equivalent": false,
+      "pairedChecksBeforeAndCandidate": [50, 50],
+      "freshContextReentryChecksBeforeAndCandidate": [50, 50],
+      "semanticMutantsRejected": 2,
+      "neighborChecksBeforeAndCandidate": [92, 92],
+      "pass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-actual-helper-v1/offline-helper/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c",
+      "pass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-actual-helper-v1/offline-helper/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac",
+      "pass": true
+    }
+  ],
+  "preservedLocalInvocationFailure": {
+    "phase": "Reviewer inline Python pin preflight, before any peer port",
+    "exitCode": 1,
+    "error": "SyntaxError: unterminated string literal (detected at line 1)",
+    "cause": "PowerShell quoting of nested escaped Python quotes was invalid. Python rejected the entire input before execution; no checks or writes ran.",
+    "correction": "The corrected read-only stdin preflight verified all40 V1/V2 raw pins and fresh peer destinations; repeated post-port validation verified all40 again. No frozen artifact was changed."
+  },
+  "canonicalFilesUnchangedAcrossPeer": {
+    "sourceRawSHA256": "42e9b241bf5f83ee0869ee9b31b1eb312161ab73b6e5b1f512de9f1202de56b5",
+    "manifestRawSHA256": "e92f6cb057c01b66f595caa2e4b8601d5522e99af375ca7b4bb0bc74bf60d414"
+  },
+  "limits": [
+    "Native parser/CAS/export/installed checks and full final native parity remain pending and Root-owned. A fresh authoritative baseline is still required; these ports provide no permission to write against historical Sources.",
+    "Actual wrapper/filesystem/rollback code executes against controlled native/console/git/helper-result boundaries. Actual extracted native guards/parser code executes against controlled engine/metadata/hash/require boundaries. Offline paired/reentry checks are controlled fake player/input/GUI/timer/transport contexts.",
+    "No gameplay, hardware, live respawn, multiplayer, streaming, reserved-server teleport, real-asset or performance pass is claimed. The two actual native factories remain uncalled in the proposed port.",
+    "Raw completed-response preservation is bounded: oversized completed reply assertions precede the full response-file save. Their error/checkpoint and known-completion state remain; a full oversized raw-response archive is not certified.",
+    "The V1 review's point-in-time filesystem and pre-try write/flush/close-I/O limits still apply. The 73-byte change is authoritative LF Source scope; verified native export additionally changes repository CRLF line endings."
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "commits": 0,
+  "modeSwitches": 0,
+  "published": false
+}

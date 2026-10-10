@@ -1,0 +1,20 @@
+{
+  "request": {
+    "operation": "apply",
+    "inputSHA256": "ae603c3cf4eacd2506e0a1e502d4f7f48ee84dec88ad9b3adbe306a12a93ddcb",
+    "timeoutSeconds": 180
+  },
+  "response": {
+    "jsonrpc": "2.0",
+    "id": 28,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"bytes\":17883,\"path\":\"StarterPlayer.StarterPlayerScripts.Round Exit Client\",\"readAtUtc\":\"2026-10-10T09:03:28Z\",\"instanceId\":\"1_31096\",\"operation\":\"apply\",\"guardSemantics\":\"Exact final point-in-time originals guard after yielding census; no continuous external-change certificate.\",\"pass\":true,\"objectsCreated\":0,\"modeSwitches\":0,\"originalParentWrites\":0,\"originalPropertyWrites\":0,\"otherOriginalSourceWrites\":0,\"sourceEditorMatches\":true,\"originalSourceWrites\":1,\"originalSourceCoverage\":213,\"sourceSHA256\":\"bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752\"}"
+        }
+      ],
+      "isError": false
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "pass": true,
+  "cases": 15,
+  "checks": 75,
+  "stdout": "NATIVE_GUARD_CASES=15 CHECKS=75\n",
+  "compile": [
+    {
+      "optimization": 0,
+      "pass": true
+    },
+    {
+      "optimization": 1,
+      "pass": true
+    }
+  ],
+  "nativeScriptCount": 213,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "templateSHA256": "6075321c2c3d504ed8966c88453dbee8e08126caaac8ca34e9c1df62d1b49398",
+  "toolSHA256": "4b4f3cff4cbf107770f03abcb6922b088f4b988976e410cb3a8a3677653b6a44",
+  "programSHA256": "8c3f9dadf0c1f210b87ba4ff02699e10d75cb6919f7f87976983bdb949f24062",
+  "actualCodeHashes": {
+    "mode": "b2f2befc8f46f1ce2a202910f692a02dd1d717ca20d3701a501834fc5627d653",
+    "stable": "8abe766ce3fcabd29e2524b5b251754ea232c34525b5f4ffcc0d2f6924fe09f2",
+    "targetIdentity": "8db35d899c915983a56b83ac8e985799c149cad4a006c587cecce7bf7d64bf80",
+    "guard": "f11f86a7e6fdfd75cbf3fea2371b20ed51aa0c30ea67b12c1590e53b716a30d0",
+    "mutation": "bf48e90e8a7d0cb8b64911fd25c74b22e78cf61f36cbdf404d5f47843c329a71"
+  },
+  "limits": "Actual native-template mode/identity/all213guard/transform/UpdateSourceAsync callback/postguard code executed. Engine metadata, exact known-body SHA, JSON and callback scheduling are controlled table boundaries. Not real Studio/ScriptEditorService guard or gameplay/multiplayer/streaming certification."
+}

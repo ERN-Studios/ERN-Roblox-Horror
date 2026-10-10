@@ -1,0 +1,430 @@
+{
+  "schema": "mongotv-exit-literal-install-v2",
+  "pass": true,
+  "publishedByThisBatch": false,
+  "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+  "bytesRemoved": 73,
+  "headAtStart": "2dc4fa409a26b686c9ee0c0798f120bf20f0dcca",
+  "productionNativeWritesRequested": 1,
+  "rollback": {},
+  "limits": "One unread private number literal; native factory parser only, actual paired/reentry offline contracts. Not gameplay/multiplayer/streaming/assets/performance. File CAS is checked immediately before atomic replacement.",
+  "offlineBefore": {
+    "pass": true,
+    "installed": false,
+    "sourceCompiler": [
+      {
+        "pass": true,
+        "optimization": 0,
+        "debug": 0,
+        "functions": {
+          "before": 37,
+          "candidate": 37,
+          "linePreserved": 37
+        },
+        "canonicalIdentical": false,
+        "textWithConstantsIdentical": false,
+        "linePreservedBinaryIdentical": false,
+        "beforeBinarySHA256": "4b9d22bb7febea45295f11f81cd5c4fc804b4880c3197004a1250a985597f9d4",
+        "candidateBinarySHA256": "6ae27089dd31b426b74eef71457072c6766753b83c1589e5666f662497887d32",
+        "beforeCanonicalSHA256": "fdb472c6bfd6d533131610d9cfcded793ade4849f29f3cb10047a607eb6818d7",
+        "candidateCanonicalSHA256": "3b327dfbb62a577d2c6dfe56226dd13d152ed4832d6f6e0fb332d57a34bfebb6"
+      },
+      {
+        "pass": true,
+        "optimization": 1,
+        "debug": 0,
+        "functions": {
+          "before": 37,
+          "candidate": 37,
+          "linePreserved": 37
+        },
+        "canonicalIdentical": true,
+        "textWithConstantsIdentical": true,
+        "linePreservedBinaryIdentical": true,
+        "beforeBinarySHA256": "165db1386b356149b23febbd134d5407878cefd0835f904f68a2ab01a4d35485",
+        "candidateBinarySHA256": "af22b83254f9bc33fe1e5af9ef503f1ccedbed15e6605bed09231b162571364c",
+        "beforeCanonicalSHA256": "d94c6bf87444391acacd37da96cb8bfddccaedbd89cead998b76ce8709202866",
+        "candidateCanonicalSHA256": "d94c6bf87444391acacd37da96cb8bfddccaedbd89cead998b76ce8709202866"
+      }
+    ],
+    "pairedPorts": [
+      {
+        "phase": "before",
+        "pass": true,
+        "checks": 50,
+        "reentryChecks": 50,
+        "compile": [
+          {
+            "pass": true,
+            "optimization": 0
+          },
+          {
+            "pass": true,
+            "optimization": 1
+          }
+        ],
+        "payloadSHA256": "6567549a584d138c6953232c5e615118882eaf039c1df48cbf0351f3653ce96f"
+      },
+      {
+        "phase": "candidate",
+        "pass": true,
+        "checks": 50,
+        "reentryChecks": 50,
+        "compile": [
+          {
+            "pass": true,
+            "optimization": 0
+          },
+          {
+            "pass": true,
+            "optimization": 1
+          }
+        ],
+        "payloadSHA256": "2b198e77a8d10362ae3c39c09fd1d9aa103bfb352e8f8b59e72d43fe9f101902"
+      },
+      {
+        "phase": "timingNegative",
+        "pass": true,
+        "expectedFailure": "no early hold at",
+        "compile": [
+          {
+            "pass": true,
+            "optimization": 0
+          },
+          {
+            "pass": true,
+            "optimization": 1
+          }
+        ],
+        "payloadSHA256": "cfef149f6b9f405701af7d252614427410908b90c480ba3cae61501dfeab8a2c",
+        "scope": "Expected semantic control rejected; no production mutation"
+      },
+      {
+        "phase": "requestNegative",
+        "pass": true,
+        "expectedFailure": "card cannot duplicate held request",
+        "compile": [
+          {
+            "pass": true,
+            "optimization": 0
+          },
+          {
+            "pass": true,
+            "optimization": 1
+          }
+        ],
+        "payloadSHA256": "c0bdfce6d56fc38b959622542508c4246a53000f9a28019641268e97ab83f2f8",
+        "scope": "Expected semantic control rejected; no production mutation"
+      }
+    ],
+    "neighbors": {
+      "pass": true,
+      "actualRunner": "tools/tests/test_hud_b6_b7.py",
+      "cases": [
+        {
+          "phase": "before",
+          "pass": true,
+          "checks": 92,
+          "sourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+          "stdout": "B6/B7: 92 checks passed (production sources, real imported templates)"
+        },
+        {
+          "phase": "candidate",
+          "pass": true,
+          "checks": 92,
+          "sourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+          "stdout": "B6/B7: 92 checks passed (production sources, real imported templates)"
+        }
+      ],
+      "verifyInstalledRequested": false,
+      "installedSourceVerified": false,
+      "nativeCalls": 0,
+      "productionWrites": 0,
+      "manifestWrites": 0,
+      "limits": "Existing unchanged full B6/B7 assertions/production sources with single Source-reader substitution and controlled fake engine/imported historical fixture/input/transport/UIDevice boundaries. Not native asset, gameplay, hardware, multiplayer or streaming certificate."
+    },
+    "nativeCalls": 0,
+    "productionWrites": 0
+  },
+  "beforeParity": {
+    "pass": true,
+    "scripts": 213,
+    "manifestRemoteEvents": 15,
+    "sourceEditorCoverage": 213,
+    "scope": "Source/editor/class/path/recorded properties/attributes. No non-script asset, remote behavior, round or streaming certificate."
+  },
+  "consoleBefore": "Failed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[EntityAnimations] Transition controller active\n[EntityAI] eye markers: Workspace.Entity.EyeL · Workspace.Entity.EyeR\n[EntityAI] glowing eyes active: 2/2\n[TunnelLobbyBuilder] bays open: 1, 2, 3, 4  |  launch stations: 16\nFailed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[LobbyLoading] lobby in 20.0 s, 87 assets, 0 failed\n[LevelLoading] level 6 covered for 3.1 s\n[LevelLoading] level 6 covered for 3.5 s\nAssistantCommand:8: assertion failed!\nStack Begin\nScript 'AssistantCommand', Line 8\nStack End\nAssistantCommand:78: bounded scene census exceeded\nStack Begin\nScript 'AssistantCommand', Line 78\nStack End\nStreamingMinRadius is not a valid member of Workspace \"Workspace\"\nStack Begin\nScript 'AssistantCommand', Line 1\nStack End\nZenMeister02 joined live editing session.\nZenMeister02 joined live editing session.\nZenMeister02 joined live editing session.",
+  "completedNativeRequests": [
+    {
+      "operation": "compile",
+      "inputSHA256": "595081d0d30489d29dbc25a1fa886eb3615b0ab7d12f7f0c8a8977468470fd76",
+      "timeoutSeconds": 180,
+      "responseSHA256": "ddf1daecb5385e4a9239c158fb724270090199be99ee12c42f5f1d50e4e3a4b1",
+      "isError": false
+    },
+    {
+      "operation": "apply",
+      "inputSHA256": "ae603c3cf4eacd2506e0a1e502d4f7f48ee84dec88ad9b3adbe306a12a93ddcb",
+      "timeoutSeconds": 180,
+      "responseSHA256": "200f442e92e3934bc83922713ed41a34fdcd735500e0b05d54d432195a0403a3",
+      "isError": false
+    },
+    {
+      "operation": "compile",
+      "inputSHA256": "546f34ecf6cdd220c7426abb413bb7a9403ec74ba83b1414650b6e302c2d2140",
+      "timeoutSeconds": 180,
+      "responseSHA256": "7d133b5f01724d95f377c114ee6dc1853b299b4a8b2c05355dbefe38418b705e",
+      "isError": false
+    }
+  ],
+  "nativeParserBefore": {
+    "originalSourceWrites": 0,
+    "readAtUtc": "2026-10-10T09:03:26Z",
+    "originalParentWrites": 0,
+    "operation": "compile",
+    "originalPropertyWrites": 0,
+    "ownedLeaseReleased": true,
+    "compiles": [
+      {
+        "bytes": 17956,
+        "factorySHA256": "8121ea7a16041297a0fbd9ae10f979f5fc3f20d9484fa76be01df999bc3f2323",
+        "phase": "Before",
+        "factoryUncalled": true,
+        "sourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3"
+      },
+      {
+        "bytes": 17883,
+        "factorySHA256": "534dfc5706e3a9a1950d5120d6de4d914f70b525c3537a8e326c1488608590d5",
+        "phase": "Candidate",
+        "factoryUncalled": true,
+        "sourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+      }
+    ],
+    "cleanupErrors": [],
+    "borrowedRuntimeState": false,
+    "sourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+    "modeSwitches": 0,
+    "pass": true,
+    "originalsUnchanged": true,
+    "parserPassed": true,
+    "originalSourceCoverage": 213,
+    "limits": "Native parser/factory-return in fresh empty ModuleScripts; client bodies never run. No gameplay, hardware, multiplayer, streaming, teleport, real-asset or performance certificate.",
+    "remainingProbes": 0,
+    "probesCreated": 2,
+    "probesDestroyed": 2,
+    "schema": "mongotv-exit-literal-native-parser-v1",
+    "clientBodiesExecuted": 0,
+    "nativeInputSHA256": "595081d0d30489d29dbc25a1fa886eb3615b0ab7d12f7f0c8a8977468470fd76"
+  },
+  "nativeApply": {
+    "bytes": 17883,
+    "path": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+    "readAtUtc": "2026-10-10T09:03:28Z",
+    "instanceId": "1_31096",
+    "operation": "apply",
+    "guardSemantics": "Exact final point-in-time originals guard after yielding census; no continuous external-change certificate.",
+    "pass": true,
+    "objectsCreated": 0,
+    "modeSwitches": 0,
+    "originalParentWrites": 0,
+    "originalPropertyWrites": 0,
+    "otherOriginalSourceWrites": 0,
+    "sourceEditorMatches": true,
+    "originalSourceWrites": 1,
+    "originalSourceCoverage": 213,
+    "sourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+  },
+  "offlineInstalled": {
+    "pass": true,
+    "installed": true,
+    "sourceCompiler": [
+      {
+        "pass": true,
+        "optimization": 0,
+        "debug": 0,
+        "functions": {
+          "before": 37,
+          "candidate": 37,
+          "linePreserved": 37
+        },
+        "canonicalIdentical": false,
+        "textWithConstantsIdentical": false,
+        "linePreservedBinaryIdentical": false,
+        "beforeBinarySHA256": "4b9d22bb7febea45295f11f81cd5c4fc804b4880c3197004a1250a985597f9d4",
+        "candidateBinarySHA256": "6ae27089dd31b426b74eef71457072c6766753b83c1589e5666f662497887d32",
+        "beforeCanonicalSHA256": "fdb472c6bfd6d533131610d9cfcded793ade4849f29f3cb10047a607eb6818d7",
+        "candidateCanonicalSHA256": "3b327dfbb62a577d2c6dfe56226dd13d152ed4832d6f6e0fb332d57a34bfebb6"
+      },
+      {
+        "pass": true,
+        "optimization": 1,
+        "debug": 0,
+        "functions": {
+          "before": 37,
+          "candidate": 37,
+          "linePreserved": 37
+        },
+        "canonicalIdentical": true,
+        "textWithConstantsIdentical": true,
+        "linePreservedBinaryIdentical": true,
+        "beforeBinarySHA256": "165db1386b356149b23febbd134d5407878cefd0835f904f68a2ab01a4d35485",
+        "candidateBinarySHA256": "af22b83254f9bc33fe1e5af9ef503f1ccedbed15e6605bed09231b162571364c",
+        "beforeCanonicalSHA256": "d94c6bf87444391acacd37da96cb8bfddccaedbd89cead998b76ce8709202866",
+        "candidateCanonicalSHA256": "d94c6bf87444391acacd37da96cb8bfddccaedbd89cead998b76ce8709202866"
+      }
+    ],
+    "pairedPorts": [
+      {
+        "phase": "before",
+        "pass": true,
+        "checks": 50,
+        "reentryChecks": 50,
+        "compile": [
+          {
+            "pass": true,
+            "optimization": 0
+          },
+          {
+            "pass": true,
+            "optimization": 1
+          }
+        ],
+        "payloadSHA256": "6567549a584d138c6953232c5e615118882eaf039c1df48cbf0351f3653ce96f"
+      },
+      {
+        "phase": "candidate",
+        "pass": true,
+        "checks": 50,
+        "reentryChecks": 50,
+        "compile": [
+          {
+            "pass": true,
+            "optimization": 0
+          },
+          {
+            "pass": true,
+            "optimization": 1
+          }
+        ],
+        "payloadSHA256": "2b198e77a8d10362ae3c39c09fd1d9aa103bfb352e8f8b59e72d43fe9f101902"
+      },
+      {
+        "phase": "timingNegative",
+        "pass": true,
+        "expectedFailure": "no early hold at",
+        "compile": [
+          {
+            "pass": true,
+            "optimization": 0
+          },
+          {
+            "pass": true,
+            "optimization": 1
+          }
+        ],
+        "payloadSHA256": "cfef149f6b9f405701af7d252614427410908b90c480ba3cae61501dfeab8a2c",
+        "scope": "Expected semantic control rejected; no production mutation"
+      },
+      {
+        "phase": "requestNegative",
+        "pass": true,
+        "expectedFailure": "card cannot duplicate held request",
+        "compile": [
+          {
+            "pass": true,
+            "optimization": 0
+          },
+          {
+            "pass": true,
+            "optimization": 1
+          }
+        ],
+        "payloadSHA256": "c0bdfce6d56fc38b959622542508c4246a53000f9a28019641268e97ab83f2f8",
+        "scope": "Expected semantic control rejected; no production mutation"
+      }
+    ],
+    "neighbors": {
+      "pass": true,
+      "actualRunner": "tools/tests/test_hud_b6_b7.py",
+      "cases": [
+        {
+          "phase": "before",
+          "pass": true,
+          "checks": 92,
+          "sourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+          "stdout": "B6/B7: 92 checks passed (production sources, real imported templates)"
+        },
+        {
+          "phase": "candidate",
+          "pass": true,
+          "checks": 92,
+          "sourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+          "stdout": "B6/B7: 92 checks passed (production sources, real imported templates)"
+        }
+      ],
+      "verifyInstalledRequested": true,
+      "installedSourceVerified": true,
+      "nativeCalls": 0,
+      "productionWrites": 0,
+      "manifestWrites": 0,
+      "limits": "Existing unchanged full B6/B7 assertions/production sources with single Source-reader substitution and controlled fake engine/imported historical fixture/input/transport/UIDevice boundaries. Not native asset, gameplay, hardware, multiplayer or streaming certificate."
+    },
+    "nativeCalls": 0,
+    "productionWrites": 0
+  },
+  "nativeParserInstalled": {
+    "originalSourceWrites": 0,
+    "readAtUtc": "2026-10-10T09:03:45Z",
+    "originalParentWrites": 0,
+    "operation": "compile",
+    "originalPropertyWrites": 0,
+    "ownedLeaseReleased": true,
+    "compiles": [
+      {
+        "bytes": 17956,
+        "factorySHA256": "8121ea7a16041297a0fbd9ae10f979f5fc3f20d9484fa76be01df999bc3f2323",
+        "phase": "Before",
+        "factoryUncalled": true,
+        "sourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3"
+      },
+      {
+        "bytes": 17883,
+        "factorySHA256": "534dfc5706e3a9a1950d5120d6de4d914f70b525c3537a8e326c1488608590d5",
+        "phase": "Candidate",
+        "factoryUncalled": true,
+        "sourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+      }
+    ],
+    "cleanupErrors": [],
+    "borrowedRuntimeState": false,
+    "sourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+    "modeSwitches": 0,
+    "pass": true,
+    "originalsUnchanged": true,
+    "parserPassed": true,
+    "originalSourceCoverage": 213,
+    "limits": "Native parser/factory-return in fresh empty ModuleScripts; client bodies never run. No gameplay, hardware, multiplayer, streaming, teleport, real-asset or performance certificate.",
+    "remainingProbes": 0,
+    "probesCreated": 2,
+    "probesDestroyed": 2,
+    "schema": "mongotv-exit-literal-native-parser-v1",
+    "clientBodiesExecuted": 0,
+    "nativeInputSHA256": "546f34ecf6cdd220c7426abb413bb7a9403ec74ba83b1414650b6e302c2d2140"
+  },
+  "afterParity": {
+    "pass": true,
+    "scripts": 213,
+    "manifestRemoteEvents": 15,
+    "sourceEditorCoverage": 213,
+    "scope": "Source/editor/class/path/recorded properties/attributes. No non-script asset, remote behavior, round or streaming certificate."
+  },
+  "consoleAfter": "Failed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[EntityAnimations] Transition controller active\n[EntityAI] eye markers: Workspace.Entity.EyeL · Workspace.Entity.EyeR\n[EntityAI] glowing eyes active: 2/2\n[TunnelLobbyBuilder] bays open: 1, 2, 3, 4  |  launch stations: 16\nFailed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[LobbyLoading] lobby in 20.0 s, 87 assets, 0 failed\n[LevelLoading] level 6 covered for 3.1 s\n[LevelLoading] level 6 covered for 3.5 s\nAssistantCommand:8: assertion failed!\nStack Begin\nScript 'AssistantCommand', Line 8\nStack End\nAssistantCommand:78: bounded scene census exceeded\nStack Begin\nScript 'AssistantCommand', Line 78\nStack End\nStreamingMinRadius is not a valid member of Workspace \"Workspace\"\nStack Begin\nScript 'AssistantCommand', Line 1\nStack End\nZenMeister02 joined live editing session.\nZenMeister02 joined live editing session.\nZenMeister02 joined live editing session.",
+  "beforeSourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+  "afterSourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+  "other212SourceRowsPreserved": true,
+  "workingOtherManifestRowsPreserved": true,
+  "scopedHeadManifestSHA256": "e17883cde75144d3ef652af33f1e4ac68c0048ead12a9a7c61826cb578408ae7",
+  "installedParserPassed": true,
+  "nativeOutcomeKnown": true,
+  "completedAtUtc": "2026-10-10T09:03:54.720823+00:00"
+}

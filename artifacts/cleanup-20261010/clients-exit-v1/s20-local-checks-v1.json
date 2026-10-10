@@ -1,0 +1,38 @@
+{
+  "schema": "s20-root-local-gates-v1",
+  "pass": true,
+  "installedCompiles": [
+    {
+      "optimization": "-O0",
+      "exitCode": 0,
+      "sourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+    },
+    {
+      "optimization": "-O1",
+      "exitCode": 0,
+      "sourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+    }
+  ],
+  "observedContractCommands": [
+    {
+      "command": "python -B tools/tests/test_studio_source_contract.py",
+      "checks": 39,
+      "exitCode": 0
+    },
+    {
+      "command": "python -B tools/tests/test_full_sync_contract.py",
+      "checks": 65,
+      "exitCode": 0
+    }
+  ],
+  "evidence": "Root actually executed both after S20 and observed tool results; not a stored stdout transcript.",
+  "canonicalSourceBytesRemoved": 73,
+  "rawRepositoryBytesRemoved": 516,
+  "repositoryLineEndings": "Verified native LF export replaces previous CRLF; private checkpoint retains exact18399 raw before bytes.",
+  "manifestChangedFields": [
+    "target.sha256",
+    "target.bytes"
+  ],
+  "performanceGainMeasured": false,
+  "gameplayCertificate": false
+}

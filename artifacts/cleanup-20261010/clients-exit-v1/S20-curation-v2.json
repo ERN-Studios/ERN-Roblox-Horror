@@ -1,0 +1,629 @@
+{
+  "schema": "s20-root-scoped-curation-v2",
+  "head": "2dc4fa409a26b686c9ee0c0798f120bf20f0dcca",
+  "scope": "Same reviewed S20 scope plus explicit byte-preserving artifact-root attribute and local failed preflight record. Original curationV1 and all frozen inputs unchanged.",
+  "reason": "Root observed CRLF normalization warnings on unprotected raw-pin root artifacts before commit. Added exact scoped * -text root attribute; peer already had one and its exact bytes are preserved. No Source/script/global Git setting changed.",
+  "files": [
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+      "rawBytes": 17883,
+      "rawSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+    },
+    {
+      "path": "studio-sync-manifest.json",
+      "rawBytes": 154383,
+      "rawSHA256": "e17883cde75144d3ef652af33f1e4ac68c0048ead12a9a7c61826cb578408ae7"
+    },
+    {
+      "path": "CLEANUP_PLAN.md",
+      "rawBytes": 53179,
+      "rawSHA256": "b84c205b130436508b5b3bf66398a5bedfc746e8228a63637595a188623d5f70"
+    },
+    {
+      "path": "CLEANUP_RESULTS.md",
+      "rawBytes": 60286,
+      "rawSHA256": "bf7d0e7a181a58d14f361074b1ae154449d3e0d3425659d215fe91e05d009022"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/capture-target-native-v1.py",
+      "rawBytes": 2250,
+      "rawSHA256": "940f30d3a21984cfa331500be227c5892b335621c6ab24296db48fe311018ef8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/exit-literal-install-v2/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/exit-literal-install-v2/native-parser-before.json",
+      "rawBytes": 1456,
+      "rawSHA256": "60b3b8149f88c36683fbcb199a8d7b4c85510c757ee6a62aaaebbd223bcbfabb"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/exit-literal-install-v2/native-parser-installed.json",
+      "rawBytes": 1456,
+      "rawSHA256": "aea80034944d2e1a9ff72c1743f7d3378a90ce05e511ed0a3e78fed4aed0c916"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/exit-literal-install-v2/offline-before/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/exit-literal-install-v2/offline-before/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/exit-literal-install-v2/offline-installed/neighbors.json",
+      "rawBytes": 1023,
+      "rawSHA256": "3734cac1a94a5c4c87c3bbc51335fadf468da5f34950ee1478e3171231da9070"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/exit-literal-install-v2/offline-installed/result.json",
+      "rawBytes": 4278,
+      "rawSHA256": "e84a480463990a25c617d0ab43a13bff6b6a9ab3d7abd4adba4396ee67bb6ebe"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/exit-literal-install-v2/result.json",
+      "rawBytes": 17468,
+      "rawSHA256": "95be3d65b92da6e4a66364dd216af9d4404e2546b818b6c8c6a0d31a47297563"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/.gitattributes",
+      "rawBytes": 20,
+      "rawSHA256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-begin.json",
+      "rawBytes": 339,
+      "rawSHA256": "bb7f61a9ea091e7b1a43a197f66ef944e1364362a5fdb5d9e8d2b8185cf18042"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-end.json",
+      "rawBytes": 339,
+      "rawSHA256": "d77a5cc76f248d721c9aa896cbc5a5e4ef277c59dff6f2bf26c0285e21aa4ad5"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-page-00.json",
+      "rawBytes": 15028,
+      "rawSHA256": "8197a4db7cb88c6b11afcf3509343adb5ff539df94ff2ad87d75bb9764906295"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-page-01.json",
+      "rawBytes": 25635,
+      "rawSHA256": "75315e150a16518a1f44ee79d8b1c132143c1b482bb94770b6832d04b1185c6b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-page-02.json",
+      "rawBytes": 26313,
+      "rawSHA256": "925f1c267749399aabf149515c6505b20574acf4c81ad92da3c08629d66d86a3"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-page-03.json",
+      "rawBytes": 26129,
+      "rawSHA256": "f6c33c89c6f199ecc1e87ebb4defc040b681b3db2e76af42b4c05980aa97fee2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-page-04.json",
+      "rawBytes": 26142,
+      "rawSHA256": "d0313fa4c01de086f4d8eb79133735936362ee4b906c7ed2f0ec9a278bd97227"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-page-05.json",
+      "rawBytes": 25717,
+      "rawSHA256": "11afcec6815e9b73475f85cd7ef16ac6444ffee85d37b8ef3121ed2c3e75f51f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-page-06.json",
+      "rawBytes": 27971,
+      "rawSHA256": "e57f5ca911e2e33535a46d9b47a37b1ba9a3c0684a1c5a5c240168c5f143aa3e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-page-07.json",
+      "rawBytes": 28338,
+      "rawSHA256": "5a69f4530968655e87c0029e24db945954a9c2d1706e6d9bd14f6dd8d04db698"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-page-08.json",
+      "rawBytes": 28197,
+      "rawSHA256": "58ad34e09c3d46c71f28813d50c0ab0e114ae85637b6428e30f92219396084a4"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-page-09.json",
+      "rawBytes": 14197,
+      "rawSHA256": "b1e9959e4ab13a6d179047603bc67457b94679a2f7c48a261a33baf5acd47136"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/native-reader.luau",
+      "rawBytes": 3293,
+      "rawSHA256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/parity-reader.py",
+      "rawBytes": 12746,
+      "rawSHA256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/repo-after-metadata.json",
+      "rawBytes": 63282,
+      "rawSHA256": "048df6f5a9fc729cedf1da92b6dfb5658c93c86ce226e0443ab67dafc547141e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/repo-before-metadata.json",
+      "rawBytes": 63462,
+      "rawSHA256": "0330d5a2447b059e1b1cbaaffcc08a511861bd5bb51819a55c51ee3f9e63b94d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/result.json",
+      "rawBytes": 2044,
+      "rawSHA256": "482484e0e32c5006ab982f189e950214160429d26de35cf8d0b01a95115f82c2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/studio-state-before.json",
+      "rawBytes": 128,
+      "rawSHA256": "cfec3c6eefac0d8b6a7b4b5cb66ed015049a38533a7f7597a4a9ff92fa10802a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/studio-state-before.txt",
+      "rawBytes": 98,
+      "rawSHA256": "468832371ef314e6b747656d478af6c841e116d9cfea9f2f3ea1d5cc2fbf1b5f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/frozen-pins-v1.json",
+      "rawBytes": 3762,
+      "rawSHA256": "d57b4c4e376296b873de5da2f85e3c850613ce943c27d82b8487cfdf715c0be1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installed-guard-negative-v1.json",
+      "rawBytes": 316,
+      "rawSHA256": "a5fda548f4fb400d8e19d39a2a8dc98115f4b7b591e0db92d494ea5e01fc27f0"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/apply_exit_literal_cleanup.py",
+      "rawBytes": 31754,
+      "rawSHA256": "1411ba4f3a0450cfe909c8f9d4ac75195cadcae3babc56ab2da9716189f319dc"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/build_offline_tests.py",
+      "rawBytes": 9585,
+      "rawSHA256": "b93b48cde409993e5e834c16b994f8ffcbbff8ac91f44c6a8f36a3bf9e1a736a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/build_scoped_installer.py",
+      "rawBytes": 16379,
+      "rawSHA256": "1956c29be82c9eedd83ddf1516bd0365b8e78f72588b4b61ebdc8c9218f3f443"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/development-failures-v1.json",
+      "rawBytes": 1459,
+      "rawSHA256": "83393e06e97ecba1450aab804ff612dd79b05ee3d50cfbe83b5aa4444889d45d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/exit_literal_source_cas.luau",
+      "rawBytes": 13408,
+      "rawSHA256": "6075321c2c3d504ed8966c88453dbee8e08126caaac8ca34e9c1df62d1b49398"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/freeze_installer.py",
+      "rawBytes": 3611,
+      "rawSHA256": "174c597894dd546a93d2524d7ff45819bf0773543e965e1756c5ce654fed76bb"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/frozen-pins-v1.json",
+      "rawBytes": 6229,
+      "rawSHA256": "474551f2f33654b5589aa1c405cc93eed5e8b350b888083dfd73f9fe3aed1890"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/native-guard-tests-v1.json",
+      "rawBytes": 1350,
+      "rawSHA256": "83e1094ecf98209f81ac12a5f72be2cb223d97a8d4c542060f9f8a97470a4f2c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/native-guard-tests-v2.json",
+      "rawBytes": 1350,
+      "rawSHA256": "6cfc4f0d9af1d796313c921c51f9f4fa766822ef3182153dea2e562b8301cb56"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-proposal-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-proposal-v1/proposal.json",
+      "rawBytes": 3182,
+      "rawSHA256": "fbb3b0c8bb4ad47ed1d4fa547356597e7bf80de2df64e7e28beeb0f4a62b101b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-refresh-v1/offline-helper/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-refresh-v1/offline-helper/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-refresh-v1/result.json",
+      "rawBytes": 7868,
+      "rawSHA256": "bbe45afe068a1e5cac66f78ebe295301ee32147580d54073abb6bad8d88bd5e1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-refresh-v2/offline-helper/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-refresh-v2/offline-helper/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-refresh-v2/result.json",
+      "rawBytes": 7868,
+      "rawSHA256": "a49e137ddd503b18406e0f497a6df94fab87832b4aa2778f10bfc0ed7fb7bbcf"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-wrapper-tests-v1.json",
+      "rawBytes": 7667,
+      "rawSHA256": "1623ca427d1c3d52f3aefed48b0f604c31e35087f6c68f0da3aecc1690a5bbd0"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-wrapper-tests-v2.json",
+      "rawBytes": 8661,
+      "rawSHA256": "fa4d1bc4cfed3cfd1fbb518f943cc1aee149af3410829f46fd209a06de6a6dd0"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/offline-wrapper-tests-v3.json",
+      "rawBytes": 9001,
+      "rawSHA256": "88a9d70723c93db9b521446d16e2fbe485850b15110cb77a58ca0042f97b8b96"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/parser-fault-tests-v1.json",
+      "rawBytes": 1462,
+      "rawSHA256": "dc38c0eec5d76c0cc1eabdd7bffa7261a06facba74a5671df4b4dc598cbc22df"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/parser-fault-tests-v2.json",
+      "rawBytes": 1462,
+      "rawSHA256": "78f6523c57be1f3dcfa978e72645ff807c2f773aa1e004cfc1c502c478dfb71f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-actual-helper-v1/offline-helper/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-actual-helper-v1/offline-helper/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-actual-helper-v1/result.json",
+      "rawBytes": 7868,
+      "rawSHA256": "a49e137ddd503b18406e0f497a6df94fab87832b4aa2778f10bfc0ed7fb7bbcf"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-native-guard-v1.json",
+      "rawBytes": 1350,
+      "rawSHA256": "6cfc4f0d9af1d796313c921c51f9f4fa766822ef3182153dea2e562b8301cb56"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-parser-faults-v1.json",
+      "rawBytes": 1462,
+      "rawSHA256": "78f6523c57be1f3dcfa978e72645ff807c2f773aa1e004cfc1c502c478dfb71f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-wrapper-v1.json",
+      "rawBytes": 9001,
+      "rawSHA256": "88a9d70723c93db9b521446d16e2fbe485850b15110cb77a58ca0042f97b8b96"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/REVIEW.md",
+      "rawBytes": 7919,
+      "rawSHA256": "41cda1391806d7c450fdfd98075868393e0f195b58071fe0d6de5cd4c9a0db8f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/test_apply_exit_literal_cleanup.py",
+      "rawBytes": 27165,
+      "rawSHA256": "ea1ee07f3dcc27368dab5b184f2d88eda05a30e95ad63e756033550609b053ed"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/test_exit_native_cas_guards.py",
+      "rawBytes": 9982,
+      "rawSHA256": "4b4f3cff4cbf107770f03abcb6922b088f4b988976e410cb3a8a3677653b6a44"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/test_exit_parser_faults.py",
+      "rawBytes": 13029,
+      "rawSHA256": "61ff0f083cf8f1617e965664f561dc5918f4c13e6804a97c88bba074ed306f66"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/verify_exit_install_proposal.py",
+      "rawBytes": 3046,
+      "rawSHA256": "15fd61342f15f55e6893dbdf79bc3ca56aa2204fcc6244e01783c29d4eff8a9e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/apply_exit_literal_cleanup.py",
+      "rawBytes": 35344,
+      "rawSHA256": "91b2bd82d72d91ef3ec6e857d35743791ef789d31d4524c9681f02f79a3b8efc"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/exit_literal_source_cas.luau",
+      "rawBytes": 13408,
+      "rawSHA256": "6075321c2c3d504ed8966c88453dbee8e08126caaac8ca34e9c1df62d1b49398"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/freeze_installer.py",
+      "rawBytes": 3824,
+      "rawSHA256": "2a8dc37cb826e522d93bdb16ad9abb9cdb98cbb7e1a735a3ab80070a58795298"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/frozen-pins-v1.json",
+      "rawBytes": 4928,
+      "rawSHA256": "23bc2453f28b5d66d7de670ab62191cb025645102e5296abcbaa766b9e81954f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/native-guard-tests-v1.json",
+      "rawBytes": 1350,
+      "rawSHA256": "6cfc4f0d9af1d796313c921c51f9f4fa766822ef3182153dea2e562b8301cb56"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-refresh-v1/offline-helper/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-refresh-v1/offline-helper/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-refresh-v1/result.json",
+      "rawBytes": 7868,
+      "rawSHA256": "9f4d75d5624d3afe42302b1e9f2d062b0377b7cb7c726c615b1752d1b837af9c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-refresh-v2/offline-helper/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-refresh-v2/offline-helper/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-refresh-v2/result.json",
+      "rawBytes": 7868,
+      "rawSHA256": "e83ad827f9760380db052a6ddf7d5c2451cd35955e57b8f0c9c425e40fb39b98"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-wrapper-tests-v1.json",
+      "rawBytes": 10011,
+      "rawSHA256": "a0fbc80aeced01d465711ae0b748bbf084643a0b1ba21c950b48aba27e738b91"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-wrapper-tests-v2.json",
+      "rawBytes": 10359,
+      "rawSHA256": "97b12ce2a364ad1c12ab91343815bcb0760ff8c7595fe920fff84c8ad244ff31"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/parser-fault-tests-v1.json",
+      "rawBytes": 1462,
+      "rawSHA256": "78f6523c57be1f3dcfa978e72645ff807c2f773aa1e004cfc1c502c478dfb71f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-actual-helper-v1/offline-helper/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-actual-helper-v1/offline-helper/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-actual-helper-v1/result.json",
+      "rawBytes": 7868,
+      "rawSHA256": "e83ad827f9760380db052a6ddf7d5c2451cd35955e57b8f0c9c425e40fb39b98"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-native-guard-v1.json",
+      "rawBytes": 1350,
+      "rawSHA256": "6cfc4f0d9af1d796313c921c51f9f4fa766822ef3182153dea2e562b8301cb56"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-parser-faults-v1.json",
+      "rawBytes": 1462,
+      "rawSHA256": "78f6523c57be1f3dcfa978e72645ff807c2f773aa1e004cfc1c502c478dfb71f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/peer-wrapper-v1.json",
+      "rawBytes": 10359,
+      "rawSHA256": "97b12ce2a364ad1c12ab91343815bcb0760ff8c7595fe920fff84c8ad244ff31"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/REVIEW.md",
+      "rawBytes": 5438,
+      "rawSHA256": "61b15c633a53523eb3343f2bf6556605a827d307042abb193a95ac628ca90177"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/test_apply_exit_literal_cleanup.py",
+      "rawBytes": 31992,
+      "rawSHA256": "9511904b1b85356125efdd869b6b1fe72b9dd287e3723b67c4a0f99b66c0acc8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/test_exit_native_cas_guards.py",
+      "rawBytes": 9982,
+      "rawSHA256": "4b4f3cff4cbf107770f03abcb6922b088f4b988976e410cb3a8a3677653b6a44"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/test_exit_parser_faults.py",
+      "rawBytes": 13029,
+      "rawSHA256": "61ff0f083cf8f1617e965664f561dc5918f4c13e6804a97c88bba074ed306f66"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/verify_exit_install_proposal.py",
+      "rawBytes": 3046,
+      "rawSHA256": "15fd61342f15f55e6893dbdf79bc3ca56aa2204fcc6244e01783c29d4eff8a9e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/native-response-provenance-v1/apply-tool-response.json",
+      "rawBytes": 978,
+      "rawSHA256": "41389b758dc5164fef08705fff317140669d88cf1d5691ba37abff3adda608fe"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/native-response-provenance-v1/native-parser-before-tool-response.json",
+      "rawBytes": 1621,
+      "rawSHA256": "0b34d26bec79ca2a6b6794aa4a0c66968d6d067eb6ac278a4b0e4260e4b9d649"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/native-response-provenance-v1/native-parser-installed-tool-response.json",
+      "rawBytes": 1621,
+      "rawSHA256": "82e9a74bed571244bde44d8d7fc23bbf5767cfcf82fbfe2e08ed08cbdf8b4636"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/native-response-provenance-v1/preflight-v2.json",
+      "rawBytes": 366,
+      "rawSHA256": "40a61673ac91eaea5449434f0bfb6641ae188a32afee117d7a9461fa8909a138"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/native-response-provenance-v1/root-provenance.json",
+      "rawBytes": 1414,
+      "rawSHA256": "4a17216810448da4cab5e0c0d335d28c792417d814a8e895ccfb6ceef455cb2a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/native-target-read-v1.json",
+      "rawBytes": 1338,
+      "rawSHA256": "54903ac3e9d3dc1d8f3135f7f821f6b361134f972b53e7593f6839799dd38233"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/neighbor-gates-v1.json",
+      "rawBytes": 952,
+      "rawSHA256": "e0ff18a26ad7008e8098c3499a219515b31b6020ef4e9bbec2f99706d6724710"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/neighbor-gates-v2.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/prepare_exit_literal.py",
+      "rawBytes": 12969,
+      "rawSHA256": "2129bf95bfbf86cfe894d54a7b246975b555f1db5bd000f2375df6dd4758f33c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/prepare_installer_v2.py",
+      "rawBytes": 5365,
+      "rawSHA256": "573edeef47e147d704a46590a86f3a3ac9c6c1fcbe49bac07fbe360c06e83290"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/before.module.luau",
+      "rawBytes": 445879,
+      "rawSHA256": "6567549a584d138c6953232c5e615118882eaf039c1df48cbf0351f3653ce96f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/before.source.luau",
+      "rawBytes": 17956,
+      "rawSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/candidate.module.luau",
+      "rawBytes": 445806,
+      "rawSHA256": "2b198e77a8d10362ae3c39c09fd1d9aa103bfb352e8f8b59e72d43fe9f101902"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/candidate.source.luau",
+      "rawBytes": 17883,
+      "rawSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/proposal.json",
+      "rawBytes": 13528,
+      "rawSHA256": "768309e0db3e61d9da7fe345470f2d3ebf1db7b28dcc38903a4260b795fb6e19"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/requestNegative.module.luau",
+      "rawBytes": 445771,
+      "rawSHA256": "c0bdfce6d56fc38b959622542508c4246a53000f9a28019641268e97ab83f2f8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/proposal-v1/timingNegative.module.luau",
+      "rawBytes": 445806,
+      "rawSHA256": "cfef149f6b9f405701af7d252614427410908b90c480ba3cae61501dfeab8a2c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/REVIEW.md",
+      "rawBytes": 6664,
+      "rawSHA256": "3e6c34bf91f9694209168b22e2af8dea81b1b535cf3756ac2d22ebaeb8aaa45e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/s20-local-checks-v1.json",
+      "rawBytes": 1140,
+      "rawSHA256": "d8751eaf83c1c7f31fc30a5e15eafffa4809b04d1a9b14d7906a174c6ecfab61"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/STATUS_AFTER_S20.md",
+      "rawBytes": 2177,
+      "rawSHA256": "e1db90d1a6e76921ede428ea65872639dc678c73af170fa5b60fbd87fb3fe203"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/verify_exit_neighbors.py",
+      "rawBytes": 4155,
+      "rawSHA256": "38aa3ef65e5cd805f19d40b209d15993379010a9bd49b76cc4039a4778f70f47"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-exit-peer-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-exit-peer-v1/REVIEW.json",
+      "rawBytes": 7596,
+      "rawSHA256": "23f9ed7df91e248efc01e8d806c3634bc0b78a505f921126e73302726cb33034"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-exit-peer-v1/TRANSPORT_ADDENDUM.json",
+      "rawBytes": 2545,
+      "rawSHA256": "c26f84504cd0c7cd5eb2d24df1d45c2cd458d9f19facb5a5be869bf5bcd1c7c9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-exit-peer-v1/V2_REVIEW.json",
+      "rawBytes": 7521,
+      "rawSHA256": "6d2f9bfa30a92cbb4e451bde1416682bd179078a2b4086836301933545023541"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/S20-curation-v1.json",
+      "rawBytes": 27316,
+      "rawSHA256": "4ffed5a15941c525b9373c1effc7aae0458bcdf00affff02c843ed9098bb3c90"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/clients-exit-v1/s20-attribute-preflight-v1.json",
+      "rawBytes": 608,
+      "rawSHA256": "73ee469b515dfc0bc5fd5a50205c7bd36ca2467d8a042a79d53ca9884db712cc"
+    }
+  ],
+  "credentialPatternMatches": 0
+}

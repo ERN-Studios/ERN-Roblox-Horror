@@ -1,0 +1,112 @@
+{
+  "schema": "mongotv-exit-installer-independent-peer-review-v1",
+  "pass": true,
+  "reviewedAtUtc": "2026-10-10T08:45:41Z",
+  "reviewer": "/root/storage_next",
+  "status": "Offline peer gates passed. Eligible for Root-owned fresh native parser/CAS/export/installed/final-parity trial; no native trial performed by this reviewer.",
+  "frozenInput": {
+    "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/frozen-pins-v1.json",
+    "rawSHA256": "474551f2f33654b5589aa1c405cc93eed5e8b350b888083dfd73f9fe3aed1890",
+    "all23RawPinsVerifiedBeforeAndAfter": true,
+    "driverRawBytes": 31754,
+    "driverRawSHA256": "1411ba4f3a0450cfe909c8f9d4ac75195cadcae3babc56ab2da9716189f319dc",
+    "templateRawBytes": 13408,
+    "templateRawSHA256": "6075321c2c3d504ed8966c88453dbee8e08126caaac8ca34e9c1df62d1b49398"
+  },
+  "scope": {
+    "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+    "nativePath": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+    "nativeInstanceIdRecordedByRoot": "1_31096",
+    "nativeParentIdRecordedByRoot": "1_410029",
+    "className": "LocalScript",
+    "declarationLine": 55,
+    "removedDeclaration": "local HINT_HEIGHT = 36      -- two wrapped lines of the explanation band\n",
+    "sourceBytesRemoved": 73,
+    "beforeSourceBytes": 17956,
+    "candidateSourceBytes": 17883,
+    "beforeSourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+    "candidateSourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+    "initializer": "The private identifier occurs once, only in this declaration. The initializer is precisely literal 36, with no call, property access, require, constructor, metatable, exported value or event sideeffect.",
+    "retainedClosure": "Whole client body, UIDevice/RoundHud/ShopBinder dependencies, GUI authoring objects, RoundExitPrompt and callers, attributes, RoundStatus protocol, hold/confirmation/refusal/retry/acknowledgement callbacks remain. The pinned proposal and actual dependency hashes were rechecked by all four actual entry points.",
+    "noMeasuredPerformanceClaim": true
+  },
+  "independentReruns": [
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-wrapper-v1.json",
+      "rawBytes": 9001,
+      "rawSHA256": "88a9d70723c93db9b521446d16e2fbe485850b15110cb77a58ca0042f97b8b96",
+      "cases": 46,
+      "checks": 373,
+      "additionalPorts": "Actual exact transform: 5 cases/8 checks; exclusive temp collisions: 2 cases/8 checks; parser receipt validator: 9 cases. Native/console/git/helper-result boundaries are controlled; actual wrapper/filesystem/CAS/rollback code executes.",
+      "pass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-native-guard-v1.json",
+      "rawBytes": 1350,
+      "rawSHA256": "6cfc4f0d9af1d796313c921c51f9f4fa766822ef3182153dea2e562b8301cb56",
+      "cases": 15,
+      "checks": 75,
+      "scope": "Actual extracted mode/identity/all213guard/transform/SES callback/postguard; controlled engine metadata, hashing and callback scheduling.",
+      "pass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-parser-faults-v1.json",
+      "rawBytes": 1462,
+      "rawSHA256": "78f6523c57be1f3dcfa978e72645ff807c2f773aa1e004cfc1c502c478dfb71f",
+      "cases": 31,
+      "checks": 317,
+      "scope": "Actual extracted original guards, lease claim/release, empty-owned-module staging, uncalled factory check, completion/cleanup. Instance/SES/require/metadata/hash are controlled boundaries.",
+      "pass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-actual-helper-v1/result.json",
+      "rawBytes": 7868,
+      "rawSHA256": "a49e137ddd503b18406e0f497a6df94fab87832b4aa2778f10bfc0ed7fb7bbcf",
+      "templateCompiles": 14,
+      "canonicalO1Equivalent": true,
+      "canonicalO0Equivalent": false,
+      "pairedChecksBeforeAndCandidate": [50, 50],
+      "freshContextReentryChecksBeforeAndCandidate": [50, 50],
+      "semanticMutantsRejected": 2,
+      "neighborChecksBeforeAndCandidate": [92, 92],
+      "pass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-actual-helper-v1/offline-helper/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c",
+      "pass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/peer-actual-helper-v1/offline-helper/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac",
+      "pass": true
+    }
+  ],
+  "reviewFindings": [
+    "The exact nonempty forward/reverse anchors plus final candidate hash bind the one-line deletion. Metadata/identity/Source/editor checks are repeated inside the real native write callback.",
+    "The parser wraps the whole actual Source in a function and never invokes that function. It creates fresh unparented empty ModuleScripts, keeps ownership references, checks all213 originals on success/failure and retains foreign-edited probes/leases with negative receipts.",
+    "Parser transport ambiguity stops further native calls, rollback and retry. A completed negative parser result is preserved. Neither case is credited as a pass.",
+    "Actual wrapper ports cover native commit-then-error, unknown/foreign outcomes, local post-replace failures, foreign Source/manifest metadata and six foreign temporary-file edit/replacement/recreation cases. Rollback only reverses own exact bytes or own target manifest fields.",
+    "Independent rerun receipts are byte-identical to the final author receipts; all final source/tool/evidence pins remain unchanged. The two recorded fixture-development failures remain preserved separately.",
+    "No blocker was found for this pure private-literal scope within the demonstrated boundaries. Real native execution remains pending and conditional on a fresh current baseline."
+  ],
+  "remainingLimits": [
+    "Fresh native Sources/editor/class/Enabled/Disabled/RunContext/identity/properties/attributes/tags, native before/installed parser, scoped CAS, verified export, installed actual ports, console/diff and complete final parity remain Root-owned.",
+    "Immediate filesystem byte/identity checks are point-in-time guards, not an OS-wide transaction. Arbitrary write/flush/close I/O failures during the exclusive temp creation stage before atomic_cas' try/finally are outside the 46 demonstrated cases and may leave an owned temporary file; no universal temp-cleanup claim is made.",
+    "The existing repository file has 18399 raw CRLF bytes versus 17956 LF Source bytes. A verified native LF export also changes repository line-ending bytes; the exact 73-byte scope statement concerns authoritative Source, not the whole raw repository diff.",
+    "Offline player/input/timer/GUI/transport and native-template engine boundaries are synthetic. Native factory parsing alone is not a gameplay, hardware, multiplayer, respawn, streaming, reserved-server teleport, real-asset or performance certificate."
+  ],
+  "observedCanonicalFilesUnchangedDuringPeer": {
+    "sourceRawSHA256": "42e9b241bf5f83ee0869ee9b31b1eb312161ab73b6e5b1f512de9f1202de56b5",
+    "manifestRawSHA256": "e92f6cb057c01b66f595caa2e4b8601d5522e99af375ca7b4bb0bc74bf60d414"
+  },
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "commits": 0,
+  "modeSwitches": 0,
+  "published": false
+}

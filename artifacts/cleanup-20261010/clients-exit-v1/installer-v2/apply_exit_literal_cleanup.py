@@ -1,0 +1,506 @@
+"""Root-only unread number-literal CAS, verified export, parser port and rollback.
+
+Default is offline proposal/compile verification. --apply is separately reviewed
+and executed by the parent. No publishing, pushing, mode switches or bulk sync.
+"""
+from pathlib import Path
+from datetime import datetime, timezone
+import argparse
+import copy
+import hashlib
+import importlib.util
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import types
+import uuid
+
+sys.dont_write_bytecode = True
+ROOT = Path(__file__).resolve().parents[4]
+TARGET_FILE = "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua"
+MANIFEST = "studio-sync-manifest.json"
+ART = "artifacts/cleanup-20261010/clients-exit-v1"
+DEST = ART + "/exit-literal-install-v2"
+CHECKPOINT = ".git/mongotv-cleanup-20261010/exit-literal-install-v2"
+STUDIO = "1b603e69-7ae1-4572-b210-d5bf05c684ff"
+spec = importlib.util.spec_from_file_location("exit_prepare", Path(__file__).parent.parent / "prepare_exit_literal.py")
+helpers = importlib.util.module_from_spec(spec);spec.loader.exec_module(helpers)
+sha = helpers.SHA
+encoded = helpers.encoded
+save = helpers.save
+lf = helpers.LF
+
+def lua_literal(text):
+    level = 1
+    while (']' + '=' * level + ']') in '_' + text: level += 1
+    marker = '=' * level
+    return 'string.sub([' + marker + '[_' + text + ']' + marker + '],2)'
+
+
+
+def item(manifest):
+    rows = [row for row in manifest["items"] if row.get("file") == TARGET_FILE]
+    assert len(rows) == 1, "Exact one Exit manifest row"
+    return rows[0]
+
+
+def project(raw, before_hash, after_hash, size):
+    data = json.loads(raw);row = item(data)
+    assert row["sha256"] == before_hash, "Target manifest Source baseline changed"
+    result = copy.deepcopy(data);target = item(result)
+    target["sha256"] = after_hash;target["bytes"] = size
+    assert all(target.get(key) == row.get(key) for key in set(row) | set(target) if key not in ("sha256", "bytes"))
+    return encoded(result)
+
+
+def restore_row(current_raw, before_raw, proposed_raw):
+    current, before, proposed = map(json.loads, (current_raw, before_raw, proposed_raw))
+    live, old, own = item(current), item(before), item(proposed)
+    # Restore only owned Source fields; other developers' metadata remains intact.
+    assert all(live.get(key) == own.get(key) for key in ("sha256", "bytes")), "Foreign target Source row preserved"
+    restored = copy.deepcopy(current)
+    for key in ("sha256", "bytes"): item(restored)[key] = old[key]
+    return encoded(restored)
+
+
+def atomic_cas(path, before, after):
+    """Compare bytes immediately before atomic replace; no stale forced restore."""
+    assert path.read_bytes() == before, "Concurrent file edit; preserve it"
+    temporary = path.with_name(path.name + ".mongotv-exit-private-locals-" + uuid.uuid4().hex + "-cas.tmp")
+    # Claim identity while the exclusive creation handle is still open. A failed
+    # exclusive creation owns nothing and must not enter the cleanup below.
+    with temporary.open("xb") as stream:
+        stream.write(after)
+        stream.flush()
+        own_stat = os.fstat(stream.fileno())
+        own_identity = (own_stat.st_dev, own_stat.st_ino)
+    try:
+        temp_stat = temporary.stat()
+        assert (temp_stat.st_dev, temp_stat.st_ino) == own_identity and temporary.read_bytes() == after, "Foreign CAS temp preserved"
+        assert path.read_bytes() == before, "Concurrent file edit before replace; preserve it"
+        os.replace(temporary, path)
+        assert path.read_bytes() == after, "Concurrent file edit after replace; preserve it"
+    finally:
+        if temporary.exists():
+            temp_stat = temporary.stat()
+            assert (temp_stat.st_dev, temp_stat.st_ino) == own_identity and temporary.read_bytes() == after, "Foreign CAS temp preserved during cleanup"
+            final_stat = temporary.stat()
+            assert (final_stat.st_dev, final_stat.st_ino) == own_identity, "Foreign CAS temp identity preserved during cleanup"
+            temporary.unlink()
+
+
+def git(root, *args):
+    run = subprocess.run(["git", *args], cwd=root, capture_output=True, check=True)
+    return run.stdout
+
+
+def scope(root=ROOT, installed=False):
+    assert sha((root / ART / "proposal-v1/proposal.json").read_bytes())=="768309e0db3e61d9da7fe345470f2d3ebf1db7b28dcc38903a4260b795fb6e19", "Reviewed proposal changed"
+    assert sha((root / ART / "prepare_exit_literal.py").read_bytes())=="2129bf95bfbf86cfe894d54a7b246975b555f1db5bd000f2375df6dd4758f33c", "Actual offline port changed"
+    assert sha((root / ART / "verify_exit_neighbors.py").read_bytes())=="38aa3ef65e5cd805f19d40b209d15993379010a9bd49b76cc4039a4778f70f47", "Actual neighbor port changed"
+    proof=json.loads((root / ART / "proposal-v1/proposal.json").read_bytes())
+    fresh=json.loads((root / ART / "native-target-read-v1.json").read_bytes())
+    assert proof["pass"] is True and fresh["pass"] is True and fresh["nativeWrites"] == fresh["modeSwitches"] == 0
+    before_path=ART+"/proposal-v1/before.source.luau";after_path=ART+"/proposal-v1/candidate.source.luau"
+    before=(root / before_path).read_bytes();after=(root / after_path).read_bytes()
+    assert sha(before)==proof["beforeSHA256"]==helpers.BEFORE and sha(after)==proof["candidateSHA256"]==helpers.AFTER
+    assert len(before)==17956 and len(after)==17883 and before.count(helpers.BLOCK.encode())==1
+    assert before.replace(helpers.BLOCK.encode(),b"",1)==after and len(before)-len(after)==73
+    # Actual literal/no-initializer proof; no calls, properties, require, exports or captures.
+    import re
+    assert re.fullmatch(r"local HINT_HEIGHT = 36      -- two wrapped lines of the explanation band\n", helpers.BLOCK)
+    assert len(re.findall(r"\bHINT_HEIGHT\b",before.decode()))==1 and not re.search(r"\bHINT_HEIGHT\b",after.decode())
+    assert sha(lf((root / TARGET_FILE).read_bytes()))==sha(after if installed else before)
+    assert next(row for row in proof["sourceCompiler"] if row["optimization"]==1)["canonicalIdentical"] is True
+    for port in proof["contractPorts"]:
+        assert port["pass"] is True
+    assert [(port["checks"],port["reentryChecks"]) for port in proof["contractPorts"][:2]]==[(50,50),(50,50)]
+    assert [port["phase"] for port in proof["contractPorts"][2:]]==["timingNegative","requestNegative"]
+    for row in proof["closure"]:
+        if row["file"]==TARGET_FILE:continue
+        assert sha((root / row["file"]).read_bytes())==row["rawSHA256"], "Dependency changed; native rebaseline required: "+row["file"]
+    target=fresh["metadata"]
+    assert fresh["schema"]=="exit-literal-fresh-native-target-v1" and fresh["bytes"]==len(before) and fresh["sourceSHA256"]==sha(before)
+    assert target["path"]=="StarterPlayer.StarterPlayerScripts.Round Exit Client" and target["segments"]==["StarterPlayer","StarterPlayerScripts","Round Exit Client"]
+    assert target["instanceId"]=="1_31096" and target["parentId"]=="1_410029" and target["className"]=="LocalScript"
+    assert target["sourceEditorMatches"] is True and all(target[key]==sha(before) for key in ("sourceSHA256","rawSourceSHA256","rawEditorSHA256"))
+    assert target["properties"]=={"Enabled":True,"Disabled":False,"RunContext":"Enum.RunContext.Legacy","Archivable":True,"LinkedSource":""}
+    assert target["attributes"]=={} and target["tags"]==[] and target["placeId"]==131311258779917 and target["universeId"]==10559217407
+    target={**target,"studioPath":target["path"]}
+    old={"beforeFile":before_path,"candidateFile":after_path,"originals":[target]}
+    request={"nativeScriptCount":213,"beforeSHA256":sha(before),"afterSHA256":sha(after),
+             "targetProperties":target["properties"],"targetAttributes":target["attributes"],"targetTags":target["tags"]}
+    template=Path(__file__).with_name("exit_literal_source_cas.luau").read_text(encoding="utf8")
+    return before,after,old,proof,request,template
+
+
+def native_code(template, request, operation, rows=None, **extra):
+    value = {**request, "operation": operation}
+    if rows is not None: value["rows"] = rows
+    value.update(extra)
+    return template.replace("__REQUEST__", lua_literal(json.dumps(value, ensure_ascii=False)))
+
+
+def validate_native(data, before, after, expected_hash, request, baseline=None):
+    assert data["pass"] and data["operation"] in ("capture", "observe")
+    summary = data["target"]
+    assert summary["sourceEditorMatches"] and summary["sourceSHA256"] == summary["editorSHA256"] == expected_hash, "Native target Source/editor ambiguous"
+    source = before if expected_hash == sha(before) else after
+    assert sha(source) == expected_hash and summary["bytes"] == summary["editorBytes"] == len(source), "Native Source/editor byte counts changed"
+    rows = data["rows"]
+    assert len(rows) == request["nativeScriptCount"] and len({row["instanceId"] for row in rows}) == len(rows)
+    target = next(row for row in rows if row["studioPath"] == "StarterPlayer.StarterPlayerScripts.Round Exit Client")
+    assert target["instanceId"] == "1_31096" and target["parentId"] == "1_410029" and target["className"] == "LocalScript"
+    assert target["properties"] == request["targetProperties"] and (target["attributes"] or {}) == (request["targetAttributes"] or {}) and target["tags"] == request["targetTags"]
+    assert target["sha256"] == expected_hash and target["bytes"] == len(source)
+    assert all(summary[key] == target[key] for key in ("segments", "studioPath", "instanceId", "parentId", "className", "properties", "attributes", "tags"))
+    if baseline is not None:
+        prior = {row["instanceId"]: row for row in baseline}
+        assert set(prior) == {row["instanceId"] for row in rows}, "Concurrent original identities changed"
+        for row in rows:
+            old = copy.deepcopy(prior[row["instanceId"]])
+            if row["instanceId"] == "1_31096": old["sha256"] = expected_hash;old["bytes"] = len(source)
+            assert row == old, "Other authoritative Source/metadata changed"
+    return source, rows
+
+
+def mirror_parity(root, raw, rows):
+    manifest = json.loads(raw)
+    scripts = [row for row in manifest["items"] if row.get("file") and row["className"] in ("Script", "LocalScript", "ModuleScript")]
+    assert len(scripts) == len(rows) == manifest["counts"]["scripts"] == 213
+    native = {row["studioPath"]: row for row in rows}
+    assert len(native) == 213 and {row["studioPath"] for row in scripts} == set(native)
+    for row in scripts:
+        raw_source = lf((root / row["file"]).read_bytes());live = native[row["studioPath"]]
+        assert sha(raw_source) == row["sha256"] == live["sha256"] and len(raw_source) == row["bytes"] == live["bytes"]
+        assert row["className"] == live["className"] and row["segments"] == live["segments"]
+        assert all(live["properties"].get(key) == value for key, value in row.get("properties", {}).items())
+        assert (row.get("attributes", []) or {}) == (live["attributes"] or {})
+    return {"pass": True, "scripts": 213, "manifestRemoteEvents": manifest["counts"]["remoteEvents"], "sourceEditorCoverage": len(rows),
+            "scope": "Source/editor/class/path/recorded properties/attributes. No non-script asset, remote behavior, round or streaming certificate."}
+
+
+def console(client, studio):
+    # Read-only console snapshot; absence of this API result is a material gate failure.
+    return client.call("get_console_output", {"studio_id": studio})
+
+
+def validate_compile(receipt, code_hash, expected_hash, before, after):
+    assert receipt["schema"]=="mongotv-exit-literal-native-parser-v1" and receipt["operation"]=="compile"
+    assert receipt["nativeInputSHA256"]==code_hash and receipt["sourceSHA256"]==expected_hash
+    assert all(receipt[key] is True for key in ("pass","parserPassed","originalsUnchanged","ownedLeaseReleased"))
+    assert receipt["borrowedRuntimeState"] is False and receipt["cleanupErrors"]==[] and receipt["clientBodiesExecuted"]==0
+    assert receipt["originalSourceCoverage"]==213 and receipt["probesCreated"]==receipt["probesDestroyed"]==2 and receipt["remainingProbes"]==0
+    assert all(receipt[key]==0 for key in ("originalSourceWrites","originalParentWrites","originalPropertyWrites","modeSwitches"))
+    expected=[]
+    for phase,body in (("Before",before),("Candidate",after)):
+        factory=b"return function()\n"+body+b"\nend\n"
+        expected.append({"phase":phase,"sourceSHA256":sha(body),"factorySHA256":sha(factory),"bytes":len(body),"factoryUncalled":True})
+    assert receipt["compiles"]==expected, "Actual native factories differ from reviewed whole Sources"
+
+
+def bounded_source_reader(client, studio, segments):
+    # Run the actual established read helper with an isolated globals dictionary.
+    # No global tool setting, Source, staging buffer or compile probe is changed.
+    sys.path.insert(0, str(ROOT / "tools"))
+    import push_repo_to_studio as actual
+    namespace = {**actual.read_studio_source.__globals__, "READ_CHUNK_LINES": 64}
+    reader = types.FunctionType(actual.read_studio_source.__code__, namespace)
+    class BoundedClient:
+        def call(self, name, args):
+            response = client.call(name, args)
+            assert len(response.encode()) <= 8000, "Source read response exceeds bounded transport contract"
+            return response
+    return reader(BoundedClient(), studio, segments)
+
+
+def offline_gate(root, destination, installed, before, after):
+    # Actual immutable whole-source ports; no native or production writes.
+    source_ports=helpers.compile_sources(before,after)
+    proof=json.loads((root / ART / "proposal-v1/proposal.json").read_bytes())
+    paired=[]
+    for old in proof["contractPorts"]:
+        payload=(root / ART / "proposal-v1" / (old["phase"]+".module.luau")).read_bytes()
+        assert sha(payload)==old["payloadSHA256"], "Whole-source offline payload changed"
+        actual=helpers.run_payload(payload.decode(),old["phase"])
+        assert actual==old, "Actual paired/reentry/negative result changed"
+        paired.append(actual)
+    neighbors=helpers.module("exit_current_neighbors",root / ART / "verify_exit_neighbors.py")
+    neighbors.main(destination / "neighbors.json",installed)
+    neighbor_receipt=json.loads((destination / "neighbors.json").read_bytes())
+    assert neighbor_receipt["pass"] is True and all(row["checks"]==92 for row in neighbor_receipt["cases"])
+    assert neighbor_receipt["installedSourceVerified"] is installed
+    result={"pass":True,"installed":installed,"sourceCompiler":source_ports,"pairedPorts":paired,
+            "neighbors":neighbor_receipt,"nativeCalls":0,"productionWrites":0}
+    save(destination / "result.json",encoded(result))
+    return result
+
+
+def apply(root=ROOT, client_factory=None, git_reader=git, source_reader=None, offline_runner=offline_gate):
+    before, after, old, newer, request, template = scope(root)
+    destination = root / DEST;checkpoint = root / CHECKPOINT
+    assert not destination.exists() and not checkpoint.exists(), "Preserve immutable prior attempt"
+    source_raw = (root / TARGET_FILE).read_bytes();manifest_raw = (root / MANIFEST).read_bytes()
+    revision = git_reader(root, "rev-parse", "HEAD").decode().strip()
+    head_manifest = git_reader(root, "show", "HEAD:" + MANIFEST)
+    assert item(json.loads(head_manifest))["sha256"] == sha(before)
+    assert (root / TARGET_FILE).read_bytes() == source_raw and (root / MANIFEST).read_bytes() == manifest_raw
+    proposed_manifest = project(manifest_raw, sha(before), sha(after), len(after))
+    scoped_head = project(head_manifest, sha(before), sha(after), len(after))
+    save(checkpoint / "repo-source.before.bin", source_raw);save(checkpoint / "manifest.before.json", manifest_raw)
+    save(checkpoint / "head-manifest.before.json", head_manifest);save(checkpoint / "head-manifest.scoped-after.json", scoped_head)
+    save(checkpoint / "metadata.json", encoded({"head": revision, "workingManifestSHA256": sha(manifest_raw), "sourceSHA256Raw": sha(source_raw)}))
+    save(destination / ".gitattributes", b"* -text\n")
+    if client_factory is None:
+        sys.path.insert(0, str(root / "tools"))
+        from sync_from_studio import StudioMcpClient, find_mcp_batch
+        client_factory = lambda: StudioMcpClient(find_mcp_batch())
+    if source_reader is None:
+        source_reader = bounded_source_reader
+    client = client_factory();result = {"schema": "mongotv-exit-literal-install-v2", "pass": False, "publishedByThisBatch": False,
+        "file": TARGET_FILE, "bytesRemoved": 73, "headAtStart": revision, "productionNativeWritesRequested": 0,
+        "rollback": {}, "limits": "One unread private number literal; native factory parser only, actual paired/reentry offline contracts. Not gameplay/multiplayer/streaming/assets/performance. File CAS is checked immediately before atomic replacement."}
+    native_before = None;primary = None;source_attempted = False;manifest_attempted = False;native_outcome_unknown = False;pending_native_operation = None;file_recovery_allowed=True
+    def mutating_request(operation, code, label):
+        nonlocal native_outcome_unknown,pending_native_operation
+        # _request has no cancellation on timeout. Never query or reverse while
+        # this mutation/parser request might still be executing in Studio.
+        pending_native_operation={"operation":operation,"inputSHA256":sha(code.encode()),"timeoutSeconds":180}
+        native_outcome_unknown=True
+        response=client._request("tools/call",{"name":"execute_luau","arguments":{
+            "studio_id":STUDIO,"datamodel_type":"Edit","code":code}},timeout=180)
+        assert isinstance(response,dict) and isinstance(response.get("result"),dict), "No actual completed tool response; native outcome unknown"
+        tool=response["result"]
+        assert isinstance(tool.get("content"),list), "No actual completed tool content; native outcome unknown"
+        # A returned tools/call result is distinct from an exception/timeout.
+        # Keep the completion even if its isError/text/JSON later rejects.
+        native_outcome_unknown=False
+        completion=pending_native_operation;pending_native_operation=None
+        text="\n".join(block.get("text","") for block in tool["content"] if block.get("type")=="text")
+        assert len(text.encode())<=20000,"Mutating tool response exceeds bounded transport contract"
+        assert len(encoded(response))<=24000,"Mutating response envelope exceeds bounded transport contract"
+        save(checkpoint / (label+"-tool-response.json"),encoded({"request":completion,"response":response}))
+        result.setdefault("completedNativeRequests",[]).append({**completion,"responseSHA256":sha(encoded(response)),"isError":tool.get("isError") is True})
+        assert not tool.get("isError"),"Completed native "+operation+" error: "+text
+        return json.loads(text)
+    def call(operation, rows=None):
+        assert operation in ("apply","rollback"), "Only scoped Source CAS mutations use this path"
+        code=native_code(template,request,operation,rows)
+        save(checkpoint / (operation+".luau"),code.encode())
+        return mutating_request(operation,code,operation)
+    serial = 0
+    def small_target(label):
+        code = native_code(template, request, "target")
+        save(checkpoint / (label + ".luau"), code.encode())
+        response = client.call("execute_luau", {"studio_id": STUDIO, "datamodel_type": "Edit", "code": code})
+        assert len(response.encode()) <= 20000, "Target response exceeds bounded transport contract"
+        value = json.loads(response)
+        assert value["pass"] and value["operation"] == "target"
+        target = value["target"]
+        assert target["instanceId"] == "1_31096" and target["parentId"] == "1_410029" and target["className"] == "LocalScript"
+        assert target["properties"] == request["targetProperties"] and (target["attributes"] or {}) == (request["targetAttributes"] or {}) and target["tags"] == request["targetTags"]
+        assert target["sourceEditorMatches"] and target["sourceSHA256"] == target["editorSHA256"] and target["bytes"] == target["editorBytes"]
+        return value
+    def collect(operation, expected_hash):
+        nonlocal serial
+        serial += 1
+        rows = [];catalog = None;target = None
+        for first in range(1, 214, 20):
+            code = native_code(template, request, operation, pageFirst=first, pageCount=20, expectedTargetSHA256=expected_hash)
+            save(checkpoint / (f"snapshot-{serial}-{first:03}.luau"), code.encode())
+            response = client.call("execute_luau", {"studio_id": STUDIO, "datamodel_type": "Edit", "code": code})
+            assert len(response.encode()) <= 20000, "Metadata page exceeds bounded transport contract"
+            page = json.loads(response)
+            assert page["pass"] and page["operation"] == operation and page["totalRows"] == 213
+            assert page["pageFirst"] == first and page["pageCount"] == 20
+            assert len(page["rows"]) == min(20, 214-first)
+            if catalog is None: catalog = page["catalogSHA256"];target = page["target"]
+            assert page["catalogSHA256"] == catalog and page["target"] == target, "Native Source/metadata catalog changed between pages"
+            save(checkpoint / (f"snapshot-{serial}-{first:03}.json"), encoded(page))
+            rows.extend(page["rows"])
+        assert len(rows) == len({row["instanceId"] for row in rows}) == 213
+        # A final bounded target read confirms identity/Source/editor after the page series.
+        final = small_target(f"snapshot-{serial}-target-final")
+        assert final["target"] == target, "Target changed after metadata pages"
+        return {"pass": True, "operation": operation, "target": target, "rows": rows, "catalogSHA256": catalog}
+    def export_source(label, expected_hash, rows):
+        start = small_target(label + "-before")
+        assert start["target"]["sourceSHA256"] == expected_hash
+        body = source_reader(client, STUDIO, ["StarterPlayer", "StarterPlayerScripts", "Round Exit Client"]).encode()
+        end = small_target(label + "-after")
+        assert start["target"] == end["target"] and sha(body) == expected_hash and len(body) == end["target"]["bytes"], "Chunked native Source export drift/truncation"
+        # Recheck the complete originals/census after the final yielding chunk.
+        code = native_code(template, request, "verify", rows, expectedTargetSHA256=expected_hash)
+        save(checkpoint / (label + "-originals-final.luau"), code.encode())
+        verified = json.loads(client.call("execute_luau", {"studio_id": STUDIO, "datamodel_type": "Edit", "code": code}))
+        assert verified["pass"] and verified["operation"] == "verify" and verified["sourceSHA256"] == expected_hash and verified["originalSourceCoverage"] == 213
+        return body
+    def parser_port(label, rows, expected_hash):
+        code=native_code(template,request,"compile",rows,expectedTargetSHA256=expected_hash,
+                         compileSources={"before":before.decode(),"candidate":after.decode()})
+        save(checkpoint / (label+".luau"),code.encode())
+        replay=mutating_request("compile",code,label)
+        receipt={**replay,"nativeInputSHA256":sha(code.encode())}
+        save(destination / (label+".json"),encoded(receipt))
+        validate_compile(receipt,sha(code.encode()),expected_hash,before,after)
+        return receipt
+    try:
+        result["offlineBefore"]=offline_runner(root,destination / "offline-before",False,before,after)
+        client.initialize()
+        assert "Current Studio Mode: Edit" in client.call("get_studio_state", {"studio_id": STUDIO}), "Preserve owner's mode"
+        native_before = collect("capture", sha(before))
+        _, rows_before = validate_native(native_before, before, after, sha(before), request)
+        save(checkpoint / "native-before.json", encoded(native_before))
+        native_before_source = export_source("native-before-source", sha(before), rows_before)
+        assert native_before_source == before, "Exact native before Source differs from reviewed source"
+        save(checkpoint / "native-target-source.before.bin", native_before_source)
+        save(checkpoint / "native-target-editor.before.bin", native_before_source)
+        result["beforeParity"] = mirror_parity(root, manifest_raw, rows_before)
+        result["consoleBefore"] = console(client, STUDIO)
+        assert git_reader(root, "rev-parse", "HEAD").decode().strip() == revision, "Concurrent HEAD change before native CAS"
+        assert (root / TARGET_FILE).read_bytes() == source_raw and (root / MANIFEST).read_bytes() == manifest_raw, "Concurrent local change before native CAS"
+        result["nativeParserBefore"] = parser_port("native-parser-before",rows_before,sha(before))
+        result["productionNativeWritesRequested"] = 1
+        result["nativeApply"] = call("apply", rows_before)
+        assert result["nativeApply"]["pass"] and result["nativeApply"]["sourceSHA256"] == sha(after)
+        observed = collect("observe", sha(after))
+        _, rows_after = validate_native(observed, before, after, sha(after), request, rows_before)
+        native_export = export_source("native-after-source", sha(after), rows_after)
+        assert native_export == after
+        save(checkpoint / "native-after.json", encoded(observed))
+        source_attempted = True
+        atomic_cas(root / TARGET_FILE, source_raw, native_export)
+        manifest_attempted = True
+        atomic_cas(root / MANIFEST, manifest_raw, proposed_manifest)
+        result["offlineInstalled"]=offline_runner(root,destination / "offline-installed",True,before,after)
+        result["nativeParserInstalled"]=parser_port("native-parser-installed",rows_after,sha(after))
+        # A distinct observation after parser port prevents crediting a stale native export.
+        final = collect("observe", sha(after))
+        _, final_rows = validate_native(final, before, after, sha(after), request, rows_before)
+        result["afterParity"] = mirror_parity(root, (root / MANIFEST).read_bytes(), final_rows)
+        assert (root / TARGET_FILE).read_bytes() == native_export and (root / MANIFEST).read_bytes() == proposed_manifest
+        result["consoleAfter"] = console(client, STUDIO)
+        assert result["consoleBefore"] == result["consoleAfter"], "Console changed; review before retaining batch"
+        assert git_reader(root, "rev-parse", "HEAD").decode().strip() == revision, "Concurrent HEAD change during batch"
+        result.update({"pass": True, "beforeSourceSHA256": sha(before), "afterSourceSHA256": sha(after), "other212SourceRowsPreserved": True,
+                       "workingOtherManifestRowsPreserved": True, "scopedHeadManifestSHA256": sha(scoped_head), "installedParserPassed": True})
+    except BaseException as error:
+        primary = error;result["error"] = str(error)
+        # Only a known completed tool result permits observation/recovery. A
+        # timeout/exception from _request can leave the native request running.
+        if native_outcome_unknown:
+            result["rollback"]["native"] = "native mutation/parser outcome unknown; observed local state preserved; no concurrent rollback or retry"
+            result["rollback"]["source"] = result["rollback"]["manifest"] = "observed mirror bytes preserved pending native mutation/parser outcome"
+        if not native_outcome_unknown and native_before is not None and result["productionNativeWritesRequested"]:
+            try:
+                actual = small_target("rollback-observe")
+                actual_hash = actual["target"]["sourceSHA256"]
+                if actual_hash == sha(after):
+                    file_recovery_allowed=False
+                    current = collect("observe", sha(after))
+                    _, current_rows = validate_native(current, before, after, sha(after), request)
+                    assert export_source("rollback-candidate-source", sha(after), current_rows) == after
+                    rollback_result = call("rollback",current_rows)
+                    assert rollback_result["pass"] and rollback_result["sourceSHA256"] == sha(before)
+                    file_recovery_allowed=True
+                    result["rollback"]["native"] = "exact own candidate reversed; fresh other originals preserved"
+                elif actual_hash == sha(before): result["rollback"]["native"] = "already exact before; no restore write"
+                else:
+                    file_recovery_allowed=False
+                    result["rollback"]["native"] = "foreign Source preserved; manual reconciliation required"
+            except BaseException as recovery:
+                result["rollback"]["native"] = "unknown outcome/blocked recovery; no forced restore: " + str(recovery)
+                if not native_outcome_unknown:
+                    # The mutating tool completed, including isError, but may
+                    # have committed before throwing. Observe; never retry CAS.
+                    try:
+                        actual=small_target("rollback-completed-error-target")
+                        result["rollbackCompletedErrorObserved"]=actual
+                        if actual["target"]["sourceSHA256"]==sha(before):
+                            current=collect("observe",sha(before))
+                            _,current_rows=validate_native(current,before,after,sha(before),request)
+                            assert export_source("rollback-completed-error-source",sha(before),current_rows)==before
+                            file_recovery_allowed=True
+                            result["rollback"]["native"]="completed rollback error; exact before Source/editor freshly exported and all originals guarded; no CAS retry"
+                        else:
+                            file_recovery_allowed=False
+                            result["rollback"]["native"]="completed rollback error; fresh target is not before; own mirrors preserved for reconciliation; no CAS retry"
+                    except BaseException as observation:
+                        file_recovery_allowed=False
+                        result["rollback"]["native"]="completed native request; unknown outcome of target restoration, own mirrors preserved: "+str(observation)
+        for kind, attempted, path, previous, candidate in (
+            ("source", source_attempted, root / TARGET_FILE, source_raw, after),
+            ("manifest", manifest_attempted, root / MANIFEST, manifest_raw, proposed_manifest),
+        ):
+            if not attempted or native_outcome_unknown: continue
+            if not file_recovery_allowed:
+                result["rollback"][kind]="native restoration not verified; observed own/foreign file bytes preserved"
+                continue
+            try:
+                current = path.read_bytes()
+                if kind == "source" and current == previous:
+                    result["rollback"][kind] = "already exact before; no file restore write"
+                    continue
+                if kind == "manifest":
+                    live, old = item(json.loads(current)), item(json.loads(previous))
+                    if all(live.get(key) == old.get(key) for key in ("sha256", "bytes")):
+                        result["rollback"][kind] = "already exact before Source fields; foreign metadata preserved"
+                        continue
+                restored = previous if kind == "source" else restore_row(current, previous, candidate)
+                if kind == "source": assert current == candidate, "Foreign Source bytes preserved"
+                atomic_cas(path, current, restored)
+                result["rollback"][kind] = "own file/fields restored; foreign metadata preserved"
+            except BaseException as recovery: result["rollback"][kind] = "foreign/unknown file preserved: " + str(recovery)
+    finally:
+        try: client.close()
+        except BaseException as cleanup:
+            result["clientCleanupError"] = str(cleanup);result["pass"] = False
+            if primary is None: primary = cleanup
+        if native_outcome_unknown:
+            result["pendingNativeOperation"]=pending_native_operation
+            result["nativeOutcomeKnown"]=False
+            result["rollback"]["native"]="native mutation/parser outcome unknown; no further calls or rollback; reconcile fresh stable originals before proceeding"
+            for kind in ("source","manifest"):
+                result["rollback"].setdefault(kind,"observed mirror bytes preserved pending native mutation/parser outcome")
+        else:result["nativeOutcomeKnown"]=True
+        result["completedAtUtc"] = datetime.now(timezone.utc).isoformat()
+        save(destination / "result.json", encoded(result))
+    assert primary is None and result["pass"], "Scoped install failed; inspect result/rollback, no forced overwrite"
+    return result
+
+
+def prepare():
+    before, after, old, newer, request, template = scope()
+    rows = [{**row, "sha256": row["sourceSHA256"], "bytes": len(before) if index == 0 else 0} for index, row in enumerate(old["originals"])]
+    compiles = []
+    with tempfile.TemporaryDirectory(prefix="mongotv-exit-private-locals-cas-compile-") as directory:
+        for operation in ("capture", "observe", "target", "verify", "apply", "rollback", "compile"):
+            code = native_code(template, request, operation, rows if operation in ("apply", "rollback", "verify", "compile") else None,
+                               pageFirst=1, pageCount=20, expectedTargetSHA256=sha(before),
+                               compileSources={"before":before.decode(),"candidate":after.decode()})
+            path = Path(directory) / (operation + ".luau");path.write_bytes(code.encode())
+            for optimization in ("-O0", "-O1"):
+                run = subprocess.run([str(helpers.COMPILER), "--binary", optimization, str(path)], capture_output=True, timeout=15)
+                assert run.returncode == 0, run.stderr.decode(errors="replace")
+                compiles.append({"operation": operation, "optimization": optimization, "sourceSHA256": sha(code.encode()), "pass": True})
+    proof = {"pass": True, "schema": "mongotv-exit-source-cas-offline-proposal-v1", "bytesRemoved": 73, "scope": TARGET_FILE,
+             "beforeSHA256": sha(before), "afterSHA256": sha(after), "compileChecks": compiles, "nativeCalls": 0,
+             "productionWrites": 0, "manifestWrites": 0, "templateSHA256": sha(template.encode()), "status": "prepared only; independent wrapper/native guard/parser cleanup review and Root native execution pending"}
+    destination = ROOT / ART / "installer-v2/offline-proposal-v1"
+    if (destination / ".gitattributes").exists(): assert (destination / ".gitattributes").read_bytes() == b"* -text\n"
+    else: save(destination / ".gitattributes", b"* -text\n")
+    save(destination / "proposal.json", encoded(proof))
+    print(json.dumps({"pass": True, "compileChecks": len(compiles), "nativeCalls": 0, "status": proof["status"]}))
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__);parser.add_argument("--apply", action="store_true")
+    args = parser.parse_args()
+    if args.apply:
+        result = apply();print(json.dumps({key: result.get(key) for key in ("pass", "bytesRemoved", "installedParserPassed", "afterSourceSHA256")}))
+    else: prepare()
+
+
+if __name__ == "__main__": main()

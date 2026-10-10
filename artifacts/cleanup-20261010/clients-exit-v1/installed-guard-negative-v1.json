@@ -1,0 +1,9 @@
+{
+  "pass": true,
+  "scope": "Actual CLI --verify-installed rejects the current before Source before writing receipt; canonical Source/manifest unchanged",
+  "expectedFailure": "Actual installed Source differs",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "unexpectedOutputExists": false
+}

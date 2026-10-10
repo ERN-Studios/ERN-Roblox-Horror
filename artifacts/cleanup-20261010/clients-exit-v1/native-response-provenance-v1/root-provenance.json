@@ -1,0 +1,33 @@
+{
+  "pass": true,
+  "actualCompletedResponses": [
+    {
+      "file": "apply-tool-response.json",
+      "rawBytes": 978,
+      "rawSHA256": "41389b758dc5164fef08705fff317140669d88cf1d5691ba37abff3adda608fe",
+      "nativeCodeSHA256": "ae603c3cf4eacd2506e0a1e502d4f7f48ee84dec88ad9b3adbe306a12a93ddcb",
+      "readAtUtc": "2026-10-10T09:03:28Z"
+    },
+    {
+      "file": "native-parser-before-tool-response.json",
+      "rawBytes": 1621,
+      "rawSHA256": "0b34d26bec79ca2a6b6794aa4a0c66968d6d067eb6ac278a4b0e4260e4b9d649",
+      "nativeCodeSHA256": "595081d0d30489d29dbc25a1fa886eb3615b0ab7d12f7f0c8a8977468470fd76",
+      "readAtUtc": "2026-10-10T09:03:26Z"
+    },
+    {
+      "file": "native-parser-installed-tool-response.json",
+      "rawBytes": 1621,
+      "rawSHA256": "82e9a74bed571244bde44d8d7fc23bbf5767cfcf82fbfe2e08ed08cbdf8b4636",
+      "nativeCodeSHA256": "546f34ecf6cdd220c7426abb413bb7a9403ec74ba83b1414650b6e302c2d2140",
+      "readAtUtc": "2026-10-10T09:03:45Z"
+    }
+  ],
+  "nativeSourceWrites": 1,
+  "otherOriginalSourceWrites": 0,
+  "modeSwitches": 0,
+  "parserBodiesExecuted": 0,
+  "privateRollbackCheckpoint": ".git/mongotv-cleanup-20261010/exit-literal-install-v2",
+  "rootModeObservedBeforeAfter": "Edit",
+  "limits": "Root actual completed JSON-RPC outputs, parser uncalled factories and213 exactoriginal guards; no gameplay, MP, streaming, teleport or asset-performance certificate."
+}

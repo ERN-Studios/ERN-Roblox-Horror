@@ -1,0 +1,114 @@
+{
+  "schema": "mongotv-exit-literal-installer-frozen-pins-v2",
+  "pass": true,
+  "status": "frozen transport-only candidate; independent delta peer and Root native parser/CAS/export/after gates pending",
+  "nativeTemplateIdenticalToV1": true,
+  "v1FrozenFilesPreserved": true,
+  "delta": "single pending-outcome _request path for apply/rollback/compile; no further calls/recovery while transport outcome is unknown",
+  "files": [
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/apply_exit_literal_cleanup.py",
+      "rawBytes": 35344,
+      "rawSHA256": "91b2bd82d72d91ef3ec6e857d35743791ef789d31d4524c9681f02f79a3b8efc"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/exit_literal_source_cas.luau",
+      "rawBytes": 13408,
+      "rawSHA256": "6075321c2c3d504ed8966c88453dbee8e08126caaac8ca34e9c1df62d1b49398"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/test_apply_exit_literal_cleanup.py",
+      "rawBytes": 31992,
+      "rawSHA256": "9511904b1b85356125efdd869b6b1fe72b9dd287e3723b67c4a0f99b66c0acc8"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/test_exit_native_cas_guards.py",
+      "rawBytes": 9982,
+      "rawSHA256": "4b4f3cff4cbf107770f03abcb6922b088f4b988976e410cb3a8a3677653b6a44"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/test_exit_parser_faults.py",
+      "rawBytes": 13029,
+      "rawSHA256": "61ff0f083cf8f1617e965664f561dc5918f4c13e6804a97c88bba074ed306f66"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/verify_exit_install_proposal.py",
+      "rawBytes": 3046,
+      "rawSHA256": "15fd61342f15f55e6893dbdf79bc3ca56aa2204fcc6244e01783c29d4eff8a9e"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/REVIEW.md",
+      "rawBytes": 5438,
+      "rawSHA256": "61b15c633a53523eb3343f2bf6556605a827d307042abb193a95ac628ca90177"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/freeze_installer.py",
+      "rawBytes": 3824,
+      "rawSHA256": "2a8dc37cb826e522d93bdb16ad9abb9cdb98cbb7e1a735a3ab80070a58795298"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-wrapper-tests-v2.json",
+      "rawBytes": 10359,
+      "rawSHA256": "97b12ce2a364ad1c12ab91343815bcb0760ff8c7595fe920fff84c8ad244ff31"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/native-guard-tests-v1.json",
+      "rawBytes": 1350,
+      "rawSHA256": "6cfc4f0d9af1d796313c921c51f9f4fa766822ef3182153dea2e562b8301cb56"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/parser-fault-tests-v1.json",
+      "rawBytes": 1462,
+      "rawSHA256": "78f6523c57be1f3dcfa978e72645ff807c2f773aa1e004cfc1c502c478dfb71f"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-refresh-v2/result.json",
+      "rawBytes": 7868,
+      "rawSHA256": "e83ad827f9760380db052a6ddf7d5c2451cd35955e57b8f0c9c425e40fb39b98"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-refresh-v2/offline-helper/result.json",
+      "rawBytes": 4281,
+      "rawSHA256": "af964985fe982034febf1c417fb9a0d612f664ded4732e5de012f476476c016c"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v2/offline-refresh-v2/offline-helper/neighbors.json",
+      "rawBytes": 1025,
+      "rawSHA256": "7a67f550cce7f1d1eb87369c89705f0a20130788c8a09e0a9990d6aca3025fac"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/prepare_installer_v2.py",
+      "rawBytes": 5365,
+      "rawSHA256": "573edeef47e147d704a46590a86f3a3ac9c6c1fcbe49bac07fbe360c06e83290"
+    },
+    {
+      "file": "tools/sync_from_studio.py",
+      "rawBytes": 36910,
+      "rawSHA256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-exit-v1/installer-v1/frozen-pins-v1.json",
+      "rawBytes": 6229,
+      "rawSHA256": "474551f2f33654b5589aa1c405cc93eed5e8b350b888083dfd73f9fe3aed1890"
+    }
+  ],
+  "offlineGateSummary": {
+    "wrapperCases": 54,
+    "wrapperChecks": 500,
+    "newTransportRecoveryCases": 8,
+    "actualNativeGuardCases": 15,
+    "actualNativeGuardChecks": 75,
+    "actualParserFaultCases": 31,
+    "actualParserFaultChecks": 317,
+    "templateCompiles": 14,
+    "pairedChecksPerVersion": 50,
+    "reentryChecksPerVersion": 50,
+    "neighborChecksPerVersion": 92,
+    "semanticMutants": 2,
+    "canonicalO1Equivalent": true
+  },
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "limits": "Actual wrapper/files/CAS rollback with controlled MCP/native transport outcomes. All native execution and final parity remain Root-owned; no gameplay/MP/streaming/teleport/asset/performance claims."
+}

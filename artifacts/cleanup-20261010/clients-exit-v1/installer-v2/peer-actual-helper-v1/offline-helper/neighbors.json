@@ -1,0 +1,26 @@
+{
+  "pass": true,
+  "actualRunner": "tools/tests/test_hud_b6_b7.py",
+  "cases": [
+    {
+      "phase": "before",
+      "pass": true,
+      "checks": 92,
+      "sourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "stdout": "B6/B7: 92 checks passed (production sources, real imported templates)"
+    },
+    {
+      "phase": "candidate",
+      "pass": true,
+      "checks": 92,
+      "sourceSHA256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+      "stdout": "B6/B7: 92 checks passed (production sources, real imported templates)"
+    }
+  ],
+  "verifyInstalledRequested": false,
+  "installedSourceVerified": false,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "limits": "Existing unchanged full B6/B7 assertions/production sources with single Source-reader substitution and controlled fake engine/imported historical fixture/input/transport/UIDevice boundaries. Not native asset, gameplay, hardware, multiplayer or streaming certificate."
+}

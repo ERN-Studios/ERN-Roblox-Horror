@@ -4102,8 +4102,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
-      "bytes": 17956,
-      "sha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "bytes": 17883,
+      "sha256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

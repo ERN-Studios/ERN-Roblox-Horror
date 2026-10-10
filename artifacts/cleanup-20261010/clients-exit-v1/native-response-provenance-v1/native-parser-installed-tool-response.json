@@ -1,0 +1,20 @@
+{
+  "request": {
+    "operation": "compile",
+    "inputSHA256": "546f34ecf6cdd220c7426abb413bb7a9403ec74ba83b1414650b6e302c2d2140",
+    "timeoutSeconds": 180
+  },
+  "response": {
+    "jsonrpc": "2.0",
+    "id": 52,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"originalSourceWrites\":0,\"readAtUtc\":\"2026-10-10T09:03:45Z\",\"originalParentWrites\":0,\"operation\":\"compile\",\"originalPropertyWrites\":0,\"ownedLeaseReleased\":true,\"compiles\":[{\"bytes\":17956,\"factorySHA256\":\"8121ea7a16041297a0fbd9ae10f979f5fc3f20d9484fa76be01df999bc3f2323\",\"phase\":\"Before\",\"factoryUncalled\":true,\"sourceSHA256\":\"13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3\"},{\"bytes\":17883,\"factorySHA256\":\"534dfc5706e3a9a1950d5120d6de4d914f70b525c3537a8e326c1488608590d5\",\"phase\":\"Candidate\",\"factoryUncalled\":true,\"sourceSHA256\":\"bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752\"}],\"cleanupErrors\":[],\"borrowedRuntimeState\":false,\"sourceSHA256\":\"bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752\",\"modeSwitches\":0,\"pass\":true,\"originalsUnchanged\":true,\"parserPassed\":true,\"originalSourceCoverage\":213,\"limits\":\"Native parser/factory-return in fresh empty ModuleScripts; client bodies never run. No gameplay, hardware, multiplayer, streaming, teleport, real-asset or performance certificate.\",\"remainingProbes\":0,\"probesCreated\":2,\"probesDestroyed\":2,\"schema\":\"mongotv-exit-literal-native-parser-v1\",\"clientBodiesExecuted\":0}"
+        }
+      ],
+      "isError": false
+    }
+  }
+}
