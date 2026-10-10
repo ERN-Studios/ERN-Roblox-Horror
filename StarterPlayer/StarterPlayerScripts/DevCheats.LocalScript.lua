@@ -410,44 +410,62 @@ end
 -- Noclip fly
 local flying = false
 local FLY_SPEED = 90
-local collisionOriginal = {}
-local noclipAdded = nil
-local humanoidOriginal = nil
+local flySession = nil
+local stopFlying
 
-local function disablePart(part)
-	if not part:IsA("BasePart") then return end
-	if collisionOriginal[part] == nil then
-		collisionOriginal[part] = part.CanCollide
+local function disablePart(session, part)
+	if flySession ~= session or not flying or not part:IsA("BasePart")
+		or not part:IsDescendantOf(session.Character) then return end
+	if session.CollisionOriginal[part] == nil then
+		session.CollisionOriginal[part] = part.CanCollide
 	end
 	part.CanCollide = false
 end
 
-local function applyLocalNoclip(character)
-	for _, part in ipairs(character:GetDescendants()) do disablePart(part) end
+local function applyLocalNoclip(session)
+	for _, part in ipairs(session.Character:GetDescendants()) do disablePart(session, part) end
 end
 
 local function startFlying()
-	if flying then return true end
+	if flying then
+		if flySession and flySession.Character == player.Character then return true end
+		stopFlying()
+	end
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	local root = character and character:FindFirstChild("HumanoidRootPart")
-	if not (character and humanoid and root) then return false end
-	-- Do not snapshot AutoRotate/PlatformStand in the middle of a slide
-	-- ragdoll. Waiting for its normal get-up avoids restoring a permanently
-	-- non-rotating developer character when fly mode is later disabled.
-	if character:GetAttribute("Level2_ForcedSliding") == true then
-		warn("[DevCheats] Finish the slide before enabling noclip fly")
+	if not (character and character.Parent and humanoid and humanoid.Health > 0
+		and root and root:IsA("BasePart")) then return false end
+	-- Entry, hiding and ragdoll own their temporary movement locks. Do not
+	-- capture one as the state to restore after a developer's fly session.
+	local state = humanoid:GetState()
+	if root.Anchored or humanoid.PlatformStand
+		or character:GetAttribute("Level2_ForcedSliding") == true
+		or character:GetAttribute("Level2_RagdollServerActive") == true
+		or state == Enum.HumanoidStateType.Dead
+		or state == Enum.HumanoidStateType.FallingDown
+		or state == Enum.HumanoidStateType.Ragdoll
+		or state == Enum.HumanoidStateType.Physics
+		or state == Enum.HumanoidStateType.PlatformStanding then
+		warn("[DevCheats] Wait for character movement to unlock before enabling noclip fly")
 		return false
 	end
 
-	flying = true
-	collisionOriginal = {}
-	humanoidOriginal = {
-		autoRotate = humanoid.AutoRotate,
-		anchored = root.Anchored,
-		fallingDown = humanoid:GetStateEnabled(Enum.HumanoidStateType.FallingDown),
-		ragdoll = humanoid:GetStateEnabled(Enum.HumanoidStateType.Ragdoll),
+	-- Every temporary write belongs to this exact body, including cleanup.
+	-- A replacement Character must never receive this body's saved state.
+	local session = {
+		Character = character, Humanoid = humanoid, Root = root,
+		CollisionOriginal = {},
+		Original = {
+			autoRotate = humanoid.AutoRotate,
+			platformStand = humanoid.PlatformStand,
+			anchored = root.Anchored,
+			fallingDown = humanoid:GetStateEnabled(Enum.HumanoidStateType.FallingDown),
+			ragdoll = humanoid:GetStateEnabled(Enum.HumanoidStateType.Ragdoll),
+		},
 	}
+	flySession = session
+	flying = true
 	-- Anchor the root while flying. Zeroing velocity in PreSimulation does not
 	-- stop gravity being applied during the physics step that follows, so the
 	-- character sank a little every frame and the solver fought every PivotTo.
@@ -459,48 +477,47 @@ local function startFlying()
 	humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
 	humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 	humanoid:ChangeState(Enum.HumanoidStateType.Flying)
-	applyLocalNoclip(character)
-	noclipAdded = character.DescendantAdded:Connect(disablePart)
+	applyLocalNoclip(session)
+	session.Added = character.DescendantAdded:Connect(function(part) disablePart(session, part) end)
+	session.Died = humanoid.Died:Connect(function()
+		if flySession == session then stopFlying() end
+	end)
 	fireDev("noclip", true)
 	publishState("DevCheatNoclip", true)
 	print("[DevCheats] Noclip fly ON")
 	return true
 end
 
-local function stopFlying()
-	if not flying then
+stopFlying = function()
+	local session = flySession
+	flySession = nil
+	flying = false
+	if not session then
 		publishState("DevCheatNoclip", false)
 		return
 	end
-	flying = false
+	if session.Added then session.Added:Disconnect() end
+	if session.Died then session.Died:Disconnect() end
 	fireDev("noclip", false)
-	if noclipAdded then noclipAdded:Disconnect(); noclipAdded = nil end
-	local character = player.Character
-	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	local root = character and character:FindFirstChild("HumanoidRootPart")
-	for part, original in pairs(collisionOriginal) do
-		if part.Parent then part.CanCollide = original end
+	local character, humanoid, root = session.Character, session.Humanoid, session.Root
+	local original = session.Original
+	for part, canCollide in pairs(session.CollisionOriginal) do
+		if part:IsDescendantOf(character) then part.CanCollide = canCollide end
 	end
-	collisionOriginal = {}
-	if root then
-		root.Anchored = humanoidOriginal ~= nil and humanoidOriginal.anchored == true
+	if root.Parent == character then
+		root.Anchored = original.anchored
 		root.AssemblyLinearVelocity = Vector3.zero
 		root.AssemblyAngularVelocity = Vector3.zero
 	end
-	if humanoid then
-		humanoid.PlatformStand = false
-		humanoid.AutoRotate = humanoidOriginal and humanoidOriginal.autoRotate ~= false
-		humanoid:SetStateEnabled(
-			Enum.HumanoidStateType.FallingDown,
-			not humanoidOriginal or humanoidOriginal.fallingDown
-		)
-		humanoid:SetStateEnabled(
-			Enum.HumanoidStateType.Ragdoll,
-			not humanoidOriginal or humanoidOriginal.ragdoll
-		)
-		humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+	if humanoid.Parent == character then
+		humanoid.PlatformStand = original.platformStand
+		humanoid.AutoRotate = original.autoRotate
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, original.fallingDown)
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, original.ragdoll)
+		if humanoid.Health > 0 and player.Character == character and character.Parent then
+			humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+		end
 	end
-	humanoidOriginal = nil
 	publishState("DevCheatNoclip", false)
 	print("[DevCheats] Noclip fly OFF")
 end
@@ -512,14 +529,18 @@ end
 
 RunService.PreSimulation:Connect(function(deltaTime)
 	if not flying then return end
-	local character = player.Character
-	local root = character and character:FindFirstChild("HumanoidRootPart")
-	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	if not (root and humanoid) then return end
+	local session = flySession
+	if not session then return end
+	local character, root, humanoid = session.Character, session.Root, session.Humanoid
+	if player.Character ~= character or not character.Parent
+		or root.Parent ~= character or humanoid.Parent ~= character or humanoid.Health <= 0 then
+		stopFlying()
+		return
+	end
 
 	humanoid.PlatformStand = false
 	humanoid.AutoRotate = false
-	applyLocalNoclip(character)
+	applyLocalNoclip(session)
 
 	local camera = workspace.CurrentCamera
 	if not camera then return end
@@ -558,7 +579,7 @@ RunService.PreSimulation:Connect(function(deltaTime)
 
 	if move.Magnitude > 0 then move = move.Unit end
 
-	-- Re-assert the anchor: a respawn or a server-side reset can clear it.
+	-- Re-assert only this fly session's root anchor.
 	if not root.Anchored then root.Anchored = true end
 	if move.Magnitude > 0 then
 		character:PivotTo(character:GetPivot() + move * FLY_SPEED * math.min(deltaTime, 1 / 20))
@@ -606,8 +627,11 @@ local function setThirdPerson(requested)
 	print("[DevCheats] Third-person camera " .. (enabled and "ON" or "OFF"))
 end
 
-player.CharacterAdded:Connect(function()
-	if flying then stopFlying() end
+player.CharacterRemoving:Connect(function(character)
+	if flySession and flySession.Character == character then stopFlying() end
+end)
+player.CharacterAdded:Connect(function(character)
+	if flySession and flySession.Character ~= character then stopFlying() end
 	reapplyPerspectiveSoon()
 end)
 player:GetAttributeChangedSignal("InRound"):Connect(reapplyPerspectiveSoon)

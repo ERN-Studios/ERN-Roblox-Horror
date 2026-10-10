@@ -3418,8 +3418,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
-      "bytes": 26547,
-      "sha256": "fdcec2e0a2790cd880094a65a26b0212f11bddc0b94ad7dce63524a8b8e23245",
+      "bytes": 27789,
+      "sha256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

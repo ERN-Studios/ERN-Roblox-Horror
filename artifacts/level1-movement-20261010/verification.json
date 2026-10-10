@@ -1,0 +1,79 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "probe": "Actual installed noclip/lifecycle source executed with native Studio character and signals. Test-only remote stub because Studio account is not on shared developer allowlist; no permission/whitelist edits.",
+  "before": {
+    "acceptedWhileAnchored": true,
+    "anchoredAfterEntryUnlockedAndFlyStopped": true,
+    "displacementStuds": 0,
+    "health": 100
+  },
+  "after": {
+    "results": {
+      "entry": {
+        "rootUnlocked": true,
+        "to": [
+          11.981399536132812,
+          3.6047730445861816,
+          -14
+        ],
+        "from": [
+          -5,
+          4.604772090911865,
+          -14
+        ],
+        "elapsed": 1.5114810833329102,
+        "displacement": 17.010818481445312,
+        "refusedEntry": true
+      },
+      "normalOnOff": {
+        "state": "Enum.HumanoidStateType.Running",
+        "rootUnlocked": true,
+        "to": [
+          31.961408615112305,
+          3.6047730445861816,
+          -14
+        ],
+        "from": [
+          11.981399536132812,
+          3.604719638824463,
+          -14
+        ],
+        "elapsed": 1.5012424583328539,
+        "hipHeight": 2.604773759841919,
+        "health": 100,
+        "displacement": 19.980009078979492
+      },
+      "replacement": {
+        "state": "Enum.HumanoidStateType.Running",
+        "flying": false,
+        "health": 100,
+        "differentCharacter": true,
+        "root": [
+          220.86508178710938,
+          32.99801254272461,
+          -859.5538940429688
+        ],
+        "anchored": false,
+        "inRound": false,
+        "sessionCleared": true
+      }
+    },
+    "probeRemoved": true
+  },
+  "offline": {
+    "assertions": 230,
+    "baselineFails": "refuses anchored entry rather than saving its transient lock",
+    "compile": "luau-compile --null -O0; Studio loadstring compile passed"
+  },
+  "otherNativeChecks": {
+    "freshStandingKeyboard": "44.58 studs / 3-second W input on pre-fix fresh body; root-to-floor gap 3.60477",
+    "signalArchitect": "native walking before fix passed",
+    "crouchStand": "native movement at speeds 8 and 16 before fix passed"
+  },
+  "limitations": [
+    "The original report did not include confirmation whether fly was used earlier; a fresh no-fly round moved normally during investigation.",
+    "No broad reseat or HipHeight/world collision change was made. Deliberate floor embeddings self-recovered in tested native cases.",
+    "Actual developer phone/keyboard noclip UI on a whitelisted account was not tested; exact installed functions, physics and real CharacterRemoving/Added lifecycle were tested."
+  ]
+}
