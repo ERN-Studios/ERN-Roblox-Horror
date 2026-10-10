@@ -1,0 +1,1463 @@
+{
+  "schema": "mongotv-audit-finding-disposition-coverage-v2",
+  "pass": true,
+  "index": {
+    "path": "artifacts/repo-super-audit-20261009/findings-index.md",
+    "bytes": 18214,
+    "sha256": "7591c768b745e4d6340d3df02b6dc40f3f73071c0c4195e0b8d4a4406b8b5e1b",
+    "lfSHA256": "ad55ea8b70c6d9c34a7b5ad8ee12cbef01462755f595c3a2030e5a0b7420146e"
+  },
+  "reports": [
+    {
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "bytes": 20536,
+      "sha256": "45c428c8b8e80430fd9e2e7a23b143ea81ddb900fb1aebfd866da1792f1e5fe7",
+      "lfSHA256": "e42798821c9e9ea41e993713221940d071abd4c21ebea94edb27ac1b3ebdb3a0",
+      "findingCount": 25,
+      "requiredFieldCount": 6
+    },
+    {
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "bytes": 55437,
+      "sha256": "75d2f3b1d504d56fd8d0508cdb6fb209cd12a6dc583d66f4d79c50e61e90ab4a",
+      "lfSHA256": "75d2f3b1d504d56fd8d0508cdb6fb209cd12a6dc583d66f4d79c50e61e90ab4a",
+      "findingCount": 73,
+      "requiredFieldCount": 5
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "bytes": 57552,
+      "sha256": "e3e0b828680d276044c0058f3c6262a36afe66cf5c57ce27d17f795467e8e143",
+      "lfSHA256": "e3e0b828680d276044c0058f3c6262a36afe66cf5c57ce27d17f795467e8e143",
+      "findingCount": 31,
+      "requiredFieldCount": 6
+    }
+  ],
+  "mainDocuments": [
+    {
+      "path": "CLEANUP_PLAN.md",
+      "bytes": 45793,
+      "sha256": "c8aafb4f84178ef6903633df758f386ed872f6a96aef48a6ec2ddd25f469dae7",
+      "lfSHA256": "7b69f649a0db2f70fa18f6219b227bc94edc5bd902aa5f611a5358fe43e8003a"
+    },
+    {
+      "path": "CLEANUP_RESULTS.md",
+      "bytes": 45898,
+      "sha256": "cb26f633ec02b91878c3458a0a72a87b3776788c7be41e1588f3464511f815a5",
+      "lfSHA256": "cb26f633ec02b91878c3458a0a72a87b3776788c7be41e1588f3464511f815a5"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/PLAN.md",
+      "bytes": 18887,
+      "sha256": "1de5893b65c1cd501234dbdc666b6fd6570e8ac4030684a558031673cd3b628e",
+      "lfSHA256": "1de5893b65c1cd501234dbdc666b6fd6570e8ac4030684a558031673cd3b628e"
+    }
+  ],
+  "expectedCount": 129,
+  "actualCount": 129,
+  "uniqueCount": 129,
+  "familyCounts": {
+    "T": 20,
+    "X": 5,
+    "LE-": 36,
+    "CORE-": 37,
+    "C": 31
+  },
+  "missing": [],
+  "extra": [],
+  "duplicate": [],
+  "readyRows": [],
+  "unresolvedProductDecisionRows": [],
+  "recognizedStatusTermCounts": {
+    "klar": 0,
+    "kræver afklaring": 0,
+    "afventer test": 80,
+    "gennemført": 26,
+    "beholdes": 40
+  },
+  "statusCountsAreExclusive": false,
+  "records": [
+    {
+      "id": "T01",
+      "status": "gennemført — historisk native baseline230/15 og0 editor conflicts; S12 `e78cf597` tilføjede96 verificerede Enabled-aliases; S13 `8fb44faf` bevarer friske eksportmetadata; afsluttende final-parity-v3 PASS 2026-10-10 00:42:34–44Z med API Edit før/efter,212 Sources/15 remotes/227 rows og0 Source/editor/hash/class/registrerede-property/missing/extra/Enabled-gap-afvigelser; ingen fuld attrs/tags/asset-/gameplaygodkendelse",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 15,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T02",
+      "status": "gennemført — eksisterende count/hash-repair; S12 `e78cf597` og S13 `8fb44faf` udvider property-/eksportgrundlaget; afsluttende frisk parity registreres særskilt",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 16,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T03",
+      "status": "gennemført — B01a native chunk-reader; S13 `8fb44faf` tilføjer friske Source/editor/identity/class/property/attribute/tag-brackets omkring den uændrede reader; faktisk full-sync i Studio er ikke udført",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 17,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T04",
+      "status": "gennemført — B01a",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 18,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T05",
+      "status": "gennemført — B01a",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 19,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T06",
+      "status": "gennemført — B01b",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 20,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T07",
+      "status": "gennemført — in-memory helper; full retired authoring suite afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 21,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T08",
+      "status": "gennemført — fixture repair299/87; CORE-004 failure reproduced, runtime remediation afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 22,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T09",
+      "status": "gennemført — offline fixture, local commit `bce98752`; native UX afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 23,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T10",
+      "status": "beholdes — understøttet manuel authoringkommando; pre-confirmation checkout er fortsat en dokumenteret risiko; eventuel pensionering/generic wrapper-policy kræver særskilt workflowvalg og den angivne port",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 24,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "T11",
+      "status": "beholdes — understøttet animation-publishingkontrakt; eventuel pensionering eller versionspolicy kræver særskilt workflowvalg og den angivne port",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 25,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "T12",
+      "status": "gennemført — B17; live connector afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 26,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T13",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 27,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "T14",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 28,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "T15",
+      "status": "beholdes — aktiv animation-authoringcache; fuld native rollback/reload og playback kræves før eventuel pensionering",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 29,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "T16",
+      "status": "gennemført — udtrykkeligt arkiverede/retirede lokale delmængder i S02/S06/S07/S08/S10; øvrige native træer beholdes / afventer test — fuld closure/objectpack/reload mangler; A2-noten er historisk, aktuel native eksistens ikke verificeret; S06 fuld object-reopen fejlede2/23 readable forests",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 30,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført",
+        "beholdes"
+      ]
+    },
+    {
+      "id": "T17",
+      "status": "gennemført — udtrykkeligt arkiverede/retirede delmængder i S01/S02/S06/S07/S08/S10, herunder godkendt TEMPPreview-workflow; øvrige native træer beholdes / afventer test — fuld closure/objectpack/reload mangler; aktive kits/maps/shared bake bevares",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 31,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført",
+        "beholdes"
+      ]
+    },
+    {
+      "id": "T18",
+      "status": "gennemført — exact zero helper removed; QA/parity/vendor empties retained",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 32,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "T19",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 33,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "T20",
+      "status": "gennemført — gap; afventer test — rebuild",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 34,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ]
+    },
+    {
+      "id": "C01",
+      "status": "**gennemført tidligere**, betinget af root's friske native parity-resultat.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 42,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "C02",
+      "status": "**afventer test**; ingen object-removal udført.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 51,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C03",
+      "status": "fire fraværende klienter **gennemført tidligere**; tre disabled instanser **beholdes** — understøttet eller endnu uverificeret authoring/migration under bevaringsmandatet; Disabled alene er ikke slettebevis; eventuel pensionering kræver særskilt workflowvalg og de angivne porte.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 61,
+      "recognizedStatuses": [
+        "gennemført",
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C04",
+      "status": "Loading `announced` **beholdes**; gamle Loading-kandidater er ugyldige. Øvrige private kandidater **afventer test/Studio**: den tidligere ejer-Play-afvisning er historisk; nu mangler kandidaternes egne friske native reconcile/CAS/manifest og installerede full/TouchTarget/lobby-porte ved root. Samtidige ejersessioner og deres mode bevares. [Review med stale-baseline warning](CLIENT_LOCALS_REVIEW.md) og [manifest med ugyldig Loading-status](remaining-clients-proposals.json) bevarer den historiske proof. Ingen productionændring udført.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 70,
+      "recognizedStatuses": [
+        "afventer test",
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C05",
+      "status": "**gennemført**, lokal commit `1dd48870`; alle13 private definitions og stale kommentar er ryddet med før/isolated/installeret-efter porte. Ingen aktiv public authoringmetode eller gameplayfeature fjernet.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 81,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "C06",
+      "status": "**afventer test/Studio**: temp-only lokale porte bestået; den tidligere ejer-Play-afvisning er historisk. Root skal stadig udføre kandidatens egne friske native CAS/manifest/installerede efter-porte; samtidige ejersessioner og deres mode bevares. [Review/closure](CLIENT_LOCALS_REVIEW.md), [exact manifest](remaining-clients-proposals.json), [T09 paired receipt](client-local-T09-paired.json). Ingen produktion ændret.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 93,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C07",
+      "status": "**afventer test/Studio/reconcile**: Kicker/Tip-bindinger og deres eksakte constructorcalls består i owner-koden, men gammelt Loading førhash/helkildekandidat matcher ikke længere. Den gamle C04/C07-unit må ikke installeres; ny C07-only kandidat fra frisk native baseline og egne before/after gates er stadig nødvendig; Play-stoppet er historisk, og samtidige ejersessioner/deres mode bevares. Store-kandidaten er separat og uændret. Ingen constructor slettes; [Review](CLIENT_LOCALS_REVIEW.md) og [manifest](remaining-clients-proposals.json) markerer stale Loading.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 102,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C08",
+      "status": "**gennemført**; root håndterer scoped commit/evidence. Ingen publicering.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 112,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "C09",
+      "status": "**beholdes**: bounded retry og round-guard er allerede implementeret samtidigt, uden cleanup-kredit. Native/streaming/performanceverifikation og separat invalidation-kandidat **afventer test**; ingen runtime-rewrite udført her.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 125,
+      "recognizedStatuses": [
+        "afventer test",
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C10",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 134,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C11",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 143,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C12",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 152,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C13",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 161,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C14",
+      "status": "**beholdes** indtil profiling/test viser grundlag.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 170,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C15",
+      "status": "**beholdes**: cache og tidlig round-guard er allerede implementeret samtidigt, uden cleanup-kredit. Verifikation **afventer test**; ingen runtimeændring udført her.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 179,
+      "recognizedStatuses": [
+        "afventer test",
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C16",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 188,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C17",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 197,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C18",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 206,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C19",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 215,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C20",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 224,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C21",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 233,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C22",
+      "status": "**afventer test**; delvist stale årsagsbeskrivelse registreret.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 242,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C23",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 251,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C24",
+      "status": "**beholdes** — aktuel UI/modalpolicy; ændring af DJ eller WELCOME ownership kræver særskilt produktvalg og de angivne native input/restore-porte.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 260,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C25",
+      "status": "**afventer test** af faktisk objective/exit-flow.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 269,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "C26",
+      "status": "**gennemført** — S15 lokal commit `920abdeeb07dbf6729c48f980765b96ec82b06eb`; faktisk scoped native CAS/eksport/manifest/installeret contract og efterparity PASS. Public aliases **beholdes**. Linjepositionerne ovenfor er historiske før-positioner; de samme funktioner/entrypoints er bevaret. Historiske [review](CLIENT_LOCALS_REVIEW.md), [compiler-manifest](remaining-clients-proposals.json) og readonly runner bevares; [faktisk S15 receipt](c26-comments-native-v2/c26-comments-source-install-v1/result.json) og [snævert scope/reproduktion](c26-comments-native-v2/REVIEW.md) registrerer afslutningen.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 278,
+      "recognizedStatuses": [
+        "gennemført",
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C27",
+      "status": "**beholdes** — aktuel global pending-clear-policy; ændring kræver særskilt produkt-/protokolvalg og de angivne økonomi-/native UI-porte; ingen quick-delete.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 288,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C28",
+      "status": "**beholdes** indtil profiling/test.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 297,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C29",
+      "status": "**beholdes** indtil profiling/test.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 306,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C30",
+      "status": "tomfil **gennemført tidligere**; ignored agentstate **beholdes** indtil tooling-/workflowvalg.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 315,
+      "recognizedStatuses": [
+        "gennemført",
+        "beholdes"
+      ]
+    },
+    {
+      "id": "C31",
+      "status": "**gennemført tidligere** i canonical repo/manifest; native absence bekræftes af root.",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 324,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "LE-01",
+      "status": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 59,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-02",
+      "status": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 60,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-03",
+      "status": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 61,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-04",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 62,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-05",
+      "status": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 63,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-06",
+      "status": "beholdes — eksisterende kompatibilitets-/recovery-/fallbackkontrakt; ændring kræver særskilt policyvalg og normal/fejl/reentry-port",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 64,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-07",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 65,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-08",
+      "status": "beholdes — nødvendigt test-API; ingen dokumenteret sikker samlet pensionering af API/workflow",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 66,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-09",
+      "status": "beholdes — eksisterende kompatibilitets-/recovery-/fallbackkontrakt; ændring kræver særskilt policyvalg og normal/fejl/reentry-port",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 67,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-10",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 68,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-11",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 69,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-12",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 70,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-13",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 71,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-14",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 72,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-15",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 73,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-16",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 74,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-17",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 75,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-18",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 76,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-19",
+      "status": "beholdes — eksisterende kompatibilitets-/recovery-/fallbackkontrakt; ændring kræver særskilt policyvalg og normal/fejl/reentry-port",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 77,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-20",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 78,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-21",
+      "status": "beholdes — eksisterende kompatibilitets-/recovery-/fallbackkontrakt; ændring kræver særskilt policyvalg og normal/fejl/reentry-port",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 79,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-22",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 80,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-23",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 81,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-24",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 82,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-25",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 83,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-26",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 84,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-27",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 85,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-28",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 86,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-29",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 87,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-30",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 88,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "LE-31",
+      "status": "beholdes",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 89,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-32",
+      "status": "gennemført — B10 isStar og S16 private Usher-state; større gameplay-/performanceændringer afventer egne porte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 90,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "LE-33",
+      "status": "beholdes — bevaret authoring-konfiguration; eventuel pensionering eller ny semantik kræver særskilt produktvalg og den angivne port",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 91,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-34",
+      "status": "gennemført — B07/B10/S11/S14 afgrænsede kode-/kommentarscopes; gamle L2-guides beholdes som authoring-/historikrecords; eventuel workflowpensionering afventer LE-01–03-porte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 92,
+      "recognizedStatuses": [
+        "gennemført",
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-35",
+      "status": "beholdes",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 93,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "LE-36",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 94,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-001",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 100,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-002",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 101,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-003",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 102,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-004",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 103,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-005",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 104,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-006",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 105,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-007",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 106,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-008",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 107,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-009",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 108,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-010",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 109,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-011",
+      "status": "beholdes — aktuel gameplay/ranking/rate/UI/økonomipolicy; ændring kræver særskilt produktvalg og de angivne fixtures/native/clientporte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 110,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "CORE-012",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 111,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-013",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 112,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-014",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 113,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-015",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 114,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-016",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 115,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-017",
+      "status": "beholdes — aktuel gameplay/ranking/rate/UI/økonomipolicy; ændring kræver særskilt produktvalg og de angivne fixtures/native/clientporte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 116,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "CORE-018",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 117,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-019",
+      "status": "beholdes — aktuel gameplay/ranking/rate/UI/økonomipolicy; ændring kræver særskilt produktvalg og de angivne fixtures/native/clientporte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 118,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "CORE-020",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 119,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-021",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 120,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-022",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 121,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-023",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 122,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-024",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 123,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-025",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 124,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-026",
+      "status": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 125,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "CORE-027",
+      "status": "beholdes — eksisterende kompatibilitets-/recovery-/fallbackkontrakt; ændring kræver særskilt policyvalg og normal/fejl/reentry-port",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 126,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "CORE-028",
+      "status": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 127,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "CORE-029",
+      "status": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 128,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "CORE-030",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 129,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-031",
+      "status": "beholdes",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 130,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "CORE-032",
+      "status": "beholdes — permanente entitlements, receipt/grant/migrationsmarkører beskyttes af ejerens udtrykkelige mandat",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 131,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "CORE-033",
+      "status": "gennemført før opgaven",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 132,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "CORE-034",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 133,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-035",
+      "status": "beholdes — aktuel gameplay/ranking/rate/UI/økonomipolicy; ændring kræver særskilt produktvalg og de angivne fixtures/native/clientporte",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 134,
+      "recognizedStatuses": [
+        "beholdes"
+      ]
+    },
+    {
+      "id": "CORE-036",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 135,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "CORE-037",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 136,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "X01",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 40,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "X02",
+      "status": "gennemført — B05, local commit `12947a34`; no real uploads",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 41,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    },
+    {
+      "id": "X03",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 42,
+      "recognizedStatuses": [
+        "afventer test"
+      ]
+    },
+    {
+      "id": "X04",
+      "status": "afventer test / beholdes",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 43,
+      "recognizedStatuses": [
+        "afventer test",
+        "beholdes"
+      ]
+    },
+    {
+      "id": "X05",
+      "status": "gennemført — B03 verified path fix",
+      "requiredFieldsPresent": true,
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 44,
+      "recognizedStatuses": [
+        "gennemført"
+      ]
+    }
+  ],
+  "actualFinalParity": {
+    "result": {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/result.json",
+      "bytes": 2044,
+      "sha256": "fed4874a59ee3708d86fece9791adcfa7723a3299da44a64cfbb8bf62e38b84a",
+      "lfSHA256": "fed4874a59ee3708d86fece9791adcfa7723a3299da44a64cfbb8bf62e38b84a"
+    },
+    "rootModeConsoleBoundary": {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/root-boundary-v1/proof.json",
+      "bytes": 324,
+      "sha256": "16a8220401958a09b830350c904817361043945afb3c9cd3f8a91375f01417ae",
+      "lfSHA256": "16a8220401958a09b830350c904817361043945afb3c9cd3f8a91375f01417ae"
+    },
+    "readerPreflight": {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/reader-preflight-v1.json",
+      "bytes": 2543,
+      "sha256": "d17b1138b1708649d4dd0296fe4ca4e8fffe899c6a4d3be4cb5b126e41c429ab",
+      "lfSHA256": "d17b1138b1708649d4dd0296fe4ca4e8fffe899c6a4d3be4cb5b126e41c429ab"
+    },
+    "nativeScripts": 212,
+    "nativeRemotes": 15,
+    "manifestRows": 227,
+    "serverStorageRoots": 52,
+    "sceneDescendants": 416276,
+    "sourceEditorConflicts": 0,
+    "missing": 0,
+    "extra": 0,
+    "hashClassRecordedPropertyMismatches": 0,
+    "EnabledCoverageGaps": 0,
+    "currentStudioModeBefore": "Edit",
+    "currentStudioModeAfter": "Edit",
+    "beginUtc": "2026-10-10T00:42:34Z",
+    "endUtc": "2026-10-10T00:42:44Z",
+    "consoleAPIExactlyEqual": true,
+    "attributesTagsAndNonScriptAssetsCompared": false
+  },
+  "historicalProofsPreserved": [
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/finding-coverage-v1/coverage.json",
+      "bytes": 36495,
+      "sha256": "163eb2b477bb2f5c0c43aca5d13a5299cd0240ea802ead6cf5988e2153f796ad",
+      "lfSHA256": "163eb2b477bb2f5c0c43aca5d13a5299cd0240ea802ead6cf5988e2153f796ad"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v1/proof.json",
+      "bytes": 17135,
+      "sha256": "1b58ed3f5706b58b27b528c2e27e4e76cf483dd5a2522da4056ac6e3166f2d5d",
+      "lfSHA256": "1b58ed3f5706b58b27b528c2e27e4e76cf483dd5a2522da4056ac6e3166f2d5d"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v2/proof.json",
+      "bytes": 5056,
+      "sha256": "7bf50c6c70e6595933c7c5cfe8255b0c5b3665ee5baa829cf0e0e3ee746b5d02",
+      "lfSHA256": "7bf50c6c70e6595933c7c5cfe8255b0c5b3665ee5baa829cf0e0e3ee746b5d02"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v3/proof.json",
+      "bytes": 2260,
+      "sha256": "73cbc26a85ab90f09ff4c0da1d09bf827c9948bd5a0ad183c1b87ddd8ee7fb48",
+      "lfSHA256": "73cbc26a85ab90f09ff4c0da1d09bf827c9948bd5a0ad183c1b87ddd8ee7fb48"
+    }
+  ],
+  "invariants": {
+    "sixDocumentInputBytesStable": true,
+    "originalFindingIndexUnchanged": true,
+    "allFindingsHaveExplicitStatus": true,
+    "requiredLocationActionDependenciesRiskTestFieldsPresent": true,
+    "priorProofBytesUnchanged": true,
+    "nativeCalls": 0,
+    "runtimeSourceWrites": 0,
+    "manifestWrites": 0,
+    "mainDocumentWrites": 0,
+    "indexWrites": 0
+  },
+  "scope": "Point-in-time audit-index/disposition completeness across current six documents. Mixed completed/keep/pending scopes are retained verbatim; matched status terms are not exclusive totals and 129 dispositions do not mean 129 fixes. Actual final reader verifies Source/editor/class/recorded properties and counts, not attrs/tags/full native assets, continuous ownership, gameplay, multiplayer, streaming, performance or publication. Existing console messages remain; equality does not mean a clean console."
+}

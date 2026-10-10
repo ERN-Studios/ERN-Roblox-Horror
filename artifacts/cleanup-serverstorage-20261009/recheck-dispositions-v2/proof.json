@@ -1,0 +1,121 @@
+{
+  "schema": "mongotv-recheck-dispositions-v2",
+  "pass": true,
+  "findingIDs": [
+    "T01",
+    "LE-32",
+    "C04",
+    "C06",
+    "C07",
+    "C26"
+  ],
+  "changedExistingLines": 7,
+  "changes": [
+    {
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 15,
+      "beforeLineSHA256": "3c4c057f99d7558a6db10a787ca08b6a807a9ca3ab684e70299830490dd12f19",
+      "afterLineSHA256": "d53d8faf411b645efd9d803fd955d44796cdfdfcce85bbe16d9c5b7fb971787b"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 90,
+      "beforeLineSHA256": "5120558e75640e5138f38429c6aa4d4c9ccb2f5e7e369efd3a68562edcc225d9",
+      "afterLineSHA256": "5bd0c806c25f5a03f59cc55dd02c23292f18ae36d9c437a1cd9062e5d17115f8"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 78,
+      "beforeLineSHA256": "a5dcf267bfda712848cae246b36fb0328ea8fe7c67dd0ddc7d1ae0574b4c3cd8",
+      "afterLineSHA256": "67f35f038aca28fc99a4f7a53656601444e6e6ce8d1914ac7444e8415af4cc15"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 100,
+      "beforeLineSHA256": "e04a52b0f7f731408184e76b5da49ef2d0b4d4ab866bef056685608d89388d37",
+      "afterLineSHA256": "4a809e93a776e18541601ea82c5149e3ede6f4091fcd8df7d84bcf38182ccb9f"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 110,
+      "beforeLineSHA256": "e4b099c88fc9dfda765e615ff4fa7f80d2e20b4eb8d0a68f48d00cde5b8a6b35",
+      "afterLineSHA256": "95117f7b4a34ea10f79388ec67d4a24b71921744176e89d6cc652d7c66e5acdc"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 285,
+      "beforeLineSHA256": "15ae478b01d69a1788d5ab2da1620e0eeb30f0caaac1c00dfabcd112e37f1ed4",
+      "afterLineSHA256": "55969f625323523e075a1568285e3e4a8c602298049115baa9ed9d6b04b2058d"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 286,
+      "beforeLineSHA256": "75d73d8e978a38e7614e4b02e71642d89b03101a27e3efdf7cd2ec669d1bbaca",
+      "afterLineSHA256": "cc1e9e920fe2807b380472160d9fa33536c5ac18a842fecdefc58e6f6737c21e"
+    }
+  ],
+  "files": [
+    {
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "beforeSHA256": "2d24aa2b0b11e4f19dde2465dbdb5b7859ef8cd9d965d126c5a53f76b18c7030",
+      "afterSHA256": "45c428c8b8e80430fd9e2e7a23b143ea81ddb900fb1aebfd866da1792f1e5fe7",
+      "beforeBytes": 20322,
+      "afterBytes": 20536
+    },
+    {
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "beforeSHA256": "2bea202ec0ba175cd2dc7e73604fdf9c9690756c63f852bef20c809297c54fbb",
+      "afterSHA256": "702cc599114869537a8dd35ed65ffc5319c1b9951863e469c7c9576ed3c54861",
+      "beforeBytes": 54551,
+      "afterBytes": 55289
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "beforeSHA256": "89eaf1278cedfd1bb59686438c349458b459e0598269f8fc684aee8de5b9db68",
+      "afterSHA256": "2c9d57c8fc7aedda4f1af844b72509cd87ccd167ea688e1ee9cfd99581699fdb",
+      "beforeBytes": 56548,
+      "afterBytes": 57286
+    }
+  ],
+  "actualEvidence": [
+    {
+      "path": "artifacts/cleanup-20261009/c26-comments-native-v2/c26-comments-source-install-v1/result.json",
+      "sha256": "46699a902f331e80276d7e4ae54315af505b2bb6a3b96b5fad220f4e05da1a4c",
+      "bytes": 4013
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/result.json",
+      "sha256": "0076d9c25acb8a762e9f50a63fccb26de72983d142082e18af6892b0d06a43f9",
+      "bytes": 4002
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/native-installed-result.json",
+      "sha256": "3c4a324bfcaa3ff0e26bea8a442f85a487db0cb3f64a588c0e759ebb0115451a",
+      "bytes": 1216
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/result.json",
+      "sha256": "fed4874a59ee3708d86fece9791adcfa7723a3299da44a64cfbb8bf62e38b84a",
+      "bytes": 2044
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/root-boundary-v1/proof.json",
+      "sha256": "16a8220401958a09b830350c904817361043945afb3c9cd3f8a91375f01417ae",
+      "bytes": 324
+    }
+  ],
+  "invariants": {
+    "findingIDsOrderAndCountsPreserved": true,
+    "nonapprovedLinesByteIdentical": true,
+    "risksDependenciesAndRequiredGameplayPortsPreserved": true,
+    "V1CheckpointAndProofByteUnchanged": true,
+    "allOriginalNewlinesPreserved": true,
+    "nativeCalls": 0,
+    "runtimeSourceWrites": 0,
+    "manifestWrites": 0,
+    "mainDocsWrites": 0,
+    "indexWrites": 0
+  },
+  "limits": "Only current disposition/evidence qualifiers. Historical Play/preparation proof preserved. Final129 coverage-v2 awaits Root final mainDocs freeze. Source/recorded-property snapshot and narrow helper/comment ports do not certify full assets, engine UI, gameplay, multiplayer, streaming or performance.",
+  "S16LocalCommit": "dc1561d1e53f565db2115cf4e9ae1d1f8adcdfbb"
+}

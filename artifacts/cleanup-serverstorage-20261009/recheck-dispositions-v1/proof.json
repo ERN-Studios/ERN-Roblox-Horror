@@ -1,0 +1,299 @@
+{
+  "schema": "mongotv-recheck-dispositions-v1",
+  "pass": true,
+  "statusOnlyDecisionRows": 27,
+  "additionalFoundationRows": [
+    "T01",
+    "T02",
+    "T03"
+  ],
+  "additionalMixedScopeRow": "LE-34",
+  "changedFindingRows": 31,
+  "changes": [
+    {
+      "id": "T01",
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 15,
+      "beforeLineSHA256": "41402e4600b103cdd1267425800f24fa3294a8e1108ed46d5470e3470181cb2b",
+      "afterLineSHA256": "3c4c057f99d7558a6db10a787ca08b6a807a9ca3ab684e70299830490dd12f19",
+      "afterStatus": "gennemført — historisk native baseline230/15 og0 editor conflicts; S12 `e78cf597` tilføjede96 verificerede Enabled-aliases; S13 `8fb44faf` bevarer friske eksportmetadata; afsluttende frisk parity afventer Root"
+    },
+    {
+      "id": "T02",
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 16,
+      "beforeLineSHA256": "0c9ba5c314ec701744bae8ff38a55199a106584a7971b9e5294098359bdf721e",
+      "afterLineSHA256": "02f38c829b8cb5b9a3dbebb2bd77db178975c784f055cd46702e56ee03265c15",
+      "afterStatus": "gennemført — eksisterende count/hash-repair; S12 `e78cf597` og S13 `8fb44faf` udvider property-/eksportgrundlaget; afsluttende frisk parity registreres særskilt"
+    },
+    {
+      "id": "T03",
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 17,
+      "beforeLineSHA256": "e73a99d60515be2b8d4301cacbc433cda2b6e412e3cdf1989b45d4958b3812fd",
+      "afterLineSHA256": "e7e169ff0b9b7f4701818bbfd054d4e0976ba26050239aa53d013bc80fa14174",
+      "afterStatus": "gennemført — B01a native chunk-reader; S13 `8fb44faf` tilføjer friske Source/editor/identity/class/property/attribute/tag-brackets omkring den uændrede reader; faktisk full-sync i Studio er ikke udført"
+    },
+    {
+      "id": "T10",
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 24,
+      "beforeLineSHA256": "b2d14441038ee23f307e5e4efc1a7782aa37925f99e93b31f28fd9ea4211722e",
+      "afterLineSHA256": "56d8095c08607794fc0ad610bb7887537ac042a875892fc3e303904b8a81e950",
+      "afterStatus": "beholdes — understøttet manuel authoringkommando; pre-confirmation checkout er fortsat en dokumenteret risiko; eventuel pensionering/generic wrapper-policy kræver særskilt workflowvalg og den angivne port"
+    },
+    {
+      "id": "T11",
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 25,
+      "beforeLineSHA256": "6a4d3d7915472a0f89582faaf75c65bdd4b7f60e24e6485e2dcb73cb8ee633cd",
+      "afterLineSHA256": "f63d7f1249b0c229cfa3fa6bd2b55ffe5bbf9f8f8afc38d58f2ec6f671b94a75",
+      "afterStatus": "beholdes — understøttet animation-publishingkontrakt; eventuel pensionering eller versionspolicy kræver særskilt workflowvalg og den angivne port"
+    },
+    {
+      "id": "T15",
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 29,
+      "beforeLineSHA256": "9749d4aaecf35bd0ab8dff66d66697a04f4085042db97499b11461e6b0973b4d",
+      "afterLineSHA256": "f2ed5b8890311b245f22f424c757209884101af620f62835e803ab85f68deb0e",
+      "afterStatus": "beholdes — aktiv animation-authoringcache; fuld native rollback/reload og playback kræves før eventuel pensionering"
+    },
+    {
+      "id": "T16",
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 30,
+      "beforeLineSHA256": "065985db7061fbf5007732a51c88eeab5d6ee467989deb178e3342a98cfeb134",
+      "afterLineSHA256": "9f34fac39cfa789e588580c7a7c2adab92fe5897ac3e250874495556b6cb4116",
+      "afterStatus": "gennemført — udtrykkeligt arkiverede/retirede lokale delmængder i S02/S06/S07/S08/S10; øvrige native træer beholdes / afventer test — fuld closure/objectpack/reload mangler; A2-noten er historisk, aktuel native eksistens ikke verificeret; S06 fuld object-reopen fejlede2/23 readable forests"
+    },
+    {
+      "id": "T17",
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "line": 31,
+      "beforeLineSHA256": "6acbaa40dd9db00f5702516272584ba89b32743a34ffe28ba19b683f5d73efb6",
+      "afterLineSHA256": "4ebe5891efa2264eb8d3ca5053e791f700a6dc254d89301f0a33e491caeb6a94",
+      "afterStatus": "gennemført — udtrykkeligt arkiverede/retirede delmængder i S01/S02/S06/S07/S08/S10, herunder godkendt TEMPPreview-workflow; øvrige native træer beholdes / afventer test — fuld closure/objectpack/reload mangler; aktive kits/maps/shared bake bevares"
+    },
+    {
+      "id": "LE-01",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 59,
+      "beforeLineSHA256": "843cb4410c16c67046111002b471633a50e1aa5aca71750d73a91436e8b6c870",
+      "afterLineSHA256": "cbd4c078de57bd59f685673d9038821fa60c9c79a3152cc9eab22fbda961398d",
+      "afterStatus": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte"
+    },
+    {
+      "id": "LE-02",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 60,
+      "beforeLineSHA256": "73e58373aed794e8f6c5dbaf5abff1f3ae6e13e4b0a7ed3d2832e1bbf1cc6383",
+      "afterLineSHA256": "58d4c35e428ce5bc662113cf04384c214f33eef2d02d69d12f3f44dee8722340",
+      "afterStatus": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte"
+    },
+    {
+      "id": "LE-03",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 61,
+      "beforeLineSHA256": "203a04b45bf4152501bd137c0643cc2fb467645d6fec02121a17d889f926be39",
+      "afterLineSHA256": "90a249b8188dca649f26f76bbc2693fca8660def64b201fa8347650a1d05d796",
+      "afterStatus": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte"
+    },
+    {
+      "id": "LE-05",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 63,
+      "beforeLineSHA256": "04acec44fc6c1826b23d5608292e36aff79a7f4d3a985fe3be658898a41acd85",
+      "afterLineSHA256": "8f825111351f48598d9efbec35765b2742bbbefb65a3f8705da601051398d729",
+      "afterStatus": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte"
+    },
+    {
+      "id": "LE-06",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 64,
+      "beforeLineSHA256": "d03a01ba3cb9ed6a60056072ece91a957a04f482a4ef787dee5f09cd676d5fb2",
+      "afterLineSHA256": "394cd7ab31223474cd7276a85deddc8d0ff193161f30b30cf27883d9647f8235",
+      "afterStatus": "beholdes — eksisterende kompatibilitets-/recovery-/fallbackkontrakt; ændring kræver særskilt policyvalg og normal/fejl/reentry-port"
+    },
+    {
+      "id": "LE-08",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 66,
+      "beforeLineSHA256": "d6fa22a7fd03d17fcc07bbcd49364ca88818dfcbc4f7a154eed2386b8e5f1fd9",
+      "afterLineSHA256": "3d70ab43e65a23e4f92e551fbe2914c10bf4bef53289b570a83eba7f257c15fc",
+      "afterStatus": "beholdes — nødvendigt test-API; ingen dokumenteret sikker samlet pensionering af API/workflow"
+    },
+    {
+      "id": "LE-09",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 67,
+      "beforeLineSHA256": "573ceadca98e03d2f3abaa966022473a8fc2a5143fc5464b44d739626002f71d",
+      "afterLineSHA256": "959661006cc7e8ff7884aee9834a6758b8354ae9f214b5c3430af65abfc4e0e1",
+      "afterStatus": "beholdes — eksisterende kompatibilitets-/recovery-/fallbackkontrakt; ændring kræver særskilt policyvalg og normal/fejl/reentry-port"
+    },
+    {
+      "id": "LE-19",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 77,
+      "beforeLineSHA256": "4642f76bf9547693451a5374de252c2ff9143b238254612b70be81acdb4dcec0",
+      "afterLineSHA256": "0115bfb6dc8549c391bebc3381070d94ffe8c924fe3f1a47d8b7fc531c5faef1",
+      "afterStatus": "beholdes — eksisterende kompatibilitets-/recovery-/fallbackkontrakt; ændring kræver særskilt policyvalg og normal/fejl/reentry-port"
+    },
+    {
+      "id": "LE-21",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 79,
+      "beforeLineSHA256": "5b927cc54ecf2b5decce427adbe3978e13fc154564a6960955e0c01f28f0f17f",
+      "afterLineSHA256": "8ed3f4f8252dca83f83f5abc57b6a3ac002be2edc97ac1328892771ddb16d780",
+      "afterStatus": "beholdes — eksisterende kompatibilitets-/recovery-/fallbackkontrakt; ændring kræver særskilt policyvalg og normal/fejl/reentry-port"
+    },
+    {
+      "id": "LE-33",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 91,
+      "beforeLineSHA256": "5af15c9e041660c1c654846cfff55ce4e8ea4d6a7a5a07ebe6ec46e7784d6e8a",
+      "afterLineSHA256": "17b315a5a599e7077183e473fda7f04c0b23f09ea73ade8c4ae20f68be7afffe",
+      "afterStatus": "beholdes — bevaret authoring-konfiguration; eventuel pensionering eller ny semantik kræver særskilt produktvalg og den angivne port"
+    },
+    {
+      "id": "LE-34",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 92,
+      "beforeLineSHA256": "df19b68954ec07d4bc0f142a68418cdd1413893b54adacd5a17254b63fd9c78e",
+      "afterLineSHA256": "153f391d08bb9f9901880d18e87585072f49f420218a7eeb61c5eb457f9ffa68",
+      "afterStatus": "gennemført — B07/B10/S11/S14 afgrænsede kode-/kommentarscopes; gamle L2-guides beholdes som authoring-/historikrecords; eventuel workflowpensionering afventer LE-01–03-porte"
+    },
+    {
+      "id": "CORE-011",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 110,
+      "beforeLineSHA256": "e398c95b411f7872a9b7d5e79f147aaaec1880a1b5da391a34ff8c12ce90339d",
+      "afterLineSHA256": "52b8935701707b99081de029896781c4deb4642d69ede05084bb7219fa6400e3",
+      "afterStatus": "beholdes — aktuel gameplay/ranking/rate/UI/økonomipolicy; ændring kræver særskilt produktvalg og de angivne fixtures/native/clientporte"
+    },
+    {
+      "id": "CORE-017",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 116,
+      "beforeLineSHA256": "a710958836ac31485f527d35726c43c21f3e526955f0e3f18e1918b4fedabf51",
+      "afterLineSHA256": "7c955d8064f0d6f19dfafef2d0ab16b0af6d9289ae6700e81882f0cfeea6ac81",
+      "afterStatus": "beholdes — aktuel gameplay/ranking/rate/UI/økonomipolicy; ændring kræver særskilt produktvalg og de angivne fixtures/native/clientporte"
+    },
+    {
+      "id": "CORE-019",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 118,
+      "beforeLineSHA256": "2582b85e99569e0bd2e2b5868b0971c489ce500e88479073d627e055ea24b25e",
+      "afterLineSHA256": "c773664e8bede54c7d6992abf050f3937c589a8cd3a545cc305665e135adf3ed",
+      "afterStatus": "beholdes — aktuel gameplay/ranking/rate/UI/økonomipolicy; ændring kræver særskilt produktvalg og de angivne fixtures/native/clientporte"
+    },
+    {
+      "id": "CORE-026",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 125,
+      "beforeLineSHA256": "5cfc8559450345edc405227414bdee3f2de7449339333ed0b64ab8d1ffe353a3",
+      "afterLineSHA256": "16559f856abb0c828cc6b16314068994d2600bd6640b33b5d28e74bd1259281a",
+      "afterStatus": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte"
+    },
+    {
+      "id": "CORE-027",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 126,
+      "beforeLineSHA256": "fd0124933129340ccf3e03060451353cdbcc50b12b203d715dc195d625155185",
+      "afterLineSHA256": "8e7084f5cfe3b611dca8daf9218168d41eca3ab5fb8ade2007d8379bb5b3b4cb",
+      "afterStatus": "beholdes — eksisterende kompatibilitets-/recovery-/fallbackkontrakt; ændring kræver særskilt policyvalg og normal/fejl/reentry-port"
+    },
+    {
+      "id": "CORE-028",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 127,
+      "beforeLineSHA256": "99c76861840ce74678707e64413e3b9d1e6a5bf1f3ac0adb2ebad6b614539598",
+      "afterLineSHA256": "7cab67eee4146dd6b2f2316291627b3359950b6804000504cb03a20bc157c746",
+      "afterStatus": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte"
+    },
+    {
+      "id": "CORE-029",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 128,
+      "beforeLineSHA256": "4789c645e4b0242a3a1e1cf5a430be07a0648dfc6055fbe3389aec0d6be4a0fa",
+      "afterLineSHA256": "b42986d421127cdcfe1339454c193c590084b4fea15577b590811643cd259323",
+      "afterStatus": "beholdes — understøttet authoring/dev/test- eller attributekontrakt; eventuel pensionering kræver særskilt workflowvalg og de angivne porte"
+    },
+    {
+      "id": "CORE-032",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 131,
+      "beforeLineSHA256": "4599fd845eb6bdb92646d5af3475e4bf14e1acde2ba6bb3257d454d4e62a78e1",
+      "afterLineSHA256": "704d40a1d14f3bed12bf5a98f04dfd7ee9fe39702ec509a585709446e47e3c66",
+      "afterStatus": "beholdes — permanente entitlements, receipt/grant/migrationsmarkører beskyttes af ejerens udtrykkelige mandat"
+    },
+    {
+      "id": "CORE-035",
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 134,
+      "beforeLineSHA256": "93e401151efaa808d6e12b728260ce6a68c217152c2a4f392dc5763dcaf51d2e",
+      "afterLineSHA256": "4f16b7f30227b86c620ea52e0dc6796b52aae16472157134ecec61caa208277d",
+      "afterStatus": "beholdes — aktuel gameplay/ranking/rate/UI/økonomipolicy; ændring kræver særskilt produktvalg og de angivne fixtures/native/clientporte"
+    },
+    {
+      "id": "C03",
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 68,
+      "beforeLineSHA256": "b06c86ca4bc0da711f5a087f89e7a538ea027b5981b0e7ed33e20bcfc1fc966a",
+      "afterLineSHA256": "57e611b50c15c222aa5c4116c2e440eac04e62394afa52ac60cc2fe3f1fb7f4f",
+      "afterStatus": "- **Status:** fire fraværende klienter **gennemført tidligere**; tre disabled instanser **beholdes** — understøttet eller endnu uverificeret authoring/migration under bevaringsmandatet; Disabled alene er ikke slettebevis; eventuel pensionering kræver særskilt workflowvalg og de angivne porte."
+    },
+    {
+      "id": "C24",
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 267,
+      "beforeLineSHA256": "47647cf1e6cd73b4e79636e774eec4e3087d0370670df355cf16827436305cc2",
+      "afterLineSHA256": "ce02871ae9bd333a883763cecf29d534040bcd55d1d6511c384f40267dbf985d",
+      "afterStatus": "- **Status:** **beholdes** — aktuel UI/modalpolicy; ændring af DJ eller WELCOME ownership kræver særskilt produktvalg og de angivne native input/restore-porte."
+    },
+    {
+      "id": "C27",
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 295,
+      "beforeLineSHA256": "be3b29629504ad314c76939e321b9be9754572393728cedd21053e6e1d96db80",
+      "afterLineSHA256": "af14b9e0414c269aeaeecb4ad60eabc765c13703facc07b0da3ac75cd6534ca9",
+      "afterStatus": "- **Status:** **beholdes** — aktuel global pending-clear-policy; ændring kræver særskilt produkt-/protokolvalg og de angivne økonomi-/native UI-porte; ingen quick-delete."
+    }
+  ],
+  "files": [
+    {
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "beforeSHA256": "f224b2e6cf368a3459e054cffc57d3553cd80110642e598be663e17117ac54a1",
+      "afterSHA256": "2d24aa2b0b11e4f19dde2465dbdb5b7859ef8cd9d965d126c5a53f76b18c7030",
+      "beforeBytes": 18944,
+      "afterBytes": 20322
+    },
+    {
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "beforeSHA256": "17bed343522f65a5fa4f7c8d79c91292c3801aaf0a3da359322ad596b40c3832",
+      "afterSHA256": "2bea202ec0ba175cd2dc7e73604fdf9c9690756c63f852bef20c809297c54fbb",
+      "beforeBytes": 51575,
+      "afterBytes": 54551
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "beforeSHA256": "61c5590c6cb24922eade11bf0ef1be038008ac99ab7c97772a3ee27ee51bdaf8",
+      "afterSHA256": "89eaf1278cedfd1bb59686438c349458b459e0598269f8fc684aee8de5b9db68",
+      "beforeBytes": 56253,
+      "afterBytes": 56548
+    }
+  ],
+  "invariants": {
+    "findingIDsOrderAndCountsPreserved": true,
+    "allNonapprovedLinesByteIdentical": true,
+    "all27DecisionRowsStatusOnly": true,
+    "foundationT01T02T03StatusOnly": true,
+    "LE34DependenciesRiskAndHistoricTestEvidencePreserved": true,
+    "allOriginalNewlinesPreserved": true,
+    "nativeCalls": 0,
+    "runtimeSourceWrites": 0,
+    "manifestWrites": 0,
+    "mainDocsWrites": 0,
+    "indexWrites": 0
+  },
+  "scopeLimits": "Disposition update under the preserve-features/workflows/data mandate. No new gameplay/policy/backup-restoration/performance certification; final129 coverage-v2 and final native parity remain separate after final docs freeze."
+}

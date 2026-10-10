@@ -1,0 +1,17 @@
+{
+  "schema": "root-final-docs-scoped-staging-v1",
+  "pass": true,
+  "headAtStage": "dc1561d1e53f565db2115cf4e9ae1d1f8adcdfbb",
+  "curationSHA256": "31c95f13426777b2019e5d26e53e44bf138b7bf150dc1f95ebd7a22510c7d1a5",
+  "curatedPathsIncludingAllowlist": 47,
+  "stagedPaths": 48,
+  "scope": "Six review documents plus immutable disposition/129-coverage/final actual parity/mode/console evidence; no runtime Source or manifest staging.",
+  "originalRoundUISourceSHA256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73",
+  "onlyRemainingWorkingManifestDelta": "Original RoundUI Source sha256/bytes fields; excluded from this commit.",
+  "all227WorkingMirrorFilesAndManifestStillEqualFinalParitySnapshot": true,
+  "publishedByThisBatch": false,
+  "pushedByThisBatch": false,
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "documentBytePolicy": "Raw working document hashes are captured. Git text normalization may convert CRLF to LF in six tracked documents; staged bytes are separately compared with exact raw or LF-normalized working bytes. New immutable proof files must remain raw byte-identical."
+}

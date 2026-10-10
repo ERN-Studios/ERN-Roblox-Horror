@@ -1,0 +1,59 @@
+{
+  "schema": "mongotv-recheck-dispositions-v3",
+  "pass": true,
+  "changedExistingNarrativeLines": 2,
+  "changes": [
+    {
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "line": 50,
+      "beforeLineSHA256": "f8f41735e9b7a4ffe184f20d22ae7646923e993e2759e7e6befcdeba3d1d4bbe",
+      "afterLineSHA256": "4d13944972041c33637b4c84103a92c87cc910ebd01ab7b231779091017275ed"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "line": 17,
+      "beforeLineSHA256": "be1b82224b68acc4398bfdecc35e769519137b47dbd662432a6450cad4d852fa",
+      "afterLineSHA256": "11d51a4e58021294f5190c2807b2f77e3c316d6dd0f1c8cbc7a6587a84d76d0f"
+    }
+  ],
+  "files": [
+    {
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "beforeSHA256": "702cc599114869537a8dd35ed65ffc5319c1b9951863e469c7c9576ed3c54861",
+      "afterSHA256": "75d2f3b1d504d56fd8d0508cdb6fb209cd12a6dc583d66f4d79c50e61e90ab4a",
+      "beforeBytes": 55289,
+      "afterBytes": 55437
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "beforeSHA256": "2c9d57c8fc7aedda4f1af844b72509cd87ccd167ea688e1ee9cfd99581699fdb",
+      "afterSHA256": "e3e0b828680d276044c0058f3c6262a36afe66cf5c57ce27d17f795467e8e143",
+      "beforeBytes": 57286,
+      "afterBytes": 57552
+    }
+  ],
+  "immutablePriorProofs": [
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v1/proof.json",
+      "sha256": "1b58ed3f5706b58b27b528c2e27e4e76cf483dd5a2522da4056ac6e3166f2d5d"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v2/proof.json",
+      "sha256": "7bf50c6c70e6595933c7c5cfe8255b0c5b3665ee5baa829cf0e0e3ee746b5d02"
+    }
+  ],
+  "invariants": {
+    "allOtherLinesByteIdentical": true,
+    "allOriginalNewlinesPreserved": true,
+    "allFindingIDsOrderPreserved": true,
+    "CORE025GateAndDevicePartKeepUnchanged": true,
+    "otherClientRequiredPortsPending": true,
+    "v1v2ProofsUnchanged": true,
+    "nativeCalls": 0,
+    "runtimeSourceWrites": 0,
+    "manifestWrites": 0,
+    "mainDocsWrites": 0,
+    "indexWrites": 0
+  },
+  "limits": "Two approved historical/current narrative qualifiers only; no new gameplay/client/full-asset/performance port."
+}

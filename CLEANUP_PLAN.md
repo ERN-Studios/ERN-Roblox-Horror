@@ -1,9 +1,12 @@
 # MongoTV oprydningsplan — 2026-10-09
 
 Studio er source of truth. PlaceId **131311258779917**, universe **10559217407**.
-Denne opgave publicerer ikke det offentlige spil. Ingen GitHub-push er planlagt.
+Oprydningssessionen udfører ingen publicering eller GitHub-push. En anden
+session har særskilt registreret publicering v2924 i commit `9635a38c`;
+dens optimeringsarbejde og publicering tilskrives ikke oprydningen.
 
 Seneste afgrænsede fremdrift, 2026-10-10: S07 er lokalt committed i `9b0c0468`.
+S08 er lokalt committed i `9c6d713f`.
 S08 har pensioneret Level1-legacyværktøjernes standalone-entry og offentlige
 gamle targets i syv filer. Installeret replay bestod seks præcise V2/elevator-
 outputs, syv negative legacy-porte og faktisk Blender V2/FBX-QA; alle 286
@@ -15,14 +18,18 @@ Ingen af de fem native S04-pakker er fjernet af denne oprydning.
 S04's tredje friske native capture bestod: 1.617 objekter, 8.050.869 bytes,
 SHA `e808f055403bd331b76e0831955b192abc8b4a914865c3936aa9b2d23ed2a8d7`.
 Alle original-/Source-/editor-/property-/leaseguards bestod. Nul originalwrites
-eller testkopier. Native reopen og aktive featureporte er fortsat separate.
+eller testkopier. Den separate native reopen bestod også: original/canonical
+bytes er identiske og stabile, ti testkopier oprettet og fjernet, nul tilbage,
+Source/editor og originale guards bestået. Aktive featureporte er stadig
+afventende; pakken er bevaret.
 
 S06 har komplet native arkiv af de 23 eksternt fjernede træer: 14.079 objekter,
 12 scripts og 2.739.764 native bytes. Den separate native reopen-port genskabte
 alle objekter/scripts og ti interne referencer, men to gamle modeltræers
 properties afveg. Fuld gendannelse er derfor **afventende**, og alle 23
 testkopier blev ryddet væk med originalerne uændrede. S06's separate lokale
-12-mirror/manifest-oprydning afventer sin friske før/efter-port; den ændrer
+12-mirror/manifest-oprydning er gennemført i `38f1d041` efter sin friske
+før/efter-port; 944.770 Source-bytes er bevaret i off-mirror arkiv. Den ændrer
 ingen runtimefeature eller native objekt.
 
 ## Aktuel ServerStorage-batch efter ny tilladelse
@@ -57,8 +64,8 @@ Historisk v7-capture viste73 ServerStorage-rødder/222 scripts efter ejerens tre
 parkede maps, nye LevelWorldStorage-modul og Level 2 Poolrooms Ambience-script.
 Disse ændringer tilskrives ikke
 oprydningen. Modulets generiske root-scan udvælger kun de tre præcise mapnavne;
-det forbruger ingen af de12 records. Frisk afsluttende Edit-parity afventer
-tilgængelig Edit og skal genlæses, fordi andre sessions fortsætter.
+det forbruger ingen af de12 records. Ved dette historiske snapshot afventede
+slutparity tilgængelig Edit; senere frisk kontrol er registreret i slutafsnittet.
 
 Frisk read-only observation21:54:29Z viste50 ServerStorage-rødder/212 scripts;
 23 gamle rødder har Parent=nil, og12 tilhørende Source/editor-par er stadig
@@ -66,6 +73,195 @@ identiske med det tidligere arkiv. To nye scripts er samtidige ændringer.
 [Observation og præcise navne](artifacts/cleanup-serverstorage-20261009/external-storage-observation.json).
 S06 bevarer de23 komplette native træer og afstemmer kun allerede fraværende
 downstream-mirrors efter arkiv-/compile-/caller-port. Ingen geninstallation.
+
+S06's første lokale trial afviste scannerens 100.000-objektgrænse før writes.
+Frisk census viste 416.276 objekter; scanneren har nu en konfigureret/testet cap på 500.000,
+1.000-row checkpoints og 256 afgrænsede hash-buckets med præcis row/multiplicity.
+Andet trial afviste samtidig native drift i den generelle `SoundController`;
+tredje trial afviste `ServerScriptService.GameManager`. Alle tre stoppede før
+filfjernelse eller manifestwrite. V4 afviste dernæst en ny dokumentations-HEAD
+før checkpoint/MCP/writes. Kun HEAD-literal blev afstemt efter præcist review.
+Den faktiske V4-port bestod siden: 212 mirrors verificeret mod live native
+Source/editor/metadata før/efter, identisk fuld scene-strukturhash og 424
+compiles. Præcis 12 filer/rows fjernet, counts 212/15/227; status **gennemført**,
+lokal commit `38f1d041`. Arkiver og gamle held-originals er bevaret. Den
+uafhængige 23-træers fulde restoration er fortsat afventende. S09 afstemmer kun den friske
+Studio-kilde og dens manifestrow. Den anden sessions nyere
+Level2 Sound-source/row bevares og udelades fra vores scoped commit; S05's
+tidligere export er historisk og må ikke bruges som nutidig landing.
+
+S03/S09 er lokalt committed i `c49e5de0`: to verificerede downstream Sources,
+deres to præcise rows og grundtællinger afledt af de 237 rows. Den arvede
+HEAD-tællefejl er rettet; øvrige rows og metadata er bevaret. Det er ingen
+featureimplementering eller samlet parity-godkendelse. Native arkiver,
+rollbackreceipts og testede guards er committed i `2231f23b` med præcis
+allowlist; rå 41 MB facts bevares bytepræcist i gzip og lokalt, ikke duplikeret
+i Git. S04-testens inaktive egne metadata er frigivet med ejerskabskontrol;
+de 73 originale rootreferencer, 23 held-træer og 222 scriptreferencer er intakte.
+De fem S04-pakker bevares, indtil aktive R4/V2/elevator-porte består.
+
+**S10 / T16,T17 gennemført lokalt:** fjern præcis de 92 dublerede transport-
+chunks i [allowlist](artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/candidate.json),
+under diagnostic-archive-before-v7/v8, external-storage-archive-v1 og retired-
+authoring-archive-v3. De komplette native/facts/referencefiler, receipts og
+Source-arkiver er bevaret. Bevis: samtlige part-bytes matcher fuld fil, offset,
+hash og transferreceipt; immutable completed capture-consumers læser fulde
+filer. Ingen initializer, remote, attribute eller runtimecaller fjernes.
+Risiko: miste en redundant transportrepræsentation; hver chunk kan genskabes
+bytepræcist med eksklusiv write fra bevaret fuld fil. Gevinst: 92 lokale filer/
+60.168.414 bytes fjernet. Før/isolated partless/efter faktisk fjernelse: samme
+Lune folder/ref-consumers, S04 verify-constructor/context og S06 inputpreflight
+bestod med identiske portrecords; hele beskyttede inventory og syv consumer-
+kilder er bytebevarede. Første trial blev fuldt tilbagerullet efter en dobbelt
+`.gitattributes`-oprettelse i testsetup; kun setup/versionmapper blev rettet.
+Faktisk V2 efterport bestod. Fire S06 roundtrip-chunks beholdes som **afventer
+test**, fordi deres fulde native restoration fejlede. Ingen runtime-/FPS-gevinst.
+[Faktisk receipt](artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/removal-receipt.json).
+Lokal commit `5a3a06e7` bevarer præcis tool-/før-/efter-/rollback-/parityevidens.
+
+**S12 / T01,T02 gennemført lokalt:** `studio-sync-manifest.json` har fået
+præcis 96 manglende native `Enabled`-aliases på Script/LocalScript-rækker.
+Aktuelle native Source/editor/class/Disabled/RunContext og eksisterende
+registrerede properties matcher; Enabled er Boolean og modsvarer Disabled.
+De to allerede registrerede Enabled-værdier, alle Sourcebytes, øvrige rækker,
+properties og counts bevares. Ingen runtimecaller, remote, attribute eller
+authoring-entry fjernes. Risiko: registrere stale metadata; friske native
+før-/efterlæsninger, HEAD-/filguards og afgrænset rollback beskytter batchen.
+Gevinst: fuldstændig Enabled-registrering for de 98 aktive/inaktive BaseScripts.
+23 faktiske wrapper-fixtures/2.191 checks bestod; native før/efter: 212 scripts,
+15 remotes, nul Source/editor-konflikter/mismatches og coveragegaps 96→0.
+212 lokale Sources er bytebevarede; ingen native/Source-/modewrites.
+[Faktisk receipt](artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/receipt.json).
+Lokal scoped commit `e78cf597`; den samtidige sessions `9ca01fc0` bevares.
+Generic full-syncs ældre metadata-tab er rettet særskilt som S13 nedenfor; ingen
+bulk-sync er kørt. RoundUI's allerede ændrede Source-række bevares særskilt.
+
+**S11 / B11,LE-34 gennemført for PuzzleManager:** fjern kun det private,
+ulæste `latchMode = true` på sessioninitializerens linje 1373 (18 bytes).
+`fuseSession` har kun privat bind/drop-brug; ingen hel-session-reflection,
+dynamisk feltlæsning, export eller remotepayload bruger feltet. Box-/fuse-/
+lever-handlers, TeamObjectives, cleanup, data og entitlements bevares.
+Native før-/kandidat-/installeret port kører de samme faktiske initializer,
+tre handlers, Announce og clearPuzzle ved kontrollerede enginegrænser:
+47 checks pr. version, 94 ved reentry, identisk adfærd inklusive duplicate/
+stale requests, Disconnect-/Destroy-fejl og cleanup/retry. Tre friske tomme
+ModuleScripts er fjernet; alle 212 originaler og øvrige metadata er bevaret.
+Dette er en privat felt-/kontraktport, ikke faktisk round, multiplayer,
+streaming, respawn eller performance. Fresh native Source/editor/class/
+properties/identity CAS og bounded før-/efter-export bestod; kun target og
+dets sha/bytes-row ændret. Risiko: en overset feltcaller; hele closure og
+semantisk negativ kontrol beskytter porten. Ingen målt performancegevinst.
+Native/kilde er 105.502 bytes, SHA `40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c`.
+Lokal scoped commit `a7c7bac4`. Første installer-V1 blev afvist af JSON-parse
+før nogen write; det historiske forsøg bevares. RoomDressing-delen af B11
+er siden gennemført separat som S14 i `5ad5c03d`.
+[Faktisk efterport](artifacts/cleanup-20261009/pending-locals-native-v1/latch-source-install-v2/result.json).
+
+**S13 / T01,T02,T03 gennemført for eksportværktøjet:**
+`tools/sync_from_studio.py:read_native_record/sync` læser nu friske native
+segments, class-properties, attributes, tags og Source/editor-enighed rundt
+om den eksisterende chunk-reader. Før genopbyggede full-sync minimale rows
+og tabte metadata. Engine-/class-/place-/mode-/identity-/metadata-drift og
+unsupported attribute-typer afvises før den berørte rækkes write. Tomme
+attributes bevarer manifestets `[]`-konvention. MCP-client, shared Source-
+reader, pushværktøj og initializer-workflows er bevaret. Risiko: forkert
+metadata-eksport; faktiske reader/loop-fixtures og native getters dækker
+kontrakten. Gevinst: fremtidige exports bevarer verificeret native metadata.
+39 Source- og 65 full-sync-checks, 19 Python-scenarier/128 assertions og
+30 faktisk genererede Luau-scenarier/103 assertions samt O0/O1 bestod.
+Otte native getters for fire classes bestod før/efter med nul writes eller
+objekter. Remote Archivable er sammenlignet med S12's native record, fordi
+dens nuværende manifestrow mangler properties. Ingen faktisk full-sync er
+kørt; eksporten er fortsat inkrementel og ingen atomisk hel-place-port.
+Lokal commit `8fb44faf`; ingen runtime- eller performanceændring.
+[Closure, historiske afvisninger og porte](artifacts/cleanup-serverstorage-20261009/S13-native-metadata-preparation-v1/REVIEW.md).
+
+**S14 / B11,LE-34 — RoomDressing, gennemført i `5ad5c03d`:** præcis native
+`ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing`,
+mirror `ServerScriptService/Level 3 Systems/Level 3 Worn Party Room Dressing.ModuleScript.lua`,
+linjer 61–62,89,252–255,404. Kun privat `safeRect`-parameter/konstantvej,
+to literal-false argumenter og den før første læsning erstattede Vector3
+fjernes. Aktiv VisualAdapter-caller, Place/carrier/mesh/collider/nav/prompt,
+Level6-kit/bake/metadata, playerdata og remotes bevares. Source 18.304 bytes/
+SHA `44249205…` bliver 18.179/`89fc2abe…` (125 bytes); ingen målt gevinst.
+Historisk pensioneret Level3-installpayload og separat aktiv Level6-dressing
+har andre kilder/workflows og bevares; de er ikke dubletter af dette target.
+Risiko: ændret placering eller interaction; samme fulde aktuelle Plan/Apply-
+kontrakt kører før/kandidat/installeret med seeded placements, servicevarianter,
+beskyttet rum, manglende assets, prompts, busy/stale callbacks, task/connection-
+cleanup og reentry. De to reproducerede eksisterende cleanup-fejl er uændrede;
+retry er dér en no-op, ingen remediation-pass. Offline18 compiles/to semantiske
+negative kontroller og ownership8/20 bestod. Faktisk native førport 00:19:14Z
+bestod752 pr. version/1.504 paired/reentry; fire friske tomme moduler fjernet,
+alle212 originaler bevaret. Før-source/editor/properties/objektidentitet gemmes
+privat; fresh CAS, native export/manifestlanding, installeret replay, samme
+212-source/metadata closure og console før/efter bestod ved actual CAS
+00:22:27Z og installeret replay752/1504; fire testmoduler fjernet, nul tilbage.
+De øvrige211 Sources/metadata er uændrede, console identisk; ingen rollback.
+Ingen faktisk kit-/round-/multiplayer-/streaming-/performancegodkendelse.
+[Closure og porte](artifacts/cleanup-20261009/remaining-private-locals-native-v1/REVIEW.md).
+
+**S15 / B12,C26 — UIRegression-kommentarer, gennemført i `920abdee`:**
+præcis `ReplicatedStorage.UIRegression` / `ReplicatedStorage/UIRegression.ModuleScript.lua`.
+Ti reversible kommentarblokke på før-linjer23,1897,4087–4254,4772,6378 erstattes
+med beskrivelser af de aktuelle shared-matrix-aliases og Levels1–4. 7.195 stale
+kommentarbytes fjernes; alle197 executable funktioner/protos, constants, types,
+upvalues, statements og public aliases/QA-workflows bevares. Risiko: misvisende
+QA-dokumentation eller fejl i kommentargrænser; hele O0/O1 binary-kontrakten
+bevarer samtlige bytes undtagen definitionernes linjemetadata, og faktiske
+current UI authoring/error/borrow/restore/reentry-porte bestod105 før/105 efter.
+Ti unique anchors plus forward/reverse/missing/duplicate/hash-negativer bestod.
+Fresh native getter bekræfter ModuleScript-ID1_42698/parent1_408323, Source/editor
+`b57a2b84…`, Archivable/LinkedSource og tomme attributes/tags; ingen writes.
+Før-source/editor/metadata gemmes privat; native fresh CAS og bounded export til
+313.535 bytes/`605da83a…`, scoped manifestlanding, samme installerede offline
+kontrakt, 212-source/metadata parity og identisk console bestod ved actual
+CAS00:33:56Z og afslutning00:34:24Z. De øvrige211 Sources/metadata er
+uændrede; ingen rollback. Ingen native
+runtimeprobe er nødvendig for en ren kommentarændring; ingen faktisk UI/device/
+gameplay-/multiplayer-/streaming- eller performancegodkendelse følger heraf.
+Loading-announced, RoundUI, remotes, data og øvrige runtime-local-kandidater
+bevares. [Præcis closure og porte](artifacts/cleanup-20261009/c26-comments-native-v2/REVIEW.md).
+
+
+**S16 / B14,LE-32 — Usher, gennemført i `dc1561d1`:**
+`ServerScriptService/Level 4 Systems/Level 4 Usher Controller.ModuleScript.lua`,
+native ModuleScript `1_42775`, parent `1_15624`. Fem præcise substitutioner
+fjerner alene de ulæste private nil/nul-værdier `targetReason`, `nextThinkAt`
+og `stunUntil` samt deres overflødige simple writes: 34.745→34.659 bytes,
+SHA `9af1a745…`→`ec425242…`, 86 bytes. Der fjernes ingen initializer-sideeffects.
+Aktiv reason, ThinkSeconds/Heartbeat-akkumulator, stunCooldownUntil, beamers,
+nav/capture/Start/Activate/Finale/Stop og offentlige testhooks bevares.
+
+Hele konkrete closure, remotes/attributes/callers, authoringværktøjer og
+testgrænser er registreret i [review](artifacts/cleanup-20261009/usher-private-locals-native-v1/REVIEW.md)
+og [closure](artifacts/cleanup-20261009/usher-private-locals-native-v1/closure.json).
+RoundGenerator/Objectives/LightDirector, Configuration/NoiseRegistry/
+PlayerProtection/DeathAdvice, Usher Nav/klient/Test Suite og aktiv nav-/asset-
+authoring bevares. Risikoen er lav for dette private scope; gevinsten er mindre
+ulæst state, uden påstand om målt performance.
+
+Før og efter skal den samme actual-source kontrakt bestå 68 checks pr. version,
+136 parrede og 136 reentry; targeting/stun/state/attributes og faktisk Stop med
+capture-boundary-/Disconnect-/Destroy-throw og retry afprøves. To aktive
+reason/cooldown-mutants skal afvises. Native prober bruger fire friske tomme
+ModuleScripts, destroyes uafhængigt, og skal efterlade nul prober samt frigivet
+ejet lease. Alle 212 originalers Source/editor/identitet/metadata beskyttes.
+Offline 16 installer-scenarier/109 checks, fem actual-anchor-scenarier/otte
+checks, 18 probecompiles, 12 genererede CAS-compiles og otte leasecases/20
+checks passerer med uafhængig review. Før actual PASS foretages ingen install.
+
+Før-kilder, editor, properties og working/HEAD-manifest gemmes privat;
+CAS rechecks den friske baseline inde i callback og kan kun reverse egen
+eksakte kandidat. Derefter eksporteres kun verificeret native target-Source
+og to Sourcefelter i manifest; installeret replay, særskilt frisk 212-parity
+og console-diff er obligatoriske. Play bevares, hvis andre starter den.
+Kontrollerede perception/nav/capture-grænser er ikke en rigtig gameplay-,
+capture/jumpscare-, respawn-, multiplayer-, streaming- eller performanceport.
+Faktisk native førport00:41:11Z, CAS00:41:37Z og installeret replay00:41:49Z
+bestod68/136/136 med identisk behaviorhash. Hver probe fjernede alle fire
+moduler og frigav ejet lease; 212-original guard bestod. Øvrige211 Sources/
+metadata og console er identiske; ingen rollback. Afsluttet00:41:59Z.
 
 **B17 / T12 gennemført lokalt:** `tools/vault/build_vault.py` og
 `build_systems.py` har fået fjernet deres hardkodede credential. Den nye
@@ -87,7 +283,7 @@ præcis AST-/note-/config-byteport ved den registrerede gate bestået. Lokal com
 Obsidian/network/MCP-kald, rotation eller Studioændring.
 [Præcis closure og receipts](artifacts/cleanup-serverstorage-20261009/vault-auth/REVIEW.md).
 
-**S03 / native-only mirror eksporteret; scoped commit afventer:** den anden sessions aktive
+**S03 / native-only mirror eksporteret og committed i `c49e5de0`:** den anden sessions aktive
 `StarterPlayer.StarterPlayerScripts.Level 2 Poolrooms Ambience` er LocalScript,
 Enabled=true/Disabled=false/RunContext.Legacy og er nu i working mirror/manifest.
 Frisk bounded Source/editor-read viste18.933 identiske bytes/SHA og nul attrs/tags.
@@ -122,7 +318,7 @@ forbrugerchecks før/efter, guarded reversibel fjernelse i små grupper og præc
 repo/Studio/manifest-delta. Risiko: tab af kildeassets/shared dependencies;
 gevinst: pensionerede revisioner og workflows ude af den aktive projektstruktur.
 Status: caller-closure, lokale authoringporte og native før-arkiv bestået;
-afventer native reopen og nødvendige featureporte. Ingen af de fem pakker er
+native reopen bestået; afventer nødvendige featureporte. Ingen af de fem pakker er
 endnu fjernet. Aktive fallbackcallers kræver særskilt bevaret/remedieret closure.
 
 ## Nye afgrænsede batches efter genkontrol
@@ -131,18 +327,18 @@ endnu fjernet. Aktive fallbackcallers kræver særskilt bevaret/remedieret closu
 |---|---|---|---|---|---|
 | B09 | N02: `artifacts/cleanup-20261009/capture_baseline.py`, metadata-read | Sideinddel native metadata i højst 40 records/60.000 bytes; den udvidede inventar-response blev afkortet af MCP. Ingen Source-writes. Kontrollér place/universe, sortering, fuld inventaridentitet og rå SHA før/efter chunks. | Lav; sikrere verificeret eksport uden ufuldstændigt snapshot. | 291 actual offline Luau checks, 11 negative fixtures, Python AST og frisk native post-B08 eksport med 230 scripts/15 remotes, nul drift/conflicts. | gennemført `e3af7ab2` |
 | B10 | LE-32 `Light Director.isStar`; LE-34 `Worn Party Visual Adapter` lampShade-binding | Fjern kun privat uncalled closure og unread retur-binding; aktiv `STAR_TAGS`, `devicePart`-kald, shade, light, metadata og APIs bevares. Callers/dependencies/authoring closure i [review](artifacts/cleanup-20261009/local-helpers/REVIEW.md). Før-kilder/hash/property-rollback i candidate-manifest. | Lav; syv døde linjer/én closure og én binding; ingen målt performancegevinst. | Samme faktiske modul lifecycle/constructor/error/cleanup-graf før/efter: 173 assertions, otte O0/O1 compile-porte, to semantiske negative kontroller. Fresh native/editor/property/attribute CAS og manifestlanding; installeret replay PASS; 230 native hashes/editor uden drift. | gennemført `2ca92003` |
-| B11 | LE-34 `Room Dressing.safeRect`, breaker-position; `PuzzleManager.session.latchMode` | To literal-false callers tillader konstant eksisterende inset. Breaker immutable Vector3 erstattes før læsning; brug endelig +2.15 direkte. Fjern kun unread boolean field. Aktive placements/carriers/nav/prompts/levers/data bevares. [Closure/rollback/testreview](artifacts/cleanup-20261009/additional-locals/REVIEW.md). | Lav; overflødige private beregninger/field; ingen native gameplay- eller performancepåstand. | Samme aktuelle RoomDressing Plan/Apply/interaction/error/reentry/cleanup 1.477 assertions; faktisk sessioninitializer og tre handlers 21 før/21 efter; otte O0/O1 compile-porte og tre negative kontroller. Afventer Edit/fresh CAS og installeret replay. | afventer test; originaler bevaret |
-| B12 | C04/C06/C07/C26: historisk 11 private local/comment-scopes i ti script-instanser | Kun ulæste constants/functions/bindings, nil→nil assignments og dokumenteret stale QA-kommentarer. Constructors og public aliases beholdes. Præcise blokke, callbacks, flags, remotes, initializer/authoring-closure, risiko og rollback i [review](artifacts/cleanup-20261009/CLIENT_LOCALS_REVIEW.md) og [manifest](artifacts/cleanup-20261009/remaining-clients-proposals.json). RoundUI er ikke et ændringsmål. Den samlede Loading-unit er nu ugyldig; announced beholdes, C07 skal afgrænses på ny. | Lav ved scoped locals; historiske 8.736 kildebytes omfatter den tilbagetrukne Loading-unit på 173 bytes. Ingen målt runtimegevinst. | Parrede faktiske historiske sources: authoring287, HUD185/shared387+stamina74, exit/hiding92, UIRegression105, store777; relevante constructor/access/copy-mutants afvises. C26 O0/O1 executable binary identisk. Afventer Edit/fresh CAS, ny Loading-afgrænsning, installeret replay og native full/touch/loading-smoke. | afventer test; originaler bevaret; proposalbeviser committed `e55b2da0` |
+| B11 | LE-34 private Puzzle-session.latchMode og RoomDressing safeRect/breaker | Ulæst privat felt, to literal-false parameterveje og overskrevet immutable Vector3 fjernet; aktive constructors/Place/carrier/prompts/nav bevares. Closure og præcise blokke findes i S11/S14 ovenfor. | Lav; mindre privat restkode, ingen målt performancegevinst. | S11 native47/version94reentry; S14 native752/version1504paired/reentry; fresh CAS/export,212-source/metadata guard og installeret replay/console PASS. Historiske Play-afvisninger bevares. | gennemført — S11 `a7c7bac4`, S14 `5ad5c03d`; L2 authoringguides beholdes |
+| B12 | C04/C06/C07/C26 historiske11 scopes/ti instanser | S15 fjerner alene7195 stale UIRegression-kommentarbytes; public aliases/QA-workflows bevares. Øvrige runtime-local-scopes beholdes indtil egne porte. Loading announced har aktiv caller; gammel samlet Loading-unit er ugyldig, C07 skal afgrænses på ny. RoundUI er ikke mål. | Lav for kommentarer; ingen målt gevinst. | S15:197O0/O1 funktioner executable-identiske, currentUI105/105, actual fresh CAS/export og212-parity/console PASS. Øvrige otte gyldige units afventer native full/Touch/lobby/loading-port; alle originale runtime-sources bevares. | gennemført — C26-kommentarer `920abdee`; øvrige scopes afventer test; historiske proposals `e55b2da0` |
 | B13 | T09: `tools/tests/test_first_entry_guide.py` | Migrér den stale pathfinding/Beam-fixture til hele aktuelle WELCOME/HELP-source og faktisk ZyntraConfig. Aktuel guide har ikke UIStyle-dependency. Exact før-fixture checkpoint gemt; kun fake engine-grænser ændres. [Dependency/testreview](artifacts/cleanup-20261009/first-entry-guide-results.md). | Lav runtime-risiko; aktuelle assertions bliver tilgængelige. C21/C22 diagnosticeres separat og runtime bevares. | Baseline fejlede før assertions på manglende TweenService. Aktuel fixture: 133 assertions, seks uafhængige temporary source mutants afvist, AST/generated compile og input byte-guards. Native UX/input/streaming afventer egne porte. | gennemført offline `bce98752`; native UX afventer test |
-| B14 | LE-32 `Level 4 Usher Controller`: targetReason, nextThinkAt, stunUntil private rester | Fjern kun unread declarations/assignments; faktisk reason/cooldown/scheduler/events/capture bevares. Før/kandidat/hash/closure og roller i [manifest](artifacts/cleanup-20261009/usher-locals/candidate-manifest.json). | Lav for locals; ingen faktisk AI/performancepåstand. | Faktiske chooseTarget/think/setBeamers/setState/Stop før/efter ved kontrollerede perception/navigation/capture-grænser: 59 assertions, fire O0/O1 compiles, to semantic negative controls. Afventer frisk native CAS og installeret replay. | afventer test; original bevaret |
+| B14 | LE-32 Usher private targetReason/nextThinkAt/stunUntil | Kun fem unread nil/nul/simple-copy substitutioner86bytes; reason/cooldown/scheduler/events/capture bevares. Præcis Source/closure/attributes/remotes/authoring i S16-review. | Lav; ingen faktisk AI/performancepåstand. | S16 native før/kandidat/installeret68/version136paired136reentry med faktisk Stop throw/retry mod kontrollerede boundaries;2mutants,4prober destroyed,212-original guards, fresh CAS/export/console PASS. | gennemført — S16 `dc1561d1`; reel AI/gameplay/asset/performance-verifikation er særskilt |
 | B15 | N03: `run_native_gate.py` N01 probe-allocation/staging/error-closure; AGENTS probe-rule | Staging/require omfattes af xpcall; uafhængig Destroy og final original identity/Source/editor guard kører også på fejl. Før-wrapperens staging leak er reproduceret. Alle inputs/objekter er test-owned; success-output uændret. [Review](artifacts/cleanup-20261009/native-gate-ownership-results.md). | Lav runtime-risiko, testværktøjs-lifecycle sikkerhed. Ingen current Play/Studio-kald. | 23 actual-generated offline Luau scenarier/275 assertions; staging/require/JSON/Destroy/original-drift, to ownership-mutants afvist, AST2/generated compile PASS. | gennemført offline `0608a9f8` |
 | B16 | N04: `run_N01_pair_probe.py`, fem historiske pair/touch-inputs og proof-index | Arkivér eksakte inputs portabelt, pin raw/LF hashes og afvis ændrede inputs eller overskrivning af historiske receipts før MCP. `.git`-inputs og gamle resultater bevares. [Review](artifacts/cleanup-20261009/N01-pair-proof/README.md). | Lav runtime-risiko; verificerbare testinputs. Ingen native replay eller performancepåstand. |70 offline checks: fem inputhashes, fire receipt-sourcehashes, seks input/index-mutants og to outputkontroller; AST2 og20 proof/wrapper O0/O1 compiles. Touch-current mangler præcis native receipt og markeres input-only. | gennemført offline `f21bfdf4` |
 
-B11-installation blev afvist af MCP, fordi Studio var skiftet til Play. Ingen
+Den historiske B11-installation blev afvist af MCP, fordi Studio var skiftet til Play. Ingen
 native writes blev eksekveret; begge lokale candidates blev straks gendannet til
 de præcise gemte før-bytes, og manifestet blev ikke ændret. Ejeren har bekræftet,
-at Play-sessionen skal bevares indtil tilbagemelding. B11 og yderligere
-Studio-edits **afventer test/tilbagemelding**, mens lokale opgaver fortsætter.
+at Play-sessionen skal bevares indtil tilbagemelding. Denne pause er historisk; ejeren har siden godkendt Studio-arbejde uden at
+stoppe andres Play. S11 Puzzle og den senere særskilte S14 Room-port er gennemført.
 
 Nyere concurrent Loading-source ændrer også B12's grundlag: `announced()` har
 nu en aktiv caller i `levelWorlds()` og **beholdes**. Den historiske samlede
@@ -162,15 +358,18 @@ baseline bevares som historiske receipts, ikke som aktuel fjernelsestilladelse.
   preload/retry/late-descendant-flow og deres manifestentries. Exact checkpoint
   af alle seks ejerændrede runtimefiler og manifestet i
   `.git/mongotv-cleanup-20261009/concurrent-20261009T200540091097Z/`.
-  Filerne bevares ustaged, og rettelserne tilskrives ikke vores commits.
-  Aktuel repo-only port:230/230 mirrorcompile,230/230 manifesthash/bytes og
+  Ved dette historiske checkpoint blev filerne bevaret ustaged. Den anden
+  session har siden committed sine øvrige ændringer i `37f09c9c`; kun den
+  oprindelige dirty RoundUI/Source-række står tilbage. Ingen cleanup-kredit.
+  Historisk repo-only port under daværende ejer-Play:230/230 mirrorcompile,230/230 manifesthash/bytes og
   451/451 Python AST ved seneste verificerede snapshot;
   [receipt](artifacts/cleanup-20261009/owner-play-repo-checks-latest.json)
   har capturetid i JSON. Tidligere receipts bevares uændret. En yderligere
   Loading-/manifestændring blev afvist af stale checkpoint-guard, før artifacts
   blev skrevet; ny checkpoint og repo-port blev derefter taget. Samtidige
   senere edits kræver igen frisk kontrol.
-  Native slutparity afventer ejerens tilbagemelding og frisk Edit-eksport.
+  Ved dette historiske snapshot afventede native slutparity Edit. Senere
+  afgrænsede batches og afsluttende frisk parity er registreret særskilt.
 - MCP valgte stedet efter navn **og** native PlaceId/GameId. Første inventar:
   230 scripts, alle native Source/editor-source ens; klasse, Enabled/Disabled,
   RunContext, attributes og manifest genkontrolleres i `baseline-parity.json`.
@@ -267,6 +466,29 @@ Batches gennemføres sekventielt med før-kilder, frisk baseline, scoped diff,
 defineret testport og egen commit. En manglende nødvendig test medfører, at
 runtimekandidaten bliver stående. En regression medfører rollback af batchen.
 
+## Afsluttende verificeret snapshot — 2026-10-10
+
+Frisk native Edit-read00:42:34–00:42:44Z efter S11/S14/S15/S16: **212 scripts,
+15 remotes,227 faktiske/deklarerede rows,52 ServerStorage-rødder** og416.276
+sceneobjekter. Source/editor/class/registrerede properties matcher working-
+mirror og manifest; nul konflikter/missing/extra/Enabled-coveragegaps.
+Catalog og lokale Sources/manifest er stabile gennem ti sider og slutread.
+Root's særskilte API-mode før/efter er Edit og consolebytes identiske; ingen
+modeændring eller nye native writes fra finalkontrollen. Dette er point-in-time
+parity, ikke komplet assets/attributes/tags/gameplay eller en kontinuerlig lås.
+Remote Archivable er læst, men den eksisterende manifestcoverage for feltet er
+ufuldstændig. S14/S15/S16 har separat beskyttet alle212 Sourceattrs/tags.
+[Actual parity](artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/result.json),
+[mode/console](artifacts/cleanup-serverstorage-20261009/final-parity-v3/root-boundary-v1/proof.json).
+Oprindelig dirty RoundUI og dens Sourcefelter i working-manifest er bevaret
+og udeladt af vores scoped commits. Origin/main er fortsat `46073662`.
+
+De godkendte gamle Lobby-/Level1-/TEMPPreview-workflows er pensioneret i de
+angivne lokale delscopes. Fem native S04-pakker afventer faktisk R4/V2/elevator-
+fejl/cleanup/respawn/reentry/asset/multiplayer/streaming-port;23-træers fulde
+restoration fejlede2/23 og er fortsat afventende. Ingen manglende test omdøbes
+til PASS, og ingen yderligere pensionsbeslutning efterspørges for disse scopes.
+
 ## Alle 129 hypoteser
 
 Den aktuelle kandidatoversigt er opdelt i følgende **genkontroller**, som er del
@@ -291,8 +513,10 @@ arbejde, ikke som ny implementation. Delvist løste poster opdeles eksplicit.
    måling; ingen FPS-/MB-gevinst udledes alene af kildekode.
 4. L2 flume/tube-closure; L3's Level6 bake/metadata; EndBlockades colliders/lenses;
    receipt IDs, playerdata, migrations og entitlements er eksplicit KEEP.
-5. Pensionering af L2/L6-pakker, fallback/authoringflows og flytning af native
-   backups er samlet til ejerafklaring. Intet svar er pensioneringstilladelse.
+5. Aktive L2/L6-/fallback-/authoring-/policykontrakter og native backups
+   beholdes under bevaringsmandatet. En eventuel fremtidig pensionering eller
+   policyændring kræver særskilt produktvalg og egne porte; det er ikke en
+   uafklaret forudsætning for de gennemførte batches.
 6. Reserved-server continuation/reentry afhænger af rigtig Roblox-clienttest.
    Studio kan ikke godkende disse flows; de beholdes/afventer relevant test.
 7. Skjulte collision/nav/hiding/promptdele og backupmapper vurderes som komplette

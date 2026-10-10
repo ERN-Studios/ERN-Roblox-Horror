@@ -1,0 +1,73 @@
+{
+  "schema": "mongotv-final-parity-v3-reader-preparation-v1",
+  "pass": true,
+  "originalFile": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/parity-reader.py",
+  "preparedFile": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/parity-reader.py",
+  "rawBytes": 12746,
+  "rawSHA256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d",
+  "byteIdentical": true,
+  "pathDepthPreserved": true,
+  "resolvedRootCorrect": true,
+  "astPass": true,
+  "s13SharedImportsResolve": true,
+  "compileChecks": [
+    {
+      "unit": "begin",
+      "optimization": "-O0",
+      "rawSHA256": "56d2c315c413a897f953f4008b52cd10ea4158cc52ef428e7468ed59474fb75c",
+      "pass": true
+    },
+    {
+      "unit": "begin",
+      "optimization": "-O1",
+      "rawSHA256": "56d2c315c413a897f953f4008b52cd10ea4158cc52ef428e7468ed59474fb75c",
+      "pass": true
+    },
+    {
+      "unit": "page",
+      "optimization": "-O0",
+      "rawSHA256": "eb63fbab87f4129d90330d0c62790f15519f13dfcc32f3d1fce2e9aba9410066",
+      "pass": true
+    },
+    {
+      "unit": "page",
+      "optimization": "-O1",
+      "rawSHA256": "eb63fbab87f4129d90330d0c62790f15519f13dfcc32f3d1fce2e9aba9410066",
+      "pass": true
+    },
+    {
+      "unit": "end",
+      "optimization": "-O0",
+      "rawSHA256": "0e5e7452bab3000b8024db352b0ceb1121256088052d2475bb679cb53092c373",
+      "pass": true
+    },
+    {
+      "unit": "end",
+      "optimization": "-O1",
+      "rawSHA256": "0e5e7452bab3000b8024db352b0ceb1121256088052d2475bb679cb53092c373",
+      "pass": true
+    }
+  ],
+  "compilerRawSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+  "temporaryFixtureCleaned": true,
+  "nativeCalls": 0,
+  "sourceWrites": 0,
+  "manifestWrites": 0,
+  "modeSwitches": 0,
+  "expectedCurrentSourceCounts": {
+    "scripts": 212,
+    "remoteEvents": 15,
+    "baseScriptsEnabledFields": 98
+  },
+  "historicalExpectedSceneFacts": {
+    "serverStorageRoots": 52,
+    "descendants": 416276
+  },
+  "actualNewSnapshotRequired": true,
+  "limits": [
+    "Root must run only after S14/C26 freeze; no native records are reused.",
+    "Frozen reader captures Source/editor/class and recorded properties; attrs/tags/fullassets and unrecorded Remote Archivable are not covered.",
+    "Frozen reader saves CurrentMode but checks native RS in Edit only; Root must independently require actual Current Studio Mode Edit and qualify Play changes.",
+    "Point-in-time repeated catalog equality, not continuous ownership/scene epoch."
+  ]
+}

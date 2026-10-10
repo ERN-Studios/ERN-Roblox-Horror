@@ -1,0 +1,9 @@
+{
+  "schema": "root-final-native-mode-console-boundary-v1",
+  "currentStudioModeBefore": "Edit",
+  "currentStudioModeAfter": "Edit",
+  "consoleAPIExactlyEqual": true,
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "limitations": "Before/after API state only; not a continuous mode epoch. Existing console messages retained."
+}

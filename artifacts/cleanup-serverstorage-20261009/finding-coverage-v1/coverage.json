@@ -1,0 +1,1217 @@
+{
+  "schema": "mongotv-audit-finding-disposition-coverage-v1",
+  "pass": true,
+  "index": {
+    "file": "artifacts/repo-super-audit-20261009/findings-index.md",
+    "rawSHA256": "7591c768b745e4d6340d3df02b6dc40f3f73071c0c4195e0b8d4a4406b8b5e1b"
+  },
+  "reports": [
+    {
+      "file": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "rawBytes": 18944,
+      "rawSHA256": "f224b2e6cf368a3459e054cffc57d3553cd80110642e598be663e17117ac54a1",
+      "findingCount": 25
+    },
+    {
+      "file": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "rawBytes": 51575,
+      "rawSHA256": "17bed343522f65a5fa4f7c8d79c91292c3801aaf0a3da359322ad596b40c3832",
+      "findingCount": 73
+    },
+    {
+      "file": "artifacts/cleanup-20261009/clients-recheck.md",
+      "rawBytes": 56253,
+      "rawSHA256": "61c5590c6cb24922eade11bf0ef1be038008ac99ab7c97772a3ee27ee51bdaf8",
+      "findingCount": 31
+    }
+  ],
+  "expectedCount": 129,
+  "actualCount": 129,
+  "uniqueCount": 129,
+  "missing": [],
+  "extra": [],
+  "duplicate": [],
+  "readyRows": [],
+  "records": [
+    {
+      "id": "T01",
+      "status": "gennemført — root native baseline230/15 exact +0 editor conflicts",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T02",
+      "status": "gennemført — existing repair",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T03",
+      "status": "gennemført — B01a",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T04",
+      "status": "gennemført — B01a",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T05",
+      "status": "gennemført — B01a",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T06",
+      "status": "gennemført — B01b",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T07",
+      "status": "gennemført — in-memory helper; full retired authoring suite afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T08",
+      "status": "gennemført — fixture repair299/87; CORE-004 failure reproduced, runtime remediation afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T09",
+      "status": "gennemført — offline fixture, local commit `bce98752`; native UX afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T10",
+      "status": "kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T11",
+      "status": "kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T12",
+      "status": "gennemført — B17; live connector afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T13",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T14",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T15",
+      "status": "kræver afklaring / beholdes",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring",
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T16",
+      "status": "beholdes / kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring",
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T17",
+      "status": "beholdes / kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring",
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T18",
+      "status": "gennemført — exact zero helper removed; QA/parity/vendor empties retained",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T19",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "T20",
+      "status": "gennemført — gap; afventer test — rebuild",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "X01",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "X02",
+      "status": "gennemført — B05, local commit `12947a34`; no real uploads",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "X03",
+      "status": "afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "X04",
+      "status": "afventer test / beholdes",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "X05",
+      "status": "gennemført — B03 verified path fix",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/repo-tools-recheck.md"
+    },
+    {
+      "id": "LE-01",
+      "status": "LE-01 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-02",
+      "status": "LE-02 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-03",
+      "status": "LE-03 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-04",
+      "status": "LE-04 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-05",
+      "status": "LE-05 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-06",
+      "status": "LE-06 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-07",
+      "status": "LE-07 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-08",
+      "status": "LE-08 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-09",
+      "status": "LE-09 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-10",
+      "status": "LE-10 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-11",
+      "status": "LE-11 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-12",
+      "status": "LE-12 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-13",
+      "status": "LE-13 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-14",
+      "status": "LE-14 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-15",
+      "status": "LE-15 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-16",
+      "status": "LE-16 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-17",
+      "status": "LE-17 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-18",
+      "status": "LE-18 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-19",
+      "status": "LE-19 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-20",
+      "status": "LE-20 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-21",
+      "status": "LE-21 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-22",
+      "status": "LE-22 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-23",
+      "status": "LE-23 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-24",
+      "status": "LE-24 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-25",
+      "status": "LE-25 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-26",
+      "status": "LE-26 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-27",
+      "status": "LE-27 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-28",
+      "status": "LE-28 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-29",
+      "status": "LE-29 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-30",
+      "status": "LE-30 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-31",
+      "status": "LE-31 — beholdes",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-32",
+      "status": "LE-32 — afventer test; isStar gennemført",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-33",
+      "status": "LE-33 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-34",
+      "status": "LE-34 — afventer test; kommentarer/lampShade gennemført",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-35",
+      "status": "LE-35 — beholdes",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "LE-36",
+      "status": "LE-36 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-001",
+      "status": "CORE-001 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-002",
+      "status": "CORE-002 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-003",
+      "status": "CORE-003 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-004",
+      "status": "CORE-004 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-005",
+      "status": "CORE-005 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-006",
+      "status": "CORE-006 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-007",
+      "status": "CORE-007 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-008",
+      "status": "CORE-008 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-009",
+      "status": "CORE-009 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-010",
+      "status": "CORE-010 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-011",
+      "status": "CORE-011 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-012",
+      "status": "CORE-012 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-013",
+      "status": "CORE-013 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-014",
+      "status": "CORE-014 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-015",
+      "status": "CORE-015 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-016",
+      "status": "CORE-016 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-017",
+      "status": "CORE-017 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-018",
+      "status": "CORE-018 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-019",
+      "status": "CORE-019 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-020",
+      "status": "CORE-020 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-021",
+      "status": "CORE-021 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-022",
+      "status": "CORE-022 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-023",
+      "status": "CORE-023 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-024",
+      "status": "CORE-024 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-025",
+      "status": "CORE-025 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-026",
+      "status": "CORE-026 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-027",
+      "status": "CORE-027 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-028",
+      "status": "CORE-028 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-029",
+      "status": "CORE-029 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-030",
+      "status": "CORE-030 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-031",
+      "status": "CORE-031 — beholdes",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-032",
+      "status": "CORE-032 — beholdes / kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring",
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-033",
+      "status": "CORE-033 — gennemført før opgaven",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-034",
+      "status": "CORE-034 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-035",
+      "status": "CORE-035 — kræver afklaring",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-036",
+      "status": "CORE-036 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "CORE-037",
+      "status": "CORE-037 — afventer test",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/levels-core-recheck.md"
+    },
+    {
+      "id": "C01",
+      "status": "**gennemført tidligere**, betinget af root's friske native parity-resultat.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C02",
+      "status": "**afventer test**; ingen object-removal udført.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C03",
+      "status": "fire fraværende klienter **gennemført tidligere**; tre disabled instanser **kræver afklaring**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring",
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C04",
+      "status": "Loading `announced` **beholdes**; gamle Loading-kandidater er ugyldige. Øvrige private kandidater **afventer test/Studio**: ejerens Play afsluttes af ejeren; derefter fresh native CAS/manifest og installerede full/TouchTarget/lobby-porte ved root. [Review med stale-baseline warning](CLIENT_LOCALS_REVIEW.md) og [manifest med ugyldig Loading-status](remaining-clients-proposals.json) bevarer den historiske proof. Ingen productionændring udført.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C05",
+      "status": "**gennemført**, lokal commit `1dd48870`; alle13 private definitions og stale kommentar er ryddet med før/isolated/installeret-efter porte. Ingen aktiv public authoringmetode eller gameplayfeature fjernet.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C06",
+      "status": "**afventer test/Studio**: temp-only lokale porte bestået; ejerens aktuelle Play bevares indtil ejeren er færdig, og root skal udføre fresh native CAS/manifest/installerede efter-porte. [Review/closure](CLIENT_LOCALS_REVIEW.md), [exact manifest](remaining-clients-proposals.json), [T09 paired receipt](client-local-T09-paired.json). Ingen produktion ændret.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C07",
+      "status": "**afventer test/Studio/reconcile**: Kicker/Tip-bindinger og deres eksakte constructorcalls består i owner-koden, men gammelt Loading førhash/helkildekandidat matcher ikke længere. Den gamle C04/C07-unit må ikke installeres; ny C07-only kandidat fra frisk native baseline og egne before/after gates er nødvendig efter ejerens Play-afslutning. Store-kandidaten er separat og uændret. Ingen constructor slettes; [Review](CLIENT_LOCALS_REVIEW.md) og [manifest](remaining-clients-proposals.json) markerer stale Loading.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C08",
+      "status": "**gennemført**; root håndterer scoped commit/evidence. Ingen publicering.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C09",
+      "status": "**beholdes**: bounded retry og round-guard er allerede implementeret samtidigt, uden cleanup-kredit. Native/streaming/performanceverifikation og separat invalidation-kandidat **afventer test**; ingen runtime-rewrite udført her.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C10",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C11",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C12",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C13",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C14",
+      "status": "**beholdes** indtil profiling/test viser grundlag.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C15",
+      "status": "**beholdes**: cache og tidlig round-guard er allerede implementeret samtidigt, uden cleanup-kredit. Verifikation **afventer test**; ingen runtimeændring udført her.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C16",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C17",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C18",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C19",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C20",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C21",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C22",
+      "status": "**afventer test**; delvist stale årsagsbeskrivelse registreret.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C23",
+      "status": "**afventer test**.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C24",
+      "status": "**kræver afklaring**: DJ booth screen-owning modal eller frit developerpanel? WELCOME ownership kan behandles separat med egne tests.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C25",
+      "status": "**afventer test** af faktisk objective/exit-flow.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C26",
+      "status": "**afventer test/Studio**: comment-only proof passer, men root's fresh native CAS/manifest/installeret parity afventer ejerens Play-afslutning. Public aliases **beholdes**. [Review](CLIENT_LOCALS_REVIEW.md), [manifest med compiler-hashes](remaining-clients-proposals.json) og readonly installed-proof runner `run_client_local_contracts.py --verify-installed`.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "afventer test",
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C27",
+      "status": "**kræver afklaring** om global clear er tilsigtet; ingen quick-delete.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "kræver afklaring"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C28",
+      "status": "**beholdes** indtil profiling/test.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C29",
+      "status": "**beholdes** indtil profiling/test.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C30",
+      "status": "tomfil **gennemført tidligere**; ignored agentstate **beholdes** indtil tooling-/workflowvalg.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført",
+        "beholdes"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    },
+    {
+      "id": "C31",
+      "status": "**gennemført tidligere** i canonical repo/manifest; native absence bekræftes af root.",
+      "requiredFieldsPresent": true,
+      "recognizedStatuses": [
+        "gennemført"
+      ],
+      "report": "artifacts/cleanup-20261009/clients-recheck.md"
+    }
+  ],
+  "scope": "Point-in-time index/disposition completeness, not a new runtime test, permission or native parity certificate. Status prose may be conditional/mixed; historical counts remain historical. Main results and per-batch receipts define completed scope."
+}

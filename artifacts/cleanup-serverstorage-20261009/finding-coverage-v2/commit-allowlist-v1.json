@@ -1,0 +1,246 @@
+{
+  "schema": "mongotv-final-cleanup-document-evidence-commit-allowlist-v1",
+  "fileCountExcludingInventory": 46,
+  "rawBytesExcludingInventory": 748372,
+  "files": [
+    {
+      "path": "CLEANUP_PLAN.md",
+      "bytes": 45793,
+      "sha256": "c8aafb4f84178ef6903633df758f386ed872f6a96aef48a6ec2ddd25f469dae7",
+      "lfSHA256": "7b69f649a0db2f70fa18f6219b227bc94edc5bd902aa5f611a5358fe43e8003a"
+    },
+    {
+      "path": "CLEANUP_RESULTS.md",
+      "bytes": 45898,
+      "sha256": "cb26f633ec02b91878c3458a0a72a87b3776788c7be41e1588f3464511f815a5",
+      "lfSHA256": "cb26f633ec02b91878c3458a0a72a87b3776788c7be41e1588f3464511f815a5"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/clients-recheck.md",
+      "bytes": 57552,
+      "sha256": "e3e0b828680d276044c0058f3c6262a36afe66cf5c57ce27d17f795467e8e143",
+      "lfSHA256": "e3e0b828680d276044c0058f3c6262a36afe66cf5c57ce27d17f795467e8e143"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "bytes": 55437,
+      "sha256": "75d2f3b1d504d56fd8d0508cdb6fb209cd12a6dc583d66f4d79c50e61e90ab4a",
+      "lfSHA256": "75d2f3b1d504d56fd8d0508cdb6fb209cd12a6dc583d66f4d79c50e61e90ab4a"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "bytes": 20536,
+      "sha256": "45c428c8b8e80430fd9e2e7a23b143ea81ddb900fb1aebfd866da1792f1e5fe7",
+      "lfSHA256": "e42798821c9e9ea41e993713221940d071abd4c21ebea94edb27ac1b3ebdb3a0"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/PLAN.md",
+      "bytes": 18887,
+      "sha256": "1de5893b65c1cd501234dbdc666b6fd6570e8ac4030684a558031673cd3b628e",
+      "lfSHA256": "1de5893b65c1cd501234dbdc666b6fd6570e8ac4030684a558031673cd3b628e"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/.gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/.gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-begin.json",
+      "bytes": 339,
+      "sha256": "6da058a6ee32bed8c4ab74149cd9941bfd3c52038191c55cac8caff66eb20077"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-end.json",
+      "bytes": 339,
+      "sha256": "9032b59ea32225140af2d56f6a2490ec960ea06d4c2491eb225c6bd6ae8bb3a9"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-page-00.json",
+      "bytes": 15028,
+      "sha256": "c9857a36283ee1583725b5945694b66b77b9b23153429a4664e0f4f342ba9867"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-page-01.json",
+      "bytes": 25635,
+      "sha256": "cc57075d5e058036d1397cc4996a406902bf929d32b71fa26bd50f91e7259b38"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-page-02.json",
+      "bytes": 26313,
+      "sha256": "b19739b019b48971f70ce5fd22c299addd01248d885fbf811a78b642bbf68163"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-page-03.json",
+      "bytes": 26129,
+      "sha256": "f9edfc5742ed7ce8fda68289f95aedb01273446b42ed2cb2c80c65f8454e9526"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-page-04.json",
+      "bytes": 26140,
+      "sha256": "fc94e4a172aa8977257e53e1c6ab5e0fd75a9710c240f75b9e0ccb7062bdbd35"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-page-05.json",
+      "bytes": 25717,
+      "sha256": "cb89018feffa6e4778d7eed727294d8b2cde335591ba24a69324b727c7ab345d"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-page-06.json",
+      "bytes": 27971,
+      "sha256": "f87116343200a3c7294fb6c400fa34df4a0dec30ac0d360566ecc9fa0393fa24"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-page-07.json",
+      "bytes": 28332,
+      "sha256": "cb472a858274fff5dc880e968f343bb59e978ce327eca42a73ec9bcf28f6d102"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-page-08.json",
+      "bytes": 28178,
+      "sha256": "37af99a22c345237bd308aacc4614ae1a3e60d95b86d46ff625f7c02e79ef4a3"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-page-09.json",
+      "bytes": 13056,
+      "sha256": "c19887062e22f6709b27d394b34d86bf8227b4cbaca27dcfb3561ef78f21c0f8"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/native-reader.luau",
+      "bytes": 3293,
+      "sha256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/parity-reader.py",
+      "bytes": 12746,
+      "sha256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/repo-after-metadata.json",
+      "bytes": 62993,
+      "sha256": "1729bba3f786ba6c321f3c5cdffdcac0e804d761aca1179a0e9c04d7f3d91afe"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/repo-before-metadata.json",
+      "bytes": 63173,
+      "sha256": "0bdde2c91bf51b7db0b1147ea054fe4bc54f5e1c304b7a3ed53150dd73fcb5a1"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/result.json",
+      "bytes": 2044,
+      "sha256": "fed4874a59ee3708d86fece9791adcfa7723a3299da44a64cfbb8bf62e38b84a"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/studio-state-before.json",
+      "bytes": 128,
+      "sha256": "cfec3c6eefac0d8b6a7b4b5cb66ed015049a38533a7f7597a4a9ff92fa10802a"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/after-cleanup/studio-state-before.txt",
+      "bytes": 98,
+      "sha256": "468832371ef314e6b747656d478af6c841e116d9cfea9f2f3ea1d5cc2fbf1b5f"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/reader-preflight-v1.json",
+      "bytes": 2543,
+      "sha256": "d17b1138b1708649d4dd0296fe4ca4e8fffe899c6a4d3be4cb5b126e41c429ab"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/root-boundary-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/root-boundary-v1/console-after.api.json",
+      "bytes": 977,
+      "sha256": "c66f1f6ce41461f5c93db3e43faa90db3f9548f2f1a39c6d394b118f93618f29"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/root-boundary-v1/console-before.api.json",
+      "bytes": 977,
+      "sha256": "c66f1f6ce41461f5c93db3e43faa90db3f9548f2f1a39c6d394b118f93618f29"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/root-boundary-v1/proof.json",
+      "bytes": 324,
+      "sha256": "16a8220401958a09b830350c904817361043945afb3c9cd3f8a91375f01417ae"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/root-boundary-v1/studio-state-after.api.json",
+      "bytes": 194,
+      "sha256": "2a40348153521a53d613a95b46111de11e0796537f953bd5b2af04224487407f"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v3/root-boundary-v1/studio-state-before.api.json",
+      "bytes": 194,
+      "sha256": "2a40348153521a53d613a95b46111de11e0796537f953bd5b2af04224487407f"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/finding-coverage-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/finding-coverage-v1/REVIEW.md",
+      "bytes": 824,
+      "sha256": "e804f0722bba5e0c15435764c4246ab1688b63ae1d363e214c3a0095638f15fa"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/finding-coverage-v1/coverage.json",
+      "bytes": 36495,
+      "sha256": "163eb2b477bb2f5c0c43aca5d13a5299cd0240ea802ead6cf5988e2153f796ad"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/finding-coverage-v2/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/finding-coverage-v2/REVIEW.md",
+      "bytes": 2051,
+      "sha256": "6bf9b77bfe085c742037c37c00b3313d280e9ecb296b4314fe31e1c1a60b0cf9"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/finding-coverage-v2/coverage.json",
+      "bytes": 47499,
+      "sha256": "0385a57e5bd3934835eb47e4e3e19f6d6e94e29b7a852b6f06133f6f94beeb8f"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v1/proof.json",
+      "bytes": 17135,
+      "sha256": "1b58ed3f5706b58b27b528c2e27e4e76cf483dd5a2522da4056ac6e3166f2d5d"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v2/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v2/proof.json",
+      "bytes": 5056,
+      "sha256": "7bf50c6c70e6595933c7c5cfe8255b0c5b3665ee5baa829cf0e0e3ee746b5d02"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v3/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/recheck-dispositions-v3/proof.json",
+      "bytes": 2260,
+      "sha256": "73cbc26a85ab90f09ff4c0da1d09bf827c9948bd5a0ad183c1b87ddd8ee7fb48"
+    }
+  ],
+  "inventorySelfExcluded": true,
+  "inventoryPath": "artifacts/cleanup-serverstorage-20261009/finding-coverage-v2/commit-allowlist-v1.json",
+  "limits": "Only six current docs, immutable disposition/coverage proofs and final read-only parity/boundary evidence. Existing runtime RoundUI/manifest owner delta and all .git/caches are excluded. Root owns staging, LF-normalized Markdown index review and commits. No native test or gameplay approval is inferred from curation."
+}
