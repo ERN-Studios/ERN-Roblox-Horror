@@ -2412,3 +2412,74 @@ weight and button size on phones, no noise meter.
 - Native Studio QA passed two actual queue starts, hazard death and native reentry, physical exit rides, transition death/recovery, Return Lobby, and Continue into a healthy active Level 3. Fresh Edit source/editor/mirror/candidate/manifest parity passed for eleven installed sources and five retired names. Shared regression checks: queue 283; loading host 98; Level 4 bays 469; routing 15 module + three source assertions. Single-player Studio QA does not claim production TeleportService transport or real multi-client replication coverage.
 - `Level 2 Pool Foam Client` now rejects the authored no-entity map before its legacy report loop sends anything. Actual handler coverage passed 2,078 assertions (2,048 authored-map ticks, zero reports; old handler fails). A third actual queue run counted zero `ClientReport` events over 30.0155 seconds with Level 2 active and the player in the round, without Foam queue warnings or engine errors. Scoped receipt, original source and exact installed readback are under `clientreport-fix/`.
 - Record: `artifacts/level2-live-20261009/README.md`, `final-verification.json`, `verified-installation.json`, `scene-verification.json` and `qa/`. **Published v2883 on 2026-10-09 at 13:56:34.612 UTC / 15:56:34.612 Copenhagen**, following the owner's live promotion request. Studio Output explicitly confirms publication and names v2883; evidence is `publication-output.txt`, `qa/published-v2883.jpg` and `public-receipt.json`. The pre-publish backup is `backup/BACKROOMS-Level2-public-20261009T1553.rbxl` (45,411,778 bytes; SHA-256 `a4ee0f0bd51016f6e672db0ced72fc7b8706ce449b55afb264c9eaf7b84690cd`). Historical preview notes above describe their earlier versions and are superseded by this promotion.
+
+### Added 2026-10-10 - Level 2 water turned down; Level 1 streamer feedback; Level 6 post ring (published v2935)
+
+**Where this work is.** Branch `codex/poolrooms-audio-20261009`, worktree `/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009`
+(sparse; based on origin/main `46073662`). It is NOT merged into `main` and NOT pushed: the checkout at
+`~/Projects/Roblox Horror REPO` is one commit behind origin/main, carries the owner's undecided deletions and has untracked
+files this branch tracks, so a merge there needs the owner's word. A session that starts in that checkout reads STALE
+scripts: read and edit the mirror in the worktree.
+
+- **Level 2 water** (owner: the wave sounds "right down to a very low level", then the wade strides too). The lapping bed
+  `bed_water` 0.55 -> 0.06 and `shot_splash` 0.6 -> 0.3 in `ReplicatedStorage.Level2Poolrooms.Plan` (revision v2; measured
+  in play: 0.060 in A1); `LEVEL2_WADE_CORE_VOLUME` 0.49 -> 0.16 and the resistance loop 0.095 -> 0.03 in SoundController
+  (`WADE_QUIETER_20261010`; NOT measured in play: the test character would not walk). Which master was "the waves" was
+  settled by measuring the nine files, not by listening: `bed_water` is the only one with a rise-and-fall lapping pattern.
+- **Level 1 is 32 x 32 cells** (`MAZE_SMALLER_20261010`, was 40): side -20%, floor -36%. `floor(GRID/2)` must stay even
+  (the two guaranteed lamps at the elevator). Pit zones keep 3 cells off the Entity's corner; the forced plaza is re-rolled
+  off the elevator. NOT changed, owner's call: the Level 1 time goal (480 s) and the leaderboard times set on the big map.
+- **Fuse puzzle** (`RELAY_OPEN_20261010`, `RELAY_FINDABLE_20261010`, `LEVER_PATH_20261010`): the relay's glass door
+  (`RelayDoor`, `ReleaseHandle`) is gone; each relay has a black FUSE sign with a pictogram (`RelaySign`), a dark
+  `FuseBacking` plate behind the fuse, an amber lamp bar and an amber ceiling cluster; one relay is guaranteed 4-6 cells
+  from the elevator; the fuse box says INSERT FUSE / POWERED and then FOLLOW CABLE / TO THE LEVER; the lever has a sign
+  (LEVER / PULL / ON), a cool-white beacon, a ping and the attribute `LeverState`; the cable current is a bead about every
+  40 studs while powered. Light levels were LOWERED after looking from the player's own view: the first values washed
+  the cabinet and the lever wall out to white. Under the Blender skin the visible cabinet is a kit mesh: recolouring the
+  proxy parts (`InnerPanel`...) changes nothing, a NEW part is skinned as a metal panel in its own colour.
+- **Mimic** (`MIMIC_DARK_20261010`, RoundUI, no new top-level local): nothing rolls until the ambient luma has been 0.16
+  or under for 20 s (two thirds of the relays out, or the red alert) and the spot must be out of every working lamp's
+  throw. Studio readbacks on the player: `MimicGate`, and `DevMimicProbe` -> `DevMimicProbeResult`.
+- **Entity** (`ENTITY_UNSTUCK_20261010`, `ENTITY_SCREAM_20261010`): nav knows the elevator, holds at the nearest
+  reachable cell instead of walking at walls, parks its body clear of walls, a watchdog replans / re-seats / gives up
+  (`workspace.EntityStuckCount`, `EntityReseatCount`), the lunge cannot end in a wall. The scream is one positional sound
+  for everybody in reach: the server sets `EntityHowlPos` then bumps `EntityHowl`; reach is 1.25 cells to 0.30 x GRID
+  cells (230 studs at 32). The Entity model is Persistent. Its visible body is 8 studs wide on a 2-stud collider: arms
+  still pass through wall corners in a chase.
+- **Entity motion** (`ENTITY_MOTION_20261010`): see `tools/level1_entity/README.md`. Six clips as data in
+  `ReplicatedStorage.Level1EntityMotion.Clips`, played by the new LocalScript `"Level 1 Entity Motion"` over the server
+  Animator. `SoundController` now follows each round's new Entity for its growl and steps (`watchEntityRoot`).
+- **Exit compass** (`EXIT_COMPASS_20261010`, RoundHud): "EXIT 163 m" in the door's green; reaches Level 3 and 4's GET OUT.
+- **Camcorder look** (`CAMCORDER_20261010`, Found Footage HUD): a grade under `workspace.CurrentCamera` (it composes with
+  each level's own grade in Lighting: compared on and off), a tape date stamp and a soft vignette (`FoundFootageLens`,
+  DisplayOrder -1 is valid). It never lifts black and the stamp shows the tape's clock, not the player's. Default on;
+  the only off switch is the player attribute `CamcorderFilterEnabled == false` (a settings row is the follow-up).
+- **Level 6** (`POST_RING_20261010`): `model.Finale_PostRing`, 32 cord segments and a lamp on the post, built by the game
+  module per session: dim red when a touch would not count, red when it would, green for 2 s on a counted touch; stepping
+  inside 8.8 studs is the touch (was 7); the lamp sinks with the post.
+
+**How it was done, worth repeating.**
+- Mapping and two of the implementation groups ran on Claude subagents, which hit the 5-hour session limit at 00:45 with
+  nothing written. The rest went to **Codex 6.1 Sol at effort ultra**: `codex exec -m gpt-6.1-sol -c
+  'model_reasoning_effort="ultra"' --skip-git-repo-check -C <dir> -o last.txt "$(cat prompt.md)" < /dev/null`. Each job got
+  a plain COPY of the mirror (no git, so nothing can be committed or swept up), a design brief on disk, the files it
+  owned, and a second Codex job reviewed it adversarially. A code group took 7 to 9 minutes; the Blender animation job 46.
+- **Enter a round from a session now**: the pad must hold the player first. Server: `PivotTo` onto the level's
+  `QueueZone1` (a part with attributes `LevelNumber`, `QueueDisplayIndex` 1, `R3QueueId` 101 / 105 / ... / 121); 2.5 s later
+  Client: `Remotes.ConfigureQueue:FireServer(<id>, 1, "public", "normal")`. Firing the remote alone does nothing.
+- **A 12 x 12 test maze**: Server, before queueing, `ReplicatedStorage.MasterTuning:SetAttribute("L1_Grid", 12)` (dies with
+  the session; check in Edit that it is not saved). The Entity then sees the player at once: set
+  `workspace.TestEntityBlind = true` BEFORE the round starts. Its touch still kills while blind.
+  `workspace.TestForceEntityLunge = true` only gives a real dash during a sighted chase.
+- **Silence a play test without touching `Sound.Volume`**: move every SoundGroup under a group of volume 0 and give
+  group-less Sounds that group. `qa.py play` forces volumes to 0, which hides every level a test wants to read.
+- **`tools/mac_merge_push.py`**: repo -> Studio with a three-way merge against what Studio holds NOW, a compare-and-swap
+  and a full readback. Another session edited GameManager and PuzzleManager in Studio during this work; both merged.
+- `Humanoid:MoveTo` from a Client `execute_luau` and `user_keyboard_input` W both failed to walk the round body in Level 2.
+- Continuing from Level 1 into Level 2 inside Studio leaves `workspace.WorldGenerated` false, so the Poolrooms pack never
+  starts there. Entering Level 2 from its pad is fine. Not checked on live (a real continue is a new server).
+- Studio's play client ran at about 12 frames a second under memory pressure; two timing faults in the lunge only showed
+  because of it.
+
+**Not verified in this batch**: more than one player anywhere, phones, how any sound sounds, a real stuck Entity and its
+recovery, a natural lunge by eye, the camcorder look in Levels 2 to 6 and on the kill cams, the TAGGED card in Level 6.
