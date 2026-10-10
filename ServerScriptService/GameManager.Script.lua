@@ -778,6 +778,7 @@ local function setLevelOneEntityActive(active)
   local root = entity:FindFirstChild("HumanoidRootPart")
   if root then root.Anchored = true end
   entity.Name = active and "Entity" or STORED_LEVEL_ONE_ENTITY_NAME
+  pcall(function() entity.ModelStreamingMode = Enum.ModelStreamingMode.Persistent end) -- ENTITY_SCREAM_20261010 (entity): distant root audio needs the model on every client.
   entity.Parent = active and workspace or ServerStorage
  end
  for _, name in ipairs(LEVEL_ONE_ENTITY_SCRIPTS) do
@@ -1503,15 +1504,49 @@ end
 -- attribute SpectatorCount on the watched Player. Only a dead or escaped
 -- participant may count, and only towards a living participant.
 local spectateTargets = {}
-local function validSpectatePair(player, target)
- if target == player or player.Parent ~= Players or target.Parent ~= Players
-  or inRound[player] ~= true or inRound[target] ~= true
-  or target:GetAttribute("Escaped") == true then return false end
- local ownHumanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
- local targetHumanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
- return (player:GetAttribute("Escaped") == true or not ownHumanoid or ownHumanoid.Health <= 0)
-  and targetHumanoid ~= nil and targetHumanoid.Health > 0
+-- SPECTATE_BOOTSTRAP_SERVER_BEGIN
+-- Candidate IDs come from the server roster before a remote body is streamed.
+-- Live Levels 5/6 own their server InRound/preview flags outside this private roster.
+local spectateCandidateRequests = {}
+local function spectateParticipant(player)
+ return player.Parent == Players and (inRound[player] == true
+  or (player:GetAttribute("InRound") == true and player:GetAttribute("Level6PlaygroundPreview") == true))
 end
+local function validSpectator(player)
+ if not spectateParticipant(player) then return false end
+ local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+ return player:GetAttribute("Escaped") == true or not humanoid or humanoid.Health <= 0
+end
+local function validSpectatePair(player, target)
+ if target == player or not validSpectator(player) or target.Parent ~= Players
+  or target:GetAttribute("Escaped") == true then return false end
+ local ownLive = player:GetAttribute("Level6PlaygroundPreview") == true
+ local targetLive = target:GetAttribute("Level6PlaygroundPreview") == true
+ if ownLive or targetLive then
+  if not (ownLive and targetLive and player:GetAttribute("InRound") == true and target:GetAttribute("InRound") == true
+   and (player:GetAttribute("Level5VoidRound") == true) == (target:GetAttribute("Level5VoidRound") == true)) then return false end
+ elseif inRound[player] ~= true or inRound[target] ~= true then return false end
+ local targetHumanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
+ return targetHumanoid ~= nil and targetHumanoid.Health > 0
+end
+local function pruneSpectateCandidateRequests()
+ for player, record in pairs(spectateCandidateRequests) do
+  if record.Character ~= player.Character or not validSpectator(player) then spectateCandidateRequests[player] = nil end
+ end
+end
+local function requestSpectateCandidates(player, serial)
+ if type(serial) ~= "number" or serial ~= serial or serial < 1 or serial >= 2^53 or serial % 1 ~= 0 then return end
+ if not validSpectator(player) then spectateCandidateRequests[player] = nil; return end
+ local now, previous = os.clock(), spectateCandidateRequests[player]
+ if previous and previous.Character == player.Character and now - previous.At < .8 then return end
+ spectateCandidateRequests[player] = {Character = player.Character, At = now}
+ local ids = {}
+ for _, target in ipairs(Players:GetPlayers()) do
+  if validSpectatePair(player, target) then ids[#ids + 1] = target.UserId end
+ end
+ status:FireClient(player, "spectatecandidates", {Serial = serial, UserIds = ids})
+end
+-- SPECTATE_BOOTSTRAP_SERVER_END
 -- PERFORMANCE_STREAMING_20261009: a Scriptable spectator camera follows another
 -- body. Keep that body's region streamed with one extra focus; never replace the
 -- spectator's default own-character focus. The existing 1 s reconciliation owns
@@ -1556,6 +1591,7 @@ function spectateFocus:Sync(player, target)
  return true
 end
 local function republishSpectatorCounts()
+ pruneSpectateCandidateRequests()
  local counts = {}
  for spectator, target in pairs(spectateTargets) do
   if validSpectatePair(spectator, target) and spectateFocus:Sync(spectator, target) then
@@ -1588,6 +1624,7 @@ local function setSpectateTarget(player, targetUserId)
  republishSpectatorCounts()
 end
 local function clearSpectatorCounts()
+ table.clear(spectateCandidateRequests)
  if next(spectateTargets) == nil and next(spectateFocus.Records) == nil then return end
  table.clear(spectateTargets)
  republishSpectatorCounts()
@@ -1596,12 +1633,13 @@ end
 -- leaves, escapes, or the spectator respawns. No names are replicated.
 task.spawn(function()
  while task.wait(1) do
-  if next(spectateTargets) ~= nil or next(spectateFocus.Records) ~= nil then republishSpectatorCounts() end
+  if next(spectateTargets) ~= nil or next(spectateFocus.Records) ~= nil or next(spectateCandidateRequests) ~= nil then republishSpectatorCounts() end
  end
 end)
 
 -- PlayerRemoving fires before Parent leaves Players: detach owned foci now.
 Players.PlayerRemoving:Connect(function(leaving)
+ spectateCandidateRequests[leaving] = nil
  for spectator, target in pairs(spectateTargets) do
   if spectator == leaving or target == leaving then
    spectateTargets[spectator] = nil
@@ -1643,6 +1681,8 @@ status.OnServerEvent:Connect(function(player, message, requestSerial)
   handlePostWinContinueRequest(player, requestSerial)
  elseif message == "leaveround" and handleLeaveRoundRequest then
   handleLeaveRoundRequest(player)
+ elseif message == "spectatecandidates" then
+  requestSpectateCandidates(player, requestSerial)
  elseif message == "spectatetarget" then
   setSpectateTarget(player, requestSerial)
  elseif message == "spectatevital" then
