@@ -1,0 +1,10 @@
+# Project defaults. No account, permission, sandbox or MCP overrides.
+model = "gpt-6.1-sol"
+model_reasoning_effort = "medium"
+service_tier = "default"
+
+[agents]
+enabled = false
+max_concurrent_threads_per_session = 1
+default_subagent_model = "gpt-6.1-sol"
+default_subagent_reasoning_effort = "medium"

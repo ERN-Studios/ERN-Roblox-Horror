@@ -1,5 +1,28 @@
 # Backrooms: Stay Quiet workflow
 
+## Project operating defaults — owner instruction, 2026-10-10
+
+- Current checkout is `/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009`,
+  branch `codex/poolrooms-audio-20261009`; the main checkout is stale for game work.
+- One named agent owns Studio (currently the paused `Main RBLX GAME DEV` Claude
+  session). Handover must record the previous owner idle, checkpoint and new owner.
+- At most one extra agent works concurrently on a scoped independent deliverable.
+  Subagents/CLI jobs/Operator workers count; helpers must not touch shared Studio
+  or start more agents. Preserve unknown sessions and collaborators' work.
+- Ordinary sessions: Opus Medium with Fast/Ultracode off; gpt-6.1-sol Medium,
+  Standard. Low suits known simple procedures; higher reasoning is task-specific.
+- No compulsory Codex share in every batch and no compulsory Claude final QA.
+  Each task owner implements/integrates and verifies; cross-model review needs a reason.
+- Use `tools/agents/start-codex.sh` for bounded Codex jobs and the delegation
+  template in `docs/workflow/`. Do not revive historical Ultra/Fast launch commands.
+- Read only relevant details from `docs/reference/`; never load the whole archive
+  automatically. CLAUDE.md is the current short guide; historical limits are superseded.
+- Local multiplayer, mobile simulation and isolated DataStore/MemoryStore tests
+  are supported subject to `docs/workflow/testing.md`; real teleports need the
+  Roblox client. Source inspection alone does not prove runtime behaviour.
+- Keep all existing permission, safety and publishing rules below. Setup-only
+  documentation/configuration changes do not call for a Roblox publish.
+
 ## Studio is authoritative — owner instruction, 2026-09-09
 
 - **Roblox Studio is the sole source of truth.** GitHub and Trello must never

@@ -1,0 +1,650 @@
+[
+  {
+    "heading": "# BACKROOMS: STAY QUIET [CO-OP HORROR] \u2014 working notes for Claude Code",
+    "originalLines": [
+      1,
+      2
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "## Where this session is running matters",
+    "originalLines": [
+      3,
+      19
+    ],
+    "file": "sync-and-tools.md"
+  },
+  {
+    "heading": "## The repo is a one-way mirror of Studio",
+    "originalLines": [
+      20,
+      35
+    ],
+    "file": "sync-and-tools.md"
+  },
+  {
+    "heading": "## Syncing",
+    "originalLines": [
+      36,
+      54
+    ],
+    "file": "sync-and-tools.md"
+  },
+  {
+    "heading": "## There is a code knowledge graph \u2014 use it before grepping",
+    "originalLines": [
+      55,
+      112
+    ],
+    "file": "sync-and-tools.md"
+  },
+  {
+    "heading": "## Current state (2026-09-02)",
+    "originalLines": [
+      113,
+      159
+    ],
+    "file": "workflow-and-history.md"
+  },
+  {
+    "heading": "### Added 2026-09-03 (afternoon session)",
+    "originalLines": [
+      160,
+      185
+    ],
+    "file": "sync-and-tools.md"
+  },
+  {
+    "heading": "### Added 2026-09-04",
+    "originalLines": [
+      186,
+      247
+    ],
+    "file": "workflow-and-history.md"
+  },
+  {
+    "heading": "### Added 2026-09-05",
+    "originalLines": [
+      248,
+      298
+    ],
+    "file": "workflow-and-history.md"
+  },
+  {
+    "heading": "### Added 2026-09-14 (Trello To Do batch; record in `artifacts/trello-20260914/claude-handoff.md`)",
+    "originalLines": [
+      299,
+      368
+    ],
+    "file": "workflow-and-history.md"
+  },
+  {
+    "heading": "### History \u2014 the 2026-08-19 audit (done, kept for context)",
+    "originalLines": [
+      369,
+      425
+    ],
+    "file": "workflow-and-history.md"
+  },
+  {
+    "heading": "### Changed 2026-09-29 \u2014 levels renumbered (supersedes the Level 4/5 notes above)",
+    "originalLines": [
+      426,
+      438
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "## House rules",
+    "originalLines": [
+      439,
+      460
+    ],
+    "file": "workflow-and-history.md"
+  },
+  {
+    "heading": "### Added 2026-09-16 (evening; record in `artifacts/wheel-shop-refresh-20260916/`)",
+    "originalLines": [
+      461,
+      486
+    ],
+    "file": "workflow-and-history.md"
+  },
+  {
+    "heading": "### Added 2026-09-30 \u2014 Level 4 rebuilt in Blender",
+    "originalLines": [
+      487,
+      499
+    ],
+    "file": "workflow-and-history.md"
+  },
+  {
+    "heading": "### Added 2026-10-01 - Level 4 facelift v2 + LightingStyle Realistic",
+    "originalLines": [
+      500,
+      514
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-02 - Level 4 facelift v3 (owner's 15 points)",
+    "originalLines": [
+      515,
+      528
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-03 - Level 6 is the Indoor Playground (hide and seek)",
+    "originalLines": [
+      529,
+      549
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-03 (later) - Level 6 entity: The Counter",
+    "originalLines": [
+      550,
+      561
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-03 (evening) - Lobby loading screen",
+    "originalLines": [
+      562,
+      579
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-03 (night) - Level 6 plays as a live round",
+    "originalLines": [
+      580,
+      599
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-03 (late) - Level 6 horror pass",
+    "originalLines": [
+      600,
+      619
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-03 (night) - UI overhaul, first pass (concepts in `artifacts/ui-concepts-20261003/`)",
+    "originalLines": [
+      620,
+      654
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-03 (late night) - Level 6 deaths follow the round death flow",
+    "originalLines": [
+      655,
+      677
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-04 - Level 5 is the void rooms",
+    "originalLines": [
+      678,
+      700
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-04 - Level 5 Void published, lobby furniture collides (v2621)",
+    "originalLines": [
+      701,
+      712
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-04 (later) - Level 5 v2, public; Levels 4 and 5 open to everyone (v2627)",
+    "originalLines": [
+      713,
+      749
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-04 (night run, v2632)",
+    "originalLines": [
+      750,
+      786
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-04 (late night)",
+    "originalLines": [
+      787,
+      807
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-04 - Achievements",
+    "originalLines": [
+      808,
+      836
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-04 (afternoon) - Level 5 smooth again, plate, party button ESP",
+    "originalLines": [
+      837,
+      882
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-04 (evening) - Level 6 kill cam: the choke",
+    "originalLines": [
+      883,
+      903
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-04 (late evening) - lobby ends, spawn view, new store artwork",
+    "originalLines": [
+      904,
+      957
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-05 - Level 5 v3: harder, ten rooms",
+    "originalLines": [
+      958,
+      983
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-05 (later) - Level 5 finish screen, open rooms, things falling; lobby ends seen in play",
+    "originalLines": [
+      984,
+      1007
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-05 (morning) - Level 5 fall screams cleaned and turned down (v2704)",
+    "originalLines": [
+      1008,
+      1035
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-05 (midday) - Level 3 finale: the Manager starts at the hall's entrance (v2706)",
+    "originalLines": [
+      1036,
+      1059
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-05 (afternoon) - Level 5: red spiral, tower, the closing corridor, choices at the finish (v2712)",
+    "originalLines": [
+      1060,
+      1117
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-05 (night) - Level 6 concept v3: a draft in pictures, nothing built",
+    "originalLines": [
+      1118,
+      1138
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-06 - Level 6 concept v4, \"the Arena\" (supersedes concept v3; still pictures only)",
+    "originalLines": [
+      1139,
+      1167
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-06 (later) - Level 6 concept v5: tall walls, and the way out is under the post (pictures only)",
+    "originalLines": [
+      1168,
+      1193
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-06 (morning) - Level 6 is the Arena: built, in Studio, NOT yet published",
+    "originalLines": [
+      1194,
+      1241
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-06 (later in the morning) - Level 6: calm hunt, standard ending, the line in the exit room, music",
+    "originalLines": [
+      1242,
+      1277
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-06 (afternoon) - Level 6 kill cam: the choke is built round the victim's neck",
+    "originalLines": [
+      1278,
+      1310
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-06 (night) - The Reach: an easter egg behind the lobby's fence",
+    "originalLines": [
+      1311,
+      1348
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-07 (small hours) - Level 6 in PBR: seven texture sets, applied to the arena",
+    "originalLines": [
+      1349,
+      1383
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-07 (morning) - Level 6 on a phone: the HUD is placed by UIDevice (in Studio, NOT published)",
+    "originalLines": [
+      1384,
+      1414
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-07 (late morning) - The Reach: dark all the way, and no shot of the eyes after the kill (in Studio, NOT published)",
+    "originalLines": [
+      1415,
+      1443
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-07 (midday) - The Reach, second round: the daylight behind the fence was RoundUI's (in Studio, NOT published)",
+    "originalLines": [
+      1444,
+      1467
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-07 (afternoon) - Level 6: nothing lies over anything any more, and the overpass (in Studio, NOT published)",
+    "originalLines": [
+      1468,
+      1508
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-07 (evening) - Promo pictures: 12 gallery, 6 thumbnails, 25 ads (nothing in Studio changed)",
+    "originalLines": [
+      1509,
+      1550
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-07 (night) - The store pictures on Roblox were replaced from a session (live)",
+    "originalLines": [
+      1551,
+      1581
+    ],
+    "file": "sync-and-tools.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 - Ten game icons (pictures only; the icon on Roblox was NOT changed)",
+    "originalLines": [
+      1582,
+      1595
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (later) - The game's icon on Roblox is I01 (live)",
+    "originalLines": [
+      1596,
+      1611
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (night) - Ads Manager: library replaced, first campaign submitted (LIVE, spends ad credit)",
+    "originalLines": [
+      1612,
+      1635
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (night, later) - Ads: daily budget of 11, no square or vertical assets (LIVE)",
+    "originalLines": [
+      1636,
+      1650
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (night) - The game's public name became \"(UPDATE) BACKROOMS: BE QUIET\" (superseded 35 minutes later, see below)",
+    "originalLines": [
+      1651,
+      1663
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (night, later) - The game's public name is \"(UPDATE) BACKROOMS: STAY QUIET\" (live)",
+    "originalLines": [
+      1664,
+      1675
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (small hours) - Levels 5 and 6 take ONE PARTY AT A TIME (in Studio; live once the owner publishes)",
+    "originalLines": [
+      1676,
+      1709
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (small hours, later) - A maintenance board in front of the Level 2 gate (in Studio, NOT published)",
+    "originalLines": [
+      1710,
+      1739
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (before dawn) - Level 3: the way out is lit, exit signs, the slide's board, a pointer at the CD reader (in Studio, NOT published)",
+    "originalLines": [
+      1740,
+      1800
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (night) - A server per party for Levels 5 and 6 (developer parties first); CONTINUE 4 -> 5",
+    "originalLines": [
+      1801,
+      1859
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (night) - Token-earner upgrade passes off sale; Entity Detector: large screen, 30 s live, 10 s cooldown",
+    "originalLines": [
+      1860,
+      1897
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (before dawn) - Advanced Equipment is +100% on both capacities; a leaderboard board at every gate",
+    "originalLines": [
+      1898,
+      1945
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (morning) - Level 5: a death keeps you in the level; the Level 4 bay's posters in lightboxes",
+    "originalLines": [
+      1946,
+      2002
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (later in the morning) - Passes count on TOP SUPPORTERS; a warning behind the fence (in Studio, NOT published)",
+    "originalLines": [
+      2003,
+      2034
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (morning, later) - \"Being Kind to Luna\": an achievement with a gift (in Studio, NOT published)",
+    "originalLines": [
+      2035,
+      2061
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (midday) - Phone and tablet QA; own servers for everyone; the board says 12 hours (in Studio, NOT published)",
+    "originalLines": [
+      2062,
+      2101
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (midday, later) - The Reach has sounds (in Studio, NOT published)",
+    "originalLines": [
+      2102,
+      2137
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (afternoon) - No more jumping in the air on touch; Level 5's fall is judged by the route (in Studio, NOT published)",
+    "originalLines": [
+      2138,
+      2180
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (afternoon, later) - Ads: first numbers, ten pictures in the campaign; phones locked to landscape",
+    "originalLines": [
+      2181,
+      2217
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (afternoon, later still) - The game's own numbers: reach is not the bottleneck",
+    "originalLines": [
+      2218,
+      2233
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (afternoon) - Developers are off the TOP SUPPORTERS board (in Studio, NOT published)",
+    "originalLines": [
+      2234,
+      2255
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (late afternoon) - Local place backups removed (the Mac was out of disk)",
+    "originalLines": [
+      2256,
+      2290
+    ],
+    "file": "workflow-and-history.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 (16:30) - Restarting servers, and how to know what is really published",
+    "originalLines": [
+      2291,
+      2307
+    ],
+    "file": "workflow-and-history.md"
+  },
+  {
+    "heading": "## Windows Studio updates retained \u2014 2026-10-09",
+    "originalLines": [
+      2308,
+      2309
+    ],
+    "file": "sync-and-tools.md"
+  },
+  {
+    "heading": "### Changed 2026-10-05 - Level 4 is a normal public round, the campaign's last level; previews deleted (supersedes the Level 4 notes below)",
+    "originalLines": [
+      2310,
+      2346
+    ],
+    "file": "audio-and-assets.md"
+  },
+  {
+    "heading": "### Added 2026-10-02 - Level 4 round \"Den Sidste Forestilling\" (developer-only)",
+    "originalLines": [
+      2347,
+      2373
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-08 - the new Level 2 map after the owner's feedback (published v2838)",
+    "originalLines": [
+      2374,
+      2405
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Changed 2026-10-09 - approved Poolrooms is the normal public Level 2",
+    "originalLines": [
+      2406,
+      2415
+    ],
+    "file": "levels-and-runtime.md"
+  },
+  {
+    "heading": "### Added 2026-10-10 - Level 2 water turned down; Level 1 streamer feedback; Level 6 post ring (published v2935)",
+    "originalLines": [
+      2416,
+      2485
+    ],
+    "file": "levels-and-runtime.md"
+  }
+]
