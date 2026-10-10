@@ -1902,17 +1902,6 @@
  ],
  "beds": [
   {
-   "key": "bed_p0_stairwell",
-   "sections": [
-    "P0"
-   ],
-   "volume": 0.4,
-   "fade": [
-    1.5,
-    1.5
-   ]
-  },
-  {
    "key": "bed_a1_cistern",
    "sections": [
     "A1"
@@ -2020,6 +2009,13 @@
    "key": "bed_service",
    "sections": [
     "S"
+   ],
+   "volume": 0.45
+  },
+  {
+   "key": "bed_service",
+   "sections": [
+    "P0"
    ],
    "volume": 0.45
   },

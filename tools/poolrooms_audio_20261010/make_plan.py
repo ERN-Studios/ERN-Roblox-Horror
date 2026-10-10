@@ -29,7 +29,9 @@ HALLS = ['A1', 'A3', 'A4', 'A2', 'A5', 'A6']
 # come up in 1.5 s or they would be a crossfade and nothing else.
 BEDS = [
     ('bed_s_desert', ['S'], 0.42, [1.5, 1.5]),
-    ('bed_p0_stairwell', ['P0'], 0.40, [1.5, 1.5]),
+    # Owner, 2026-10-10 (night), after hearing it: "Den første lyd ned af trappen i level 2 skal så meget fucking
+    # fjernes nu! ... den konstante lyd når man er på vej ned af trappen". bed_p0_stairwell (buzzing tube lights and
+    # an extractor fan) is OUT of the plan: the stairs keep the start room's bed_service. Do not put it back.
     ('bed_a1_cistern', ['A1'], 0.50, None),
     ('bed_p1_pipes', ['P1'], 0.42, [1.5, 1.5]),
     ('bed_a3_nave', ['A3'], 0.55, None),
