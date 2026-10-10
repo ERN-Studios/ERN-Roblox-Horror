@@ -6,14 +6,14 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-09T17:14:40.588140+00:00",
+  "capturedAtUtc": "2026-10-10T04:05:45.192919+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
   "counts": {
-    "scripts": 230,
+    "scripts": 232,
     "remoteEvents": 15,
-    "total": 245,
+    "total": 247,
     "created": 12,
     "updated": 18,
     "unchanged": 215,
@@ -139,8 +139,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/LoadingCardView.ModuleScript.lua",
-      "bytes": 8831,
-      "sha256": "9e8e46048ed89e632b67b6d49d075f96013adff2437a991e398fd04aa465a0dd",
+      "bytes": 8923,
+      "sha256": "0f2d4b561ae206ffd07c4345a5e7372853c54863071946e525bd3fa0970c4a7b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -157,8 +157,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
-      "bytes": 21208,
-      "sha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "bytes": 21531,
+      "sha256": "ede7dd4a687e76d0aefba2356869e0e31d70dc953b963680ae8fd607ea32e165",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -193,8 +193,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
-      "bytes": 63919,
-      "sha256": "f12fe404cf4ae6adee5901989d3a5d4388db13a9a5850f7390d3ca1c6e7ebd20",
+      "bytes": 76673,
+      "sha256": "98983afec6256d7f4c2286ae3228c68c06e5e78a1a9f6e3470dda6281ee42559",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -247,8 +247,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 323180,
-      "sha256": "f387e68e871a51436c5dcbe91c24986af23bf1121bb907ed8282bdcccebfceb8",
+      "bytes": 313853,
+      "sha256": "a862519414051a16dd3e401f1753fdd9ae1c4d78a1d217ced8fded0b596163c6",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -265,8 +265,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
-      "bytes": 11842,
-      "sha256": "28ac2bf612994737da4e0e5c307401f5c4508b8561491670528c73889e01a1d5",
+      "bytes": 12426,
+      "sha256": "94b0216cf9dcbe9f0380c68ad832233777882b57312dc8de68804d9fdc0095c3",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -489,8 +489,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 190167,
-      "sha256": "0969202a4cbb3898b32608608905e19179eb7f8b645d1613c2f5a91980984ebe",
+      "bytes": 195000,
+      "sha256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -530,8 +530,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 1 Systems/BlenderRoomRenderer.ModuleScript.lua",
-      "bytes": 31698,
-      "sha256": "85c62d3ecdbeaad9f8da7e51bb891255e80c3cb4d383d81fb61b7c0562fff99b",
+      "bytes": 31759,
+      "sha256": "0f217e5a3f56751e7672efc035861a2cec1b5f23d581a52020411a8d081790cf",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -549,8 +549,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
-      "bytes": 58731,
-      "sha256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "bytes": 67280,
+      "sha256": "7a1e689543b043c4d5da90270b32abbe02525183ef71adea85664a171bf5bd01",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -570,8 +570,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
-      "bytes": 10588,
-      "sha256": "3c15ac60553c52c133bbbdd8e6d70efd52022c9e722065153b76e73986417508",
+      "bytes": 10869,
+      "sha256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -612,8 +612,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
-      "bytes": 89825,
-      "sha256": "f3bf0447db60f17eb6c83f005fbde4df9bb2d10232427c6494c0352d3851f106",
+      "bytes": 93377,
+      "sha256": "8ea483bda5477c34c72e07dc9fd5d4b9b5aa5264788869aaf61c51f50d2fb36f",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -633,8 +633,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
-      "bytes": 105526,
-      "sha256": "605fb1c22a2d6a3f3128c4404f671c868570bdc02789239ce908ce66e3e3a645",
+      "bytes": 115391,
+      "sha256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1618,8 +1618,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
-      "bytes": 98696,
-      "sha256": "c863e11fba99a6557a783e1fbd1d755af7fc245b386f4f5ba7ce06a36bd95de4",
+      "bytes": 105852,
+      "sha256": "d03ffa84eab839acf755b3e95399853707bfc354d0a464acb188ee2a68186be6",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1823,8 +1823,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level6PreviewAccess.Script.lua",
-      "bytes": 31298,
-      "sha256": "44fcbebf64a7680222af00d304494ee8d03d05d5e0606622fae36677686fe368",
+      "bytes": 35534,
+      "sha256": "62c22dbcde5c87ff6d0054be7d60a0890298ed5ebb9b1bf6f61e431f45e38655",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3439,8 +3439,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
-      "bytes": 10450,
-      "sha256": "8084b8ec48f09fa62889d22257d76dd8946cda5a11a7977b8f800bb5674bd0b4",
+      "bytes": 12165,
+      "sha256": "2b12a543132bc0af7e624e50559756236f7f1b717bfe764433f6fbea5be81e4b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3502,8 +3502,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Found Footage HUD.LocalScript.lua",
-      "bytes": 9745,
-      "sha256": "c21f23d514a20a6be3ba48f2c03ff0f788e372d73b80b1ea733657b64698b24b",
+      "bytes": 22328,
+      "sha256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3565,8 +3565,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
-      "bytes": 7549,
-      "sha256": "07baa4a3ae035615dacb67da55ec197cfd4a09f6bf7071280f3685b653f97f88",
+      "bytes": 7088,
+      "sha256": "7e5cedc84631a6af3f7edc126cb6775c9c498f42e851484c4980c3a3a6846a88",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3586,8 +3586,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
-      "bytes": 10507,
-      "sha256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "bytes": 11661,
+      "sha256": "a2c09bc7e9bba5ebd04462bfd7d0e0dba49f7453cf3a0403dfb0b0db8d7b5651",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3607,8 +3607,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 1 Hardware Client.LocalScript.lua",
-      "bytes": 11762,
-      "sha256": "252c7b86be07131d4f13d6f74c3a20178b60085ec98e3898adc02b72a3831e4a",
+      "bytes": 12239,
+      "sha256": "dd27aa5bb7e87e75f54c3d4b0c60340b5037213b078e156a7ea0e980298d83fa",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3754,8 +3754,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
-      "bytes": 40174,
-      "sha256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "bytes": 41930,
+      "sha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3967,8 +3967,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
-      "bytes": 63894,
-      "sha256": "4753898b930d00dcd3e0e0cae8745a94f9beeb5077c32162382bd298e30aa067",
+      "bytes": 66400,
+      "sha256": "08867cb5fbfc46dc91e484ffb302ca06065d14f9d0166a77e8ab10dcf443d7dc",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4343,8 +4343,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
-      "bytes": 5602,
-      "sha256": "a35eba8da9854126d7522d2efe569ba0cf61af5ff0b0b3fb06d2f61ff5fb1fa5",
+      "bytes": 8315,
+      "sha256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4453,8 +4453,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 238896,
-      "sha256": "98d2c871dd5cbd33e3a0d633e6afcc3a7a0012c777418bd57cc272c5f35eb5dc",
+      "bytes": 244615,
+      "sha256": "f524a7e6865c01b412581b46e64c12c2c2c786bf9c84c23f3b7d7a359d3f422c",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4497,8 +4497,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 67762,
-      "sha256": "b382f0a7a0dbf70b368534440c72bb274e64229e3ba8074e871a6913411f14dc",
+      "bytes": 71742,
+      "sha256": "0fc2ce5ee4787d7196193f2849ca3dc9fdfbc85e5f5286a11901543a610d327f",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4910,6 +4910,48 @@
       "bytes": 456,
       "sha256": "da41e03f2bcf356e13a5b840ec7508d99c312bb8a07ceb9353cbadeaea81b216",
       "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Entity Motion",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Entity Motion"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Entity Motion.LocalScript.lua",
+      "bytes": 25299,
+      "sha256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Poolrooms Ambience",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Poolrooms Ambience"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Poolrooms Ambience.LocalScript.lua",
+      "bytes": 18933,
+      "sha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
       "attributes": []
     }
   ]
