@@ -1,0 +1,51 @@
+{
+  "schema": "mongotv-s11-bounded-native-restoration-proof-v1",
+  "pass": true,
+  "nativeResultPass": true,
+  "sourceRowCount": 212,
+  "sourceRowDiffs": [
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "changes": {
+        "bytes": {
+          "before": 105520,
+          "after": 105502
+        },
+        "sha256": {
+          "before": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+          "after": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c"
+        }
+      }
+    }
+  ],
+  "beforeCatalogSHA256": "bc72f557b2c2a3a6d6cfc789181a36d7a5c549d9854509e116dad338fbd5761a",
+  "afterCatalogSHA256": "e9cccb7ebce3d460ab4cc7949ae8438fe53d9f021d3810a25e780273ed7699e1",
+  "afterAndFinalRowsIdentical": true,
+  "allSourceIdentityClassParentPropertiesAttributesTagsPreserved": true,
+  "transportCapsEnforcedByExecutedWrapper": {
+    "metadataReplyUTF8Bytes": 20000,
+    "metadataRowsPerPage": 20,
+    "pagesPerSnapshot": 11,
+    "sourceReadReplyUTF8Bytes": 8000,
+    "sourceChunkLines": 64
+  },
+  "knownBeforeSourceChunkBytesMax": 3663,
+  "knownBeforeSourceChunks": 40,
+  "copiedImmutableNativeCodes": [
+    "native-before.json",
+    "native-after.json",
+    "apply.luau",
+    "native-before-source-originals-final.luau",
+    "native-after-source-originals-final.luau",
+    "snapshot-1-001.luau",
+    "snapshot-1-201.luau",
+    "snapshot-3-001.luau",
+    "snapshot-3-201.luau",
+    "snapshot-3-target-final.luau"
+  ],
+  "nativeCallsByCuration": 0,
+  "productionWritesByCuration": 0,
+  "sourceBodyCopies": "Private .git checkpoint only; old exact before/candidate remain existing additional-locals archive. Public capture metadata holds hashes/bytes, not target Source/editor bodies.",
+  "guardLimits": "Point-in-time full original guard after yielding census; no full assets/gameplay/multiplayer/streaming/continuous epoch or performance certificate.",
+  "console": "Exact before/after equal; existing asset and earlier assistant errors remain in the preserved baseline. No claim of an empty console."
+}

@@ -1,0 +1,158 @@
+{
+  "schema": "mongotv-latch-only-proposal-v1",
+  "pass": true,
+  "scope": "LE34 ONLY private latchMode initializer field; no RoomDressing/Usher edits",
+  "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+  "beforeFile": "artifacts/cleanup-20261009/additional-locals/PuzzleManager.before.luau",
+  "candidateFile": "artifacts/cleanup-20261009/additional-locals/PuzzleManager.candidate.luau",
+  "beforeSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+  "candidateSHA256": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
+  "bytesRemoved": 18,
+  "checksPerVersion": 47,
+  "pairedChecks": 94,
+  "reentryChecks": 94,
+  "semanticNegativeRejected": true,
+  "compileChecks": [
+    {
+      "input": "fullBefore",
+      "optimization": "-O0",
+      "sourceSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "pass": true
+    },
+    {
+      "input": "fullBefore",
+      "optimization": "-O1",
+      "sourceSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "pass": true
+    },
+    {
+      "input": "fullCandidate",
+      "optimization": "-O0",
+      "sourceSHA256": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
+      "pass": true
+    },
+    {
+      "input": "fullCandidate",
+      "optimization": "-O1",
+      "sourceSHA256": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
+      "pass": true
+    },
+    {
+      "input": "before",
+      "optimization": "-O0",
+      "sourceSHA256": "4f74d654441d6446195b5c44e03e136544cb6eccf0b1a061d00270b3ee644ccb",
+      "pass": true
+    },
+    {
+      "input": "before",
+      "optimization": "-O1",
+      "sourceSHA256": "4f74d654441d6446195b5c44e03e136544cb6eccf0b1a061d00270b3ee644ccb",
+      "pass": true
+    },
+    {
+      "input": "candidate",
+      "optimization": "-O0",
+      "sourceSHA256": "c494f656189596bf5d3c7f5c957eb7fa2f2269ce8162adedf380d0d7ca12c868",
+      "pass": true
+    },
+    {
+      "input": "candidate",
+      "optimization": "-O1",
+      "sourceSHA256": "c494f656189596bf5d3c7f5c957eb7fa2f2269ce8162adedf380d0d7ca12c868",
+      "pass": true
+    },
+    {
+      "input": "inactiveNegative",
+      "optimization": "-O0",
+      "sourceSHA256": "930150333f2791c0dbc1d3ab578d72d5ef1de2ef70b8bf5abe36eafdeef6bfd2",
+      "pass": true
+    },
+    {
+      "input": "inactiveNegative",
+      "optimization": "-O1",
+      "sourceSHA256": "930150333f2791c0dbc1d3ab578d72d5ef1de2ef70b8bf5abe36eafdeef6bfd2",
+      "pass": true
+    },
+    {
+      "input": "native-before",
+      "optimization": "-O0",
+      "sourceSHA256": "ee73625fd0c6cd1f7fefa002578a740436c38f0db455901ede24d00314338d09",
+      "pass": true
+    },
+    {
+      "input": "native-before",
+      "optimization": "-O1",
+      "sourceSHA256": "ee73625fd0c6cd1f7fefa002578a740436c38f0db455901ede24d00314338d09",
+      "pass": true
+    },
+    {
+      "input": "native-installed",
+      "optimization": "-O0",
+      "sourceSHA256": "e57accfd3e677bd80ffc5c613e2b6e37b5e2e49fdf6bea93ec45ffddb3c43384",
+      "pass": true
+    },
+    {
+      "input": "native-installed",
+      "optimization": "-O1",
+      "sourceSHA256": "e57accfd3e677bd80ffc5c613e2b6e37b5e2e49fdf6bea93ec45ffddb3c43384",
+      "pass": true
+    }
+  ],
+  "originals": [
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "instanceId": "1_408347",
+      "parentId": "1_15621",
+      "className": "Script",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "attributes": [],
+      "tags": [],
+      "sourceSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "PuzzleManager"
+      ]
+    },
+    {
+      "studioPath": "ServerScriptService.TeamObjectives",
+      "instanceId": "1_42759",
+      "parentId": "1_409634",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "tags": [],
+      "sourceSHA256": "4e5f91990b1d2cddcca1310ef877f709cf308ef450d43ff48b4399b0d1cd40b2",
+      "segments": [
+        "ServerScriptService",
+        "TeamObjectives"
+      ]
+    }
+  ],
+  "nativeScriptCount": 212,
+  "manifestAtPrepareSHA256": "cab2d235d9636d19d89686219b74e25dfba7fe7b360a520fe7db6c93ef043cca",
+  "payloadHashes": {
+    "before": "4f74d654441d6446195b5c44e03e136544cb6eccf0b1a061d00270b3ee644ccb",
+    "candidate": "c494f656189596bf5d3c7f5c957eb7fa2f2269ce8162adedf380d0d7ca12c868",
+    "inactiveNegative": "930150333f2791c0dbc1d3ab578d72d5ef1de2ef70b8bf5abe36eafdeef6bfd2"
+  },
+  "nativeCodeHashes": {
+    "before": "ee73625fd0c6cd1f7fefa002578a740436c38f0db455901ede24d00314338d09",
+    "installed": "e57accfd3e677bd80ffc5c613e2b6e37b5e2e49fdf6bea93ec45ffddb3c43384"
+  },
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "immutableOldProposalPreserved": true,
+  "status": "offline ready; root reviews then executes native-before. No installation or native port pass yet.",
+  "limits": "Actual initializer/three handlers/announce/clearPuzzle; engine/players/remotes/analytics/world/clock are local boundaries. Native full-round/multiplayer/streaming/respawn/teleport/performance remain untested."
+}

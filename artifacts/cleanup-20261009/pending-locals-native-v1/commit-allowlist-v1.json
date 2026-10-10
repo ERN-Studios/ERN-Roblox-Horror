@@ -1,0 +1,175 @@
+{
+  "schema": "mongotv-s11-curated-allowlist-v1",
+  "files": [
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/REVIEW.md",
+      "rawBytes": 6981,
+      "rawSHA256": "5c8d00bf9c87235316619404a9a084d52577d015926abb3a689a2c1319856090"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/S11-REVIEW.md",
+      "rawBytes": 5973,
+      "rawSHA256": "b9a87eb358d8b214a5e3a1568a7f0e80bbdf2fb7be67698f149d7078a1060762"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only-v2/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only-v2/native-before.luau",
+      "rawBytes": 68600,
+      "rawSHA256": "d49702efc5f8a1cb74472f52895b15da81f3d8fd793bc2597f8908237d4d33aa"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only-v2/native-installed.luau",
+      "rawBytes": 68599,
+      "rawSHA256": "bcf8a3f919457c7d7262c2bc82e9bbf615407ca4f852ae165fa656cfa73fa18f"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only-v2/ownership-fixture.luau",
+      "rawBytes": 3605,
+      "rawSHA256": "290bdb5a8c29570a634cf45b2fba8bef4d18cadcb97d3132c58ea0b039aca552"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only-v2/proposal.json",
+      "rawBytes": 2405,
+      "rawSHA256": "25d41b7e340af84e91a9cb025daafc3065029fadc82c33a8d0f3e9822bdba960"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only/before.module.luau",
+      "rawBytes": 18687,
+      "rawSHA256": "4f74d654441d6446195b5c44e03e136544cb6eccf0b1a061d00270b3ee644ccb"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only/candidate.module.luau",
+      "rawBytes": 18669,
+      "rawSHA256": "c494f656189596bf5d3c7f5c957eb7fa2f2269ce8162adedf380d0d7ca12c868"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only/inactiveNegative.module.luau",
+      "rawBytes": 18670,
+      "rawSHA256": "930150333f2791c0dbc1d3ab578d72d5ef1de2ef70b8bf5abe36eafdeef6bfd2"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only/native-before.luau",
+      "rawBytes": 68082,
+      "rawSHA256": "ee73625fd0c6cd1f7fefa002578a740436c38f0db455901ede24d00314338d09"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only/native-installed.luau",
+      "rawBytes": 68081,
+      "rawSHA256": "e57accfd3e677bd80ffc5c613e2b6e37b5e2e49fdf6bea93ec45ffddb3c43384"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-only/proposal.json",
+      "rawBytes": 5433,
+      "rawSHA256": "d46ee1e4e41d9f80e988b161019f17cbda9f678230e11a26722f41166927430b"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-source-proposal-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-source-proposal-v1/offline-wrapper-tests-initial-v1.json",
+      "rawBytes": 1976,
+      "rawSHA256": "50ad337f7a972c184068a11f75f835701ae1a23cd280d9ece4fe0697947067dd"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-source-proposal-v1/offline-wrapper-tests.json",
+      "rawBytes": 2134,
+      "rawSHA256": "544eabbda6f40ef12c6ce7aec40240eaef66e908c10a0c77950d3436bdca0b28"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-source-proposal-v1/proposal.json",
+      "rawBytes": 2060,
+      "rawSHA256": "cca57de1923f6dcb63850f0c8fcf6c35cb3ddeccb6990074fe1d238d102f02ad"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/latch-source-proposal-v1/test_apply_latch_mode_cleanup.initial-v1.py.txt",
+      "rawBytes": 10491,
+      "rawSHA256": "884a8b47525dbe4c6dc45c121a34f7731db57bd6c48c9c28797bc3349b517413"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/native-before-result.json",
+      "rawBytes": 1145,
+      "rawSHA256": "8ee13aa00cb7ee2e8afd7b6a652200cc17473609c17fb6c63abc758557f72fff"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/observation.json",
+      "rawBytes": 4863,
+      "rawSHA256": "833206c9d21ad846b948f8c981766b9d010499c272a9ef27dd9e2c609ee36070"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/read-source.luau",
+      "rawBytes": 3056,
+      "rawSHA256": "327c01d622953f393ac9623bd89e71117aaa4c50dc5cc1e06ef8dafe6c80efc0"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/pending-locals-native-v1/team-observation.json",
+      "rawBytes": 1753,
+      "rawSHA256": "206447969c9a2b994b0c81c5e83a83ef4e8522725685b65a4892bb0633ae27cd"
+    },
+    {
+      "file": "tools/cleanup_20261009/.gitattributes",
+      "rawBytes": 1636,
+      "rawSHA256": "bbb243003c570315063219ceac15d53a8be30a3bddd4994eb1c0eef2743f809d"
+    },
+    {
+      "file": "tools/cleanup_20261009/apply_latch_mode_cleanup.py",
+      "rawBytes": 18479,
+      "rawSHA256": "f9c8f71d8e85b44df2fec5427ce1021ab958cb076901fe5f88fe1e2c1659c4ba"
+    },
+    {
+      "file": "tools/cleanup_20261009/latch_mode_probe.luau",
+      "rawBytes": 8129,
+      "rawSHA256": "f5b2420e84e339b9e58357e1a653f0b0c7e9a4d678ce98c2b9fe327c72379904"
+    },
+    {
+      "file": "tools/cleanup_20261009/latch_mode_probe_v2.luau",
+      "rawBytes": 8647,
+      "rawSHA256": "3f5f6f6e6734e195d1f562a124910cbaa8d3abd777a2a35bd0aa8f58756c6ffc"
+    },
+    {
+      "file": "tools/cleanup_20261009/latch_mode_source_cas.luau",
+      "rawBytes": 6978,
+      "rawSHA256": "094276588229701cf09301e0271d957e2068420a41c93178a0d815ba3425e231"
+    },
+    {
+      "file": "tools/cleanup_20261009/prepare_latch_mode_probe.py",
+      "rawBytes": 17515,
+      "rawSHA256": "66c3131bef4f5f0f67490249ef6c494652e59b9155c684f59b1ce8e4039a459c"
+    },
+    {
+      "file": "tools/cleanup_20261009/prepare_latch_mode_probe_v2.py",
+      "rawBytes": 9083,
+      "rawSHA256": "0cfad2b65a34cca5912a58ea525d5f040e506d6d49c86a3f38d6c9813fd81351"
+    },
+    {
+      "file": "tools/cleanup_20261009/test_apply_latch_mode_cleanup.py",
+      "rawBytes": 11114,
+      "rawSHA256": "cffc36889dadd2f8beb935b4c0902bdca091bde5301ef93271d436cb64dfde1c"
+    }
+  ],
+  "fileCountExcludingSelf": 31,
+  "totalBytesExcludingSelf": 462868,
+  "excluded": [
+    ".git/mongotv-cleanup-20261009/latch-source-install-v1 private exact native Source/editor/file/manifest rollback checkpoints",
+    "canonical production source and studio-sync-manifest.json (parent owns separate source/row stage)",
+    "all unrelated working files and S12tools",
+    "duplicate full PuzzleManager before/candidate Source already preserved in committed additional-locals inputs"
+  ],
+  "pendingNativeEvidence": [
+    "artifacts/cleanup-20261009/pending-locals-native-v1/native-before-v2-result.json",
+    "artifacts/cleanup-20261009/pending-locals-native-v1/latch-source-install-v1/.gitattributes",
+    "artifacts/cleanup-20261009/pending-locals-native-v1/latch-source-install-v1/native-installed-result.json",
+    "artifacts/cleanup-20261009/pending-locals-native-v1/latch-source-install-v1/result.json"
+  ],
+  "scope": "Preparation/exact executed v1 before contract only at curation. Root owns v2before/install/replay, final evidence, stage/commit. No staging by curator. tools attrs7specific lines appended; all prior rows retained."
+}

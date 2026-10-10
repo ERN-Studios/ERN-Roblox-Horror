@@ -1,0 +1,13 @@
+{
+  "schema": "mongotv-latch-source-install-v1",
+  "pass": false,
+  "publishedByThisBatch": false,
+  "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+  "bytesRemoved": 18,
+  "headAtStart": "5a3a06e7ba065615f35b54884b7a984e4ab155a2",
+  "productionNativeWritesRequested": 0,
+  "rollback": {},
+  "limits": "Actual local-source contract, not full gameplay/multiplayer/streaming/assets/performance. File CAS is checked immediately before atomic replacement.",
+  "error": "Unterminated string starting at: line 1 column 118 (char 117)",
+  "completedAtUtc": "2026-10-09T23:53:11.616929+00:00"
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "s11-root-scoped-commit-v2",
+  "headBeforeCommit": "e78cf597807ea644265646707977840a5bdb6fde",
+  "actualReceiptSHA256": "6cea4782b6ba64a34755bf2648455695c40f678a0bc37ca5ea7695c881bdfbbf",
+  "canonicalSource": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+  "beforeSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+  "afterSHA256": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
+  "bytesRemoved": 18,
+  "oneNativeSourceWrite": true,
+  "other211OriginalSourcesPropertiesPreserved": true,
+  "onlyTwoFieldsOneHeadManifestRowChanged": true,
+  "scopedManifestSHA256": "2d42639edabde62038aaf6d645135af48f9efb2076562b8c311ab204f83c309c",
+  "workingRoundUIRawPreservedSHA256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73",
+  "nativeInstalledContractPassed": true,
+  "nativeFreshModulesCreatedDestroyed": 3,
+  "probesRemaining": 0,
+  "consoleReturnedTextUnchanged": true,
+  "cleanConsoleClaimed": false,
+  "scope": "One private unread field only. Actual contracts use controlled engine boundaries; no complete gameplay, multiplayer, streaming, assets, performance or published certificate."
+}

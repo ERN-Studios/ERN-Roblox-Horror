@@ -1,0 +1,66 @@
+{
+  "schema": "mongotv-latch-mode-probe-v2",
+  "pass": true,
+  "checksPerVersion": 47,
+  "pairedChecks": 94,
+  "reentryChecks": 94,
+  "ownershipCases": 8,
+  "ownershipChecks": 20,
+  "compileChecks": [
+    {
+      "input": "before",
+      "optimization": "-O0",
+      "sourceSHA256": "d49702efc5f8a1cb74472f52895b15da81f3d8fd793bc2597f8908237d4d33aa",
+      "pass": true
+    },
+    {
+      "input": "before",
+      "optimization": "-O1",
+      "sourceSHA256": "d49702efc5f8a1cb74472f52895b15da81f3d8fd793bc2597f8908237d4d33aa",
+      "pass": true
+    },
+    {
+      "input": "installed",
+      "optimization": "-O0",
+      "sourceSHA256": "bcf8a3f919457c7d7262c2bc82e9bbf615407ca4f852ae165fa656cfa73fa18f",
+      "pass": true
+    },
+    {
+      "input": "installed",
+      "optimization": "-O1",
+      "sourceSHA256": "bcf8a3f919457c7d7262c2bc82e9bbf615407ca4f852ae165fa656cfa73fa18f",
+      "pass": true
+    },
+    {
+      "input": "ownership",
+      "optimization": "-O0",
+      "sourceSHA256": "290bdb5a8c29570a634cf45b2fba8bef4d18cadcb97d3132c58ea0b039aca552",
+      "pass": true
+    },
+    {
+      "input": "ownership",
+      "optimization": "-O1",
+      "sourceSHA256": "290bdb5a8c29570a634cf45b2fba8bef4d18cadcb97d3132c58ea0b039aca552",
+      "pass": true
+    }
+  ],
+  "payloadHashes": {
+    "before": "4f74d654441d6446195b5c44e03e136544cb6eccf0b1a061d00270b3ee644ccb",
+    "candidate": "c494f656189596bf5d3c7f5c957eb7fa2f2269ce8162adedf380d0d7ca12c868",
+    "inactiveNegative": "930150333f2791c0dbc1d3ab578d72d5ef1de2ef70b8bf5abe36eafdeef6bfd2"
+  },
+  "nativeCodeHashes": {
+    "before": "d49702efc5f8a1cb74472f52895b15da81f3d8fd793bc2597f8908237d4d33aa",
+    "installed": "bcf8a3f919457c7d7262c2bc82e9bbf615407ca4f852ae165fa656cfa73fa18f"
+  },
+  "templateSHA256": "3f5f6f6e6734e195d1f562a124910cbaa8d3abd777a2a35bd0aa8f58756c6ffc",
+  "beforeSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+  "candidateSHA256": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
+  "nativeScriptCount": 212,
+  "v1ProposalSHA256": "d46ee1e4e41d9f80e988b161019f17cbda9f678230e11a26722f41166927430b",
+  "v1ExecutedNativeSHA256": "ee73625fd0c6cd1f7fefa002578a740436c38f0db455901ede24d00314338d09",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "status": "offline ownership controls pass; parent must run fresh native-before-v2 before installation"
+}

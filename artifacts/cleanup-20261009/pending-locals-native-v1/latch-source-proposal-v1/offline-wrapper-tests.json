@@ -1,0 +1,66 @@
+{
+  "pass": true,
+  "cases": [
+    {
+      "scenario": "success",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "play",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "beforeWrite",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "commitThenError",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "observeUnknown",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "foreignNative",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "replay",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "actorManifest",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "actorSource",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "actorTargetRow",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "console",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    }
+  ],
+  "checks": 74,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "wrapperSHA256": "f9c8f71d8e85b44df2fec5427ce1021ab958cb076901fe5f88fe1e2c1659c4ba",
+  "templateSHA256": "094276588229701cf09301e0271d957e2068420a41c93178a0d815ba3425e231",
+  "limits": "Fake MCP/native/console/git boundaries; actual filesystem and wrapper operations. Real native source CAS and global after-port remain parent-owned."
+}

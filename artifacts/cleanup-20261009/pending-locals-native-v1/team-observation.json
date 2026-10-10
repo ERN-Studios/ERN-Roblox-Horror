@@ -1,0 +1,17 @@
+{
+  "studioPath": "ServerScriptService.TeamObjectives",
+  "source": "-- Shared server-owned team progress. Call only after a validated objective mutation.\nlocal Players = game:GetService(\"Players\")\nlocal RS = game:GetService(\"ReplicatedStorage\")\nlocal remote = RS:WaitForChild(\"Remotes\"):WaitForChild(\"RoundStatus\")\n-- ANALYTICS_20260921. This is the single server-validated choke point every\n-- level's objective progress passes through, which is why it is the hook.\nlocal Analytics = require(script.Parent:WaitForChild(\"ZyntraAnalytics\"))\nlocal TeamObjectives = {}\nlocal serial = 0\nfunction TeamObjectives.Announce(actorName, detail, level, key)\n\tif type(actorName) ~= \"string\" or type(detail) ~= \"string\" then return end\n\t-- Attributed to the ACTOR only, never the party: every caller passes a\n\t-- player's own name and names are unique within a server. Measurement only.\n\tAnalytics.Objective(Players:FindFirstChild(actorName), level)\n\tserial += 1\n\tlocal payload = {Actor = actorName, Detail = detail, Level = level, Serial = serial,\n\t\tKey = type(key) == \"string\" and key or nil}\n\tfor _, recipient in ipairs(Players:GetPlayers()) do\n\t\t-- Dead/escaped teammates retain InRound until their round closes.\n\t\tif recipient:GetAttribute(\"InRound\") == true then\n\t\t\tremote:FireClient(recipient, \"objective\", payload)\n\t\tend\n\tend\nend\nreturn TeamObjectives\n",
+  "instanceId": "1_42759",
+  "sourceSHA256": "4e5f91990b1d2cddcca1310ef877f709cf308ef450d43ff48b4399b0d1cd40b2",
+  "properties": {
+    "Archivable": true,
+    "LinkedSource": ""
+  },
+  "parentId": "1_409634",
+  "modeSwitches": 0,
+  "attributes": [],
+  "className": "ModuleScript",
+  "nativeWrites": 0,
+  "probeObjects": 0,
+  "tags": []
+}

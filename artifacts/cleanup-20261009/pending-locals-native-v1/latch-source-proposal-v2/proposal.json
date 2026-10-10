@@ -1,0 +1,87 @@
+{
+  "pass": true,
+  "schema": "mongotv-latch-source-cas-offline-proposal-v2",
+  "bytesRemoved": 18,
+  "scope": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+  "beforeSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+  "afterSHA256": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
+  "compileChecks": [
+    {
+      "operation": "capture",
+      "optimization": "-O0",
+      "sourceSHA256": "7896235375fecc74acc1e0e7af12b66933779b6b85f755d8c5cddb920cb6506e",
+      "pass": true
+    },
+    {
+      "operation": "capture",
+      "optimization": "-O1",
+      "sourceSHA256": "7896235375fecc74acc1e0e7af12b66933779b6b85f755d8c5cddb920cb6506e",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O0",
+      "sourceSHA256": "b4c629fd7b94a8f0fde49850a456b9133e142ef2e9142808ca3166a9b984f39c",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O1",
+      "sourceSHA256": "b4c629fd7b94a8f0fde49850a456b9133e142ef2e9142808ca3166a9b984f39c",
+      "pass": true
+    },
+    {
+      "operation": "target",
+      "optimization": "-O0",
+      "sourceSHA256": "9bc4674f86a40c30af0284ba41715195355f173c3ca79dd1ddf6ca13ec92af64",
+      "pass": true
+    },
+    {
+      "operation": "target",
+      "optimization": "-O1",
+      "sourceSHA256": "9bc4674f86a40c30af0284ba41715195355f173c3ca79dd1ddf6ca13ec92af64",
+      "pass": true
+    },
+    {
+      "operation": "verify",
+      "optimization": "-O0",
+      "sourceSHA256": "580b8e2b53278f02dc4039c06ce43378a7e61bbb477c33d5ecf772bcd9dc60bd",
+      "pass": true
+    },
+    {
+      "operation": "verify",
+      "optimization": "-O1",
+      "sourceSHA256": "580b8e2b53278f02dc4039c06ce43378a7e61bbb477c33d5ecf772bcd9dc60bd",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O0",
+      "sourceSHA256": "10a29a26c161f1ebe741cdee21d3da0f7e4b0da409301962363b750c616b94d3",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O1",
+      "sourceSHA256": "10a29a26c161f1ebe741cdee21d3da0f7e4b0da409301962363b750c616b94d3",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O0",
+      "sourceSHA256": "6339c9779dc7cc413056b6fefa1e0f46248198b271e07da8ad3dd6501ae7b0f4",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O1",
+      "sourceSHA256": "6339c9779dc7cc413056b6fefa1e0f46248198b271e07da8ad3dd6501ae7b0f4",
+      "pass": true
+    }
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "templateSHA256": "bf8ed492993ddd67faca008f10d51dec2e593aa6d8b4403e96ff9c2d3dbeb05f",
+  "status": "pending independent wrapper/negative review and fresh native-before-v2"
+}

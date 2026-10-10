@@ -1,0 +1,63 @@
+{
+  "pass": true,
+  "schema": "mongotv-latch-source-cas-offline-proposal-v1",
+  "bytesRemoved": 18,
+  "scope": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+  "beforeSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+  "afterSHA256": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
+  "compileChecks": [
+    {
+      "operation": "capture",
+      "optimization": "-O0",
+      "sourceSHA256": "fcd4a985bdd3201c02f1b9d36e129e98667d120ef90229286baa5029add05e26",
+      "pass": true
+    },
+    {
+      "operation": "capture",
+      "optimization": "-O1",
+      "sourceSHA256": "fcd4a985bdd3201c02f1b9d36e129e98667d120ef90229286baa5029add05e26",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O0",
+      "sourceSHA256": "9f046a48eb198fe71baf171b1a134827e82a63d68b6f7dbfdd2b16f43efc2507",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O1",
+      "sourceSHA256": "9f046a48eb198fe71baf171b1a134827e82a63d68b6f7dbfdd2b16f43efc2507",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O0",
+      "sourceSHA256": "56d8e77678ad8fc5efccb29e7bf9daa7c5885364adc0b5d91cd61bd02b823bfb",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O1",
+      "sourceSHA256": "56d8e77678ad8fc5efccb29e7bf9daa7c5885364adc0b5d91cd61bd02b823bfb",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O0",
+      "sourceSHA256": "703d9f5e5b852efda5a253d0502d0b2417798581699cc6718f62ccdef5b9e939",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O1",
+      "sourceSHA256": "703d9f5e5b852efda5a253d0502d0b2417798581699cc6718f62ccdef5b9e939",
+      "pass": true
+    }
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "templateSHA256": "094276588229701cf09301e0271d957e2068420a41c93178a0d815ba3425e231",
+  "status": "pending independent wrapper/negative review and fresh native-before-v2"
+}

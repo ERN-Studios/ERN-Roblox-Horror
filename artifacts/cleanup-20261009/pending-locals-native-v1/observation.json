@@ -1,0 +1,149 @@
+{
+  "universeId": 10559217407,
+  "readAtUtc": "2026-10-09T23:26:48Z",
+  "nativeWrites": 0,
+  "placeId": 131311258779917,
+  "datamodel": "Edit",
+  "modeSwitches": 0,
+  "rows": [
+    {
+      "excerpts": [
+        {
+          "lineNumber": 61,
+          "text": "local function safeRect(rect, room, blocked, reservePerimeter)"
+        },
+        {
+          "lineNumber": 62,
+          "text": "\tlocal inset = if reservePerimeter then 11.5 else WALL_INSET"
+        },
+        {
+          "lineNumber": 89,
+          "text": "\t\tlocal fits=safeRect(withPartition,room,blocked,false)"
+        },
+        {
+          "lineNumber": 252,
+          "text": "\t\tlocal localPosition=if kind==\"breaker\" then V(.98,6.70,.42)"
+        },
+        {
+          "lineNumber": 255,
+          "text": "\t\tif kind==\"breaker\" then localPosition=V(.98,2.15,.42) end"
+        },
+        {
+          "lineNumber": 256,
+          "text": "\t\tlocal anchor=carrier(model,cf:PointToWorldSpace(localPosition),\"Interaction Origin\")"
+        },
+        {
+          "lineNumber": 404,
+          "text": "\t\t\t\t\t\tif safeRect(rect,room,blocked,false) then"
+        }
+      ],
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "oldCASStillValid": true,
+      "instanceId": "1_42745",
+      "sourceSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_15620",
+      "canonicalBytes": 18304,
+      "rawEditorSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+      "rawSourceSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Worn Party Room Dressing"
+      ],
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "tags": [],
+      "rawBytes": 18304,
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d"
+      }
+    },
+    {
+      "excerpts": [
+        {
+          "lineNumber": 1373,
+          "text": "\t\tboxesDone = 0, boxCount = boxCount, latchMode = true,"
+        }
+      ],
+      "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "oldCASStillValid": true,
+      "instanceId": "1_408347",
+      "sourceSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "parentId": "1_15621",
+      "canonicalBytes": 105520,
+      "rawEditorSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "rawSourceSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "PuzzleManager"
+      ],
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "tags": [],
+      "rawBytes": 105520,
+      "attributes": []
+    },
+    {
+      "excerpts": [
+        {
+          "lineNumber": 41,
+          "text": "local target, targetReason = nil, nil"
+        },
+        {
+          "lineNumber": 43,
+          "text": "local nextHopAt, nextThinkAt, nextReplanAt = 0, 0, 0"
+        },
+        {
+          "lineNumber": 44,
+          "text": "local beamTime, stunUntil, stunCooldownUntil = 0, 0, 0"
+        },
+        {
+          "lineNumber": 676,
+          "text": "\ttargetReason = reason"
+        },
+        {
+          "lineNumber": 927,
+          "text": "\tbeamTime, stunUntil, stunCooldownUntil, nextHopAt = 0, 0, 0, 0"
+        }
+      ],
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "oldCASStillValid": true,
+      "instanceId": "1_42775",
+      "sourceSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_15624",
+      "canonicalBytes": 34745,
+      "rawEditorSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "rawSourceSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Usher Controller"
+      ],
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "tags": [],
+      "rawBytes": 34745,
+      "attributes": []
+    }
+  ],
+  "probeObjects": 0,
+  "schema": "mongo-cleanup-pending-locals-fresh-observation-v1",
+  "sourceWrites": 0
+}

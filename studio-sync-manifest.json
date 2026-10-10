@@ -643,8 +643,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
-      "bytes": 105520,
-      "sha256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "bytes": 105502,
+      "sha256": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

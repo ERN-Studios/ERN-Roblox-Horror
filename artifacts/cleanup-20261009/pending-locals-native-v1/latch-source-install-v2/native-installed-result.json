@@ -1,0 +1,29 @@
+{
+  "contract": {
+    "beforeBehaviorSHA256": "2f246c7bf9b4d3afe64b6c40af45fb32037b76e0330eadf50005259cba11b18b",
+    "candidateBehaviorSHA256": "2f246c7bf9b4d3afe64b6c40af45fb32037b76e0330eadf50005259cba11b18b",
+    "semanticNegativeRejected": true,
+    "reentryChecks": 94,
+    "pairedChecks": 94,
+    "checksPerVersion": 47
+  },
+  "readAtUtc": "2026-10-10T00:02:17Z",
+  "nativeOriginalSourceWrites": 0,
+  "remainingProbes": 0,
+  "nativeOriginalAttributeWrites": 0,
+  "nativeOriginalParentWrites": 0,
+  "cleanupErrors": [],
+  "borrowedRuntimeState": false,
+  "contractPassed": true,
+  "probesDestroyed": 3,
+  "ownedLeaseReleased": true,
+  "installed": true,
+  "originalsUnchanged": true,
+  "limits": "Actual private initializer/prompt/clearPuzzle contract against local-only engine boundary tables. No live round, real asset, real multiplayer, streaming, respawn, teleport or performance certification.",
+  "modeSwitches": 0,
+  "probesCreated": 3,
+  "pass": true,
+  "schema": "mongotv-latch-mode-native-contract-v2",
+  "originalSourceCoverage": 212,
+  "nativeInputSHA256": "bcf8a3f919457c7d7262c2bc82e9bbf615407ca4f852ae165fa656cfa73fa18f"
+}

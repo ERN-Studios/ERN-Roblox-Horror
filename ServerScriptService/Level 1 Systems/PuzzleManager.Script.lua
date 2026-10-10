@@ -1370,7 +1370,7 @@ local function startPuzzle()
 	session = {
 		active = true, stage = "fuses", conns = {}, folder = folder,
 		boxes = {}, levers = {}, circuits = {}, relays = {}, fuses = {}, carried = {}, exit = nil,
-		boxesDone = 0, boxCount = boxCount, latchMode = true,
+		boxesDone = 0, boxCount = boxCount,
 		escaped = {}, escapeAnnounced = false, -- who's out + first-escape latch
 		participants = roundPlayerSet, fuseCharacters = {},
 	}
