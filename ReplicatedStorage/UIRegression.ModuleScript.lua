@@ -20,7 +20,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
--- Used by BriefingFitMatrix only. GetTextBoundsAsync is the ONE way to ask what
+-- Retained analytical text helper. GetTextBoundsAsync can ask what
 -- a string WOULD need at a size and wrap width the client is not currently
 -- rendering; the TextBounds property can only ever answer for what is on screen
 -- right now, at the one viewport Studio happens to be drawing.
@@ -1250,19 +1250,6 @@ end
 
 local LONG_DISPATCH_CUE = "Keep moving through the flooded service halls. The water is above your knees, so listen for every heavy step and follow the green exit lights."
 
-local function setLongDispatchCue()
-	task.wait(.05)
-	local guide = findGui("LevelOneGuideGui")
-	local subtitle = guide and guide:FindFirstChild("Subtitle", true)
-	if subtitle and subtitle:IsA("TextLabel") then subtitle.Text = LONG_DISPATCH_CUE end
-	-- The panel is sized for the copy, so changing the copy has to re-run the
-	-- layout. Through the production function, via its Studio seam.
-	local relayout = guide and guide:FindFirstChild("UIRegressionRelayoutGuide")
-	if relayout and relayout:IsA("BindableFunction") then
-		pcall(function() relayout:Invoke() end)
-	end
-	task.wait(.05)
-end
 
 -- NOT LOCKED, AND CORRECTLY SO -- but say why, because it is the one public
 -- entry point in this file that is next door to a mutating lane and is not
@@ -1907,8 +1894,8 @@ end
 -- file its ability to compile.
 
 -- GetTextBoundsAsync is the ONE way to ask what a string WOULD need at a size
--- and wrap width the client is not currently rendering. Hoisted here from
--- BriefingFitMatrix, which now shares it rather than keeping a second copy.
+-- and wrap width the client is not currently rendering. The current shared
+-- HUD matrix uses native TextBounds; it does not call this analytical helper.
 -- Every call is pcall'ed: a service hiccup must be a failed CHECK, not an
 -- unwound sweep that strands the device override.
 function Fit.measureText(text, fontFace, size, width)
@@ -2586,9 +2573,7 @@ function Fit.borrow()
 	-- behaving; when it does not, residue says a transition happened instead of
 	-- quietly forgiving the widgets that moved.
 	saved.DispatchOpen = Players.LocalPlayer:GetAttribute("DispatchTextActive") == true
-	-- The live dispatch caption. setLongDispatchCue overwrites it in place, and
-	-- nothing put it back -- so every run left the player's briefing showing a
-	-- test string until the next real cue.
+	-- Preserve the live dispatch caption so every QA lane restores the copy it borrowed.
 	local guide = playerGui():FindFirstChild("LevelOneGuideGui")
 	local subtitle = guide and guide:FindFirstChild("Subtitle", true)
 	if subtitle and subtitle:IsA("TextLabel") then
@@ -3338,6 +3323,8 @@ function Fit.bodyTouchTargetMatrix(): (string, number)
 			-- zone -- and it is applied here to all THREE levels rather than to
 			-- Level 2 alone. ObjectiveCornerMatrix runs the same predicate across
 			-- its own device list; this keeps it in the tap-target sweep too.
+			-- Close the preceding device's fixture-owned modal/result before staging this readout.
+			resetScenario(true)
 			Fit.stageRoundObjective(1)
 			task.wait(.12)
 			for _, spec in ipairs({
@@ -3348,7 +3335,7 @@ function Fit.bodyTouchTargetMatrix(): (string, number)
 				local objectiveRect = objectivePanel
 					and UIRegression.ResolveRect(objectivePanel, device.Size, layout.Inset.Y)
 				if objectiveRect and not objectiveRect.Unresolvable then
-					local problems = Fit.anchorProblems(objectiveRect, layout, spec[2])
+					local problems = Fit.anchorProblems(objectiveRect, layout, spec[2], layout.IsTouch and 16 or 24)
 					record(#problems == 0,
 						device.Name .. ": " .. spec[2] .. " holds the upper-right safe corner",
 						table.concat(problems, "; "))
@@ -4097,120 +4084,12 @@ function UIRegression.QueueModalMatrix(token: string?): (string, number)
 end
 
 -- ---------------------------------------------------------------------------
--- Briefing text fit, resolved per device
+-- BriefingFitMatrix: compatibility alias for the shared HUD matrix.
 -- ---------------------------------------------------------------------------
---
--- The dispatch panel is the one place in the HUD where the layout sizes a
--- rectangle and something else entirely fills it with a sentence. RoundUI's
--- `updateLevelOneGuideLayout` reserves the subtitle box arithmetically --
--- `textTop = math.max(28, controlsTop + controlsHeight + (touch and 0 or 2))`,
--- RoundUI L2425 -- and on a TOUCH row that picks OwnBand with two 44px columns
--- that lands the box top at exactly y = 74, the same pixel where the MUTE/STOP
--- row ends. Nothing hard-codes 74; it falls out of the arithmetic, and the two
--- rectangles ABUT by design. Abutment is fine. One pixel of real penetration is
--- the defect this file already exists to catch, and neither case was ever
--- asserted anywhere but at whatever viewport Studio happened to be rendering.
---
--- Worse, the boxes were the only thing ever checked. Whether the COPY fits the
--- box it was handed had exactly one automated assertion -- `TextFitTargets`
--- inside RunAll -- and that one reads the engine's `TextBounds` PROPERTY, which
--- can only describe the string currently on screen at the size currently
--- rendered. RunAll also refuses to start while `UIRegressionViewport` is set,
--- so it can never speak about any viewport but the real one. Every claim that
--- a 113-character cue fits on a 568x320 phone came from a human looking at the
--- Device Simulator.
---
--- This matrix asks arithmetically instead: ResolveRect for the boxes,
--- TextService:GetTextBoundsAsync for the copy. It is deliberately pessimistic
--- about what it may resolve. `BriefingControls` holds a UIListLayout, so the
--- two buttons inside it are ENGINE-placed and ResolveRect correctly refuses
--- them -- so the CONTAINER is resolved, and the buttons are measured against
--- its resolved extent and the list layout's own declared padding, rather than
--- pretending the resolver can place what the engine places.
-
--- LOCALISATION STRESS CORPUS.
---
--- This is a PROXY for the shipped copy, not a mirror of it. UIRegression lives
--- in ReplicatedStorage and the cues live in a LocalScript under
--- StarterPlayerScripts, which cannot be required from here, so the strings are
--- transcribed by hand and MUST be re-synced when the cue tables change. Their
--- sources, all in StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua:
---
---   L1917-1932  briefingCues             -- Level 1
---   L1952-1971  levelThreeBriefing.cues  -- Level 3
---   L1525-1543  lobbyBriefing.cues       -- the concourse briefing
---
--- The Level 2 briefing and its 113-character "a pump alerts an entity" line,
--- which used to lead this corpus verbatim, are deleted (owner, 2026-10-08), and
--- its row went with them. The longest authored line left is Level 1's at 91
--- characters. LONG_DISPATCH_CUE (L610 of this file, 142 characters) is the
--- string the live `briefing` scenario already forces into the panel, so it is
--- now the worst English case for both matrices. The last entry is SYNTHETIC:
--- 181 characters, a German localisation of that deleted line, kept unchanged as
--- the stress case. German is the useful shape here -- the same sentence runs
--- long AND carries compounds the wrapper cannot break.
-local BRIEFING_STRESS_CORPUS = {
-	{
-		Name = "LONG_DISPATCH_CUE (142 chars)",
-		Text = LONG_DISPATCH_CUE,
-	},
-	{
-		Name = "a synthetic 1.60x localisation (181 chars)",
-		Text = "Noch wichtiger: das Aktivieren einer Pumpstation alarmiert offenbar eine bislang nicht identifizierte, ungewoehnlich grosse Entitaet und verraet ihr eure derzeitige Position sofort.",
-	},
-}
-
--- Speech is disabled for now, so MUTE is deliberately absent from the input
--- stack. Keep its instance for a future voice release, but measure only the
--- visible dismiss control and the caption it actually prints.
-local BRIEFING_CONTROL_CAPTIONS = {
-	DispatchStopButton = {
-		Binding = "[N]  ",
-		Captions = {"SKIP BRIEF"},
-	},
-}
-local BRIEFING_CONTROL_ORDER = {"DispatchStopButton"}
-
--- The rows of MODAL_DEVICES this matrix sweeps: every PORTRAIT row, plus the
--- four short landscape shapes where the panel has the least vertical room and
--- the layout is driven into its compromise pass. Landscape rows are keyed by
--- size rather than by device name, so a renamed row cannot silently drop out.
-local BRIEFING_LANDSCAPE_ROWS = {
-	-- The reference device for the compact-briefing repair.
-	["956x440"] = true,
-	["705x338"] = true,  -- Galaxy A06, the shape the panel shipped broken on
-	["568x320"] = true,  -- the smallest viewport in the matrix
-	["844x390"] = true,  -- iPhone landscape
-	["667x375"] = true,  -- iPhone SE landscape
-}
-
-local function briefingDevices(): {any}
-	local rows = {}
-	for _, device in ipairs(MODAL_DEVICES) do
-		local key = string.format("%.0fx%.0f", device.Size.X, device.Size.Y)
-		if device.Portrait or BRIEFING_LANDSCAPE_ROWS[key] then
-			table.insert(rows, device)
-		end
-	end
-	return rows
-end
-
--- The overlap predicate for ANALYTICAL rects.
---
--- `rectsOverlap` above carries a one-pixel slack in every direction, and it is
--- right to: it compares MEASURED AbsolutePosition, where a shared edge can
--- round into a pixel of apparent penetration. These rects are not measured,
--- they are exact arithmetic over the UDim2 values production sets, so the same
--- slack would swallow a genuine one-pixel collision -- precisely the failure
--- this matrix exists to find, given the subtitle box is authored to land ON the
--- controls' lower edge. Half-open comparison instead, which is what the
--- rectsOverlap COMMENT describes: a shared edge (subtitle top 74, controls
--- bottom 74) is abutment and passes; one pixel of real penetration (subtitle
--- top 73) is an overlap and fails.
-local function analyticalOverlap(a: any, b: any): boolean
-	return a.Left < b.Right and a.Right > b.Left
-		and a.Top < b.Bottom and a.Bottom > b.Top
-end
+-- Preserves this public lane name, token ownership and borrow/restore behavior.
+-- Current coverage is Fit.bodyRoundHudMatrix: shared objectives and native
+-- text bounds across device fixtures, plus admitted feed/caption checks.
+-- It does not run the retired analytical briefing layout or localisation corpus.
 
 function Fit.bodyBriefingFitMatrix(): (string, number)
 	return Fit.bodyRoundHudMatrix()
@@ -4221,70 +4100,11 @@ function UIRegression.BriefingFitMatrix(token: string?): (string, number)
 end
 
 -- ---------------------------------------------------------------------------
--- BriefingExclusionMatrix -- briefing, queue modal and the L4 shop window (was the Zyntra terminal)
+-- BriefingExclusionMatrix: compatibility alias for the shared HUD matrix.
 -- ---------------------------------------------------------------------------
---
--- WHAT SHIPPED BROKEN, in pixels, at 705x338: the Zyntra opener occupied
--- (345,66)-(529,110), which is ENTIRELY inside the dispatch briefing panel
--- (12,66)-(529,141) and overlaps its MUTE/STOP row by 172x42. The briefing
--- panel in turn overlapped QueueHostPanel (290,66)-(529,326) by 239x75 and
--- covered its CloseQueue button completely. The panel draws above both
--- (DisplayOrder 110 against RoundGui 100 and ZyntraStore 55) and is opaque at
--- BackgroundTransparency .18 -- but its Frame is not Active, so a tap that
--- missed MUTE or STOP fell straight through onto a button the player could not
--- see. On a phone that is the entire top strip of the screen.
---
--- The rule is now one expression in one place (RoundUI's dispatchAudio.refresh),
--- published as the player attribute DispatchBriefingOpen. Queue always wins;
--- an already-open terminal suppresses only the panel while the transmission
--- keeps running. This matrix drives each state machine in BOTH orders because a
--- flag that is only ever set one way round is a flag that sticks.
---
--- Three things are asserted that a "does the panel hide" test would not:
---
---   * ZyntraDispatchClientActive must NOT follow DispatchBriefingOpen. The
---     transmission keeps running while its panel is suppressed; if it were torn
---     down, claimLobbyBriefing's one-shot claim would be burned by opening a
---     modal and the player would never hear the briefing at all.
---   * the suppression is UNCONDITIONAL, not touch-only, so the sweep runs at a
---     desktop viewport as well as at the phone.
---   * no rect anywhere under CommandSubtitles may intersect any rect anywhere
---     under QueueHostShade, in any state -- descendants included, because the
---     overlap that shipped was between two CHILDREN, not the two panels.
---
--- Then the developer-page captions, which are a different fault with the same
--- shape: they were chosen by UIDevice.IsTouch(), so a handheld that reports a
--- keyboard -- a tablet with a case, a hybrid -- was told to press J, B, V, P,
--- I, U and C on a device with no keys. They now follow
--- UIDevice.SuppressesKeyboardGlyphs(), which is true for EITHER touch input or
--- a handheld form factor, and they are re-rendered on UIDevice.Changed rather
--- than only at build time.
-local BRIEFING_EXCLUSION_VIEWPORTS = {
-	{Name = "phone-landscape", Size = Vector2.new(705, 338), Touch = true},
-	{Name = "desktop", Size = nil, Touch = false},
-}
-
--- command -> the key the caption must name when glyphs are shown. Mirrored by
--- hand from Zyntra Dev L4's ROWS (the legacy DEV tab's control table, which
--- the go-live deleted, carried the same keys) so a silent rebinding fails here.
--- Each row Dev_<command> draws them on its KeyChip as "KEY <key>".
--- B really does drive esp and fastQueue together (DevCheats' InputBegan toggles
--- both), so the repeat is correct and must not be "fixed".
-local DEV_CAPTION_KEYS = {
-	{Command = "esp", Key = "B"},
-	{Command = "fastQueue", Key = "B"},
-	{Command = "noclip", Key = "V"},
-	{Command = "pauseEntity", Key = "P"},
-	{Command = "immunePush", Key = "I"},
-	{Command = "unlimited", Key = "U"},
-	{Command = "thirdPerson", Key = "C"},
-	{Command = "level3PreBlackout", Key = "K"},
-	{Command = "level5Fall", Key = "O"},
-}
-local DEV_EYEBROW_BASE = "WHITELISTED DEVELOPER CONTROLS"
-local DEV_EYEBROW_KEYBOARD = DEV_EYEBROW_BASE .. " \u{B7} KEY J"
-local DEV_NOCLIP_KEYBOARD = "Fly through geometry with WASD, Space and Left Ctrl."
-local DEV_NOCLIP_TOUCH = "Fly through geometry using the movement stick."
+-- Current checks are delegated to Fit.bodyRoundHudMatrix. This entrypoint no
+-- longer independently sweeps legacy briefing/terminal exclusion state or
+-- developer-page keyboard captions. Those old claims are not current coverage.
 
 function Fit.bodyBriefingExclusionMatrix(): (string, number)
 	return Fit.bodyRoundHudMatrix()
@@ -4298,12 +4118,10 @@ end
 -- ObjectiveCornerMatrix
 -- ---------------------------------------------------------------------------
 
--- All three levels' persistent objective readouts, forced into every state they
--- have, at every device in the matrix. The question it answers is the one the
--- old suite could not even ask: not "does this rectangle avoid the movement
--- zones" -- the corridor and bottom-band placements it replaced both did -- but
--- "is it in the UPPER RIGHT of the true safe area", which is where the player
--- was told to look for it.
+-- ObjectiveCornerMatrix delegates to the shared HUD matrix. It stages the
+-- current shared objective for Levels 1 through 4 across the device fixtures.
+-- The legacy placement history below explains why the helper keeps a single
+-- expected corner; the shared card reserves 16 px on touch or 24 px on PC.
 --
 -- C_ONE_RIGHT_EDGE_20260831 -- WHAT SHIPPED BROKEN in the tests.
 --
@@ -4322,7 +4140,8 @@ end
 -- leave no headroom -- so the assertion states that single number and nothing
 -- else. Not a fraction of the width, not a range, not an alternative: the panel
 -- ends at Safe.Right minus the one authored margin (OBJECTIVE_MARGIN = 8 on
--- touch, 18 on a pointer), within AnchorSlack.
+-- touch, 18 on a pointer), within AnchorSlack. Shared callers reserve their
+-- additional authored 16/24 px through Fit.anchorProblems rightInset.
 Fit.AnchorSlack = 2
 
 -- EVERY CHILD of a panel: inside it, not on top of a sibling, and its string
@@ -4384,12 +4203,13 @@ function Fit.childProblems(panel, label): {string}
 	return problems
 end
 
-function Fit.anchorProblems(rect, layout, label): {string}
+function Fit.anchorProblems(rect, layout, label, rightInset: number?): {string}
 	if not rect then return {label .. " was not measured"} end
 	local problems = {}
 	if rect.Width <= 0 or rect.Height <= 0 then return {label .. " has no drawable size"} end
-	local expected = UIDevice.TopRightPanel(rect.Width, rect.Height, layout.IsTouch and 8 or 18, 0)
-	if math.abs(rect.Right - expected.Right) > Fit.AnchorSlack or math.abs(rect.Top - expected.Top) > Fit.AnchorSlack then
+	local inset = rightInset or 0
+	local expected = UIDevice.TopRightPanel(rect.Width + inset, rect.Height)
+	if math.abs(rect.Right - (expected.Right - inset)) > Fit.AnchorSlack or math.abs(rect.Top - expected.Top) > Fit.AnchorSlack then
 		table.insert(problems, label .. " is outside its actual UIDevice.TopRightPanel slot")
 	end
 	if not Fit.within(rect, layout.Safe, 1) then table.insert(problems, label .. " escapes the safe area") end
@@ -4777,7 +4597,9 @@ function Fit.bodyRoundHudMatrix(): (string, number)
 				if root and root.Visible then
 					local layout = UIDevice.Layout()
 					local rect = UIRegression.ResolveRect(root, device.Size, layout.Inset.Y)
-					local problems = Fit.anchorProblems(rect, layout, "ObjectiveCard")
+					-- RoundHud reserves an additional authored right margin inside the safe slot.
+					-- Legacy objective callers retain their exact TopRightPanel edge above.
+					local problems = Fit.anchorProblems(rect, layout, "ObjectiveCard", layout.IsTouch and 16 or 24)
 					state.record(#problems == 0, device.Name .. ": exact shared safe slot", table.concat(problems, "; "))
 					local absolute, rendered = Fit.live(root), Fit.engineRect(root)
 					state.record(rendered and not rendered.Unresolvable and math.abs(rendered.Left - absolute.Left) <= 1
@@ -4837,17 +4659,9 @@ end
 -- DispatchCompactMatrix
 -- ---------------------------------------------------------------------------
 
--- The compact contract for the phone briefing, asserted as a MAXIMUM footprint
--- rather than as the absence of an overlap. BriefingFitMatrix already proves
--- the panel's internals fit each other and that the panel fits its band; what
--- it cannot say -- and what the owner measured on a real iPhone 16 Pro Max --
--- is that a band-filling 768x117 panel for two readouts and one sentence is far
--- too much of the screen.
---
--- The reference device carries a HARD bound: 560 wide and 100 high on 956x440,
--- i.e. 59% and 23%. Every other phone is bound by what it PUBLISHES -- the
--- compact target it computed, and the ladder rung it had to climb -- so a
--- smaller screen may take the extra its own copy needs and nothing more.
+-- DispatchCompactMatrix is a compatibility alias for Fit.bodyRoundHudMatrix.
+-- It no longer asserts the legacy phone-briefing maximum footprint below.
+-- Keep DispatchReference as retained metadata; no current matrix reads it.
 Fit.DispatchReference = {Width = 560, Height = 100}
 
 function Fit.bodyDispatchCompactMatrix(): (string, number)
@@ -6443,9 +6257,9 @@ function Fit.bodyRunAll(lease): (string, number)
 	local modalReport, modalFailures = UIRegression.QueueModalMatrix(lease.Token)
 	table.insert(report, modalReport)
 	failures += modalFailures
-	-- Same contract, same reason: BriefingFitMatrix owns the override too, and
-	-- it is the only thing in this file that can say whether the dispatch copy
-	-- fits its box on a viewport Studio is not currently rendering.
+	-- Run the shared HUD matrix once. The four compatibility aliases delegate
+	-- to that same body, so repeating them would repeat identical fixture work.
+	-- This lane measures current shared objectives and admitted feed/captions.
 	local hudReport, hudFailures = UIRegression.RoundHudMatrix(lease.Token)
 	table.insert(report, hudReport)
 	failures += hudFailures
