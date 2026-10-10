@@ -953,6 +953,7 @@ local function makeFuseRelay(cf, folder)
 			light:SetAttribute("FuseBaseBrightness", light.Brightness)
 			light:SetAttribute("FuseBaseRange", light.Range)
 			light:SetAttribute("FuseBaseColor", light.Color)
+			light:SetAttribute("FuseBaseEnabled", light.Enabled)
 			panel:SetAttribute("FuseBasePanelColor", panel.Color)
 			panel:SetAttribute("FuseBasePanelMaterial", panel.Material.Name)
 		end
@@ -987,9 +988,17 @@ local function makeFuseRelay(cf, folder)
 					}):Play()
 					local panelFade = TweenService:Create(panel, fade, { Color = basePanelColor })
 					panelFade:Play()
+					local wasDead = light:GetAttribute("FuseBaseEnabled") == false
 					panelFade.Completed:Once(function()
 						if panel.Parent and (light:GetAttribute("FuseClusterCount") or 0) == 0 then
 							panel.Material = materialName and Enum.Material[materialName] or Enum.Material.Neon
+							-- A cluster borrows the four nearest fixtures, dead ones included, and switches them on.
+							-- A dead one used to stay lit for the rest of the round, through the blackout too. While
+							-- the building is in its normal mode it goes dark again; in any other mode the
+							-- generator's own light mode owns Enabled.
+							if wasDead and (workspace:GetAttribute("LightMode") or "NORMAL") == "NORMAL" then
+								light.Enabled = false
+							end
 						end
 					end)
 				end
