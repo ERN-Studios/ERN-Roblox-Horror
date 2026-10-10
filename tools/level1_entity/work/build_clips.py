@@ -40,8 +40,13 @@ GAITS = {
     # the first run was the walk folded double: head at chest height, feet pattering under the hips, one arm pawing
     # ahead. This one is a heavy charge: chest and head up, long reaching strides with a real flight, a hard drop on
     # each landing, both arms pumping with the claws open.
-    'Run':dict(seconds=.72,frames=72,speed=27.2,duty=.30,front=2.95,width=1.20,clear=2.25,
-               height=3.92,bob=.50,lean=25,yaw=17,list=6.5,sway=.20,heel=72),
+    # RUN_FRONT_20261010: the charge above was built for a side view. The hunted player sees it head on, as a black
+    # shape: its lean and stride lay along the line of sight, its arms (kept wide of the face) barely rose or fell,
+    # and its feet tracked 2.4 studs apart, so in the game it was an upright waddle with hanging arms. This one is
+    # built for the front silhouette: low and far forward with the head thrust out, a narrow track, a hard drop and
+    # rise, shoulders rolling and swaying, and arms that pump from the hip to the shoulder at the sides.
+    'Run':dict(seconds=.70,frames=70,speed=27.2,duty=.30,front=2.90,width=.90,clear=1.85,
+               height=3.85,bob=.62,lean=37,yaw=22,list=10.0,sway=.42,heel=72),
 }
 
 def foot_path(p,g,side):
@@ -127,7 +132,7 @@ def arms_gait(pose,p,name):
             amp=1.08 if side=='Right' else .96
             # Seen from the front (where the hunted player is) the arms have to stay OUT of the face and read wide:
             # the forward hand comes up beside the chest, never across it; the back hand is thrown out behind the hip.
-            front=np.array([sign*1.25,-1.00,-2.55*amp]); back=np.array([sign*1.95,-1.65,2.25*amp])
+            front=np.array([sign*1.15,-.30,-2.35*amp]); back=np.array([sign*1.90,-2.70,1.55*amp])
             target=S+mix(back,front,a)+np.array([0,-.50*(1-fwd*fwd),0])
             direction=mix(np.array([sign*.45,-.75,.50]),np.array([sign*.20,.15,-.97]),a)
             direction=direction/np.linalg.norm(direction)
@@ -166,7 +171,7 @@ def build_gait(name):
         bob=-g['bob']*math.cos(2*TAU*(p-(.09 if name=='Run' else .07)))
         lean=max(0,g['lean']-13.3)/.84+2*math.sin(2*TAU*(p-.07))
         torso(pose,p,lean,g['yaw'],g['list'],g['sway'],g['height']+bob,wind=3 if name!='Run' else -4,
-              head=(-28,-30,3) if name=='Run' else None)
+              head=(-34,-36,3) if name=='Run' else None)
         feet={s:foot_path(p,g,s) for s in ['Left','Right']}
         poses.append(pose); feet_all.append(feet)
     origin=RIG.rest_world['Hips'][:3,3]

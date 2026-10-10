@@ -137,3 +137,34 @@ stride.
 
 A capture trap from that night: `_G` is not shared between `execute_luau` calls, so a "disconnect the previous loop"
 kept through `_G` stacks one render loop per call. Hand a token through a workspace attribute instead.
+
+## RUN_FRONT_20261010: the charge was wrong in the game, and why
+
+The owner published the charge above and sent twenty screenshots of a chase: "det ligner jo noget der er løgn". It
+was the new clip (published 20:17, after the install). Seen head on, as the black shape the Entity is in Level 1, it
+was an upright waddle with the arms hanging out to the sides. Why:
+
+1. It was built for a side view. Lean, stride and back-kick lie along the hunted player's line of sight and vanish.
+2. The arms, kept wide of the face, swung fore and aft but rose and fell 0.65 studs: from the front they hang still.
+3. The feet tracked 1.2 studs each side of the centre line: a straddle.
+4. **Half of a chase was not the run at all.** The layer picked the gait from the speed measured on the client and
+   showed the pure run only above 24 studs/s; in a baited chase the measured speed was above 24 in 33 of 64 chase
+   frames. The rest was the prowl or a prowl/run blend that nobody drew.
+5. In the game it is a silhouette. Everything judged on lit grey renders (claws, mask, the body's form) is invisible.
+And the check that passed it looked at frozen, lit stills from angles no player has, never at motion, never at the
+blend, never at a dark shape from eye height.
+
+What changed:
+- `GAITS['Run']` and the run's arm targets, for the front silhouette: 37 degrees of lean with the head thrust out and
+  up, hips lower, track 0.9 studs, more drop and rise, more roll and sway, and arms that pump from the hip (2.7 studs
+  under the shoulder) to shoulder height at the sides.
+- `Level 1 Entity Motion`: while `EntityState` is `CHASE` and the measured speed is over 12 the gait is the run and
+  nothing else. After: Run in 52 of 64 chase frames, the others being the standing start.
+- `work/render_real.py --views player --dark [--video --approach]`: the Entity as a black shape against a lit yellow
+  room, from a player's eye height through the game's 70-degree lens, on the spot or running at the camera from 95
+  studs. This view reproduced the owner's screenshots of the bad run exactly; **it is the view to judge a chase in.**
+  (A stripe material once shadowed the `dark` flag and made every render dark: fixed.)
+
+Sheets and videos: `artifacts/level1-entity-anim-20261010/real/front_Run_*` (and `firstpass_Run_player.jpg`, the
+first run in the same view). Not checked: anybody watching it move in the game; `tools/tests/test_level1_entity_animation.py`
+could not run here (it reads a draft outside this sparse checkout).

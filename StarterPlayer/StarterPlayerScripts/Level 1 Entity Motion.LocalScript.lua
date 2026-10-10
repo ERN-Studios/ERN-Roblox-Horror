@@ -424,6 +424,12 @@ local function step(dt)
 		desiredRun = math.clamp((v - 10.5) / 13.5, 0, 1)
 		desiredWalk, desiredProwl = 1 - desiredRun, 0
 	end
+	-- RUN_FRONT_20261010: a chase is the run and nothing else. The speed measured on a client dips under 24 for more
+	-- than half of a chase (corners, bursts of replication), and each dip put the creeping prowl, or a half-blend of
+	-- prowl and run that nobody drew, in front of the hunted player. The feet still advance with the real distance.
+	if workspace:GetAttribute("EntityState") == "CHASE" and v > 12 then
+		desiredWalk, desiredProwl, desiredRun = 0, 0, 1
+	end
 	local alpha = 1 - math.exp(-dt / 0.15)
 	walkWeight += (desiredWalk - walkWeight) * alpha
 	prowlWeight += (desiredProwl - prowlWeight) * alpha

@@ -67,7 +67,7 @@ def skin(body, world):
     return to_blender(out)
 
 
-def scene(size):
+def scene(size, dark=False):
     bpy.ops.wm.read_factory_settings(use_empty=True)
     sc = bpy.context.scene
     for engine in ('BLENDER_EEVEE_NEXT', 'BLENDER_EEVEE'):
@@ -92,20 +92,39 @@ def scene(size):
     floor.from_pydata([(-60, -60, -FLOOR_UP), (60, -60, -FLOOR_UP), (60, 60, -FLOOR_UP), (-60, 60, -FLOOR_UP)], [], [(0, 1, 2, 3)])
     fo = bpy.data.objects.new('floor', floor); sc.collection.objects.link(fo); fo.data.materials.append(material('floor', (0.42, 0.43, 0.44), 0.9))
     stripes = bpy.data.objects.new('stripes', None); sc.collection.objects.link(stripes)
-    dark = material('stripe', (0.12, 0.12, 0.13), 0.9)
+    stripe = material('stripe', (0.12, 0.12, 0.13), 0.9)
     for i in range(-14, 15):
         m = bpy.data.meshes.new('s'); y = i * 4.0; z = -FLOOR_UP + 0.01
         m.from_pydata([(-60, y - 0.12, z), (60, y - 0.12, z), (60, y + 0.12, z), (-60, y + 0.12, z)], [], [(0, 1, 2, 3)])
-        o = bpy.data.objects.new('s', m); o.parent = stripes; sc.collection.objects.link(o); o.data.materials.append(dark)
+        o = bpy.data.objects.new('s', m); o.parent = stripes; sc.collection.objects.link(o); o.data.materials.append(stripe)
     sun = bpy.data.objects.new('sun', bpy.data.lights.new('sun', 'SUN')); sun.data.energy = 4.5; sun.data.angle = math.radians(8)
     sun.rotation_euler = (math.radians(52), 0, math.radians(-35)); sc.collection.objects.link(sun)
     fill = bpy.data.objects.new('fill', bpy.data.lights.new('fill', 'SUN')); fill.data.energy = 0.7
     fill.rotation_euler = (math.radians(65), 0, math.radians(140)); sc.collection.objects.link(fill)
     camera = bpy.data.objects.new('cam', bpy.data.cameras.new('cam')); sc.collection.objects.link(camera); sc.camera = camera
-    return sc, stripes, camera, material('suit', (0.52, 0.47, 0.16), 0.55)
+    suit = material('suit', (0.52, 0.47, 0.16), 0.55)
+    if dark:
+        # Level 1 as the hunted player has it: a dim yellow room lit from behind the Entity, the Entity a black shape
+        world.node_tree.nodes['Background'].inputs[0].default_value = (0.20, 0.15, 0.05, 1)
+        world.node_tree.nodes['Background'].inputs[1].default_value = 0.12
+        suit = material('suit', (0.004, 0.004, 0.004), 0.9)
+        fo.data.materials[0] = material('carpet', (0.20, 0.15, 0.06), 0.95)
+        sun.data.energy = 0.0; fill.data.energy = 0.0
+        wall = bpy.data.meshes.new('wall')
+        wall.from_pydata([(-70, -60, -FLOOR_UP), (70, -60, -FLOOR_UP), (70, -60, -FLOOR_UP + 14), (-70, -60, -FLOOR_UP + 14)], [], [(0, 1, 2, 3)])
+        wo = bpy.data.objects.new('wall', wall); sc.collection.objects.link(wo)
+        glow = bpy.data.materials.new('glow'); glow.use_nodes = True
+        e = next(n for n in glow.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
+        e.inputs['Base Color'].default_value = (0.9, 0.7, 0.2, 1)
+        e.inputs['Emission Color'].default_value = (0.95, 0.72, 0.22, 1); e.inputs['Emission Strength'].default_value = 2.2
+        wo.data.materials.append(glow)
+        lamp = bpy.data.objects.new('lamp', bpy.data.lights.new('lamp', 'AREA')); lamp.data.energy = 26000; lamp.data.size = 30
+        lamp.data.color = (1.0, 0.8, 0.35); lamp.location = (0, -30, -FLOOR_UP + 13); lamp.rotation_euler = (0, 0, 0)
+        sc.collection.objects.link(lamp)
+    return sc, stripes, camera, suit
 
 
-def aim(camera, view):
+def aim(camera, view, distance=None):
     from mathutils import Vector
     target = Vector((0, 0.4, -FLOOR_UP + 4.6))
     cam = camera.data
@@ -115,6 +134,12 @@ def aim(camera, view):
     elif view == 'front':
         cam.type = 'ORTHO'; cam.ortho_scale = 15.5
         camera.location = target + Vector((0, 40, 0.6))
+    elif view == 'player':        # what the hunted player sees: eye height, dead ahead, the game's 70-degree lens
+        cam.type = 'PERSP'; cam.sensor_fit = 'VERTICAL'; cam.angle_y = math.radians(70 if distance is None else 34)
+        eye = Vector((0, 15 if distance is None else distance, -FLOOR_UP + 4.6))
+        camera.location = eye
+        camera.rotation_euler = (Vector((0, 0, -FLOOR_UP + 4.6)) - eye).to_track_quat('-Z', 'Y').to_euler()
+        return
     else:                         # three-quarter from the front, at a player's eye height
         cam.type = 'PERSP'; cam.lens = 58
         camera.location = target + Vector((15, 24, 0.9))
@@ -127,13 +152,15 @@ def main():
     parser.add_argument('--tag', default='now'); parser.add_argument('--phases', type=int, default=12)
     parser.add_argument('--views', default='side,threequarter'); parser.add_argument('--video', action='store_true')
     parser.add_argument('--size', type=int, default=480)
+    parser.add_argument('--dark', action='store_true', help='the Entity black against a lit yellow room, as in Level 1')
+    parser.add_argument('--approach', action='store_true', help='video: it runs at the camera from 95 studs to 12 instead of on the spot')
     args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else [])
     rig = Rig(ROOT / 'input' / 'rig.json'); bc.RIG = rig
     data = json.loads(Path(args.clips).read_text())[args.clip]
     poses = bc.decode_export(data)
     body = load_body(rig)
     print(f'BODY {len(body["positions"])} vertices; bind pose against the rig: worst matrix difference {body["bind_spread"]:.4f}', flush=True)
-    sc, stripes, camera, suit = scene(args.size)
+    sc, stripes, camera, suit = scene(args.size, args.dark)
     mesh = bpy.data.meshes.new('entity')
     first = skin(body, rig.fk(poses[0]))
     mesh.from_pydata(first.tolist(), [], body['tris'].tolist())
@@ -143,10 +170,15 @@ def main():
     work = OUT / '_frames'; work.mkdir(exist_ok=True)
     frames = data['frames']; seconds = frames / data['fps']; speed = data.get('speed', 0) if data.get('loop') else 0
 
-    def pose_at(index, travelled):
-        mesh.vertices.foreach_set('co', skin(body, rig.fk(poses[index % frames])).ravel())
+    def pose_at(index, travelled, advance=None):
+        points = skin(body, rig.fk(poses[index % frames]))
+        if advance is not None:
+            points[:, 1] += advance          # it really comes closer; the floor stays where it is
+            stripes.location = (0, 0, 0)
+        else:
+            stripes.location = (0, -(travelled % 4.0), 0)   # the floor passes under a body that runs on the spot
+        mesh.vertices.foreach_set('co', points.ravel())
         mesh.update()
-        stripes.location = (0, -(travelled % 4.0), 0)   # the floor passes under a body that runs on the spot
 
     for view in args.views.split(','):
         aim(camera, view)
@@ -164,13 +196,17 @@ def main():
         print('SHEET', sheet, flush=True)
         if args.video:
             fps = 30; total = int(round(2 * seconds * fps)) if data.get('loop') else int(round(seconds * fps))
+            approach = args.approach and view == 'player' and speed > 0
+            if approach:
+                aim(camera, view, 95.0); total = int((95.0 - 12.0) / speed * fps)
             for f in range(total):
                 t = f / fps
-                pose_at(int(round(t * data['fps'])) if data.get('loop') else min(frames - 1, int(round(t * data['fps']))), speed * t)
+                pose_at(int(round(t * data['fps'])) if data.get('loop') else min(frames - 1, int(round(t * data['fps']))), speed * t,
+                        speed * t if approach else None)
                 sc.render.filepath = str(work / f'{args.tag}_{args.clip}_{view}_v{f:03d}.png'); bpy.ops.render.render(write_still=True)
             video = OUT / f'{args.tag}_{args.clip}_{view}.mp4'
             video.unlink(missing_ok=True)
-            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-stream_loop', '2', '-framerate', str(fps), '-i',
+            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-stream_loop', '0' if approach else '2', '-framerate', str(fps), '-i',
                             str(work / f'{args.tag}_{args.clip}_{view}_v%03d.png'), '-pix_fmt', 'yuv420p', '-crf', '20', str(video)], check=True)
             print('VIDEO', video, flush=True)
     for leftover in work.glob(f'{args.tag}_{args.clip}_*.png'): leftover.unlink()
