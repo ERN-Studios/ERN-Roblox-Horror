@@ -46,6 +46,8 @@ KILL_SITES = {
     # longer spawns; dropping only the tip would turn its kills into SIGNAL LOST.
     "L2Slide": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Controller.ModuleScript.lua",
     "L3Manager": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
+    "L2Hole": "ServerScriptService/Level 2 Systems/Level 2 Poolrooms Runtime.ModuleScript.lua",
+    "L2Shade": "ServerScriptService/Level 2 Systems/Level 2 Shade.ModuleScript.lua",
     # L2Hole (owner, 2026-10-08) joins with the file that adds its kill site: the
     # no-entity Level 2 is not built yet, so nothing marks it today.
 }

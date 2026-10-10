@@ -1,0 +1,111 @@
+{
+ "defaults": {
+  "shot": {
+   "target_lufs": -18,
+   "lowpass": 9000
+  },
+  "loop": {
+   "target_lufs": -20,
+   "lowpass": 7500
+  }
+ },
+ "keys": {
+  "loop_shade_presence": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0,
+   "target_lufs": -27
+  },
+  "shot_shade_whisper_a": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_whisper_b": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_whisper_c": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_whisper_d": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_whisper_e": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_whisper_f": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_glimpse_a": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_glimpse_b": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_glimpse_c": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_slide_a": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_slide_b": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_slide_c": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_recoil_a": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_recoil_b": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_near_a": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_near_b": {
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0,
+   "target_lufs": -26.5
+  },
+  "loop_shade_hands": {
+   "target_lufs": -28,
+   "natural_noise_texture": true,
+   "physical_water": true,
+   "haze_depth_db": 0
+  },
+  "shot_shade_grab": {
+   "target_lufs": -31.5,
+   "lowpass": 9000
+  }
+ }
+}

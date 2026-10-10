@@ -1,0 +1,110 @@
+{
+ "about": "Measured with ffmpeg ebur128 on the masters; gain is what the client multiplies its volume by (Sound attribute Gain).",
+ "sounds": {
+  "shade_drag": {
+   "lufs": -21.7,
+   "peak_dbfs": -3.4,
+   "gain": 1.08
+  },
+  "shade_emerge": {
+   "lufs": -20.9,
+   "peak_dbfs": -7.2,
+   "gain": 1.0
+  },
+  "shade_glimpse_a": {
+   "lufs": -21.2,
+   "peak_dbfs": -7.0,
+   "gain": 1.02
+  },
+  "shade_glimpse_b": {
+   "lufs": -21.8,
+   "peak_dbfs": -3.3,
+   "gain": 1.1
+  },
+  "shade_glimpse_c": {
+   "lufs": -21.3,
+   "peak_dbfs": -9.9,
+   "gain": 1.04
+  },
+  "shade_grab": {
+   "lufs": -34.7,
+   "peak_dbfs": -8.1,
+   "gain": 2.26
+  },
+  "shade_near_a": {
+   "lufs": -21.3,
+   "peak_dbfs": -7.0,
+   "gain": 1.04
+  },
+  "shade_near_b": {
+   "lufs": -30.4,
+   "peak_dbfs": -3.4,
+   "gain": 1.32
+  },
+  "shade_presence": {
+   "lufs": -30.8,
+   "peak_dbfs": -13.9,
+   "gain": 3.09
+  },
+  "shade_recoil_a": {
+   "lufs": -21.3,
+   "peak_dbfs": -8.0,
+   "gain": 1.04
+  },
+  "shade_recoil_b": {
+   "lufs": -21.3,
+   "peak_dbfs": -9.4,
+   "gain": 1.04
+  },
+  "shade_slide_a": {
+   "lufs": -21.0,
+   "peak_dbfs": -4.1,
+   "gain": 1.0
+  },
+  "shade_slide_b": {
+   "lufs": -21.0,
+   "peak_dbfs": -5.5,
+   "gain": 1.0
+  },
+  "shade_slide_c": {
+   "lufs": -21.0,
+   "peak_dbfs": -6.7,
+   "gain": 1.0
+  },
+  "shade_sting": {
+   "lufs": -20.7,
+   "peak_dbfs": -7.4,
+   "gain": 1.0
+  },
+  "shade_whisper_a": {
+   "lufs": -21.2,
+   "peak_dbfs": -3.6,
+   "gain": 1.02
+  },
+  "shade_whisper_b": {
+   "lufs": -21.2,
+   "peak_dbfs": -6.5,
+   "gain": 1.02
+  },
+  "shade_whisper_c": {
+   "lufs": -21.2,
+   "peak_dbfs": -6.6,
+   "gain": 1.02
+  },
+  "shade_whisper_d": {
+   "lufs": -21.3,
+   "peak_dbfs": -6.1,
+   "gain": 1.04
+  },
+  "shade_whisper_e": {
+   "lufs": -21.3,
+   "peak_dbfs": -5.7,
+   "gain": 1.04
+  },
+  "shade_whisper_f": {
+   "lufs": -21.2,
+   "peak_dbfs": -6.7,
+   "gain": 1.02
+  }
+ }
+}

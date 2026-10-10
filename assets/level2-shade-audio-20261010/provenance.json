@@ -1,0 +1,258 @@
+{
+ "alias": {
+  "loop_shade_hands": "shade_hands",
+  "loop_shade_presence": "shade_presence",
+  "shot_shade_drag": "shade_drag",
+  "shot_shade_emerge": "shade_emerge",
+  "shot_shade_glimpse_a": "shade_glimpse_a",
+  "shot_shade_glimpse_b": "shade_glimpse_b",
+  "shot_shade_glimpse_c": "shade_glimpse_c",
+  "shot_shade_grab": "shade_grab",
+  "shot_shade_near_a": "shade_near_a",
+  "shot_shade_near_b": "shade_near_b",
+  "shot_shade_recoil_a": "shade_recoil_a",
+  "shot_shade_recoil_b": "shade_recoil_b",
+  "shot_shade_slide_a": "shade_slide_a",
+  "shot_shade_slide_b": "shade_slide_b",
+  "shot_shade_slide_c": "shade_slide_c",
+  "shot_shade_sting": "shade_sting",
+  "shot_shade_whisper_a": "shade_whisper_a",
+  "shot_shade_whisper_b": "shade_whisper_b",
+  "shot_shade_whisper_c": "shade_whisper_c",
+  "shot_shade_whisper_d": "shade_whisper_d",
+  "shot_shade_whisper_e": "shade_whisper_e",
+  "shot_shade_whisper_f": "shade_whisper_f"
+ },
+ "data": {
+  "codec": "OGG Vorbis q6",
+  "date": "2026-10-10T15:43:05.741829+00:00",
+  "listening_verified": false,
+  "network_used": false,
+  "provider": "ElevenLabs",
+  "sample_rate": 44100,
+  "script_sha256": "61c42b261b094c222c3c868f2f4582957d50cd87aa4fe5a66aee3e80e56a3447",
+  "sounds": {
+   "loop_shade_hands": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "Many long fingers creeping across wet ceramic tile close to the microphone: continuous quick fingertip taps, nails scratching and dragging on tile, small wet slaps of palms, never stopping. Close, dry, present, steady level from start to end. No voices, no music. Seamless loop.",
+    "raw_sha256": "8d0f40a8828d507dcbf5269966c7d6763223ea0f16e33864fecb34894d8e6a39",
+    "section": null,
+    "selected_take": "loop_shade_hands__take4.mp3",
+    "take_number": 4
+   },
+   "loop_shade_presence": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A dark living presence breathing close to the microphone: slow deep hollow inhales and exhales like air drawn through a long throat, with a constant low sub rumble underneath and a layer of several voices whispering without words. Close, dry, present, steady level from start to end. No music, no words, no room echo. Seamless loop.",
+    "raw_sha256": "623aea17aa4a43429073ef0895f76da4539ac51a590554999e324f311a480fca",
+    "section": null,
+    "selected_take": "loop_shade_presence__take4.mp3",
+    "take_number": 4
+   },
+   "shot_shade_drag": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A body in a rubber suit dragged down fast into thick liquid darkness: rubber squealing and scraping across tile, a deep descending roar, a heavy muffled swallow, then sudden dead silence. Close, heavy, loud. No voices, no scream, no music.",
+    "raw_sha256": "399fba7901e5521f2471182a0e6a28a0c6d51baec9eb7ec919994dbe1eaccf5b",
+    "section": null,
+    "selected_take": "shot_shade_drag__take1.mp3",
+    "take_number": 1
+   },
+   "shot_shade_emerge": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A shadow tearing itself out of a tiled floor: a deep wet ripping surge with a huge low sub swell, thick tar-like liquid stretching and snapping, and many hands slapping onto wet tile at the end. Close, heavy, loud. No voices, no music.",
+    "raw_sha256": "161dcc80c4b547ec20f120b02b5f393dd73b180a497c0a5350c0c47941b30cec",
+    "section": null,
+    "selected_take": "shot_shade_emerge__take2.mp3",
+    "take_number": 2
+   },
+   "shot_shade_glimpse_a": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A short dark reverse swell: a deep hollow breath sucked inward that rises fast and cuts off dead, with a brief whispered hiss on top. Dry, close, present. No music, no impact, no echo tail.",
+    "raw_sha256": "ed301dfb40a55517299fd1d3271f9d02e6ac051704d79cad0c6e364f1955fa4b",
+    "section": null,
+    "selected_take": "shot_shade_glimpse_a__take1.mp3",
+    "take_number": 1
+   },
+   "shot_shade_glimpse_b": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A quick low airy whoosh passing close by from left to right, like a large dark cloth swept through air, with a short breathy gasp inside it. Dry, close, present. No music, no impact.",
+    "raw_sha256": "d61fca73a6e84a91f84ee5191352af03124dad492fef8df4e7540dea608573a3",
+    "section": null,
+    "selected_take": "shot_shade_glimpse_b__take3.mp3",
+    "take_number": 3
+   },
+   "shot_shade_glimpse_c": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A single deep muffled thump felt more than heard, followed immediately by a short dry hissing breath that fades in one second. Close, dark, present. No music, no echo tail.",
+    "raw_sha256": "50ee7b0b481add3d507a7678ab574f310185630d52817719b4c0f9655e6a5fe2",
+    "section": null,
+    "selected_take": "shot_shade_glimpse_c__take2.mp3",
+    "take_number": 2
+   },
+   "shot_shade_grab": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "Several hands grabbing a person in a rubber protective suit at once: four fast heavy wet grips and slaps on thick rubber and fabric, the last one hardest. Very close, dry, loud. No voices, no music.",
+    "raw_sha256": "4c8b7825dcb0fbb3a380122d125f03135855e6b8bac533bd28f438c020c0d88e",
+    "section": null,
+    "selected_take": "shot_shade_grab__take3.mp3",
+    "take_number": 3
+   },
+   "shot_shade_near_a": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A deep slow breath out right on the back of the listener's neck, wet and hollow, followed by one low whispered wordless syllable. Extremely close, dry, loud and present. No music, no room echo.",
+    "raw_sha256": "4657f9eeea265d3ea9ba48a2fd2df7d8c90ee5d46a25ea0dbf80d070fd85424d",
+    "section": null,
+    "selected_take": "shot_shade_near_a__take1.mp3",
+    "take_number": 1
+   },
+   "shot_shade_near_b": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "Long fingernails tapping one after another on ceramic tile right behind the listener, five quick taps, then a low hungry breath in. Extremely close, dry, present. No music.",
+    "raw_sha256": "deeff10e55572f0f0f12c3e69ba33612c3b478ce36a506c53a79f58c630d6605",
+    "section": null,
+    "selected_take": "shot_shade_near_b__take2.mp3",
+    "take_number": 2
+   },
+   "shot_shade_recoil_a": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A creature made of shadow recoiling when seen: a loud sharp hissing shriek-whisper that pulls away fast into the distance with a rushing whoosh. Breath and air only, no vocal scream. Starts close and loud, dry. No music.",
+    "raw_sha256": "5349602aeb15b6a9ce9ce5610797c84b7018a8b47edb815ba33b0772cd1144f4",
+    "section": null,
+    "selected_take": "shot_shade_recoil_a__take2.mp3",
+    "take_number": 2
+   },
+   "shot_shade_recoil_b": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A sharp furious hiss like many voices inhaling at once through clenched teeth, then a fast fluttering whoosh retreating. Starts very close and loud, dry. No scream, no music.",
+    "raw_sha256": "3893fa8a09a89dfbe5fc481b24e68fba9f06292ac3829361e4430e0cea949158",
+    "section": null,
+    "selected_take": "shot_shade_recoil_b__take2.mp3",
+    "take_number": 2
+   },
+   "shot_shade_slide_a": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "Something flat sliding fast along a tiled wall: a short dry rushing swish like a palm dragged quickly across smooth ceramic tile, with a low airy whoosh under it. Close, dry, present. No voices, no music.",
+    "raw_sha256": "8e815981399ad9e936c16b71c62959ff1e855ab893a075448dd1766c282ed93f",
+    "section": null,
+    "selected_take": "shot_shade_slide_a__take2.mp3",
+    "take_number": 2
+   },
+   "shot_shade_slide_b": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A short dark whoosh with a papery rustle, like a heavy sheet of silk pulled quickly across a stone floor. Close, dry, present. No voices, no music.",
+    "raw_sha256": "192bcef84bd620d6f92227c9794eeab1821283fe85869cd81558f48b6889f7b1",
+    "section": null,
+    "selected_take": "shot_shade_slide_b__take3.mp3",
+    "take_number": 3
+   },
+   "shot_shade_slide_c": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A slow dry dragging slide across tile lasting two seconds, like dry fingers and a sleeve drawn along a ceramic wall, ending with a small flick. Close, dry, present. No voices, no music.",
+    "raw_sha256": "e787f50af902718e8a908098b268ce58a9a09d68d6dc16b736a78d0e07c5d14a",
+    "section": null,
+    "selected_take": "shot_shade_slide_c__take2.mp3",
+    "take_number": 2
+   },
+   "shot_shade_sting": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A horror death sting: one massive deep dark impact with a low distorted sub drop and a chorus of reversed whispers that is cut off abruptly into silence. Loud, heavy, dark. No melody, no scream.",
+    "raw_sha256": "ea071c2bd4ab8277ee0ea0290c81516136347eff2dcd00ba060a021491701f58",
+    "section": null,
+    "selected_take": "shot_shade_sting__take2.mp3",
+    "take_number": 2
+   },
+   "shot_shade_whisper_a": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "Close-up breathy whispering right at the ear: one androgynous voice whispering fast urgent syllables with no real words, lips and breath clearly audible, ending in a slow exhale. Dry, close, present. No music, no room echo.",
+    "raw_sha256": "9e4b7aac0e81683c20928345a1d4a67f8b5cd5ae4c3d24002c78f49cd0a2e0bb",
+    "section": null,
+    "selected_take": "shot_shade_whisper_a__take1.mp3",
+    "take_number": 1
+   },
+   "shot_shade_whisper_b": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "Close-up whispering: three or four overlapping voices whispering different wordless phrases at once, hissing S sounds, rising slightly then cutting off. Dry, close to the microphone, clearly present. No music, no room echo.",
+    "raw_sha256": "a129e0d0f61dee49af3bfe41e4efcb2528cbf8e0af98839d2ad12533c22ddd92",
+    "section": null,
+    "selected_take": "shot_shade_whisper_b__take2.mp3",
+    "take_number": 2
+   },
+   "shot_shade_whisper_c": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A slow drawn-out breathy whisper very close: a single long wordless phrase stretched out like a sigh that almost becomes a word, with a wet click of the tongue at the end. Dry, close, present. No music, no room echo.",
+    "raw_sha256": "6597f7ceb85a09d0ffc48966df54cc535b6db23669bde079944c2a0d295d5b88",
+    "section": null,
+    "selected_take": "shot_shade_whisper_c__take1.mp3",
+    "take_number": 1
+   },
+   "shot_shade_whisper_d": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "Whispered wordless chanting close to the microphone: a low voice repeating the same short hissed syllables four times in a steady rhythm, each one a little more urgent. Dry, close, present. No music, no room echo.",
+    "raw_sha256": "8a60e40f08bfeb4f1f4bb944ffee9e715573aa32e1fe7fede5ef2ec7d7c53f3d",
+    "section": null,
+    "selected_take": "shot_shade_whisper_d__take3.mp3",
+    "take_number": 3
+   },
+   "shot_shade_whisper_e": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "A sudden short harsh whisper right behind the listener: two quick hissed wordless syllables and a sharp breath in. Dry, very close, loud and present. No music, no room echo.",
+    "raw_sha256": "49f49808e4141c40ef417a2578fc55bf7c4e4205b941124545e29c806050b182",
+    "section": null,
+    "selected_take": "shot_shade_whisper_e__take3.mp3",
+    "take_number": 3
+   },
+   "shot_shade_whisper_f": {
+    "generation_ids": [],
+    "generation_log_matches": [],
+    "place": null,
+    "prompt": "Reversed whispering voices: several breathy whispers played backwards, swelling up from nothing and ending abruptly with a sharp intake of breath. Dry, close, present. No music, no room echo.",
+    "raw_sha256": "97f5cf046225bc690ed28ad65dcaf000f462c919189ff12edb052a8f51af8c9d",
+    "section": null,
+    "selected_take": "shot_shade_whisper_f__take1.mp3",
+    "take_number": 1
+   }
+  },
+  "synthetic_audio_outputs": false
+ }
+}

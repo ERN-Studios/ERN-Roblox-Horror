@@ -6,14 +6,14 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-10T14:56:14.291791+00:00",
+  "capturedAtUtc": "2026-10-10T16:12:52.680929+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
   "counts": {
-    "scripts": 232,
+    "scripts": 234,
     "remoteEvents": 15,
-    "total": 247,
+    "total": 249,
     "created": 12,
     "updated": 18,
     "unchanged": 215,
@@ -49,8 +49,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/DeathAdvice.ModuleScript.lua",
-      "bytes": 8952,
-      "sha256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "bytes": 9533,
+      "sha256": "55ab1db79ecb8ac2fe18e840d5bdef082b82f704b3af47143c6937539db3fbb0",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -901,8 +901,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Poolrooms Runtime.ModuleScript.lua",
-      "bytes": 22302,
-      "sha256": "8608150767d697f3f6fda087748bc2b31ddb2a67c552d14922cd46b75c556cfa",
+      "bytes": 22981,
+      "sha256": "b0a2adf9c9a9d3ee695b6d3b19a356f5c3404c3395f9f8351097f4092a9aeb1d",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4944,6 +4944,46 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Poolrooms Ambience.LocalScript.lua",
       "bytes": 31837,
       "sha256": "55ab78bc83db326fc577366abeb12dd0b77befac019fed5b2f3de46ab5b94372",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Shade",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Shade"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Shade.ModuleScript.lua",
+      "bytes": 19761,
+      "sha256": "31a8603c27a67aeca6f37438ed173f67bb69d93c29a7f99c5b5c4b1d1d66d637",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Shade Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Shade Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Shade Client.LocalScript.lua",
+      "bytes": 34193,
+      "sha256": "fddf1b172806ac7c5ce9833728e38b8db129cc0049a46e580fa698baf994f697",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

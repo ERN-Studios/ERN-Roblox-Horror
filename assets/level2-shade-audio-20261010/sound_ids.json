@@ -1,0 +1,107 @@
+{
+ "shade_drag": {
+  "asset_id": 77021104253741,
+  "master_sha256": "0e3796b1f8e1cc13c1ac16c816a6fe604c4c9526af8b89f65f2ee87a7be21f8b",
+  "moderation": "Approved"
+ },
+ "shade_emerge": {
+  "asset_id": 74060029461223,
+  "master_sha256": "a44a72a052e294050fef61fb12087ee8ace67446a1edec8474ba583aa9d7f8ee",
+  "moderation": "Approved"
+ },
+ "shade_glimpse_a": {
+  "asset_id": 107082850774841,
+  "master_sha256": "46beaa6b4597390563584aafab6f99aeda1589a5305840e67e08d6e88822e70d",
+  "moderation": "Approved"
+ },
+ "shade_glimpse_b": {
+  "asset_id": 79372439748588,
+  "master_sha256": "6714f7cf3114d998bafe4270988da294cc72b2a2a10de571a69ad1557a8db560",
+  "moderation": "Approved"
+ },
+ "shade_glimpse_c": {
+  "asset_id": 130305640533087,
+  "master_sha256": "4ba945b230a162526c5beb9dfd3f5407c93411d5ebbc0398ca995166948b61e2",
+  "moderation": "Approved"
+ },
+ "shade_grab": {
+  "asset_id": 79370963298283,
+  "master_sha256": "47c62c7cbe6c933e3c6b6a0507bbe1d2b870425f56de47402a6e1e06509d7685",
+  "moderation": "Approved"
+ },
+ "shade_near_a": {
+  "asset_id": 78747171043045,
+  "master_sha256": "f3a709015ac93f2307175ff6b1a8f45091e6868c5300046b8d86ad0f38594c6f",
+  "moderation": "Approved"
+ },
+ "shade_near_b": {
+  "asset_id": 88165459932397,
+  "master_sha256": "3e7e52573a3d4a1c8a0c08feb598db516eb883704d5fd3c33b34a35007670ca5",
+  "moderation": "Approved"
+ },
+ "shade_presence": {
+  "asset_id": 75306236681946,
+  "master_sha256": "99097606f3241b292404044b1cbb6bcd331c9132c5aeb9a534bd8635bdbba572",
+  "moderation": "Approved"
+ },
+ "shade_recoil_a": {
+  "asset_id": 89595594661772,
+  "master_sha256": "3bed69f6cbb766f26ca8d182a731a66385ce1a03ba2aa8097be7497c285c36ac",
+  "moderation": "Approved"
+ },
+ "shade_recoil_b": {
+  "asset_id": 95628257343457,
+  "master_sha256": "38a94805e51ed338e38f1dcc5cdc25e698ed8b4130371d20045a44e0af4af4f0",
+  "moderation": "Approved"
+ },
+ "shade_slide_a": {
+  "asset_id": 75832114929037,
+  "master_sha256": "7d21ceb4988bb9a51152d04e1523a0acf8d8ffe2bda49c1c83039430c38e29da",
+  "moderation": "Approved"
+ },
+ "shade_slide_b": {
+  "asset_id": 114099800864562,
+  "master_sha256": "4b0b995e8a89016c484cbe5167ee6bafd2d1922316692a07bdf2b25d34954696",
+  "moderation": "Approved"
+ },
+ "shade_slide_c": {
+  "asset_id": 103088193769632,
+  "master_sha256": "e0aa8195db9533382bab4254d228c9a3e336ff43287901aa11a6980d6c9834d3",
+  "moderation": "Approved"
+ },
+ "shade_sting": {
+  "asset_id": 128005730277984,
+  "master_sha256": "75b1fb67a5e6ef43bf41f8d961c7bd86cf5653ac8bbb44bc465e49a10cfe2de7",
+  "moderation": "Approved"
+ },
+ "shade_whisper_a": {
+  "asset_id": 140108821347568,
+  "master_sha256": "caa555f6f0de19f69f4205c464213f8493feb3bb5b5159c3fb1edc861864b74a",
+  "moderation": "Approved"
+ },
+ "shade_whisper_b": {
+  "asset_id": 105015704809760,
+  "master_sha256": "cfa01ca14de3fb7869616d02cd048d8cb062e6c2c118a4790359f143c28db9e4",
+  "moderation": "Approved"
+ },
+ "shade_whisper_c": {
+  "asset_id": 98021039820312,
+  "master_sha256": "d68f07919cf8722ca44579ed21e49c7cdda4496a57f9b3928e2ebb7236c85066",
+  "moderation": "Approved"
+ },
+ "shade_whisper_d": {
+  "asset_id": 136760918064100,
+  "master_sha256": "3711de21966821906b1572698f3d4e2f5803f857f3139984c55e1ce42b315587",
+  "moderation": "Approved"
+ },
+ "shade_whisper_e": {
+  "asset_id": 100080939849115,
+  "master_sha256": "52f7d6e199ef3eb8f157389d20cab9f8c2a6847569c782b42869f9709b49ab59",
+  "moderation": "Approved"
+ },
+ "shade_whisper_f": {
+  "asset_id": 76533598113109,
+  "master_sha256": "acc3024f05bba3f49d9d639c6656195a77ce36356056f161474f8902025e11de",
+  "moderation": "Approved"
+ }
+}

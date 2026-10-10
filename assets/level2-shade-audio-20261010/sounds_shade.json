@@ -1,0 +1,36 @@
+{
+ "about": "Level 2 shadow entity (the Shade), 2026-10-10. Owner: 'elevenlabs til at lave dens hviske og shadow lyde der kommer directional for hvor den er fra'. Every sound is played from a point in the 3D world (the game adds distance and direction), so takes must be CLOSE, DRY and PRESENT: a clear source near the microphone, little or no room. Earlier lesson: prompts that say soft/faint/quiet come back as near-silence.",
+ "rules": {
+  "provider": "ElevenLabs eleven_text_to_sound_v2",
+  "prompt_influence": 0.6,
+  "loops": {"seconds": 20, "loop": true, "takes": 4},
+  "shots": {"loop": false, "takes": 3},
+  "max_prompt_characters": 440
+ },
+ "loops": [
+  {"key": "shade_presence", "prompt": "A dark living presence breathing close to the microphone: slow deep hollow inhales and exhales like air drawn through a long throat, with a constant low sub rumble underneath and a layer of several voices whispering without words. Close, dry, present, steady level from start to end. No music, no words, no room echo. Seamless loop."},
+  {"key": "shade_hands", "prompt": "Many long fingers creeping across wet ceramic tile close to the microphone: continuous quick fingertip taps, nails scratching and dragging on tile, small wet slaps of palms, never stopping. Close, dry, present, steady level from start to end. No voices, no music. Seamless loop."}
+ ],
+ "shots": [
+  {"key": "shade_whisper_a", "seconds": 4, "prompt": "Close-up breathy whispering right at the ear: one androgynous voice whispering fast urgent syllables with no real words, lips and breath clearly audible, ending in a slow exhale. Dry, close, present. No music, no room echo."},
+  {"key": "shade_whisper_b", "seconds": 4, "prompt": "Close-up whispering: three or four overlapping voices whispering different wordless phrases at once, hissing S sounds, rising slightly then cutting off. Dry, close to the microphone, clearly present. No music, no room echo."},
+  {"key": "shade_whisper_c", "seconds": 4, "prompt": "A slow drawn-out breathy whisper very close: a single long wordless phrase stretched out like a sigh that almost becomes a word, with a wet click of the tongue at the end. Dry, close, present. No music, no room echo."},
+  {"key": "shade_whisper_d", "seconds": 5, "prompt": "Whispered wordless chanting close to the microphone: a low voice repeating the same short hissed syllables four times in a steady rhythm, each one a little more urgent. Dry, close, present. No music, no room echo."},
+  {"key": "shade_whisper_e", "seconds": 3, "prompt": "A sudden short harsh whisper right behind the listener: two quick hissed wordless syllables and a sharp breath in. Dry, very close, loud and present. No music, no room echo."},
+  {"key": "shade_whisper_f", "seconds": 5, "prompt": "Reversed whispering voices: several breathy whispers played backwards, swelling up from nothing and ending abruptly with a sharp intake of breath. Dry, close, present. No music, no room echo."},
+  {"key": "shade_glimpse_a", "seconds": 3, "prompt": "A short dark reverse swell: a deep hollow breath sucked inward that rises fast and cuts off dead, with a brief whispered hiss on top. Dry, close, present. No music, no impact, no echo tail."},
+  {"key": "shade_glimpse_b", "seconds": 3, "prompt": "A quick low airy whoosh passing close by from left to right, like a large dark cloth swept through air, with a short breathy gasp inside it. Dry, close, present. No music, no impact."},
+  {"key": "shade_glimpse_c", "seconds": 3, "prompt": "A single deep muffled thump felt more than heard, followed immediately by a short dry hissing breath that fades in one second. Close, dark, present. No music, no echo tail."},
+  {"key": "shade_slide_a", "seconds": 2, "prompt": "Something flat sliding fast along a tiled wall: a short dry rushing swish like a palm dragged quickly across smooth ceramic tile, with a low airy whoosh under it. Close, dry, present. No voices, no music."},
+  {"key": "shade_slide_b", "seconds": 2, "prompt": "A short dark whoosh with a papery rustle, like a heavy sheet of silk pulled quickly across a stone floor. Close, dry, present. No voices, no music."},
+  {"key": "shade_slide_c", "seconds": 3, "prompt": "A slow dry dragging slide across tile lasting two seconds, like dry fingers and a sleeve drawn along a ceramic wall, ending with a small flick. Close, dry, present. No voices, no music."},
+  {"key": "shade_recoil_a", "seconds": 3, "prompt": "A creature made of shadow recoiling when seen: a loud sharp hissing shriek-whisper that pulls away fast into the distance with a rushing whoosh. Breath and air only, no vocal scream. Starts close and loud, dry. No music."},
+  {"key": "shade_recoil_b", "seconds": 3, "prompt": "A sharp furious hiss like many voices inhaling at once through clenched teeth, then a fast fluttering whoosh retreating. Starts very close and loud, dry. No scream, no music."},
+  {"key": "shade_near_a", "seconds": 3, "prompt": "A deep slow breath out right on the back of the listener's neck, wet and hollow, followed by one low whispered wordless syllable. Extremely close, dry, loud and present. No music, no room echo."},
+  {"key": "shade_near_b", "seconds": 3, "prompt": "Long fingernails tapping one after another on ceramic tile right behind the listener, five quick taps, then a low hungry breath in. Extremely close, dry, present. No music."},
+  {"key": "shade_emerge", "seconds": 4, "prompt": "A shadow tearing itself out of a tiled floor: a deep wet ripping surge with a huge low sub swell, thick tar-like liquid stretching and snapping, and many hands slapping onto wet tile at the end. Close, heavy, loud. No voices, no music."},
+  {"key": "shade_grab", "seconds": 2, "prompt": "Several hands grabbing a person in a rubber protective suit at once: four fast heavy wet grips and slaps on thick rubber and fabric, the last one hardest. Very close, dry, loud. No voices, no music."},
+  {"key": "shade_drag", "seconds": 5, "prompt": "A body in a rubber suit dragged down fast into thick liquid darkness: rubber squealing and scraping across tile, a deep descending roar, a heavy muffled swallow, then sudden dead silence. Close, heavy, loud. No voices, no scream, no music."},
+  {"key": "shade_sting", "seconds": 4, "prompt": "A horror death sting: one massive deep dark impact with a low distorted sub drop and a chorus of reversed whispers that is cut off abruptly into silence. Loud, heavy, dark. No melody, no scream."}
+ ]
+}

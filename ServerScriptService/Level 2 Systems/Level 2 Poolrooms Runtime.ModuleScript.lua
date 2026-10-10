@@ -5,6 +5,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local RunService = game:GetService("RunService")
 local DeathAdvice = require(ReplicatedStorage:WaitForChild("DeathAdvice"))
+-- SHADE_20261010: the shadow entity is its own module and may be absent or broken without costing the level anything.
+local Shade
+do
+	local module = script.Parent:FindFirstChild("Level 2 Shade")
+	local ok, result = pcall(function() return module and require(module) end)
+	if ok and type(result) == "table" then Shade = result elseif module then warn("[Level 2] Shade did not load: " .. tostring(result)) end
+end
 local Runtime = {}
 local active
 local generation = 0
@@ -373,6 +380,7 @@ function Runtime.Stop(handle)
 	if not handle then return end
 	handle.Stopped = true
 	if handle.Connection then handle.Connection:Disconnect(); handle.Connection = nil end
+	if Shade and handle.Shade then pcall(Shade.Stop, handle.Shade); handle.Shade = nil end
 	for player, record in pairs(handle.Finishers) do
 		record.RecoveryToken = nil
 		if record.Connection then record.Connection:Disconnect() end
@@ -415,6 +423,10 @@ function Runtime.Start(world)
 		end)
 	end)
 	if not ok then Runtime.Stop(handle); error(err) end
+	if Shade then
+		local started, shade = pcall(Shade.Start, world)
+		if started then handle.Shade = shade else warn("[Level 2] Shade did not start: " .. tostring(shade)) end
+	end
 	return handle
 end
 

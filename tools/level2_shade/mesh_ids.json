@@ -1,0 +1,38 @@
+{
+ "Shade_Arm": {
+  "id": 77563411732353,
+  "sha1": "19eec9ccde3c"
+ },
+ "Shade_ArmGrip": {
+  "id": 80991550063148,
+  "sha1": "8bc29d905e1b"
+ },
+ "Shade_Claw": {
+  "id": 72263421275007,
+  "sha1": "d48224e77919"
+ },
+ "Shade_Crawl": {
+  "id": 111159406777739,
+  "sha1": "f607a1b56b61"
+ },
+ "Shade_Hands": {
+  "id": 134052459289807,
+  "sha1": "3bf3a2df1686"
+ },
+ "Shade_Pool": {
+  "id": 97340685054804,
+  "sha1": "4f4e2bc464ec"
+ },
+ "Shade_Reach": {
+  "id": 105462334542803,
+  "sha1": "bf123246ff84"
+ },
+ "Shade_Rise": {
+  "id": 120945752226781,
+  "sha1": "92e3b60d281c"
+ },
+ "Shade_Stand": {
+  "id": 110447432833227,
+  "sha1": "e0b47643bc03"
+ }
+}
