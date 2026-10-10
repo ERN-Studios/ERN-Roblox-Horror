@@ -1,0 +1,8 @@
+{
+ "measured_in": "Roblox Studio play session, Level 1 round, 2026-10-10 about 04:50 CEST",
+ "FLOOR_UP": 8.0,
+ "floor_up_note": "HumanoidRootPart centre y 7.999 while walking, maze floor top y 0.000 (raycast against workspace.Maze).",
+ "gate_0a": "PASSED. A client BindToRenderStep at RenderPriority.Character + 1 that writes Bone.Transform on LeftArm, RightArm and Head changes the rendered pose while the replicated server Animator plays its clip (seen in two screenshots, override off / on). At that render step bone.Transform read back holds the Animator's own pose (non-identity, replaced every frame: 60 of 60 reads), so 'animator = bone.Transform; bone.Transform = animator:Lerp(target, w)' works as the brief's player design assumes.",
+ "playing_track_while_paused": "one AnimationTrack named 'Animation' at weight 1.00 (the Watch clip)",
+ "bones_on_client": 51
+}

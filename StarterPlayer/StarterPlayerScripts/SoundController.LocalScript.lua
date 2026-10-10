@@ -112,6 +112,28 @@ local STEP_PITCH_JITTER   = 0.015
 
 local player = Players.LocalPlayer
 
+local function finite(n)
+	return type(n) == "number" and n == n and math.abs(n) < math.huge
+end
+
+-- A configured motion layer uses nil to mean no foot contact (including lunge,
+-- action poses and missing clip data). Legacy timers only apply without it.
+local motionConfigured = RS:FindFirstChild("Level1EntityMotion") ~= nil
+RS.ChildAdded:Connect(function(child)
+	if child.Name == "Level1EntityMotion" then motionConfigured = true end
+end)
+RS.ChildRemoved:Connect(function(child)
+	if child.Name == "Level1EntityMotion" then
+		motionConfigured = RS:FindFirstChild("Level1EntityMotion") ~= nil
+	end
+end)
+-- ENTITY_MOTION_LIVE_20261010: ...and only while the layer is beating. If it is off, has no data or has died,
+-- nil means nothing and the legacy timers below carry the footsteps, so the Entity is never silent.
+local function motionLive()
+	local beat = workspace:GetAttribute("L1EntityMotionBeat")
+	return motionConfigured and type(beat) == "number" and os.clock() - beat < 1.5 -- 10 Hz beat; a slow client hitches
+end
+
 -- SPECTATE_AUDIO_PARITY_20260914 -- whose ears this controller is mixing for.
 -- Alive: your own body. Dead or escaped and spectating: the player
 -- SpectateController is watching (it publishes the client-local attributes
@@ -316,24 +338,64 @@ end
 workspace:GetAttributeChangedSignal("LightMode"):Connect(refreshAlert)
 refreshAlert()
 
--- the Entity's own growl: a looping POSITIONAL sound on the entity, so you hear
--- which direction it's coming from (attached client-side from here)
-task.spawn(function()
-	if ENTITY_SOUND == "" then return end
-	local entity = workspace:WaitForChild("Entity", 60)
-	local er = entity and entity:WaitForChild("HumanoidRootPart", 15)
-	if not er then return end
-	local s = Instance.new("Sound")
-	s.Name = "EntitySound"
-	s.Looped = true
-	s.Volume = ENTITY_VOLUME
-	s.SoundId = ENTITY_SOUND
-	s.RollOffMode = Enum.RollOffMode.InverseTapered
-	s.RollOffMinDistance = 8
-	s.RollOffMaxDistance = 140
-	s.Parent = er
-	s:Play()
-end)
+-- Follow the round's NEW Entity and an initially missing/replaced root. No
+-- per-Entity connection or old-root Heartbeat survives its removal.
+local function watchEntityRoot(onRoot)
+	local entity, root, rootAdded, rootRemoved
+	local function refreshRoot()
+		local candidate = entity and entity.Parent == workspace
+			and entity:FindFirstChild("HumanoidRootPart") or nil
+		if candidate and not candidate:IsA("BasePart") then candidate = nil end
+		if candidate == root then return end
+		root = candidate
+		onRoot(root)
+	end
+	local function unbind()
+		if rootAdded then rootAdded:Disconnect(); rootAdded = nil end
+		if rootRemoved then rootRemoved:Disconnect(); rootRemoved = nil end
+		entity, root = nil, nil
+		onRoot(nil)
+	end
+	local function bind(candidate)
+		if not candidate:IsA("Model") or candidate.Name ~= "Entity" or candidate == entity then return end
+		unbind()
+		entity = candidate
+		rootAdded = entity.ChildAdded:Connect(refreshRoot)
+		rootRemoved = entity.ChildRemoved:Connect(refreshRoot)
+		refreshRoot()
+	end
+	local added = workspace.ChildAdded:Connect(bind)
+	local removed = workspace.ChildRemoved:Connect(function(child)
+		if child == entity then unbind() end
+	end)
+	script.Destroying:Connect(function()
+		added:Disconnect()
+		removed:Disconnect()
+		unbind()
+	end)
+	local existing = workspace:FindFirstChild("Entity")
+	if existing then bind(existing) end
+end
+
+-- the Entity's own growl: positional and rebound for every round.
+if ENTITY_SOUND ~= "" then
+	local growl
+	watchEntityRoot(function(er)
+		if growl then growl:Destroy(); growl = nil end
+		if not er then return end
+		local s = Instance.new("Sound")
+		s.Name = "EntitySound"
+		s.Looped = true
+		s.Volume = ENTITY_VOLUME
+		s.SoundId = ENTITY_SOUND
+		s.RollOffMode = Enum.RollOffMode.InverseTapered
+		s.RollOffMinDistance = 8
+		s.RollOffMaxDistance = 140
+		s.Parent = er
+		growl = s
+		s:Play()
+	end)
+end
 
 -- YOUR OWN jumpscare scream (2D): fired on the SAME Jumpscare remote as the
 -- face image (JumpscareUI). The scream starts the INSTANT the Entity captures
@@ -727,76 +789,89 @@ end
 
 -- The Entity's two alternating steps. Both supplied clips are one-shot impacts
 -- with long tails and different leading silence, so each foot gets its own voice.
--- Actual position delta suppresses fake stomps while the Entity is stuck.
-task.spawn(function()
-	if ENTITY_STEP_SOUNDS[1] == "" and ENTITY_STEP_SOUNDS[2] == "" then return end
-	local entity = workspace:WaitForChild("Entity", 60)
-	local er = entity and entity:WaitForChild("HumanoidRootPart", 15)
-	if not er then return end
-
+-- Actual position delta suppresses fake stomps in the legacy timer fallback.
+if ENTITY_STEP_SOUNDS[1] ~= "" or ENTITY_STEP_SOUNDS[2] ~= "" then
+	local heartbeat
 	local voices = {}
-	for index, id in ipairs(ENTITY_STEP_SOUNDS) do
-		local step = Instance.new("Sound")
-		step.Name = "EntityStep" .. index
-		step.SoundId = id
-		step.RollOffMode = Enum.RollOffMode.InverseTapered
-		step.RollOffMinDistance = 8
-		step.RollOffMaxDistance = 140
-		step.Parent = er
-		voices[index] = step
-	end
-	pcall(function()
-		ContentProvider:PreloadAsync(voices)
+	watchEntityRoot(function(er)
+		if heartbeat then heartbeat:Disconnect(); heartbeat = nil end
+		for _, voice in ipairs(voices) do voice:Destroy() end
+		table.clear(voices)
+		if not er then return end
+
+		for index, id in ipairs(ENTITY_STEP_SOUNDS) do
+			local step = Instance.new("Sound")
+			step.Name = "EntityStep" .. index
+			step.SoundId = id
+			step.RollOffMode = Enum.RollOffMode.InverseTapered
+			step.RollOffMinDistance = 8
+			step.RollOffMaxDistance = 140
+			step.Parent = er
+			voices[index] = step
+		end
+		-- Preloading may yield; capture this round's bank rather than a reused table.
+		local preloadVoices = table.clone(voices)
+		task.spawn(function()
+			pcall(function() ContentProvider:PreloadAsync(preloadVoices) end)
+		end)
+
+		local clock = math.huge -- land a step immediately when legacy movement begins
+		local nextInterval = STEP_WALK_INT
+		local nextFoot = 1
+		local lastPos = er.Position
+		local movementGrace = 0
+		local lastMotionStep = nil
+		heartbeat = RunService.Heartbeat:Connect(function(dt)
+			-- Baseline the first finite number; consume contacts even when far away.
+			local motionStep = workspace:GetAttribute("L1EntityStep")
+			local motionSynced = finite(motionStep)
+			local motionContact = motionSynced and lastMotionStep ~= nil
+				and motionStep ~= lastMotionStep
+			lastMotionStep = motionSynced and motionStep or nil
+			if not er.Parent or not finite(dt) or dt < 0 then return end
+			local now = er.Position
+			local moved = Vector3.new(now.X - lastPos.X, 0, now.Z - lastPos.Z).Magnitude
+			lastPos = now
+			local spd = dt > 0 and moved / dt or 0
+			if spd >= 3 then
+				-- Hold movement briefly between physics replication packets.
+				movementGrace = 0.14
+			else
+				movementGrace = math.max(0, movementGrace - dt)
+			end
+			if motionSynced then
+				clock = 0
+				if not motionContact then return end
+			elseif motionLive() or movementGrace <= 0 then
+				clock = math.huge
+				return
+			end
+
+			-- State still selects the impact tone when contacts select its timing.
+			local chasing = workspace:GetAttribute("EntityState") == "CHASE"
+			local cadence = chasing and STEP_RUN_INT or STEP_WALK_INT
+			if not motionSynced then
+				clock += dt
+				if clock < nextInterval then return end
+				clock = 0
+			end
+
+			local step = voices[nextFoot]
+			if step then
+				step:Stop()
+				step.TimePosition = ENTITY_STEP_STARTS[nextFoot]
+				step.Volume = chasing and STEP_RUN_VOLUME or STEP_WALK_VOLUME
+				local basePlayback = chasing and STEP_RUN_PLAYBACK or STEP_WALK_PLAYBACK
+				step.PlaybackSpeed = basePlayback
+					+ ((math.random() * 2 - 1) * STEP_PITCH_JITTER)
+				step:Play()
+			end
+			nextFoot = nextFoot == #voices and 1 or nextFoot + 1
+			nextInterval = math.max(0.1, cadence
+				+ ((math.random() * 2 - 1) * STEP_CADENCE_JITTER))
+		end)
 	end)
-
-	local clock = math.huge -- land a step immediately when real movement begins
-	local nextInterval = STEP_WALK_INT
-	local nextFoot = 1
-	local lastPos = er.Position
-	local movementGrace = 0
-	RunService.Heartbeat:Connect(function(dt)
-		local now = er.Position
-		local moved = Vector3.new(now.X - lastPos.X, 0, now.Z - lastPos.Z).Magnitude
-		lastPos = now
-		local spd = (dt > 0) and (moved / dt) or 0
-		if spd >= 3 then
-			-- Physics replication can arrive in tiny bursts. Hold the moving state
-			-- briefly between packets so one real stride never becomes many first steps.
-			movementGrace = 0.14
-		else
-			movementGrace = math.max(0, movementGrace - dt)
-		end
-		if movementGrace <= 0 then
-			clock = math.huge
-			return
-		end
-
-		-- EntityAnimation uses Run only in CHASE. TRACK/SEARCH deliberately keeps
-		-- the walk cycle even when it moves faster, so key the gait to the same state.
-		local chasing = workspace:GetAttribute("EntityState") == "CHASE"
-		-- Use animation state for cadence rather than raw per-frame speed: networked
-		-- physics can arrive in bursts even while the visual movement is smooth.
-		local cadence = chasing and STEP_RUN_INT or STEP_WALK_INT
-
-		clock += dt
-		if clock < nextInterval then return end
-		clock = 0
-
-		local step = voices[nextFoot]
-		if step then
-			step:Stop()
-			step.TimePosition = ENTITY_STEP_STARTS[nextFoot]
-			step.Volume = chasing and STEP_RUN_VOLUME or STEP_WALK_VOLUME
-			local basePlayback = chasing and STEP_RUN_PLAYBACK or STEP_WALK_PLAYBACK
-			step.PlaybackSpeed = basePlayback
-				+ ((math.random() * 2 - 1) * STEP_PITCH_JITTER)
-			step:Play()
-		end
-		nextFoot = nextFoot == #voices and 1 or nextFoot + 1
-		nextInterval = math.max(0.1, cadence
-			+ ((math.random() * 2 - 1) * STEP_CADENCE_JITTER))
-	end)
-end)
+end
 
 -- FOOTSTEPS: the clips are continuous LOOPS (several seconds), not one-shot thumps
 -- — so we run ONE looping sound that only plays while you MOVE and FADES OUT when
