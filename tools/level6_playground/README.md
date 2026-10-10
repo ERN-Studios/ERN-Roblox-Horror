@@ -134,6 +134,12 @@ room under the court are out of its reach by construction.
   out was seeked, twenty times a second, which on a slow frame rate is all the time. The equaliser and pitch
   shifter sit once on a sound group per tape (`Level6MusicBus<n>`), not on every copy. Measured in Studio: no
   jumps in 18 s, copies at most 0.02 s apart.
+- *Post ring* (`POST_RING_20261010`, owner). The server builds `Finale_PostRing` at runtime: a red cord of
+  radius 8.4 studs and a small lamp on the post. Stepping within 8.8 studs counts as touching when the Counter
+  is far enough away. Both are bright red while a touch would count, dim red otherwise, green for 2 s after
+  each counted touch, then dark in the finale; the lamp sinks with the post. `Level6PostRing` reads `dim`,
+  `red`, `green` or `off`. The folder is separate from `Finale_Post` and `Finale_Lid`, and is built and removed
+  with the session rather than kept in the arena export, so its colours and lamp movement follow the round.
 
 **The look** is set by the client (`ARENA_LOOK`): exposure -0.45, saturation -0.3 and contrast -0.1 (worn
 vinyl, lifted blacks), and 24 faint fill lights hung in the open well (`L6_Fill_*`), because a light's range
