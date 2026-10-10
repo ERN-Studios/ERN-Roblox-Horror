@@ -242,25 +242,26 @@
   "A01_ad_office_run": 86971162315270
  },
  "campaign": {
-  "request": {
+  "body": {
    "asset_ids": [
-    86971162315270,
     85334319149309,
     109659855098434,
+    79426727575422,
+    86971162315270,
     130462922453042,
     103797698944118,
-    131830288383893
+    89268799631436
    ],
    "budget_in_micro_usd": 11000000,
    "budget_type": 1,
    "detailed_targeting_match_type": 0,
-   "duration_in_days": 5,
+   "duration_in_days": 3,
    "is_auto_reload_ad_credit_enabled": false,
    "is_off_platform_request": false,
-   "name": "Stay Quiet | Plays | 11 a day | 6 creatives",
+   "name": "Stay Quiet | Plays | computer only | 11 a day",
    "objective": 2,
    "payment_type": 4,
-   "start_timestamp_ms": 1791415800000,
+   "start_timestamp_ms": 1791676800000,
    "target_universe_id": 10559217407,
    "targeting_criteria": {
     "age_bucket_criteria": {
@@ -268,7 +269,7 @@
     },
     "device_criteria": {
      "devices": [
-      1
+      2
      ]
     },
     "gender_criteria": {
@@ -292,86 +293,19 @@
     }
    }
   },
+  "answer": "{\"campaign_id\":\"01ce9d16-f951-4705-8491-bb67353ace32\",\"ad_set_id\":\"9d4682f7-b9fa-4134-9555-755260f17f08\",\"ad_ids\":[\"aae0ebc6-4e99-4534-8582-297e98ed46ba\",\"748a2ab0-3034-4b6e-b7be-0975b1cf1cd0\",\"479e6d69-69e0-4686-b17d-f14053fe686e\",\"cb57de29-aff9-4c26-a563-6cb7bf9ae507\",\"5e5499b7-311a-41a4-a341-2c07f81fbbd2\",\"e77851ec-0e4b-4ed2-aefb-89938aede419\",\"df859f29-f430-4933-933e-073b30e062c6\"]}",
+  "idempotency_key": "cf6c0c9c-904b-4e98-84b7-20a566223c84",
   "pictures": {
-   "A01_ad_office_run": 86971162315270,
-   "T01_hero_office_hide": 85334319149309,
-   "T04_hero_shh": 109659855098434,
-   "A03_ad_table_check": 130462922453042,
-   "T03_hero_playground": 103797698944118,
-   "T05_hero_cinema": 131830288383893
+   "T01": 85334319149309,
+   "T04": 109659855098434,
+   "A02": 79426727575422,
+   "A01": 86971162315270,
+   "A03": 130462922453042,
+   "T03": 103797698944118,
+   "A04": 89268799631436
   },
-  "idempotency_key": "a35034ae-99dd-4745-9d61-e2197934ebd1",
-  "submitted_at": "2026-10-08T01:00:08",
-  "status": 200,
-  "answer": "{\"campaign_id\":\"fc071f73-178a-491c-8257-c8be9e222e3c\",\"ad_set_id\":\"d7f469d5-c8c5-4c80-9739-dab2fb83c3d3\",\"ad_ids\":[\"0a1bb234-9ec3-49cf-8cf6-01ba432dfaa9\",\"1c9aff9d-69f9-463d-962f-e37ded1120d6\",\"9d346178-e3ef-4ad1-8302-9f57feaec4de\",\"9042dfd0-d12c-4541-90aa-42be0efc88be\",\"132fc3d8-9d39-42d9-ae41-1379c4b203a0\",\"f373206a-dbc9-4dc1-98eb-b994cbe3a478\"]}",
-  "read_back": {
-   "id": "fc071f73-178a-491c-8257-c8be9e222e3c",
-   "name": "Stay Quiet | Plays | 11 a day | 6 creatives",
-   "status": 2,
-   "objective": 2,
-   "budget_type": 1,
-   "budget_in_micro_usd": 11000000,
-   "performance": {},
-   "payment_type": 4,
-   "start_timestamp_ms": 1791415800000,
-   "duration_in_days": 5,
-   "target_universe_id": 10559217407,
-   "asset_ids": [
-    85334319149309,
-    130462922453042,
-    86971162315270,
-    109659855098434,
-    103797698944118,
-    131830288383893
-   ],
-   "targeting_criteria": {
-    "language_criteria": {
-     "languages": [
-      1
-     ]
-    },
-    "gender_criteria": {
-     "gender": 1
-    },
-    "age_criteria": {
-     "all_ages": false,
-     "lower_bound": 0,
-     "upper_bound": 0
-    },
-    "device_criteria": {
-     "devices": [
-      1
-     ]
-    },
-    "age_bucket_criteria": {
-     "all_ages": true,
-     "age_buckets": null
-    },
-    "genre_criteria": {
-     "genres": [
-      1
-     ]
-    },
-    "location_criteria": {
-     "countries": null,
-     "regions": [
-      1
-     ]
-    },
-    "keyword_criteria": {
-     "keywords": null
-    },
-    "retargeting_criteria": {
-     "retargeting_audiences": null
-    },
-    "operating_system_criteria": {
-     "operating_systems": null
-    }
-   },
-   "bid_value_micro_usd": 1000001,
-   "is_full_days": false,
-   "is_auto_reload_ad_credit_enabled": false
-  }
+  "created": "2026-10-10T23:33:28",
+  "note": "computer only (device 2), daily 11 for 3 days from 2026-10-11 00:00 UTC; owner 2026-10-10: \"Lav en ny kampagne men kun til computer\""
  },
  "square_and_vertical_archived": [
   {
@@ -730,5 +664,137 @@
    "http": 200,
    "why": "owner 2026-10-08: \"submit the level 2 pictures even though its under maintenance to the campaign and maybe just add the max\""
   }
- ]
+ ],
+ "campaign_all_devices": {
+  "request": {
+   "asset_ids": [
+    86971162315270,
+    85334319149309,
+    109659855098434,
+    130462922453042,
+    103797698944118,
+    131830288383893
+   ],
+   "budget_in_micro_usd": 11000000,
+   "budget_type": 1,
+   "detailed_targeting_match_type": 0,
+   "duration_in_days": 5,
+   "is_auto_reload_ad_credit_enabled": false,
+   "is_off_platform_request": false,
+   "name": "Stay Quiet | Plays | 11 a day | 6 creatives",
+   "objective": 2,
+   "payment_type": 4,
+   "start_timestamp_ms": 1791415800000,
+   "target_universe_id": 10559217407,
+   "targeting_criteria": {
+    "age_bucket_criteria": {
+     "all_ages": true
+    },
+    "device_criteria": {
+     "devices": [
+      1
+     ]
+    },
+    "gender_criteria": {
+     "gender": 1
+    },
+    "genre_criteria": {
+     "genres": [
+      1
+     ]
+    },
+    "language_criteria": {
+     "languages": [
+      1
+     ]
+    },
+    "location_criteria": {
+     "countries": [],
+     "regions": [
+      1
+     ]
+    }
+   }
+  },
+  "pictures": {
+   "A01_ad_office_run": 86971162315270,
+   "T01_hero_office_hide": 85334319149309,
+   "T04_hero_shh": 109659855098434,
+   "A03_ad_table_check": 130462922453042,
+   "T03_hero_playground": 103797698944118,
+   "T05_hero_cinema": 131830288383893
+  },
+  "idempotency_key": "a35034ae-99dd-4745-9d61-e2197934ebd1",
+  "submitted_at": "2026-10-08T01:00:08",
+  "status": 200,
+  "answer": "{\"campaign_id\":\"fc071f73-178a-491c-8257-c8be9e222e3c\",\"ad_set_id\":\"d7f469d5-c8c5-4c80-9739-dab2fb83c3d3\",\"ad_ids\":[\"0a1bb234-9ec3-49cf-8cf6-01ba432dfaa9\",\"1c9aff9d-69f9-463d-962f-e37ded1120d6\",\"9d346178-e3ef-4ad1-8302-9f57feaec4de\",\"9042dfd0-d12c-4541-90aa-42be0efc88be\",\"132fc3d8-9d39-42d9-ae41-1379c4b203a0\",\"f373206a-dbc9-4dc1-98eb-b994cbe3a478\"]}",
+  "read_back": {
+   "id": "fc071f73-178a-491c-8257-c8be9e222e3c",
+   "name": "Stay Quiet | Plays | 11 a day | 6 creatives",
+   "status": 2,
+   "objective": 2,
+   "budget_type": 1,
+   "budget_in_micro_usd": 11000000,
+   "performance": {},
+   "payment_type": 4,
+   "start_timestamp_ms": 1791415800000,
+   "duration_in_days": 5,
+   "target_universe_id": 10559217407,
+   "asset_ids": [
+    85334319149309,
+    130462922453042,
+    86971162315270,
+    109659855098434,
+    103797698944118,
+    131830288383893
+   ],
+   "targeting_criteria": {
+    "language_criteria": {
+     "languages": [
+      1
+     ]
+    },
+    "gender_criteria": {
+     "gender": 1
+    },
+    "age_criteria": {
+     "all_ages": false,
+     "lower_bound": 0,
+     "upper_bound": 0
+    },
+    "device_criteria": {
+     "devices": [
+      1
+     ]
+    },
+    "age_bucket_criteria": {
+     "all_ages": true,
+     "age_buckets": null
+    },
+    "genre_criteria": {
+     "genres": [
+      1
+     ]
+    },
+    "location_criteria": {
+     "countries": null,
+     "regions": [
+      1
+     ]
+    },
+    "keyword_criteria": {
+     "keywords": null
+    },
+    "retargeting_criteria": {
+     "retargeting_audiences": null
+    },
+    "operating_system_criteria": {
+     "operating_systems": null
+    }
+   },
+   "bid_value_micro_usd": 1000001,
+   "is_full_days": false,
+   "is_auto_reload_ad_credit_enabled": false
+  }
+ }
 }

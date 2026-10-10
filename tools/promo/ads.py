@@ -55,6 +55,8 @@ Campaign numbers: objective 2 = Plays; budget_type 1 = daily, 2 = lifetime; paym
 credit (2 = a user's own, 1 = card); detailed_targeting_match_type 0 = all players, 3 = new, 2 = recent,
 1 = lapsed. Targeting: ages 5 = all (sent as all_ages), 1 = 13-17, 2 = 18-24, 3 = 25+, 4 = 5-12; devices 1 =
 all, 2 computer, 3 phone, 4 tablet, 5 console; gender 1 = any; genres [1] = all; regions [1] = everywhere.
+(DEVICE_TYPE_COMPUTER = 2 and so on, read from the Ads Manager's own script on 2026-10-10. The experience's playable
+devices do NOT narrow a campaign: the device is chosen here, `targeting_criteria.device_criteria.devices`.)
 """
 import json
 import struct
@@ -260,7 +262,7 @@ def status():
     print(len(library(archived=True)), 'archived')
     record = json.loads(RECORD.read_text()) if RECORD.exists() else {}
     names = {1: 'paused', 2: 'scheduled', 5: 'completed', 6: 'in review', 7: 'cancelled', 9: 'active', 14: 'learning'}
-    for key in ('campaign', 'campaign_previous'):
+    for key in ('campaign', 'campaign_all_devices', 'campaign_previous'):      # newest first (2026-10-10: computer only)
         answer = record.get(key, {}).get('answer')
         if not answer:
             continue
