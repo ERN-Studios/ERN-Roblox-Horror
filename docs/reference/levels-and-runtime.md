@@ -1559,3 +1559,35 @@ recovery, a natural lunge by eye, the camcorder look in Levels 2 to 6 and on the
 - If the Codex computer-use publish is ever wanted again, it must be started with the model pinned (`-m gpt-6.1-sol`, Low,
   `service_tier="default"`): `~/.codex/config.toml` on this Mac defaults to ultra/priority, and
   `tools/agents/start-codex.sh` rejects `--enable`. `~/Projects/stayquiet-session-tools/publish_when_idle.sh`.
+
+### Added 2026-10-10 (night) - Level 2 has an entity: the Shade (in Studio, switch on, NOT published by this session)
+
+- **This replaces "Level 2 has no entity" (owner, 2026-10-08).** Owner, 2026-10-10: a shadow seen on walls and pillars
+  for a second, that comes closer from behind and, unwatched, becomes real, comes out of the floor and drags you down
+  with its hands; ElevenLabs whispers heard from where it is. Commit `08c2bd4a`.
+- **Rule**: it hunts one player at a time from behind (46 studs down to 4.5 in 17 s, 22 s the first time). The hunted
+  player holding it on screen for 0.3 s sends it away. The first time it reaches a player in a round it only scares
+  (`FirstIsWarning`); after that it kills (`DeathAdvice` `L2Shade`). Nothing in the arrival room, its stairs or the
+  first 45 s; never a protected player. Numbers: `Shade.Config` at the top of `Level 2 Shade`. These are my choices.
+- **Parts**: server `ServerScriptService."Level 2 Systems"."Level 2 Shade"` (started and stopped by the Poolrooms
+  Runtime inside pcall), client `StarterPlayerScripts."Level 2 Shade Client"`, assets `ReplicatedStorage.Level2Shade`
+  (`Meshes` 9, `Sounds` 21) built by `tools/level2_shade/install_shade.py`. **Switch: that folder's attribute
+  `Enabled`**; false or no folder = Level 2 exactly as before.
+- **A mesh uploaded from numbers (EditableMesh -> CreateAssetAsync) keeps its own origin**: the MeshPart's CFrame is
+  the mesh's (0,0,0), not its box centre, and resizing scales about that point. Placing by box centre stood the figure
+  5.5 studs up the wall. The lamps of the same day never showed it (their offsets are centimetres).
+- **A shadow on a pool floor is invisible through a stud of water**: floor shadows and the kill's dark pool are drawn
+  on the water surface (client `onWater`).
+- **Studio's viewport was 1250x116 all evening.** What worked: roll the camera 90 degrees so the tall thing lies
+  along the strip, capture, rotate and crop (`~/Projects/stayquiet-session-tools/l2shade/rshot.sh`, `cam.lua`). A
+  strip also clamps the horizontal field of view, so a non-rolled capture is far more zoomed than its FieldOfView says.
+- `execute_luau` on the Server gets its OWN copy of a ModuleScript (like the command bar): the test drove a second
+  instance of the entity through `_G`. Long waits inside one call (27 s) hang the bridge: poll with short calls.
+- Play-test knobs left in the client, all local player attributes: `Level2ShadeTestGlimpse` (true = one glimpse now),
+  `Level2ShadeTestSlow` (stretch the kill), `Level2ShadeTestRoll`, `Level2ShadeTestCamera`. Server: `Shade.ForceStalk`.
+- `master_v3.py` only takes keys that start `bed_`/`loop_`/`shot_` and paths inside its own folder: the Shade's
+  sounds were mastered under aliased keys in `~/Projects/stayquiet-l2-shade/audio` (raw takes and logs are there).
+  `shade_hands` (the finger loop) failed the loop-envelope gate in all four takes and is not in the game.
+- **Not done**: anyone listening; two players (only the hunted player's look counts, teammates just see it); a phone;
+  the kill from the victim's own eyes at full frame; Shade_Reach and Shade_Claw seen in game (the A3 pillars are too
+  narrow for them, so every test glimpse was Shade_Stand); whether 32 to 58 s between stalks is the right pressure.
