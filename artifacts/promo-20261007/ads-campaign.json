@@ -305,7 +305,14 @@
    "A04": 89268799631436
   },
   "created": "2026-10-10T23:33:28",
-  "note": "computer only (device 2), daily 11 for 3 days from 2026-10-11 00:00 UTC; owner 2026-10-10: \"Lav en ny kampagne men kun til computer\""
+  "note": "computer only (device 2), daily 11 for 3 days from 2026-10-11 00:00 UTC; owner 2026-10-10: \"Lav en ny kampagne men kun til computer\"",
+  "edits": [
+   {
+    "at": "2026-10-10T23:41:27",
+    "budget_in_micro_usd": 6000000,
+    "why": "owner, 2026-10-10 night: \"Kan vi ikke lave om p\u00e5 kampagnen som den bruger 6 credits om dagen og ikke 11\""
+   }
+  ]
  },
  "square_and_vertical_archived": [
   {
