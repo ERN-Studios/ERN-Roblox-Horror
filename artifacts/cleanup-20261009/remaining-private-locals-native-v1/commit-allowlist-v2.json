@@ -1,0 +1,246 @@
+{
+  "schema": "S14-room-private-locals-commit-allowlist-v2",
+  "generatedAtUtc": "2026-10-10T00:25:21.168671+00:00",
+  "scope": "Five new owned proposal/nativeprobe/boundedinstaller/test tools and exact S14 immutable/offline/actual evidence. Root separately stages verified Source and scoped HEAD manifest. No staging by preparer.",
+  "fileCountExcludingSelf": 42,
+  "totalBytesExcludingSelf": 1518705,
+  "files": [
+    {
+      "path": "tools/cleanup_20261009/prepare_room_private_locals_probe.py",
+      "bytes": 15188,
+      "sha256": "c789f036a9c2a074f3e2a9cec9828594a8ce73b6e98545291c20495906743a86"
+    },
+    {
+      "path": "tools/cleanup_20261009/room_private_locals_probe.luau",
+      "bytes": 8884,
+      "sha256": "3346ba8f387d9d1a3e6203ff742e49f32298e2bacd8fd645f57a953d42d121e1"
+    },
+    {
+      "path": "tools/cleanup_20261009/apply_room_private_locals_cleanup.py",
+      "bytes": 25299,
+      "sha256": "c748944a3bcf02dc808ceee2bd168ef567fd2a40e1111ca20c1f8e71872eac8f"
+    },
+    {
+      "path": "tools/cleanup_20261009/room_private_locals_source_cas.luau",
+      "bytes": 9365,
+      "sha256": "db9aa76b38fbc0f7b69850048427b6ae29cf103b77047a998d245625ccac9ae2"
+    },
+    {
+      "path": "tools/cleanup_20261009/test_apply_room_private_locals_cleanup.py",
+      "bytes": 16600,
+      "sha256": "13ff99fa886a6f0380a25f42ad79d789bab151b61cd99abfad7dc88de4272bb9"
+    },
+    {
+      "path": "tools/cleanup_20261009/.gitattributes",
+      "bytes": 1964,
+      "sha256": "9cfd5f09853eecba0b449445fb0256f433dd2cf7a5f3658cc129e10af1820ef9"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/observation.json",
+      "bytes": 5806,
+      "sha256": "ea30a2104050f7a29bb81fc7fc3b214e2b405bd57c74b22eb3e16f37ad81579d"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/read-source.luau",
+      "bytes": 2203,
+      "sha256": "acecb7b697a5deccd8a609a238229576455099e186c0ba4330538696831092be"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/REVIEW.md",
+      "bytes": 15941,
+      "sha256": "7d0d1516905ca4b2b1c2dfe25b51835748e2a887f9ac8837dd0053ede959de06"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/authoring-closure.json",
+      "bytes": 2965,
+      "sha256": "8a66cbd016a275350a5c317b5efbe82c49b4eadd7121c5283acd60392c7197c6"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-native-before-result.json",
+      "bytes": 1204,
+      "sha256": "bd37f31aad9b496e38b60044f8c52c091df116dd6b8c417f51d73b8a934a7d1f"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-proposal-v1/proposal.json",
+      "bytes": 5425,
+      "sha256": "55a40f0a9099bc955c9ad4af9026fff00883c020884cbae3881fab83d205a2a4"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-proposal-v1/preparer-offline-v1.py.txt",
+      "bytes": 14937,
+      "sha256": "ac7df19df7e7b15dd545a64af439a5dcfcd710697fe531e223d4873a24460f21"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-proposal-v2/before.module.luau",
+      "bytes": 44893,
+      "sha256": "e044330e952ac76dc33bf94ac2859d1c820a588f99bd19106f341a7ee55f3cc9"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-proposal-v2/candidate.module.luau",
+      "bytes": 44768,
+      "sha256": "29703916b811860cb1df9c73fc3f9b1aa00f8d82bc6723d440ad618e5385461d"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-proposal-v2/wallNegative.module.luau",
+      "bytes": 44760,
+      "sha256": "77d8e5554b83da828c7d8b9c4f4ffc7b1359e6d05077cacf460439ba1e82210e"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-proposal-v2/breakerNegative.module.luau",
+      "bytes": 44768,
+      "sha256": "28d867e5e72b870268ff7fdbf4604f61279284950e8e9f2e3ece3937c0258f9e"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-proposal-v2/native-before.luau",
+      "bytes": 200352,
+      "sha256": "20f87d2e14e182df26ba678eb2a863e1004dcb375c2fb854c2083d6998faa319"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-proposal-v2/native-installed.luau",
+      "bytes": 200351,
+      "sha256": "7f9093bcdcc0bac74f865ac57f324d67176b947538a48faa7e2e78f302f7493d"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-proposal-v2/ownership-fixture.luau",
+      "bytes": 3604,
+      "sha256": "644398e1cf69f566762f6ab762b61cedbd458ed64eadb1e21fb52b94577b05b7"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-proposal-v2/proposal.json",
+      "bytes": 5869,
+      "sha256": "ac563c3d9a3f51af9761fd95e21c89e3e2f42fc9298ebd99906ced11cc12f861"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-proposal-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-proposal-v1/proposal.json",
+      "bytes": 2807,
+      "sha256": "ba9b848f3e4522f450a65e1bee1eb561e096b8b53cb25da0ced5678dc782ad5f"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-proposal-v1/offline-wrapper-tests.json",
+      "bytes": 2920,
+      "sha256": "bc510ea7fce836357ee865f37364505dd9d0a5765078b4e2aa5ec074d76b1c76"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-proposal-v1/offline-wrapper-tests-final.json",
+      "bytes": 3542,
+      "sha256": "9a4da0e890c9ad3bdcabc32239324818350c56da9cf26968dd4243f8ab90165c"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-proposal-v1/test_apply_room_private_locals_cleanup.initial-offline.py.txt",
+      "bytes": 13451,
+      "sha256": "8f14fd02bb3b7578807fd953227205cbd4b5925913c4e076679060d723f6cc0c"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/result.json",
+      "bytes": 4018,
+      "sha256": "95eb8f9e120393b098824460dfd161ae09249c0921884d2d14acd8a8b7875f63"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/native-installed-result.json",
+      "bytes": 1203,
+      "sha256": "57052bdb0940c73a8d35e9e46db2cd5af811f3304878c5a347f767121b5e8bf5"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/native-before.json",
+      "bytes": 130832,
+      "sha256": "71a1629313f00be05d04ba35dc06ff15f09ed51c4b95a0181314f4239cd4cbc9"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/native-after.json",
+      "bytes": 130832,
+      "sha256": "cf77e64e481309e9f6b934deee7fd6963f7aef12a59a25293d6c56ebb7b4a1b1"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/native-final.json",
+      "bytes": 132129,
+      "sha256": "6a482f3449d8da2ac31ff1a859e64e141216c3db77f7f48186d30ad50a9e41cf"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/apply.luau",
+      "bytes": 109810,
+      "sha256": "2285359590576e0e60aed5394198d86e4140612eeb734c72006f3bcc5f61faba"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/native-before-source-originals-final.luau",
+      "bytes": 109903,
+      "sha256": "11233eca9c7cb885361bb51b2ca70e7e84bae54f412cd38c80b5310cea3cf854"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/native-after-source-originals-final.luau",
+      "bytes": 109903,
+      "sha256": "ee071a29bf5bf38b498b45a7276f4cad23199032d1add111d0fae3484b7e23d8"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/snapshot-1-001.luau",
+      "bytes": 10020,
+      "sha256": "acc7af66dc094001b74211b40089dffb35d332c6f719660f66fc4938bc525f44"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/snapshot-1-201.luau",
+      "bytes": 10022,
+      "sha256": "7ffb5ed7f9b8369147bdc253267dd264fca55c64e73387b64028747afadd808a"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/snapshot-3-001.luau",
+      "bytes": 10020,
+      "sha256": "2daa4e8c1b9a698bc0564f5054bf6a757ac17633c2481639b637f6039e1be0ea"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/snapshot-3-201.luau",
+      "bytes": 10022,
+      "sha256": "2e7bb5fdff31926dba4f56d53ed819b0f0e10f34ef478527133f9e040316cbf2"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/snapshot-3-target-final.luau",
+      "bytes": 9894,
+      "sha256": "63ff5b15b43c6111bb0575af838f5dce416a5571389bba2d787673f787a8b183"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/bounded-transport-and-parity-proof.json",
+      "bytes": 2207,
+      "sha256": "83be0f03f781fe94590d26a200ef129fbb941ec8e4658987e5093b2900b45b07"
+    }
+  ],
+  "includeSelf": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/commit-allowlist-v2.json",
+  "exclude": [
+    "production Source/manifest and Root main docs (Root-owned separate staging)",
+    "RoundUI/pre-existing owner changes",
+    "all .git private Source/editor/manifest/page/checkpoint copies",
+    "room-proposal-v1 payload/native/ownership duplicate files byte-identical to final v2 preserved only locally",
+    "all unrelated authoring/optimization/client tool changes including prepare_c26_comments.py",
+    "earlier curation-only commit-allowlist-v1.json; no native/proof/tool bytes were changed for the wording clarification"
+  ],
+  "actualOutcome": {
+    "RootNativeInstallPASS": true,
+    "removedBytes": 125,
+    "beforeSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+    "afterSHA256": "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b",
+    "all212NativeParityPASS": true,
+    "installed752EachPaired1504Reentry1504PASS": true,
+    "localCommitId": "PENDING ROOT",
+    "publishedByThisBatch": false
+  },
+  "toolRulesAddedOnly": [
+    "prepare_room_private_locals_probe.py -text",
+    "room_private_locals_probe.luau -text",
+    "apply_room_private_locals_cleanup.py -text",
+    "room_private_locals_source_cas.luau -text",
+    "test_apply_room_private_locals_cleanup.py -text"
+  ],
+  "restorationEvidenceScope": "Exact before/candidate sources preexist in additional-locals archive; private rollback checkpoints retained. No raw Source/editor or runtime-mirror checkpoint duplicate is added. The meaningful actual-source contract runners explicitly contain the whole RoomDressing body under local engine boundaries. This is not native non-script restore certification."
+}

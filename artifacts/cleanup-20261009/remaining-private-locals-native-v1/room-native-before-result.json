@@ -1,0 +1,30 @@
+{
+  "contract": {
+    "beforeBehaviorSHA256": "81cddf6665793174aca5b3eddfca40483c3c31348fab6caa951e8d40e1eea980",
+    "semanticNegativeControls": 2,
+    "candidateBehaviorSHA256": "81cddf6665793174aca5b3eddfca40483c3c31348fab6caa951e8d40e1eea980",
+    "semanticNegativeRejected": true,
+    "reentryChecks": 1504,
+    "pairedChecks": 1504,
+    "checksPerVersion": 752
+  },
+  "readAtUtc": "2026-10-10T00:19:14Z",
+  "nativeOriginalSourceWrites": 0,
+  "remainingProbes": 0,
+  "nativeOriginalAttributeWrites": 0,
+  "nativeOriginalParentWrites": 0,
+  "cleanupErrors": [],
+  "borrowedRuntimeState": false,
+  "contractPassed": true,
+  "probesDestroyed": 4,
+  "ownedLeaseReleased": true,
+  "installed": false,
+  "originalsUnchanged": true,
+  "limits": "Whole actual RoomDressing Plan/Apply/local-helper contract against local-only engine/asset boundary tables. No live round, real asset, real multiplayer, streaming, respawn, teleport or performance certification.",
+  "modeSwitches": 0,
+  "probesCreated": 4,
+  "pass": true,
+  "schema": "mongotv-room-private-locals-native-contract-v1",
+  "originalSourceCoverage": 212,
+  "nativeInputSHA256": "20f87d2e14e182df26ba678eb2a863e1004dcb375c2fb854c2083d6998faa319"
+}

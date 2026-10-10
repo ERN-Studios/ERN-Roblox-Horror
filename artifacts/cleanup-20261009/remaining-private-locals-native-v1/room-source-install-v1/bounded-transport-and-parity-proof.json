@@ -1,0 +1,45 @@
+{
+  "schema": "room-installed-bounded-transport-and-parity-proof-v1",
+  "pass": true,
+  "generatedAtUtc": "2026-10-10T00:24:34.964983+00:00",
+  "nativeSourceRows": 212,
+  "targetOnlySourceDrift": [
+    {
+      "instanceId": "1_42745",
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "fields": {
+        "bytes": {
+          "before": 18304,
+          "after": 18179
+        },
+        "sha256": {
+          "before": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+          "after": "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b"
+        }
+      }
+    }
+  ],
+  "identitiesClassesParentsPropertiesAttrsTagsUnchanged": true,
+  "afterAndFinalRowsByteEquivalent": true,
+  "metadataPagesPerSnapshot": 11,
+  "totalSavedMetadataPages": 33,
+  "maxSavedPrettyPageBytes": 15108,
+  "wireMetadataResponseCapEnforcedByExecutedWrapper": 20000,
+  "wireSourceResponseCapEnforcedByExecutedWrapper": 8000,
+  "actualSourceReadChunkLines": 64,
+  "staticAlignedBeforeSourceChunkCount": 7,
+  "staticAlignedBeforeSourceChunkMaxBytes": 3128,
+  "sourceChunkSizeScope": "Static exact guarded before bytes at the actual reader64line alignment; actual wire limits independently enforced before parsing. No invented measured wire size.",
+  "privateOriginalSourceHash": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+  "privateOriginalEditorHash": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+  "privateOriginalEditorExact": true,
+  "actualCASCodeSHA256": "2285359590576e0e60aed5394198d86e4140612eeb734c72006f3bcc5f61faba",
+  "actualResultSHA256": "95eb8f9e120393b098824460dfd161ae09249c0921884d2d14acd8a8b7875f63",
+  "actualInstalledReplaySHA256": "57052bdb0940c73a8d35e9e46db2cd5af811f3304878c5a347f767121b5e8bf5",
+  "consoleBeforeAfterExact": true,
+  "other211SourceRowsPreserved": true,
+  "noRollbackNeeded": true,
+  "nativeCallsByProofDerivation": 0,
+  "productionWritesByProofDerivation": 0,
+  "scope": "Read-only derivation from Root actual receipts/private immutable checkpoint. All original/native guards are point-in-time; no gameplay/assets/multiplayer/streaming/performance certificate."
+}

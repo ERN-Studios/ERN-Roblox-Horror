@@ -1,0 +1,23 @@
+{
+  "schema": "s14-root-scoped-staging-review-v1",
+  "pass": true,
+  "curationSHA256": "2a03ee9905cbd5c01319aad4b4e47717527ef8fed6b90db2e7541e647248f46f",
+  "curatedPaths": 43,
+  "stagedPaths": 46,
+  "runtimeSource": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Room Dressing.ModuleScript.lua",
+  "sourceSHA256": "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b",
+  "sourceBytes": 18179,
+  "scopedManifestSHA256": "6159355d631c30730830a7c6be88a65e5cde03cbf62dfb38535507faab34a5b6",
+  "manifestDelta": "Only target sha256 and bytes; working-only original RoundUI source fields excluded.",
+  "excludedRoundUISourceSHA256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73",
+  "modeSwitches": 0,
+  "publishedByThisBatch": false,
+  "pushedByThisBatch": false,
+  "intentionalImmutableProofWhitespace": {
+    "path": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/read-source.luau",
+    "line": 31,
+    "reason": "Exact executed read-only source input has one blank EOF line; preserve its verified native-input SHA instead of changing historical evidence.",
+    "sha256": "acecb7b697a5deccd8a609a238229576455099e186c0ba4330538696831092be",
+    "allOtherStagedPathsWhitespaceCheck": "PASS"
+  }
+}

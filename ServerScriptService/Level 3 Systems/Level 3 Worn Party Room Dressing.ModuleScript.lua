@@ -58,8 +58,8 @@ local function overlaps(a,b,padding)
 		and math.abs(a.z-b.z) < a.hz+b.hz+(padding or 0)
 end
 
-local function safeRect(rect, room, blocked, reservePerimeter)
-	local inset = if reservePerimeter then 11.5 else WALL_INSET
+local function safeRect(rect, room, blocked)
+	local inset = WALL_INSET
 	if math.abs(rect.x)+rect.hx > room.W*.5-inset+.001
 		or math.abs(rect.z)+rect.hz > room.D*.5-inset+.001 then
 		return false,"wall"
@@ -86,7 +86,7 @@ function Dress.Plan(room, blocked, seed)
 		local sx,sz=signs[1],signs[2]
 		local pocket={sx=sx,sz=sz,x=sx*(room.W*.5-10),z=sz*(room.D*.5-13),hx=9,hz=12}
 		local withPartition={x=pocket.x-sx*.45,z=pocket.z,hx=9.45,hz=12}
-		local fits=safeRect(withPartition,room,blocked,false)
+		local fits=safeRect(withPartition,room,blocked)
 		if fits then
 			pocket.xInner=room.W*.5-19
 			pocket.zInner=room.D*.5-25
@@ -249,10 +249,9 @@ function Dress.Apply(manifest,helper,options)
 
 	local function interactive(model,cf,kind,asset)
 		if not model then return end
-		local localPosition=if kind=="breaker" then V(.98,6.70,.42)
+		local localPosition=if kind=="breaker" then V(.98,2.15,.42)
 			elseif kind=="claw" then V(.52,2.65,1.94) else V(0,4.2,1.8)
 		-- Breaker asset base is already mounted high; inspect at its latch +2.15.
-		if kind=="breaker" then localPosition=V(.98,2.15,.42) end
 		local anchor=carrier(model,cf:PointToWorldSpace(localPosition),"Interaction Origin")
 		local prompt=Instance.new("ProximityPrompt")
 		prompt.Name="Level3_ServiceInteraction"
@@ -401,7 +400,7 @@ function Dress.Apply(manifest,helper,options)
 						local x=signs[1]*(room.W*.5-1.4-size.X*.5-step*1.7)
 						local z=signs[2]*(room.D*.5-1.4-size.Z*.5)
 						local rect={x=x,z=z,hx=size.X*.5,hz=size.Z*.5}
-						if safeRect(rect,room,blocked,false) then
+						if safeRect(rect,room,blocked) then
 							local cf=faceCF(base+V(x,0,z),V(0,0,-signs[2]))
 							local model=placed(asset,cf,group,true,nil)
 							if model then

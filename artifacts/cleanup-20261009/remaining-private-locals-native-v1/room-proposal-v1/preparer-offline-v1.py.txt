@@ -1,0 +1,250 @@
+"""Prepare one whole-source RoomDressing local-helper native contract.
+
+Default creates immutable proposal artifacts only. Root alone may --execute a
+reviewed fresh unparented ModuleScript probe; no production installation, live
+requires, mode switches, assets, players or borrowed runtime state are used.
+"""
+from pathlib import Path
+import argparse
+import hashlib
+import importlib.util
+import json
+import re
+import subprocess
+import sys
+import tempfile
+
+sys.dont_write_bytecode = True
+ROOT = Path(__file__).resolve().parents[2]
+ART = ROOT / "artifacts/cleanup-20261009/remaining-private-locals-native-v1"
+DEST = ART / "room-proposal-v1"
+FILE = "ServerScriptService/Level 3 Systems/Level 3 Worn Party Room Dressing.ModuleScript.lua"
+BEFORE = "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a"
+AFTER = "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b"
+LUAU = Path("C:/Users/mikke/AppData/Local/Temp/codex-luau-0.737/luau.exe")
+COMPILER = LUAU.with_name("luau-compile.exe")
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+lf = lambda raw: raw.replace(b"\r\n", b"\n")
+
+
+def save(path, raw):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("xb") as stream:
+        assert stream.write(raw) == len(raw)
+    assert path.read_bytes() == raw
+
+
+def encoded(value):
+    return (json.dumps(value, indent=2, ensure_ascii=False) + "\n").encode()
+
+
+def lua_literal(text):
+    level = "="
+    while "]" + level + "]" in text:
+        level += "="
+    return "string.sub([" + level + "[_" + text + "]" + level + "],2)"
+
+
+FAULTS = r'''
+-- Execute the unchanged actual cleanup failure behavior, then independently
+-- clean only fixture-owned tables. This does not certify or fix live cleanup.
+local function cleanupFaultFixture(load,kind)
+ local e=dressingEngine();local api=load(e)
+ local stage=e.new("Folder","Owned Fault Stage")
+ local world=e.new("Model","Fault World",stage)
+ world:SetAttribute("Level3_Generation",7)
+ local result=api.Apply({World=world,Generation=7,Rooms={},Layout={Rooms={},ResolvedSeed=1}},
+  {Place=function()error("No room should request an asset",0)end},{})
+ local owner=result.Owner
+ local connection=world.AncestryChanged.Connections[1]
+ local disconnect=connection.Disconnect
+ local destroy=owner.Destroy
+ if kind=="disconnect" then
+  connection.Disconnect=function()error("controlled disconnect failure",0)end
+ else
+  rawset(owner,"Destroy",function()error("controlled owner destroy failure",0)end)
+ end
+ local ok,err=pcall(result.Cleanup)
+ check(not ok and err=="controlled "..(kind=="disconnect" and "disconnect" or "owner destroy").." failure",
+  "actual cleanup failure propagates unchanged "..kind)
+ check(owner.Parent==world,"failed cleanup leaves current owner present "..kind)
+ local retry=pcall(result.Cleanup)
+ check(retry and owner.Parent==world,"existing alive=false cleanup retry is a no-op "..kind)
+ local flags={}
+ for _,s in e.signals do for _,c in s.Connections do flags[#flags+1]=c.Connected end end
+ local before={Fault=kind,Error=err,OwnerPresent=owner.Parent==world,Connections=flags,Report=stable(result.Report)}
+ connection.Disconnect=disconnect;rawset(owner,"Destroy",nil)
+ -- Separate harness ownership cleanup after the failure; all objects are fake.
+ for _,s in e.signals do for _,c in s.Connections do c:Disconnect() end end
+ stage:Destroy()
+ for _,s in e.signals do for _,c in s.Connections do check(not c.Connected,"fault fixture disconnects own connections")end end
+ for _,o in e.allocated do check(o.Parent==nil,"fault fixture cleans own objects")end
+ return before
+end
+'''
+
+
+def payload(host, source):
+    return '''return function()
+''' + host + '''
+local function load(e)
+ local game,workspace,task,Instance,os=e.game,e.workspace,e.task,e.Instance,e.os
+''' + source + '''
+end
+''' + FAULTS + '''
+local rows={Plan=planFixture(load),Dressing={},CleanupFailures={}}
+for _,scenario in {{false,false,false},{true,false,false},{false,true,false},{false,false,true}} do
+ rows.Dressing[#rows.Dressing+1]=dressingFixture(load,table.unpack(scenario))
+end
+for _,kind in {"disconnect","destroy"} do rows.CleanupFailures[#rows.CleanupFailures+1]=cleanupFaultFixture(load,kind)end
+return {checks=checks,signature=stable(rows)}
+end
+'''
+
+
+def prepare():
+    assert not DEST.exists(), "Preserve immutable proposal; prepare a new version after reconciliation"
+    raw = (ROOT / FILE).read_bytes()
+    manifest_raw = (ROOT / "studio-sync-manifest.json").read_bytes()
+    current = lf(raw)
+    assert sha(current) == BEFORE
+    old_dir = ROOT / "artifacts/cleanup-20261009/additional-locals"
+    old = json.loads((old_dir / "candidate-manifest.json").read_bytes())
+    row = next(r for r in old["files"] if r["file"] == FILE)
+    before = (ROOT / row["beforeFile"]).read_bytes()
+    candidate = (ROOT / row["candidateFile"]).read_bytes()
+    assert before == current and sha(before) == row["beforeSHA256Lf"] == BEFORE
+    assert sha(candidate) == row["candidateSHA256Lf"] == AFTER
+    source = before.decode()
+    assert len(re.findall(r"\bsafeRect\b", source)) == 3
+    assert len(re.findall(r"\breservePerimeter\b", source)) == 2
+    assert source.count("local V = Vector3.new") == 1 and "require(" not in source
+    edits = [
+        ("local function safeRect(rect, room, blocked, reservePerimeter)\n\tlocal inset = if reservePerimeter then 11.5 else WALL_INSET", "local function safeRect(rect, room, blocked)\n\tlocal inset = WALL_INSET"),
+        ("safeRect(withPartition,room,blocked,false)", "safeRect(withPartition,room,blocked)"),
+        ("safeRect(rect,room,blocked,false)", "safeRect(rect,room,blocked)"),
+        ('local localPosition=if kind=="breaker" then V(.98,6.70,.42)', 'local localPosition=if kind=="breaker" then V(.98,2.15,.42)'),
+        ('\t\tif kind=="breaker" then localPosition=V(.98,2.15,.42) end\n', ""),
+    ]
+    projected = source
+    for a,b in edits:
+        assert projected.count(a) == 1
+        projected = projected.replace(a,b,1)
+    assert projected.encode() == candidate
+    manifest = json.loads(manifest_raw)
+    entry = next(r for r in manifest["items"] if r["file"] == FILE)
+    assert entry["sha256"] == BEFORE and entry["sourceEditorMatches"] is True
+    observations = json.loads((ART / "observation.json").read_bytes())
+    originals = [r for r in observations["rows"] if "Level 3" in r["studioPath"]]
+    assert len(originals) == 2 and originals[0]["sourceSHA256"] == BEFORE
+    entries = {r["studioPath"]:r for r in manifest["items"]}
+    for r in originals:
+        expected = entries[r["studioPath"]]
+        for key in ("className","properties","attributes","tags"):
+            if key == "tags" and key not in expected:
+                assert r[key] == [], "Unrecorded fresh tags require reconciliation"
+            else:
+                assert r[key] == expected[key], "Fresh original metadata differs"
+        assert r["editorMatches"] is True and r["rawSourceSHA256"] == r["sourceSHA256"] == expected["sha256"]
+        assert sha(lf((ROOT / expected["file"]).read_bytes())) == r["sourceSHA256"]
+    pinned = {
+        "artifacts/cleanup-20261009/local-helpers-host.luau":"d7333b5cfcf813de0f60a22f4b0795286530d7f9bf8a777409d506e3efd69b45",
+        "artifacts/cleanup-20261009/additional-locals-host.luau":"425d7a48747a06bd378145ee17abec7d914d0459eebd2449cf806454837477ce",
+        "tools/cleanup_20261009/latch_mode_probe_v2.luau":"3f5f6f6e6734e195d1f562a124910cbaa8d3abd777a2a35bd0aa8f58756c6ffc",
+    }
+    for p,h in pinned.items(): assert sha((ROOT/p).read_bytes()) == h
+    host = "".join((ROOT / p).read_text(encoding="utf8") for p in list(pinned)[:2])
+    payloads = {"before":payload(host,source), "candidate":payload(host,candidate.decode())}
+    payloads["wallNegative"] = payload(host,candidate.decode().replace("local inset = WALL_INSET", "local inset = 12",1))
+    payloads["breakerNegative"] = payload(host,candidate.decode().replace('local localPosition=if kind=="breaker" then V(.98,2.15,.42)', 'local localPosition=if kind=="breaker" then V(.98,6.70,.42)',1))
+    template = Path(__file__).with_name("room_private_locals_probe.luau").read_text(encoding="utf8")
+    spec=importlib.util.spec_from_file_location("owned_latch_probe_v2",Path(__file__).with_name("prepare_latch_mode_probe_v2.py"))
+    owned=importlib.util.module_from_spec(spec);spec.loader.exec_module(owned)
+    ownership = owned.ownership_fixture(template)
+    compiles=[]
+    with tempfile.TemporaryDirectory(prefix="mongotv-room-locals-") as directory:
+        temp=Path(directory)
+        wrappers="\n".join("local "+name+"=(function()\n"+body+"\nend)()" for name,body in payloads.items())
+        test=wrappers+'''
+local a,b=before(),candidate()
+assert(a.checks==b.checks and a.signature==b.signature,"Whole actual-source authoring behavior differs")
+local aa,bb=before(),candidate()
+assert(aa.checks==a.checks and aa.signature==a.signature and bb.checks==b.checks and bb.signature==b.signature,"Runner reentry differs")
+for _,pair in {{wallNegative,"authoring seed0 chooses positive corner"},{breakerNegative,"breaker latch prompt uses mounted +2.15 position"}} do
+ local ok,err=pcall(pair[1]);assert(not ok and tostring(err):find(pair[2],1,true),"Actual semantic mutant was not rejected")
+end
+print("CHECKS="..a.checks)
+'''
+        p=temp/"offline.luau";p.write_bytes(test.encode())
+        run=subprocess.run([str(LUAU),str(p)],capture_output=True,text=True,timeout=30)
+        assert run.returncode==0,run.stdout+run.stderr
+        count=int(re.search(r"CHECKS=(\d+)",run.stdout)[1])
+        expected={"nativeScriptCount":manifest["counts"]["scripts"],"contractChecks":count,"originals":originals}
+        codes={}
+        for phase in ("before","installed"):
+            values=json.loads(json.dumps(expected))
+            if phase=="installed":values["originals"][0]["sourceSHA256"]=AFTER
+            code=template.replace("__EXPECTED__",lua_literal(json.dumps(values,ensure_ascii=False)))
+            code=code.replace("__PAYLOADS__",lua_literal(json.dumps(payloads,ensure_ascii=False))).replace("__INSTALLED__",str(phase=="installed").lower())
+            codes[phase]=code
+        for name,body in {**codes,**payloads,"ownership":ownership,"beforeFullSource":source,"candidateFullSource":candidate.decode()}.items():
+            p=temp/(name+".luau");p.write_bytes(body.encode())
+            for opt in ("-O0","-O1"):
+                run=subprocess.run([str(COMPILER),"--binary",opt,str(p)],capture_output=True,timeout=30)
+                assert run.returncode==0,run.stderr.decode(errors="replace")
+                compiles.append({"input":name,"optimization":opt,"pass":True,"sourceSHA256":sha(body.encode())})
+        run=subprocess.run([str(LUAU),str(temp/"ownership.luau")],capture_output=True,text=True,timeout=15)
+        assert run.returncode==0,run.stdout+run.stderr
+        ownership_checks=int(re.search(r"OWNERSHIP_CHECKS=(\d+)",run.stdout)[1])
+    assert (ROOT/FILE).read_bytes()==raw and (ROOT/"studio-sync-manifest.json").read_bytes()==manifest_raw
+    for name,body in payloads.items():save(DEST/(name+".module.luau"),body.encode())
+    for name,code in codes.items():save(DEST/("native-"+name+".luau"),code.encode())
+    save(DEST/"ownership-fixture.luau",ownership.encode())
+    proof={"schema":"room-private-locals-native-proposal-v1","pass":True,"finding":"LE-34","file":FILE,
+           "beforeSHA256":BEFORE,"candidateSHA256":AFTER,"removedBytes":len(before)-len(candidate),
+           "checksPerVersion":count,"pairedChecks":2*count,"reentryChecks":2*count,"semanticNegativeControls":2,
+           "ownershipCases":8,"ownershipChecks":ownership_checks,"nativeScriptCount":expected["nativeScriptCount"],
+           "templateSHA256":sha(template.encode()),"toolSHA256":sha(Path(__file__).read_bytes()),
+           "payloadHashes":{k:sha(v.encode()) for k,v in payloads.items()},"nativeCodeHashes":{k:sha(v.encode()) for k,v in codes.items()},
+           "compileChecks":compiles,"immutableInputHashes":pinned,"nativeCalls":0,"productionWrites":0,"manifestWrites":0,
+           "currentManifestSHA256":sha(manifest_raw),"freshObservationSHA256":sha((ART/"observation.json").read_bytes()),
+           "scope":"Whole actual RoomDressing Plan/Apply/local-helper contract with local-only engine/asset boundary tables; no real assets/gameplay/multiplayer/streaming/performance certificate.",
+           "knownUnchangedCleanupFailure":"Connection/owner Destroy failures propagate after alive=false; repeated Cleanup does not retry. Harness independently disconnects/destroys only its boundary tables.",
+           "status":"offline paired contracts pass; Root must review and execute native-before before any installation"}
+    save(DEST/"proposal.json",encoded(proof))
+    print(json.dumps({"pass":True,"checksPerVersion":count,"pairedChecks":2*count,"reentryChecks":2*count,"compileChecks":len(compiles),"ownershipChecks":ownership_checks,"nativeCalls":0,"nativeCodeHashes":proof["nativeCodeHashes"]}))
+
+
+def execute(phase,receipt):
+    assert receipt is not None and not receipt.exists(), "Require a new immutable native receipt"
+    proof=json.loads((DEST/"proposal.json").read_bytes())
+    code=(DEST/("native-"+phase+".luau")).read_bytes()
+    assert sha(code)==proof["nativeCodeHashes"][phase]
+    assert sha(lf((ROOT/FILE).read_bytes()))==proof["beforeSHA256" if phase=="before" else "candidateSHA256"]
+    sys.path.insert(0,str(ROOT/"tools"))
+    from sync_from_studio import StudioMcpClient,find_mcp_batch,select_studio,RELEASE_STUDIO_NAME,require_edit_state
+    client=StudioMcpClient(find_mcp_batch());result=None;error=None
+    try:
+        client.initialize();studio=select_studio(client,RELEASE_STUDIO_NAME,15)
+        assert studio["id"]=="1b603e69-7ae1-4572-b210-d5bf05c684ff"
+        require_edit_state(client,studio["id"])
+        result=json.loads(client.call("execute_luau",{"studio_id":studio["id"],"datamodel_type":"Edit","code":code.decode()}))
+    except BaseException as primary:error=primary
+    finally:
+        try:client.close()
+        except BaseException as cleanup:
+            if error is None:error=cleanup
+            else:error.add_note("MCP close: "+str(cleanup))
+        if result is None:result={"pass":False}
+        if error is not None:result.update({"pass":False,"transportError":str(error)})
+        result["nativeInputSHA256"]=sha(code);save(receipt,encoded(result))
+    print(json.dumps({k:result.get(k) for k in ("pass","contractPassed","originalsUnchanged","probesCreated","probesDestroyed","remainingProbes","error","transportError")}))
+    assert error is None and result.get("pass") is True,"Native gate failed; retain the candidate"
+
+
+if __name__=="__main__":
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--execute",choices=("before","installed"));parser.add_argument("--receipt",type=Path)
+    args=parser.parse_args()
+    if args.execute:execute(args.execute,args.receipt)
+    else:prepare()

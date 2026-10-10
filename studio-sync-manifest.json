@@ -1280,8 +1280,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Room Dressing.ModuleScript.lua",
-      "bytes": 18304,
-      "sha256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+      "bytes": 18179,
+      "sha256": "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

@@ -1,0 +1,179 @@
+{
+  "modeSwitches": 0,
+  "objectsCreated": 0,
+  "readAtUtc": "2026-10-10T00:06:54Z",
+  "nativeWrites": 0,
+  "rows": [
+    {
+      "bytes": 18304,
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "instanceId": "1_42745",
+      "sourceSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_15620",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Worn Party Room Dressing"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "tags": [],
+      "rawSourceSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d"
+      }
+    },
+    {
+      "bytes": 34745,
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "instanceId": "1_42775",
+      "sourceSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_15624",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Usher Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "tags": [],
+      "rawSourceSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "attributes": []
+    },
+    {
+      "bytes": 30505,
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "instanceId": "1_42746",
+      "sourceSHA256": "0b5d4034c3a9016f6e4405024d713244ad936cf97988f13e03296ed016b39035",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_15620",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Worn Party Visual Adapter"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "tags": [],
+      "rawSourceSHA256": "0b5d4034c3a9016f6e4405024d713244ad936cf97988f13e03296ed016b39035",
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613"
+      }
+    },
+    {
+      "bytes": 15758,
+      "studioPath": "ServerScriptService.Level4RoundGenerator",
+      "instanceId": "1_42778",
+      "sourceSHA256": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_409634",
+      "segments": [
+        "ServerScriptService",
+        "Level4RoundGenerator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "tags": [],
+      "rawSourceSHA256": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566",
+      "attributes": []
+    },
+    {
+      "bytes": 7425,
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "instanceId": "1_42772",
+      "sourceSHA256": "af6225d22fb998db4cd2417cd552f934c75ff2c82cb223c4dd9e27daefd98aa6",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_15624",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Configuration"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "tags": [],
+      "rawSourceSHA256": "af6225d22fb998db4cd2417cd552f934c75ff2c82cb223c4dd9e27daefd98aa6",
+      "attributes": []
+    },
+    {
+      "bytes": 2197,
+      "studioPath": "ServerScriptService.NoiseRegistry",
+      "instanceId": "1_42713",
+      "sourceSHA256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_409634",
+      "segments": [
+        "ServerScriptService",
+        "NoiseRegistry"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "tags": [],
+      "rawSourceSHA256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "attributes": []
+    },
+    {
+      "bytes": 7408,
+      "studioPath": "ServerScriptService.PlayerProtection",
+      "instanceId": "1_42755",
+      "sourceSHA256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_409634",
+      "segments": [
+        "ServerScriptService",
+        "PlayerProtection"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "tags": [],
+      "rawSourceSHA256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "attributes": []
+    },
+    {
+      "bytes": 8952,
+      "studioPath": "ReplicatedStorage.DeathAdvice",
+      "instanceId": "1_42705",
+      "sourceSHA256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_408323",
+      "segments": [
+        "ReplicatedStorage",
+        "DeathAdvice"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "tags": [],
+      "rawSourceSHA256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "attributes": []
+    }
+  ],
+  "schema": "mongo-private-locals-fresh-observation-v2"
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "room-local-authoring-closure-v1",
+  "pass": true,
+  "records": [
+    {
+      "path": "tools/level3_worn_party/README.md",
+      "rawSHA256": "7cbd37754850e40177b55821e8b045e8fc88d4c7d3c09f3f3502803e5ce2c96d",
+      "bytes": 4264
+    },
+    {
+      "path": "tools/level3_worn_party/prepare_studio_install.py",
+      "rawSHA256": "0b7b3cb405e2420ca49229750289234e438797270548f11c691e020e5681903a",
+      "bytes": 12322
+    },
+    {
+      "path": "tools/level3_worn_party/install_studio.luau",
+      "rawSHA256": "089a9c0526671a233f87f24c9fe66bbe23fcc2363a5f155df41bb3567933f95c",
+      "bytes": 6336
+    },
+    {
+      "path": "tools/level3_worn_party/install-manifest.json",
+      "rawSHA256": "9722285ce3d6b3c916cd138b754bb2a94dd279441dde51625700574138af595f",
+      "bytes": 3924
+    },
+    {
+      "path": "tools/level3_worn_party/Level 3 Worn Party Room Dressing.ModuleScript.luau",
+      "rawSHA256": "6b3e93d9fb360c3c6eb0d73c0416d559b7a7a55a229179b6d5277df63909a0f5",
+      "bytes": 19885
+    },
+    {
+      "path": "tools/level6_build/import/serve_gameplay_candidates.py",
+      "rawSHA256": "281b236f22827f502deded4bdfe8a16ef2be055acf20fc435508cbe6aa4a83ae",
+      "bytes": 6534
+    },
+    {
+      "path": "tools/level6_build/room_dressing.luau",
+      "rawSHA256": "86132cfc9d2d8ed69ab9a67f49f14e7714bd59c2f8afe959ea278648f3605e50",
+      "bytes": 18794
+    },
+    {
+      "path": "ServerScriptService/Level 6 Systems/Level 6 Room Dressing.ModuleScript.lua",
+      "rawSHA256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f",
+      "bytes": 18364
+    }
+  ],
+  "historicalLevel3Package": {
+    "readmeRetired": true,
+    "historicalBackupPresent": false,
+    "actualBuildAttempt": "FileNotFoundError before payloads/listener",
+    "backupExpectedPath": "artifacts/level3-rebuild-20260930/native-backup/scripts.json",
+    "snapshotSHA256": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+    "roomCreate": true,
+    "sameCurrentTargetExists": true,
+    "actualPreflightBlockOffline": {
+      "cases": 1,
+      "checks": 2,
+      "compiles": 2,
+      "fixtureSHA256": "e283e8e19903d29af5dbb7b57dbbffe5389be589e7dc0ca9ae285d296f38a43c",
+      "scope": "Actual historical preflight block under fake current-existing target; no native execution/writes/HTTP/asset workflows."
+    },
+    "disposition": "KEEP immutable historical package. Its real builder rejects missing required backup before payload/listener setup; historical existing-target creation guard also rejects before first write."
+  },
+  "separateLevel6Workflow": {
+    "toolPayloadCanonicalEqualsSeparateLevel6Mirror": true,
+    "exactTarget": "ServerScriptService.Level 6 Systems.Level 6 Room Dressing",
+    "disposition": "KEEP separate current Level6 module and authoring payload unchanged; not Room3 Source duplicate."
+  },
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "httpServers": 0,
+  "sourceBodiesPrinted": 0
+}

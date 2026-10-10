@@ -1,0 +1,87 @@
+{
+  "pass": true,
+  "schema": "mongotv-room-source-cas-offline-proposal-v1",
+  "bytesRemoved": 125,
+  "scope": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Room Dressing.ModuleScript.lua",
+  "beforeSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+  "afterSHA256": "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b",
+  "compileChecks": [
+    {
+      "operation": "capture",
+      "optimization": "-O0",
+      "sourceSHA256": "acc7af66dc094001b74211b40089dffb35d332c6f719660f66fc4938bc525f44",
+      "pass": true
+    },
+    {
+      "operation": "capture",
+      "optimization": "-O1",
+      "sourceSHA256": "acc7af66dc094001b74211b40089dffb35d332c6f719660f66fc4938bc525f44",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O0",
+      "sourceSHA256": "d24d7bcefcb92dddbf969eb30aa72636c11556e4533e752f749b6c649e97e4b1",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O1",
+      "sourceSHA256": "d24d7bcefcb92dddbf969eb30aa72636c11556e4533e752f749b6c649e97e4b1",
+      "pass": true
+    },
+    {
+      "operation": "target",
+      "optimization": "-O0",
+      "sourceSHA256": "887d56e4ca441b868d664e3ef8e71efc0046a0e6e424de0b0519167a6797cb84",
+      "pass": true
+    },
+    {
+      "operation": "target",
+      "optimization": "-O1",
+      "sourceSHA256": "887d56e4ca441b868d664e3ef8e71efc0046a0e6e424de0b0519167a6797cb84",
+      "pass": true
+    },
+    {
+      "operation": "verify",
+      "optimization": "-O0",
+      "sourceSHA256": "5c24a3a5e18d622488dc26caaa043fca8860ab3d7ef7411d87bcaa8a9ed6b78f",
+      "pass": true
+    },
+    {
+      "operation": "verify",
+      "optimization": "-O1",
+      "sourceSHA256": "5c24a3a5e18d622488dc26caaa043fca8860ab3d7ef7411d87bcaa8a9ed6b78f",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O0",
+      "sourceSHA256": "fd9540a6824294d3d6ef18125dfe3f8876517454da8f8adff26ce4868eab5bab",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O1",
+      "sourceSHA256": "fd9540a6824294d3d6ef18125dfe3f8876517454da8f8adff26ce4868eab5bab",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O0",
+      "sourceSHA256": "8f2fa57dc38fae6be5fc4d9ff43a0d12d34e188962e544e0cf45eb6e94f312e0",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O1",
+      "sourceSHA256": "8f2fa57dc38fae6be5fc4d9ff43a0d12d34e188962e544e0cf45eb6e94f312e0",
+      "pass": true
+    }
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "templateSHA256": "db9aa76b38fbc0f7b69850048427b6ae29cf103b77047a998d245625ccac9ae2",
+  "status": "pending independent wrapper/negative review and fresh room-native-before"
+}

@@ -1,0 +1,139 @@
+{
+  "schema": "room-private-locals-native-proposal-v1",
+  "pass": true,
+  "finding": "LE-34",
+  "file": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Room Dressing.ModuleScript.lua",
+  "beforeSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+  "candidateSHA256": "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b",
+  "removedBytes": 125,
+  "checksPerVersion": 752,
+  "pairedChecks": 1504,
+  "reentryChecks": 1504,
+  "semanticNegativeControls": 2,
+  "ownershipCases": 8,
+  "ownershipChecks": 20,
+  "nativeScriptCount": 212,
+  "templateSHA256": "3346ba8f387d9d1a3e6203ff742e49f32298e2bacd8fd645f57a953d42d121e1",
+  "toolSHA256": "ac7df19df7e7b15dd545a64af439a5dcfcd710697fe531e223d4873a24460f21",
+  "payloadHashes": {
+    "before": "e044330e952ac76dc33bf94ac2859d1c820a588f99bd19106f341a7ee55f3cc9",
+    "candidate": "29703916b811860cb1df9c73fc3f9b1aa00f8d82bc6723d440ad618e5385461d",
+    "wallNegative": "77d8e5554b83da828c7d8b9c4f4ffc7b1359e6d05077cacf460439ba1e82210e",
+    "breakerNegative": "28d867e5e72b870268ff7fdbf4604f61279284950e8e9f2e3ece3937c0258f9e"
+  },
+  "nativeCodeHashes": {
+    "before": "20f87d2e14e182df26ba678eb2a863e1004dcb375c2fb854c2083d6998faa319",
+    "installed": "7f9093bcdcc0bac74f865ac57f324d67176b947538a48faa7e2e78f302f7493d"
+  },
+  "compileChecks": [
+    {
+      "input": "before",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "e044330e952ac76dc33bf94ac2859d1c820a588f99bd19106f341a7ee55f3cc9"
+    },
+    {
+      "input": "before",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "e044330e952ac76dc33bf94ac2859d1c820a588f99bd19106f341a7ee55f3cc9"
+    },
+    {
+      "input": "installed",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "7f9093bcdcc0bac74f865ac57f324d67176b947538a48faa7e2e78f302f7493d"
+    },
+    {
+      "input": "installed",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "7f9093bcdcc0bac74f865ac57f324d67176b947538a48faa7e2e78f302f7493d"
+    },
+    {
+      "input": "candidate",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "29703916b811860cb1df9c73fc3f9b1aa00f8d82bc6723d440ad618e5385461d"
+    },
+    {
+      "input": "candidate",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "29703916b811860cb1df9c73fc3f9b1aa00f8d82bc6723d440ad618e5385461d"
+    },
+    {
+      "input": "wallNegative",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "77d8e5554b83da828c7d8b9c4f4ffc7b1359e6d05077cacf460439ba1e82210e"
+    },
+    {
+      "input": "wallNegative",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "77d8e5554b83da828c7d8b9c4f4ffc7b1359e6d05077cacf460439ba1e82210e"
+    },
+    {
+      "input": "breakerNegative",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "28d867e5e72b870268ff7fdbf4604f61279284950e8e9f2e3ece3937c0258f9e"
+    },
+    {
+      "input": "breakerNegative",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "28d867e5e72b870268ff7fdbf4604f61279284950e8e9f2e3ece3937c0258f9e"
+    },
+    {
+      "input": "ownership",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "644398e1cf69f566762f6ab762b61cedbd458ed64eadb1e21fb52b94577b05b7"
+    },
+    {
+      "input": "ownership",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "644398e1cf69f566762f6ab762b61cedbd458ed64eadb1e21fb52b94577b05b7"
+    },
+    {
+      "input": "beforeFullSource",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a"
+    },
+    {
+      "input": "beforeFullSource",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a"
+    },
+    {
+      "input": "candidateFullSource",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b"
+    },
+    {
+      "input": "candidateFullSource",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b"
+    }
+  ],
+  "immutableInputHashes": {
+    "artifacts/cleanup-20261009/local-helpers-host.luau": "d7333b5cfcf813de0f60a22f4b0795286530d7f9bf8a777409d506e3efd69b45",
+    "artifacts/cleanup-20261009/additional-locals-host.luau": "425d7a48747a06bd378145ee17abec7d914d0459eebd2449cf806454837477ce",
+    "tools/cleanup_20261009/latch_mode_probe_v2.luau": "3f5f6f6e6734e195d1f562a124910cbaa8d3abd777a2a35bd0aa8f58756c6ffc"
+  },
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "currentManifestSHA256": "96f8a71599d3c2671add5f7382bd6281eac33db7453848a01a296678eaeabd00",
+  "freshObservationSHA256": "ea30a2104050f7a29bb81fc7fc3b214e2b405bd57c74b22eb3e16f37ad81579d",
+  "scope": "Whole actual RoomDressing Plan/Apply/local-helper contract with local-only engine/asset boundary tables; no real assets/gameplay/multiplayer/streaming/performance certificate.",
+  "knownUnchangedCleanupFailure": "Connection/owner Destroy failures propagate after alive=false; repeated Cleanup does not retry. Harness independently disconnects/destroys only its boundary tables.",
+  "status": "offline paired contracts pass; Root must review and execute native-before before any installation"
+}
