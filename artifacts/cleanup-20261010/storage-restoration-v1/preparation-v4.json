@@ -1,0 +1,20 @@
+{
+  "schema": "storage-restoration-lexical-fix-preparation-v4",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "candidateExecutedNative": false,
+  "restorationCertified": false,
+  "normalizationApplied": false,
+  "base": {
+    "path": "restoration-probe-v3.luau",
+    "bytes": 29158,
+    "sha256": "c1c7406188bad76db369140bed57addc26d4302564f0c2161ce8441859cec629"
+  },
+  "candidate": {
+    "path": "restoration-probe-v4.luau",
+    "bytes": 29240,
+    "sha256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b"
+  },
+  "change": "Forward-declare local supplement before restoreFourCFrames; remove the later shadowing declaration. Version/key changes only otherwise.",
+  "historicalV3Preserved": true
+}

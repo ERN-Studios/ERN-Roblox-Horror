@@ -1,0 +1,9 @@
+{
+  "schema": "storage-restoration-exact-recipe-verdict-v1",
+  "recipePassed": false,
+  "restorationCertified": false,
+  "normalizationApplied": false,
+  "completionSHA256": "73cde49028d571cd7fa43e88200fdfb759ca7eb8b17eec4a95267055d4e778f8",
+  "baselineSHA256": "5fb05317f19c289c98bd3068ea2e49c6c1d062692e4ac77b19b10e2a9baeac62",
+  "scope": "Raw archive plus exact four-Bone CFrame restoration after each reopen. Historical raw-only recovery remains failed. No native removal, full-place/assets/gameplay/multiplayer/streaming or publication certification."
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "storage-v3-peer-lexical-scope-proof-v1",
+  "findingConfirmed": true,
+  "candidateSHA256": "c1c7406188bad76db369140bed57addc26d4302564f0c2161ce8441859cec629",
+  "candidateBytes": 29158,
+  "actualHelperSHA256": "3ba892043264a04fc7fc74386f86d8405f1dd9f1f51c9568a3ab83b571674ea1",
+  "fixtureSHA256": "d067c832bd90c991061aad90050e2ac2da7987e8ba46840bc8522b04383af936",
+  "stdout": "ACTUAL_LEXICAL_SCOPE_REJECTS_VALID_LOCAL_SUPPLEMENT\n",
+  "compile": [
+    {
+      "optimization": 0,
+      "pass": true
+    },
+    {
+      "optimization": 1,
+      "pass": true
+    }
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "blocker": "Actual restoreFourCFrames helper precedes local supplement declaration, so it resolves a nil global; valid locally assigned four-row supplement is unavailable. New version must forward-declare local before helper.",
+  "limits": "Executes exact extracted helper in the same lexical declaration order; controlled assert boundary. Not native restore or property setter certification."
+}

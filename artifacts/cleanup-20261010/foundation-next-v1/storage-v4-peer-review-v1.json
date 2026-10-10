@@ -1,0 +1,178 @@
+{
+  "schema": "s06-v4-exact-restore-preparation-independent-peer-v1",
+  "preparationPeerPassed": true,
+  "nativeRecipePassedByPeer": false,
+  "nativeCallsByPeer": 0,
+  "productionWritesByPeer": 0,
+  "manifestWritesByPeer": 0,
+  "indexWritesByPeer": 0,
+  "reviewedAtUtc": "2026-10-10T08:13:45.522258+00:00",
+  "reviewer": "foundation_next",
+  "recommendation": "Eligible for Root-owned controlled unparented-copy native trial with fresh pinned all213 baseline and separate final native completion. This is not approval for native deletion or a native restoration pass.",
+  "scope": {
+    "nativeArchiveSHA256": "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca",
+    "nativeArchiveBytes": 2739764,
+    "heldRoots": 23,
+    "heldNodes": 14079,
+    "heldSources": 12,
+    "internalReferenceProperties": 10,
+    "exactCFrameSupplementRows": 4,
+    "expectedCopyRootsAcrossTwoReopens": 46,
+    "expectedCopyOnlySetters": 8,
+    "requiredFreshCurrentSourcePins": 213,
+    "ledgerRootRefs": 73,
+    "ledgerScriptRefs": 222,
+    "normalizationAllowed": false
+  },
+  "independentReruns": {
+    "actualLexicalOwnershipRestoreReopenCleanupFragments": {
+      "pass": true,
+      "cases": 20,
+      "checks": 30284,
+      "compiledUnits": 10,
+      "receipt": "foundation-next-v1/storage-v4-fault-peer-v1.json",
+      "limits": "Actual extracted candidate helper/deserialize-serialize ordering/cleanup fragments. CFrame, serializer, reflection, scene, callbacks and original guards explicitly fake; hashing real. Assertion count can vary with fixture table iteration/early failure order."
+    },
+    "actualReceiverSchemaAndHTTP": {
+      "pass": true,
+      "cases": 87,
+      "checks": 50,
+      "receipt": "foundation-next-v1/storage-v4-receiver-peer-v1.json",
+      "limits": "Actual receiver with pinned historical binary/facts and synthetic all213 baseline/final completion messages; fixture-only15 roots/18000descendants. Actual ephemeral localhost HTTP routing/locks/server shutdown. Not native recovery."
+    }
+  },
+  "reviewedContracts": {
+    "lexicalBinding": "V4 forward-declares local supplement before restoreFourCFrames and removes later shadowing. Exact candidate declaration order executed; V3 real helper is a negative control, rejects before setters, and cleans its23 owned copies. Historical V3 remains unchanged/unexecuted natively.",
+    "freshOriginals": "Separate readonly baseline Source/editor equality, exact Source SHA/bytes, path/class/identity/parent and properties/attributes/tags digest for all213 current scripts. Fresh root/descendant counts and ledger counts required. Context locked until distinct final baseline completion passes zero-write and release gates.",
+    "ownership": "Known-original set covers game census plus retained unparented root/script ledger closure. Only unparented engine-returned roots whose whole hierarchy excludes originals/overlaps are adopted. All eligible roots independently cleaned on every path; foreign parenting/original intrusion preserves that tree and fails, never destroys authoritative originals.",
+    "supplement": "Only four unique pinned Bone.CFrame paths; exact twelve historical components must match fresh held originals, constructed CFrame and owned setter readback. Setters operate only on adopted non-original, non-live copy identities with checked parent. No tolerance, normalization, Source/editor or original property setters.",
+    "roundtrip": "Held original native serialization must match immutable historical binary before deserialization. Entire readable joint forest,12Source bodies,10internal references and raw original byte-exact serialization checked after first supplemented reopen and again after second. Final original native archive guarded after owned cleanup.",
+    "receiver": "Frozen V4/schema, probe/baseline/captureCompletion/supplement/facts/native hashes, immutable fresh execution sources and flat outputs. Strict JSON rejects duplicate/nonfinite values; strict integer counters reject floats/bools; wrong hashes/classes/identity/counts/zero writes rejected. Four exact parts reproduce pinned binary. Transfer receipt stays false until distinct post-cleanup native completion passes all narrow recipe gates.",
+    "completionBoundary": "Native probe returns JSON only after cleanup, original Source/native archive guard, watcher release and owned lease release. Root must persist that actual executed-code completion separately; receiver does not contact Studio or produce a native pass itself."
+  },
+  "resolvedPeerFindings": [
+    {
+      "finding": "V3 restoreFourCFrames resolved global nil supplement because local declared after helper.",
+      "status": "fixed in V4",
+      "evidence": "Exact declaration-order V3 failure reproduced separately and in full cleanup fixture; V4 forward declaration and successful paired fixture verified."
+    }
+  ],
+  "boundaryEvidence": {
+    "rootReadonlyRobloxConstructor": {
+      "pass": true,
+      "checks": 111,
+      "rows": 4,
+      "componentsPerRow": 12,
+      "originalsUnchanged": true,
+      "originalOrCopySetters": 0,
+      "instancesCreated": 0,
+      "executedCodeSHA256": "89a30b82c59fa838edd9275bdb6fa9cada24feb12d95b256234e5c8b867db971",
+      "scope": "Four held-original reads plus exact pure Roblox CFrame construction only; not native setter/reopen/cleanup pass."
+    },
+    "luneConstructor": "Exact Lune constructor boundary failed independently and is preserved, without epsilon/tolerance. Copy fault fixture uses explicitly fake exact CFrame values; that pass is not substituted for Roblox engine semantics."
+  },
+  "requiredRootNativeGates": [
+    "Use exact frozen V4+receiver+baseline/supplement/archive pins in a new owned immutable execution directory; verify right StudioGUID/place/universe/current mode and preserve foreign work.",
+    "Capture fresh readonly actual all213 source/editor/identity/class/properties/attributes/tags pins and live root/descendant counts; accept distinct final baseline completion before opening copy-probe context.",
+    "Execute controlled V4 native copy-only probe once with adequate bounded transport; on unknown outcome do not retry, clear foreign leases, destroy unowned objects or infer completion from local files.",
+    "Validate actual first and second supplemental reopen/serialization, full readable forest/internal references/source bodies, byte-exact native binary,8copy-only setters,46owned roots destroyed,0remaining,original Sources/native archive unchanged and released lease.",
+    "Persist exact post-cleanup native JSON with executed-code provenance, then validate receiver final port-verdict. A transfer-only receipt or the independent offline peer suites is insufficient for deletion.",
+    "Before any later native retirement/removal, recheck dependency closure/product authorization and the required feature or authoring test port. Keep active Level2 tube/flume, Level3 dependencies on Level6 kit/bake, active colliders/prompts and player/receipt/migration/entitlement data."
+  ],
+  "limits": [
+    "Actual controlled native V4 restore trial remains pending at this receipt; peer made no Studio/MCP call.",
+    "No full-place/assets/external content recovery, gameplay, multiplayer, respawn/reentry, streaming, reserved-server client teleport, public release or performance certificate.",
+    "Readonly source/live-root and held-property guards are bounded point-in-time checks with active watched epoch through final guarded yield; no continuous whole-scene property certificate.",
+    "Historical raw-only archive reopening mismatch remains a failed gate; success requires the pinned four-row supplement after every reopen."
+  ],
+  "rawFilePins": {
+    "artifacts/cleanup-20261010/storage-restoration-v1/receiver.py": {
+      "bytes": 17682,
+      "sha256": "4a70b5216d45321461aa9e0c482cefc6391b389ef92e2f905783a60d832267bc"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/test-receiver.py": {
+      "bytes": 14800,
+      "sha256": "297eba30446b81aff3ae2b03ca6259a5b9125c11e090ea6edf04752c13e9eb06"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/restoration-probe-v4.luau": {
+      "bytes": 29240,
+      "sha256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/capture-live-baseline.luau": {
+      "bytes": 8357,
+      "sha256": "df846a007464c2f5bf11284b69eecf32b0c8ecaf4fe776481489483fc7095a2b"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/test-copy-faults.py": {
+      "bytes": 8009,
+      "sha256": "69b9eb7a9275c19e561b1b6906f70eebea51a017d48d52b4a57fac5e4ade264a"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/copy-faults.luau": {
+      "bytes": 13223,
+      "sha256": "8b3bf03ccb9e3b03c1785bf4383de995012aae58cc00d28141aed0023433d9f8"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-proof.json": {
+      "bytes": 10324,
+      "sha256": "7b73d7d8405acd17e0d13ddf05f4e2e8ff95de8edb67fc904e8d7db2e93a4a9d"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/receiver-fault-proof.json": {
+      "bytes": 10391,
+      "sha256": "57f9e12f4a0f481211f83253a8502fb642adf60ab2e5613c6067e7c3482196d6"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/restore-supplement.json": {
+      "bytes": 2511,
+      "sha256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/restoration-probe-v3.luau": {
+      "bytes": 29158,
+      "sha256": "c1c7406188bad76db369140bed57addc26d4302564f0c2161ce8441859cec629"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/preparation-v3.json": {
+      "bytes": 861,
+      "sha256": "5949f19be6e683fbc02bf4b2e2f8422faee6524ed850610f31840ad9f713155e"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/preparation-v4.json": {
+      "bytes": 715,
+      "sha256": "c517d5722d3951cc57e0f6f0cd0f14e3e2591a9cfcc33f84a2dd3423953995b6"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/readonly-constructor-probe.luau": {
+      "bytes": 6601,
+      "sha256": "89a30b82c59fa838edd9275bdb6fa9cada24feb12d95b256234e5c8b867db971"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/readonly-constructor-native-result-v1.json": {
+      "bytes": 1536,
+      "sha256": "6b8407287a277419bd886519e9ab4ba6ac7a4971f0623b29d845c6dcd4828d7b"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/lune-constructor-boundary.luau": {
+      "bytes": 888,
+      "sha256": "4395b4db5fa2a00dd10a649ce9b7c48dc382cab0ac0c98ebdab348cf491ebe9e"
+    },
+    "artifacts/cleanup-20261010/storage-restoration-v1/lune-constructor-boundary-result-v1.json": {
+      "bytes": 4522,
+      "sha256": "6cf32b02290195e77da5c03cb26f64646f47514d21766a75189a48ebecae4015"
+    },
+    "artifacts/cleanup-20261010/foundation-next-v1/storage-v3-lexical-proof-v1.json": {
+      "bytes": 1047,
+      "sha256": "b16591a7b33859f757f9b72010f5eb8e014dc24328c7d03936959ad6658d81bd"
+    },
+    "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-fault-peer-v1.json": {
+      "bytes": 10324,
+      "sha256": "f91f1a56af9fe2ddd5d38f56805c7e6f8c44dcb3e602a458746eebbbfd7b588a"
+    },
+    "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-receiver-peer-v1.json": {
+      "bytes": 10391,
+      "sha256": "57f9e12f4a0f481211f83253a8502fb642adf60ab2e5613c6067e7c3482196d6"
+    },
+    "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native.rbxm": {
+      "bytes": 2739764,
+      "sha256": "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca"
+    },
+    "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json": {
+      "bytes": 41912358,
+      "sha256": "b6b86b7871bab31d8fdebd9afa5cf3367426fad4e6a5eaef9038e4e8b1434f33"
+    },
+    "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/capture-completion.json": {
+      "bytes": 3665,
+      "sha256": "e326db60c8032345efe7346cc01f177d9e3124f9121227f8819b3c448d3e8a8d"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "schema": "storage-restoration-baseline-preparation-v1",
+  "nativeCalls": 0,
+  "sourceCandidateSHA256": "c1c7406188bad76db369140bed57addc26d4302564f0c2161ce8441859cec629",
+  "baselineBytes": 8357,
+  "baselineSHA256": "df846a007464c2f5bf11284b69eecf32b0c8ecaf4fe776481489483fc7095a2b",
+  "candidateExecuted": false,
+  "scope": "Actual sha/canonical/scriptRow/scriptMatches helpers extracted unchanged. Future readonly Root request, no Studio call by preparer."
+}

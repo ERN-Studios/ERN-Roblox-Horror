@@ -1,0 +1,149 @@
+{
+  "schema": "storage-lune-constructor-boundary-receipt-v1",
+  "exactConstructorPassed": false,
+  "nativeCalls": 0,
+  "normalizationApplied": false,
+  "exitCode": 0,
+  "scriptSHA256": "4395b4db5fa2a00dd10a649ce9b7c48dc382cab0ac0c98ebdab348cf491ebe9e",
+  "supplementSHA256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1",
+  "stdoutSHA256": "578836fd3df8e9b3bbeecea3d5c7dba05fd8a789616cb374f3bb357a22438373",
+  "result": {
+    "changedComponents": 21,
+    "exact": false,
+    "nativeCalls": 0,
+    "normalizationApplied": false,
+    "rows": [
+      {
+        "differences": [
+          {
+            "actual": 0.18999947607517242,
+            "component": 1,
+            "expected": 0.1899994760751724
+          },
+          {
+            "actual": -8.940696716308594e-08,
+            "component": 2,
+            "expected": -8.940696716308595e-08
+          },
+          {
+            "actual": 4.7707207073699465e-09,
+            "component": 3,
+            "expected": 4.770720707369946e-09
+          },
+          {
+            "actual": 0.9439874887466431,
+            "component": 4,
+            "expected": 0.9439874887466432
+          },
+          {
+            "actual": 0.23667016625404358,
+            "component": 5,
+            "expected": 0.2366701662540436
+          },
+          {
+            "actual": 0.22994564473628998,
+            "component": 6,
+            "expected": 0.22994564473629
+          },
+          {
+            "actual": -0.9715903997421265,
+            "component": 12,
+            "expected": -0.9715903997421264
+          }
+        ],
+        "exact": false,
+        "path": "TEMP_PipeEntityValidation.PipeEntity_LocalPreview.RootPart.Root.Hips.LeftUpperLeg"
+      },
+      {
+        "differences": [
+          {
+            "actual": -0.18999947607517242,
+            "component": 1,
+            "expected": -0.1899994760751724
+          },
+          {
+            "actual": -8.940696716308594e-08,
+            "component": 2,
+            "expected": -8.940696716308595e-08
+          },
+          {
+            "actual": 0.9439874887466431,
+            "component": 4,
+            "expected": 0.9439874887466432
+          },
+          {
+            "actual": -0.22994564473628998,
+            "component": 6,
+            "expected": -0.22994564473629
+          },
+          {
+            "actual": -0.9715903997421265,
+            "component": 12,
+            "expected": -0.9715903997421264
+          }
+        ],
+        "exact": false,
+        "path": "TEMP_PipeEntityValidation.PipeEntity_LocalPreview.RootPart.Root.Hips.RightUpperLeg"
+      },
+      {
+        "differences": [
+          {
+            "actual": -3.5762786865234375e-07,
+            "component": 2,
+            "expected": -3.576278686523438e-07
+          },
+          {
+            "actual": 0.9439874887466431,
+            "component": 4,
+            "expected": 0.9439874887466432
+          },
+          {
+            "actual": 0.23667016625404358,
+            "component": 5,
+            "expected": 0.2366701662540436
+          },
+          {
+            "actual": 0.22994564473628998,
+            "component": 6,
+            "expected": 0.22994564473629
+          },
+          {
+            "actual": -0.9715903997421265,
+            "component": 12,
+            "expected": -0.9715903997421264
+          }
+        ],
+        "exact": false,
+        "path": "TrelloPoolSlideReleaseBackup_20260910.Level 2 Pool Slide Template.RootPart.Root.Hips.LeftUpperLeg"
+      },
+      {
+        "differences": [
+          {
+            "actual": -3.5762786865234375e-07,
+            "component": 2,
+            "expected": -3.576278686523438e-07
+          },
+          {
+            "actual": 0.9439874887466431,
+            "component": 4,
+            "expected": 0.9439874887466432
+          },
+          {
+            "actual": -0.22994564473628998,
+            "component": 6,
+            "expected": -0.22994564473629
+          },
+          {
+            "actual": -0.9715903997421265,
+            "component": 12,
+            "expected": -0.9715903997421264
+          }
+        ],
+        "exact": false,
+        "path": "TrelloPoolSlideReleaseBackup_20260910.Level 2 Pool Slide Template.RootPart.Root.Hips.RightUpperLeg"
+      }
+    ],
+    "schema": "storage-lune-constructor-boundary-v1"
+  },
+  "scope": "Lune 0.10.5 double/GetComponents exact boundary failed 21 components. Root's actual native readonly constructor result is separate; no epsilon or transport-data normalization accepted."
+}

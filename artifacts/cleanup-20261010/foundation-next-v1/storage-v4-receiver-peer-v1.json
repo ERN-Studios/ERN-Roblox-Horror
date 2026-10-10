@@ -1,0 +1,449 @@
+{
+  "schema": "storage-restoration-receiver-fault-proof-v1",
+  "pass": true,
+  "nativeCalls": 0,
+  "restorationCertified": false,
+  "normalizationApplied": false,
+  "receiverSHA256": "4a70b5216d45321461aa9e0c482cefc6391b389ef92e2f905783a60d832267bc",
+  "driverSHA256": "297eba30446b81aff3ae2b03ca6259a5b9125c11e090ea6edf04752c13e9eb06",
+  "checks": 50,
+  "cases": 87,
+  "results": [
+    {
+      "kind": "context-before-baseline",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "part-before-baseline",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "duplicate-json",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "nonfinite-json",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "existing-execution-directory",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-placeId-1",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-mode-Play",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-expectedLiveSources-212",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-expectedLiveRoots-16",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-expectedLiveDescendants-18001",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-expectedLedgerRootRefs-72",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-expectedLedgerScriptRefs-221",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-expectedLiveSources-213.0",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-sourceWrites-False",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-propertyWrites-1",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-source-count",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-duplicate-path",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-duplicate-identity",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-wrong-class",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-bad-source-hash",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-bad-parent",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-bool-bytes",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-nonstring-hash",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "context-before-native-final-baseline",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "immutable-baseline-conflict",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-completion-pass",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "context-locked-after-baseline-completion-pass",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-completion-originalSourcesUnchanged",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "context-locked-after-baseline-completion-originalSourcesUnchanged",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-completion-baselineSHA256",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "context-locked-after-baseline-completion-baselineSHA256",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-completion-liveSources",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "context-locked-after-baseline-completion-liveSources",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-completion-liveRoots",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "context-locked-after-baseline-completion-liveRoots",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-completion-liveDescendants",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "context-locked-after-baseline-completion-liveDescendants",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-completion-nativeObjectCreations",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "context-locked-after-baseline-completion-nativeObjectCreations",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-completion-watchersReleaseAttempted",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "context-locked-after-baseline-completion-watchersReleaseAttempted",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-completion-watchers",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "context-locked-after-baseline-completion-watchers",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "baseline-final-failure",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "failed-baseline-retry-needs-new-dest",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "wrong-part-index",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "bool-part-index",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "changed-native-byte",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "missing-native-parts",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "finalize-parts-3",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "finalize-parts-4.0",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "finalize-bytes-2739763",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "finalize-sha256-0000000000000000000000000000000000000000000000000000000000000000",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "finalize-extra-key",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-createdRoots-45",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-destroyedRoots-45",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-testOwnedRootsRemaining-1",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-adoptedRoots-45",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-testOwnedCFrameSetAttempts-7",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-testOwnedCFrameWrites-7",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-supplementPasses-1",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-reconstructedNodes-14078",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-reconstructedSources-11",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-referenceProperties-9",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-freshSourcePinsValidated-212",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-roundtripBytes-2739763",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-liveSources-212",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-liveRoots-16",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-roundtripSHA256-0000000000000000000000000000000000000000000000000000000000000000",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-secondNativeSHA256-0000000000000000000000000000000000000000000000000000000000000000",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-liveBaselineSHA256-0000000000000000000000000000000000000000000000000000000000000000",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-normalizationApplied-True",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-restorationCertified-True",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-sourceWrites-True",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-completion-createdRoots-46.0",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-final-guard-readableDataPass",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-final-guard-nativeSerializedBytesExact",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-final-guard-secondSupplementedReopenPass",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-final-guard-originalSourcesUnchanged",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-final-guard-originalSourcePinsUnchanged",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-final-guard-originalNativeArchiveUnchanged",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-final-guard-leaseReleased",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "probe-final-guard-internalReferencesPass",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "completion-before-transfer-finalized",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "synthetic-exact-four-part-finalization-and-completion",
+      "accepted": true,
+      "pass": true
+    },
+    {
+      "kind": "immutable-execution-source-changed",
+      "accepted": false,
+      "pass": true
+    },
+    {
+      "kind": "actual-localhost-http-routing-locks",
+      "accepted": false,
+      "pass": true
+    }
+  ],
+  "scope": "Actual receiver/schema/HTTP tested against pinned historical binary/facts and synthetic all213 pins/completion claims. Counts 15/18000 are fixture-only. This never calls Studio, does not record synthetic claims as native receipts, and does not prove native setter/recovery/gameplay."
+}

@@ -1,0 +1,4 @@
+*.py -text
+*.luau -text
+*.json -text
+REVIEW.md -text

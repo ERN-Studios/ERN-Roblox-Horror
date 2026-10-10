@@ -1,0 +1,25 @@
+{
+  "schema": "s06-restoration-supplement-preparation-v2",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "candidateExecuted": false,
+  "restorationCertified": false,
+  "normalizationApplied": false,
+  "beforeCandidate": {
+    "path": "restoration-supplement-probe.luau",
+    "bytes": 26444,
+    "sha256": "ac01f995b30b883c21ca982b071cd518fed722120e2498ff38341595cb5b27f1"
+  },
+  "candidate": {
+    "path": "restoration-supplement-probe-v2.luau",
+    "bytes": 27000,
+    "sha256": "c9ae7a5f71fd836d8722eb77786c7c1a6ded062c0f8dbfd53387982a022a66ab"
+  },
+  "preservedSupplement": {
+    "path": "restore-supplement.json",
+    "bytes": 2511,
+    "sha256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1"
+  },
+  "reason": "V1 would reject 276 legitimate duplicate historical Keyframe/Pose paths before any setter. V2 validates uniqueness only for the four pinned Bone targets and separately records setter attempts for commit-then-throw diagnostics. V1 is preserved unexecuted, not certified.",
+  "scope": "New candidate only. All guarded original/source/native SHA/reopen/cleanup and exact-component requirements retained."
+}

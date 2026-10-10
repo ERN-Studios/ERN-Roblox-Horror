@@ -1,0 +1,74 @@
+{
+  "schema": "s06-exact-native-chunk-diagnostic-v1",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "restorationCertified": false,
+  "normalizationApplied": false,
+  "archiveHeaderByteExact": true,
+  "binaryChunkCount": 283,
+  "rawChunkDifferenceCount": 1,
+  "contentChunkDifferenceCount": 1,
+  "identicalContentChunks": 282,
+  "differences": [
+    {
+      "index": 42,
+      "kind": "PROP",
+      "offset": 116840,
+      "compressedBytes": 815,
+      "uncompressedBytes": 1615,
+      "rawSHA256": "22c0cb2d45a9d5804029933e1330ce48c682fb49f57c27a120a987815d190780",
+      "contentSHA256": "2192a8062dadcc7d1ea5f8701c5f6ff55ee4d18f320d93065a6311a9110fc08f",
+      "classId": 3,
+      "property": "CFrame",
+      "propertyTypeByte": 16,
+      "className": "Bone",
+      "afterContentSHA256": "3dfd29875e4ffa79d03ab4967ba395f870c634d430e1b9392d455ee006d67920",
+      "changedByteCount": 6,
+      "changedBytes": [
+        {
+          "uncompressedOffset": 82,
+          "before": 122,
+          "after": 8
+        },
+        {
+          "uncompressedOffset": 193,
+          "before": 121,
+          "after": 77
+        },
+        {
+          "uncompressedOffset": 194,
+          "before": 229,
+          "after": 228
+        },
+        {
+          "uncompressedOffset": 642,
+          "before": 122,
+          "after": 8
+        },
+        {
+          "uncompressedOffset": 753,
+          "before": 121,
+          "after": 77
+        },
+        {
+          "uncompressedOffset": 754,
+          "before": 229,
+          "after": 228
+        }
+      ]
+    }
+  ],
+  "inputs": {
+    "original": {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native.rbxm",
+      "bytes": 2739764,
+      "sha256": "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca"
+    },
+    "roundtrip": {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip.rbxm",
+      "bytes": 2739764,
+      "sha256": "dbfb34d6dc742c50c4b743fd7a5fc0e374599f3b8c81ea1e8f5d6baa455eb121"
+    }
+  },
+  "limits": "Exact historical RBXM byte/chunk comparison only. Runtime computed/nonserialized and ReflectionService-readable values are not recorded for owned copies. No live source, gameplay, recovery or deletion approval."
+}

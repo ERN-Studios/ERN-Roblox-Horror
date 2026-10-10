@@ -102,6 +102,61 @@ er bevaret. Ny destination bruger identisk frozen reader og bestod.
 [uafhængig peer](artifacts/cleanup-20261010/clients-next-v1/cas-v1/peer-review-v1.json),
 [separat parity](artifacts/cleanup-20261010/clients-next-v1/final-parity-v2/result.json).
 
+S18 lokal commit: `936dfd65ce6a1c988798f1d6c27ae571cd621e04`.
+
+### S19 / T16,T17 — native recovery-opskrift fejlet; kandidater beholdes
+
+Den rå S06 native genåbning er stadig FAIL for to af23 historiske træer.
+Ny offline analyse fandt headeren og282 af283 native chunks byte-identiske.
+Den eneste afvigelse var en Bone.CFrame-PROP-chunk med seks ændrede uncompressed bytes.
+Lune-dekodning af14079 objekter/151983 properties lokaliserede fire historiske
+R21-forskelle. Alle12 wanted-komponenter pr. Bone er bevaret fra de immutable
+før-facts; ingen epsilon, normalisering eller ændring af arkivet blev godkendt.
+Lune-constructor-port fejlede21/48 komponenter; rigtig readonly Studio ctor
+bestod111 checks/48 komponenter, men dette er ingen setter-/recovery-pass.
+
+Frosset V4 blev afprøvet i det korrekte Studio Edit uden modeswitch.
+08:17:41Z baseline PASS2292 checks,213 Source/editor/identity/metadata-pins,
+52 ServerStorage-rødder og416284 live descendants. 08:18:37Z actual native
+V4 FAIL efter den første copy-only setter. Den kombinerede assertion var
+`copy.CFrame == wanted AND after12 == spec12`; de to predicates og after-tal
+blev ikke registreret hver for sig. Derfor er konkrete setter-deltas eller
+normalisering som årsag ikke fastslået. De historiske DS-deltas er ikke dette
+forsøgs after-setter-måling. Fire setters, anden reopening og native transfer
+blev ikke gennemført; receiverens `recipePassed=false` er bevaret uændret.
+
+Alle23 skabte/adopterede testkopier blev fjernet,0 tilbage, egen lease frigivet.
+Afsluttende guards: original native archive uændret, alle213 friske scriptpins
+uændrede;0 originale Source-/Parent-/modewrites. Ingen autoritativ regression
+observeret; ingen original rollback nødvendig. Eksisterende console-output var
+identisk før/efter. Root stoppede alene sin egen localhost-receiver efter den
+færdige negative port; dens interrupt-exit1 var ikke testens fejlårsag.
+Uafhængig peer fulgte hele actual-response/SHA-kæden med92 read-only checks.
+Frosne V3/v4, faktiske preflight/fault-fejl og den negative native port bevares.
+Ingen native retry, tolerance eller udvidet setterliste er implementeret.
+
+Ny separat actual parity08:31:50–08:32:00Z PASS213 scripts/15 remotes/228 rows,
+52 ServerStorage-rødder,416284 sceneobjekter; nul mismatch/missing/extra/
+Source-editor-conflict/propertycoveragegap. Scope: source og registrerede
+properties; attrs/tags/non-script assets sammenlignes ikke af paritylæseren.
+S19’s egne scriptguards dækker attrs/tags. Sceneantallet var416284 allerede
+før S19; den samtidige to-objektsændring fra416286 tilskrives ikke oprydningen.
+Der er ingen målt gameplay-/performancegevinst, publicering eller GitHub-push.
+
+Bevar held-originaler og fulde før-arkiver. S04’s fem native authoringpakker
+beholdes også, indtil deres særskilte R4/V2/elevator/queue/gameplay/MP/streaming-
+porte kan gennemføres. De23 allerede eksternt fjernede træer er fortsat
+eksternt arbejde, ikke en fjernelse udført eller godkendt af denne batch.
+[Frosset opskrift](artifacts/cleanup-20261010/storage-restoration-v1/REVIEW.md),
+[actual native FAIL](artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/port-verdict.json),
+[uafhængig fejlreview](artifacts/cleanup-20261010/storage-restoration-v1/NATIVE_FAILURE_REVIEW.md),
+[afsluttende parity](artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/result.json).
+
+S20/C04’s73-byte private tal-literal og den generiske authoringinstaller er
+fortsat kun forberedte kandidater; ingen af deres produktionsændringer eller
+native Sourcewrites er udført ved S19-afslutningen. Installerens offline
+fejlfixture er ikke en native authoring-/transportcertificering.
+
 S08 har nu pensioneret Level1-legacybuildens standalone `main` og de offentlige
 gamle import-/QA-/publish-/exporttargets i syv lokale filer. Aktive defaults
 vælger V2; elevatorens delte INSTALL-template og alle 12 delte build-definitioner

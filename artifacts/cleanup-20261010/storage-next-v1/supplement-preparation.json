@@ -1,0 +1,34 @@
+{
+  "schema": "s06-restoration-supplement-preparation-v1",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "restorationCertified": false,
+  "candidateExecuted": false,
+  "normalizationApplied": false,
+  "facts": {
+    "path": "artifacts\\cleanup-serverstorage-20261009\\external-storage-archive-v1\\facts.json",
+    "bytes": 41912358,
+    "sha256": "b6b86b7871bab31d8fdebd9afa5cf3367426fad4e6a5eaef9038e4e8b1434f33"
+  },
+  "derivedFrom": {
+    "path": "tools\\cleanup_20261009\\external_storage_archive_reopen.luau",
+    "bytes": 21244,
+    "sha256": "acb303cfca62b8a5955befee9c555d6537e21b588ec0cd830f11fd7e31dc9cdd"
+  },
+  "files": [
+    {
+      "path": "restore-supplement.json",
+      "bytes": 2511,
+      "sha256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1"
+    },
+    {
+      "path": "restoration-supplement-probe.luau",
+      "bytes": 26444,
+      "sha256": "ac01f995b30b883c21ca982b071cd518fed722120e2498ff38341595cb5b27f1"
+    }
+  ],
+  "requiredBeforeNativeExecution": "Root review exact generated request, dedicated immutable loopback receiver/context, current Edit/place and original ledger, offline helper+ownership fault gates, all native original/source guards; if constructor/setter changes values then pending, never epsilon-pass.",
+  "futureOwnedCopiesExpected": 46,
+  "futureOwnedCFrameSettersExpected": 8,
+  "scope": "Preparation of a future exact restoration recipe for owned copies only. No authoritative source, properties, parenting, mode, existing tooling, manifest, index or commits changed."
+}

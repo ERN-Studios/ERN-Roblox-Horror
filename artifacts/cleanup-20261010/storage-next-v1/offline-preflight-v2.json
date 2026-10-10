@@ -1,0 +1,89 @@
+{
+  "schema": "s06-exact-supplement-offline-preflight-v2",
+  "pass": true,
+  "nativeCalls": 0,
+  "candidateExecuted": false,
+  "normalizationApplied": false,
+  "restorationCertified": false,
+  "actualPreparedOwnershipCases": 16,
+  "actualPreparedOwnershipAssertions": 4237,
+  "compiledUnits": [
+    {
+      "name": "restoration-supplement-probe-v2.luau",
+      "opt": "-O0",
+      "sourceSHA256": "c9ae7a5f71fd836d8722eb77786c7c1a6ded062c0f8dbfd53387982a022a66ab",
+      "exitCode": 0
+    },
+    {
+      "name": "restoration-supplement-probe-v2.luau",
+      "opt": "-O1",
+      "sourceSHA256": "c9ae7a5f71fd836d8722eb77786c7c1a6ded062c0f8dbfd53387982a022a66ab",
+      "exitCode": 0
+    },
+    {
+      "name": "new_reopen_contract.luau",
+      "opt": "-O0",
+      "sourceSHA256": "eff982c9cccc7e92b1ab67de4c4493d056c7be6d187a87bb5dd618008c53b813",
+      "exitCode": 0
+    },
+    {
+      "name": "new_reopen_contract.luau",
+      "opt": "-O1",
+      "sourceSHA256": "eff982c9cccc7e92b1ab67de4c4493d056c7be6d187a87bb5dd618008c53b813",
+      "exitCode": 0
+    },
+    {
+      "name": "before_reopen_contract.luau",
+      "opt": "-O0",
+      "sourceSHA256": "c3433d91af54e15970826ab83184f3d45d7a76b0287b37a07aa87bc61180cc16",
+      "exitCode": 0
+    },
+    {
+      "name": "before_reopen_contract.luau",
+      "opt": "-O1",
+      "sourceSHA256": "c3433d91af54e15970826ab83184f3d45d7a76b0287b37a07aa87bc61180cc16",
+      "exitCode": 0
+    },
+    {
+      "name": "ownership.luau",
+      "opt": "-O0",
+      "sourceSHA256": "5f7b2d3a0405fa7b2116f2eb20280ca1153c14feea48a4637813b8648270a6b4",
+      "exitCode": 0
+    },
+    {
+      "name": "ownership.luau",
+      "opt": "-O1",
+      "sourceSHA256": "5f7b2d3a0405fa7b2116f2eb20280ca1153c14feea48a4637813b8648270a6b4",
+      "exitCode": 0
+    }
+  ],
+  "inputHashesBeforeAfterExact": [
+    {
+      "path": "tools\\cleanup_20261009\\test_external_storage_reopen_ownership.py",
+      "bytes": 7567,
+      "sha256": "f35202bc3dbfd53a5af6b341f24374be9382f68d5e80d8be7244d5503980d218"
+    },
+    {
+      "path": "tools\\cleanup_20261009\\external_storage_reopen_ownership_fixture.luau",
+      "bytes": 7148,
+      "sha256": "5f7b2d3a0405fa7b2116f2eb20280ca1153c14feea48a4637813b8648270a6b4"
+    },
+    {
+      "path": "artifacts\\cleanup-serverstorage-20261009\\external-storage-reopen-v1\\reopen-source.luau",
+      "bytes": 18912,
+      "sha256": "52a3fc3aa70acd4e60977594f96caee7a2bba583f021246aa5677a0a0f9305d7"
+    },
+    {
+      "path": "artifacts\\cleanup-20261010\\storage-next-v1\\restoration-supplement-probe-v2.luau",
+      "bytes": 27000,
+      "sha256": "c9ae7a5f71fd836d8722eb77786c7c1a6ded062c0f8dbfd53387982a022a66ab"
+    },
+    {
+      "path": "artifacts\\cleanup-20261010\\storage-next-v1\\restore-supplement.json",
+      "bytes": 2511,
+      "sha256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1"
+    }
+  ],
+  "supplementFaultGateStatus": "Pending: complete real helper constructor/setter/commit-then-throw and original-guard failure fixture before any native execution.",
+  "scope": "Existing actual registration/adoption/cleanup code from this prepared request executed with synthetic identities in 16 scenarios, including historical two leak controls; eight O0/O1 compiles. New supplement path remains prepared/unexecuted and is not certified by these ownership contracts."
+}

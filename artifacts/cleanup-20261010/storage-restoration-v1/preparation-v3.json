@@ -1,0 +1,22 @@
+{
+  "schema": "s06-exact-restoration-preparation-v3",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "candidateExecuted": false,
+  "restorationCertified": false,
+  "normalizationApplied": false,
+  "base": {
+    "path": "artifacts\\cleanup-20261010\\storage-next-v1\\restoration-supplement-probe-v2.luau",
+    "bytes": 27000,
+    "sha256": "c9ae7a5f71fd836d8722eb77786c7c1a6ded062c0f8dbfd53387982a022a66ab"
+  },
+  "candidate": {
+    "path": "restoration-probe-v3.luau",
+    "bytes": 29158,
+    "sha256": "c1c7406188bad76db369140bed57addc26d4302564f0c2161ce8441859cec629"
+  },
+  "requiredFreshSourceCount": 213,
+  "expectedLedgerRootRefs": 73,
+  "expectedLedgerScriptRefs": 222,
+  "scope": "Future Root-native request only; current native baseline is required independently and historical original archive must match byte-exact before deserialization. No epsilon."
+}

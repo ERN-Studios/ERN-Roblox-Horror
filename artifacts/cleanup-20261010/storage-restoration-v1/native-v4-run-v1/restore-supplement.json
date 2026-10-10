@@ -1,0 +1,84 @@
+{
+  "schema": "s06-exact-four-bone-cframe-supplement-v1",
+  "factsSHA256": "b6b86b7871bab31d8fdebd9afa5cf3367426fad4e6a5eaef9038e4e8b1434f33",
+  "nativeSHA256": "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca",
+  "rows": [
+    {
+      "path": "TEMP_PipeEntityValidation.PipeEntity_LocalPreview.RootPart.Root.Hips.LeftUpperLeg",
+      "class": "Bone",
+      "property": "CFrame",
+      "components": [
+        0.18999947607517242,
+        -8.940696716308594e-08,
+        4.7707207073699465e-09,
+        0.9439874887466431,
+        0.23667016625404358,
+        0.22994564473628998,
+        0.22994647920131683,
+        -0.9715901017189026,
+        0.05601239576935768,
+        0.23666934669017792,
+        1.8891469721893372e-07,
+        -0.9715903997421265
+      ]
+    },
+    {
+      "path": "TEMP_PipeEntityValidation.PipeEntity_LocalPreview.RootPart.Root.Hips.RightUpperLeg",
+      "class": "Bone",
+      "property": "CFrame",
+      "components": [
+        -0.18999947607517242,
+        -8.940696716308594e-08,
+        4.770805972498238e-09,
+        0.9439874887466431,
+        -0.23667018115520477,
+        -0.22994564473628998,
+        -0.22994649410247803,
+        -0.9715901017189026,
+        0.05601239949464798,
+        -0.23666934669017792,
+        1.889619767325712e-07,
+        -0.9715903997421265
+      ]
+    },
+    {
+      "path": "TrelloPoolSlideReleaseBackup_20260910.Level 2 Pool Slide Template.RootPart.Root.Hips.LeftUpperLeg",
+      "class": "Bone",
+      "property": "CFrame",
+      "components": [
+        0.7599979043006897,
+        -3.5762786865234375e-07,
+        1.9082882829479786e-08,
+        0.9439874887466431,
+        0.23667016625404358,
+        0.22994564473628998,
+        0.22994647920131683,
+        -0.9715901017189026,
+        0.05601239576935768,
+        0.23666934669017792,
+        1.8891469721893372e-07,
+        -0.9715903997421265
+      ]
+    },
+    {
+      "path": "TrelloPoolSlideReleaseBackup_20260910.Level 2 Pool Slide Template.RootPart.Root.Hips.RightUpperLeg",
+      "class": "Bone",
+      "property": "CFrame",
+      "components": [
+        -0.7599979043006897,
+        -3.5762786865234375e-07,
+        1.908322388999295e-08,
+        0.9439874887466431,
+        -0.23667018115520477,
+        -0.22994564473628998,
+        -0.22994649410247803,
+        -0.9715901017189026,
+        0.05601239949464798,
+        -0.23666934669017792,
+        1.889619767325712e-07,
+        -0.9715903997421265
+      ]
+    }
+  ],
+  "normalizationApplied": false
+}

@@ -1,0 +1,189 @@
+{
+  "schema": "s06-offline-lune-property-diff-v1",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "restorationCertified": false,
+  "normalizationApplied": false,
+  "decodedInstances": 14079,
+  "decodedPropertiesCompared": 151983,
+  "propertyDifferenceCount": 4,
+  "differences": [
+    {
+      "path": [
+        [
+          "Folder",
+          "TEMP_PipeEntityValidation"
+        ],
+        [
+          "Model",
+          "PipeEntity_LocalPreview"
+        ],
+        [
+          "Part",
+          "RootPart"
+        ],
+        [
+          "Bone",
+          "Root"
+        ],
+        [
+          "Bone",
+          "Hips"
+        ],
+        [
+          "Bone",
+          "LeftUpperLeg"
+        ]
+      ],
+      "class": "Bone",
+      "property": "CFrame",
+      "xmlType": "CoordinateFrame",
+      "beforePropertySHA256": "03eaec0c696d11bc557154f788cb91dcdc0b5ca945f865e8ff41c9ce8df24d6c",
+      "afterPropertySHA256": "030ad5a90e7688001e958c2fb95c29bc3252a87ad6e5eab193f3489f52d2f21d",
+      "scalarChanges": [
+        {
+          "component": "R21",
+          "before": "0.0000001889147",
+          "after": "0.00000018891308",
+          "delta": -1.6200000000002488e-12
+        }
+      ]
+    },
+    {
+      "path": [
+        [
+          "Folder",
+          "TEMP_PipeEntityValidation"
+        ],
+        [
+          "Model",
+          "PipeEntity_LocalPreview"
+        ],
+        [
+          "Part",
+          "RootPart"
+        ],
+        [
+          "Bone",
+          "Root"
+        ],
+        [
+          "Bone",
+          "Hips"
+        ],
+        [
+          "Bone",
+          "RightUpperLeg"
+        ]
+      ],
+      "class": "Bone",
+      "property": "CFrame",
+      "xmlType": "CoordinateFrame",
+      "beforePropertySHA256": "1c4d1a0eec577d27ec136a7f73add994f7684833734a994629d8a86ce295f941",
+      "afterPropertySHA256": "662dfe333154f69466c14ce9ee1a6b00f45333ec301706c738a36dabaa8ea72b",
+      "scalarChanges": [
+        {
+          "component": "R21",
+          "before": "0.00000018896198",
+          "after": "0.00000018895771",
+          "delta": -4.270000000004577e-12
+        }
+      ]
+    },
+    {
+      "path": [
+        [
+          "Folder",
+          "TrelloPoolSlideReleaseBackup_20260910"
+        ],
+        [
+          "Model",
+          "Level 2 Pool Slide Template"
+        ],
+        [
+          "Part",
+          "RootPart"
+        ],
+        [
+          "Bone",
+          "Root"
+        ],
+        [
+          "Bone",
+          "Hips"
+        ],
+        [
+          "Bone",
+          "LeftUpperLeg"
+        ]
+      ],
+      "class": "Bone",
+      "property": "CFrame",
+      "xmlType": "CoordinateFrame",
+      "beforePropertySHA256": "f5c8aba329b5b3eb1e8f4be6cc7c01519bfa328e23485abdaf3915e335a62285",
+      "afterPropertySHA256": "eabdce7ba1446cad7996bcc8d6aacc491803b242bf24c7f484a074ad5b5020bf",
+      "scalarChanges": [
+        {
+          "component": "R21",
+          "before": "0.0000001889147",
+          "after": "0.00000018891308",
+          "delta": -1.6200000000002488e-12
+        }
+      ]
+    },
+    {
+      "path": [
+        [
+          "Folder",
+          "TrelloPoolSlideReleaseBackup_20260910"
+        ],
+        [
+          "Model",
+          "Level 2 Pool Slide Template"
+        ],
+        [
+          "Part",
+          "RootPart"
+        ],
+        [
+          "Bone",
+          "Root"
+        ],
+        [
+          "Bone",
+          "Hips"
+        ],
+        [
+          "Bone",
+          "RightUpperLeg"
+        ]
+      ],
+      "class": "Bone",
+      "property": "CFrame",
+      "xmlType": "CoordinateFrame",
+      "beforePropertySHA256": "5a48d80def03d02e1cb27bade2b189ccb3f80db4daecc675b55f5d4903d1fac7",
+      "afterPropertySHA256": "f1b29a7fd4b9f2a1794de1d21bab967305bd120a5b5798b2264fb1953054eff7",
+      "scalarChanges": [
+        {
+          "component": "R21",
+          "before": "0.00000018896198",
+          "after": "0.00000018895771",
+          "delta": -4.270000000004577e-12
+        }
+      ]
+    }
+  ],
+  "inputs": {
+    "original": {
+      "path": "original.rbxmx",
+      "bytes": 24771888,
+      "sha256": "1ce8f12e91951dad4895132dd764f9cdd4e0e050116ffa6dfb72dfa4d58e9b9f"
+    },
+    "roundtrip": {
+      "path": "roundtrip.rbxmx",
+      "bytes": 24771890,
+      "sha256": "811d032cb0dcae98279b79b7cce33a579f55c8fa6670d85e5bfb2bdd4bf1d210"
+    }
+  },
+  "limits": "Historical binary Lune decode diagnostic; it cannot certify native ReflectionService-readable data, opaque engine fields, live originals, runtime serialization-only fields, or actual restoration."
+}

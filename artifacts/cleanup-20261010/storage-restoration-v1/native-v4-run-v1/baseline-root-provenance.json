@@ -1,0 +1,9 @@
+{
+  "phase": "baseline",
+  "executedCodeSHA256": "df846a007464c2f5bf11284b69eecf32b0c8ecaf4fe776481489483fc7095a2b",
+  "completionSHA256": "5b016c1ec2f5772205a78e83c09e095c31d964cffcc9b368ee2ae78498f022aa",
+  "actualNativeResponse": true,
+  "rootClientWallSeconds": 7.219,
+  "noRetry": true,
+  "limits": "Probe duration is not a performance gain. Native result claims retained unmodified; no synthetic PASS fields."
+}

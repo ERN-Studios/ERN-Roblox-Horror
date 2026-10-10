@@ -1,0 +1,196 @@
+{
+  "schema": "storage-restoration-immutable-preparation-pins-v1",
+  "nativeCallsByStorageAgent": 0,
+  "sourceWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "commitWrites": 0,
+  "nativeSetterRecoveryExecuted": false,
+  "normalizationApplied": false,
+  "restorationCertified": false,
+  "scope": "Top-level immutable candidates/preparation/offline evidence plus Root's independent native readonly math receipt. New native execution subdirectories excluded.",
+  "files": [
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/.gitattributes",
+      "bytes": 53,
+      "sha256": "1ce18687dc97c337fbd4d879a63b41397a7f7e7507d28624a88a92a9eb4a4d5b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/baseline-preparation.json",
+      "bytes": 466,
+      "sha256": "744911544ed665964afeaa3d3ac4633e8262841768b246297d10fe865e3c5518"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/capture-live-baseline.luau",
+      "bytes": 8357,
+      "sha256": "df846a007464c2f5bf11284b69eecf32b0c8ecaf4fe776481489483fc7095a2b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-compile-failure-ddc0973ef312.json",
+      "bytes": 794,
+      "sha256": "ddc0973ef312b470d4e6c28b4aaca80341b2b1c28d5c2e07aa6a53c92dafaf65"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-failure-1f152572abb2.json",
+      "bytes": 837,
+      "sha256": "190e91ddde739ad6a2d2203923a51b9044116aab8a24c72b8d95778078efb706"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-failure-51301452eaf1.json",
+      "bytes": 1443,
+      "sha256": "32780973f33409942dc443a1495a27c4f8caa425007189cac3322ab8ecb007e4"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-failure-e9f63d29f623.json",
+      "bytes": 921,
+      "sha256": "1650aae71fc3577f0b1878b777633fd46da41184661f8b8151f5d466f2c13858"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-proof.json",
+      "bytes": 10324,
+      "sha256": "7b73d7d8405acd17e0d13ddf05f4e2e8ff95de8edb67fc904e8d7db2e93a4a9d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-faults.luau",
+      "bytes": 13223,
+      "sha256": "8b3bf03ccb9e3b03c1785bf4383de995012aae58cc00d28141aed0023433d9f8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/lune-constructor-boundary-result-v1.json",
+      "bytes": 4522,
+      "sha256": "6cf32b02290195e77da5c03cb26f64646f47514d21766a75189a48ebecae4015"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/lune-constructor-boundary.luau",
+      "bytes": 888,
+      "sha256": "4395b4db5fa2a00dd10a649ce9b7c48dc382cab0ac0c98ebdab348cf491ebe9e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/preparation-v3.json",
+      "bytes": 861,
+      "sha256": "5949f19be6e683fbc02bf4b2e2f8422faee6524ed850610f31840ad9f713155e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/preparation-v4.json",
+      "bytes": 715,
+      "sha256": "c517d5722d3951cc57e0f6f0cd0f14e3e2591a9cfcc33f84a2dd3423953995b6"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/prepare-baseline.py",
+      "bytes": 6626,
+      "sha256": "40742b4d1111550452bf176ee28d1379cbb08d45a3f2bc45c894d2688d6613b9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/prepare-readonly-constructor.py",
+      "bytes": 4733,
+      "sha256": "48d3ccc80abc252b9bee31f1434bf3b41694d174219a8f1a1de099e28707fc11"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/prepare-v3.py",
+      "bytes": 5545,
+      "sha256": "d68f47fbc961871fff500fc80694d5438d1c81edc9e48b201d8bc0729999c1e0"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/prepare-v4.py",
+      "bytes": 2280,
+      "sha256": "7939f930667de4a5931bd5e0e59a996907202b2d0d3fe904d49f59649400e1c7"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/readonly-constructor-native-result-v1.json",
+      "bytes": 1536,
+      "sha256": "6b8407287a277419bd886519e9ab4ba6ac7a4971f0623b29d845c6dcd4828d7b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/readonly-constructor-probe.luau",
+      "bytes": 6601,
+      "sha256": "89a30b82c59fa838edd9275bdb6fa9cada24feb12d95b256234e5c8b867db971"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/receiver-fault-proof.json",
+      "bytes": 10391,
+      "sha256": "57f9e12f4a0f481211f83253a8502fb642adf60ab2e5613c6067e7c3482196d6"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/receiver.py",
+      "bytes": 17682,
+      "sha256": "4a70b5216d45321461aa9e0c482cefc6391b389ef92e2f905783a60d832267bc"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/record-file-pins.py",
+      "bytes": 1951,
+      "sha256": "87fe21b1d3e62a7a71e68ed5124b00aec23af766bff3de0a4d6a9c7c7b855bed"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/record-lune-boundary.py",
+      "bytes": 1548,
+      "sha256": "5ff9b3ba171117bdf5551d6b9b4afa536b0869cce7bc5083e07313e8cc9e8d61"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/restoration-probe-v3.luau",
+      "bytes": 29158,
+      "sha256": "c1c7406188bad76db369140bed57addc26d4302564f0c2161ce8441859cec629"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/restoration-probe-v4.luau",
+      "bytes": 29240,
+      "sha256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/restore-supplement.json",
+      "bytes": 2511,
+      "sha256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/REVIEW.md",
+      "bytes": 8400,
+      "sha256": "0eb093d9710ebea7c4a87fcf0ef31cd1acd54364580117017591c8f06fbb2328"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/run-root-readonly-constructor-v1.py",
+      "bytes": 1327,
+      "sha256": "45f227a27e0d9d977d9fc67d917f48d3d629637871d061d3e9a9ef3998125fda"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/test-copy-faults.py",
+      "bytes": 8009,
+      "sha256": "69b9eb7a9275c19e561b1b6906f70eebea51a017d48d52b4a57fac5e4ade264a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/test-receiver.py",
+      "bytes": 14800,
+      "sha256": "297eba30446b81aff3ae2b03ca6259a5b9125c11e090ea6edf04752c13e9eb06"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/verify-file-pins.py",
+      "bytes": 725,
+      "sha256": "27fa6c1e1b4b17fcb77cffaad3463e9d6337dc895f0c2e0f115161c1eafed809"
+    }
+  ],
+  "historicalInputs": [
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native.rbxm",
+      "bytes": 2739764,
+      "sha256": "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "bytes": 41912358,
+      "sha256": "b6b86b7871bab31d8fdebd9afa5cf3367426fad4e6a5eaef9038e4e8b1434f33"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/capture-completion.json",
+      "bytes": 3665,
+      "sha256": "e326db60c8032345efe7346cc01f177d9e3124f9121227f8819b3c448d3e8a8d"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip.rbxm",
+      "bytes": 2739764,
+      "sha256": "dbfb34d6dc742c50c4b743fd7a5fc0e374599f3b8c81ea1e8f5d6baa455eb121"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/reopen-result.txt",
+      "bytes": 8536,
+      "sha256": "03f29e1308f87adc045104700356a2865dc728adaca0faa04b3389a888ccfb82"
+    }
+  ]
+}

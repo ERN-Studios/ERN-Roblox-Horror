@@ -1,0 +1,10 @@
+{
+  "schema": "storage-copy-fault-failed-execution-v1",
+  "nativeCalls": 0,
+  "candidateSHA256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b",
+  "fixtureSHA256": "5116f1919884acf6fe932247831a789a99af97900085d1c627784b7e1564f0b1",
+  "moduleSHA256": "4e34dfad26415381bb350634bdc79527613ad9b91f945d5737e37879af660c73",
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "C:\\Users\\mikke\\AppData\\Local\\Temp\\mongotv-storage-copy-faults-ffnk8bcf\\copy-faults:14: Real Lune constructor changed exact supplemental components\n[Stack Begin]\n    Script '[C]' - function 'assert'\n    Script 'C:\\Users\\mikke\\AppData\\Local\\Temp\\mongotv-storage-copy-faults-ffnk8bcf\\copy-faults', Line 14\n    Script 'C:\\Users\\mikke\\AppData\\Local\\Temp\\mongotv-storage-copy-faults-ffnk8bcf\\copy-faults', Line 26\n[Stack End]\n\n"
+}

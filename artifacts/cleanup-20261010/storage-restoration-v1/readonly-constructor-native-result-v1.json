@@ -1,0 +1,47 @@
+{
+  "copySetterWrites": 0,
+  "capturedAtUtc": "2026-10-10T08:01:16Z",
+  "checks": 111,
+  "originalParentWrites": 0,
+  "originalsUnchanged": true,
+  "rows": [
+    {
+      "originalMatchesHistorical": true,
+      "path": "TEMP_PipeEntityValidation.PipeEntity_LocalPreview.RootPart.Root.Hips.LeftUpperLeg",
+      "componentsChecked": 12,
+      "identity": "1_12618",
+      "exactConstructor": true
+    },
+    {
+      "originalMatchesHistorical": true,
+      "path": "TEMP_PipeEntityValidation.PipeEntity_LocalPreview.RootPart.Root.Hips.RightUpperLeg",
+      "componentsChecked": 12,
+      "identity": "1_12621",
+      "exactConstructor": true
+    },
+    {
+      "originalMatchesHistorical": true,
+      "path": "TrelloPoolSlideReleaseBackup_20260910.Level 2 Pool Slide Template.RootPart.Root.Hips.LeftUpperLeg",
+      "componentsChecked": 12,
+      "identity": "1_12638",
+      "exactConstructor": true
+    },
+    {
+      "originalMatchesHistorical": true,
+      "path": "TrelloPoolSlideReleaseBackup_20260910.Level 2 Pool Slide Template.RootPart.Root.Hips.RightUpperLeg",
+      "componentsChecked": 12,
+      "identity": "1_12641",
+      "exactConstructor": true
+    }
+  ],
+  "pass": true,
+  "normalizationApplied": false,
+  "nativeInstanceCreations": 0,
+  "sharedStateWrites": 0,
+  "restorationCertified": false,
+  "modeSwitches": 0,
+  "originalSetterWrites": 0,
+  "schema": "s06-exact-readonly-native-constructor-v1",
+  "sourceWrites": 0,
+  "rootExecutedCodeSHA256": "89a30b82c59fa838edd9275bdb6fa9cada24feb12d95b256234e5c8b867db971"
+}

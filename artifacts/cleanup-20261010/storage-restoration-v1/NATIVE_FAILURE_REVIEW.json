@@ -1,0 +1,160 @@
+{
+  "schema": "storage-restoration-native-failure-independent-review-v1",
+  "reviewer": "storage_next",
+  "readOnlyReviewPassed": true,
+  "reviewChecks": 92,
+  "nativeCallsByReviewer": 0,
+  "recipeStatus": "afventer test \u2014 native V4 exact setter gate failed",
+  "recipePassed": false,
+  "authoritativeRegressionDetectedByRecordedGuards": false,
+  "nativeDeletionApproved": false,
+  "restorationCertified": false,
+  "normalizationApplied": false,
+  "expandedSetters": false,
+  "actualResultAtUtc": "2026-10-10T08:18:37Z",
+  "nativeChecks": 3167424,
+  "failure": {
+    "assertion": "check(copy.CFrame==wanted and canonical({copy.CFrame:GetComponents()})==canonical(spec.components),\"Bone setter changed exact components\")",
+    "firstOwnedSetterAttempt": true,
+    "assignmentReturned": true,
+    "exactSetterVerificationPassed": false,
+    "componentDeltasRecorded": false,
+    "equalityPredicatesRecordedSeparately": false,
+    "normalizationCauseEstablished": false,
+    "inferredFirstTargetFromPinnedArray": "TEMP_PipeEntityValidation.PipeEntity_LocalPreview.RootPart.Root.Hips.LeftUpperLeg",
+    "targetWasNotRecordedInNativeCompletion": true,
+    "limit": "The combined CFrame equality/12-component predicate failed. Receipt does not determine which predicate or component differed; old DS R21 diffs are not new after-setter evidence."
+  },
+  "completedScope": {
+    "freshNativeSourcePins": 213,
+    "knownOriginalIdentities": 430364,
+    "createdRoots": 23,
+    "adoptedRoots": 23,
+    "destroyedRoots": 23,
+    "remainingOwnedRoots": 0,
+    "setterAttempts": 1,
+    "setterAssignmentsReturned": 1,
+    "leaseReleased": true,
+    "originalNativeArchiveUnchanged": true,
+    "originalSourcesAndPinsUnchanged": true,
+    "sourceWrites": 0,
+    "originalParentWrites": 0,
+    "modeSwitches": 0
+  },
+  "unfinishedScope": [
+    "Exact first setter verification",
+    "remaining three first-reopen setters",
+    "whole supplemented readable forest/reference/source and raw binary comparison",
+    "second reopen/four setters/second serialization",
+    "complete recovery recipe",
+    "native deletion gate"
+  ],
+  "diagnosticProposalOnly": {
+    "preparedExecutable": false,
+    "executed": false,
+    "scope": "At most one fresh unparented Bone and the four pinned wanted CFrames; never use DS/retry V4, an original Bone, original property setters, cloned scripts or a live parent.",
+    "observations": [
+      "Capture all12 expected/wanted/after components plus exact %.17g strings",
+      "Record CFrame equality and component equality separately, and exact differing indices",
+      "Fresh all213/held-native guards, cleanup on both success and throw, zero test-owned instances remaining"
+    ],
+    "interpretation": "A mismatch on a fresh Bone would isolate the generic setter path; a match would leave deserialized/hierarchy context unproven. Either outcome remains synthetic and cannot certify recovery/gameplay/deletion.",
+    "rejectionRule": "No epsilon, value normalization, extra setters, native retry or changes to frozen/archive/failure evidence."
+  },
+  "preserve": "All authoritative held originals, full raw archive/facts, failed raw-only reopen, frozen V4, native completion/receiver verdict and earlier failures remain untouched.",
+  "evidence": [
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-api.json",
+      "bytes": 675,
+      "sha256": "da7b9a87dff20cdfb0e1986e9f39b389a8977006290c118b65a32696f73eb085"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-completion.json",
+      "bytes": 478,
+      "sha256": "5b016c1ec2f5772205a78e83c09e095c31d964cffcc9b368ee2ae78498f022aa"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-post-result.json",
+      "bytes": 176,
+      "sha256": "529329d2048e9265ab65798921e8f3efe82c08aa7f4a541264af97e3bacc4c40"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-provenance.json",
+      "bytes": 418,
+      "sha256": "1aa40e49b3192fd34f68809ae59d3526ec0efb8f11456a761e980996ccd8f475"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-source.luau",
+      "bytes": 8357,
+      "sha256": "df846a007464c2f5bf11284b69eecf32b0c8ecaf4fe776481489483fc7095a2b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/inputs.json",
+      "bytes": 1313,
+      "sha256": "8139af8146e02d2ca013d0d31fbf05da2d6506d4157b532561a4e2b5af6b0224"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/live-baseline-native-completion.json",
+      "bytes": 478,
+      "sha256": "5b016c1ec2f5772205a78e83c09e095c31d964cffcc9b368ee2ae78498f022aa"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/live-baseline.json",
+      "bytes": 67596,
+      "sha256": "5fb05317f19c289c98bd3068ea2e49c6c1d062692e4ac77b19b10e2a9baeac62"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/port-verdict.json",
+      "bytes": 559,
+      "sha256": "95f7722392459fa8f96024dd296eb13af7f91e1e3fc2919789a8b192f1a54bdc"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-native-completion.json",
+      "bytes": 4938,
+      "sha256": "73cde49028d571cd7fa43e88200fdfb759ca7eb8b17eec4a95267055d4e778f8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-native-completion.received.json",
+      "bytes": 4938,
+      "sha256": "73cde49028d571cd7fa43e88200fdfb759ca7eb8b17eec4a95267055d4e778f8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-api.json",
+      "bytes": 5491,
+      "sha256": "7d1797defd0a90b810e9322f14c01bbe0dc0bc779957c58e3f3e996141493bc2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-completion.json",
+      "bytes": 4938,
+      "sha256": "73cde49028d571cd7fa43e88200fdfb759ca7eb8b17eec4a95267055d4e778f8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-post-result.json",
+      "bytes": 167,
+      "sha256": "7cbdda8ec87de02a58f7b3734971177717531254c6020d6ebe5da7f2d4052b03"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-provenance.json",
+      "bytes": 416,
+      "sha256": "4781ebb56ca6613131c0b450cd6c707ff63f946c7e92f78342ca5ece436f6d5c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-source.luau",
+      "bytes": 29240,
+      "sha256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/restore-supplement.json",
+      "bytes": 2511,
+      "sha256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/root-after-review-v1.json",
+      "bytes": 2785,
+      "sha256": "b0ec69f4a6afc7d573d58d731e1fdc4429e4a92b899cda6aab51a022dee9943c"
+    }
+  ],
+  "frozenPinListSHA256": "f60faf0806cf6931fc662150fe0f850af52aa48110f068bf2340b5658702955f",
+  "reviewScriptSHA256": "e9a7e9d4b52a3f289f951aff86e6ae931f87201b226503d022350fe31377473a",
+  "reviewMarkdownSHA256": "a7506a14db0edec6834b83f1f6913e2f2a85cb5c51280200259989eff26db469"
+}

@@ -1,0 +1,22 @@
+{
+    "originalArchiveWrites":  0,
+    "nativeWrites":  0,
+    "schema":  "s06-owned-diagnostic-intermediates-removal-v1",
+    "reason":  "Regenerable Lune diagnostic XML is replaced by compact exact chunk/property proofs; pinned native originals and historical receipts remain untouched.",
+    "nativeCalls":  0,
+    "bytesRemoved":  49543778,
+    "rows":  [
+                 {
+                     "scope":  "new local regenerated diagnostic XML only",
+                     "path":  "original.rbxmx",
+                     "sha256":  "1ce8f12e91951dad4895132dd764f9cdd4e0e050116ffa6dfb72dfa4d58e9b9f",
+                     "bytes":  24771888
+                 },
+                 {
+                     "scope":  "new local regenerated diagnostic XML only",
+                     "path":  "roundtrip.rbxmx",
+                     "sha256":  "811d032cb0dcae98279b79b7cce33a579f55c8fa6670d85e5bfb2bdd4bf1d210",
+                     "bytes":  24771890
+                 }
+             ]
+}

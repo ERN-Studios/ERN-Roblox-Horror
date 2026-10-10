@@ -1,0 +1,795 @@
+{
+  "schema": "mongotv-s19-public-file-curation-v1",
+  "curationRecordPath": "artifacts/cleanup-20261010/S19-curation-v1.json",
+  "curationRecordSelfHash": "Intentionally outside its own hashed file list; Root receives the final raw hash separately.",
+  "stagePaths": [
+    "artifacts/cleanup-20261010/foundation-next-v1/storage-v3-lexical-proof-v1.json",
+    "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-fault-peer-v1.json",
+    "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-peer-review-v1.json",
+    "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-receiver-peer-v1.json",
+    "artifacts/cleanup-20261010/storage-next-v1/.gitattributes",
+    "artifacts/cleanup-20261010/storage-next-v1/REVIEW.md",
+    "artifacts/cleanup-20261010/storage-next-v1/compare-decoded.py",
+    "artifacts/cleanup-20261010/storage-next-v1/compare-native-chunks.py",
+    "artifacts/cleanup-20261010/storage-next-v1/comparison-intermediates-removal.json",
+    "artifacts/cleanup-20261010/storage-next-v1/decode-comparison.luau",
+    "artifacts/cleanup-20261010/storage-next-v1/file-pins.json",
+    "artifacts/cleanup-20261010/storage-next-v1/native-chunk-differences.json",
+    "artifacts/cleanup-20261010/storage-next-v1/offline-differences.json",
+    "artifacts/cleanup-20261010/storage-next-v1/offline-preflight-v2.json",
+    "artifacts/cleanup-20261010/storage-next-v1/offline-preflight.json",
+    "artifacts/cleanup-20261010/storage-next-v1/prepare-supplement-v2.py",
+    "artifacts/cleanup-20261010/storage-next-v1/prepare-supplement.py",
+    "artifacts/cleanup-20261010/storage-next-v1/record-file-pins.py",
+    "artifacts/cleanup-20261010/storage-next-v1/restoration-supplement-probe-v2.luau",
+    "artifacts/cleanup-20261010/storage-next-v1/restoration-supplement-probe.luau",
+    "artifacts/cleanup-20261010/storage-next-v1/restore-supplement.json",
+    "artifacts/cleanup-20261010/storage-next-v1/supplement-preparation-v2.json",
+    "artifacts/cleanup-20261010/storage-next-v1/supplement-preparation.json",
+    "artifacts/cleanup-20261010/storage-next-v1/verify-prepared-v2.py",
+    "artifacts/cleanup-20261010/storage-next-v1/verify-prepared.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/.gitattributes",
+    "artifacts/cleanup-20261010/storage-restoration-v1/NATIVE_FAILURE_REVIEW.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/NATIVE_FAILURE_REVIEW.md",
+    "artifacts/cleanup-20261010/storage-restoration-v1/REVIEW.md",
+    "artifacts/cleanup-20261010/storage-restoration-v1/baseline-preparation.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/capture-live-baseline.luau",
+    "artifacts/cleanup-20261010/storage-restoration-v1/copy-compile-failure-ddc0973ef312.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-failure-1f152572abb2.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-failure-51301452eaf1.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-failure-e9f63d29f623.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-proof.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/copy-faults.luau",
+    "artifacts/cleanup-20261010/storage-restoration-v1/file-pins.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/.gitattributes",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-begin.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-end.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-00.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-01.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-02.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-03.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-04.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-05.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-06.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-07.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-08.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-09.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-reader.luau",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/parity-reader.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/repo-after-metadata.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/repo-before-metadata.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/result.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/studio-state-before.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/studio-state-before.txt",
+    "artifacts/cleanup-20261010/storage-restoration-v1/lune-constructor-boundary-result-v1.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/lune-constructor-boundary.luau",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-api.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-completion.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-post-result.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-provenance.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-source.luau",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/inputs.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/live-baseline-native-completion.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/live-baseline.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/port-verdict.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-native-completion.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-native-completion.received.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-api.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-completion.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-post-result.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-provenance.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-source.luau",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/restore-supplement.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/root-after-review-v1.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/preparation-v3.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/preparation-v4.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/prepare-baseline.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/prepare-readonly-constructor.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/prepare-v3.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/prepare-v4.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/readonly-constructor-native-result-v1.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/readonly-constructor-probe.luau",
+    "artifacts/cleanup-20261010/storage-restoration-v1/receiver-fault-proof.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/receiver.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/record-file-pins.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/record-lune-boundary.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/restoration-probe-v3.luau",
+    "artifacts/cleanup-20261010/storage-restoration-v1/restoration-probe-v4.luau",
+    "artifacts/cleanup-20261010/storage-restoration-v1/restore-supplement.json",
+    "artifacts/cleanup-20261010/storage-restoration-v1/review-native-failure-v1.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/run-root-native-port-v1.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/run-root-readonly-constructor-v1.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/test-copy-faults.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/test-receiver.py",
+    "artifacts/cleanup-20261010/storage-restoration-v1/verify-file-pins.py",
+    "artifacts/cleanup-20261010/S19-curation-v1.json"
+  ],
+  "files": [
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/storage-v3-lexical-proof-v1.json",
+      "bytes": 1047,
+      "sha256": "b16591a7b33859f757f9b72010f5eb8e014dc24328c7d03936959ad6658d81bd",
+      "group": "frozen-peer-receipt"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-fault-peer-v1.json",
+      "bytes": 10324,
+      "sha256": "f91f1a56af9fe2ddd5d38f56805c7e6f8c44dcb3e602a458746eebbbfd7b588a",
+      "group": "frozen-peer-receipt"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-peer-review-v1.json",
+      "bytes": 12050,
+      "sha256": "d7d6c68add3a3aa9a55b9f2269883c3583827c4b5f2a58a7e2db5f22563da1c8",
+      "group": "frozen-peer-receipt"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-receiver-peer-v1.json",
+      "bytes": 10391,
+      "sha256": "57f9e12f4a0f481211f83253a8502fb642adf60ab2e5613c6067e7c3482196d6",
+      "group": "frozen-peer-receipt"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/.gitattributes",
+      "bytes": 53,
+      "sha256": "1ce18687dc97c337fbd4d879a63b41397a7f7e7507d28624a88a92a9eb4a4d5b",
+      "group": "raw-byte-preservation"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/REVIEW.md",
+      "bytes": 9201,
+      "sha256": "a617250743b5e4ad9ecf16d16503ba21fd092fd867d257a7bdc39f2ed2ac34cc",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/compare-decoded.py",
+      "bytes": 5020,
+      "sha256": "c5d961a35d2616255347f206f266d9a2caac8f3fcac3c3deefa1a2940db8a852",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/compare-native-chunks.py",
+      "bytes": 4568,
+      "sha256": "4424802d0533512e3a4e284bb7b9d1b051b53c931cad226b4ebcdffde4c50921",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/comparison-intermediates-removal.json",
+      "bytes": 1005,
+      "sha256": "adeba43c0cde8d41b02b44b1ff800c44070fa739b822553a942d598a5b10dada",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/decode-comparison.luau",
+      "bytes": 1845,
+      "sha256": "e75eaaeadc7c70e8f5000822d363badf529b053a9c3c4d7e577fe3128c59ba89",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/file-pins.json",
+      "bytes": 5593,
+      "sha256": "90c0c1ed4a7bc37b877f4742ff22def48ed802bf86a0a3f25cc88d82024c82d7",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/native-chunk-differences.json",
+      "bytes": 2263,
+      "sha256": "4bf9fc0c4ca727aa0797fdaa74896b14198a1ae2ce48596ae2b67e45fd937e46",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/offline-differences.json",
+      "bytes": 4533,
+      "sha256": "a671208d257839cd6882a981bc2b41c1b350b06bc1ffad137a4a936f297714ce",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/offline-preflight-v2.json",
+      "bytes": 3353,
+      "sha256": "9d54420b6a1fa44240fcd8ed9481b5643292ef575c3ed2cba114c00e9998f230",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/offline-preflight.json",
+      "bytes": 3344,
+      "sha256": "824373ff62a3fb501fa3a5d3c8fe7c18d44332b04a5a10ca0d4499233136a3c3",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/prepare-supplement-v2.py",
+      "bytes": 3573,
+      "sha256": "357b886be610e8841ff841aa3490c851fb99df18b7d765be9503d60c88526c50",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/prepare-supplement.py",
+      "bytes": 10944,
+      "sha256": "e0837134ed8b069d75f366e2f2965445a90a060f6a8742e57ac5fc693f4e51b5",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/record-file-pins.py",
+      "bytes": 2729,
+      "sha256": "2fbc897d94ed4d3d4e376d7981da689d7776b740a159183a0b5d8e662a90d343",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/restoration-supplement-probe-v2.luau",
+      "bytes": 27000,
+      "sha256": "c9ae7a5f71fd836d8722eb77786c7c1a6ded062c0f8dbfd53387982a022a66ab",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/restoration-supplement-probe.luau",
+      "bytes": 26444,
+      "sha256": "ac01f995b30b883c21ca982b071cd518fed722120e2498ff38341595cb5b27f1",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/restore-supplement.json",
+      "bytes": 2511,
+      "sha256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/supplement-preparation-v2.json",
+      "bytes": 1137,
+      "sha256": "b59b8157dcc324dfa6ff73c92b67de602a3f62afc74f05deeac4a03219d305b2",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/supplement-preparation.json",
+      "bytes": 1539,
+      "sha256": "706e108fde839035f78eba0b54f53f69d24048716ed0638252bd959081c283be",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/verify-prepared-v2.py",
+      "bytes": 867,
+      "sha256": "bbc266ae57aa379d93db1e6c0312ddb27e7a5860f7f594c9efade8b17bf3994a",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-next-v1/verify-prepared.py",
+      "bytes": 4220,
+      "sha256": "344faa14e72423d539dee709aae3ea42ed7d45dc053a471f29f21ff808adebb6",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/.gitattributes",
+      "bytes": 53,
+      "sha256": "1ce18687dc97c337fbd4d879a63b41397a7f7e7507d28624a88a92a9eb4a4d5b",
+      "group": "raw-byte-preservation"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/NATIVE_FAILURE_REVIEW.json",
+      "bytes": 7631,
+      "sha256": "229c7bf8c8a154526b9c79f187a98ed5a6dc255001dd3200d0e7b9e801b3ead0",
+      "group": "preserved-failure-evidence-or-review"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/NATIVE_FAILURE_REVIEW.md",
+      "bytes": 3032,
+      "sha256": "a7506a14db0edec6834b83f1f6913e2f2a85cb5c51280200259989eff26db469",
+      "group": "preserved-failure-evidence-or-review"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/REVIEW.md",
+      "bytes": 8400,
+      "sha256": "0eb093d9710ebea7c4a87fcf0ef31cd1acd54364580117017591c8f06fbb2328",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/baseline-preparation.json",
+      "bytes": 466,
+      "sha256": "744911544ed665964afeaa3d3ac4633e8262841768b246297d10fe865e3c5518",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/capture-live-baseline.luau",
+      "bytes": 8357,
+      "sha256": "df846a007464c2f5bf11284b69eecf32b0c8ecaf4fe776481489483fc7095a2b",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-compile-failure-ddc0973ef312.json",
+      "bytes": 794,
+      "sha256": "ddc0973ef312b470d4e6c28b4aaca80341b2b1c28d5c2e07aa6a53c92dafaf65",
+      "group": "preserved-failure-evidence-or-review"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-failure-1f152572abb2.json",
+      "bytes": 837,
+      "sha256": "190e91ddde739ad6a2d2203923a51b9044116aab8a24c72b8d95778078efb706",
+      "group": "preserved-failure-evidence-or-review"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-failure-51301452eaf1.json",
+      "bytes": 1443,
+      "sha256": "32780973f33409942dc443a1495a27c4f8caa425007189cac3322ab8ecb007e4",
+      "group": "preserved-failure-evidence-or-review"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-failure-e9f63d29f623.json",
+      "bytes": 921,
+      "sha256": "1650aae71fc3577f0b1878b777633fd46da41184661f8b8151f5d466f2c13858",
+      "group": "preserved-failure-evidence-or-review"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-fault-proof.json",
+      "bytes": 10324,
+      "sha256": "7b73d7d8405acd17e0d13ddf05f4e2e8ff95de8edb67fc904e8d7db2e93a4a9d",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/copy-faults.luau",
+      "bytes": 13223,
+      "sha256": "8b3bf03ccb9e3b03c1785bf4383de995012aae58cc00d28141aed0023433d9f8",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/file-pins.json",
+      "bytes": 8102,
+      "sha256": "f60faf0806cf6931fc662150fe0f850af52aa48110f068bf2340b5658702955f",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/.gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-begin.json",
+      "bytes": 339,
+      "sha256": "c753130bc9d237f8865c5d5ba4288a757fc9287762218e522a962b99b4764e06",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-end.json",
+      "bytes": 339,
+      "sha256": "3f56780bd8af95c714b9b186edf61634e0ed3b38d105f76d24575e1eed9511c1",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-00.json",
+      "bytes": 15028,
+      "sha256": "dc50d02a12949de3d3da7e516f61335038d407b98b4af69af21c6e378e4a85c2",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-01.json",
+      "bytes": 25635,
+      "sha256": "e7578a7f81006ff1daebaa976762d6dd459ea2b0b8472c73ca4e716a9aba6a3e",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-02.json",
+      "bytes": 26313,
+      "sha256": "41f9a874855493dbe2669088afac7a782d623e662695ab78b266959f12d1ac44",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-03.json",
+      "bytes": 26129,
+      "sha256": "21f5c7bf5f58b393c82909fb241894d4f07f3f0c39d38e584237e0ca86bb21ac",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-04.json",
+      "bytes": 26142,
+      "sha256": "780dc8be73fb7893fa49cd5e0146a5bfc9871412ba9e7dbe81307cd847e25ab7",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-05.json",
+      "bytes": 25717,
+      "sha256": "0e40b9a4415592a48a118b6690d201f42a4bc9d7ad37ac03f83a2ca50d849566",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-06.json",
+      "bytes": 27971,
+      "sha256": "3e412839a573e63df213e0f2c20cae00e182c55f909a0d3e706f280cb94efdb9",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-07.json",
+      "bytes": 28338,
+      "sha256": "9d4460d35fcd61ea4ba918b0fc04c9de5c0a522737de2abf2bf81c1a9b5e56e3",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-08.json",
+      "bytes": 28197,
+      "sha256": "30b9714bccf560c2b900a47975605a77c25a265142388150dd42f369f44d8d47",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-page-09.json",
+      "bytes": 14197,
+      "sha256": "bc57c837c90705d0e222ba8530360ef681556496666b562d2ad11603ae0cd30a",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/native-reader.luau",
+      "bytes": 3293,
+      "sha256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/parity-reader.py",
+      "bytes": 12746,
+      "sha256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/repo-after-metadata.json",
+      "bytes": 63282,
+      "sha256": "3e22015f4fb973ea0e8300b5749af083752f130f06ad5821e7eb35da1c56ef37",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/repo-before-metadata.json",
+      "bytes": 63462,
+      "sha256": "3e00048edfb0bdf2959a7c42bfbf19c0587393b652584a1575e9a62941917ab5",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/result.json",
+      "bytes": 2044,
+      "sha256": "f69acc9b890c24a0e645999ade88a71cc4094eeeda37468bda95efdb44b9554e",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/studio-state-before.json",
+      "bytes": 128,
+      "sha256": "cfec3c6eefac0d8b6a7b4b5cb66ed015049a38533a7f7597a4a9ff92fa10802a",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/final-parity-v1/studio-state-before.txt",
+      "bytes": 98,
+      "sha256": "468832371ef314e6b747656d478af6c841e116d9cfea9f2f3ea1d5cc2fbf1b5f",
+      "group": "actual-final-parity-reader-or-evidence"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/lune-constructor-boundary-result-v1.json",
+      "bytes": 4522,
+      "sha256": "6cf32b02290195e77da5c03cb26f64646f47514d21766a75189a48ebecae4015",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/lune-constructor-boundary.luau",
+      "bytes": 888,
+      "sha256": "4395b4db5fa2a00dd10a649ce9b7c48dc382cab0ac0c98ebdab348cf491ebe9e",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-api.json",
+      "bytes": 675,
+      "sha256": "da7b9a87dff20cdfb0e1986e9f39b389a8977006290c118b65a32696f73eb085",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-completion.json",
+      "bytes": 478,
+      "sha256": "5b016c1ec2f5772205a78e83c09e095c31d964cffcc9b368ee2ae78498f022aa",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-post-result.json",
+      "bytes": 176,
+      "sha256": "529329d2048e9265ab65798921e8f3efe82c08aa7f4a541264af97e3bacc4c40",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-root-provenance.json",
+      "bytes": 418,
+      "sha256": "1aa40e49b3192fd34f68809ae59d3526ec0efb8f11456a761e980996ccd8f475",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/baseline-source.luau",
+      "bytes": 8357,
+      "sha256": "df846a007464c2f5bf11284b69eecf32b0c8ecaf4fe776481489483fc7095a2b",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/inputs.json",
+      "bytes": 1313,
+      "sha256": "8139af8146e02d2ca013d0d31fbf05da2d6506d4157b532561a4e2b5af6b0224",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/live-baseline-native-completion.json",
+      "bytes": 478,
+      "sha256": "5b016c1ec2f5772205a78e83c09e095c31d964cffcc9b368ee2ae78498f022aa",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/live-baseline.json",
+      "bytes": 67596,
+      "sha256": "5fb05317f19c289c98bd3068ea2e49c6c1d062692e4ac77b19b10e2a9baeac62",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/port-verdict.json",
+      "bytes": 559,
+      "sha256": "95f7722392459fa8f96024dd296eb13af7f91e1e3fc2919789a8b192f1a54bdc",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-native-completion.json",
+      "bytes": 4938,
+      "sha256": "73cde49028d571cd7fa43e88200fdfb759ca7eb8b17eec4a95267055d4e778f8",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-native-completion.received.json",
+      "bytes": 4938,
+      "sha256": "73cde49028d571cd7fa43e88200fdfb759ca7eb8b17eec4a95267055d4e778f8",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-api.json",
+      "bytes": 5491,
+      "sha256": "7d1797defd0a90b810e9322f14c01bbe0dc0bc779957c58e3f3e996141493bc2",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-completion.json",
+      "bytes": 4938,
+      "sha256": "73cde49028d571cd7fa43e88200fdfb759ca7eb8b17eec4a95267055d4e778f8",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-post-result.json",
+      "bytes": 167,
+      "sha256": "7cbdda8ec87de02a58f7b3734971177717531254c6020d6ebe5da7f2d4052b03",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-root-provenance.json",
+      "bytes": 416,
+      "sha256": "4781ebb56ca6613131c0b450cd6c707ff63f946c7e92f78342ca5ece436f6d5c",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/probe-source.luau",
+      "bytes": 29240,
+      "sha256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/restore-supplement.json",
+      "bytes": 2511,
+      "sha256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/native-v4-run-v1/root-after-review-v1.json",
+      "bytes": 2785,
+      "sha256": "b0ec69f4a6afc7d573d58d731e1fdc4429e4a92b899cda6aab51a022dee9943c",
+      "group": "actual-native-failed-port-evidence-or-frozen-input"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/preparation-v3.json",
+      "bytes": 861,
+      "sha256": "5949f19be6e683fbc02bf4b2e2f8422faee6524ed850610f31840ad9f713155e",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/preparation-v4.json",
+      "bytes": 715,
+      "sha256": "c517d5722d3951cc57e0f6f0cd0f14e3e2591a9cfcc33f84a2dd3423953995b6",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/prepare-baseline.py",
+      "bytes": 6626,
+      "sha256": "40742b4d1111550452bf176ee28d1379cbb08d45a3f2bc45c894d2688d6613b9",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/prepare-readonly-constructor.py",
+      "bytes": 4733,
+      "sha256": "48d3ccc80abc252b9bee31f1434bf3b41694d174219a8f1a1de099e28707fc11",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/prepare-v3.py",
+      "bytes": 5545,
+      "sha256": "d68f47fbc961871fff500fc80694d5438d1c81edc9e48b201d8bc0729999c1e0",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/prepare-v4.py",
+      "bytes": 2280,
+      "sha256": "7939f930667de4a5931bd5e0e59a996907202b2d0d3fe904d49f59649400e1c7",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/readonly-constructor-native-result-v1.json",
+      "bytes": 1536,
+      "sha256": "6b8407287a277419bd886519e9ab4ba6ac7a4971f0623b29d845c6dcd4828d7b",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/readonly-constructor-probe.luau",
+      "bytes": 6601,
+      "sha256": "89a30b82c59fa838edd9275bdb6fa9cada24feb12d95b256234e5c8b867db971",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/receiver-fault-proof.json",
+      "bytes": 10391,
+      "sha256": "57f9e12f4a0f481211f83253a8502fb642adf60ab2e5613c6067e7c3482196d6",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/receiver.py",
+      "bytes": 17682,
+      "sha256": "4a70b5216d45321461aa9e0c482cefc6391b389ef92e2f905783a60d832267bc",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/record-file-pins.py",
+      "bytes": 1951,
+      "sha256": "87fe21b1d3e62a7a71e68ed5124b00aec23af766bff3de0a4d6a9c7c7b855bed",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/record-lune-boundary.py",
+      "bytes": 1548,
+      "sha256": "5ff9b3ba171117bdf5551d6b9b4afa536b0869cce7bc5083e07313e8cc9e8d61",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/restoration-probe-v3.luau",
+      "bytes": 29158,
+      "sha256": "c1c7406188bad76db369140bed57addc26d4302564f0c2161ce8441859cec629",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/restoration-probe-v4.luau",
+      "bytes": 29240,
+      "sha256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/restore-supplement.json",
+      "bytes": 2511,
+      "sha256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/review-native-failure-v1.py",
+      "bytes": 12622,
+      "sha256": "e9a7e9d4b52a3f289f951aff86e6ae931f87201b226503d022350fe31377473a",
+      "group": "preserved-failure-evidence-or-review"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/run-root-native-port-v1.py",
+      "bytes": 3675,
+      "sha256": "fad48360de2681771feaa95f0d782a020368a0849ad0f040a711b7dbefbdc344",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/run-root-readonly-constructor-v1.py",
+      "bytes": 1327,
+      "sha256": "45f227a27e0d9d977d9fc67d917f48d3d629637871d061d3e9a9ef3998125fda",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/test-copy-faults.py",
+      "bytes": 8009,
+      "sha256": "69b9eb7a9275c19e561b1b6906f70eebea51a017d48d52b4a57fac5e4ade264a",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/test-receiver.py",
+      "bytes": 14800,
+      "sha256": "297eba30446b81aff3ae2b03ca6259a5b9125c11e090ea6edf04752c13e9eb06",
+      "group": "storage-diagnostics"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/verify-file-pins.py",
+      "bytes": 725,
+      "sha256": "27fa6c1e1b4b17fcb77cffaad3463e9d6337dc895f0c2e0f115161c1eafed809",
+      "group": "storage-diagnostics"
+    }
+  ],
+  "fileCount": 99,
+  "totalFileBytes": 911975,
+  "groups": {
+    "frozen-peer-receipt": 4,
+    "raw-byte-preservation": 2,
+    "storage-diagnostics": 48,
+    "preserved-failure-evidence-or-review": 7,
+    "actual-final-parity-reader-or-evidence": 20,
+    "actual-native-failed-port-evidence-or-frozen-input": 18
+  },
+  "scope": "S19 compact evidence only: both storage directories recursively and exactly four frozen storage-v3/v4 foundation receipts. Root stages updated CLEANUP_PLAN.md/CLEANUP_RESULTS.md separately.",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "sourceWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "commitWrites": 0,
+  "frozenHistoricalVerificationChecks": 100,
+  "credentialReview": {
+    "pass": true,
+    "scannedFiles": 99,
+    "utf8TextAndJsonValidated": true,
+    "signatureClasses": [
+      "private-key",
+      "github-token",
+      "aws-access-key",
+      "openai-key",
+      "slack-token",
+      "jwt",
+      "roblox-cookie",
+      "literal-authorization"
+    ],
+    "credentialFindings": 0,
+    "manualReview": "Native receipts export Source hashes/metadata only; diagnostic code contains local MCP wrappers, localhost endpoints, fixture source and non-secret IDs/paths. No authorization headers, cookies, private keys or tokens found."
+  },
+  "excludedExistingCompactScanFiles": [],
+  "excludedPreservedHistoricalInputs": [
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native.rbxm",
+      "bytes": 2739764,
+      "sha256": "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip.rbxm",
+      "bytes": 2739764,
+      "sha256": "dbfb34d6dc742c50c4b743fd7a5fc0e374599f3b8c81ea1e8f5d6baa455eb121"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "bytes": 41912358,
+      "sha256": "b6b86b7871bab31d8fdebd9afa5cf3367426fad4e6a5eaef9038e4e8b1434f33"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/reopen-result.txt",
+      "bytes": 8536,
+      "sha256": "03f29e1308f87adc045104700356a2865dc728adaca0faa04b3389a888ccfb82"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/capture-completion.json",
+      "bytes": 3665,
+      "sha256": "e326db60c8032345efe7346cc01f177d9e3124f9121227f8819b3c448d3e8a8d"
+    }
+  ],
+  "excludedScopes": [
+    "Source/manifest/runtime mirrors outside the approved artifact directories",
+    "CLEANUP_PLAN.md and CLEANUP_RESULTS.md: Root-owned staging",
+    "scratch/caches/compiled binaries",
+    "derived ~50MB XML: already removed with pinned proof",
+    "original raw native archive/facts and prior raw-only reopen: already preserved, not duplicated"
+  ],
+  "nativeDisposition": {
+    "recipePassed": false,
+    "restorationCertified": false,
+    "nativeDeletionApproved": false,
+    "actualFailureAtUtc": "2026-10-10T08:18:37Z",
+    "nativeRetry": false,
+    "newDiagnostic": false,
+    "preservedFirstSetterFailureAndCleanup": true
+  },
+  "finalParityMetadataEvidence": {
+    "complete": true,
+    "sourceAndRecordedPropertyParity": true,
+    "scripts": 213,
+    "remotes": 15,
+    "total": 228,
+    "serverStorageRoots": 52,
+    "gameDescendants": 416284,
+    "nativeBeginUtc": "2026-10-10T08:31:50Z",
+    "nativeEndUtc": "2026-10-10T08:32:00Z",
+    "attributesTagsAndNonScriptNativeAssetsCompared": false
+  },
+  "boundaries": "Allowlist is neither native recovery/deletion approval nor gameplay/multiplayer/streaming/performance/publication certification. No inputs or existing evidence are mutated."
+}

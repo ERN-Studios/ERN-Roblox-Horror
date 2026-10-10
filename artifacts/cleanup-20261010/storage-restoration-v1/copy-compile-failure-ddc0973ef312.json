@@ -1,0 +1,10 @@
+{
+  "schema": "storage-copy-fault-failed-compile-v1",
+  "nativeCalls": 0,
+  "candidateSHA256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b",
+  "fixtureSHA256": "591efa98bf99c3c9b1cd9ca03ac0308247e1f3255ddef5b4cd4f0771ac56eaa3",
+  "name": "copy-faults.luau",
+  "opt": "-O0",
+  "exitCode": 1,
+  "stderr": "C:/Users/mikke/AppData/Local/Temp/mongotv-storage-copy-faults-mpim0p_h/copy-faults.luau(185,18): SyntaxError: Malformed number\r\nC:/Users/mikke/AppData/Local/Temp/mongotv-storage-copy-faults-mpim0p_h/copy-faults.luau(185,30): SyntaxError: Expected '=' when parsing assignment, got 'in'\r\nC:/Users/mikke/AppData/Local/Temp/mongotv-storage-copy-faults-mpim0p_h/copy-faults.luau(185,33): SyntaxError: Incomplete statement: expected assignment or a function call\r\n"
+}

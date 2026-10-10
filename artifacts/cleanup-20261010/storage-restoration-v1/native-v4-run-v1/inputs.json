@@ -1,0 +1,42 @@
+{
+  "schema": "storage-restoration-immutable-inputs-v1",
+  "nativeCalls": 0,
+  "serverStudioImports": 0,
+  "restorationCertified": false,
+  "expectedStudioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "expectedLiveSources": 213,
+  "expectedLiveRoots": 52,
+  "expectedLiveDescendants": 416284,
+  "expectedLedgerRootRefs": 73,
+  "expectedLedgerScriptRefs": 222,
+  "inputs": {
+    "native": {
+      "bytes": 2739764,
+      "sha256": "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca"
+    },
+    "facts": {
+      "bytes": 41912358,
+      "sha256": "b6b86b7871bab31d8fdebd9afa5cf3367426fad4e6a5eaef9038e4e8b1434f33"
+    },
+    "captureCompletion": {
+      "bytes": 3665,
+      "sha256": "e326db60c8032345efe7346cc01f177d9e3124f9121227f8819b3c448d3e8a8d"
+    },
+    "supplement": {
+      "bytes": 2511,
+      "sha256": "0c83647db8c7a2c299834481c0d3b1032a97ca2aafe9aacf8091f2523392b7a1"
+    },
+    "probeSource": {
+      "bytes": 29240,
+      "sha256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b"
+    },
+    "baselineSource": {
+      "bytes": 8357,
+      "sha256": "df846a007464c2f5bf11284b69eecf32b0c8ecaf4fe776481489483fc7095a2b"
+    },
+    "receiverSource": {
+      "bytes": 17682,
+      "sha256": "4a70b5216d45321461aa9e0c482cefc6391b389ef92e2f905783a60d832267bc"
+    }
+  }
+}

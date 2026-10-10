@@ -1,0 +1,346 @@
+{
+  "schema": "storage-restoration-actual-copy-fault-proof-v1",
+  "pass": true,
+  "nativeCalls": 0,
+  "candidateExecutedNative": false,
+  "restorationCertified": false,
+  "normalizationApplied": false,
+  "candidateSHA256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b",
+  "fixtureSHA256": "8b3bf03ccb9e3b03c1785bf4383de995012aae58cc00d28141aed0023433d9f8",
+  "actualModuleSHA256": "1dc7fad4a7ae67125ce72469b02342b5558dbfe5aeb7b4129d45e32d9956c448",
+  "negativeControlCandidateSHA256": "c1c7406188bad76db369140bed57addc26d4302564f0c2161ce8441859cec629",
+  "negativeControlModuleSHA256": "63c20e2d6361ecc3c5bd94e2529af6ca33bfe592d537527cb8ed9dbeec8e1142",
+  "globalSupplementInjected": false,
+  "compiledUnits": [
+    {
+      "name": "restoration-probe-v4.luau",
+      "opt": "-O0",
+      "sourceSHA256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b",
+      "exitCode": 0
+    },
+    {
+      "name": "restoration-probe-v4.luau",
+      "opt": "-O1",
+      "sourceSHA256": "133436198c3b5a7338f9327beb8d8023c14203ee1dbb69372b2287d65b22c31b",
+      "exitCode": 0
+    },
+    {
+      "name": "capture-live-baseline.luau",
+      "opt": "-O0",
+      "sourceSHA256": "df846a007464c2f5bf11284b69eecf32b0c8ecaf4fe776481489483fc7095a2b",
+      "exitCode": 0
+    },
+    {
+      "name": "capture-live-baseline.luau",
+      "opt": "-O1",
+      "sourceSHA256": "df846a007464c2f5bf11284b69eecf32b0c8ecaf4fe776481489483fc7095a2b",
+      "exitCode": 0
+    },
+    {
+      "name": "actual_recipe.luau",
+      "opt": "-O0",
+      "sourceSHA256": "1dc7fad4a7ae67125ce72469b02342b5558dbfe5aeb7b4129d45e32d9956c448",
+      "exitCode": 0
+    },
+    {
+      "name": "actual_recipe.luau",
+      "opt": "-O1",
+      "sourceSHA256": "1dc7fad4a7ae67125ce72469b02342b5558dbfe5aeb7b4129d45e32d9956c448",
+      "exitCode": 0
+    },
+    {
+      "name": "actual_recipe_before.luau",
+      "opt": "-O0",
+      "sourceSHA256": "63c20e2d6361ecc3c5bd94e2529af6ca33bfe592d537527cb8ed9dbeec8e1142",
+      "exitCode": 0
+    },
+    {
+      "name": "actual_recipe_before.luau",
+      "opt": "-O1",
+      "sourceSHA256": "63c20e2d6361ecc3c5bd94e2529af6ca33bfe592d537527cb8ed9dbeec8e1142",
+      "exitCode": 0
+    },
+    {
+      "name": "copy-faults.luau",
+      "opt": "-O0",
+      "sourceSHA256": "8b3bf03ccb9e3b03c1785bf4383de995012aae58cc00d28141aed0023433d9f8",
+      "exitCode": 0
+    },
+    {
+      "name": "copy-faults.luau",
+      "opt": "-O1",
+      "sourceSHA256": "8b3bf03ccb9e3b03c1785bf4383de995012aae58cc00d28141aed0023433d9f8",
+      "exitCode": 0
+    }
+  ],
+  "results": {
+    "cases": 20,
+    "checks": 30282,
+    "fakeExactConstructorComponents": 48,
+    "nativeCalls": 0,
+    "results": [
+      {
+        "copySetterCalls": 0,
+        "created": 23,
+        "deserializeCalls": 1,
+        "destroyed": 23,
+        "kind": "lexical-V3-before",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 8,
+        "created": 46,
+        "deserializeCalls": 2,
+        "destroyed": 46,
+        "kind": "success",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": true,
+        "serializeCalls": 2
+      },
+      {
+        "copySetterCalls": 0,
+        "created": 23,
+        "deserializeCalls": 1,
+        "destroyed": 23,
+        "kind": "historical-components-differ",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 0,
+        "created": 23,
+        "deserializeCalls": 1,
+        "destroyed": 23,
+        "kind": "constructor-difference",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 1,
+        "created": 23,
+        "deserializeCalls": 1,
+        "destroyed": 23,
+        "kind": "setter-difference",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 1,
+        "created": 23,
+        "deserializeCalls": 1,
+        "destroyed": 23,
+        "kind": "setter-before-error",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 1,
+        "created": 23,
+        "deserializeCalls": 1,
+        "destroyed": 23,
+        "kind": "setter-commit-then-error",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 5,
+        "created": 46,
+        "deserializeCalls": 2,
+        "destroyed": 46,
+        "kind": "setter-commit-then-error-second",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 1
+      },
+      {
+        "copySetterCalls": 1,
+        "created": 23,
+        "deserializeCalls": 1,
+        "destroyed": 23,
+        "kind": "guard-after-first-setter",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 0,
+        "created": 23,
+        "deserializeCalls": 1,
+        "destroyed": 22,
+        "kind": "identity-before-setter",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 1,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 0,
+        "created": 0,
+        "deserializeCalls": 1,
+        "destroyed": 0,
+        "kind": "first-deserialize-error",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 4,
+        "created": 23,
+        "deserializeCalls": 2,
+        "destroyed": 23,
+        "kind": "second-deserialize-error",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 1
+      },
+      {
+        "copySetterCalls": 4,
+        "created": 23,
+        "deserializeCalls": 1,
+        "destroyed": 23,
+        "kind": "first-serialize-error",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 1
+      },
+      {
+        "copySetterCalls": 8,
+        "created": 46,
+        "deserializeCalls": 2,
+        "destroyed": 46,
+        "kind": "second-serialize-error",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 2
+      },
+      {
+        "copySetterCalls": 0,
+        "created": 24,
+        "deserializeCalls": 1,
+        "destroyed": 23,
+        "kind": "original-alias-return",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 0,
+        "created": 23,
+        "deserializeCalls": 1,
+        "destroyed": 23,
+        "kind": "duplicate-target",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 0,
+        "recipeAccepted": false,
+        "serializeCalls": 0
+      },
+      {
+        "copySetterCalls": 4,
+        "created": 46,
+        "deserializeCalls": 2,
+        "destroyed": 45,
+        "kind": "foreign-child-second-adoption",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 1,
+        "recipeAccepted": false,
+        "serializeCalls": 1
+      },
+      {
+        "copySetterCalls": 8,
+        "created": 46,
+        "deserializeCalls": 2,
+        "destroyed": 45,
+        "kind": "cleanup-first-root-error",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 1,
+        "recipeAccepted": false,
+        "serializeCalls": 2
+      },
+      {
+        "copySetterCalls": 8,
+        "created": 46,
+        "deserializeCalls": 2,
+        "destroyed": 45,
+        "kind": "cleanup-second-root-error",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 1,
+        "recipeAccepted": false,
+        "serializeCalls": 2
+      },
+      {
+        "copySetterCalls": 8,
+        "created": 46,
+        "deserializeCalls": 2,
+        "destroyed": 45,
+        "kind": "foreign-root-before-cleanup",
+        "originalDestroyCalls": 0,
+        "originalSetterCalls": 0,
+        "pass": true,
+        "preservedOwnedRoots": 1,
+        "recipeAccepted": false,
+        "serializeCalls": 2
+      }
+    ],
+    "robloxEngineConstructorCertified": false
+  },
+  "scope": "Actual lexical constructor-path, ownership/adoption, setters, first/second DS/serialize ordering and independent root cleanup fragments executed. Source/parent/identity invariants checked on owned fakes; hashes are real. CFrame, serializer, reflection, scene, callbacks and originals guard are explicit fixture boundaries. Lune exact construction failed separately; Root native readonly constructor passed separately. No Roblox-engine setter/recovery/gameplay assertion."
+}
