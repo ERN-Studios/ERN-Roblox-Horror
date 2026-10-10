@@ -1,0 +1,11 @@
+{
+  "actualNativeResponse": true,
+  "knownCompleted": true,
+  "executedSourceSHA256": "f30231ed362df36faa48bd15a85501f97309b958618b2eb4003fe5f674ff5b85",
+  "actualAPIResponseSHA256": "5dfc232a8c730f9e0137e53baf082cfac5a3764da2d6e51e45e104366557730a",
+  "nativeCompletionSHA256": "cdc857e07c6a722d5d55d3cbb1971e40ca40a7cd91fc2560b91f1e26e177dc04",
+  "wallSeconds": 108.532,
+  "noRetry": true,
+  "tokenOnlyInPrivateRequest": true,
+  "limits": "Tool duration is not performance improvement. Completed native claims retained separately from raw Ref validation."
+}

@@ -1,7 +1,7 @@
 # MongoTV oprydningsplan — 2026-10-09
 
 Studio er source of truth. PlaceId **131311258779917**, universe **10559217407**.
-Seneste fulde parity, 2026-10-10 10:28:56–10:29:09Z: **213 scripts,15 remotes,228 rows**,
+Seneste fulde parity, 2026-10-10 11:10:12–11:10:25Z: **213 scripts,15 remotes,228 rows**,
 52 ServerStorage-rødder og417075 sceneobjekter; nul mismatch/conflicts/gaps.
 Studio-proxy er genforbundet til nyt sessions-ID; den gamle shared cleanup-ledger
 var ikke tilgængelig. Historiske held-original pointers er derfor ikke certificeret i denne kontekst.
@@ -20,12 +20,12 @@ Ejeren har udtrykkeligt pensioneret HELE den gamle lobby som R4-fallback:
 gammel geometri. Aktive R4-køer, canonical spawn, shop, supportboard, party/signal,
 level-lifecycle og authoringværktøjer bevares og genkontrolleres særskilt.
 
-| Prioriteret kandidat / fund | Præcis ændring og closure | Bevis, risiko og gevinst | Testport før/efter | Status |
-|---|---|---|---|---|
+| Prioriteret kandidat / fund | Præcis ændring og closure | Bevis / dependencies | Risiko og gevinst | Testport før/efter | Status |
+|---|---|---|---|---|---|
 | S25 / T11,T15 — lokale animationworkflows | `tools/publish_entity_animations.py` CLI/`publish_code`/`main`; `export_entity_keyframes_retargeted.py` CLI/`studio_rest`/`main`; `export_entity_keyframes.py` og `export_entity_animations.py` CLI/import før deres bpy-initializer. Fire præcise før-kilder arkiveret; pensionerede entrypoints afviser før native/Blender/upload. | Ejeren har pensioneret de gamle Studio-workflows. Ingen aktuelle production/tool-callers fundet; README-pipeline er opdateret. Syv pure helpers,21 keyframe/receipt/builderfiler og alle aktive animation-ID’er bevares. Native Source/editor/class/props/attrs/tags genlæst10:04:32Z; begge309079-node native animationtræer/cache forbliver urørte. | Lav lokal risiko; de afklarede gamle authoringflows stopper med tydelig besked. Ingen målt runtimegevinst. | Root før/installeret PASS32 entrycases inkl.16 actual CLI;13 helpers/version; otte actual generated-Lua cached-ID-fixtures plus missing-ID-negativ, ingen upload. Eksakt scoped tool-CAS skrev kun fire lokale filer, rollback ikke nødvendig. Native arkiv/reference/absence/playback er særskilt pending. | gennemført — [promotion](artifacts/cleanup-20261010/animation-workflow-retirement-v1/root-promotion-result-v1.json), [installeret port](artifacts/cleanup-20261010/animation-workflow-retirement-v1/root-installed-port-v1.json); lokal commit `b2c16a6d` |
-| S23 / T01–T03 | Downstream `GameManager.Script.lua`, `Level2PoolroomsPresentation.LocalScript.lua`, `NoiseReporter.LocalScript.lua`; tre manifestrows bytes/sha/editor-match/trailing-LF bookkeeping alene. [Scope](artifacts/cleanup-20261010/concurrent-export-v2/export-scope.json). | Friske stable213/15 captures har tre native afvigelser; alle tidligere raw mirrors/docs/manifest checkpointet. Ingen native writes, andre210 Sources og alle uejede manifestfelter bevares. Concurrent arbejde tilskrives ophavsmændene. | S13 Source/editor/identity/class/props/attrs/tags for tre targets; hele native catalog før/efter;6 O0/O1 compiles; Source39/full65; ny separat213/15/228 parity uden mismatch. V2/V3 reviewproblemer bevaret, kun V4 anvendt. | gennemført — [eksport](artifacts/cleanup-20261010/concurrent-export-v2/export-result.json), [parity](artifacts/cleanup-20261010/concurrent-export-v2/after/result.json) |
-| S04 / T16,T17 | Fem native authoringpakker: `Level1BlenderKit`, `LobbyReimaginedBlenderSource20261001`, `R2`, `R3`, `R3B`; pensionerede workflows afklaret. R4/V2/elevator bevares. | Arkiv1617objekter/8050869nativebytes og exact reopen bestod. Aktuelle213 Sources og assets genkontrolleret; readable refs og data-selectorport består. Compatible protected Instance-references er selvstændigt afventende; navn/Disabled tæller ikke. | S28 actual før/fravær/restored PASS: fem samme originaler restored,21 negative data-cases, eksakt aktuelle R4/V2/elevator-data og213 originalguards. Bred gameplay/MP/stream/teleport er uverificeret; data-only afgrænsning kræver den resterende referenceport. [Actual review](artifacts/cleanup-20261010/storage-authoring-port-v2/native-run-v1/ROOT_REVIEW.json). | afventer test — permanent fjernelse ikke godkendt; fem originalpakker beholdes |
-| S24 / CORE-027 | `GameManager.buildLobby` samt `TunnelLobbyBuilder.Build` og R4 `Builder.Build`: udskil minimal live spawn/shop/support/queue-kontrakt; fjern gammel dekorationsopbygning og original-spawn-fallback i afgrænsede batches. | Full Build er IKKE sikker at disable: R4 kopierer shop, flytter live supportboard, GameManager kører gamle stationer og R4 queue engine; party/signal/light/room-consumers kortlægges. Middel/høj ved migration; forventet færre objekter, ingen målt CPU/FPS/memorygevinst. | Aktuel normalboot først, shop/support/party/signal og alle R4 queues; kontrolleret kandidat i isoleret kopi, spawn/join/reset/return/reentry, failure cleanup, MP/stream; reserved-server klientporte særskilt. Gammel shop-test FAIL forventer8artkeys, aktuel har10; negativt baselinefund bevares og faktisk aktuel kontraktport forberedes. | afventer test — fallback pensioneret som produktbeslutning, ingen runtimeændring endnu |
+| S23 / T01–T03 | Downstream `GameManager.Script.lua`, `Level2PoolroomsPresentation.LocalScript.lua`, `NoiseReporter.LocalScript.lua`; tre manifestrows bytes/sha/editor-match/trailing-LF bookkeeping alene. [Scope](artifacts/cleanup-20261010/concurrent-export-v2/export-scope.json). | Friske stable213/15 captures har tre native afvigelser; alle tidligere raw mirrors/docs/manifest checkpointet. Ingen native writes, andre210 Sources og alle uejede manifestfelter bevares. Concurrent arbejde tilskrives ophavsmændene. | Lav downstream-risiko; korrekt grundlag, ingen gameplay- eller performanceændring. | S13 Source/editor/identity/class/props/attrs/tags for tre targets; hele native catalog før/efter;6 O0/O1 compiles; Source39/full65; ny separat213/15/228 parity uden mismatch. V2/V3 reviewproblemer bevaret, kun V4 anvendt. | gennemført — [eksport](artifacts/cleanup-20261010/concurrent-export-v2/export-result.json), [parity](artifacts/cleanup-20261010/concurrent-export-v2/after/result.json) |
+| S04 / T16,T17 | Fem native authoringpakker: `Level1BlenderKit`, `LobbyReimaginedBlenderSource20261001`, `R2`, `R3`, `R3B`; pensionerede workflows afklaret. R4/V2/elevator bevares. | Arkiv1617objekter/8050869nativebytes og exact reopen bestod. Aktuelle213 Sources og assets genkontrolleret; readable refs og data-selectorport består. Compatible protected Instance-references er selvstændigt afventende; navn/Disabled tæller ikke. | Lav runtime-risiko er betinget af komplet referenceport;1617 færre authoringobjekter forventes, ingen målt runtimegevinst. | S28 actual før/fravær/restored PASS: fem samme originaler restored,21 negative data-cases, eksakt aktuelle R4/V2/elevator-data og213 originalguards. Bred gameplay/MP/stream/teleport er uverificeret; data-only afgrænsning kræver den resterende referenceport. [Actual review](artifacts/cleanup-20261010/storage-authoring-port-v2/native-run-v1/ROOT_REVIEW.json). | afventer test — permanent fjernelse ikke godkendt; fem originalpakker beholdes |
+| S24 / CORE-027 | `GameManager.buildLobby` samt `TunnelLobbyBuilder.Build` og R4 `Builder.Build`: udskil minimal live spawn/shop/support/queue-kontrakt; fjern gammel dekorationsopbygning og original-spawn-fallback i afgrænsede batches. | Full Build er IKKE sikker at disable: R4 kopierer shop, flytter live supportboard, GameManager kører gamle stationer og R4 queue engine; party/signal/light/room-consumers kortlægges. | Middel/høj ved migration; forventet færre objekter, ingen målt CPU/FPS/memorygevinst. | Aktuel normalboot først, shop/support/party/signal og alle R4 queues; kontrolleret kandidat i isoleret kopi, spawn/join/reset/return/reentry, failure cleanup, MP/stream; reserved-server klientporte særskilt. Gammel shop-test FAIL forventer8artkeys, aktuel har10; negativt baselinefund bevares og faktisk aktuel kontraktport forberedes. | afventer test — fallback pensioneret som produktbeslutning, ingen runtimeændring endnu |
 
 S25 er lokalt committed som `b2c16a6d4352d1333a9b94973fb84b5975856f79`.
 S27 / T11 — gennemført: reduceret kun de to allerede pensionerede unsafe bpy-exportere
@@ -35,7 +35,7 @@ ingen aktive import-/subprocess-/safe_name-callers. Eksakte originaler og S25
 guarded Sources er arkiveret; syv publisher/sampler helpers og21 datafiler bevares.
 Lav risiko;7199 færre døde authoring-sourcebytes, ingen målt runtimegevinst.
 Root før/installeret PASS16 actual CLI/4 imports/4 mutants/13 helperbehaviors;
-exact two-file CAS med checkpoint bestod, ingen rollback; scoped commit følger.
+exact two-file CAS med checkpoint bestod, ingen rollback; lokal commit `03e0c054`.
 [Scope](artifacts/cleanup-20261010/animation-workflow-stubs-v1/proposal-v1/proposal.json).
 S26 / S04-V1 er faktisk udført og kendt afsluttet, men FAIL før alle Parentwrites:
 actual `RuntimeBake.GetManifest` afviste Edit/client-servicefacaden som server-only.
@@ -60,6 +60,60 @@ Separat readonly efter-parity10:28:56–10:29:09Z PASS med samme213/15/228,
 52 ServerStorage-rødder,417075 objekter og catalog811155…; nul mismatches/gaps.
 [Efterport](artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/result.json).
 S26's negative resultat og guards er lokalt committed i `90a2ad15cbe824252d524d92dd217d38cc1371aa`.
+S27/S28 er lokalt committed i `03e0c0548086b485bc4b8e00a78f8cb5fdf3a9a6`.
+
+S29 / T11,T15 — actual native cacheinventar gennemført: `ServerStorage.MongoTVEntityAnimations`
+og `RBX_ANIMSAVES`, alle144 topchildren samt alle nested AnimationClip/Animation/
+PublishedAssetId-/AnimationId-bærende noder.191 metadatarecords, alle versioner/typed
+ID’er/attributes/tags bevaret i237199-byte manifestSHA4caa106e…;309079 originalobjekter
+urørte. Ingen Source/Instance/property-/modewrites. Før/efter213 Source/editor/
+metadata-guards, root/kandidat-recensus og20 boundede pages PASS;24 egne scratchwrites
+efterfulgt af exact owned cleanup. Root actual offline56/366487 og transport27 PASS.
+Lav læserisiko; ingen runtimegevinst. [Actual review](artifacts/cleanup-20261010/animation-cache-inventory-v1/ROOT_ACTUAL_REVIEW-v1.json).
+Fuld native archive/reopen/ref/fravær er fortsat **afventer test**; de27 ObjectValue
+topchildren og20 AnimationRigData kræver særskilt ekstern rig-/referencekontrol.
+
+S30 / S04 — actual protected serialized-reference-port PASS. Det aktuelle native
+jointarkiv på9041490 bytes dækker de fem gamle pakker, StarterPlayer og alle109
+Welds. Raw0x13-referencekolonnerne indeholder alle219 beskyttede owner/field-par
+(`Part0Internal`, `Part1Internal`, `PlaceAvatarRules`) og ingen inbound-reference
+til de1617 gamle objekter. Direkte getters var alle ulæselige og bruges ikke som
+nil-bevis. To serialiseringer, alle213 Source/editor/metadata-guards samt egne
+lease-/receiver-cleanups bestod;0 original-/Source-/Parent-/modewrites.
+[Raw verdict](artifacts/cleanup-20261010/storage-serialized-references-v1/native-run-v1/raw-reference-verdict.json).
+Permanent fjernelse er stadig **afventer test**: compatible nonserialized slots
+er ikke dækket af raw-porten. Den separate afgrænsning omfatter549 interne
+physics-holdere og60734 eksterne slots i den tidligere capture-epoch. Offentlig
+assembly-isolation er ikke bevis for skjulte pointerværdier; frisk supplerende
+kontrol forberedes. Ingen målt performancegevinst eller sletning.
+
+CORE-027 — frisk native R4-baseline læst10:59:20Z:213 Source/editor-records og196
+R4-dataobjekter, native manifestSHA17b68efc…;0 native writes. Det første svar
+blev faktisk proxytrunkeret og er bevaret som FAIL uden testkredit. Ny V4 bruger
+bounded komprimeret transport, exact raw attrs og typed komponentbits; actual
+capture PASS191197 bytes SHA c5706abe…. Den isolerede native WorldModel-query og
+før/kandidat-serviceport er under forberedelse; produktionslobbyen er uændret.
+[Actual baseline](artifacts/cleanup-20261010/lobby-services-native-v1/root-capture-run-v4/root-review.json).
+
+S31 / T11,T15 — actual readonly animation-reference-frontier PASS: de otte native
+classschemas og27 `ObjectValue.Value` samt `RBX_ANIMSAVES.PrimaryPart` er læst.
+Alle28 felter er readable:20 Value er nil, syv peger på eksterne Model-rigs,
+PrimaryPart er nil. De eksterne rigs omfatter aktive Level2/Level3/Workspace/
+StarterPlayer-assets og historiske Archive-rigs; deres originale identiteter
+bevares og mappings følger arkivet. Kun Value/PrimaryPart er serialiserede
+Instance-felter i de otte schemas; Model.LodEntity/SlimAnimationTarget er stadig
+nonserialized afventende. Ingen native/probe/Source/property/shared-/modewrites;
+213 Source/editor/metadata og191 cache-records samt slut-recensus/guards PASS.
+Root independent offline11/78833 og21/51 PASS. [Actual review](artifacts/cleanup-20261010/animation-full-archive-v2/native-frontier-v1/ROOT_ACTUAL_REVIEW-v1.json).
+Fuld144-unit rawarchive og separate exact Edit-reopen/fravær/playback-porte
+er fortsat **afventer test**.309079 animationobjekter og hele uploadcachen bevares.
+
+S29–S31 afsluttende Source/manifest-parity11:10:12–11:10:25Z PASS:213/15/228,
+52 ServerStorage-rødder,417075 sceneobjekter og uændret catalog811155…. Nul
+mismatch/conflicts/missing/extra/coveragegaps; repo snapshot stabilt,0 writes.
+Første lokale reader-start afviste en allerede oprettet `.gitattributes` før
+MCP-klienten blev oprettet; fejlen bevares uden paritykredit. Frisk V2 med samme
+uændrede læser bestod. [Parity](artifacts/cleanup-20261010/animation-full-archive-v2/after-parity-v2/result.json).
 
 | Ny batch / fund | Præcis kandidat og ændring | Bevis / dependency-closure | Risiko og gevinst | Før/efter-port | Status |
 |---|---|---|---|---|---|

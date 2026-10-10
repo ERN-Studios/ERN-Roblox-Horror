@@ -1,0 +1,533 @@
+{
+  "schema": "mongotv-animation-cache-actual-offline-port-v1",
+  "passed": true,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "inputs": [
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/collector.luau",
+      "bytes": 16527,
+      "sha256": "2fd299f2872e9ebba6f38a02c2b534373b7a696b36ccaef253c94516dc1c6b7e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/offline-fixtures.luau",
+      "bytes": 14707,
+      "sha256": "9a30d86ac293660a0814f0dac3080424f205965068643f97811bf1665951f281"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/test-offline.py",
+      "bytes": 3611,
+      "sha256": "cd363088ebce7ee0be1ae26fb2b0d11f67a18496ea0459be59bfd1d643948b1d"
+    }
+  ],
+  "assembledFixtureSHA256": "0c6218f7441bcdb4566d66f9461ce72806433ecc2b2196cc4d7c328a8797307a",
+  "assembledFixtureBytes": 31221,
+  "limits": "Actual source replay uses synthetic game/Source/editor/metadata/task/shared/Encoding/JSON boundaries. No actual native cache, assets, scheduling, serialization, reference or deletion certificate; no gameplay/MP/streaming/performance pass.",
+  "compile": {
+    "exitCode": 0,
+    "stderr": ""
+  },
+  "exitCode": 0,
+  "stderr": "",
+  "replay": {
+    "cases": 55,
+    "checks": 360746,
+    "limits": "Actual collector text with synthetic tables/task/Encoding/JSON boundaries; no actual cache/native scheduling or asset/deletion/gameplay/performance certificate.",
+    "nativeCalls": 0,
+    "passed": true,
+    "productionWrites": 0,
+    "results": [
+      {
+        "expectedVerdict": true,
+        "name": "success-all-versions",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": true,
+        "yields": 6
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "mode",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 0
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "place",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 0
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "source-count",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "initial-editor",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-missing",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-duplicate",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-class",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-topcount",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "unsupported-attribute",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "scan-yield-error",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 2
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "scan-source-drift",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 2
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "response-bound",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "manifest-bound",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "Source",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "editor",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "ClassName",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "Parent",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "Enabled",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "Disabled",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "RunContext",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "Archivable",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "LinkedSource",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "source-attr",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "source-tag",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-name",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-parent",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-class",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-attr",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-tag",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "topchild",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "animation-id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "published-id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "sequence-loop",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "sequence-priority",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "sequence-hip",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "cache-attr",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "cache-tag",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "named-id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "child-count",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "wrong-page",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "finish-too-early",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "foreign-progress",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": true,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "foreign-slot",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": true,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "foreign-owner",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": true,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "template",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": true,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "nested-new-id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 6
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "nested-new-animation",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 6
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "nested-new-source",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 5
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "new-global-source",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 5
+      },
+      {
+        "expectedVerdict": true,
+        "name": "abandon",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "occupied-namespace",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "expectedVerdict": true,
+        "name": "unreadable-property-explicit-incomplete",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": true,
+        "yields": 6
+      }
+    ]
+  }
+}

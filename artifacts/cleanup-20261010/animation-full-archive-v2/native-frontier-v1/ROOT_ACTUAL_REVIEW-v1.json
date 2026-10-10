@@ -1,0 +1,250 @@
+{
+  "schema": "mongotv-animation-frontier-actual-root-review-v1",
+  "frontierReadPassed": true,
+  "actualCompletionSHA256": "b5e08d7cfd05e09bf3865252446a485cf874cc3d6618a07446f25a9034964c7f",
+  "sourceCount": 213,
+  "cacheRecords": 191,
+  "nativeSchemas": 8,
+  "readableSlots": 28,
+  "objectValueNil": 20,
+  "externalModelReferences": [
+    {
+      "readable": true,
+      "name": "Value",
+      "value": {
+        "path": "StarterPlayer.StarterCharacter",
+        "kind": "Instance",
+        "className": "Model",
+        "instanceId": "1_41651"
+      },
+      "holder": {
+        "instanceId": "1_45273",
+        "parentId": "1_41652",
+        "tags": [],
+        "name": "Avatar Rigged No Animation_autosetup",
+        "className": "ObjectValue",
+        "attributes": [],
+        "childCount": 0,
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Avatar Rigged No Animation_autosetup"
+        ]
+      },
+      "descriptor": {
+        "instanceType": "Instance",
+        "serialized": true,
+        "name": "Value",
+        "scriptType": "Instance"
+      }
+    },
+    {
+      "readable": true,
+      "name": "Value",
+      "value": {
+        "path": "ServerStorage.Level3Assets.EntityTemplates.MallManagerTemplate",
+        "kind": "Instance",
+        "className": "Model",
+        "instanceId": "1_41661"
+      },
+      "holder": {
+        "instanceId": "1_45283",
+        "parentId": "1_41652",
+        "tags": [],
+        "name": "Mall Manager Level 3 Entity template correct",
+        "className": "ObjectValue",
+        "attributes": [],
+        "childCount": 1,
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Mall Manager Level 3 Entity template correct"
+        ]
+      },
+      "descriptor": {
+        "instanceType": "Instance",
+        "serialized": true,
+        "name": "Value",
+        "scriptType": "Instance"
+      }
+    },
+    {
+      "readable": true,
+      "name": "Value",
+      "value": {
+        "path": "ServerStorage.Level2Assets.PoolFoamPrimaryTemplate",
+        "kind": "Instance",
+        "className": "Model",
+        "instanceId": "1_41658"
+      },
+      "holder": {
+        "instanceId": "1_45280",
+        "parentId": "1_41652",
+        "tags": [],
+        "name": "Meshy_AI_Rainbow_Knot_F...ng_Walk_inplace_withSkin",
+        "className": "ObjectValue",
+        "attributes": [],
+        "childCount": 0,
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Meshy_AI_Rainbow_Knot_F...ng_Walk_inplace_withSkin"
+        ]
+      },
+      "descriptor": {
+        "instanceType": "Instance",
+        "serialized": true,
+        "name": "Value",
+        "scriptType": "Instance"
+      }
+    },
+    {
+      "readable": true,
+      "name": "Value",
+      "value": {
+        "path": "ServerStorage.Archive.RetiredLobbyAssets.Miso",
+        "kind": "Instance",
+        "className": "Model",
+        "instanceId": "1_41654"
+      },
+      "holder": {
+        "instanceId": "1_45275",
+        "parentId": "1_41652",
+        "tags": [],
+        "name": "MisoWalk",
+        "className": "ObjectValue",
+        "attributes": [],
+        "childCount": 0,
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "MisoWalk"
+        ]
+      },
+      "descriptor": {
+        "instanceType": "Instance",
+        "serialized": true,
+        "name": "Value",
+        "scriptType": "Instance"
+      }
+    },
+    {
+      "readable": true,
+      "name": "Value",
+      "value": {
+        "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Template",
+        "kind": "Instance",
+        "className": "Model",
+        "instanceId": "1_41655"
+      },
+      "holder": {
+        "instanceId": "1_45286",
+        "parentId": "1_41652",
+        "tags": [],
+        "name": "Slidemouth walking animation Roblox",
+        "className": "ObjectValue",
+        "attributes": [],
+        "childCount": 1,
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Slidemouth walking animation Roblox"
+        ]
+      },
+      "descriptor": {
+        "instanceType": "Instance",
+        "serialized": true,
+        "name": "Value",
+        "scriptType": "Instance"
+      }
+    },
+    {
+      "readable": true,
+      "name": "Value",
+      "value": {
+        "path": "Workspace.StarterCharacter",
+        "kind": "Instance",
+        "className": "Model",
+        "instanceId": "1_40053"
+      },
+      "holder": {
+        "instanceId": "1_45274",
+        "parentId": "1_41652",
+        "tags": [],
+        "name": "StarterCharacter",
+        "className": "ObjectValue",
+        "attributes": [],
+        "childCount": 2,
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "StarterCharacter"
+        ]
+      },
+      "descriptor": {
+        "instanceType": "Instance",
+        "serialized": true,
+        "name": "Value",
+        "scriptType": "Instance"
+      }
+    },
+    {
+      "readable": true,
+      "name": "Value",
+      "value": {
+        "path": "Workspace.Entity",
+        "kind": "Instance",
+        "className": "Model",
+        "instanceId": "1_40070"
+      },
+      "holder": {
+        "instanceId": "1_45268",
+        "parentId": "1_41652",
+        "tags": [],
+        "name": "Untitled",
+        "className": "ObjectValue",
+        "attributes": [],
+        "childCount": 13,
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Untitled"
+        ]
+      },
+      "descriptor": {
+        "instanceType": "Instance",
+        "serialized": true,
+        "name": "Value",
+        "scriptType": "Instance"
+      }
+    }
+  ],
+  "containerPrimaryPartNil": true,
+  "serializedInstanceProperties": [
+    {
+      "className": "Model",
+      "property": "PrimaryPart"
+    },
+    {
+      "className": "ObjectValue",
+      "property": "Value"
+    }
+  ],
+  "nonserializedModelPropertiesPending": [
+    "LodEntity",
+    "SlimAnimationTarget"
+  ],
+  "nativeOriginalProbeSourcePropertySharedModeWrites": 0,
+  "allOriginalGuardsPassed": true,
+  "fullNativeArchiveCertified": false,
+  "referenceAbsenceCertified": false,
+  "deletionApproved": false,
+  "limits": "Actual readonly frontier only. External active/archived rig identities preserved; raw144-unit archive, exact off-place reopen and removal/playback gates pending. No performance gain."
+}

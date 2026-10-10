@@ -1,0 +1,289 @@
+{
+  "schema": "retired-authoring-raw-reference-capture-frozen-pins-v1",
+  "nativeCalls": 0,
+  "receiverStarted": false,
+  "deletionApproved": false,
+  "pins": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 4804,
+      "sha256": "9fef3032bc262f5f149f1a2f7ce15941433e3cdcbf1dc8f63993472ed2979137"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-begin.json",
+      "bytes": 339,
+      "sha256": "cefcba541fabbeaedbc42e4081806b39d3449879d19f75759eedc16018aa0fd5"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-end.json",
+      "bytes": 339,
+      "sha256": "ad3ca555d727430d61eaae65dd7b3ecc38202987b30aa75b420a2f5e444a6d44"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-page-00.json",
+      "bytes": 15028,
+      "sha256": "136cb1e2e55cedd2777ada26c6852dba499488c222bf430e400f6eae1c56d221"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-page-01.json",
+      "bytes": 25635,
+      "sha256": "5446d74656864ae3933ccc1730e2e6aa1953b1dd069b840759d32a522ab29036"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-page-02.json",
+      "bytes": 26313,
+      "sha256": "97ab4b17ca8070e64c6ffa655399a528ffb2c037939bda34a203f25b665b3111"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-page-03.json",
+      "bytes": 26129,
+      "sha256": "9e93bde9652408925513d48e3f7ac2fee732242d6e2860579a81c81083ae27cb"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-page-04.json",
+      "bytes": 26142,
+      "sha256": "f7001d871b4032598b8054c1a8d4ffd66bd1f416540c6a130913bc8aacd017da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-page-05.json",
+      "bytes": 25717,
+      "sha256": "1ceb2b8eafedd70a190016b1c9143c248821ea90edbaffea898fd4c14d96ec5d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-page-06.json",
+      "bytes": 27971,
+      "sha256": "98f6047c14fbad389698bbcd61905bf275caf809728b8a6fbf92c062dd77dee8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-page-07.json",
+      "bytes": 28338,
+      "sha256": "dfeb4223b40f7bcbe8da2e8333f9b9d73a645c6da7c992b4cf410a88bb43173e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-page-08.json",
+      "bytes": 28197,
+      "sha256": "88dbe1db69334155a62092fa1312c2b90149803df356118ff2c65ba4df254254"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/native-page-09.json",
+      "bytes": 14197,
+      "sha256": "6589abe63fe103d1dcf3d549137744b6fe907806167ade0d3156cba3aaa7d4f2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/result.json",
+      "bytes": 2044,
+      "sha256": "2455d6138baaa38957927e8e3c5aeedf801e01308cdcc3e5f0800d25ef715b7e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/native-run-v1/root-completion.json",
+      "bytes": 14757,
+      "sha256": "a1416cb91afff9e730045aaa483332490718da38e69644618939afc01544776a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-restoration-v1/receiver.py",
+      "bytes": 17682,
+      "sha256": "4a70b5216d45321461aa9e0c482cefc6391b389ef92e2f905783a60d832267bc"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/READ_PLAN.md",
+      "bytes": 6155,
+      "sha256": "0250eb79edaf0f6bcba059a38092f7503d580feb58e48c54c8dfff2e01ff5b09"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/REVIEW.md",
+      "bytes": 10062,
+      "sha256": "e83e493ba940a92812deabe87ec1f84ffcc959ab333464764dc012c49c57ea51"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/actual-native-archive-parser-observation-v1.json",
+      "bytes": 1916,
+      "sha256": "83c1d669efcb6c38126537c1fd8730dfb0673ddeffe38e2dc727ae8a982ed97e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/actual-native-archive-parser-observation-v2.json",
+      "bytes": 2132,
+      "sha256": "a2c8a62b3c306e1e9fd748cd1c04cc82d82a584d9a37d1df2649bfccf1d80024"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/actual-native-archive-parser-observation-v3.json",
+      "bytes": 2132,
+      "sha256": "2ed8db23e06aa8b6684a95aed924a61d42ec3081835d69c1b20965582bbb1201"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/baseline-binding-v1.json",
+      "bytes": 636,
+      "sha256": "af3e5f8b2f9b42ea77e3a8cb1b63fe947399e5b53650d5a2ccc76bf44f54a781"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/capture-config.json",
+      "bytes": 60654,
+      "sha256": "9f86c0afdfd1c16e5486196a2afa1d69b4c3cfebf2406f022e5e28da4ecd180b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/capture-source-template-before-yield-v1.luau",
+      "bytes": 92791,
+      "sha256": "e754cd27d848276da0ffb4ab494599d9ad43f7162d9d1f6121ee11f053f6ec21"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/capture-source-template.luau",
+      "bytes": 92990,
+      "sha256": "b954326f239946fddaffe5872debe1d3d69941afa6e9230b8798f02feaf42895"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/compile-proposal-v1.json",
+      "bytes": 1520,
+      "sha256": "7a9d96bdb707f6c002941d50fe49219a79b77c7c74abaf6dc2189d48633f933d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/final-compile-v1.json",
+      "bytes": 370,
+      "sha256": "161a7312d33b6e9bf812728cfa373b176cf19a5d5bb81443158cd0230a07e531"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/final-compile-v2.json",
+      "bytes": 2067,
+      "sha256": "7efe22777f1199dc661adbcee9a9c10228c68e35aa9c931d0151078329fa6fd0"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/freeze-capture.py",
+      "bytes": 4799,
+      "sha256": "d30fcf9c61169c4e72ff311d48c1d9689d3976d52e23fb9ddcb4639937d77b3e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/native-capture-before-yield-v1.luau",
+      "bytes": 9987,
+      "sha256": "c512d25b431052169f66de22c8678ca0ef7dcc90297c647087f40c830278253c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/native-capture.luau",
+      "bytes": 10186,
+      "sha256": "63fdb7cc824c5e44f07e7bb530bf31f7a07a692e18f8bb620ff1ce59aa20d43c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/native-read-proposal.luau",
+      "bytes": 9308,
+      "sha256": "2d603cb3b0d60c55211881cb5b23872c06c7eba8b000c60e99830159e2a698eb"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/native-suffix-attempt-v1.json",
+      "bytes": 4819,
+      "sha256": "65b5099da2b3ac64fcadc42741399c32ab5f0268a3728bb10353a4317ad9ef9f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/native-suffix-attempt-v2.json",
+      "bytes": 6340,
+      "sha256": "edfd4783baf9645d620b27fea292bd063c7e8105f6e28489f16485743ede24e1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/observe-native-archive.py",
+      "bytes": 2793,
+      "sha256": "6f23aae05c6ba0a4578b8f25985c75dc5cc7a6940659e8f8f7ae65b90fd4df41"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/offline-attempt-v1.json",
+      "bytes": 4816,
+      "sha256": "f63bf550f8cb129e20e987722049532b1628c392cdbf0234cc8902771c170b42"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/offline-tests-v1.json",
+      "bytes": 4816,
+      "sha256": "229acbfd3242d8020a8600d5490a4f740ed13c6312269f77737fd99cc714dea9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/offline-tests-v2.json",
+      "bytes": 4904,
+      "sha256": "c47cfb15415782b2b08109def9faf928f0e5273e2836078cc837f9c4890ad026"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/offline-tests-v3.json",
+      "bytes": 5150,
+      "sha256": "16c24667e3f1dd693b05fdddb0b9db5a059bee4905fbbf0a10b05e4c3af8d462"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/preparation-before-yield-v1.json",
+      "bytes": 1090,
+      "sha256": "9717ffe3f3ca2dfc46c2bfb857f16ffb186f9a947c7b3f0846bfd08128513e2c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/preparation-v1.json",
+      "bytes": 1091,
+      "sha256": "defc9d5297cbd6bc0de1d570875773131f90e018545d2c2fc51554b363589e2a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/prepare-capture.py",
+      "bytes": 1649,
+      "sha256": "de0acd9bf504408aa1c21f79fc629fbf80e4ee439097f4dfd8e96350d6d6318b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/raw_binary_refs-before-mapping-v1.py",
+      "bytes": 12124,
+      "sha256": "bbe12a5919e3d430dd98560f435956f82c7af79b532e0897cff02f1ec0f4a787"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/raw_binary_refs.py",
+      "bytes": 13500,
+      "sha256": "58bf824c9b3b0fa821555bae2f4a8476aba37bd6b708323ecde5a4b411782ad3"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/receiver-before-count-guards-v1.py",
+      "bytes": 6749,
+      "sha256": "b469d79e18f66ca6e51c874ee00d16c1ffd0f4f36c19d7f96851e85ebd5997a9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/receiver.py",
+      "bytes": 6910,
+      "sha256": "ba257e451e2b11a95c23501ccdb7bdedfcb2cb9aa3f77d47b0a6981d17b84090"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/remaining-protected-boundaries-v1.json",
+      "bytes": 6679,
+      "sha256": "0ad704a9fee6b4823f1d2a61baf145727a5b4579cd182be04f3990a868a34c11"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/run-root-capture.py",
+      "bytes": 8991,
+      "sha256": "1b0d6f46f7d5e98a2993e54c70bed0563782e309fcf2aa464bb1cdf9ce58b6fb"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/test-native-suffix.py",
+      "bytes": 11909,
+      "sha256": "fd9f1fd5b410b584fd1ecd02838c5e928b91aff13d6141753e527ff1d5773c1d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/test-offline-before-count-guards-v1.py",
+      "bytes": 15388,
+      "sha256": "2278e8befdfdd91c60d36f0be3627ff5df1966551f05983040e21f41f7cb03b0"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/test-offline.py",
+      "bytes": 15990,
+      "sha256": "d13790c992a2d9b93b227f15a7e1069495274b46edf4ad94a50ee7574667de1c"
+    },
+    {
+      "path": "tools/cleanup_20261009/retired_authoring_archive_common.luau",
+      "bytes": 22101,
+      "sha256": "d9a783c71d56591580ceab53f914f1cc8832365b68f5fe275cf279cd5634f5ad"
+    },
+    {
+      "path": "tools/sync_from_studio.py",
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    }
+  ],
+  "preservedExistingRawEvidence": [
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v4/references.rbxm",
+      "bytes": 1103834,
+      "sha256": "590ca74c6a4c6fbfbcc03f3f1ab7cc574268e22c52b8df95170c41ef5c45d0a7",
+      "alreadyPreservedRawNotPublicCuration": true
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "bytes": 8050869,
+      "sha256": "e808f055403bd331b76e0831955b192abc8b4a914865c3936aa9b2d23ed2a8d7",
+      "alreadyPreservedRawNotPublicCuration": true
+    }
+  ],
+  "sourceTemplateSHA256": "b954326f239946fddaffe5872debe1d3d69941afa6e9230b8798f02feaf42895",
+  "limits": "Local immutable preparation only; Root native/API/HTTP/raw currentfields + remaining nonserialized holders pending."
+}

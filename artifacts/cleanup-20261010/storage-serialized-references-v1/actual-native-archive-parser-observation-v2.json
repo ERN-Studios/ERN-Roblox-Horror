@@ -1,0 +1,80 @@
+{
+  "schema": "retired-authoring-existing-native-raw-parser-observation-v2",
+  "passed": true,
+  "nativeCalls": 0,
+  "rawArchive": {
+    "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v4/references.rbxm",
+    "bytes": 1103834,
+    "sha256": "590ca74c6a4c6fbfbcc03f3f1ab7cc574268e22c52b8df95170c41ef5c45d0a7"
+  },
+  "parserSHA256": "bbe12a5919e3d430dd98560f435956f82c7af79b532e0897cff02f1ec0f4a787",
+  "limits": "Existing engine buffer/different targets and epoch. Protected wire-field semantics evidence only, not current 109/five-forest reference absence.",
+  "actualRelevantRawColumns": [
+    {
+      "class": "StarterPlayer",
+      "typeID": 19,
+      "name": "PlaceAvatarRules",
+      "typeCode": 19,
+      "chunkIndex": 390,
+      "rawValueOffsetInPayload": 25,
+      "rawValueBytes": 4,
+      "rawValueSHA256": "b40711a88c7039756fb8a73827eabe2c0fe5a0346ca7e0a104adc0fc764f528d",
+      "decoded": true,
+      "owners": 1,
+      "values": [
+        -1
+      ],
+      "referentClasses": [
+        null
+      ]
+    },
+    {
+      "class": "WeldConstraint",
+      "typeID": 24,
+      "name": "Part0Internal",
+      "typeCode": 19,
+      "chunkIndex": 443,
+      "rawValueOffsetInPayload": 22,
+      "rawValueBytes": 12,
+      "rawValueSHA256": "42357f75dcf37529885aadea507afbeef58323484947d553a3e55b77b2897789",
+      "decoded": true,
+      "owners": 3,
+      "values": [
+        361,
+        361,
+        361
+      ],
+      "referentClasses": [
+        "MeshPart",
+        "MeshPart",
+        "MeshPart"
+      ]
+    },
+    {
+      "class": "WeldConstraint",
+      "typeID": 24,
+      "name": "Part1Internal",
+      "typeCode": 19,
+      "chunkIndex": 444,
+      "rawValueOffsetInPayload": 22,
+      "rawValueBytes": 12,
+      "rawValueSHA256": "977c4d2a30bcd6726471b4aa3a85a5bbc1199a5cfc81334c8501c8f3bc2512b4",
+      "decoded": true,
+      "owners": 3,
+      "values": [
+        280,
+        282,
+        284
+      ],
+      "referentClasses": [
+        "Part",
+        "Part",
+        "Part"
+      ]
+    }
+  ],
+  "instances": 576,
+  "chunks": 466,
+  "opaqueColumns": 399,
+  "rawWeldConstraints": 3
+}

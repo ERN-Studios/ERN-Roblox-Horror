@@ -1,0 +1,21 @@
+{
+  "schema": "mongotv-animation-cache-root-independent-review-v1",
+  "preparationEligibleForNativeRead": true,
+  "nativeExecuted": false,
+  "deletionApproved": false,
+  "reviewedCollectorSHA256": "5af553bdfa8eeffe6fdd3cf64e9202f87dd04156313f65b98e0bdf0ca2866c0a",
+  "reviewedDriverSHA256": "55b57e6a6224c793138eaeffcb25e206c5d3526ff9e541f7f0bb111257e768e8",
+  "reviewedFrozenPinsSHA256": "9e3020d8b15e64a73694f8d429a0d923804591f0f7f29ec8a36095b3ae7e259f",
+  "independentOfflineSHA256": "6c837bd03b4aaf583f163123bcc1f7942adc9b17b45d7137077a8de43269c446",
+  "collectorCases": 56,
+  "driverCases": 27,
+  "nativeInstanceSourcePropertyWrites": 0,
+  "review": [
+    "Complete current collector and driver read by Root, not just author summary",
+    "Typed metadata, all native actualversions, all213 Source/editor+metadata guards and roots recensus",
+    "20k bounded page responses, deterministic raw bytes/SHA, guarded own shared scratch identity/progress",
+    "Known completed failure vs unknown transport; no retry/follow-up after ambiguity",
+    "No require/Instance/setter/listener/task/network/upload/delete; task.wait yields current operation"
+  ],
+  "limits": "Preparation for targeted native metadata read only. No full native asset archive, reference closure, playback, gameplay, deletion or performance certificate."
+}

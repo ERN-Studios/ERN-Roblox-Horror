@@ -1,0 +1,7 @@
+{
+  "schema": "mongotv-lobby-owned-native-request-v1",
+  "nativeScriptCount": 213,
+  "operation": "capture",
+  "variant": "before",
+  "fault": "none"
+}

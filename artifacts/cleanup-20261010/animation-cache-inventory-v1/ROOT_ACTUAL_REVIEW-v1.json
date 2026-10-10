@@ -1,0 +1,1952 @@
+{
+  "schema": "mongotv-actual-animation-cache-root-summary-v1",
+  "capturePassed": true,
+  "manifestBytes": 237199,
+  "manifestSHA256": "4caa106ecfcf965013c4ac6759c61c3fa752ff855f51614b9392ba8e0cbc1d94",
+  "records": 191,
+  "topChildren": 144,
+  "rootNodes": {
+    "MongoTVEntityAnimations": 223367,
+    "RBX_ANIMSAVES": 85712
+  },
+  "topChildClasses": {
+    "Animation": 58,
+    "KeyframeSequence": 59,
+    "ObjectValue": 27
+  },
+  "publisherVersionInferenceCounts": {
+    "uninferred": 139,
+    "v10full": 11,
+    "v8actions": 2,
+    "v9actions": 1,
+    "v7actions": 3,
+    "v3": 8,
+    "v4": 8,
+    "v5": 8,
+    "v6actions": 2,
+    "v2": 8,
+    "v6walk": 1
+  },
+  "actualTypedIdRecords": [
+    {
+      "instanceId": "1_11968",
+      "name": "Kill_CloseHunchPunch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://79777407032608",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11969",
+      "name": "Kill_CloseHunchPunch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://116430726507331",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11980",
+      "name": "Kill_CloseHunchPunch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://94135265462008",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11965",
+      "name": "Kill_DeepHunchGroundPunch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://120416325910330",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11945",
+      "name": "Kill_GroundPinPunch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://73469024040297",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11953",
+      "name": "Kill_GroundPinPunch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://95675854057927",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11961",
+      "name": "Kill_GroundPinPunch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://131812662446824",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11977",
+      "name": "Kill_GroundPinPunch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://93323458577096",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11964",
+      "name": "Kill_HunchedGroundPunch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://101684601194418",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11937",
+      "name": "Kill_VisorCrush",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://139968377472432",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11928",
+      "name": "Lunge",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://122769036667525",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11935",
+      "name": "Lunge",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://129411802349452",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11943",
+      "name": "Lunge",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://90343971020887",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11951",
+      "name": "Lunge",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://118129978406506",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11959",
+      "name": "Lunge",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://94661930573561",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11975",
+      "name": "Lunge",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://70970124497806",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11929",
+      "name": "Lunge_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://131606138259618",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11936",
+      "name": "Lunge_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://118506682454741",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11944",
+      "name": "Lunge_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://125045827384250",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11952",
+      "name": "Lunge_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://123867767441019",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11960",
+      "name": "Lunge_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://81430032814694",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11976",
+      "name": "Lunge_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://132839013239254",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_31051",
+      "name": "MongoTV_Entity_Kill_CloseHunchPunch_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "94135265462008",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31039",
+      "name": "MongoTV_Entity_Kill_CloseHunchPunch_v8actions",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "79777407032608",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v8actions"
+    },
+    {
+      "instanceId": "1_31040",
+      "name": "MongoTV_Entity_Kill_CloseHunchPunch_v9actions",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "116430726507331",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v9actions"
+    },
+    {
+      "instanceId": "1_31036",
+      "name": "MongoTV_Entity_Kill_DeepHunchGroundPunch_v7actions",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "120416325910330",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v7actions"
+    },
+    {
+      "instanceId": "1_31048",
+      "name": "MongoTV_Entity_Kill_GroundPinPunch_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "93323458577096",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31015",
+      "name": "MongoTV_Entity_Kill_GroundPinPunch_v3",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "73469024040297",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v3"
+    },
+    {
+      "instanceId": "1_31023",
+      "name": "MongoTV_Entity_Kill_GroundPinPunch_v4",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "95675854057927",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v4"
+    },
+    {
+      "instanceId": "1_31031",
+      "name": "MongoTV_Entity_Kill_GroundPinPunch_v5",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "131812662446824",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v5"
+    },
+    {
+      "instanceId": "1_31034",
+      "name": "MongoTV_Entity_Kill_HunchedGroundPunch_v6actions",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "101684601194418",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v6actions"
+    },
+    {
+      "instanceId": "1_31007",
+      "name": "MongoTV_Entity_Kill_VisorCrush_v2",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "139968377472432",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v2"
+    },
+    {
+      "instanceId": "1_30998",
+      "name": "MongoTV_Entity_Lunge",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "122769036667525",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_30999",
+      "name": "MongoTV_Entity_Lunge_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "131606138259618",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_31047",
+      "name": "MongoTV_Entity_Lunge_FromRun_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "132839013239254",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31006",
+      "name": "MongoTV_Entity_Lunge_FromRun_v2",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "118506682454741",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v2"
+    },
+    {
+      "instanceId": "1_31014",
+      "name": "MongoTV_Entity_Lunge_FromRun_v3",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "125045827384250",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v3"
+    },
+    {
+      "instanceId": "1_31022",
+      "name": "MongoTV_Entity_Lunge_FromRun_v4",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "123867767441019",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v4"
+    },
+    {
+      "instanceId": "1_31030",
+      "name": "MongoTV_Entity_Lunge_FromRun_v5",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "81430032814694",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v5"
+    },
+    {
+      "instanceId": "1_31046",
+      "name": "MongoTV_Entity_Lunge_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "70970124497806",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31005",
+      "name": "MongoTV_Entity_Lunge_v2",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "129411802349452",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v2"
+    },
+    {
+      "instanceId": "1_31013",
+      "name": "MongoTV_Entity_Lunge_v3",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "90343971020887",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v3"
+    },
+    {
+      "instanceId": "1_31021",
+      "name": "MongoTV_Entity_Lunge_v4",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "118129978406506",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v4"
+    },
+    {
+      "instanceId": "1_31029",
+      "name": "MongoTV_Entity_Lunge_v5",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "94661930573561",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v5"
+    },
+    {
+      "instanceId": "1_30994",
+      "name": "MongoTV_Entity_Run_Chase",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "110343018595451",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_31033",
+      "name": "MongoTV_Entity_Run_Chase_Corrected_v6actions",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "113760166977097",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v6actions"
+    },
+    {
+      "instanceId": "1_31042",
+      "name": "MongoTV_Entity_Run_Chase_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "99121728157417",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31001",
+      "name": "MongoTV_Entity_Run_Chase_v2",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "91888525275025",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v2"
+    },
+    {
+      "instanceId": "1_31009",
+      "name": "MongoTV_Entity_Run_Chase_v3",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "95010135299937",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v3"
+    },
+    {
+      "instanceId": "1_31017",
+      "name": "MongoTV_Entity_Run_Chase_v4",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "137228566477955",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v4"
+    },
+    {
+      "instanceId": "1_31025",
+      "name": "MongoTV_Entity_Run_Chase_v5",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "116275096071779",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v5"
+    },
+    {
+      "instanceId": "1_31037",
+      "name": "MongoTV_Entity_Run_Natural_v7actions",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "117689146715099",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v7actions"
+    },
+    {
+      "instanceId": "1_31050",
+      "name": "MongoTV_Entity_Run_PredatoryJog_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "90840395594409",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31038",
+      "name": "MongoTV_Entity_Run_PredatoryJog_v8actions",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "85991585476335",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v8actions"
+    },
+    {
+      "instanceId": "1_30993",
+      "name": "MongoTV_Entity_Walk",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "79037853194841",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_31049",
+      "name": "MongoTV_Entity_Walk_Restrained_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "121187609243437",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31032",
+      "name": "MongoTV_Entity_Walk_Restrained_v6walk",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "139801177050454",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v6walk"
+    },
+    {
+      "instanceId": "1_31041",
+      "name": "MongoTV_Entity_Walk_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "100709130475232",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31000",
+      "name": "MongoTV_Entity_Walk_v2",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "111438501305925",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v2"
+    },
+    {
+      "instanceId": "1_31008",
+      "name": "MongoTV_Entity_Walk_v3",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "84427037970976",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v3"
+    },
+    {
+      "instanceId": "1_31016",
+      "name": "MongoTV_Entity_Walk_v4",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "80984572103403",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v4"
+    },
+    {
+      "instanceId": "1_31024",
+      "name": "MongoTV_Entity_Walk_v5",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "120776103063010",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v5"
+    },
+    {
+      "instanceId": "1_30995",
+      "name": "MongoTV_Entity_Watch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "129452887687978",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_31043",
+      "name": "MongoTV_Entity_Watch_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "92831421568704",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31002",
+      "name": "MongoTV_Entity_Watch_v2",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "129401363536804",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v2"
+    },
+    {
+      "instanceId": "1_31010",
+      "name": "MongoTV_Entity_Watch_v3",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "128025248631252",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v3"
+    },
+    {
+      "instanceId": "1_31018",
+      "name": "MongoTV_Entity_Watch_v4",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "95158317052216",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v4"
+    },
+    {
+      "instanceId": "1_31026",
+      "name": "MongoTV_Entity_Watch_v5",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "86013923573480",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v5"
+    },
+    {
+      "instanceId": "1_30997",
+      "name": "MongoTV_Entity_Yell_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "97380507966441",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_31045",
+      "name": "MongoTV_Entity_Yell_FromRun_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "132425538759403",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31004",
+      "name": "MongoTV_Entity_Yell_FromRun_v2",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "100655617830150",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v2"
+    },
+    {
+      "instanceId": "1_31012",
+      "name": "MongoTV_Entity_Yell_FromRun_v3",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "134624595904968",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v3"
+    },
+    {
+      "instanceId": "1_31020",
+      "name": "MongoTV_Entity_Yell_FromRun_v4",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "121775599725846",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v4"
+    },
+    {
+      "instanceId": "1_31028",
+      "name": "MongoTV_Entity_Yell_FromRun_v5",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "119056181976223",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v5"
+    },
+    {
+      "instanceId": "1_30996",
+      "name": "MongoTV_Entity_Yell_Howl",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "102924140813036",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_31044",
+      "name": "MongoTV_Entity_Yell_Howl_v10full",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "102035504530432",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v10full"
+    },
+    {
+      "instanceId": "1_31003",
+      "name": "MongoTV_Entity_Yell_Howl_v2",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "132421139634506",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v2"
+    },
+    {
+      "instanceId": "1_31011",
+      "name": "MongoTV_Entity_Yell_Howl_v3",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "110412756756869",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v3"
+    },
+    {
+      "instanceId": "1_31019",
+      "name": "MongoTV_Entity_Yell_Howl_v4",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "91704926128382",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v4"
+    },
+    {
+      "instanceId": "1_31027",
+      "name": "MongoTV_Entity_Yell_Howl_v5",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "value": "118013244839249",
+        "kind": "string"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": null,
+      "inferredPublisherVersion": "v5"
+    },
+    {
+      "instanceId": "1_11924",
+      "name": "Run_Chase",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://110343018595451",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11931",
+      "name": "Run_Chase",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://91888525275025",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11939",
+      "name": "Run_Chase",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://95010135299937",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11947",
+      "name": "Run_Chase",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://137228566477955",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11955",
+      "name": "Run_Chase",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://116275096071779",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11971",
+      "name": "Run_Chase",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://99121728157417",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11963",
+      "name": "Run_Chase_Corrected",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://113760166977097",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11966",
+      "name": "Run_Natural",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://117689146715099",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11967",
+      "name": "Run_PredatoryJog",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://85991585476335",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11979",
+      "name": "Run_PredatoryJog",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://90840395594409",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11923",
+      "name": "Walk",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://79037853194841",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11930",
+      "name": "Walk",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://111438501305925",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11938",
+      "name": "Walk",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://84427037970976",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11946",
+      "name": "Walk",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://80984572103403",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11954",
+      "name": "Walk",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://120776103063010",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11970",
+      "name": "Walk",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://100709130475232",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11962",
+      "name": "Walk_Restrained",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://139801177050454",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11978",
+      "name": "Walk_Restrained",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://121187609243437",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11925",
+      "name": "Watch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://129452887687978",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11932",
+      "name": "Watch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://129401363536804",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11940",
+      "name": "Watch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://128025248631252",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11948",
+      "name": "Watch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://95158317052216",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11956",
+      "name": "Watch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://86013923573480",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11972",
+      "name": "Watch",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://92831421568704",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11927",
+      "name": "Yell_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://97380507966441",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11934",
+      "name": "Yell_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://100655617830150",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11942",
+      "name": "Yell_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://134624595904968",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11950",
+      "name": "Yell_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://121775599725846",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11958",
+      "name": "Yell_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://119056181976223",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11974",
+      "name": "Yell_FromRun",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://132425538759403",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11926",
+      "name": "Yell_Howl",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://102924140813036",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11933",
+      "name": "Yell_Howl",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://132421139634506",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11941",
+      "name": "Yell_Howl",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://110412756756869",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11949",
+      "name": "Yell_Howl",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://91704926128382",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11957",
+      "name": "Yell_Howl",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://118013244839249",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    },
+    {
+      "instanceId": "1_11973",
+      "name": "Yell_Howl",
+      "rootName": "MongoTVEntityAnimations",
+      "publishedAssetId": {
+        "kind": "nil"
+      },
+      "animationIdAttribute": {
+        "kind": "nil"
+      },
+      "animationId": {
+        "value": {
+          "value": "rbxassetid://102035504530432",
+          "kind": "string"
+        },
+        "readable": true
+      },
+      "inferredPublisherVersion": null
+    }
+  ],
+  "all213SourceMetadataUnchanged": true,
+  "ownedScratchClosed": true,
+  "collectorStateWrites": 24,
+  "nativeInstanceSourcePropertyWrites": 0,
+  "permanentRemoval": false,
+  "limits": "All actual targeted ID/attributes recorded without a v10-only filter. Version inference is derived from names, not authoritative version metadata. ObjectValue.Value/external rigs, non-cache pose/keyframe values, full native archive/reopen and reference closure remain separate pending ports. No playback/gameplay/performance/deletion certificate."
+}

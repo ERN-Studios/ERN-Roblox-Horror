@@ -1,0 +1,115 @@
+{
+  "schema": "mongotv-animation-archive-readonly-frontier-pins-v2",
+  "nativeExecuted": false,
+  "productionWrites": 0,
+  "deletionApproved": false,
+  "files": [
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/collector.luau",
+      "bytes": 16695,
+      "sha256": "5af553bdfa8eeffe6fdd3cf64e9202f87dd04156313f65b98e0bdf0ca2866c0a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/native-run-v1/cache-manifest-raw.json",
+      "bytes": 237199,
+      "sha256": "4caa106ecfcf965013c4ac6759c61c3fa752ff855f51614b9392ba8e0cbc1d94"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/native-run-v1/finish-completion.json",
+      "bytes": 702,
+      "sha256": "67b642d36bc7a1ce92e4d569406d4a337004ea1033978356a654a017314f2340"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/offline-fixtures.luau",
+      "bytes": 14854,
+      "sha256": "002c8886385163f8c5fd5d997a1415577a803779e2dd9b555d9378a37adcb34a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/run-root-inventory.py",
+      "bytes": 14160,
+      "sha256": "55b57e6a6224c793138eaeffcb25e206c5d3526ff9e541f7f0bb111257e768e8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/freeze-frontier.py",
+      "bytes": 1803,
+      "sha256": "b27e3b3bae3f789c0be431a340f3e1258d54d4ccab5664983d80cdac0b84f82d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-compile-v1.json",
+      "bytes": 237,
+      "sha256": "2bd85f1469ff3f752a3e71668c0f555ea0fc47539c0e7653502c9e390dfb660f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-config.json",
+      "bytes": 196106,
+      "sha256": "2ebc7765997a0b947d433a82d162b35a55eca18b209ee5630fa62e5f22edc1c4"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-driver-offline-v1.json",
+      "bytes": 2980,
+      "sha256": "3e18be03d3a65abc045b26b29f42f509b9027d27ca08fec526368a3155c27f72"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-offline-attempt-v1.json",
+      "bytes": 4130,
+      "sha256": "a26825b3d0ff11c259919d8e01a4e83cc83060b3f68e43e0bd4d60a03f8afb7d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-preparation.json",
+      "bytes": 1653,
+      "sha256": "7084d05171040298ccc08f245c74476a00063925cc61cce1507af147e702fb38"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-source.luau",
+      "bytes": 152374,
+      "sha256": "44ae3656944519368c6efa2d3c3f3cd20ef4c94f823162015dcabfa41b6dd088"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-suffix.luau",
+      "bytes": 6586,
+      "sha256": "d60f9825f04f72f5758713a719122c8a87178fbf3b21e2786be57024a50cb49b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-template.luau",
+      "bytes": 17216,
+      "sha256": "18a96172051a500bba1bb4c2e2467bb97ece9861ad607d2bdc98a82ebb72b001"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/FRONTIER_REVIEW.md",
+      "bytes": 5334,
+      "sha256": "e7e70f1a555c29c453b6a423f787ed7ab977d106a192805c44e8918a874b9b75"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/PLAN.md",
+      "bytes": 6977,
+      "sha256": "9a0c62f083dce8632a79fc45282b7ee73bf0b800d6ef4decd6c4b9cd13561ee2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/prepare-frontier.py",
+      "bytes": 3458,
+      "sha256": "4c548b0572011772aab1ffdca2a97462e947bb3cf134cb8d27e45b1541ae465f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/run-root-frontier.py",
+      "bytes": 6433,
+      "sha256": "c4a1278d9ce380ceeba0bf70bf404bac8186456dc17c32565d29b7e6bbb2ad64"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/test-driver.py",
+      "bytes": 7700,
+      "sha256": "d9a63f5fe46dbf0524067b12ba98f836c36d8cae6b5d64b26ff02a0b97a09d27"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/test-frontier.py",
+      "bytes": 8709,
+      "sha256": "f036371dafbc58d0e8b0b9dcb0a02705972715f04ca36b47915aeb84e097e1ff"
+    }
+  ],
+  "fileCount": 21,
+  "totalBytes": 705314
+}

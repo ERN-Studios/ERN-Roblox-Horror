@@ -1,0 +1,11 @@
+{
+  "studioId": "b609b91a-e648-42ab-ba5f-a996912e9552",
+  "collectorSHA256": "5af553bdfa8eeffe6fdd3cf64e9202f87dd04156313f65b98e0bdf0ca2866c0a",
+  "captureId": "ada7756e-f199-482c-9363-f14979952d49",
+  "peerSHA256": "08583fa3a796f9487bdeaa40ce648ecb2e18fd8f4d5c6982fb82e19c8961caa5",
+  "driverSHA256": "55b57e6a6224c793138eaeffcb25e206c5d3526ff9e541f7f0bb111257e768e8",
+  "nativeInstanceSourcePropertyWritesRequested": 0,
+  "noRetry": true,
+  "noModeSwitch": true,
+  "scratchNamespace": "__MongoTVAnimationCacheInventory20261010V1_ada7756e-f199-482c-9363-f14979952d49"
+}

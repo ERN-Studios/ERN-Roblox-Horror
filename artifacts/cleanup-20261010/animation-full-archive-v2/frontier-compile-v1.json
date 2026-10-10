@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "exitCode": 0,
+  "stderr": "",
+  "preparedCodeSHA256": "44ae3656944519368c6efa2d3c3f3cd20ef4c94f823162015dcabfa41b6dd088",
+  "nativeCalls": 0,
+  "limits": "Native APIs have not been invoked by this compile pass."
+}

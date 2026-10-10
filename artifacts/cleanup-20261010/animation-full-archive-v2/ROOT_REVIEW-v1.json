@@ -1,0 +1,20 @@
+{
+  "schema": "mongotv-animation-frontier-root-independent-review-v2",
+  "preparationEligibleForNativeRead": true,
+  "nativeExecuted": false,
+  "deletionApproved": false,
+  "reviewedSourceSHA256": "44ae3656944519368c6efa2d3c3f3cd20ef4c94f823162015dcabfa41b6dd088",
+  "reviewedDriverSHA256": "c4a1278d9ce380ceeba0bf70bf404bac8186456dc17c32565d29b7e6bbb2ad64",
+  "frozenPinsSHA256": "6f8dc6f85cfde32cd4c992808706f3bcfbeb9e45e55e8868bef1b9be42cbb639",
+  "rootOfflineCases": 11,
+  "rootDriverCases": 21,
+  "review": [
+    "Root read reused prefix, full readonly suffix, preparation, driver and bounded known-outcome transport",
+    "Generated prefix/config/suffix bytes reconstructed independently and matched",
+    "No shared collector functions invoked; no Instance/setter/require/network/upload/mode writes",
+    "Current213 exact Source/editor/header and191 cache records, root IDs, late rediscovery and slot rechecks",
+    "Native ReflectionService schemas and27 Value/one PrimaryPart only; unreadable endpoints retained explicitly",
+    "No truncation/nil inference; default preflight zero MCP, one actual request, ambiguity stops followup"
+  ],
+  "limits": "Readonly reference frontier, not full asset archive, hidden reference absence, reopen, removal or gameplay certification."
+}

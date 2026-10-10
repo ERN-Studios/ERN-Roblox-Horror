@@ -1,0 +1,29 @@
+{
+  "schema": "retired-authoring-raw-capture-preparation-v1",
+  "nativeCalls": 0,
+  "receiverStarted": false,
+  "sourceTemplate": {
+    "bytes": 92990,
+    "sha256": "b954326f239946fddaffe5872debe1d3d69941afa6e9230b8798f02feaf42895"
+  },
+  "privateTokenPlaceholderOnly": true,
+  "inputs": [
+    {
+      "path": "tools/cleanup_20261009/retired_authoring_archive_common.luau",
+      "bytes": 22101,
+      "sha256": "d9a783c71d56591580ceab53f914f1cc8832365b68f5fe275cf279cd5634f5ad"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/capture-config.json",
+      "bytes": 60654,
+      "sha256": "9f86c0afdfd1c16e5486196a2afa1d69b4c3cfebf2406f022e5e28da4ecd180b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/native-capture.luau",
+      "bytes": 10186,
+      "sha256": "63fdb7cc824c5e44f07e7bb530bf31f7a07a692e18f8bb620ff1ce59aa20d43c"
+    }
+  ],
+  "deletionApproved": false,
+  "limits": "Prepared readonly source only. Root must bind new private token and complete exact native/API/transport/raw-reference gates."
+}

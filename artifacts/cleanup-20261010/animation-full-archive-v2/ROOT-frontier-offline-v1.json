@@ -1,0 +1,144 @@
+{
+  "schema": "mongotv-animation-archive-frontier-offline-v1",
+  "passed": true,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "inputs": [
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-template.luau",
+      "bytes": 17216,
+      "sha256": "18a96172051a500bba1bb4c2e2467bb97ece9861ad607d2bdc98a82ebb72b001"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-suffix.luau",
+      "bytes": 6586,
+      "sha256": "d60f9825f04f72f5758713a719122c8a87178fbf3b21e2786be57024a50cb49b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/offline-fixtures.luau",
+      "bytes": 14854,
+      "sha256": "002c8886385163f8c5fd5d997a1415577a803779e2dd9b555d9378a37adcb34a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/test-frontier.py",
+      "bytes": 8709,
+      "sha256": "f036371dafbc58d0e8b0b9dcb0a02705972715f04ca36b47915aeb84e097e1ff"
+    }
+  ],
+  "assembledFixtureBytes": 28425,
+  "assembledFixtureSHA256": "2064b72b30e3b94308c9108d61991015da87bacb20e5ddff083a1ce0f5a6323d",
+  "limits": "Explicit offline request-construction insertion only; unchanged native prefix/suffix have no native execution evidence.",
+  "compile": {
+    "exitCode": 0,
+    "stderr": ""
+  },
+  "stderr": "",
+  "replay": {
+    "cases": 11,
+    "checks": 78833,
+    "limits": "Actual frontier template/suffix under explicit fake Source/editor/game/reflection/security/reference/task boundaries. No actual native reflection, asset, reference absence or archive/reopen certificate.",
+    "nativeCalls": 0,
+    "passed": true,
+    "results": [
+      {
+        "case": "success-external-references",
+        "expectedPass": true,
+        "nativeWrites": 0,
+        "observedPass": true,
+        "reflectedClassReads": 8,
+        "sharedWrites": 0,
+        "yields": 5
+      },
+      {
+        "case": "unreadable-slot",
+        "expectedPass": true,
+        "nativeWrites": 0,
+        "observedPass": true,
+        "reflectedClassReads": 8,
+        "sharedWrites": 0,
+        "yields": 5
+      },
+      {
+        "case": "missing-slot-schema",
+        "expectedPass": false,
+        "nativeWrites": 0,
+        "observedPass": false,
+        "reflectedClassReads": 8,
+        "sharedWrites": 0,
+        "yields": 3
+      },
+      {
+        "case": "wrong-slot-schema",
+        "expectedPass": false,
+        "nativeWrites": 0,
+        "observedPass": false,
+        "reflectedClassReads": 8,
+        "sharedWrites": 0,
+        "yields": 3
+      },
+      {
+        "case": "initial-source-drift",
+        "expectedPass": false,
+        "nativeWrites": 0,
+        "observedPass": false,
+        "reflectedClassReads": 0,
+        "sharedWrites": 0,
+        "yields": 2
+      },
+      {
+        "case": "initial-root-id",
+        "expectedPass": false,
+        "nativeWrites": 0,
+        "observedPass": false,
+        "reflectedClassReads": 0,
+        "sharedWrites": 0,
+        "yields": 2
+      },
+      {
+        "case": "initial-cache-id",
+        "expectedPass": false,
+        "nativeWrites": 0,
+        "observedPass": false,
+        "reflectedClassReads": 0,
+        "sharedWrites": 0,
+        "yields": 2
+      },
+      {
+        "case": "slot-change-late",
+        "expectedPass": false,
+        "nativeWrites": 0,
+        "observedPass": false,
+        "reflectedClassReads": 8,
+        "sharedWrites": 0,
+        "yields": 5
+      },
+      {
+        "case": "new-cache-candidate",
+        "expectedPass": false,
+        "nativeWrites": 0,
+        "observedPass": false,
+        "reflectedClassReads": 8,
+        "sharedWrites": 0,
+        "yields": 4
+      },
+      {
+        "case": "Source-change-late",
+        "expectedPass": false,
+        "nativeWrites": 0,
+        "observedPass": false,
+        "reflectedClassReads": 8,
+        "sharedWrites": 0,
+        "yields": 4
+      },
+      {
+        "case": "mode-change-late",
+        "expectedPass": false,
+        "nativeWrites": 0,
+        "observedPass": false,
+        "reflectedClassReads": 8,
+        "sharedWrites": 0,
+        "yields": 4
+      }
+    ]
+  }
+}

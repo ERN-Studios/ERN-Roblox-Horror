@@ -1,0 +1,804 @@
+{
+  "schema": "mongotv-animation-cache-actual-offline-port-v1",
+  "passed": true,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "inputs": [
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/collector.luau",
+      "bytes": 16695,
+      "sha256": "5af553bdfa8eeffe6fdd3cf64e9202f87dd04156313f65b98e0bdf0ca2866c0a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/offline-fixtures.luau",
+      "bytes": 14854,
+      "sha256": "002c8886385163f8c5fd5d997a1415577a803779e2dd9b555d9378a37adcb34a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/test-offline.py",
+      "bytes": 4050,
+      "sha256": "3582aa729e73e1ecf9ed5be5bd08fca05a80e9fbc9d4a47f6a9ebf28985469e9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/run-root-inventory.py",
+      "bytes": 14160,
+      "sha256": "55b57e6a6224c793138eaeffcb25e206c5d3526ff9e541f7f0bb111257e768e8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/driver-fixtures.py",
+      "bytes": 12451,
+      "sha256": "07880c524c7ba4d3f7f00585da2197a28905bc1accdd4634a4f38c611f555943"
+    }
+  ],
+  "assembledFixtureSHA256": "0a26feaae2b6ad79bd775b9aabaa3b49d81ba9739a7269db800bbd5fbcb0e8ac",
+  "assembledFixtureBytes": 31536,
+  "limits": "Actual source replay uses synthetic game/Source/editor/metadata/task/shared/Encoding/JSON boundaries. No actual native cache, assets, scheduling, serialization, reference or deletion certificate; no gameplay/MP/streaming/performance pass.",
+  "compile": {
+    "exitCode": 0,
+    "stderr": ""
+  },
+  "exitCode": 0,
+  "stderr": "",
+  "replay": {
+    "cases": 56,
+    "checks": 366487,
+    "limits": "Actual collector text with synthetic tables/task/Encoding/JSON boundaries; no actual cache/native scheduling or asset/deletion/gameplay/performance certificate.",
+    "nativeCalls": 0,
+    "passed": true,
+    "productionWrites": 0,
+    "results": [
+      {
+        "expectedVerdict": true,
+        "name": "success-all-versions",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": true,
+        "yields": 6
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "mode",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 0
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "place",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 0
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "source-count",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "initial-editor",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-missing",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-duplicate",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-class",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-topcount",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "unsupported-attribute",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 1
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "scan-yield-error",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 2
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "scan-source-drift",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 2
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "response-bound",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "manifest-bound",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "Source",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "editor",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "ClassName",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "Parent",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "Enabled",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "Disabled",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "RunContext",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "Archivable",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "LinkedSource",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "source-attr",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "source-tag",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-name",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-parent",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-class",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-attr",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-tag",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "root-new-collision",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "topchild",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "animation-id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "published-id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "sequence-loop",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "sequence-priority",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "sequence-hip",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "cache-attr",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "cache-tag",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "named-id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "child-count",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "wrong-page",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "finish-too-early",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "foreign-progress",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": true,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "foreign-slot",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": true,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "foreign-owner",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": true,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "template",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": true,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "nested-new-id",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 6
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "nested-new-animation",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 6
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "nested-new-source",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 5
+      },
+      {
+        "cleanupPassed": true,
+        "expectedVerdict": false,
+        "name": "new-global-source",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 5
+      },
+      {
+        "expectedVerdict": true,
+        "name": "abandon",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "yields": 4
+      },
+      {
+        "cleanupPassed": false,
+        "expectedVerdict": false,
+        "name": "occupied-namespace",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": false,
+        "yields": 4
+      },
+      {
+        "expectedVerdict": true,
+        "name": "unreadable-property-explicit-incomplete",
+        "nativeWrites": 0,
+        "ownedScratchRemaining": false,
+        "pass": true,
+        "yields": 6
+      }
+    ]
+  },
+  "driverPort": {
+    "passed": true,
+    "cases": 27,
+    "checks": 1057,
+    "results": [
+      {
+        "name": "success",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 10,
+        "lastFakeCommand": "finish",
+        "outcome": "success",
+        "scratchPendingObserved": false
+      },
+      {
+        "name": "timeout-before-begin",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "unknown-transport",
+        "scratchPendingObserved": false
+      },
+      {
+        "name": "timeout-after-begin",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "unknown-transport",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "timeout-before-page",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 2,
+        "lastFakeCommand": "page",
+        "outcome": "unknown-transport",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "timeout-after-page",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 2,
+        "lastFakeCommand": "page",
+        "outcome": "unknown-transport",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "timeout-before-finish",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 10,
+        "lastFakeCommand": "finish",
+        "outcome": "unknown-transport",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "timeout-after-finish",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 10,
+        "lastFakeCommand": "finish",
+        "outcome": "unknown-transport",
+        "scratchPendingObserved": false
+      },
+      {
+        "name": "tool-error-before-begin",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "completed-tool-error",
+        "scratchPendingObserved": false
+      },
+      {
+        "name": "tool-error-after-begin",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "completed-tool-error",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "malformed-envelope",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "unknown-envelope",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "invalid-text-block",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "unknown-envelope",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "invalid-json",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "completed-invalid-completion",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "oversized-envelope",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "unknown-envelope",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "oversized-completion",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "completed-invalid-completion",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "collector-refusal-no-scratch",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "completed-collector-refusal",
+        "scratchPendingObserved": false
+      },
+      {
+        "name": "collector-refusal-cleaned",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "completed-collector-refusal",
+        "scratchPendingObserved": false
+      },
+      {
+        "name": "collector-refusal-pending",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "completed-collector-refusal",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "page-wrong-sha",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 2,
+        "lastFakeCommand": "page",
+        "outcome": "validation-refusal",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "page-wrong-order",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 2,
+        "lastFakeCommand": "page",
+        "outcome": "validation-refusal",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "page-bad-base64",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 2,
+        "lastFakeCommand": "page",
+        "outcome": "validation-refusal",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "page-claimed-writes",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 2,
+        "lastFakeCommand": "page",
+        "outcome": "validation-refusal",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "begin-claimed-writes",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 1,
+        "lastFakeCommand": "begin",
+        "outcome": "validation-refusal",
+        "scratchPendingObserved": true
+      },
+      {
+        "name": "incomplete-metadata",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 10,
+        "lastFakeCommand": "finish",
+        "outcome": "completed-metadata-refusal-owned-scratch-closed",
+        "scratchPendingObserved": false
+      },
+      {
+        "name": "manifest-root-class",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 10,
+        "lastFakeCommand": "finish",
+        "outcome": "completed-metadata-refusal-owned-scratch-closed",
+        "scratchPendingObserved": false
+      },
+      {
+        "name": "manifest-source-editor",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 10,
+        "lastFakeCommand": "finish",
+        "outcome": "completed-metadata-refusal-owned-scratch-closed",
+        "scratchPendingObserved": false
+      },
+      {
+        "name": "finish-refusal-cleaned",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 10,
+        "lastFakeCommand": "finish",
+        "outcome": "completed-collector-refusal",
+        "scratchPendingObserved": false
+      },
+      {
+        "name": "finish-refusal-pending",
+        "passed": true,
+        "nativeCalls": 0,
+        "fakeRequestCount": 10,
+        "lastFakeCommand": "finish",
+        "outcome": "completed-collector-refusal",
+        "scratchPendingObserved": true
+      }
+    ],
+    "nativeCalls": 0,
+    "limits": "Actual Python driver, synchronous fake transport and metadata. Does not prove Studio cancellation, queue timing, engine scheduling or actual cache contents."
+  }
+}

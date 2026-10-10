@@ -1,0 +1,21 @@
+{
+  "schema": "retired-authoring-root-independent-serialized-reference-review-v1",
+  "capturePreparationEligible": true,
+  "nativeExecuted": false,
+  "deletionApproved": false,
+  "reviewedSourceTemplateSHA256": "b954326f239946fddaffe5872debe1d3d69941afa6e9230b8798f02feaf42895",
+  "reviewedDriverSHA256": "1b0d6f46f7d5e98a2993e54c70bed0563782e309fcf2aa464bb1cdf9ce58b6fb",
+  "reviewedFrozenPinsSHA256": "2fa7029d92bad2d8b64630adf329d8bd5be70ba123bf3ce347d5585a01c02e03",
+  "independentOfflineSHA256": "16c24667e3f1dd693b05fdddb0b9db5a059bee4905fbbf0a10b05e4c3af8d462",
+  "independentSuffixSHA256": "edfd4783baf9645d620b27fea292bd063c7e8105f6e28489f16485743ede24e1",
+  "review": [
+    "Full current readonly suffix, Root wrapper, receiver, raw decoder read by Root",
+    "Unchanged common guard prefix and exact213 Source/five-root/native8050869byte baseline",
+    "Joint target+witness serialization twice exact, 1000node yields and mode/epoch/lease guard",
+    "Raw Ref columns required, no omitted=null aliases, complete1617targets+219owner-field mappings",
+    "Loopback-only owned receiver, private token/request/API/raw outside public Git evidence",
+    "One600s native request, known errors distinguished, unknown keeps receiver and stops later calls",
+    "Independent cleanup attempts, final/post guards, no native setters/require/new/deserialization"
+  ],
+  "limits": "Prepared readonly raw serialized-reference capture only. Compatible nonserialized references and immediate removal CAS remain pending; no gameplay/performance/deletion certificate."
+}

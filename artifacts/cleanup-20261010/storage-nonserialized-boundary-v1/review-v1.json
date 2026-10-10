@@ -1,0 +1,183 @@
+{
+  "schema": "retired-authoring-nonserialized-reference-boundary-review-v1",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "frozenPackChanged": false,
+  "referenceAbsenceCertified": false,
+  "deletionApproved": false,
+  "currentHolderCountsCertified": false,
+  "actualEpoch": "Root S04 V2 completed trial + following after-parity; counts are historical until freshly censused",
+  "inputs": [
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/native-run-v1/root-completion.json",
+      "bytes": 14757,
+      "sha256": "a1416cb91afff9e730045aaa483332490718da38e69644618939afc01544776a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/result.json",
+      "bytes": 2044,
+      "sha256": "2455d6138baaa38957927e8e3c5aeedf801e01308cdcc3e5f0800d25ef715b7e"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts.json",
+      "bytes": 2439804,
+      "sha256": "cd1b1766429ad82b0fb129fc0cb1ac46c3b36462b7e567afa27500b5ca2f90cf"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/native-probe.json",
+      "bytes": 3580,
+      "sha256": "59d9bcb645d2cfce822d511953dfac0be6013e7b00cec1b843faef34ccd839c7"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/frozen-pins-v1.json",
+      "bytes": 12534,
+      "sha256": "2fa7029d92bad2d8b64630adf329d8bd5be70ba123bf3ce347d5585a01c02e03"
+    }
+  ],
+  "observedCompatibleNonserializedSlots": 61283,
+  "observedInternalPhysicsHolders": 549,
+  "observedExternalPhysicsHolders": 60728,
+  "observedExternalOtherHolders": 6,
+  "observedExternalCompatibleSlots": 60734,
+  "physicsHolders": [
+    {
+      "holderClass": "MeshPart",
+      "totalObservedHolders": 9660,
+      "retiredInternalHolders": 498,
+      "externalObservedHolders": 9162,
+      "hiddenValueRead": "unreadable in actual native receipt",
+      "status": "pending hidden-slot contract/read; public assembly isolation can be tested separately"
+    },
+    {
+      "holderClass": "Part",
+      "totalObservedHolders": 43804,
+      "retiredInternalHolders": 51,
+      "externalObservedHolders": 43753,
+      "hiddenValueRead": "unreadable in actual native receipt",
+      "status": "pending hidden-slot contract/read; public assembly isolation can be tested separately"
+    },
+    {
+      "holderClass": "Seat",
+      "totalObservedHolders": 1204,
+      "retiredInternalHolders": 0,
+      "externalObservedHolders": 1204,
+      "hiddenValueRead": "unreadable in actual native receipt",
+      "status": "pending hidden-slot contract/read; public assembly isolation can be tested separately"
+    },
+    {
+      "holderClass": "Terrain",
+      "totalObservedHolders": 1,
+      "retiredInternalHolders": 0,
+      "externalObservedHolders": 1,
+      "hiddenValueRead": "unreadable in actual native receipt",
+      "status": "pending hidden-slot contract/read; public assembly isolation can be tested separately"
+    },
+    {
+      "holderClass": "UnionOperation",
+      "totalObservedHolders": 6608,
+      "retiredInternalHolders": 0,
+      "externalObservedHolders": 6608,
+      "hiddenValueRead": "unreadable in actual native receipt",
+      "status": "pending hidden-slot contract/read; public assembly isolation can be tested separately"
+    }
+  ],
+  "otherHolders": [
+    {
+      "holderClass": "GuiService",
+      "property": "CoreEffectFolder",
+      "observedHolders": 1,
+      "instanceType": "Folder",
+      "freshZeroHoldersObserved": false,
+      "status": "pending; no unreadable-to-null or alias proof"
+    },
+    {
+      "holderClass": "GuiService",
+      "property": "CoreGuiFolder",
+      "observedHolders": 1,
+      "instanceType": "Folder",
+      "freshZeroHoldersObserved": false,
+      "status": "pending; no unreadable-to-null or alias proof"
+    },
+    {
+      "holderClass": "Player",
+      "property": "PendingRequestedTool",
+      "observedHolders": 2,
+      "instanceType": "Instance",
+      "freshZeroHoldersObserved": false,
+      "status": "pending; no unreadable-to-null or alias proof"
+    },
+    {
+      "holderClass": "Selection",
+      "property": "ActiveInstance",
+      "observedHolders": 1,
+      "instanceType": "Instance",
+      "freshZeroHoldersObserved": false,
+      "status": "pending; no unreadable-to-null or alias proof"
+    },
+    {
+      "holderClass": "StudioService",
+      "property": "HoverInstance",
+      "observedHolders": 1,
+      "instanceType": "Instance",
+      "freshZeroHoldersObserved": false,
+      "status": "pending; no unreadable-to-null or alias proof"
+    }
+  ],
+  "exactForest": {
+    "nodes": 1617,
+    "baseParts": 549,
+    "classes": {
+      "Folder": 365,
+      "StringValue": 244,
+      "Model": 283,
+      "Part": 51,
+      "MeshPart": 498,
+      "SurfaceAppearance": 176
+    },
+    "allBasePartsAnchored": true,
+    "WorldModelOrJointOrConstraintNodes": 0,
+    "nativeSHA256": "e808f055403bd331b76e0831955b192abc8b4a914865c3936aa9b2d23ed2a8d7"
+  },
+  "primaryDocumentation": [
+    {
+      "url": "https://create.roblox.com/docs/physics/assemblies",
+      "supports": "Normal assemblies/joints operate only in Workspace or WorldModel; not hidden PhysicsRepRootPart equivalence."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Roblox/creator-docs/main/content/en-us/reference/engine/classes/BasePart.yaml",
+      "supports": "AssemblyRootPart outside Workspace is nil; GetJoints and GetConnectedParts expose public physical connections. Hidden PhysicsRepRootPart absent."
+    },
+    {
+      "url": "https://create.roblox.com/docs/reference/engine/classes/Selection",
+      "supports": "Selection is Studio-only and Selection:Get exposes current selected items; no ActiveInstance equivalence contract."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Roblox/creator-docs/main/content/en-us/reference/engine/classes/StudioService.yaml",
+      "supports": "Studio/plugin configuration service; hidden HoverInstance absent."
+    },
+    {
+      "url": "https://create.roblox.com/docs/reference/engine/classes/GuiService",
+      "supports": "Public GUI API; no CoreGuiFolder/CoreEffectFolder pointer contract found."
+    },
+    {
+      "url": "https://create.roblox.com/docs/reference/engine/classes/Player",
+      "supports": "No PendingRequestedTool public pointer contract found."
+    }
+  ],
+  "proposedBoundedRootRead": {
+    "executed": false,
+    "authoritativeOriginalWritesRequested": 0,
+    "freshIdentityCensus": "One guarded complete game descendants census, yield+mode/lease/epoch every1000. Partition current Player and all BasePart holders; include held original identities explicitly. Zero Player only excludes current contained Player holders.",
+    "targetPhysicsCrosscheck": "Exactly549 current Part/MeshPart identities inside the five exact trees; read AssemblyRootPart, GetJoints(), GetConnectedParts(false) with no mutation/recursive expansion. Record errors and every returned external identity. Mode/Source/editor/exact-five/native/lease guards before and after; yield/checkpoint every50targets.",
+    "smallHolders": "Read the four GuiService/Selection/StudioService slots and any actual current Players PendingRequestedTool via ordinary native pcall. Preserve readability/type/exact target-membership; Selection:Get plus own SelectionChanged watcher is supplementary only. No Selection:Set/Remove or mouse changes.",
+    "finalDecision": "Actual errors remain pending. Public physics isolation is not hidden PhysicsRepRootPart certification. No hidden-getter/identity escalation, serializer forcing, write-then-reset or source/asset edits."
+  },
+  "remainingNecessaryEvidence": [
+    "Fresh current holder identity census (prior counts do not claim Player0).",
+    "For every compatible external unreadable slot: permitted direct native value or actual engine contract that excludes these five trees. Names/NonSerialized/Studio-only do not establish nil.",
+    "If accepting loss of transient state associated solely with retired authoring workflows, record that as scoped disposition, not global reference-absence proof; preserve unrelated active selection/plugins.",
+    "New native-bounded public-physics result would reduce active assembly risk only; hidden 60728-external-holder closure remains pending absent a documented equivalence/retention contract."
+  ],
+  "limits": "Readonly file/doc analysis only. Existing actual receipts are retained unmodified. No native, selection, Studio CLI, runtime or removal call.",
+  "StudioCLIOrUIInvocations": 0
+}

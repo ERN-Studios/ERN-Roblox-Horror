@@ -1,0 +1,17 @@
+{
+  "schema": "mongotv-lobby-owned-native-preparation-v1",
+  "nativeExecuted": false,
+  "productionEligible": false,
+  "operation": "capture",
+  "variant": "before",
+  "fault": "none",
+  "executeBytes": 33570,
+  "executeSHA256": "236f5a90bec0c68032fc956783ada94247482c21a3f713ffc280683b02830a9c",
+  "requestSHA256": "dea99598d684869b78f66963f5f722f800aa558f3e959f2de46846b430a1f1bb",
+  "templateSHA256": "127ed6abc5a9cb4f1e91fe25dce6b0597d7d7a6bc217e9a10d4c9047b3e5bf41",
+  "dependencies": [],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "indexWrites": 0,
+  "instruction": "Root executes once on selected fresh Edit SID. Unknown transport outcome stops; no retry or automatic cleanup."
+}

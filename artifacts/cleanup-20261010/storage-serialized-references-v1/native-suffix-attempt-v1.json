@@ -1,0 +1,177 @@
+{
+  "schema": "retired-authoring-actual-readonly-capture-suffix-offline-v1",
+  "passed": true,
+  "nativeCalls": 0,
+  "receiverHTTPStarted": false,
+  "inputs": [
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/native-capture.luau",
+      "bytes": 9987,
+      "sha256": "c512d25b431052169f66de22c8678ca0ef7dcc90297c647087f40c830278253c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/capture-config.json",
+      "bytes": 60654,
+      "sha256": "9f86c0afdfd1c16e5486196a2afa1d69b4c3cfebf2406f022e5e28da4ecd180b"
+    }
+  ],
+  "fixtureSHA256": "8fc2d74e9f6b3cc4a4151da978f0fe636aa3a2d6a03b72b61c57e3c822730c9d",
+  "limits": "Actual suffix under explicit table/script-row/serializer/common-guard boundaries. Not actual Instance getters, engine events, serialization, Source parity, HTTP or reference absence.",
+  "compile": {
+    "exitCode": 0,
+    "stderr": ""
+  },
+  "exitCode": 0,
+  "stderr": "",
+  "replay": {
+    "cases": 16,
+    "checks": 134989,
+    "passed": true,
+    "results": [
+      {
+        "capturePassed": true,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "success",
+        "passed": true,
+        "serializerCalls": 3,
+        "transferCalls": 1
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 0,
+        "disconnectAttempts": 0,
+        "mode": "bad-token",
+        "passed": true,
+        "serializerCalls": 0,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 0,
+        "disconnectAttempts": 0,
+        "mode": "mode-before",
+        "passed": true,
+        "serializerCalls": 0,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "begin-fails",
+        "passed": true,
+        "serializerCalls": 0,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "serializer-first",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "serializer-joint",
+        "passed": true,
+        "serializerCalls": 2,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "serializer-again",
+        "passed": true,
+        "serializerCalls": 3,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "transfer-fails",
+        "passed": true,
+        "serializerCalls": 3,
+        "transferCalls": 1
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "epoch",
+        "passed": true,
+        "serializerCalls": 2,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "source-change",
+        "passed": true,
+        "serializerCalls": 2,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "foreign-lease",
+        "passed": true,
+        "serializerCalls": 2,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "foreign-ledger",
+        "passed": true,
+        "serializerCalls": 2,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "disconnect-fails",
+        "passed": true,
+        "serializerCalls": 3,
+        "transferCalls": 1
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "missing-weld",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "extra-weld",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      },
+      {
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "unarchivable",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      }
+    ]
+  }
+}

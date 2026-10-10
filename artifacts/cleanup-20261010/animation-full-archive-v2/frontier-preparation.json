@@ -1,0 +1,40 @@
+{
+  "schema": "mongotv-animation-full-archive-frontier-preparation-v1",
+  "nativeExecuted": false,
+  "productionWrites": 0,
+  "deletionApproved": false,
+  "inventoryManifestSHA256": "4caa106ecfcf965013c4ac6759c61c3fa752ff855f51614b9392ba8e0cbc1d94",
+  "helperPrefixSHA256": "ad5d03368207938634004f8f333d0a73402f2b71cbbd5015779b57b2f701e52d",
+  "templateSHA256": "18a96172051a500bba1bb4c2e2467bb97ece9861ad607d2bdc98a82ebb72b001",
+  "preparedCode": {
+    "bytes": 152374,
+    "sha256": "44ae3656944519368c6efa2d3c3f3cd20ef4c94f823162015dcabfa41b6dd088"
+  },
+  "inputs": [
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/native-run-v1/cache-manifest-raw.json",
+      "bytes": 237199,
+      "sha256": "4caa106ecfcf965013c4ac6759c61c3fa752ff855f51614b9392ba8e0cbc1d94"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/collector.luau",
+      "bytes": 16695,
+      "sha256": "5af553bdfa8eeffe6fdd3cf64e9202f87dd04156313f65b98e0bdf0ca2866c0a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/native-run-v1/finish-completion.json",
+      "bytes": 702,
+      "sha256": "67b642d36bc7a1ce92e4d569406d4a337004ea1033978356a654a017314f2340"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-suffix.luau",
+      "bytes": 6586,
+      "sha256": "d60f9825f04f72f5758713a719122c8a87178fbf3b21e2786be57024a50cb49b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/prepare-frontier.py",
+      "bytes": 3458,
+      "sha256": "4c548b0572011772aab1ffdca2a97462e947bb3cf134cb8d27e45b1541ae465f"
+    }
+  ]
+}

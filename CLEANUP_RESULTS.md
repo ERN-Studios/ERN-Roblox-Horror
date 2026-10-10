@@ -283,6 +283,8 @@ Ingen native runtime- eller packageændring tilskrives S26.
 
 ### S27 / T11 — døde exporterbodies fjernet efter pensionering
 
+S27/S28 lokal commit: `03e0c0548086b485bc4b8e00a78f8cb5fdf3a9a6`; ingen push/publicering.
+
 `export_entity_keyframes.py` og `export_entity_animations.py` er reduceret fra
 4812/3389 til501 bytes hver:7199 døde Sourcebytes fjernet. Begge imports/CLI var
 allerede pensioneret før bpy-initializers; nye små stubs giver samme tydelige
@@ -328,6 +330,116 @@ er uændret; nul Source/editor conflicts, mirror/manifest/class/propertymismatch
 eller coveragegaps. [Efterport](artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/result.json).
 Denne separate parity er Source/registrerede properties, ikke fuld asset/reference/
 gameplay-parity. S28's egne213 originalguards dækker attributes/tags under prøven.
+
+### S29 / T11,T15 — faktisk native cacheinventar PASS
+
+Root har udført den frosne læser i Studio Edit. Hele237199-byte manifestet er
+modtaget i20 deterministiske hashkontrollerede pages;SHA
+`4caa106ecfcf965013c4ac6759c61c3fa752ff855f51614b9392ba8e0cbc1d94`.
+191 actual records dækker144 topchildren og nested cache/AnimationClip/Animation-
+poster med alle versioner og typed PublishedAssetId/AnimationId/attributes/tags.
+Ingen v10-only filter. Før/efter213 Source/editor/class/properties/attributes/tags,
+root/kandidat-counts og nye/manglende nested kandidater er kontrolleret.
+[Actual review](artifacts/cleanup-20261010/animation-cache-inventory-v1/ROOT_ACTUAL_REVIEW-v1.json),
+[native completion](artifacts/cleanup-20261010/animation-cache-inventory-v1/native-run-v1/finish-completion.json).
+
+De144 topchildren er58 Animation,59 KeyframeSequence og27 ObjectValue.116 records
+har faktiske typed cache-/Animation-ID-felter. Publisher-versioner afledt af navne
+omfatter v2/v3/v4/v5/v6walk/v6actions/v7actions/v8actions/v9actions/v10full; alle
+uinfererede navne er også bevaret. Det er en navneafledning, ikke versionsmetadata.
+309079 native originalobjekter er urørte.24 egne shared-scratch/statewrites er
+registreret, og begge purpose-bound namespace-slots er lukket præcist;0 native
+Instance/Source/property-/modewrites, ingen require/upload/lyttere/spawned tasks.
+Uafhængig Root actual offline56cases/366487checks og27 transportcases PASS.
+
+Dette er targeted cache-/metadata-preservation, ikke fuldt native assetarkiv.
+Pose/keyframe-værdier, ObjectValue.Value og eksterne rigs er særskilt afventende;
+RBX_ANIMSAVES indeholder også20 AnimationRigData. Arkiv/reopen/reference/fravær/
+playback-porte mangler før permanent fjernelse. Ingen measured performancegevinst
+eller native sletning tilskrives inventaret.
+
+### S30 / S04 — beskyttede serialiserede referencer, faktisk PASS
+
+Root har modtaget9041490 native raw bytes i19 kontrollerede dele, SHA
+`a2ed3c5b254a3ca3c49bda3807d375b4bef375851d52ef23cd52ee209ce602ff`.
+Det fælles arkiv indeholder de1617 gamle pakkeobjekter, StarterPlayer og alle109
+Welds. Raw0x13-kolonnerne indeholder alle219 beskyttede owner/field-par:
+109 `Part0Internal`,109 `Part1Internal` og én `PlaceAvatarRules`. Ingen peger på
+de inkluderede1617 gamle objekter. Eksterne endpoints kan falde uden for det
+fælles arkiv; resultatet bruges alene til fravær af inbound refs til de inkluderede
+gamle pakker. Ulæselige direkte getters behandles aldrig som nil.
+[Raw verdict](artifacts/cleanup-20261010/storage-serialized-references-v1/native-run-v1/raw-reference-verdict.json),
+[actual provenance](artifacts/cleanup-20261010/storage-serialized-references-v1/native-run-v1/root-provenance.json).
+
+To native serialiseringer er byteidentiske; fem-pakke førarkiv og alle213
+Source/editor/class/properties/attrs/tags er uændrede. Ingen Instance-/Source-/
+Parent-/property-/modewrites eller oprettede probes. Egne leases er frigivet,
+0 forbindelser/pending cleanup; loopbackmodtageren er stoppet med0 tråde tilbage.
+Transfer-token, request og fuld privat rawcapture opbevares i privat checkpoint;
+de er ikke medtaget i offentlige receipts eller commit-scope.108.532 sekunder
+er kaldets varighed, ingen målt performancegevinst. Root offline42/45 og20/
+166804 suffix-checks bestod før det ene faktiske native kald.
+
+Permanent fjernelse er fortsat afventende de compatible **nonserialized** slots.
+Den særskilte gennemgang af den tidligere epoch fordeler61283 slots på549 interne
+physics-holdere og60734 eksterne. Alle549 gamle parts er anchored, og de fem
+pakker indeholder ingen WorldModel/joint/constraint. Offentlige assemblyregler
+beviser ikke skjulte `PhysicsRepRootPart`-/editorpointerværdier. Frisk public
+physics-/selectionkontrol forberedes; dette er ingen fuld referencefraværscertificering.
+
+### CORE-027 — faktisk R4-baseline, lobbyændringen afventer native test
+
+Den første readonly capture returnerede et proxytrunkeret100015-byte svar;
+parseren afviste det. Ingen original-/probe-/shared-/Sourcewrites blev udført,
+og resultatet giver ingen testkredit. Den negative receipt er bevaret.
+
+Ny V4-capture bestod10:59:20Z med213 Source/editor-records og196 aktuelle
+R4-dataobjekter.191197 raw JSON-bytes SHA
+`c5706abe6e4a6fe2784fb9223e4aec865e6ca17a0c08389a5369ed926d0d8796`
+blev modtaget via bounded hashkontrolleret komprimeret transport. Raw native
+attributes og typed komponentbits undgår JSON-præcisionstab i guards;0 native
+writes, ingen require eller runtimeflow kørt.
+[Actual review](artifacts/cleanup-20261010/lobby-services-native-v1/root-capture-run-v4/root-review.json).
+
+Serviceudskillelsen er fortsat en kandidat. Før nogen Source-staging skal en
+isoleret ejet WorldModel-ray/overlap-query bestå. Før/kandidat-serviceport samt
+rigtige join/reset/return/kø/shop/tavle/party/signal/level-/multiplayer-/streaming-
+tests mangler. En frisk fuld placebackup efterspørges til en særskilt disponibel
+spiltestkopi; ejerens bevarede session skiftes ikke. Ingen lobby- eller fallback-
+Source er ændret i denne batch, og ingen gameplay- eller performancegevinst påstås.
+
+### S31 / T11,T15 — faktisk animation-referencefrontier PASS
+
+Root har læst de otte aktuelle native classschemas og28 konkrete referencefelter.
+Alle er readable:20 ObjectValue.Value er nil, syv refererer til eksterne Model-rigs;
+RBX_ANIMSAVES.PrimaryPart er nil. De syv endpoints er StarterPlayer.StarterCharacter,
+Level3Assets.EntityTemplates.MallManagerTemplate, Level2Assets.PoolFoamPrimaryTemplate,
+Archive.RetiredLobbyAssets.Miso, Archive.Level2RetiredSlidemouth_20260831.Level 2
+Slidemouth Template, Workspace.StarterCharacter og Workspace.Entity. Deres aktuelle
+identiteter og paths er bevaret i den faktiske receipt; ingen rig er ændret.
+[Actual review](artifacts/cleanup-20261010/animation-full-archive-v2/native-frontier-v1/ROOT_ACTUAL_REVIEW-v1.json).
+
+Value og Model.PrimaryPart er de eneste serialiserede Instance-felter i disse
+otte schemas. Model.LodEntity og SlimAnimationTarget er nonserialized og stadig
+afventende. Det er en afgrænset frontier, ikke fuld scanning af pose/keyframe-
+værdier eller rigs. Før/efter alle213 Source/editor/metadata,191 cache-records,
+rootidentiteter og sen kandidat-recensus bestod;0 native/probe/Source/property/
+shared-/modewrites. Root independent offline11cases/78833checks og transport21/
+51 bestod før det ene native kald.25.469 sekunder er kaldvarighed, ingen gevinst.
+
+Fuld144-unit rawarchive, exact reopen i separat Edit-dokument og de relevante
+fravær/playback-tests mangler. Hele uploadcachen med samme rod og117 topidentiteter,
+alle publicerede IDs og309079 native animationobjekter bevares indtil deres egne
+testporte består. Ingen animation- eller rigfjernelse er implementeret.
+
+Separat afsluttende Source/manifest-parity11:10:12–11:10:25Z PASS:213 scripts,
+15 remotes,228 manifestrows,52 ServerStorage-rødder og417075 sceneobjekter.
+Catalog811155… er uændret, nul mismatch/conflicts/missing/extra/propertygaps,
+stabilt repo snapshot og0 native/repo-/manifest-/modewrites.
+[Parity](artifacts/cleanup-20261010/animation-full-archive-v2/after-parity-v2/result.json).
+Første lokale start afviste Root's forudkopierede `.gitattributes` med
+FileExistsError før klientoprettelse;0 MCP-kald og ingen paritykredit. Den
+negative receipt er bevaret; frisk V2 brugte præcis samme reader og bestod.
 
 ### ServerStorage og lobby — bevarede kandidater
 

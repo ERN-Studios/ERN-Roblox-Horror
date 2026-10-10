@@ -1,0 +1,170 @@
+{
+  "schema": "mongotv-owned-native-bounded-decoder-tests-v1",
+  "pass": true,
+  "cases": [
+    {
+      "name": "bounded exact decode",
+      "pass": true
+    },
+    {
+      "name": "raw hash",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "compressed hash",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "raw too large",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "raw bool",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "compressed bool",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "compressed too large",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "invalid base64",
+      "pass": true,
+      "errorType": "Error"
+    },
+    {
+      "name": "base64 over bound",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "raw length mismatch",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "compressed length mismatch",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "encoding",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "schema",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "sha not lowercase",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "unknown envelope field",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "frame without bounded content size",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "trailing compressed payload",
+      "pass": true,
+      "errorType": "ZstdError"
+    },
+    {
+      "name": "original count",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "duplicate identity",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "duplicate path",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "wrong class",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "failed capture",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "original source write",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "mode switch",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "object write",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "empty asset census",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "untyped attributes",
+      "pass": true,
+      "errorType": "AssertionError"
+    },
+    {
+      "name": "actual main exact output",
+      "pass": true
+    },
+    {
+      "name": "actual main immutable existing output",
+      "pass": true
+    },
+    {
+      "name": "actual main malformed before output",
+      "pass": true
+    }
+  ],
+  "checks": 34,
+  "dependencies": [
+    {
+      "path": "G:/Roblox/MongoTV/artifacts/cleanup-20261010/lobby-services-native-v1/decode_capture.py",
+      "bytes": 3684,
+      "sha256": "95c585a6bcae7fcc85c42608f5265709c9ac269b399c8cadf606b8674a8a0fec"
+    },
+    {
+      "path": "G:/Roblox/MongoTV/_local/optimization-20261009/vendor/zstandard/__init__.py",
+      "bytes": 7452,
+      "sha256": "5c229d937b3f8420234f3baac08d8abc0ade34a17bbfbbac98fcd4f9349492d6"
+    }
+  ],
+  "zstandardVersion": "0.25.0",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "indexWrites": 0,
+  "fixtureOnly": true
+}

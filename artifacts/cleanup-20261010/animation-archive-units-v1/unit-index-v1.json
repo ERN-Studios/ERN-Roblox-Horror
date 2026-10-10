@@ -1,0 +1,6846 @@
+{
+  "schema": "mongotv-animation-current-native-archive-unit-index-v1",
+  "inventorySHA256": "4caa106ecfcf965013c4ac6759c61c3fa752ff855f51614b9392ba8e0cbc1d94",
+  "sourceCatalogSHA256": "b30a806da598ab234a0ca15066e84aea8c030a48a7ab44bb9b3583f86b0092b4",
+  "unitCount": 144,
+  "units": [
+    {
+      "unit": 0,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11923",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://79037853194841",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Walk",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Walk"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 1,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11924",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://110343018595451",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Run_Chase",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Run_Chase"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 2,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11925",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://129452887687978",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Watch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Watch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 3,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11926",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://102924140813036",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_Howl",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_Howl"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 4,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11927",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://97380507966441",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 5,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11928",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://122769036667525",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 6,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11929",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://131606138259618",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 7,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11930",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://111438501305925",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Walk",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Walk"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 8,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11931",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://91888525275025",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Run_Chase",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Run_Chase"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 9,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11932",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://129401363536804",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Watch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Watch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 10,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11933",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://132421139634506",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_Howl",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_Howl"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 11,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11934",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://100655617830150",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 12,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11935",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://129411802349452",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 13,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11936",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://118506682454741",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 14,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11937",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://139968377472432",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Kill_VisorCrush",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Kill_VisorCrush"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 15,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11938",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://84427037970976",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Walk",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Walk"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 16,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11939",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://95010135299937",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Run_Chase",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Run_Chase"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 17,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11940",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://128025248631252",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Watch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Watch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 18,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11941",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://110412756756869",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_Howl",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_Howl"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 19,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11942",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://134624595904968",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 20,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11943",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://90343971020887",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 21,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11944",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://125045827384250",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 22,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11945",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://73469024040297",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Kill_GroundPinPunch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Kill_GroundPinPunch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 23,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11946",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://80984572103403",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Walk",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Walk"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 24,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11947",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://137228566477955",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Run_Chase",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Run_Chase"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 25,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11948",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://95158317052216",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Watch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Watch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 26,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11949",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://91704926128382",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_Howl",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_Howl"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 27,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11950",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://121775599725846",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 28,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11951",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://118129978406506",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 29,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11952",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://123867767441019",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 30,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11953",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://95675854057927",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Kill_GroundPinPunch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Kill_GroundPinPunch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 31,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11954",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://120776103063010",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Walk",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Walk"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 32,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11955",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://116275096071779",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Run_Chase",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Run_Chase"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 33,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11956",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://86013923573480",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Watch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Watch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 34,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11957",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://118013244839249",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_Howl",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_Howl"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 35,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11958",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://119056181976223",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 36,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11959",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://94661930573561",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 37,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11960",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://81430032814694",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 38,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11961",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://131812662446824",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Kill_GroundPinPunch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Kill_GroundPinPunch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 39,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11962",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://139801177050454",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Walk_Restrained",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Walk_Restrained"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 40,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11963",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://113760166977097",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Run_Chase_Corrected",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Run_Chase_Corrected"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 41,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11964",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://101684601194418",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Kill_HunchedGroundPunch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Kill_HunchedGroundPunch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 42,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11965",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://120416325910330",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Kill_DeepHunchGroundPunch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Kill_DeepHunchGroundPunch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 43,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11966",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://117689146715099",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Run_Natural",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Run_Natural"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 44,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11967",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://85991585476335",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Run_PredatoryJog",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Run_PredatoryJog"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 45,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11968",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://79777407032608",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Kill_CloseHunchPunch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Kill_CloseHunchPunch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 46,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11969",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://116430726507331",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Kill_CloseHunchPunch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Kill_CloseHunchPunch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 47,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11970",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://100709130475232",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Walk",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Walk"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 48,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11971",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://99121728157417",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Run_Chase",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Run_Chase"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 49,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11972",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://92831421568704",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Watch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Watch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 50,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11973",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://102035504530432",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_Howl",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_Howl"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 51,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11974",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://132425538759403",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Yell_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Yell_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 52,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11975",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://70970124497806",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 53,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11976",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://132839013239254",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Lunge_FromRun",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Lunge_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 54,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11977",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://93323458577096",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Kill_GroundPinPunch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Kill_GroundPinPunch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 55,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11978",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://121187609243437",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Walk_Restrained",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Walk_Restrained"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 56,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11979",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://90840395594409",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Run_PredatoryJog",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Run_PredatoryJog"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 57,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "attributes": [],
+        "rootName": "MongoTVEntityAnimations",
+        "instanceId": "1_11980",
+        "animationId": {
+          "value": {
+            "value": "rbxassetid://94135265462008",
+            "kind": "string"
+          },
+          "readable": true
+        },
+        "parentId": "1_15647",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Kill_CloseHunchPunch",
+        "className": "Animation",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "Kill_CloseHunchPunch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 58,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "79037853194841",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_30993",
+        "rootName": "MongoTVEntityAnimations",
+        "parentId": "1_15647",
+        "childCount": 41,
+        "publishedAssetId": {
+          "value": "79037853194841",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Walk",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Walk"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 59,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "110343018595451",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_30994",
+        "rootName": "MongoTVEntityAnimations",
+        "parentId": "1_15647",
+        "childCount": 49,
+        "publishedAssetId": {
+          "value": "110343018595451",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_Chase",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_Chase"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 60,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Idle",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "129452887687978",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_30995",
+        "rootName": "MongoTVEntityAnimations",
+        "parentId": "1_15647",
+        "childCount": 181,
+        "publishedAssetId": {
+          "value": "129452887687978",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Watch",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Watch"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 61,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "102924140813036",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_30996",
+        "rootName": "MongoTVEntityAnimations",
+        "parentId": "1_15647",
+        "childCount": 66,
+        "publishedAssetId": {
+          "value": "102924140813036",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_Howl",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_Howl"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 62,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "97380507966441",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_30997",
+        "rootName": "MongoTVEntityAnimations",
+        "parentId": "1_15647",
+        "childCount": 87,
+        "publishedAssetId": {
+          "value": "97380507966441",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_FromRun",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 63,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "122769036667525",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_30998",
+        "rootName": "MongoTVEntityAnimations",
+        "parentId": "1_15647",
+        "childCount": 64,
+        "publishedAssetId": {
+          "value": "122769036667525",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 64,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "131606138259618",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_30999",
+        "rootName": "MongoTVEntityAnimations",
+        "parentId": "1_15647",
+        "childCount": 52,
+        "publishedAssetId": {
+          "value": "131606138259618",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_FromRun",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_FromRun"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 65,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "111438501305925",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31000",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v2",
+        "parentId": "1_15647",
+        "childCount": 40,
+        "publishedAssetId": {
+          "value": "111438501305925",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Walk_v2",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Walk_v2"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 66,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "91888525275025",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31001",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v2",
+        "parentId": "1_15647",
+        "childCount": 48,
+        "publishedAssetId": {
+          "value": "91888525275025",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_Chase_v2",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_Chase_v2"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 67,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Idle",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "129401363536804",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31002",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v2",
+        "parentId": "1_15647",
+        "childCount": 180,
+        "publishedAssetId": {
+          "value": "129401363536804",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Watch_v2",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Watch_v2"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 68,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "132421139634506",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31003",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v2",
+        "parentId": "1_15647",
+        "childCount": 66,
+        "publishedAssetId": {
+          "value": "132421139634506",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_Howl_v2",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_Howl_v2"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 69,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "100655617830150",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31004",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v2",
+        "parentId": "1_15647",
+        "childCount": 87,
+        "publishedAssetId": {
+          "value": "100655617830150",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_FromRun_v2",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_FromRun_v2"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 70,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "129411802349452",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31005",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v2",
+        "parentId": "1_15647",
+        "childCount": 72,
+        "publishedAssetId": {
+          "value": "129411802349452",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_v2",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_v2"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 71,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "118506682454741",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31006",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v2",
+        "parentId": "1_15647",
+        "childCount": 52,
+        "publishedAssetId": {
+          "value": "118506682454741",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_FromRun_v2",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_FromRun_v2"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 72,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "139968377472432",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31007",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v2",
+        "parentId": "1_15647",
+        "childCount": 120,
+        "publishedAssetId": {
+          "value": "139968377472432",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Kill_VisorCrush_v2",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Kill_VisorCrush_v2"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 73,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "84427037970976",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31008",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v3",
+        "parentId": "1_15647",
+        "childCount": 40,
+        "publishedAssetId": {
+          "value": "84427037970976",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Walk_v3",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Walk_v3"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 74,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "95010135299937",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31009",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v3",
+        "parentId": "1_15647",
+        "childCount": 48,
+        "publishedAssetId": {
+          "value": "95010135299937",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_Chase_v3",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_Chase_v3"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 75,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Idle",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "128025248631252",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31010",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v3",
+        "parentId": "1_15647",
+        "childCount": 180,
+        "publishedAssetId": {
+          "value": "128025248631252",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Watch_v3",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Watch_v3"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 76,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "110412756756869",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31011",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v3",
+        "parentId": "1_15647",
+        "childCount": 66,
+        "publishedAssetId": {
+          "value": "110412756756869",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_Howl_v3",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_Howl_v3"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 77,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "134624595904968",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31012",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v3",
+        "parentId": "1_15647",
+        "childCount": 87,
+        "publishedAssetId": {
+          "value": "134624595904968",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_FromRun_v3",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_FromRun_v3"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 78,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "90343971020887",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31013",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v3",
+        "parentId": "1_15647",
+        "childCount": 72,
+        "publishedAssetId": {
+          "value": "90343971020887",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_v3",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_v3"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 79,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "125045827384250",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31014",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v3",
+        "parentId": "1_15647",
+        "childCount": 52,
+        "publishedAssetId": {
+          "value": "125045827384250",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_FromRun_v3",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_FromRun_v3"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 80,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "73469024040297",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31015",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v3",
+        "parentId": "1_15647",
+        "childCount": 150,
+        "publishedAssetId": {
+          "value": "73469024040297",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Kill_GroundPinPunch_v3",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Kill_GroundPinPunch_v3"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 81,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "80984572103403",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31016",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v4",
+        "parentId": "1_15647",
+        "childCount": 40,
+        "publishedAssetId": {
+          "value": "80984572103403",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Walk_v4",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Walk_v4"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 82,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "137228566477955",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31017",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v4",
+        "parentId": "1_15647",
+        "childCount": 48,
+        "publishedAssetId": {
+          "value": "137228566477955",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_Chase_v4",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_Chase_v4"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 83,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Idle",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "95158317052216",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31018",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v4",
+        "parentId": "1_15647",
+        "childCount": 180,
+        "publishedAssetId": {
+          "value": "95158317052216",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Watch_v4",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Watch_v4"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 84,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "91704926128382",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31019",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v4",
+        "parentId": "1_15647",
+        "childCount": 66,
+        "publishedAssetId": {
+          "value": "91704926128382",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_Howl_v4",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_Howl_v4"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 85,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "121775599725846",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31020",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v4",
+        "parentId": "1_15647",
+        "childCount": 87,
+        "publishedAssetId": {
+          "value": "121775599725846",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_FromRun_v4",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_FromRun_v4"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 86,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "118129978406506",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31021",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v4",
+        "parentId": "1_15647",
+        "childCount": 72,
+        "publishedAssetId": {
+          "value": "118129978406506",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_v4",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_v4"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 87,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "123867767441019",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31022",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v4",
+        "parentId": "1_15647",
+        "childCount": 52,
+        "publishedAssetId": {
+          "value": "123867767441019",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_FromRun_v4",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_FromRun_v4"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 88,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "95675854057927",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31023",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v4",
+        "parentId": "1_15647",
+        "childCount": 150,
+        "publishedAssetId": {
+          "value": "95675854057927",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Kill_GroundPinPunch_v4",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Kill_GroundPinPunch_v4"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 89,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "120776103063010",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31024",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v5",
+        "parentId": "1_15647",
+        "childCount": 40,
+        "publishedAssetId": {
+          "value": "120776103063010",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Walk_v5",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Walk_v5"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 90,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "116275096071779",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31025",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v5",
+        "parentId": "1_15647",
+        "childCount": 48,
+        "publishedAssetId": {
+          "value": "116275096071779",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_Chase_v5",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_Chase_v5"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 91,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Idle",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "86013923573480",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31026",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v5",
+        "parentId": "1_15647",
+        "childCount": 180,
+        "publishedAssetId": {
+          "value": "86013923573480",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Watch_v5",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Watch_v5"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 92,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "118013244839249",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31027",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v5",
+        "parentId": "1_15647",
+        "childCount": 66,
+        "publishedAssetId": {
+          "value": "118013244839249",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_Howl_v5",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_Howl_v5"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 93,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "119056181976223",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31028",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v5",
+        "parentId": "1_15647",
+        "childCount": 87,
+        "publishedAssetId": {
+          "value": "119056181976223",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_FromRun_v5",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_FromRun_v5"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 94,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "94661930573561",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31029",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v5",
+        "parentId": "1_15647",
+        "childCount": 72,
+        "publishedAssetId": {
+          "value": "94661930573561",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_v5",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_v5"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 95,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "81430032814694",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31030",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v5",
+        "parentId": "1_15647",
+        "childCount": 52,
+        "publishedAssetId": {
+          "value": "81430032814694",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_FromRun_v5",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_FromRun_v5"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 96,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "131812662446824",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31031",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v5",
+        "parentId": "1_15647",
+        "childCount": 150,
+        "publishedAssetId": {
+          "value": "131812662446824",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Kill_GroundPinPunch_v5",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Kill_GroundPinPunch_v5"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 97,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "139801177050454",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31032",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v6walk",
+        "parentId": "1_15647",
+        "childCount": 40,
+        "publishedAssetId": {
+          "value": "139801177050454",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Walk_Restrained_v6walk",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Walk_Restrained_v6walk"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 98,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "113760166977097",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31033",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v6actions",
+        "parentId": "1_15647",
+        "childCount": 48,
+        "publishedAssetId": {
+          "value": "113760166977097",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_Chase_Corrected_v6actions",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_Chase_Corrected_v6actions"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 99,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "101684601194418",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31034",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v6actions",
+        "parentId": "1_15647",
+        "childCount": 150,
+        "publishedAssetId": {
+          "value": "101684601194418",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Kill_HunchedGroundPunch_v6actions",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Kill_HunchedGroundPunch_v6actions"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 100,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [],
+        "instanceId": "1_31035",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v7actions",
+        "parentId": "1_15647",
+        "childCount": 48,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_Chase_NaturalUpperBody_v7actions",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_Chase_NaturalUpperBody_v7actions"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 101,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "120416325910330",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31036",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v7actions",
+        "parentId": "1_15647",
+        "childCount": 150,
+        "publishedAssetId": {
+          "value": "120416325910330",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Kill_DeepHunchGroundPunch_v7actions",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Kill_DeepHunchGroundPunch_v7actions"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 102,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "117689146715099",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31037",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v7actions",
+        "parentId": "1_15647",
+        "childCount": 48,
+        "publishedAssetId": {
+          "value": "117689146715099",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_Natural_v7actions",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_Natural_v7actions"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 103,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "85991585476335",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31038",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v8actions",
+        "parentId": "1_15647",
+        "childCount": 40,
+        "publishedAssetId": {
+          "value": "85991585476335",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_PredatoryJog_v8actions",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_PredatoryJog_v8actions"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 104,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "79777407032608",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31039",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v8actions",
+        "parentId": "1_15647",
+        "childCount": 150,
+        "publishedAssetId": {
+          "value": "79777407032608",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Kill_CloseHunchPunch_v8actions",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Kill_CloseHunchPunch_v8actions"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 105,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "116430726507331",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31040",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v9actions",
+        "parentId": "1_15647",
+        "childCount": 150,
+        "publishedAssetId": {
+          "value": "116430726507331",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Kill_CloseHunchPunch_v9actions",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Kill_CloseHunchPunch_v9actions"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 106,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "100709130475232",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31041",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 40,
+        "publishedAssetId": {
+          "value": "100709130475232",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Walk_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Walk_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 107,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "99121728157417",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31042",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 48,
+        "publishedAssetId": {
+          "value": "99121728157417",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_Chase_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_Chase_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 108,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Idle",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "92831421568704",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31043",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 180,
+        "publishedAssetId": {
+          "value": "92831421568704",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Watch_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Watch_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 109,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "102035504530432",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31044",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 66,
+        "publishedAssetId": {
+          "value": "102035504530432",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_Howl_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_Howl_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 110,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "132425538759403",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31045",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 87,
+        "publishedAssetId": {
+          "value": "132425538759403",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Yell_FromRun_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Yell_FromRun_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 111,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "70970124497806",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31046",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 72,
+        "publishedAssetId": {
+          "value": "70970124497806",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 112,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "132839013239254",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31047",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 52,
+        "publishedAssetId": {
+          "value": "132839013239254",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Lunge_FromRun_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Lunge_FromRun_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 113,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "93323458577096",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31048",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 150,
+        "publishedAssetId": {
+          "value": "93323458577096",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Kill_GroundPinPunch_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Kill_GroundPinPunch_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 114,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "121187609243437",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31049",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 40,
+        "publishedAssetId": {
+          "value": "121187609243437",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Walk_Restrained_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Walk_Restrained_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 115,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": true,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Movement",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "90840395594409",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31050",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 40,
+        "publishedAssetId": {
+          "value": "90840395594409",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Run_PredatoryJog_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Run_PredatoryJog_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 116,
+      "root": "MongoTVEntityAnimations",
+      "rootId": "1_15647",
+      "top": {
+        "sequenceProperties": [
+          {
+            "value": {
+              "value": false,
+              "kind": "boolean"
+            },
+            "readable": true,
+            "name": "Loop"
+          },
+          {
+            "value": {
+              "value": "Enum.AnimationPriority.Action4",
+              "kind": "EnumItem"
+            },
+            "readable": true,
+            "name": "Priority"
+          },
+          {
+            "value": {
+              "value": "2",
+              "kind": "number"
+            },
+            "readable": true,
+            "name": "AuthoredHipHeight"
+          }
+        ],
+        "attributes": [
+          {
+            "name": "PublishedAssetId",
+            "value": {
+              "value": "94135265462008",
+              "kind": "string"
+            }
+          }
+        ],
+        "instanceId": "1_31051",
+        "rootName": "MongoTVEntityAnimations",
+        "inferredPublisherVersion": "v10full",
+        "parentId": "1_15647",
+        "childCount": 150,
+        "publishedAssetId": {
+          "value": "94135265462008",
+          "kind": "string"
+        },
+        "tags": [],
+        "name": "MongoTV_Entity_Kill_CloseHunchPunch_v10full",
+        "className": "KeyframeSequence",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "MongoTVEntityAnimations",
+          "MongoTV_Entity_Kill_CloseHunchPunch_v10full"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 117,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45266",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 3,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Clerk_Moving_rigged",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Clerk_Moving_rigged"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 118,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45267",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 2,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Explorer 1 v2",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Explorer 1 v2"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 119,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45268",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 13,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Untitled",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Untitled"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 120,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45269",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Untitled",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Untitled"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 121,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45270",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Dummy",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Dummy"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 122,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45271",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 6,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Avatar Rigged No Animation",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Avatar Rigged No Animation"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 123,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45272",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Avatar Rigged No Animation_autosetup",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Avatar Rigged No Animation_autosetup"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 124,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45273",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Avatar Rigged No Animation_autosetup",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Avatar Rigged No Animation_autosetup"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 125,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45274",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 2,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "StarterCharacter",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "StarterCharacter"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 126,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45275",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "MisoWalk",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "MisoWalk"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 127,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45276",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 3,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Pool Noodle Entity Reme... Walk Animation In Place",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Pool Noodle Entity Reme... Walk Animation In Place"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 128,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45277",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Meshy_AI_Rainbow_Knot_F...ng_Walk_inplace_withSkin",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Meshy_AI_Rainbow_Knot_F...ng_Walk_inplace_withSkin"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 129,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45278",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Meshy_AI_Rainbow_Knot_F...ng_Walk_inplace_withSkin",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Meshy_AI_Rainbow_Knot_F...ng_Walk_inplace_withSkin"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 130,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45279",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 3,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Meshy_AI_Rainbow_Knot_F...e_biped_Character_output",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Meshy_AI_Rainbow_Knot_F...e_biped_Character_output"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 131,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45280",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Meshy_AI_Rainbow_Knot_F...ng_Walk_inplace_withSkin",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Meshy_AI_Rainbow_Knot_F...ng_Walk_inplace_withSkin"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 132,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45281",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 2,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Mall Manger Level 3 Template",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Mall Manger Level 3 Template"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 133,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45282",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Mall Manger Level 3 Template",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Mall Manger Level 3 Template"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 134,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45283",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Mall Manager Level 3 Entity template correct",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Mall Manager Level 3 Entity template correct"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 135,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45284",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 0,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "MallManagerWalkAuthoring",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "MallManagerWalkAuthoring"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 136,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45285",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "MallManagerWalk_InPlace",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "MallManagerWalk_InPlace"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 137,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45286",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Slidemouth walking animation Roblox",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Slidemouth walking animation Roblox"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 138,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45287",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Scene",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Scene"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 139,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45288",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Scene",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Scene"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 140,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45289",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Scene",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Scene"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 141,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45290",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Scene",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Scene"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 142,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45291",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Scene",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Scene"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    },
+    {
+      "unit": 143,
+      "root": "RBX_ANIMSAVES",
+      "rootId": "1_41652",
+      "top": {
+        "attributes": [],
+        "instanceId": "1_45292",
+        "rootName": "RBX_ANIMSAVES",
+        "parentId": "1_41652",
+        "childCount": 1,
+        "publishedAssetId": {
+          "kind": "nil"
+        },
+        "tags": [],
+        "name": "Scene",
+        "className": "ObjectValue",
+        "topChild": true,
+        "animationIdAttribute": {
+          "kind": "nil"
+        },
+        "archivable": true,
+        "segments": [
+          "ServerStorage",
+          "RBX_ANIMSAVES",
+          "Scene"
+        ]
+      },
+      "status": "afventer reference-frontier og fuld native archive/reopen",
+      "originalRemovalApproved": false
+    }
+  ],
+  "nativeExecuted": false,
+  "deletionApproved": false,
+  "preserveExistingEntityRootAndAll117TopIdentities": true,
+  "limits": "Current144 identity selectors only; no native raw data/opaque/reference/exact-reopen proof."
+}

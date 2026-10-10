@@ -1,0 +1,41 @@
+{
+  "schema": "retired-authoring-reference-read-proposal-compile-v1",
+  "compiled": true,
+  "nativeExecuted": false,
+  "productionWrites": 0,
+  "deletionApproved": false,
+  "referenceAbsenceCertified": false,
+  "compileOnly": true,
+  "sourceBytes": 91985,
+  "sourceSHA256": "9dbd66051ea2d9daeff5a45610fdb252cfcb951cd12ffa95fa743d484a53ae16",
+  "inputs": [
+    {
+      "path": "tools/cleanup_20261009/retired_authoring_archive_common.luau",
+      "bytes": 22101,
+      "sha256": "d9a783c71d56591580ceab53f914f1cc8832365b68f5fe275cf279cd5634f5ad"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/native-read-proposal.luau",
+      "bytes": 9308,
+      "sha256": "2d603cb3b0d60c55211881cb5b23872c06c7eba8b000c60e99830159e2a698eb"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/trial-config.json",
+      "bytes": 60527,
+      "sha256": "69f0bd08db4630d4f822e98c3fa363e299e748db5a4e7d3c6f78c45f223001e2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/READ_PLAN.md",
+      "bytes": 6155,
+      "sha256": "0250eb79edaf0f6bcba059a38092f7503d580feb58e48c54c8dfff2e01ff5b09"
+    }
+  ],
+  "pending": [
+    "fresh Root config/receiver binding",
+    "independent peer review",
+    "actual native known completion",
+    "raw binary complete reference semantics",
+    "compatible protected nonserialized holders"
+  ],
+  "limits": "Compile with prior V2 config only, no source/native read/asset/cleanup/reference proof."
+}

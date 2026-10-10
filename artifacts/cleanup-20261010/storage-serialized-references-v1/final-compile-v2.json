@@ -1,0 +1,52 @@
+{
+  "schema": "retired-authoring-capture-final-compile-v2",
+  "passed": true,
+  "nativeCalls": 0,
+  "receiverStarted": false,
+  "templateSHA256": "b954326f239946fddaffe5872debe1d3d69941afa6e9230b8798f02feaf42895",
+  "templateBytes": 92990,
+  "pythonUnits": 8,
+  "pythonInputs": [
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/raw_binary_refs.py",
+      "bytes": 13500,
+      "sha256": "58bf824c9b3b0fa821555bae2f4a8476aba37bd6b708323ecde5a4b411782ad3"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/receiver.py",
+      "bytes": 6910,
+      "sha256": "ba257e451e2b11a95c23501ccdb7bdedfcb2cb9aa3f77d47b0a6981d17b84090"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/run-root-capture.py",
+      "bytes": 8991,
+      "sha256": "1b0d6f46f7d5e98a2993e54c70bed0563782e309fcf2aa464bb1cdf9ce58b6fb"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/test-offline.py",
+      "bytes": 15990,
+      "sha256": "d13790c992a2d9b93b227f15a7e1069495274b46edf4ad94a50ee7574667de1c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/test-native-suffix.py",
+      "bytes": 11909,
+      "sha256": "fd9f1fd5b410b584fd1ecd02838c5e928b91aff13d6141753e527ff1d5773c1d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/observe-native-archive.py",
+      "bytes": 2793,
+      "sha256": "6f23aae05c6ba0a4578b8f25985c75dc5cc7a6940659e8f8f7ae65b90fd4df41"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/prepare-capture.py",
+      "bytes": 1649,
+      "sha256": "de0acd9bf504408aa1c21f79fc629fbf80e4ee439097f4dfd8e96350d6d6318b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/freeze-capture.py",
+      "bytes": 4799,
+      "sha256": "d30fcf9c61169c4e72ff311d48c1d9689d3976d52e23fb9ddcb4639937d77b3e"
+    }
+  ],
+  "limits": "Syntax only; native/HTTP/raw current109 validation pending."
+}

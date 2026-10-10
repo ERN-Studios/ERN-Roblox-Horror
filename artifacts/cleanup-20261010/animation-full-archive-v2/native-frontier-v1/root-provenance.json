@@ -1,0 +1,11 @@
+{
+  "studioId": "b609b91a-e648-42ab-ba5f-a996912e9552",
+  "sourceSHA256": "44ae3656944519368c6efa2d3c3f3cd20ef4c94f823162015dcabfa41b6dd088",
+  "driverSHA256": "c4a1278d9ce380ceeba0bf70bf404bac8186456dc17c32565d29b7e6bbb2ad64",
+  "peerSHA256": "a0872a7e759dc19d3c6e0e28f4fece32916a404263f87f2007afa4e9f480de1d",
+  "oneReadonlyRequest": true,
+  "noRetry": true,
+  "noModeSwitch": true,
+  "nativeInstanceSourcePropertyWritesRequested": 0,
+  "scratchWritesRequested": 0
+}

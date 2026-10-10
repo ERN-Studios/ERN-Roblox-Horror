@@ -1,0 +1,13 @@
+{
+  "schema": "mongotv-animation-cache-preservation-verdict-v1",
+  "capturePassed": true,
+  "allActualVersionsRetained": true,
+  "cacheRecordCount": 191,
+  "topChildrenRetained": 144,
+  "deletionApproved": false,
+  "fullNativeArchiveCertified": false,
+  "referenceAbsenceCertified": false,
+  "limits": "Targeted class/PublishedAssetId/AnimationId traversal +complete metadata on all topchildren/cache/AnimationClip candidates. Other pose/keyframe properties/attributes are not inventoried; full off-place native archive remains required. Readable errors/unknown fields are not nil. No upload/delete/gameplay/performance/reference certificate. Point-in-time guards do not prove continuous actor provenance.",
+  "manifestSHA256": "4caa106ecfcf965013c4ac6759c61c3fa752ff855f51614b9392ba8e0cbc1d94",
+  "collectorStateWrites": 24
+}

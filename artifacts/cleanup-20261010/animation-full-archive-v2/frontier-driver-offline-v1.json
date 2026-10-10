@@ -1,0 +1,137 @@
+{
+  "schema": "mongotv-animation-frontier-actual-driver-offline-v1",
+  "passed": true,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "inputs": [
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/run-root-frontier.py",
+      "bytes": 6433,
+      "sha256": "c4a1278d9ce380ceeba0bf70bf404bac8186456dc17c32565d29b7e6bbb2ad64"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-cache-inventory-v1/run-root-inventory.py",
+      "bytes": 14160,
+      "sha256": "55b57e6a6224c793138eaeffcb25e206c5d3526ff9e541f7f0bb111257e768e8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/frontier-source.luau",
+      "bytes": 152374,
+      "sha256": "44ae3656944519368c6efa2d3c3f3cd20ef4c94f823162015dcabfa41b6dd088"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/animation-full-archive-v2/test-driver.py",
+      "bytes": 7700,
+      "sha256": "d9a63f5fe46dbf0524067b12ba98f836c36d8cae6b5d64b26ff02a0b97a09d27"
+    }
+  ],
+  "cases": 21,
+  "checks": 51,
+  "results": [
+    {
+      "case": "success",
+      "expectedPass": true,
+      "passed": true
+    },
+    {
+      "case": "unreadable",
+      "expectedPass": true,
+      "passed": true
+    },
+    {
+      "case": "unknown-with-value",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "unreadable-no-error",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "source-hash",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "manifest-hash",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "source-count",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "slot-count",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "duplicate-slot",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "model-id",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "missing-class",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "missing-value",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "wrong-value-kind",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "claimed-write",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "claimed-delete",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "failed-guard",
+      "expectedPass": false,
+      "passed": true
+    },
+    {
+      "case": "completed",
+      "passed": true,
+      "fakeRequests": 1
+    },
+    {
+      "case": "unknown-before",
+      "passed": true,
+      "fakeRequests": 1
+    },
+    {
+      "case": "unknown-after",
+      "passed": true,
+      "fakeRequests": 1
+    },
+    {
+      "case": "tool-error",
+      "passed": true,
+      "fakeRequests": 1
+    },
+    {
+      "case": "malformed-envelope",
+      "passed": true,
+      "fakeRequests": 1
+    }
+  ]
+}

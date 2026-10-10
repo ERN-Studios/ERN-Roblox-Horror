@@ -1,0 +1,15 @@
+{
+  "schema": "retired-authoring-capture-default-driver-gate-v1",
+  "passed": true,
+  "nativeCalls": 0,
+  "receiverStarted": false,
+  "stdout": {
+    "prepared": true,
+    "nativeCalls": 0,
+    "receiverStarted": false,
+    "templateSHA256": "b954326f239946fddaffe5872debe1d3d69941afa6e9230b8798f02feaf42895",
+    "deletionApproved": false
+  },
+  "frozenPinsSHA256": "2fa7029d92bad2d8b64630adf329d8bd5be70ba123bf3ce347d5585a01c02e03",
+  "driverSHA256": "1b0d6f46f7d5e98a2993e54c70bed0563782e309fcf2aa464bb1cdf9ce58b6fb"
+}

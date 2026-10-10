@@ -1,0 +1,10 @@
+{
+  "schema": "retired-authoring-capture-final-compile-v1",
+  "passed": true,
+  "nativeCalls": 0,
+  "receiverStarted": false,
+  "templateSHA256": "e754cd27d848276da0ffb4ab494599d9ad43f7162d9d1f6121ee11f053f6ec21",
+  "templateBytes": 92791,
+  "pythonUnits": 7,
+  "limits": "Syntax only. ActualRootnativecurrentSource/serializer/cleanup/reference port remains pending."
+}

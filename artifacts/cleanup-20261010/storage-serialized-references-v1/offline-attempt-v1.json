@@ -1,0 +1,203 @@
+{
+  "schema": "retired-authoring-reference-capture-offline-v1",
+  "passed": true,
+  "nativeCalls": 0,
+  "receiverHTTPStarted": false,
+  "inputs": [
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/raw_binary_refs.py",
+      "bytes": 12124,
+      "sha256": "bbe12a5919e3d430dd98560f435956f82c7af79b532e0897cff02f1ec0f4a787"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/receiver.py",
+      "bytes": 6749,
+      "sha256": "b469d79e18f66ca6e51c874ee00d16c1ffd0f4f36c19d7f96851e85ebd5997a9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/run-root-capture.py",
+      "bytes": 8958,
+      "sha256": "b15df5621bc1be62c99897ac2447d119c4af243a8c6390fc7db73d030e4884c2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/native-capture.luau",
+      "bytes": 9754,
+      "sha256": "2fb732ea7d5d8533fbfd1acf2d475a0d82aa134608ce119d7dd40c62a2ae37e6"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/capture-config.json",
+      "bytes": 60654,
+      "sha256": "9f86c0afdfd1c16e5486196a2afa1d69b4c3cfebf2406f022e5e28da4ecd180b"
+    }
+  ],
+  "actualOldArchiveSHA256": "e808f055403bd331b76e0831955b192abc8b4a914865c3936aa9b2d23ed2a8d7",
+  "limits": "Actual wrapper/decoder/receiver with fake API/server. Raw engine archive prefix plus synthetic appended Ref columns; native capture/listener cleanup/full reference/deletion ports remain separate.",
+  "cases": 38,
+  "checks": 38,
+  "results": [
+    {
+      "case": "raw-complete-columns-unknown-preserved",
+      "passed": true
+    },
+    {
+      "case": "omitted-Part0Internal",
+      "refused": true
+    },
+    {
+      "case": "wrong-type-Part0Internal",
+      "refused": true
+    },
+    {
+      "case": "inbound-Part0Internal",
+      "refused": true
+    },
+    {
+      "case": "omitted-Part1Internal",
+      "refused": true
+    },
+    {
+      "case": "wrong-type-Part1Internal",
+      "refused": true
+    },
+    {
+      "case": "inbound-Part1Internal",
+      "refused": true
+    },
+    {
+      "case": "omitted-PlaceAvatarRules",
+      "refused": true
+    },
+    {
+      "case": "wrong-type-PlaceAvatarRules",
+      "refused": true
+    },
+    {
+      "case": "inbound-PlaceAvatarRules",
+      "refused": true
+    },
+    {
+      "case": "public-alias-is-not-hidden-slot",
+      "refused": true
+    },
+    {
+      "case": "duplicate-native-column",
+      "refused": true
+    },
+    {
+      "case": "truncated-native",
+      "refused": true
+    },
+    {
+      "case": "trailing-native",
+      "refused": true
+    },
+    {
+      "case": "unresolved-raw-referent",
+      "refused": true
+    },
+    {
+      "case": "witness-count-drift",
+      "refused": true
+    },
+    {
+      "case": "actual-receiver-raw-transfer",
+      "passed": true
+    },
+    {
+      "case": "wrong-private-token",
+      "refused": true
+    },
+    {
+      "case": "wrong-capture-id",
+      "refused": true
+    },
+    {
+      "case": "duplicate-part",
+      "refused": true
+    },
+    {
+      "case": "reordered-part",
+      "refused": true
+    },
+    {
+      "case": "part-after-short",
+      "refused": true
+    },
+    {
+      "case": "completion-originalWrites",
+      "refused": true
+    },
+    {
+      "case": "completion-connectionsRetained",
+      "refused": true
+    },
+    {
+      "case": "completion-weldConstraints",
+      "refused": true
+    },
+    {
+      "case": "completion-deletionApproved",
+      "refused": true
+    },
+    {
+      "case": "completion-referenceAbsenceCertified",
+      "refused": true
+    },
+    {
+      "case": "completion-finalOriginalGuardPassed",
+      "refused": true
+    },
+    {
+      "case": "completion-referenceSHA256",
+      "refused": true
+    },
+    {
+      "case": "completion-referenceBytes",
+      "refused": true
+    },
+    {
+      "case": "completion-ownedLeaseReleased",
+      "refused": true
+    },
+    {
+      "case": "known-failed-native-claim",
+      "passed": true
+    },
+    {
+      "case": "actual-wrapper-completed-error",
+      "passed": true,
+      "nativeCalls": 0,
+      "fakeAPICalls": 1
+    },
+    {
+      "case": "actual-wrapper-completed-malformed",
+      "passed": true,
+      "nativeCalls": 0,
+      "fakeAPICalls": 1
+    },
+    {
+      "case": "actual-wrapper-completed-failure",
+      "passed": true,
+      "nativeCalls": 0,
+      "fakeAPICalls": 1
+    },
+    {
+      "case": "actual-wrapper-transport-unknown",
+      "passed": true,
+      "nativeCalls": 0,
+      "fakeAPICalls": 1
+    },
+    {
+      "case": "actual-wrapper-envelope-unknown",
+      "passed": true,
+      "nativeCalls": 0,
+      "fakeAPICalls": 1
+    },
+    {
+      "case": "actual-wrapper-success",
+      "passed": true,
+      "nativeCalls": 0,
+      "fakeAPICalls": 1
+    }
+  ]
+}

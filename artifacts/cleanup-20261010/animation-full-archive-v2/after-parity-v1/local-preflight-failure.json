@@ -1,0 +1,1 @@
+{"pass":false,"nativeCalls":0,"nativeWrites":0,"phase":"local-main-initialization-before-client-create","error":"Root pre-copied .gitattributes; unchanged reader exclusively creates its own .gitattributes and refused FileExistsError","noParityCredit":true,"next":"fresh after-parity-v2 with only unchanged reader pre-staged"}

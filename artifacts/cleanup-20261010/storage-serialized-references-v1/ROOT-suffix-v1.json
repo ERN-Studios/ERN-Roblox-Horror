@@ -1,0 +1,233 @@
+{
+  "schema": "retired-authoring-actual-readonly-capture-suffix-offline-v1",
+  "passed": true,
+  "nativeCalls": 0,
+  "receiverHTTPStarted": false,
+  "inputs": [
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/native-capture.luau",
+      "bytes": 10186,
+      "sha256": "63fdb7cc824c5e44f07e7bb530bf31f7a07a692e18f8bb620ff1ce59aa20d43c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-serialized-references-v1/capture-config.json",
+      "bytes": 60654,
+      "sha256": "9f86c0afdfd1c16e5486196a2afa1d69b4c3cfebf2406f022e5e28da4ecd180b"
+    }
+  ],
+  "fixtureSHA256": "8dd580c2b0d5f4723d6958d402a12c5928818fb52e9930e76d82fcb2584b4bfe",
+  "limits": "Actual suffix under explicit table/script-row/serializer/common-guard boundaries. Not actual Instance getters, engine events, serialization, Source parity, HTTP or reference absence.",
+  "compile": {
+    "exitCode": 0,
+    "stderr": ""
+  },
+  "exitCode": 0,
+  "stderr": "",
+  "replay": {
+    "cases": 20,
+    "checks": 166804,
+    "passed": true,
+    "results": [
+      {
+        "boundedYields": 7,
+        "capturePassed": true,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "success",
+        "passed": true,
+        "serializerCalls": 3,
+        "transferCalls": 1
+      },
+      {
+        "boundedYields": 0,
+        "capturePassed": false,
+        "createdFakeConnections": 0,
+        "disconnectAttempts": 0,
+        "mode": "bad-token",
+        "passed": true,
+        "serializerCalls": 0,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 0,
+        "capturePassed": false,
+        "createdFakeConnections": 0,
+        "disconnectAttempts": 0,
+        "mode": "mode-before",
+        "passed": true,
+        "serializerCalls": 0,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 0,
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "begin-fails",
+        "passed": true,
+        "serializerCalls": 0,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 0,
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "serializer-first",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 4,
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "serializer-joint",
+        "passed": true,
+        "serializerCalls": 2,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 5,
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "serializer-again",
+        "passed": true,
+        "serializerCalls": 3,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 6,
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "transfer-fails",
+        "passed": true,
+        "serializerCalls": 3,
+        "transferCalls": 1
+      },
+      {
+        "boundedYields": 2,
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "epoch",
+        "passed": true,
+        "serializerCalls": 2,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 2,
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "source-change",
+        "passed": true,
+        "serializerCalls": 2,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 2,
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "foreign-lease",
+        "passed": true,
+        "serializerCalls": 2,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 2,
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "foreign-ledger",
+        "passed": true,
+        "serializerCalls": 2,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 7,
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "disconnect-fails",
+        "passed": true,
+        "serializerCalls": 3,
+        "transferCalls": 1
+      },
+      {
+        "boundedYields": 3,
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "missing-weld",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 3,
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "extra-weld",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 3,
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "unarchivable",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 1,
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "mode-after-yield",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 1,
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "epoch-after-yield",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 1,
+        "capturePassed": false,
+        "createdFakeConnections": 180,
+        "disconnectAttempts": 180,
+        "mode": "source-after-yield",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      },
+      {
+        "boundedYields": 1,
+        "capturePassed": false,
+        "createdFakeConnections": 1,
+        "disconnectAttempts": 1,
+        "mode": "foreign-lease-after-yield",
+        "passed": true,
+        "serializerCalls": 1,
+        "transferCalls": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "frontierReadPassed": true,
+  "actualSlotsRetained": 28,
+  "unreadableSlots": 0,
+  "deletionApproved": false,
+  "fullNativeArchiveCertified": false,
+  "referenceAbsenceCertified": false,
+  "limits": "Actual reflection +27 Value/one PrimaryPart frontier only. Other serialized Instance slots/full data/reference closure, raw native archive and exact off-place reopen remain pending. Unreadable/missing is never nil. No upload/delete/recovery/gameplay/performance certificate. Point-in-time guards only."
+}

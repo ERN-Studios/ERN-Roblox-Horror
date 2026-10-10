@@ -1,0 +1,20 @@
+{
+  "schema": "retired-authoring-reference-current-baseline-binding-v1",
+  "nativeCallsByAuthor": 0,
+  "sourcePinsInheritedUnchanged": 213,
+  "SSRoots": 52,
+  "bounds": {
+    "weldConstraints": 109,
+    "retiredNodes": 1617,
+    "rawMiB": 32
+  },
+  "actualV2KnownCompletedPASS": {
+    "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/native-run-v1/root-completion.json",
+    "bytes": 14757,
+    "sha256": "a1416cb91afff9e730045aaa483332490718da38e69644618939afc01544776a"
+  },
+  "actualSourcesUnchanged": true,
+  "originalArchiveUnchanged": true,
+  "absenceIsNotReferenceCertification": true,
+  "deletionApproved": false
+}
