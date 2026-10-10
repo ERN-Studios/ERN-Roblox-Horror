@@ -39,6 +39,7 @@ local shiftSprintHeld, touchSprintHeld, gamepadSprintHeld = false, false, false
 -- The touch RUN toggle, declared up here because the B2 RUN cell's paintRun reads it (HUD_B2_TOUCH, owner, 2026-10-08).
 local touchSprintToggled = false
 local windowFocused = true
+local crouchInterrupted = false -- CROUCH_LATCH_20261010: a Control hold that the window losing focus cut short
 local keyboardCrouchHeld, controllerCrouchToggled, touchSneakToggled = false, false, false
 local lastPublishedCrouch: boolean? = nil
 local crouchRequestSerial = 0
@@ -320,6 +321,13 @@ UIS.WindowFocusReleased:Connect(function()
 	windowFocused = false
 	shiftSprintHeld, gamepadSprintHeld = false, false
 	refreshSprint()
+	-- CROUCH_LATCH_20261010: Control is part of the Mac's own shortcuts (Spaces, Mission Control, screenshot to
+	-- clipboard). The key-down reaches the game, the key-up goes with the focus, and the body stayed kneeling at half
+	-- speed until Control or Space was pressed again.
+	if keyboardCrouchHeld then
+		keyboardCrouchHeld, crouchInterrupted = false, true
+		refreshCrouch()
+	end
 end)
 UIS.WindowFocused:Connect(function()
 	windowFocused = true -- the next Heartbeat reads the current hardware state
@@ -810,6 +818,65 @@ player:GetAttributeChangedSignal("ZyntraSpeedBoostUntil"):Connect(refreshSpeedBo
 player:GetAttributeChangedSignal("ZyntraSpeedBoostMultiplier"):Connect(refreshSpeedBoost)
 player:GetAttributeChangedSignal("Level4_CarrySpeedFactor"):Connect(applySpeed)
 
+-- POOL_EXIT_20261010 (owner: "no walking problems in Level 2"). A swimming body pressed against a pool's edge treads
+-- water there for good: measured in the stepwell's pool, six seconds without an inch, while one jump put it on the
+-- deck. Walking squarely at a deck now climbs out by itself. Level 2 only, only in the Swimming state, only onto a
+-- top that is a real floor (two studs deep, level, with room to stand), so a pillar cap or a thin rim never throws
+-- anybody anywhere. A dry level never runs more than the first two tests.
+local poolExitStep
+do
+	local nextCheck, pressedSince, lastHop, lastWall, lastDir = 0, nil, 0, nil, nil
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.IgnoreWater, params.RespectCanCollide = true, true
+	local room = OverlapParams.new()
+	room.FilterType = Enum.RaycastFilterType.Exclude
+	room.RespectCanCollide = true
+	local STANDING = Vector3.new(2.4, 4.6, 2.4) -- the round body's own box, a little slim so a wall beside the spot is fine
+	local function idle() pressedSince, lastWall, lastDir = nil, nil, nil end
+	poolExitStep = function()
+		local now = os.clock()
+		if now < nextCheck then return end
+		nextCheck = now + 0.1
+		if workspace:GetAttribute("SelectedLevel") ~= 2 or player:GetAttribute("InRound") ~= true then return idle() end
+		local character, hum = currentChar()
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if not (hum and root and hum.Health > 0 and hum:GetState() == Enum.HumanoidStateType.Swimming)
+			or root.Anchored or not movementAvailable()
+			or character:GetAttribute("Level2_ForcedSliding") == true
+			or character:GetAttribute("Level2_RagdollServerActive") == true then
+			return idle()
+		end
+		local move, velocity = hum.MoveDirection, root.AssemblyLinearVelocity
+		local flat = Vector3.new(move.X, 0, move.Z)
+		if flat.Magnitude < 0.3 or Vector3.new(velocity.X, 0, velocity.Z).Magnitude > 2.5 then return idle() end
+		local dir = flat.Unit
+		params.FilterDescendantsInstances = {character}
+		-- A wall squarely ahead, at the water line or just under it.
+		local wall = workspace:Raycast(root.Position, dir * 3.5, params)
+			or workspace:Raycast(root.Position - Vector3.new(0, 1.5, 0), dir * 3.5, params)
+		if not wall or wall.Normal:Dot(dir) > -0.7 then return idle() end
+		-- Its top: level, no more than three studs over the body, and still floor two studs further in.
+		local over = Vector3.new(wall.Position.X, root.Position.Y + 5, wall.Position.Z)
+		local top = workspace:Raycast(over + dir * 0.7, Vector3.new(0, -7, 0), params)
+		local deck = top and workspace:Raycast(over + dir * 2.7, Vector3.new(0, -7, 0), params)
+		if not (top and deck) or top.Normal.Y < 0.9 or math.abs(deck.Position.Y - top.Position.Y) > 0.6 then return idle() end
+		local rise = top.Position.Y - root.Position.Y
+		if rise < -1 or rise > 3 then return idle() end
+		room.FilterDescendantsInstances = {character}
+		local landing = CFrame.new(top.Position + dir * 1 + Vector3.new(0, STANDING.Y / 2 + 0.3, 0))
+		if #workspace:GetPartBoundsInBox(landing, STANDING, room) > 0 then return idle() end
+		-- The same edge, the same way, for a third of a second: that is somebody trying to get out.
+		if lastWall ~= wall.Instance or not lastDir or lastDir:Dot(dir) < 0.95 then pressedSince = now end
+		lastWall, lastDir = wall.Instance, dir
+		if now - pressedSince < 0.3 or now - lastHop < 0.8 then return end
+		lastHop = now
+		idle()
+		hum.Jump = true
+		hum:ChangeState(Enum.HumanoidStateType.Jumping) -- the control module rewrites Jump every frame: force the state
+	end
+end
+
 RunService.Heartbeat:Connect(function(dt)
 	-- InputEnded can be lost on disconnect/focus loss in any phase. Reconcile
 	-- physical holds without changing the independent touch RUN toggle.
@@ -833,6 +900,21 @@ RunService.Heartbeat:Connect(function(dt)
 		shiftSprintHeld, gamepadSprintHeld = physicalShift, physicalTrigger
 		refreshSprint() -- also repairs the in-round state used by stamina/noise
 	end
+	-- CROUCH_LATCH_20261010: the same repair for the Control hold. A crouch begins on a key-down; the only hold this
+	-- puts back is one the window's own focus loss interrupted while the key stayed down.
+	if windowFocused then
+		local physicalCrouch = keyboardCrouchHeldNow()
+		if keyboardCrouchHeld and not physicalCrouch then
+			keyboardCrouchHeld = false
+			refreshCrouch()
+		elseif crouchInterrupted and physicalCrouch and not keyboardCrouchHeld
+			and UIS:GetFocusedTextBox() == nil and crouchAllowed() then
+			keyboardCrouchHeld = true
+			refreshCrouch()
+		end
+		crouchInterrupted = false
+	end
+	poolExitStep()
 	if not inRound() then
 		stamina = staminaMax()
 		exhausted = false
@@ -1005,6 +1087,21 @@ local function bindLife(character)
 	end
 	character:GetAttributeChangedSignal("Level2_ForcedSliding"):Connect(cancelForLevel2Lock)
 	character:GetAttributeChangedSignal("Level2_RagdollServerActive"):Connect(cancelForLevel2Lock)
+	-- HIP_HEIGHT_20261010 (owner, with pictures: "gliding in the floor and almost cant move"; in Level 2 "cannot really
+	-- walk forward and slides back all the time"). The round body can reach this client in pieces (5 of its 16 parts at
+	-- CharacterAdded, the legs a tenth of a second later). The engine works the hip height out from what is there
+	-- (0, -0.1 or 0.94 instead of 2.6) and never again: the body stands in the floor, finds no ground under it, and in
+	-- Level 2's ankle-deep water it "swims". Measured 2026-10-10: four of four round starts in a row. The server
+	-- always has the whole rig, so its figure is the truth; this client simulates the body, so it is put right here.
+	local function holdHipHeight()
+		local want = character:GetAttribute("ZyntraHipHeight")
+		if humanoid and type(want) == "number" and want >= 0.5 and want <= 6 and math.abs(humanoid.HipHeight - want) > 0.01 then
+			humanoid.HipHeight = want
+		end
+	end
+	character:GetAttributeChangedSignal("ZyntraHipHeight"):Connect(holdHipHeight)
+	if humanoid then humanoid:GetPropertyChangedSignal("HipHeight"):Connect(holdHipHeight) end
+	holdHipHeight()
 	updateRoundState()
 end
 if player.Character then task.spawn(bindLife, player.Character) end
