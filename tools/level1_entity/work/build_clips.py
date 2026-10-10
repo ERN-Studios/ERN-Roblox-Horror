@@ -36,8 +36,12 @@ GAITS = {
                 height=4.12,bob=.17,lean=24,yaw=8,list=3.2,sway=.24,heel=48),
     'Prowl':dict(seconds=.80,frames=64,speed=17.0,duty=.42,front=2.87,width=1.12,clear=1.18,
                  height=3.97,bob=.18,lean=32,yaw=10,list=3.8,sway=.17,heel=55),
-    'Run':dict(seconds=.68,frames=68,speed=27.2,duty=.28,front=2.41,width=1.05,clear=1.65,
-               height=4.12,bob=.32,lean=40,yaw=12,list=4.5,sway=.12,heel=63),
+    # RUN_CHARGE_20261010 (owner: "its chase/run animation is absolute dog shit, remake it"). Seen on the real body
+    # the first run was the walk folded double: head at chest height, feet pattering under the hips, one arm pawing
+    # ahead. This one is a heavy charge: chest and head up, long reaching strides with a real flight, a hard drop on
+    # each landing, both arms pumping with the claws open.
+    'Run':dict(seconds=.72,frames=72,speed=27.2,duty=.30,front=2.95,width=1.20,clear=2.25,
+               height=3.92,bob=.50,lean=25,yaw=17,list=6.5,sway=.20,heel=72),
 }
 
 def foot_path(p,g,side):
@@ -60,7 +64,8 @@ def foot_path(p,g,side):
         h01=-2*u**3+3*u*u; h11=u**3-u*u
         v=-stride*(1-d)
         f=h00*off+h10*v+h01*g['front']+h11*v
-        h=.035+g['clear']*math.sin(math.pi*u)**2
+        # the charge kicks the heel up early behind the body and brings the knee through high
+        h=.035+g['clear']*math.sin(math.pi*(u**.72 if g['speed']>20 else u))**2
         entry=18 if g['speed']==8 else -12
         pitch=float(sequence_keys([(0,-g['heel']),(.32,-32),(.72,22),(1,entry)],u))
         stance=False
@@ -70,7 +75,7 @@ def foot_path(p,g,side):
     if not stance: x-=sign*.10*math.sin(math.pi*(q-d)/(1-d))**2
     return dict(toe=point(x,h,f),pitch=pitch,yaw=sign*9,stance=stance,phase=q)
 
-def torso(pose,p,lean,yaw_amp,list_amp,sway,hip_height,hip_forward=-.44,wind=0):
+def torso(pose,p,lean,yaw_amp,list_amp,sway,hip_height,hip_forward=-.44,wind=0,head=None):
     sn=math.sin(TAU*p); cs=math.cos(TAU*p)
     # Hips is yawed 16.5 degrees at rest. All deltas below are ROOT-space.
     RIG.set_root_rotation(pose,'Hips',rotation(lean*.68,yaw_amp*sn,list_amp*sn) @ RIG.rest_world['Hips'][:3,:3])
@@ -87,8 +92,14 @@ def torso(pose,p,lean,yaw_amp,list_amp,sway,hip_height,hip_forward=-.44,wind=0):
         roll=-list_amp*.6*sn if name=='Spine' else 0
         RIG.set_root_rotation(pose,name,rotation(lean*share,counter,roll)@baseline)
     # The gaze is stable in root coordinates despite the whole spine moving.
-    RIG.set_root_rotation(pose,'neck',rotation(-7,wind*.12,0)@RIG.rest_world['neck'][:3,:3])
-    RIG.set_root_rotation(pose,'Head',rotation(4,1.0*sn,4)@RIG.rest_world['Head'][:3,:3])
+    if head is None:
+        RIG.set_root_rotation(pose,'neck',rotation(-7,wind*.12,0)@RIG.rest_world['neck'][:3,:3])
+        RIG.set_root_rotation(pose,'Head',rotation(4,1.0*sn,4)@RIG.rest_world['Head'][:3,:3])
+    else:
+        # the charge: the head is thrown up out of the hunch and held on the prey, rocking a little with each landing
+        nod=2.5*math.cos(2*TAU*(p-.10))
+        RIG.set_root_rotation(pose,'neck',rotation(head[0]+nod*.5,wind*.12,0)@RIG.rest_world['neck'][:3,:3])
+        RIG.set_root_rotation(pose,'Head',rotation(head[1]+nod,2.5*sn,head[2])@RIG.rest_world['Head'][:3,:3])
 
 def safe_wrist(pose,side,target,pole_offset=None):
     S=RIG.fk(pose)[side+'Arm'][:3,3]
@@ -109,10 +120,18 @@ def arms_gait(pose,p,name):
         phase=p+(0 if side=='Left' else .5)
         S=RIG.fk(pose)[side+'Arm'][:3,3]
         if name=='Run':
-            a=.5-.5*math.cos(TAU*(phase+.045))
-            target=point(-.0937+sign*(2.35-1.0*a),4.05+3.05*a+(0.25*a if side=='Right' else 0),-.7+6.2*a+(0.35*a if side=='Right' else 0))
-            direction=np.array([sign*.08,-.70+.55*a,-.70-.30*a])
-            curl=.55-.4*a
+            # Each arm pumps against its own leg: back and out as that foot lands, driven forward across the chest
+            # as it pushes off. Elbows stay bent; the claws open at the front of the swing.
+            fwd=-math.cos(TAU*(phase+.03))
+            a=float(smooth(.5+.5*fwd))
+            amp=1.08 if side=='Right' else .96
+            # Seen from the front (where the hunted player is) the arms have to stay OUT of the face and read wide:
+            # the forward hand comes up beside the chest, never across it; the back hand is thrown out behind the hip.
+            front=np.array([sign*1.25,-1.00,-2.55*amp]); back=np.array([sign*1.95,-1.65,2.25*amp])
+            target=S+mix(back,front,a)+np.array([0,-.50*(1-fwd*fwd),0])
+            direction=mix(np.array([sign*.45,-.75,.50]),np.array([sign*.20,.15,-.97]),a)
+            direction=direction/np.linalg.norm(direction)
+            curl=.46-.28*a
         else:
             wave=math.sin(TAU*(phase+.07))
             amp=(1.03 if name=='Walk' else 1.50)*(1.12 if side=='Right' else .91)
@@ -143,9 +162,11 @@ def build_gait(name):
         p=i/N
         pose={}
         # Contact dip followed by flight lift. Stance duty, not a sped-up walk, distinguishes the gaits.
-        bob=-g['bob']*math.cos(2*TAU*(p-.07))
+        # the charge is lowest in the middle of each stance and highest in the middle of each flight
+        bob=-g['bob']*math.cos(2*TAU*(p-(.09 if name=='Run' else .07)))
         lean=max(0,g['lean']-13.3)/.84+2*math.sin(2*TAU*(p-.07))
-        torso(pose,p,lean,g['yaw'],g['list'],g['sway'],g['height']+bob,wind=3 if name!='Run' else -4)
+        torso(pose,p,lean,g['yaw'],g['list'],g['sway'],g['height']+bob,wind=3 if name!='Run' else -4,
+              head=(-28,-30,3) if name=='Run' else None)
         feet={s:foot_path(p,g,s) for s in ['Left','Right']}
         poses.append(pose); feet_all.append(feet)
     origin=RIG.rest_world['Hips'][:3,3]
@@ -163,7 +184,8 @@ def build_gait(name):
         p=i/N; H=RIG.fk(pose)['Hips'][:3,3].copy(); H[1]-=envelopes[i]+.015
         RIG.set_root_position(pose,'Hips',H)
         for side,ft in feet_all[i].items():
-            bend=max(0,-ft['pitch'])*(1-float(smooth((ft['toe'][1]+FLOOR_UP-.035)/.25)))
+            # the charge's foot leaves the floor fast: its toe unbends over more height or the joint snaps
+            bend=max(0,-ft['pitch'])*(1-float(smooth((ft['toe'][1]+FLOOR_UP-.035)/(.9 if name=='Run' else .25))))
             RIG.solve_leg_toe(side,pose,ft['toe'],ft['pitch'],ft['yaw'],point(-.0937+(-1 if side=='Left' else 1)*1.3,2.0,5.0),toe_bend_deg=bend,clamp=False)
         arms_gait(pose,p,name)
     return dict(poses=poses,feet=feet_all,frames=N,fps=N/g['seconds'],seconds=g['seconds'],loop=True,
@@ -315,7 +337,7 @@ def qa_clip(name,clip,data,float_q):
     # QA the quantized payload the player will decode, not just perfect pre-export targets.
     poses=decode_export(data); worlds=[RIG.fk(p) for p in poses]
     N=len(poses); dt=clip['seconds']/N if clip['loop'] else clip['seconds']/(N-1)
-    max_slide=0.; min_foot=100.; max_leg=0.; max_arm=0.; max_rotation=0.; frame_changes=[]
+    max_slide=0.; min_foot=100.; max_leg=0.; max_arm=0.; max_rotation=0.; frame_changes=[]; worst=('',0)
     for i,W in enumerate(worlds):
         for side in ['Left','Right']:
             max_leg=max(max_leg,float(np.linalg.norm(W[side+'Foot'][:3,3]-W[side+'UpLeg'][:3,3])))
@@ -333,6 +355,7 @@ def qa_clip(name,clip,data,float_q):
         for n in data['bones']:
             qa=np.array(mat_to_quat(poses[i][n][:3,:3])); qb=np.array(mat_to_quat(poses[j][n][:3,:3]))
             angle=2*math.acos(min(1,abs(float(np.dot(qa,qb)))))
+            if math.degrees(angle)>max_rotation: worst=(n,i)
             max_rotation=max(max_rotation,math.degrees(angle)); deltas.append(angle**2)
         hip_delta=float(np.linalg.norm(poses[j]['Hips'][:3,3]-poses[i]['Hips'][:3,3]))
         frame_changes.append(math.sqrt(sum(deltas)/len(deltas))+hip_delta)
@@ -347,7 +370,7 @@ def qa_clip(name,clip,data,float_q):
     mean_horizontal=max(abs(float(mean_hips[0])),abs(float(mean_hips[2])))
     report=dict(frames=N,fps=clip['fps'],seconds=clip['seconds'],stride=clip['stride'],authored_speed=clip['speed'],
                 max_stance_slide_per_frame=max_slide,loop_ratio=ratio,max_leg_reach=max_leg,max_arm_reach=max_arm,
-                min_foot_height=min_foot,max_joint_rotation_degrees=max_rotation,
+                min_foot_height=min_foot,max_joint_rotation_degrees=max_rotation,fastest_joint=list(worst),
                 max_encoded_quaternion_norm_error=max_q_error,min_quaternion_adjacent_dot=min_dot,
                 max_mean_horizontal_hips_offset=mean_horizontal if clip['loop'] else None,
                 notes=clip['notes'])
@@ -379,6 +402,7 @@ def main():
     qa=json.loads((out/'qa.json').read_text()) if args.only and (out/'qa.json').exists() else {}
     for name in names:
         payload,keys,qs=export_clip(clips[name]); report=qa_clip(name,clips[name],payload,qs)
+        print('FASTEST',name,report['fastest_joint'],round(report['max_joint_rotation_degrees'],1))
         print(f"{name:15} {report['frames']:3} {report['max_leg_reach']:.4f} leg {report['max_arm_reach']:.4f} arm {report['max_stance_slide_per_frame']:.5f} slide {report['loop_ratio']:.3f} loop {report['max_joint_rotation_degrees']:.2f} deg {report['passed']}",flush=True)
         if name in selected:
             data[name]=payload; qa[name]=report

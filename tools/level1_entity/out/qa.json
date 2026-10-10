@@ -11,6 +11,10 @@
     "max_arm_reach": 3.66069177231675,
     "min_foot_height": 0.03428007274373357,
     "max_joint_rotation_degrees": 16.66244450682739,
+    "fastest_joint": [
+      "RightToeBase",
+      12
+    ],
     "max_encoded_quaternion_norm_error": 6.540786090569739e-05,
     "min_quaternion_adjacent_dot": 0.98944984,
     "max_mean_horizontal_hips_offset": 3.560044713639564e-05,
@@ -41,6 +45,10 @@
     "max_arm_reach": 3.9472831915513433,
     "min_foot_height": 0.0341299466603715,
     "max_joint_rotation_degrees": 18.02672883146619,
+    "fastest_joint": [
+      "LeftToeBase",
+      30
+    ],
     "max_encoded_quaternion_norm_error": 6.84426578012598e-05,
     "min_quaternion_adjacent_dot": 0.98763695,
     "max_mean_horizontal_hips_offset": 9.162707774965518e-05,
@@ -60,21 +68,25 @@
     "passed": true
   },
   "Run": {
-    "frames": 68,
-    "fps": 99.99999999999999,
-    "seconds": 0.68,
-    "stride": 18.496000000000002,
+    "frames": 72,
+    "fps": 100.0,
+    "seconds": 0.72,
+    "stride": 19.584,
     "authored_speed": 27.2,
-    "max_stance_slide_per_frame": 0.002341392634662143,
-    "loop_ratio": 0.8362066985336404,
-    "max_leg_reach": 3.839122585571019,
-    "max_arm_reach": 4.039973115832767,
-    "min_foot_height": 0.03411579831460809,
-    "max_joint_rotation_degrees": 20.221400637713,
-    "max_encoded_quaternion_norm_error": 6.685776501957896e-05,
-    "min_quaternion_adjacent_dot": 0.98441153,
-    "max_mean_horizontal_hips_offset": 6.016209024904276e-05,
-    "notes": "IK toe tracks; duty 0.28; max reach-driven hip correction 0.198 stud; measured finger axes.",
+    "max_stance_slide_per_frame": 0.002161185650552171,
+    "loop_ratio": 0.584667601769989,
+    "max_leg_reach": 3.8410141601411594,
+    "max_arm_reach": 3.5423944710424498,
+    "min_foot_height": 0.034565055486927676,
+    "max_joint_rotation_degrees": 26.822728289818645,
+    "fastest_joint": [
+      "LeftUpLeg",
+      46
+    ],
+    "max_encoded_quaternion_norm_error": 6.932259718883671e-05,
+    "min_quaternion_adjacent_dot": 0.9727435799999999,
+    "max_mean_horizontal_hips_offset": 3.93183627430659e-05,
+    "notes": "IK toe tracks; duty 0.30; max reach-driven hip correction 0.710 stud; measured finger axes.",
     "asserts": {
       "rest_fk": true,
       "leg_reach": true,
@@ -101,6 +113,10 @@
     "max_arm_reach": 4.039973087192322,
     "min_foot_height": 0.03391194362602956,
     "max_joint_rotation_degrees": 4.567114826996931,
+    "fastest_joint": [
+      "LeftForeArm",
+      15
+    ],
     "max_encoded_quaternion_norm_error": 6.840766019600153e-05,
     "min_quaternion_adjacent_dot": 0.99919795,
     "max_mean_horizontal_hips_offset": null,
@@ -131,6 +147,10 @@
     "max_arm_reach": 3.962437036686838,
     "min_foot_height": 0.05980360168581633,
     "max_joint_rotation_degrees": 10.165209327634775,
+    "fastest_joint": [
+      "RightArm",
+      15
+    ],
     "max_encoded_quaternion_norm_error": 7.154755952665237e-05,
     "min_quaternion_adjacent_dot": 0.99603073,
     "max_mean_horizontal_hips_offset": null,
@@ -157,10 +177,14 @@
     "authored_speed": 0,
     "max_stance_slide_per_frame": 0.0021160237191748493,
     "loop_ratio": 0,
-    "max_leg_reach": 3.3488726605463075,
-    "max_arm_reach": 4.039973073731608,
+    "max_leg_reach": 3.397641211427092,
+    "max_arm_reach": 3.461133136796172,
     "min_foot_height": 0.03436974818337557,
     "max_joint_rotation_degrees": 17.333145588316558,
+    "fastest_joint": [
+      "RightArm",
+      4
+    ],
     "max_encoded_quaternion_norm_error": 6.930740175803418e-05,
     "min_quaternion_adjacent_dot": 0.98859193,
     "max_mean_horizontal_hips_offset": null,

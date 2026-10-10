@@ -97,3 +97,43 @@ stance and the replicated root moves in bursts, so the true figure is lower; it 
   a chase. That is the rig and the collider, not the clips.
 - Open from the review, each needs a play-test to settle: a lunge that stops dead at its target may play `Run` for the
   0.35 s of the server's standing recovery; a small teleport by the puzzle can be read as gait travel for a frame.
+
+## RUN_CHARGE_20261010: the run was remade, and how animations are judged now
+
+Owner, 2026-10-10 (night): "The entity walk animation in level 1 is good, but its chase/run animation is absolute dog
+shit, remake it and QA that shit before you upload." Only `Run` was rewritten (and `Lunge_Land`, which ends in the
+run's first pose, follows it); `Walk`, `Prowl`, `Lunge_Windup` and `Lunge_Flight` are byte for byte what they were.
+
+**What was wrong.** The first pass was approved on a capsule figure. The real body is a bulky hunched hazmat suit with
+heavy boots, and on it the run was the walk folded double: head at chest height, feet pattering under the hips, one
+arm pawing ahead. Nobody had looked at it on the real mesh.
+
+**The new run** (`GAITS['Run']`, the `Run` branches in `foot_path`, `torso`, `arms_gait`, `build_gait`): a heavy charge.
+0.72 s cycle, 19.6 studs a cycle at 27.2 studs/s, stance 30% of the cycle; feet reach 2.95 studs ahead of the hips
+and kick up 2.25 behind; the hips drop in each stance and rise in each flight (0.5 studs); 25 degrees of lean instead
+of 40; the head thrown up out of the hunch and held on the prey; both arms pumping wide of the body with the claws
+open, so that from the front (where the hunted player is) nothing crosses the face.
+
+**Judge on the real body, offline.** `export_mesh.py` reads the live skinned mesh out of Studio
+(`AssetService:CreateEditableMeshAsync` gives vertices, triangles, the four bones and weights of each vertex and the
+bones' bind CFrames) into `input/mesh.json`; `work/render_real.py` skins it with any clip's poses on the measured rig
+and renders contact sheets and videos over a floor whose stripes pass at the clip's speed. The mesh's bind pose
+matches the rig to four decimals. This does not need Studio's viewport, which was unusable that night (a 214-pixel
+strip, then a blank 3D capture after Studio had been restarted).
+
+```
+python3 tools/level1_entity/export_mesh.py                                    # once, Studio in Edit
+Blender -b --python work/render_real.py -- --clip Run --tag final --phases 12 --views side,front,threequarter --video
+```
+Sheets and videos: `artifacts/level1-entity-anim-20261010/real/` (`final_Run_*`, and `old_Run_side.jpg`,
+`old_Walk_side.jpg` for comparison).
+
+**Checked.** The build's own asserts on all six clips (stance slide 0.002 studs a frame, no foot under the floor, loop
+continuity, no joint flips: one was a toe that unbent in 0.25 studs of lift, now 0.9 for the run). In a Studio play
+round, a baited chase: 48 frames at 26 studs/s, toes 0.03 to 2.26 studs over the floor, never under it, both feet off
+the floor in 12% of those frames, and the kill took over. **Not checked:** the run seen moving in the game by anybody
+(only frozen offline phases and numbers), a 60 fps client, more than one player, how the footsteps fall on the new
+stride.
+
+A capture trap from that night: `_G` is not shared between `execute_luau` calls, so a "disconnect the previous loop"
+kept through `_G` stacks one render loop per call. Hand a token through a workspace attribute instead.
