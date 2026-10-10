@@ -441,6 +441,12 @@ local FULLSCREEN_OVERLAYS = {
 	ChaseEdgeRight = true,
 	ChaseEdgeTop = true,
 	ChaseEdgeBottom = true,
+	-- CAMCORDER_20261010: the camcorder look's soft vignette in FoundFootageLens (order -1, pointer devices
+	-- only, never under the viewport fixture). Same idea again: four shallow bands MEANT to lie over the edges.
+	CamVignetteLeft = true,
+	CamVignetteRight = true,
+	CamVignetteTop = true,
+	CamVignetteBottom = true,
 	-- Modal panels own the screen while they are open, and the movement cluster
 	-- hides underneath them. WindowHolder is the L4 windows' (the shop, with
 	-- RECORDS and SETTINGS since 2026-10-07, the dev menu, Daily Rewards); the

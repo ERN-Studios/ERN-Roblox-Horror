@@ -3,6 +3,12 @@
 Whole exit/prompt clients execute. Only hiding's preceding pose/camera code is
 excluded; its complete UI, countdown, device and EXIT input code is executed.
 Native rendering/font and hardware input remain Studio QA responsibilities.
+
+CAMCORDER_20261010: the camcorder look at the end of Found Footage HUD is driven
+too: its gate (round, live-level markers, the off switch, covers, a hushed REC
+frame, Level 6's kill cover), the grade's values per level under a fake
+CurrentCamera, the date stamp and the lens gui. Whether a camera-parented grade
+composes with a level's own grade, and how it looks, is Studio QA.
 """
 import json
 import os
@@ -180,6 +186,116 @@ do
  check(not frame:FindFirstChild("RecLine").Visible and not frame:FindFirstChild("Bracket1").Visible,"phone no REC/corners")
  local phoneBoard=ctx.PlayerGui:FindFirstChild("InteractionPrompt")
  check(Binder.at(phoneBoard,"KeyChip")==nil and Binder.at(phoneBoard,"HoldBar")~=nil,"phone prompt no key, actual hold bar")
+end
+
+-- CAMCORDER_20261010: the camcorder look at the end of Found Footage HUD (gate, grade, date stamp, lens).
+do
+ local ctx=boot(false);ctx.Workspace:SetAttribute("SelectedLevel",3);ctx.Workspace:SetAttribute("RoundStartedAt",0)
+ local camera=Instance.new("Camera");ctx.Workspace.CurrentCamera=camera
+ ctx:Require("FootageClient");ctx:Step(0)
+ local frame=ctx.PlayerGui:FindFirstChild("FoundFootageHUD");local lens=ctx.PlayerGui:FindFirstChild("FoundFootageLens")
+ local Binder=ctx:Require("ShopBinder")
+ local grade=camera:FindFirstChild("CamcorderGrade")
+ check(grade and grade.ClassName=="ColorCorrectionEffect" and grade.Enabled,"grade under the camera, on in a round")
+ check(near(grade.Saturation,-.10) and near(grade.Contrast,.03) and grade.Brightness==0,"level 3 at full strength")
+ check(grade.TintColor==Color3.fromRGB(246,250,244),"full strength is the whole tint")
+ check(lens.Enabled and lens.DisplayOrder==-1 and not lens.ResetOnSpawn,"lens under every HUD on a pointer device")
+ for _,name in ipairs({"CamVignetteLeft","CamVignetteRight","CamVignetteTop","CamVignetteBottom"}) do
+  local band=lens:FindFirstChild(name)
+  check(band and not band.Active and band:FindFirstChildOfClass("UIGradient")~=nil,"vignette band "..name)
+ end
+ local left,bottom=lens:FindFirstChild("CamVignetteLeft"),lens:FindFirstChild("CamVignetteBottom")
+ check(near(left.Size.X.Scale,.12) and left.Size.Y.Scale==1 and near(bottom.Size.Y.Scale,.16) and bottom.AnchorPoint.Y==1,"band depth")
+ check(lens:FindFirstChild("CamScan")==nil,"no scanline without an image id")
+ check(lens:GetAttribute("CamcorderOn")==true and lens:GetAttribute("CamcorderLevel")==3,"readback on")
+ local stamp=frame:FindFirstChild("StampLine");local stampText=Binder.at(stamp,"Time")
+ local STAMP="^OCT%.13 1996  23:4%d$"
+ check(stamp.Visible and stamp.Position.X.Offset==72 and stamp.Position.Y.Offset==36,"date stamp under the timecode")
+ check(string.match(stampText.Text,STAMP)~=nil,"stamp copy: "..stampText.Text)
+ for _,child in ipairs(stamp:GetChildren()) do
+  if child:IsA("GuiObject") then check(child.Visible==(child==stampText),"only the stamp's Time is drawn: "..child.Name) end
+ end
+ check(Binder.at(frame,"Time")~=stampText and Binder.at(frame,"Time").Text=="00:00","the timecode lookup still finds REC's")
+ stampText.Text="STALE";ctx:Step(1.1)
+ check(Binder.at(frame,"Time").Text=="00:01" and string.match(stampText.Text,STAMP)~=nil,"the timecode's tick is the stamp's clock")
+ local writes=0
+ lens:GetAttributeChangedSignal("CamcorderOn"):Connect(function() writes+=1 end)
+ lens:GetAttributeChangedSignal("CamcorderLevel"):Connect(function() writes+=1 end)
+ ctx:Device({});ctx.Player:SetAttribute("LuckyWheelOpen",false)
+ check(writes==0,"readbacks are written only when they change")
+ ctx.Player:SetAttribute("CamcorderFilterEnabled",false)
+ check(not grade.Enabled and not lens.Enabled and not stamp.Visible,"the switch takes grade, lens and stamp off at once")
+ check(lens:GetAttribute("CamcorderOn")==false and lens:GetAttribute("CamcorderLevel")==0 and writes==2,"readback off")
+ check(frame.Enabled and frame:FindFirstChild("RecLine").Visible,"the REC frame is not the switch's")
+ ctx.Player:SetAttribute("CamcorderFilterEnabled",true)
+ check(grade.Enabled and lens.Enabled and stamp.Visible,"and back on")
+ ctx.Workspace:SetAttribute("SelectedLevel",4)
+ check(near(grade.Saturation,-.06) and near(grade.Contrast,.018) and grade.Brightness==0,"level 4 at 0.6")
+ check(grade.TintColor==Color3.fromRGB(250,252,248) and lens:GetAttribute("CamcorderLevel")==4,"tint scaled toward white")
+ ctx.Workspace:SetAttribute("SelectedLevel",9)
+ check(grade.Enabled and near(grade.Saturation,-.06),"a level without a row gets the fallback strength")
+ ctx.Workspace:SetAttribute("RoundActive",false)
+ check(not grade.Enabled and not lens.Enabled and not frame.Enabled,"no round: off")
+ ctx.Player:SetAttribute("Level6PlaygroundPreview",true)
+ check(grade.Enabled and lens.Enabled and not frame.Enabled,"Level 6: its marker opens the gate with RoundActive false, REC stays off")
+ check(lens:GetAttribute("CamcorderLevel")==6 and near(grade.Saturation,-.07),"level 6 at 0.7")
+ ctx.Player:SetAttribute("Level5VoidRound",true)
+ check(lens:GetAttribute("CamcorderLevel")==5 and near(grade.Saturation,-.06),"Level 5's own marker wins over the shared one")
+ ctx.Player:SetAttribute("Level5VoidRound",nil)
+ local cover=Instance.new("ScreenGui");cover.Name="Level6KillCover";cover.Parent=ctx.PlayerGui
+ check(not grade.Enabled and not lens.Enabled and lens:GetAttribute("CamcorderOn")==false,"Level 6 kill cam: the look stands down under its cover")
+ cover:Destroy();ctx:Flush()
+ check(grade.Enabled and lens.Enabled,"and comes back when the cover is destroyed")
+ -- The real cover carries its black and outlives the kill: black, then a fade out over the spectate view,
+ -- then destroyed. The look is back UNDER the whole black, so it never switches on in a picture that shows.
+ cover=Instance.new("ScreenGui");cover.Name="Level6KillCover"
+ local black=Instance.new("Frame");black.Name="KillBlack";black.BackgroundTransparency=1;black.Parent=cover
+ cover.Parent=ctx.PlayerGui
+ check(not grade.Enabled and not lens.Enabled,"kill cam with its black: the look stands down")
+ black.BackgroundTransparency=.72
+ check(not grade.Enabled and not lens.Enabled,"a heartbeat dim is not the end of the kill")
+ black.BackgroundTransparency=0
+ check(grade.Enabled and lens.Enabled and lens:GetAttribute("CamcorderOn")==true,"the look is back under the whole black")
+ local before=writes
+ black.BackgroundTransparency=.5;black.BackgroundTransparency=1
+ check(grade.Enabled and lens.Enabled,"and stays on while the black fades out over the spectate view")
+ cover:Destroy();ctx:Flush()
+ check(grade.Enabled and lens.Enabled and writes==before,"the cover's end changes nothing more")
+ cover=Instance.new("ScreenGui");cover.Name="Level6KillCover";cover.Parent=ctx.PlayerGui
+ check(not grade.Enabled,"a second kill stands the look down again")
+ cover.Parent=nil;ctx:Device({})
+ check(grade.Enabled and lens.Enabled,"a cover that left PlayerGui undestroyed is over at the next look")
+ ctx.Player:SetAttribute("Level6PlaygroundPreview",nil);ctx.Workspace:SetAttribute("RoundActive",true)
+ check(frame.Enabled and grade.Enabled and stamp.Visible,"back in a GameManager round")
+ frame.Enabled=false
+ check(not grade.Enabled and not lens.Enabled and lens:GetAttribute("CamcorderOn")==false,"a hushed REC frame takes the look with it")
+ frame.Enabled=true
+ check(grade.Enabled and lens.Enabled,"and hands it back")
+ for _,flag in ipairs({"LobbyLoadingOpen","LuckyWheelOpen"}) do
+  ctx.Player:SetAttribute(flag,true);check(not grade.Enabled and not lens.Enabled,flag.." stands the look down")
+  ctx.Player:SetAttribute(flag,nil);check(grade.Enabled and lens.Enabled,flag.." cleared")
+ end
+ ctx.Workspace:SetAttribute("UIRegressionViewport",Vector2.new(844,390))
+ check(grade.Enabled and not lens.Enabled and stamp.Visible,"viewport fixture: no lens, grade and stamp stay")
+ ctx.Workspace:SetAttribute("UIRegressionViewport",nil);check(lens.Enabled,"fixture cleared")
+ ctx:Device({Touch=true})
+ check(grade.Enabled and not lens.Enabled and not stamp.Visible and lens:GetAttribute("CamcorderOn")==true,"touch: the grade alone")
+ ctx:Device({Touch=false});check(lens.Enabled and stamp.Visible,"pointer again")
+ local second=Instance.new("Camera");camera:Destroy();ctx.Workspace.CurrentCamera=second
+ local regrade=second:FindFirstChild("CamcorderGrade")
+ check(regrade and regrade~=grade and regrade.Enabled and near(regrade.Saturation,-.06),"a new CurrentCamera gets a grade of its own")
+ ctx.Player:SetAttribute("InRound",false)
+ check(not regrade.Enabled and not lens.Enabled and lens:GetAttribute("CamcorderLevel")==0,"left the round: off")
+end
+do
+ local ctx=boot(true);ctx:Require("FootageClient")
+ local lens=ctx.PlayerGui:FindFirstChild("FoundFootageLens")
+ check(lens and not lens.Enabled and lens:GetAttribute("CamcorderOn")==true and lens:GetAttribute("CamcorderLevel")==1,
+  "phone with no camera yet: the gate is open, nothing is drawn, nothing errors")
+ check(not ctx.PlayerGui:FindFirstChild("FoundFootageHUD"):FindFirstChild("StampLine").Visible,"phone no date stamp")
+ local camera=Instance.new("Camera");ctx.Workspace.CurrentCamera=camera
+ local grade=camera:FindFirstChild("CamcorderGrade")
+ check(grade and grade.Enabled and near(grade.Saturation,-.10),"a camera that arrives later gets the grade")
 end
 
 for _,touch in ipairs({false,true}) do
