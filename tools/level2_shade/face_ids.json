@@ -1,22 +1,22 @@
 {
  "face_sheet_1.png": {
   "asset_id": 120246779657946,
-  "moderation": "Reviewing",
+  "moderation": "Approved",
   "sha256": "45ac6ce63e92f87df8acd874dd88edba067140d66871576c51047db0f180bbb7"
  },
  "face_sheet_2.png": {
   "asset_id": 122472186144743,
-  "moderation": "Reviewing",
+  "moderation": "Approved",
   "sha256": "e9494efebfd747b5102fb028f15e1e64f6de693e6d0c94bd5d71eb12bb8774af"
  },
  "face_sheet_3.png": {
   "asset_id": 90241361632802,
-  "moderation": "Reviewing",
+  "moderation": "Approved",
   "sha256": "d4290d6d1f87f4e6ec170a6a1cc8d6a282a8c01eb4a626cc1b3b3a506ca28c83"
  },
  "face_sheet_4.png": {
   "asset_id": 72663243283187,
-  "moderation": "Reviewing",
+  "moderation": "Approved",
   "sha256": "c38acf3bd149cc09f7a7724ee68e306a7f2edfbfae7334f1a420ec81e0d7892d"
  }
 }
