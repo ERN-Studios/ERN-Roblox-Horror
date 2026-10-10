@@ -816,6 +816,47 @@ def wall_style(nets, pads, p0, p1, zb, zt, key):
               'net_yellow' if key % 13 == 0 else 'net_black')
 
 
+# A player-only escape from the gate lane. The straight lane fence AND the polar
+# cell boundary need an aperture: cutting only the first leaves a second net ahead.
+ESCAPE_SIDE, ESCAPE_Y = 1, CY - WALL_R + 15.6
+ESCAPE_WIDTH, ESCAPE_HEIGHT, ESCAPE_PAD = 3.2, 6.5, 0.45
+ESCAPE_CELL = (0, 6, 38)
+ESCAPE_ANGLE = span(6, 38)[0]
+ESCAPE_X = CX + (CY - ESCAPE_Y) * math.tan(math.radians(ESCAPE_ANGLE - 270.0))
+ESCAPE_CUTS = []
+
+
+def escape_net(nets, arches, p0, p1, zb, zt):
+    """Replace one net sheet with three disjoint sheets and a padded portal.
+
+    Both apertures share their Y interval; their 3.2-stud projected width remains
+    clear all the way from the lane into the actual polar ground-floor cell.
+    """
+    p0, p1 = Vector(p0), Vector(p1)
+    if p0.y > p1.y:
+        p0, p1 = p1, p0
+    ya, yb = ESCAPE_Y - ESCAPE_WIDTH / 2, ESCAPE_Y + ESCAPE_WIDTH / 2
+    assert p0.y < ya - 2 * ESCAPE_PAD and p1.y > yb + 2 * ESCAPE_PAD
+    at = lambda y: p0 + (p1 - p0) * ((y - p0.y) / (p1.y - p0.y))
+    lo, hi = at(ya), at(yb)
+    roof = zb + ESCAPE_HEIGHT
+    assert 5.5 < ESCAPE_HEIGHT < 8.2 and roof + 2 * ESCAPE_PAD < zt
+
+    def sheet(a, b, bottom, upper):
+        nets.face([(a.x, a.y, bottom), (b.x, b.y, bottom),
+                   (b.x, b.y, upper), (a.x, a.y, upper)], 'net_black')
+    sheet(p0, lo, zb, zt)
+    sheet(hi, p1, zb, zt)
+    sheet(lo, hi, roof, zt)
+    # Shift along Y, rather than along the diagonal, to preserve the clear width.
+    left, right = at(ya - ESCAPE_PAD), at(yb + ESCAPE_PAD)
+    for q in (left, right):
+        arches.cyl((q.x, q.y, zb), (q.x, q.y, roof + ESCAPE_PAD), ESCAPE_PAD, 'yellow', 8, True)
+    arches.cyl((left.x, left.y, roof + ESCAPE_PAD),
+               (right.x, right.y, roof + ESCAPE_PAD), ESCAPE_PAD, 'blue', 8, True)
+    ESCAPE_CUTS.append((tuple(lo), tuple(hi)))
+
+
 def build_frame():
     posts, beams = Builder('Frame_Posts', frame_col), Builder('Frame_Beams', frame_col)
     decks, nets, pads = Builder('Frame_Decks', frame_col), Builder('Frame_Nets', frame_col), Builder('Frame_Panels', frame_col)
@@ -918,7 +959,10 @@ def build_frame():
             if what == 'terrace':
                 rail_bay(k, P(R[b] + 0.9, a0), P(R[b + 1] - 0.9, a0))
             else:
-                nets.face([P(R[b] + 0.9, a0, zb), P(R[b + 1] - 0.9, a0, zb), P(R[b + 1] - 0.9, a0, zt), P(R[b] + 0.9, a0, zt)], 'net_black')
+                if cell == ESCAPE_CELL:
+                    escape_net(nets, arches, P(R[b] + 0.9, a0), P(R[b + 1] - 0.9, a0), zb, zt)
+                else:
+                    nets.face([P(R[b] + 0.9, a0, zb), P(R[b + 1] - 0.9, a0, zb), P(R[b + 1] - 0.9, a0, zt), P(R[b] + 0.9, a0, zt)], 'net_black')
         # the side toward the next band out
         if b + 1 < NB:
             for s2 in ([s] if NSEC[b + 1] == n else [2 * s, 2 * s + 1]):
@@ -949,7 +993,10 @@ def build_frame():
             floors_here = 4 if r < R[1] else 8 if r < R[2] else 12
             for k in range(floors_here):
                 zb, zt = ftop(k), (k + 1) * H - 0.35
-                nets.face([(x, ya - 0.9, zb), (x, yb + 0.9, zb), (x, yb + 0.9, zt), (x, ya - 0.9, zt)], 'net_black')
+                if side == ESCAPE_SIDE and k == 0 and yb < ESCAPE_Y < ya:
+                    escape_net(nets, arches, (x, yb + 0.9, 0), (x, ya - 0.9, 0), zb, zt)
+                else:
+                    nets.face([(x, ya - 0.9, zb), (x, yb + 0.9, zb), (x, yb + 0.9, zt), (x, ya - 0.9, zt)], 'net_black')
                 if k:
                     beams.cyl((x, ya, k * H), (x, yb, k * H), BEAM_R, rail_cols[k % 4], 6)
             if floors_here < 12:
@@ -1058,6 +1105,9 @@ def build_bridges():
     n = Builder('Frame_BridgeNets', frame_col)
     z, rad = BRIDGE_K * H, R[BRIDGE_B]
     top = ftop(BRIDGE_K)
+    before = len(PRIMS)
+    rail_offset, beam_radius = 3.05, 0.55
+    assert 2 * (rail_offset - beam_radius) >= 5.0, 'bridge must stay five studs clear'
     # what you walk on is rope net with a padded slat every few studs: from the bridge you look straight down
     # through it at the post, and from the court you look up through it at whoever is crossing
     hub = 3.7
@@ -1073,19 +1123,48 @@ def build_bridges():
             r, k = 8.0, 0
             while r < rad - 2.0:
                 b.obox(P(r, a, top - 0.2), (0.8, 5.6, 0.4), a, ('yellow', 'blue', 'yellow', 'red')[k % 4])
+                for side in (-1, 1):
+                    q = Vector(P(r, a)) + across * (rail_offset * side)
+                    b.cyl((q.x, q.y, top - 0.1), (q.x, q.y, z + 4.7),
+                          0.45, ('yellow', 'blue', 'red')[k % 3], 8, True)
                 r, k = r + 6.0, k + 1
             for side in (-1, 1):
-                off = across * (2.5 * side)
+                off = across * (rail_offset * side)
                 p0, p1 = Vector(P(4.5, a)) + off, Vector(P(rad + 0.4, a)) + off
-                b.cyl((p0.x, p0.y, top - 0.1), (p1.x, p1.y, top - 0.1), 0.38, 'yellow', 6)
+                b.cyl((p0.x, p0.y, top - 0.1), (p1.x, p1.y, top - 0.1), beam_radius, 'blue', 8, True)
                 n.face([(p0.x, p0.y, z + 0.4), (p1.x, p1.y, z + 0.4), (p1.x, p1.y, z + 4.6), (p0.x, p0.y, z + 4.6)], 'net_yellow')
                 b.cyl((p0.x, p0.y, z + 4.7), (p1.x, p1.y, z + 4.7), 0.35, 'yellow', 6)
                 # what is left of the ledge's rail either side of the bridge
                 q0, q1 = chord(rad, a - 7.5, a + 7.5)
-                near = Vector(P(rad, a)) + off * 1.15
+                near = Vector(P(rad, a)) + off
                 far = q1 if side > 0 else q0
                 n.face([(near.x, near.y, z + 1.5), (far.x, far.y, z + 1.5), (far.x, far.y, z + 4.5), (near.x, near.y, z + 4.5)], 'net_black')
                 b.cyl((near.x, near.y, z + 5.05), (far.x, far.y, z + 5.05), 0.55, 'yellow', 6)
+                # One end post per rail reaches both the bridge rail and the
+                # ledge rail (their centres differ in height by 0.35 studs).
+                b.cyl((p1.x, p1.y, top - 0.1), (p1.x, p1.y, z + 5.05),
+                      beam_radius, 'red', 8, True)
+                assert (p1 - near).length < 2 * beam_radius, 'landing rails must meet the end post'
+
+    # A ring around the hub with four open portals. Each corner is an L joining
+    # the rails of two adjacent arms; no rail crosses a walking/nav centre line.
+    angle = math.radians(15.0 * BRIDGES[0][0])
+    u = Vector((math.cos(angle), math.sin(angle), 0))
+    v = Vector((-math.sin(angle), math.cos(angle), 0))
+    centre = Vector((CX, CY, 0))
+    for su in (-1, 1):
+        for sv in (-1, 1):
+            corner = centre + rail_offset * (su * u + sv * v)
+            ends = (centre + 4.5 * su * u + rail_offset * sv * v,
+                    centre + rail_offset * su * u + 4.5 * sv * v)
+            for end in ends:
+                b.cyl((corner.x, corner.y, z + 4.7), (end.x, end.y, z + 4.7), 0.35, 'yellow', 8, True)
+                b.cyl((corner.x, corner.y, top - 0.1), (end.x, end.y, top - 0.1), beam_radius, 'blue', 8, True)
+                b.cyl((end.x, end.y, top - 0.1), (end.x, end.y, z + 4.7), 0.45, 'yellow', 8, True)
+            b.cyl((corner.x, corner.y, top - 0.1), (corner.x, corner.y, z + 4.7), 0.45, 'red', 8, True)
+    # 60 original bridge solids, plus 72 slat uprights, eight landing posts and
+    # 28 hub parts. Existing side beams are enlarged, not duplicated.
+    assert sum(row[0] == 'Frame_Bridges' for row in PRIMS[before:]) == 168
     b.finish()
     n.finish()
 
@@ -1504,6 +1583,87 @@ def build_sound_and_signs():
     anchor('L6_Anchor_PartyButton', (spot[1], spot[2], spot[3] - 0.9))
 
 
+# Freeze the pre-geometry navigation data; neither player aperture nor railwork
+# authorizes adding a Counter route or moving an existing bridge node.
+NAV_BEFORE_GEOMETRY = json.dumps([NODES, NODE_ID.keys().__repr__(), EDGES], sort_keys=True)
+
+
+def verify_escape():
+    assert len(ESCAPE_CUTS) == 2, 'cut exactly the lane net and its matching polar cell net'
+    assert 6.0 <= ESCAPE_Y - gate_y <= 14.0
+    assert ESCAPE_CELL in CELLS and kind(*ESCAPE_CELL) == 'cell'
+    assert (ESCAPE_CELL[1], ESCAPE_CELL[2]) not in WELL_OF
+    # Walk only ground-floor cell openings, never lane/court/stair/bridge links.
+    ground = {c for c in CELLS if c[0] == 0}
+    graph = {c: [] for c in ground}
+    for pair in OPEN:
+        a, b = tuple(pair)
+        if a in ground and b in ground:
+            graph[a].append(b)
+            graph[b].append(a)
+    reached, pending = {ESCAPE_CELL}, [ESCAPE_CELL]
+    while pending:
+        for other in graph[pending.pop()]:
+            if other not in reached:
+                reached.add(other)
+                pending.append(other)
+    assert reached == ground, 'escape cell must connect to the entire ground floor'
+    assert json.dumps([NODES, NODE_ID.keys().__repr__(), EDGES], sort_keys=True) == NAV_BEFORE_GEOMETRY
+
+    # Conservative bounding boxes over every exported primitive, including nets
+    # (solid in the importer) and invisible slide/crawl-tube collision channels.
+    # Test the full approach from the lane and the first six studs IN the cell.
+    tilt = math.tan(math.radians(ESCAPE_ANGLE - 270.0))
+    xa, xb = CX + LANE_HALF + 0.076, ESCAPE_X + ESCAPE_WIDTH / 2 * tilt + 6.0
+    ya, yb = ESCAPE_Y - ESCAPE_WIDTH / 2, ESCAPE_Y + ESCAPE_WIDTH / 2
+    za, zb = ftop(0) + 0.01, ftop(0) + ESCAPE_HEIGHT - 0.01
+    for group, shape, d, mat in PRIMS:
+        if shape in ('b', 'q'):
+            points = [d[i:i + 3] for i in range(0, len(d), 3)]
+            if shape == 'q':
+                points.append([d[3 + i] + d[6 + i] - d[i] for i in range(3)])
+            margin = 0.075 if shape == 'q' else 0.0
+        elif shape == 'o':
+            x, y, z, dx, dy, dz, yaw = d
+            ca, sa = math.cos(math.radians(yaw)), math.sin(math.radians(yaw))
+            points = [(x + a * ca - b * sa, y + a * sa + b * ca, z + c)
+                      for a in (-dx / 2, dx / 2) for b in (-dy / 2, dy / 2) for c in (-dz / 2, dz / 2)]
+            margin = 0.0
+        elif shape in ('c', 't', 's'):
+            points = [d[:3]] if shape == 's' else [d[:3], d[3:6]]
+            margin = d[3] if shape == 's' else d[6]
+            if shape == 't':
+                margin = 1.5 * margin + 0.6
+        elif shape == 'p':
+            ra, rb, delta, split, angle, zc, thick = d
+            points = [P(r, a, z) for r in (ra, rb) for a in (angle - delta / 2, angle, angle + delta / 2)
+                      for z in (zc - thick / 2, zc + thick / 2)]
+            margin = 0.0
+        else:
+            raise AssertionError(f'unchecked escape obstacle: {shape}')
+        low = [min(q[i] for q in points) - margin for i in range(3)]
+        high = [max(q[i] for q in points) + margin for i in range(3)]
+        # Net thickness is perpendicular to a sheet, not beyond its Y/Z edges.
+        # All sheets near this opening are upright; retain exact Y/Z cut edges.
+        if shape == 'q' and mat.startswith('net_'):
+            for i in (1, 2):
+                low[i], high[i] = min(q[i] for q in points), max(q[i] for q in points)
+        hit = all(high[i] > a + 1e-5 and low[i] < b - 1e-5
+                  for i, (a, b) in enumerate(((xa, xb), (ya, yb), (za, zb))))
+        assert not hit, f'escape approach / first six studs obstructed by {group} {shape} {d}'
+    # At the far side of the clear area, the full width is on this cell's mat.
+    for y in (ya, ESCAPE_Y, yb):
+        x = xb
+        radius = math.hypot(x - CX, y - CY)
+        angle = math.degrees(math.atan2(y - CY, x - CX)) % 360
+        a0, a1 = span(ESCAPE_CELL[1], ESCAPE_CELL[2])
+        assert R[6] < radius < R[7] and a0 < angle < a1
+    print('L6 ESCAPE', json.dumps({'side': 'right', 'lane_distance_from_gate': ESCAPE_Y - gate_y,
+          'centre_xyz_model': [CX + LANE_HALF, ESCAPE_Y, ftop(0) + ESCAPE_HEIGHT / 2],
+          'width': ESCAPE_WIDTH, 'height': ESCAPE_HEIGHT, 'cell_behind': list(ESCAPE_CELL),
+          'ground_cells_reached': len(reached), 'cell_aperture_x': ESCAPE_X}))
+
+
 gate_y = build_shell()
 build_floors()
 build_frame()
@@ -1513,6 +1673,7 @@ panel_count = build_features()
 light_count = build_lights()
 build_finale()
 build_sound_and_signs()
+verify_escape()
 
 hide_counts = {}
 for kind_, x, y, z in HIDE:

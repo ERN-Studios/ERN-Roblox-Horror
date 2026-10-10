@@ -44,7 +44,7 @@ ORGANIC = ('vinyl_plain', 'slide_plastic')               # no pattern to keep st
 LUAU = r'''
 local MODE = "%(mode)s"                                    -- "apply" | "dry"
 local SPEC = game:GetService("HttpService"):JSONDecode([==[%(spec)s]==])
-local model = workspace:FindFirstChild("Level 6 Indoor Playground")
+local model = workspace:FindFirstChild("Level 6 Indoor Playground") or game:GetService("ServerStorage"):FindFirstChild("Level 6 Indoor Playground")   -- parked there between sessions since 2026-10-10
 assert(model and model:GetAttribute("Arena") ~= nil, "the arena is not in this place")
 local origin = model:GetAttribute("Origin")
 local MaterialService = game:GetService("MaterialService")

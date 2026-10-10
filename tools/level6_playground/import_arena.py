@@ -40,7 +40,7 @@ NO_COLLIDE = ('Ceiling_', 'Hall_Balls', 'Frame_Lamps', 'Finale_Dial', 'Finale_Ri
 PRELUDE = '''
 local NAME = %s
 local O = Vector3.new(%d, %d, %d)
-local model = workspace:FindFirstChild(NAME)
+local model = workspace:FindFirstChild(NAME) or game:GetService("ServerStorage"):FindFirstChild(NAME)   -- parked there between sessions since 2026-10-10 (LevelWorldStorage)
 local MAT = {%s}
 local NOCOLLIDE = {%s}
 local folders = {}
@@ -504,7 +504,7 @@ return string.format("parts %d, textures %d, centre (%.0f, %.0f, %.0f), size (%.
 
 NAV = '''
 local NAME = %s
-local model = workspace:FindFirstChild(NAME)
+local model = workspace:FindFirstChild(NAME) or game:GetService("ServerStorage"):FindFirstChild(NAME)   -- parked there between sessions since 2026-10-10 (LevelWorldStorage)
 local nav = model:FindFirstChild("NavGraph")
 if not nav then nav = Instance.new("Folder"); nav.Name = "NavGraph"; nav.Parent = model end
 if FIRST then nav:ClearAllChildren() end
@@ -668,7 +668,7 @@ def main():
         if not mine:
             raise SystemExit(f'no parts for group {owner}')
         print(studio.luau(f'''
-local model = workspace:FindFirstChild({json.dumps(MODEL_NAME)})
+local model = workspace:FindFirstChild({json.dumps(MODEL_NAME)}) or game:GetService("ServerStorage"):FindFirstChild({json.dumps(MODEL_NAME)})
 local group = model and model:FindFirstChild({json.dumps(owner)})
 if not group then return "no such group in the live model" end
 local n = #group:GetChildren()
@@ -698,7 +698,7 @@ return "fresh model"
 
 def finish(studio, prelude, anchors, lights, signs, slides, props):
     print(studio.luau(f'''
-local model = workspace:FindFirstChild({json.dumps(MODEL_NAME)})
+local model = workspace:FindFirstChild({json.dumps(MODEL_NAME)}) or game:GetService("ServerStorage"):FindFirstChild({json.dumps(MODEL_NAME)})
 for _, name in ipairs({{"Anchors", "Lights", "ExitLights", "Signs", "Props", "Slides", "Level6Exit", "Finale_Glow"}}) do
 	local old = model:FindFirstChild(name)
 	if old then old:Destroy() end
