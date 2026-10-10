@@ -58,7 +58,10 @@ Shade.Config = {
 	RecoilSeconds = 1.4,
 	WarnSeconds = 1.8,
 	KillSeconds = 3.6,
-	RealmSeconds = 3.4,            -- after the drag the victim is in the dark with its face before the death is counted
+	-- Owner, 2026-10-10 (late), after playing it: "The kill cam is horrible. So the last pov with the shadow face and
+	-- white eyes should be removed right now!" The time in the dark with the face is gone: the death is counted when
+	-- the drag ends. Do not bring the face back without the owner asking for it.
+	RealmSeconds = 0,
 	StillSeconds = 10,             -- owner: standing still longer than this brings it, every time
 	StillRadius = 4,               -- "still" = has not left a circle of this radius
 	KillSinkFrom = 1.5,

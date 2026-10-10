@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-10T17:04:15.800981+00:00",
+  "capturedAtUtc": "2026-10-10T17:24:10.586125+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -4963,8 +4963,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Shade.ModuleScript.lua",
-      "bytes": 21771,
-      "sha256": "58a2ebaac3096c7621f88994cdf15f0ffb77d0fc3f74c31d7e003c054884d950",
+      "bytes": 21982,
+      "sha256": "a2dd4414046ac04350bb727640e8998e93a962c8424753fde89e6e0fb94b1e33",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4982,8 +4982,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Shade Client.LocalScript.lua",
-      "bytes": 39662,
-      "sha256": "4e8dafef0c17ccfcfb7a2161b458bc59fc93a0601a2820ad68d6e3773ee43ebe",
+      "bytes": 39698,
+      "sha256": "b4b28318798d0f7cdfe15c336c0e16f58b25fafd14e0aaae3f2e41aef6ad8b26",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

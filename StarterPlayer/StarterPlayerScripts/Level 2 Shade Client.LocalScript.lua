@@ -583,6 +583,9 @@ end
 
 local HUSHED = {"RoundExitGui", "FoundFootageHUD", "FlashlightPopup"}
 local function playKill(userId, floorPoint, direction, seconds, realm)
+	-- Owner, 2026-10-10 (late): "the last pov with the shadow face and white eyes should be removed right now!"
+	-- Nothing is shown after the drag any more, whatever the server or the folder's Face attributes say.
+	realm = 0
 	local mine = userId == player.UserId
 	local riser, pool = piece("Shade_Rise"), piece("Shade_Pool")
 	if not riser or not pool then return end
@@ -621,7 +624,6 @@ local function playKill(userId, floorPoint, direction, seconds, realm)
 	local startCF, startFov = camera and camera.CFrame, camera and camera.FieldOfView
 	local hushed = {}
 	local realmSounds = {}
-	if mine then faceSetup() end
 	if mine and camera then camera.CameraType = Enum.CameraType.Scriptable end
 	local t0 = os.clock()
 	-- a play test can stretch the whole sequence to look at it (the server's own clock has to be stretched to match)
@@ -656,8 +658,8 @@ local function playKill(userId, floorPoint, direction, seconds, realm)
 			hidden.Part.Transparency = 1
 		end
 		if not (mine and camera and startCF) then return end
-		if t >= seconds + 0.25 then
-			-- down in the dark: nothing but black, and then its face
+		if realm > 0 and t >= seconds + 0.25 then
+			-- (removed on the owner's order: realm is always 0) down in the dark: nothing but black, and then its face
 			local inDark = t - seconds - 0.25
 			dark.black, dark.edge = 1, 0
 			faceShow(inDark, player:GetAttribute("ReduceFlashing") == true)
@@ -869,7 +871,6 @@ RunService.RenderStepped:Connect(function(dt)
 	end
 	if not wasIn then
 		wasIn = true
-		faceSetup()   -- its pictures are fetched now, not in the second they are needed
 		glimpse.nextAt = os.clock() + random:NextNumber(25, 45)
 	end
 	local turn = {}
@@ -886,10 +887,6 @@ RunService.RenderStepped:Connect(function(dt)
 		voiceQuiet(dt)
 		if not busy then dark.edge = math.max(0, dark.edge - dt * 1.5) end
 		if phase == "idle" then player:SetAttribute("Level2ShadeView", glimpse.live and player:GetAttribute("Level2ShadeView") or "none") end
-	end
-	if player:GetAttribute("Level2ShadeTestFace") == true then
-		player:SetAttribute("Level2ShadeTestFace", "playing")
-		playFaceAlone()
 	end
 	if glimpse.live then
 		glimpse.live()

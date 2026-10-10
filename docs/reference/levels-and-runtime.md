@@ -1614,3 +1614,17 @@ recovery, a natural lunge by eye, the camcorder look in Levels 2 to 6 and on the
 - Test knob: local player attribute `Level2ShadeTestFace = true` plays the face alone on black.
 - Not done: anybody watching the face at full size in game (seen at 116 px in the letterbox viewport, and as the
   contact sheet); the sounds under it are three of the Shade's existing ones, nothing new was made.
+
+### Changed 2026-10-10 (late night) - The Shade's face in the dark is REMOVED
+
+- **Owner, after playing it**: "The kill cam is horrible. So the last pov with the shadow face and white eyes should be
+  removed right now!" Removed within the hour: `RealmSeconds = 0` on the server (the death is counted when the drag
+  ends), the client forces `realm = 0` and no longer loads or plays the flipbook (or the two-eyes fallback), and
+  `install_shade.py` clears the folder's `Face*` attributes and no longer publishes the sheets. A normal round played
+  to a kill afterwards: death 3.6 s after the grab, no face pictures exist on the client, death card as before.
+- The Blender work stays in the repo (`tools/level2_shade/build_face.py`, `artifacts/level2-shade-face-20261010/`,
+  `face_ids.json`) and the eight uploaded sheets stay in the group's assets, unused. **Do not bring a face back
+  unless the owner asks.** They asked for it on the same night and rejected it on sight: a description they approve
+  is not the picture they will accept; show a still before building the next thing like it.
+- "The kill cam is horrible" may mean more than the face. Only the face was ordered out, so only the face went; the
+  drag itself (pool, figure rising, arms, sinking, fade to black) is unchanged and its verdict is still owed.

@@ -121,6 +121,9 @@ for key, row in pairs(SPEC.sounds) do
 	sound:SetAttribute("Provider", "ElevenLabs")
 	sound:SetAttribute("Gain", row.gain)   -- what the client multiplies its volume by: the masters are not equally loud
 end
+if not SPEC.face then
+	for _, name in ipairs({"FaceSheets", "FaceFrames", "FaceFps", "FaceGrid", "FaceFrame"}) do bank:SetAttribute(name, nil) end
+end
 if SPEC.face then
 	bank:SetAttribute("FaceSheets", SPEC.face.sheets)
 	bank:SetAttribute("FaceFrames", SPEC.face.frames)
@@ -170,10 +173,11 @@ def main():
             if row.get('moderation') == 'Approved':
                 sounds[key] = {'id': str(row['asset_id']), 'sha': row['master_sha256'], 'loop': key in ('shade_presence', 'shade_hands'),
                                'gain': levels.get(key, {}).get('gain', 1)}
-    # the face in the dark: only when every sheet is uploaded and approved (the client shows two eyes until then)
+    # The face in the dark was REMOVED on the owner's order (2026-10-10, late: "the last pov with the shadow face and
+    # white eyes should be removed right now!"). Its sheets are no longer published and the attributes are cleared.
     face = None
     face_spec, face_ids = ROOT / 'artifacts' / 'level2-shade-face-20261010' / 'face.json', HERE / 'face_ids.json'
-    if face_spec.exists() and face_ids.exists():
+    if False and face_spec.exists() and face_ids.exists():
         spec, known = json.loads(face_spec.read_text()), json.loads(face_ids.read_text())
         if all(known.get(name, {}).get('moderation') == 'Approved' for name in spec['sheets']):
             face = {'sheets': ','.join(str(known[name]['asset_id']) for name in spec['sheets']), 'frames': spec['frames'],
