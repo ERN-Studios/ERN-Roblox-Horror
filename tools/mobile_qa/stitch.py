@@ -1,7 +1,9 @@
+"""Join the tiles ui_audit.py took into one picture per screen (needs PIL: /usr/local/bin/python3)."""
 import sys, json, glob
 from pathlib import Path
 from PIL import Image
-out = Path('/Users/zeanjuul4/Projects/stayquiet-session-tools/ui/shots')
+import datetime
+out = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().parents[2] / 'artifacts' / f'ui-review-{datetime.date.today():%Y%m%d}'
 for meta_path in sorted(out.glob('tiles_*.json')):
     key = meta_path.stem[len('tiles_'):]
     m = json.loads(meta_path.read_text())

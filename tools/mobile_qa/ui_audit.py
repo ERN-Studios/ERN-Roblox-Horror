@@ -3,7 +3,7 @@
 The Studio viewport is a strip, so the device frame is slid under it tile by tile and the tiles are stitched afterwards."""
 import sys, time, json
 from pathlib import Path
-WT = Path('/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009')
+WT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(WT / 'tools' / 'mobile_qa'))
 argv = sys.argv[:]
 sys.argv = ['qa.py']
@@ -16,8 +16,9 @@ audit = qa.AUDIT.replace('__W__', str(w)).replace('__H__', str(h)).replace('__MO
 if mode == 'desktop':
     assert audit.count('workspace:SetAttribute("ForceTouchUI", true)') == 1
     audit = audit.replace('workspace:SetAttribute("ForceTouchUI", true)', 'workspace:SetAttribute("ForceTouchUI", nil)')
-out = Path('/Users/zeanjuul4/Projects/stayquiet-session-tools/ui/shots')
-out.mkdir(exist_ok=True)
+import datetime
+out = WT / 'artifacts' / f'ui-review-{datetime.date.today():%Y%m%d}'
+out.mkdir(parents=True, exist_ok=True)
 report = s.luau('Client', audit)
 (out / f'{state}__{size}__{mode}.txt').write_text(report + '\n')
 lines = report.splitlines()
