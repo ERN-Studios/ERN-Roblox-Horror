@@ -1591,3 +1591,26 @@ recovery, a natural lunge by eye, the camcorder look in Levels 2 to 6 and on the
 - **Not done**: anyone listening; two players (only the hunted player's look counts, teammates just see it); a phone;
   the kill from the victim's own eyes at full frame; Shade_Reach and Shade_Claw seen in game (the A3 pillars are too
   narrow for them, so every test glimpse was Shade_Stand); whether 32 to 58 s between stalks is the right pressure.
+
+### Added 2026-10-10 (late night) - The Shade: standing still brings it; the face in the dark
+
+- **Owner after playing it**: "Shadow entity er fed, men den skal konsekvent komme efter en bagved en hvis man står
+  stille for længe. Står man stille i mere end 10 sek så kommer den efter en og andre spillere kan godt se den, det
+  er spilleren den chaser der skal kigge rundt." `STILL_20261010` in `Level 2 Shade`: a player who has not left a
+  four-stud circle for `StillSeconds` (10) is hunted at once, every time, with ten new seconds after each hunt. The
+  timed hunts (32 to 58 s) stay beside it; that they stay is my reading, the owner did not say either way.
+- **Owner**: "via blender animere et meget klamt shadow figure ansigt, som vises når man er blevet trukket ned i det
+  shadow realm ... omridset af hovedet og hvide lysende øjne og ingen mund, rigtig ulækkert." After the drag the
+  victim's screen is black for `RealmSeconds` (3.4) before the death is counted, and a 36-frame Blender animation
+  plays as a flipbook: `tools/level2_shade/build_face.py` (Codex; the first pass at Medium was a clean egg with two
+  ovals, the second at High has a skull, sockets, veined eyes and skin drawn in strands over the mouth),
+  `artifacts/level2-shade-face-20261010/`, sheets uploaded by `upload_face.py` (ids in `face_ids.json`), published to
+  the client as the folder's `FaceSheets`/`FaceFrames`/`FaceFps`/`FaceGrid`/`FaceFrame` attributes by
+  `install_shade.py`, which only swaps them in when all four sheets are approved. Without sheets two eyes open.
+- `ProtectionHUD` (the Q/Z item keys) has DisplayOrder 1001: a full-screen black has to go above it.
+- An ImageLabel that has never been visible reports `IsLoaded = false`; the sheets are preloaded on entering the level.
+- The dashboard upload route needs a `create.roblox.com` tab in Chrome. With no Chrome window, `make new window` and
+  setting its URL by AppleScript left the game in front (the owner was playing).
+- Test knob: local player attribute `Level2ShadeTestFace = true` plays the face alone on black.
+- Not done: anybody watching the face at full size in game (seen at 116 px in the letterbox viewport, and as the
+  contact sheet); the sounds under it are three of the Shade's existing ones, nothing new was made.

@@ -289,7 +289,8 @@ gui.Parent = player:WaitForChild("PlayerGui")
 -- (tools/level2_shade/install_shade.py). Until the pictures exist two eyes open in the dark instead.
 local faceHolder = Instance.new("Frame")
 faceHolder.AnchorPoint, faceHolder.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5)
-faceHolder.Size, faceHolder.SizeConstraint = UDim2.fromScale(1, 1), Enum.SizeConstraint.RelativeYY
+-- a third larger than the screen is high: the head sits small in its black frame, and the frame's edges are black
+faceHolder.Size, faceHolder.SizeConstraint = UDim2.fromScale(1.3, 1.3), Enum.SizeConstraint.RelativeYY
 faceHolder.BackgroundTransparency, faceHolder.BorderSizePixel, faceHolder.ZIndex, faceHolder.Visible = 1, 0, 6, false
 faceHolder.Parent = gui
 local face = {labels = {}, eyes = {}, source = nil, frames = 0, fps = 12, grid = 3, size = 340}

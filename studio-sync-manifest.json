@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-10T16:43:13.679763+00:00",
+  "capturedAtUtc": "2026-10-10T17:04:15.800981+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -4982,8 +4982,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Shade Client.LocalScript.lua",
-      "bytes": 39543,
-      "sha256": "0c900b1dc4ed41065eb05507885f9d26453929e8a297eeb5dfd27cfd5d2fd03b",
+      "bytes": 39662,
+      "sha256": "4e8dafef0c17ccfcfb7a2161b458bc59fc93a0601a2820ad68d6e3773ee43ebe",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

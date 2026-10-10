@@ -1,0 +1,18 @@
+{
+  "frames": 36,
+  "fps": 12,
+  "grid": 3,
+  "frame": 340,
+  "sheets": [
+    "face_sheet_1.png",
+    "face_sheet_2.png",
+    "face_sheet_3.png",
+    "face_sheet_4.png"
+  ],
+  "sha1": {
+    "face_sheet_1.png": "a7eb9d43ee294341c0c30540107be36d16e39fa2",
+    "face_sheet_2.png": "6f4b3b6059c32017b3a3a9cd195c20babf031f5e",
+    "face_sheet_3.png": "39f0e0cca2b7ba2e762b4bfe028a644177614a5c",
+    "face_sheet_4.png": "2a9b5f8e30cf1dd9a43c5e7637eb80af1a03d0c6"
+  }
+}
