@@ -1,0 +1,10 @@
+{
+  "schema": "generic-installer-v4-expanded-port-failure-v2",
+  "exitcode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v4\\test_candidate_v2.py\", line 269, in <module>\r\n    if __name__=='__main__':main()\r\n                            ^^^^^^\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v4\\test_candidate_v2.py\", line 258, in main\r\n    cases += [actual_main_case('large-same',unicode=True,large=True),actual_main_case('large-overwrite',unicode=True,large=True)]\r\n                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v4\\test_candidate_v2.py\", line 235, in actual_main_case\r\n    check(len(client.chunkResponses)>40 and all(size<=8000 for size in client.chunkResponses),'large source reads bounded and multi-chunk')\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v4\\test_candidate_v2.py\", line 34, in check\r\n    assert value, message\r\nAssertionError: large source reads bounded and multi-chunk\r\n",
+  "candidateSHA256": "48b104a30d436c603edc4c21972719d2b57cf419a92664a11e60f1346a3431e1",
+  "testSHA256": "c2b2a26a400435b72a1a083f8df636dd6054410362b1aeae83a9f59c07f0eba1",
+  "nativeCalls": 0,
+  "productionWrites": 0
+}

@@ -1,0 +1,7 @@
+{
+  "schema": "installer-candidate-preparation-v1",
+  "productionSHA256": "4e9e6177f602f6b1519e682b70e661cec13928aec7ce3e608365163b3285292f",
+  "candidateSHA256": "e8addf46659f7cd3b089f10b210f5cfdba9d7ab17d918053db850c6d82ad339a",
+  "productionWrites": 0,
+  "scope": "Prepared candidate only. Requires source/authoring-contract review and offline/native gates before installation."
+}

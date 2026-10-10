@@ -1,0 +1,10 @@
+{
+  "schema": "generic-installer-v3-expanded-port-failure-v2",
+  "exitcode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v3\\test_candidate_v2.py\", line 268, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v3\\test_candidate_v2.py\", line 243, in main\n    check(original.returncode==0,'unchanged production Unicode baseline gate: '+original.stdout+original.stderr)\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v3\\test_candidate_v2.py\", line 33, in check\n    assert value, message\nAssertionError: unchanged production Unicode baseline gate: Traceback (most recent call last):\n  File \"G:\\Roblox\\MongoTV\\tools\\tests\\test_install_new_scripts.py\", line 53, in <module>\n    main()\n  File \"G:\\Roblox\\MongoTV\\tools\\tests\\test_install_new_scripts.py\", line 33, in main\n    assert fakestudio.LUAU.is_file(), \"Set LUAU_BIN to the real Luau interpreter\"\nAssertionError: Set LUAU_BIN to the real Luau interpreter\n\n",
+  "candidateSHA256": "1c6d5c2f9be48b5bbfe21a5fed33774b662938590e59ee6c7879cd5405ce153d",
+  "testSHA256": "5f5d2b83861cffa756f1b410a62f1da97fafdd65abff682eb14bf9755dbd9965",
+  "nativeCalls": 0,
+  "productionWrites": 0
+}

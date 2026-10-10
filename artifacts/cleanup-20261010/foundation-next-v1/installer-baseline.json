@@ -1,0 +1,174 @@
+{
+  "schema": "foundation-next-installer-baseline-v1",
+  "diagnosticCompleted": true,
+  "caseCount": 5,
+  "cases": [
+    {
+      "case": "exact-existing-erases-metadata",
+      "observedExpectedBaseline": true,
+      "exitCode": 0,
+      "fakeLuauCalls": 1,
+      "lookupCount": 1,
+      "updateCount": 0,
+      "droppedManifestFields": [
+        "attributes",
+        "properties",
+        "segments",
+        "sourceEditorMatches",
+        "tags"
+      ],
+      "manifestChanged": true,
+      "heldSourceAfterSHA256": "ad00b8fed4091d169079a6f7648fbe57b7193b245cf1c2f80adf4af863bb9ed9",
+      "concurrentSourceOverwritten": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.InstallerProbe  <-  ServerScriptService/InstallerProbe.ModuleScript.lua\nVERIFIED ServerScriptService.InstallerProbe\n"
+    },
+    {
+      "case": "default-different-refuses",
+      "observedExpectedBaseline": true,
+      "exitCode": 1,
+      "fakeLuauCalls": 1,
+      "lookupCount": 1,
+      "updateCount": 0,
+      "droppedManifestFields": [],
+      "manifestChanged": false,
+      "heldSourceAfterSHA256": "9e2d81ed4a9468fb1f4472abba87fa2e78e7ba67224c7b5f98fd915edde58464",
+      "concurrentSourceOverwritten": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.InstallerProbe  <-  ServerScriptService/InstallerProbe.ModuleScript.lua\nDIFFERS ServerScriptService.InstallerProbe: Studio holds other source (22 B vs 19 B); rerun with --overwrite to replace it\n"
+    },
+    {
+      "case": "class-mismatch-refuses",
+      "observedExpectedBaseline": true,
+      "exitCode": 1,
+      "fakeLuauCalls": 1,
+      "lookupCount": 1,
+      "updateCount": 0,
+      "droppedManifestFields": [],
+      "manifestChanged": false,
+      "heldSourceAfterSHA256": "ad00b8fed4091d169079a6f7648fbe57b7193b245cf1c2f80adf4af863bb9ed9",
+      "concurrentSourceOverwritten": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.InstallerProbe  <-  ServerScriptService/InstallerProbe.ModuleScript.lua\nFAILED  ServerScriptService.InstallerProbe: class 'Script'\n"
+    },
+    {
+      "case": "overwrite-concurrent-source",
+      "observedExpectedBaseline": true,
+      "exitCode": 0,
+      "fakeLuauCalls": 3,
+      "lookupCount": 2,
+      "updateCount": 1,
+      "droppedManifestFields": [
+        "attributes",
+        "properties",
+        "segments",
+        "sourceEditorMatches",
+        "tags"
+      ],
+      "manifestChanged": true,
+      "heldSourceAfterSHA256": "ad00b8fed4091d169079a6f7648fbe57b7193b245cf1c2f80adf4af863bb9ed9",
+      "concurrentSourceOverwritten": true,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.InstallerProbe  <-  ServerScriptService/InstallerProbe.ModuleScript.lua\nVERIFIED ServerScriptService.InstallerProbe\n"
+    },
+    {
+      "case": "exact-existing-clears-pending-baseline",
+      "observedExpectedBaseline": true,
+      "exitCode": 0,
+      "fakeLuauCalls": 1,
+      "lookupCount": 1,
+      "updateCount": 0,
+      "droppedManifestFields": [
+        "attributes",
+        "properties",
+        "segments",
+        "sourceEditorMatches",
+        "studioSha256Before",
+        "tags"
+      ],
+      "manifestChanged": true,
+      "heldSourceAfterSHA256": "ad00b8fed4091d169079a6f7648fbe57b7193b245cf1c2f80adf4af863bb9ed9",
+      "concurrentSourceOverwritten": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.InstallerProbe  <-  ServerScriptService/InstallerProbe.ModuleScript.lua\nVERIFIED ServerScriptService.InstallerProbe\n"
+    }
+  ],
+  "protectedInputsBefore": {
+    "tools/install_new_scripts.py": {
+      "bytes": 6408,
+      "sha256": "4e9e6177f602f6b1519e682b70e661cec13928aec7ce3e608365163b3285292f"
+    },
+    "tools/install_trello_new_scripts.py": {
+      "bytes": 3034,
+      "sha256": "31b3da39b82c7a802c9af63eb86890aa6dd700d9c80237533f57be63813798be"
+    },
+    "tools/sync_from_studio.py": {
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    },
+    "tools/push_repo_to_studio.py": {
+      "bytes": 32272,
+      "sha256": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399"
+    },
+    "tools/studio_source_contract.py": {
+      "bytes": 6297,
+      "sha256": "fbe02af9eb9470b20662fdaaa126ecbb6caff02d52d2baa8ef1eb86d9ef86d94"
+    },
+    "tools/tests/test_install_new_scripts.py": {
+      "bytes": 2070,
+      "sha256": "e78b961da5d7d1f514101ea1068b208b2a9f44d71466f96e8f9648daee29a721"
+    },
+    "tools/tests/fakestudio.py": {
+      "bytes": 10102,
+      "sha256": "e173277318fa78ea008e5f26a4ac643383b7915fe704939a3583d779af610522"
+    },
+    "studio-sync-manifest.json": {
+      "bytes": 152169,
+      "sha256": "bd211a5a7fdf2491603e5e9d2e3e168e43cd45bb2b3b53872cbfcca3f06f64ad"
+    },
+    "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua": {
+      "bytes": 244971,
+      "sha256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73"
+    }
+  },
+  "protectedInputsAfter": {
+    "tools/install_new_scripts.py": {
+      "bytes": 6408,
+      "sha256": "4e9e6177f602f6b1519e682b70e661cec13928aec7ce3e608365163b3285292f"
+    },
+    "tools/install_trello_new_scripts.py": {
+      "bytes": 3034,
+      "sha256": "31b3da39b82c7a802c9af63eb86890aa6dd700d9c80237533f57be63813798be"
+    },
+    "tools/sync_from_studio.py": {
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    },
+    "tools/push_repo_to_studio.py": {
+      "bytes": 32272,
+      "sha256": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399"
+    },
+    "tools/studio_source_contract.py": {
+      "bytes": 6297,
+      "sha256": "fbe02af9eb9470b20662fdaaa126ecbb6caff02d52d2baa8ef1eb86d9ef86d94"
+    },
+    "tools/tests/test_install_new_scripts.py": {
+      "bytes": 2070,
+      "sha256": "e78b961da5d7d1f514101ea1068b208b2a9f44d71466f96e8f9648daee29a721"
+    },
+    "tools/tests/fakestudio.py": {
+      "bytes": 10102,
+      "sha256": "e173277318fa78ea008e5f26a4ac643383b7915fe704939a3583d779af610522"
+    },
+    "studio-sync-manifest.json": {
+      "bytes": 152169,
+      "sha256": "bd211a5a7fdf2491603e5e9d2e3e168e43cd45bb2b3b53872cbfcca3f06f64ad"
+    },
+    "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua": {
+      "bytes": 244971,
+      "sha256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73"
+    }
+  },
+  "protectedInputsUnchanged": true,
+  "realMcpCalls": 0,
+  "nativeStudioWrites": 0,
+  "productionWrites": 0,
+  "scope": "Current Python installer main and actual generated Luau on owned temporary fake DataModel; JSON and concurrent editor boundaries are synthetic. Existing bugs reproduced, not a fix or native authoring certification.",
+  "diagnosticSHA256": "b1ad50bf9fba25228259fd588b95bd5224fe548f5a8475b15a450f54590c6b17",
+  "luauBinary": "C:\\Users\\mikke\\AppData\\Local\\Temp\\codex-luau-0.737\\luau.exe"
+}

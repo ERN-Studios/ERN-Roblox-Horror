@@ -1,0 +1,121 @@
+{
+  "schema": "generic-installer-v5-frozen-candidate-pins",
+  "candidateOnly": true,
+  "promotionApproved": false,
+  "nativeAuthoring": "pending",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "realManifestWrites": 0,
+  "indexWrites": 0,
+  "productionInstallerBeforeAfterSHA256": "4e9e6177f602f6b1519e682b70e661cec13928aec7ce3e608365163b3285292f",
+  "files": {
+    ".gitattributes": {
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    "atomic-ports-v1.json": {
+      "bytes": 2925,
+      "sha256": "94f1dabab9cd2ff5c0e4137534bcfbcf4b0514f3501fc6a5c9e2da9f55c98664"
+    },
+    "atomic-ports-v2.json": {
+      "bytes": 5674,
+      "sha256": "2367109c53056561eca23a71f0fb8d4f7389673c89a2fe38411d89071167c3dd"
+    },
+    "NATIVE_AUTHORING_PLAN.md": {
+      "bytes": 8497,
+      "sha256": "67b0b7bb3d480bb1e8711f1d7a7cfe17d3222db342d9aa233f5845bde335d606"
+    },
+    "ports-v1.json": {
+      "bytes": 20040,
+      "sha256": "ffe552157a4037db36e6596cff4c73c86e5c04a53d3369f9fc035ad0bc1c15c8"
+    },
+    "preparation.json": {
+      "bytes": 859,
+      "sha256": "8067c9f0791363586723ecbf8921ab8ac4a0f76cded95e4cc2688c96681a8f54"
+    },
+    "production-candidate.diff": {
+      "bytes": 25652,
+      "sha256": "90fe10df27cf004e2e9f55ab90b0b77cc76096e986e5c7fb407425fc0e0605a8"
+    },
+    "REVIEW.md": {
+      "bytes": 8556,
+      "sha256": "fef49d660ff2d1816a115bc366ac12c1ffa551ed44d5cf90433958b878fe2595"
+    },
+    "test_atomic_faults.py": {
+      "bytes": 8462,
+      "sha256": "d226e14e12fbc65d56db98cc0625f08826afd3e3d704d00806179fa3cfdd94a9"
+    },
+    "test_atomic_faults_v2.py": {
+      "bytes": 12287,
+      "sha256": "35c68eb23516c8ae62926da0323107e67c9e921e379a5b317e78a7270027b45e"
+    },
+    "test_candidate_v3.py": {
+      "bytes": 22281,
+      "sha256": "e6d18b6210e558841360af345382937426e89365fa9358f58c80a3c95164cd6d"
+    },
+    "tools/install_new_scripts.py": {
+      "bytes": 18606,
+      "sha256": "33d91899ea6de4abab01d0fe2c2f837ebd4c7f588e3b0018a038484ad6c27e2f"
+    },
+    "tools/push_repo_to_studio.py": {
+      "bytes": 32272,
+      "sha256": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399"
+    },
+    "tools/studio_source_contract.py": {
+      "bytes": 6297,
+      "sha256": "fbe02af9eb9470b20662fdaaa126ecbb6caff02d52d2baa8ef1eb86d9ef86d94"
+    },
+    "tools/sync_from_studio.py": {
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    }
+  },
+  "preservedFailureReceipts": {
+    "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/failure-v1.json": {
+      "bytes": 2046,
+      "sha256": "646e2d4a80cc3910ef81d1a33423f974beedec9ef640dc2d082750eb343841f9"
+    },
+    "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/failure-v2.json": {
+      "bytes": 1436,
+      "sha256": "bf3a70eae73bd98366a1c3ba45d4efb305b6190ca3c62effc35f51a743ee5ede"
+    },
+    "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/failure-v3.json": {
+      "bytes": 333,
+      "sha256": "a6eb6ccfa74d04b218a3711180d90468943962d8b6ea89d971a37edffe580878"
+    },
+    "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/failure-v4.json": {
+      "bytes": 1772,
+      "sha256": "1d11a406420666df9511a3b7cdb63de9ae6c54176be4c33f2c94fea131adf375"
+    },
+    "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/failure-v1.json": {
+      "bytes": 2477,
+      "sha256": "6e6fd7cf2a5bac33739c21801b63c8c47e5e8c766c19d0c5d1ccc125bff9378b"
+    },
+    "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/failure-v2.json": {
+      "bytes": 1512,
+      "sha256": "1c28e79abe27f2335e10589a54ae292b5782177ab710a86a3bea61963d36417e"
+    },
+    "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/atomic-failure-v1.json": {
+      "bytes": 2117,
+      "sha256": "26f966ab06d0b1c129a4727a11699a05c4b6bfd93140aea619f3a9843fae2c7f"
+    }
+  },
+  "checks": {
+    "unchangedOldUnicode": 20,
+    "preservedActualMainCases": 14,
+    "preservedFixtureChecks": 86,
+    "addedActualMainCases": 29,
+    "expandedPythonChecks": 312,
+    "generatedGuardCases": 711,
+    "generatedChecks": 2241,
+    "O0O1CompileUnits": 14,
+    "atomicActualMainCases": 15,
+    "atomicChecks": 91
+  },
+  "limits": [
+    "Read responses bounded64lines/8k;91,702B test Source uses99,637B single-literal overwrite request. Native large-write pending.",
+    "Actual native authoring wrapper/validator and independent review pending.",
+    "Immediate filesystem CAS and cleanup identity/body guards are not a cross-process lock.",
+    "No gameplay/assets/multiplayer/streaming/performance certificate."
+  ]
+}

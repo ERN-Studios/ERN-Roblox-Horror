@@ -1,0 +1,148 @@
+{
+  "schema": "foundation-next-installer-candidate-tests-v1",
+  "pass": true,
+  "pythonChecks": 89,
+  "mainCaseCount": 14,
+  "cases": [
+    {
+      "case": "same-source",
+      "pass": true,
+      "exitCode": 0,
+      "updateCalls": 0,
+      "metadataReads": 4,
+      "error": null
+    },
+    {
+      "case": "overwrite",
+      "pass": true,
+      "exitCode": 0,
+      "updateCalls": 1,
+      "metadataReads": 4,
+      "error": null
+    },
+    {
+      "case": "no-overwrite",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 2,
+      "error": null
+    },
+    {
+      "case": "empty-attributes",
+      "pass": true,
+      "exitCode": 0,
+      "updateCalls": 0,
+      "metadataReads": 4,
+      "error": null
+    },
+    {
+      "case": "pending",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 0,
+      "error": "Installer refuses queued/conflicted targets: ServerScriptService/Fixture.ModuleScript.lua"
+    },
+    {
+      "case": "conflict",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 0,
+      "error": "Installer refuses queued/conflicted targets: ServerScriptService/Fixture.ModuleScript.lua"
+    },
+    {
+      "case": "dry-run",
+      "pass": true,
+      "exitCode": 0,
+      "updateCalls": 0,
+      "metadataReads": 0,
+      "error": null
+    },
+    {
+      "case": "wrong-class",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 1,
+      "error": null
+    },
+    {
+      "case": "editor-conflict",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 1,
+      "error": null
+    },
+    {
+      "case": "property-read-error",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 1,
+      "error": null
+    },
+    {
+      "case": "update-error",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 1,
+      "metadataReads": 2,
+      "error": null
+    },
+    {
+      "case": "callback-concurrent",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 1,
+      "metadataReads": 2,
+      "error": null
+    },
+    {
+      "case": "post-property-drift",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 1,
+      "metadataReads": 4,
+      "error": null
+    },
+    {
+      "case": "manifest-concurrent",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 1,
+      "metadataReads": 4,
+      "error": null
+    }
+  ],
+  "nativeSummary": "NATIVE CASES=96 CHECKS=297",
+  "compiles": [
+    {
+      "opt": "-O0",
+      "exitCode": 0
+    },
+    {
+      "opt": "-O1",
+      "exitCode": 0
+    }
+  ],
+  "candidateSHA256": "40b1bef366922f18015411e6c665f4caec25a80f789ed173c1e27d44b179ea2a",
+  "testSHA256": "4783448add95920e328c9ef2f4163aef5f6a9a4142d2d83cfd1ca4481845985c",
+  "fixtureSHA256": "333f21782283323a2605321a70e3550a8fb682da971225449b59e9bfcdff830a",
+  "generatedUpdateSHA256": {
+    "ModuleScript": "1c495717791f6b61f4d6c8d4d2499ea40a100e58f57e5da0eb43c3eabe26d693",
+    "Script": "6156058ca829fe6489da7ceb8cfecc34f1207b00490873c097a64437fab3cff2",
+    "LocalScript": "4994994afca5b3b0e41de8ccf676348a7dff78ff81baac7bbbe9855807408fe8"
+  },
+  "generatedCreateSHA256": {
+    "ModuleScript": "028d9b1a626cd9ddcf5252474b77dce18a31299d49df5885380851ba2050ec6e",
+    "Script": "e9c7de70219efe5642a06df063b1f62e4ad04e2bf30d15eba1566a59cf96b264",
+    "LocalScript": "bbf81f36523bddf85c9d4739074b9a46672f2f9d387953d7fb43147a69485c9e"
+  },
+  "realMcpCalls": 0,
+  "nativeStudioWrites": 0,
+  "productionWrites": 0,
+  "scope": "Actual main against owned temporary mirrors/fake MCP reader protocol; actual generated Lua guards on fake engine services with lookup SHA boundary. Not native authoring, new gameplay, multiprocessing full transaction or Studio engine certification."
+}

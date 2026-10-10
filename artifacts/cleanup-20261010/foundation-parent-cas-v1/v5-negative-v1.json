@@ -1,0 +1,15 @@
+{
+  "schema": "actual-generated-parent-commit-detach-fault-v1",
+  "version": "v5",
+  "gatePassed": false,
+  "expectedVerdictConfirmed": true,
+  "candidateSHA256": "33d91899ea6de4abab01d0fe2c2f837ebd4c7f588e3b0018a038484ad6c27e2f",
+  "testSHA256": "9e5796e3048e388d79f17845e7c577c3e82405b924bf84e5595a68f27bab418f",
+  "baseDriverSHA256": "e6d18b6210e558841360af345382937426e89365fa9358f58c80a3c95164cd6d",
+  "inMemoryPortSHA256": "e7115cd11f5a6d8ffac07e6a9673a75a7835c443362a743b6bed4cccd2bcc7cb",
+  "result": null,
+  "error": "actual generated port: C:/Users/mikke/AppData/Local/Temp/generic-v3-native-ports-ni3p7rkm/actual-generated.luau:3: preserve foreign detach even without Source mutation\nstacktrace:\n[C] function assert\nC:/Users/mikke/AppData/Local/Temp/generic-v3-native-ports-ni3p7rkm/actual-generated.luau:3 function check\nC:/Users/mikke/AppData/Local/Temp/generic-v3-native-ports-ni3p7rkm/actual-generated.luau:858\n",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "limits": "Actual generated create payload/callback with explicit native/hash/JSON/property-setter fault boundary. No real Studio object or scheduler certificate."
+}

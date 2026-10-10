@@ -1,0 +1,7 @@
+{
+  "schema": "installer-candidate-preparation-v2",
+  "candidateSHA256": "40b1bef366922f18015411e6c665f4caec25a80f789ed173c1e27d44b179ea2a",
+  "previousCandidateSHA256": "e8addf46659f7cd3b089f10b210f5cfdba9d7ab17d918053db850c6d82ad339a",
+  "delta": "add owned created instance debug ID baseline to callback/cleanup guards",
+  "productionWrites": 0
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "generic-installer-v6-frozen-candidate-pins",
+  "candidateOnly": true,
+  "promotionApproved": false,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "indexWrites": 0,
+  "files": {
+    ".gitattributes": {
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    "atomic-ports-v1.json": {
+      "bytes": 5674,
+      "sha256": "88c98bf918cec4fe5fd76000932321837645cae21b3a048c8b07c333432d5304"
+    },
+    "ports-v1.json": {
+      "bytes": 20040,
+      "sha256": "3f65585f14ed6b4035ac3469b8deccb3fbe7128a672513bff1e85d1854847fc0"
+    },
+    "preparation.json": {
+      "bytes": 650,
+      "sha256": "e75d94271e0a2cb1bb78e655af03ef3434adfb16ec91692c841185829d9bb830"
+    },
+    "REVIEW.md": {
+      "bytes": 2471,
+      "sha256": "28606e3aafd44d3d1d085aebe7087cdcc860fc02374cdf82daaaa16aeca1cfd9"
+    },
+    "test_atomic_faults_v2.py": {
+      "bytes": 12287,
+      "sha256": "35c68eb23516c8ae62926da0323107e67c9e921e379a5b317e78a7270027b45e"
+    },
+    "test_candidate_v3.py": {
+      "bytes": 22281,
+      "sha256": "a31c11408f54e7beb9216b81df103bbfa07b04957a6f90e4efada470fffc8d98"
+    },
+    "tools/install_new_scripts.py": {
+      "bytes": 18654,
+      "sha256": "a4c0832b88bba7e151d4bae47007e9b20eacde5cd6f3a7d3f9685fe2942bbaf7"
+    },
+    "tools/push_repo_to_studio.py": {
+      "bytes": 32272,
+      "sha256": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399"
+    },
+    "tools/studio_source_contract.py": {
+      "bytes": 6297,
+      "sha256": "fbe02af9eb9470b20662fdaaa126ecbb6caff02d52d2baa8ef1eb86d9ef86d94"
+    },
+    "tools/sync_from_studio.py": {
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    }
+  },
+  "peerComposedProofs": {
+    "artifacts/cleanup-20261010/foundation-parent-cas-v1/.gitattributes": {
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    "artifacts/cleanup-20261010/foundation-parent-cas-v1/test_parent_combined.py": {
+      "bytes": 3604,
+      "sha256": "9e5796e3048e388d79f17845e7c577c3e82405b924bf84e5595a68f27bab418f"
+    },
+    "artifacts/cleanup-20261010/foundation-parent-cas-v1/test_parent_combined_v2.py": {
+      "bytes": 3594,
+      "sha256": "5aec71c56048c9e66bda9951eeb982827dfc7839b4fc50578e7564679a9b061b"
+    },
+    "artifacts/cleanup-20261010/foundation-parent-cas-v1/v5-negative-v1.json": {
+      "bytes": 1147,
+      "sha256": "dd0ebeeb5cfd20ae9fbb79b696419647caf00ddff0e8eb90bcc1aaffdaa25b06"
+    },
+    "artifacts/cleanup-20261010/foundation-parent-cas-v1/v6-driver-failure-v1.json": {
+      "bytes": 475,
+      "sha256": "d7287cac0a3df1d2361f33d5bd6bb0b47ece90b8261c43a57fe84c92e7c5d1d5"
+    },
+    "artifacts/cleanup-20261010/foundation-parent-cas-v1/v6-positive-v2.json": {
+      "bytes": 1946,
+      "sha256": "3533b3e2744474783bd8ec698f3e25fcf5584c053014c0538dd722dd6a633737"
+    }
+  },
+  "V5CombinedGatePassed": false,
+  "V6OfflineGatePassed": true,
+  "nativeAuthoring": "pending",
+  "largeNativeWriteTransport": "pending"
+}

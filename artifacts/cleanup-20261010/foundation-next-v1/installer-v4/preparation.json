@@ -1,0 +1,15 @@
+{
+  "schema": "generic-installer-v4-parent-commit-cleanup-candidate",
+  "baseCandidateSHA256": "1c6d5c2f9be48b5bbfe21a5fed33774b662938590e59ee6c7879cd5405ce153d",
+  "candidateSHA256": "48b104a30d436c603edc4c21972719d2b57cf419a92664a11e60f1346a3431e1",
+  "change": "Exact-owned current parent/path/slot cleanup after Parent setter commit-then-error; foreign detach remains retained after confirmed attach.",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "scope": "Candidate only",
+  "dependencies": {
+    "push_repo_to_studio.py": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399",
+    "studio_source_contract.py": "fbe02af9eb9470b20662fdaaa126ecbb6caff02d52d2baa8ef1eb86d9ef86d94",
+    "sync_from_studio.py": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+  },
+  "testDriverSHA256": "0ebf1a79f0ba3d1fcb3e20c02837c03963fc21b2b35b5f5c34921832fae6cc73"
+}

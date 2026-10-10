@@ -157,6 +157,41 @@ fortsat kun forberedte kandidater; ingen af deres produktionsændringer eller
 native Sourcewrites er udført ved S19-afslutningen. Installerens offline
 fejlfixture er ikke en native authoring-/transportcertificering.
 
+S19 lokal commit: `51d3095afb3e6f62bb73c7fd0a8c6b491a205d82`.
+
+### F01 / T06-extension — authoringinstaller, forberedt og afventer native test
+
+Det aktuelle generic installer-workflow er genkontrolleret; fem actual-main
+baselinecases reproducerede metadata-loss ved exact-source registration og
+manglende frisk callback-CAS ved overwrite. T06’s historiske Unicodebug var
+allerede rettet og er ikke implementeret igen. De15 remotes’ metadata-gap er
+allerede løst i S17, ikke en ny afventende oprydning.
+
+V6 er alene et forberedt forslag. Produktionstool, native Source og manifest
+er uændrede. Kandidaten bevarer hele CLI- og Unicodecontract, bruger fresh S13
+native metadata og kontrollerer overwrite inde i SES-callback; ny creation
+sker på præcist egne tomme objekter med cleanup og Enabled-gendannelse.
+Manifestregistration bevarer ukendte/unrelated fields og afviser drift; egne
+temporære filer kræver eksakt descriptoridentity og kendte komplette bytes.
+Der er ingen påstand om cross-process lock eller native-plus-local transaction.
+
+Unchanged Unicode20,43 actual-main cases,711 generated Luau create/CAS-cases
+med2241 checks og O0/O1 samt15 real filesystem/atomic faults91checks PASS.
+Concrete candidate fejl i ID-guard, Parent commit-then-error cleanup og fremmed
+temp-file-ejerskab blev fanget lokalt; immutable tidligere versioner/negative
+receipts bevares. Disse porte bruger fakes ved native/SES/reflection boundaries.
+En yderligere peer-reproduktion viste en sammensat V5 ownership-fejl: Parent
+committede, fremmed reentry detached objektet, og setter kastede før attached-
+flagget. V5’s combined gate er FAIL og uændret. V6 registrerer setterforsøget
+før kaldet og bevarer ukendte nil-Parent outcomes;138 actual-generated cases/
+432 checks bestod sammen med de ovenstående V6-porte. Det certificerer ikke
+native engine-fejlveje. Rigtige native class/editor/authoring-porte og den enkelte store99.637-byte
+overwrite-request er afventende; reads er målt bounded64lines/8k, hvilket ikke
+certificerer write-transporten. Ingen Source- eller assetfjernelse er godkendt.
+[Frosset V6 scope](artifacts/cleanup-20261010/foundation-next-v1/installer-v6/REVIEW.md),
+[arvet native portdesign, kræver V6-binding](artifacts/cleanup-20261010/foundation-next-v1/installer-v5/NATIVE_AUTHORING_PLAN.md),
+[præcis beviscuration](artifacts/cleanup-20261010/foundation-next-v1/CURATION-v2.json).
+
 S08 har nu pensioneret Level1-legacybuildens standalone `main` og de offentlige
 gamle import-/QA-/publish-/exporttargets i syv lokale filer. Aktive defaults
 vælger V2; elevatorens delte INSTALL-template og alle 12 delte build-definitioner

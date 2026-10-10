@@ -1,0 +1,117 @@
+{
+  "schema": "generic-installer-actual-main-atomic-faults-v2",
+  "pass": true,
+  "cases": [
+    {
+      "case": "foreign-temp-open-race",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": true,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: [Errno 17] File exists: 'C:\\\\Users\\\\mikke\\\\AppData\\\\Local\\\\Temp\\\\generic-atomic-fault-02ev84pj\\\\studio-sync-manifest.json.installer-owned.tmp'\n"
+    },
+    {
+      "case": "foreign-temp-edit",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": true,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled after foreign temp edit\n"
+    },
+    {
+      "case": "foreign-temp-replacement-same-bytes",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": true,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled after foreign identity replacement\n"
+    },
+    {
+      "case": "replace-before-error",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled pre-replace failure\n"
+    },
+    {
+      "case": "replace-commit-error",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled error after actual replace\n"
+    },
+    {
+      "case": "foreign-manifest-post-replace",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: Manifest changed after registration; preserve current bytes\n"
+    },
+    {
+      "case": "own-cleanup-unlink-error",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": true,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled owned temp cleanup error\n"
+    },
+    {
+      "case": "write-error-before",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": true,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled before write error\n"
+    },
+    {
+      "case": "write-partial-error",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": true,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled partial write error\n"
+    },
+    {
+      "case": "write-incomplete-return",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": true,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: Incomplete installer temp write; preserved\n"
+    },
+    {
+      "case": "write-close-error",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled close error after complete write\n"
+    },
+    {
+      "case": "foreign-manifest-pre-replace",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: Manifest changed before atomic registration; preserve it\n"
+    },
+    {
+      "case": "manifest-pre-replace-read-error",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled immediate registration guard read failure\n"
+    },
+    {
+      "case": "manifest-post-replace-read-error",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": false,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled postreplace guard read failure\n"
+    },
+    {
+      "case": "temp-cleanup-getter-error",
+      "pass": true,
+      "sourceWrites": 1,
+      "tempRemaining": true,
+      "stdout": "PLAN ModuleScript game.ServerScriptService.Fixture  <-  ServerScriptService/Fixture.ModuleScript.lua\nFAILED ServerScriptService.Fixture: controlled owned cleanup identity getter error\n"
+    }
+  ],
+  "checks": 91,
+  "candidateSHA256": "33d91899ea6de4abab01d0fe2c2f837ebd4c7f588e3b0018a038484ad6c27e2f",
+  "testSHA256": "35c68eb23516c8ae62926da0323107e67c9e921e379a5b317e78a7270027b45e",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "limits": "Real local open/replace/postread/cleanup with actual main. Native service/chunk transport boundaries fake; no cross-process lock or native authoring certification. Unknown partial temp writes and cleanup getter failures deliberately retain the own file for review."
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "installer-candidate-failed-attempt-v1",
+  "pass": false,
+  "testSHA256": "a7c4a53d8c754c3f248ce8ba60f2acfda00cf1a050fa0bd9da19b6c1ff1a2719",
+  "candidateSHA256": "e8addf46659f7cd3b089f10b210f5cfdba9d7ab17d918053db850c6d82ad339a",
+  "failure": "create negative identity unexpectedly succeeded; owned creation omitted explicit GetDebugId baseline check",
+  "compilerOutputIssue": "compiler disassembly contains arbitrary hash bytes; UTF8 decoder failed in reader thread, not a clean compile log",
+  "realMcpCalls": 0,
+  "nativeStudioWrites": 0,
+  "productionWrites": 0
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "generic-installer-v3-expanded-port-failure-v4",
+  "exitcode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v3\\test_candidate_v4.py\", line 269, in <module>\r\n    if __name__=='__main__':main()\r\n                            ^^^^^^\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v3\\test_candidate_v4.py\", line 254, in main\r\n    matrix.append(execute_native_matrix('ServerScriptService.Pr\ufffdve \"?\"',legacy.NEW,True))\r\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v3\\test_candidate_v4.py\", line 132, in execute_native_matrix\r\n    check(result.returncode == 0, 'actual generated port: ' + result.stdout + result.stderr)\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v3\\test_candidate_v4.py\", line 34, in check\r\n    assert value, message\r\nAssertionError: actual generated port: C:/Users/mikke/AppData/Local/Temp/generic-v3-native-ports-860r36_0/actual-generated.luau:3: clean precise owned allocation: parent-set-commit-error\r\nstacktrace:\r\n[C] function assert\r\nC:/Users/mikke/AppData/Local/Temp/generic-v3-native-ports-860r36_0/actual-generated.luau:3 function check\r\nC:/Users/mikke/AppData/Local/Temp/generic-v3-native-ports-860r36_0/actual-generated.luau:854\r\n\r\n",
+  "candidateSHA256": "1c6d5c2f9be48b5bbfe21a5fed33774b662938590e59ee6c7879cd5405ce153d",
+  "testSHA256": "0ebf1a79f0ba3d1fcb3e20c02837c03963fc21b2b35b5f5c34921832fae6cc73",
+  "nativeCalls": 0,
+  "productionWrites": 0
+}

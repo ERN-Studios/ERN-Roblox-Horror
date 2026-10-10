@@ -1,0 +1,10 @@
+{
+  "schema": "generic-installer-v3-expanded-port-failure-v3",
+  "exitcode": 1,
+  "stdout": "",
+  "stderr": null,
+  "candidateSHA256": "1c6d5c2f9be48b5bbfe21a5fed33774b662938590e59ee6c7879cd5405ce153d",
+  "testSHA256": "2302d322eeb5677bdda4ec13583dace9b71450b456a88175c65cef1450ebaa04",
+  "nativeCalls": 0,
+  "productionWrites": 0
+}

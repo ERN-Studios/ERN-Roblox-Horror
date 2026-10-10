@@ -1,0 +1,44 @@
+{
+  "schema": "actual-generated-parent-commit-detach-fault-v1",
+  "version": "v6",
+  "gatePassed": true,
+  "expectedVerdictConfirmed": true,
+  "candidateSHA256": "a4c0832b88bba7e151d4bae47007e9b20eacde5cd6f3a7d3f9685fe2942bbaf7",
+  "testSHA256": "5aec71c56048c9e66bda9951eeb982827dfc7839b4fc50578e7564679a9b061b",
+  "baseDriverSHA256": "a31c11408f54e7beb9216b81df103bbfa07b04957a6f90e4efada470fffc8d98",
+  "inMemoryPortSHA256": "c240828324d550c96d62c7d4202fa19d440a888ec77cd0911973f0339cd71b38",
+  "result": {
+    "pass": true,
+    "path": "ServerScriptService.CombinedParentProbe",
+    "sourceBytes": 28,
+    "cases": 138,
+    "checks": 432,
+    "compiles": [
+      {
+        "optimization": "-O0",
+        "pass": true
+      },
+      {
+        "optimization": "-O1",
+        "pass": true
+      }
+    ],
+    "fixtureSHA256": "7072aad76e6e3a7c6606c4f1e4033896614592ee36bb10a981cede23c6e3e846",
+    "generatedUpdates": {
+      "ModuleScript": "5ab235ef8cd802dbf5c759b4fe2f94d5eb70655a323f805c31a5bb250833499d",
+      "Script": "4011bc50c328522da4ca0fe2a98fc2a7a2715aab660ac0729a0c2993684e9811",
+      "LocalScript": "9764fd219910396be4557d5e135c5a3a51e25525d4913766691fb03053909b2d"
+    },
+    "generatedCreates": {
+      "ModuleScript": "69030d96ae7e15184ff642510d0973fefa70e6c4cffdaa55cf303243b6022dd3",
+      "Script": "f36698f6ccb788005b356b27282d8b177ce23bec36a8445e56e8b62ee7d9ada3",
+      "LocalScript": "703a2af97ebb118cb7e5f832b758384e9acd6a01ddda0b24e1280f9acad08721"
+    },
+    "actualLookupSHA256": "2d464e2326da47c8b47a77afad7c95cba0751df91d2cf83ee668057cefd01db1",
+    "limits": "Actual generated payloads; table services/JSON/known-body hash boundary. No Studio SES or native object certificate."
+  },
+  "error": null,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "limits": "Actual generated create payload/callback with explicit native/hash/JSON/property-setter fault boundary. No real Studio object or scheduler certificate."
+}

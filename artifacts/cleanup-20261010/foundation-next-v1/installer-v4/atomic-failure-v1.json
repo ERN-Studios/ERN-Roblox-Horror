@@ -1,0 +1,10 @@
+{
+  "schema": "generic-installer-v4-atomic-port-failure-v1",
+  "exitcode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v4\\test_atomic_faults.py\", line 134, in <module>\r\n    if __name__ == '__main__': main()\r\n                               ^^^^^^\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v4\\test_atomic_faults.py\", line 128, in main\r\n    cases = [main_case(case) for case in ('foreign-temp-open-race', 'foreign-temp-edit', 'foreign-temp-replacement-same-bytes', 'replace-before-error', 'replace-commit-error', 'foreign-manifest-post-replace', 'own-cleanup-unlink-error')]\r\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v4\\test_atomic_faults.py\", line 128, in <listcomp>\r\n    cases = [main_case(case) for case in ('foreign-temp-open-race', 'foreign-temp-edit', 'foreign-temp-replacement-same-bytes', 'replace-before-error', 'replace-commit-error', 'foreign-manifest-post-replace', 'own-cleanup-unlink-error')]\r\n             ^^^^^^^^^^^^^^^\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v4\\test_atomic_faults.py\", line 105, in main_case\r\n    check(temporary.exists() and temporary.read_bytes() == foreign, 'foreign temp retained: ' + scenario)\r\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261010\\foundation-next-v1\\installer-v4\\test_atomic_faults.py\", line 25, in check\r\n    assert value, message\r\nAssertionError: foreign temp retained: foreign-temp-open-race\r\n",
+  "candidateSHA256": "48b104a30d436c603edc4c21972719d2b57cf419a92664a11e60f1346a3431e1",
+  "testSHA256": "d226e14e12fbc65d56db98cc0625f08826afd3e3d704d00806179fa3cfdd94a9",
+  "nativeCalls": 0,
+  "productionWrites": 0
+}

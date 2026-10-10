@@ -1,0 +1,694 @@
+{
+  "schema": "generic-installer-v4-expanded-offline-ports",
+  "pass": true,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "candidateSHA256": "48b104a30d436c603edc4c21972719d2b57cf419a92664a11e60f1346a3431e1",
+  "testSHA256": "e6d18b6210e558841360af345382937426e89365fa9358f58c80a3c95164cd6d",
+  "pythonChecks": 312,
+  "preservedV2MainCases": [
+    {
+      "case": "same-source",
+      "pass": true,
+      "exitCode": 0,
+      "updateCalls": 0,
+      "metadataReads": 4,
+      "error": null
+    },
+    {
+      "case": "overwrite",
+      "pass": true,
+      "exitCode": 0,
+      "updateCalls": 1,
+      "metadataReads": 4,
+      "error": null
+    },
+    {
+      "case": "no-overwrite",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 2,
+      "error": null
+    },
+    {
+      "case": "empty-attributes",
+      "pass": true,
+      "exitCode": 0,
+      "updateCalls": 0,
+      "metadataReads": 4,
+      "error": null
+    },
+    {
+      "case": "pending",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 0,
+      "error": "Installer refuses queued/conflicted targets: ServerScriptService/Fixture.ModuleScript.lua"
+    },
+    {
+      "case": "conflict",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 0,
+      "error": "Installer refuses queued/conflicted targets: ServerScriptService/Fixture.ModuleScript.lua"
+    },
+    {
+      "case": "dry-run",
+      "pass": true,
+      "exitCode": 0,
+      "updateCalls": 0,
+      "metadataReads": 0,
+      "error": null
+    },
+    {
+      "case": "wrong-class",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 1,
+      "error": null
+    },
+    {
+      "case": "editor-conflict",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 1,
+      "error": null
+    },
+    {
+      "case": "property-read-error",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 0,
+      "metadataReads": 1,
+      "error": null
+    },
+    {
+      "case": "update-error",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 1,
+      "metadataReads": 2,
+      "error": null
+    },
+    {
+      "case": "callback-concurrent",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 1,
+      "metadataReads": 2,
+      "error": null
+    },
+    {
+      "case": "post-property-drift",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 1,
+      "metadataReads": 4,
+      "error": null
+    },
+    {
+      "case": "manifest-concurrent",
+      "pass": true,
+      "exitCode": 1,
+      "updateCalls": 1,
+      "metadataReads": 4,
+      "error": null
+    }
+  ],
+  "preservedV2Checks": 86,
+  "additionalMainCases": [
+    {
+      "case": "same",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 4,
+      "chunkResponses": 2,
+      "maxResponseBytes": 28,
+      "largestRequestBytes": 3699,
+      "error": null
+    },
+    {
+      "case": "overwrite",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 1,
+      "metadataReads": 4,
+      "chunkResponses": 2,
+      "maxResponseBytes": 28,
+      "largestRequestBytes": 6348,
+      "error": null
+    },
+    {
+      "case": "unicode",
+      "pass": true,
+      "unicode": true,
+      "sourceBytes": 28,
+      "writes": 1,
+      "metadataReads": 4,
+      "chunkResponses": 2,
+      "maxResponseBytes": 28,
+      "largestRequestBytes": 6364,
+      "error": null
+    },
+    {
+      "case": "create",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 1,
+      "metadataReads": 2,
+      "chunkResponses": 1,
+      "maxResponseBytes": 28,
+      "largestRequestBytes": 3822,
+      "error": null
+    },
+    {
+      "case": "create-race",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 3822,
+      "error": null
+    },
+    {
+      "case": "create-parent-changed",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 3822,
+      "error": null
+    },
+    {
+      "case": "create-editor-error",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 3822,
+      "error": null
+    },
+    {
+      "case": "create-commit-error",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 1,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 3822,
+      "error": null
+    },
+    {
+      "case": "presence-list",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 829,
+      "error": null
+    },
+    {
+      "case": "presence-null",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 829,
+      "error": null
+    },
+    {
+      "case": "presence-invalid-json",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 829,
+      "error": null
+    },
+    {
+      "case": "presence-empty",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 829,
+      "error": null
+    },
+    {
+      "case": "presence-missing-int",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 829,
+      "error": null
+    },
+    {
+      "case": "presence-parent-null",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 829,
+      "error": null
+    },
+    {
+      "case": "presence-parent-empty",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 829,
+      "error": null
+    },
+    {
+      "case": "presence-extra",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 829,
+      "error": null
+    },
+    {
+      "case": "presence-oversized",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 829,
+      "error": null
+    },
+    {
+      "case": "missing-parent",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 829,
+      "error": null
+    },
+    {
+      "case": "final-property",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 1,
+      "metadataReads": 4,
+      "chunkResponses": 2,
+      "maxResponseBytes": 28,
+      "largestRequestBytes": 6348,
+      "error": null
+    },
+    {
+      "case": "same-final-property",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 4,
+      "chunkResponses": 2,
+      "maxResponseBytes": 28,
+      "largestRequestBytes": 3699,
+      "error": null
+    },
+    {
+      "case": "final-editor",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 1,
+      "metadataReads": 3,
+      "chunkResponses": 1,
+      "maxResponseBytes": 22,
+      "largestRequestBytes": 6348,
+      "error": null
+    },
+    {
+      "case": "final-source",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 1,
+      "metadataReads": 4,
+      "chunkResponses": 2,
+      "maxResponseBytes": 22,
+      "largestRequestBytes": 6348,
+      "error": null
+    },
+    {
+      "case": "chunk-oversized",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 1,
+      "chunkResponses": 1,
+      "maxResponseBytes": 8001,
+      "largestRequestBytes": 3699,
+      "error": null
+    },
+    {
+      "case": "chunk-failure",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 1,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 3699,
+      "error": null
+    },
+    {
+      "case": "chunk-truncated",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 1,
+      "chunkResponses": 4,
+      "maxResponseBytes": 21,
+      "largestRequestBytes": 3699,
+      "error": null
+    },
+    {
+      "case": "manifest-temp",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 1,
+      "metadataReads": 4,
+      "chunkResponses": 2,
+      "maxResponseBytes": 28,
+      "largestRequestBytes": 6348,
+      "error": null
+    },
+    {
+      "case": "duplicate-row",
+      "pass": true,
+      "unicode": false,
+      "sourceBytes": 28,
+      "writes": 0,
+      "metadataReads": 0,
+      "chunkResponses": 0,
+      "maxResponseBytes": 0,
+      "largestRequestBytes": 0,
+      "error": "Duplicate targeted manifest rows; no write"
+    },
+    {
+      "case": "large-same",
+      "pass": true,
+      "unicode": true,
+      "sourceBytes": 91702,
+      "writes": 0,
+      "metadataReads": 4,
+      "chunkResponses": 52,
+      "maxResponseBytes": 3711,
+      "largestRequestBytes": 3703,
+      "error": null
+    },
+    {
+      "case": "large-overwrite",
+      "pass": true,
+      "unicode": true,
+      "sourceBytes": 91702,
+      "writes": 1,
+      "metadataReads": 4,
+      "chunkResponses": 27,
+      "maxResponseBytes": 3711,
+      "largestRequestBytes": 99637,
+      "error": null
+    }
+  ],
+  "generatedGuardMatrices": [
+    {
+      "pass": true,
+      "path": "ServerScriptService.Fixture",
+      "sourceBytes": 9,
+      "cases": 96,
+      "checks": 303,
+      "compiles": [
+        {
+          "optimization": "-O0",
+          "pass": true
+        },
+        {
+          "optimization": "-O1",
+          "pass": true
+        }
+      ],
+      "fixtureSHA256": "1d82adb36a39046f42cd09663fa3e6806cfa41eb878e8f3aa7ace89790451849",
+      "generatedUpdates": {
+        "ModuleScript": "d6842baf7664a8412c03bc3142e9532aea7a7e639e92734f8b6f0eeab6df2cbd",
+        "Script": "6e529d59709d0064455988c00fc5545b705ec376cfe88622812d301a18c61836",
+        "LocalScript": "66e7938c116acae1ed8d11e526a22ff006faed9be10e0717f92b0cb789fa6bd7"
+      },
+      "generatedCreates": {
+        "ModuleScript": "aa080d05d02886f3cf4f182cc527662bb5f3553b9efd69a84776b620f8efc0de",
+        "Script": "1f1415187240d400d0d5b6121989edbfdd72ee423960c9fd98d5956e4679e3a2",
+        "LocalScript": "95ea3718a474414b31df3eebd6c9d2a767ffb7d076321fb83eef5642ec24a010"
+      },
+      "actualLookupSHA256": "f2cf7b9817e1efe8e6b8d8af136adfb7c081fbe864b895e3af6a2394044dabe5",
+      "limits": "Actual generated payloads; table services/JSON/known-body hash boundary. No Studio SES or native object certificate."
+    },
+    {
+      "pass": true,
+      "path": "ServerScriptService.Fixture",
+      "sourceBytes": 36,
+      "cases": 96,
+      "checks": 303,
+      "compiles": [
+        {
+          "optimization": "-O0",
+          "pass": true
+        },
+        {
+          "optimization": "-O1",
+          "pass": true
+        }
+      ],
+      "fixtureSHA256": "667c618783e1b9fda5c449abd0e17b5aa35b5cf6597047876593b5aacb5012b1",
+      "generatedUpdates": {
+        "ModuleScript": "bb7f56ce0e2a31afcb133bfd38a87dc569c21798e94d05bc4914b774cd850e8b",
+        "Script": "b21195e74c93496df3bf17ca8eaf79a6411ea899dacf689288d79384bfb99790",
+        "LocalScript": "d2f477479375d9ebd2c2665b1b09822b3c68294185f324d7872ef29907b7cde0"
+      },
+      "generatedCreates": {
+        "ModuleScript": "5c944643da54b875a3657464a53c855f0016d51f2c35f4dd55387fff39dcd0c5",
+        "Script": "51efa180f1616ac710cba2cc4c533bd210c437702358eac5085f364426299929",
+        "LocalScript": "fcfbf3506da36324bcb0a2eb7060a252659ec5c7b753c43326d1bf5b65a7b682"
+      },
+      "actualLookupSHA256": "f2cf7b9817e1efe8e6b8d8af136adfb7c081fbe864b895e3af6a2394044dabe5",
+      "limits": "Actual generated payloads; table services/JSON/known-body hash boundary. No Studio SES or native object certificate."
+    },
+    {
+      "pass": true,
+      "path": "ServerScriptService.Fixture",
+      "sourceBytes": 41,
+      "cases": 96,
+      "checks": 303,
+      "compiles": [
+        {
+          "optimization": "-O0",
+          "pass": true
+        },
+        {
+          "optimization": "-O1",
+          "pass": true
+        }
+      ],
+      "fixtureSHA256": "167f6f0f94d7500ec07e71869acc5d42cf82bdf08ac6f81842547b2bc936ee97",
+      "generatedUpdates": {
+        "ModuleScript": "8474b0af4c4d5b8406ecde8914a59ac32c388f8472128a798ccfbee86448913d",
+        "Script": "996015b0cbcf76c841fc25033ea538ecb6b29b94d0a5e599ba5f9e9f3b086e18",
+        "LocalScript": "70da6630346dbe767912e249f1bdfe434581a5eb374017d743044719e7ee1b8a"
+      },
+      "generatedCreates": {
+        "ModuleScript": "ec97d2a9160fe08d03917a23ec19c3e0410644e7cc5b3007457aa00ded3f27e7",
+        "Script": "d8721980a796d03b75a5e1aba4425e0943974ded8ae0a46d1105fbc92811c093",
+        "LocalScript": "d8c6979fece71881c81f546da27572a4c2c335f65b29f84c71a1ed084bbda1be"
+      },
+      "actualLookupSHA256": "f2cf7b9817e1efe8e6b8d8af136adfb7c081fbe864b895e3af6a2394044dabe5",
+      "limits": "Actual generated payloads; table services/JSON/known-body hash boundary. No Studio SES or native object certificate."
+    },
+    {
+      "pass": true,
+      "path": "ServerScriptService.Prøve \"😀\"",
+      "sourceBytes": 9,
+      "cases": 96,
+      "checks": 303,
+      "compiles": [
+        {
+          "optimization": "-O0",
+          "pass": true
+        },
+        {
+          "optimization": "-O1",
+          "pass": true
+        }
+      ],
+      "fixtureSHA256": "67f225167d7d45ab65d24eceed02a236d17c727d3eef54d1c27dfa2d8dc20335",
+      "generatedUpdates": {
+        "ModuleScript": "9e46a9850cb77d78b05ae0fb29c6160479657d2f33036d164b950beec9da6f25",
+        "Script": "5e53027a9c08593831762f9339365d93dff9181f33271b2b3bff2f8e5923c950",
+        "LocalScript": "448203c0969cfcaa4baa6d0016eca0f34ead7a6c8d47628186f078be8cece721"
+      },
+      "generatedCreates": {
+        "ModuleScript": "45ee1ddf2906017dd2f15b6082a709b7b09732a08fea1f42f22daccc25fd164c",
+        "Script": "c7be989403654092a15cf7ac8590f3f95bf49693f80c86517cb117f3d7883128",
+        "LocalScript": "627d252650dd718070dea5958f92d726fd9aeccb7251686bb71a21f527f8e741"
+      },
+      "actualLookupSHA256": "20971d3271b6a85b6a2a7a4e38f4de147c423870c81b4e86bd72e329802abd28",
+      "limits": "Actual generated payloads; table services/JSON/known-body hash boundary. No Studio SES or native object certificate."
+    },
+    {
+      "pass": true,
+      "path": "ServerScriptService.Prøve \"😀\"",
+      "sourceBytes": 36,
+      "cases": 96,
+      "checks": 303,
+      "compiles": [
+        {
+          "optimization": "-O0",
+          "pass": true
+        },
+        {
+          "optimization": "-O1",
+          "pass": true
+        }
+      ],
+      "fixtureSHA256": "1721e804d9fb9fb7ca98c3213e837e27613a336d01bc1ad52c94ca8d83e2789b",
+      "generatedUpdates": {
+        "ModuleScript": "863e85d619efb83ca25158911d099fd8fcb5ee81798d4940be377db739304c8d",
+        "Script": "1bd5e4da433f93167f95293fcdf22a8f5c0a740d276bd34c13f012d7ef54e286",
+        "LocalScript": "78cc4233517f7f60dd2ab3718e76a70a1a765ea44b73366b36896f3c51ff7aa4"
+      },
+      "generatedCreates": {
+        "ModuleScript": "903955a82f5b8a4c328c7288da30821099e1b60a0c98964c735d0e7751042080",
+        "Script": "76b22f8c25f7442e049bd66e7fa24374cf6271f48337fddfc706d95e459627ea",
+        "LocalScript": "ad6d9cec7eb96d0effbd238946ad49bf931933557e1bf0fcd1bcac78cdafe0f9"
+      },
+      "actualLookupSHA256": "20971d3271b6a85b6a2a7a4e38f4de147c423870c81b4e86bd72e329802abd28",
+      "limits": "Actual generated payloads; table services/JSON/known-body hash boundary. No Studio SES or native object certificate."
+    },
+    {
+      "pass": true,
+      "path": "ServerScriptService.Prøve \"😀\"",
+      "sourceBytes": 41,
+      "cases": 96,
+      "checks": 303,
+      "compiles": [
+        {
+          "optimization": "-O0",
+          "pass": true
+        },
+        {
+          "optimization": "-O1",
+          "pass": true
+        }
+      ],
+      "fixtureSHA256": "202f3cae75f56f5a9180634f3ae1bcbfd52c7b5bfdd31db939044c45fca18a6d",
+      "generatedUpdates": {
+        "ModuleScript": "5ff62553b38f4b42add5c0484de3e37ba08342ee93f0a3d086035df179c102e2",
+        "Script": "79f0e0e66486c4c72ee4d61ccf8f66d4cd78b744f7228eda3560b9c41074ab59",
+        "LocalScript": "e662b40696838484dbd7d8d94b5320b5cae8bed772df8702bf1142a85d0d3eb9"
+      },
+      "generatedCreates": {
+        "ModuleScript": "12374d1532286b27245374593ac7ee89aa9053116b2042a656d942b3b8fab419",
+        "Script": "c6bbe7755593bcec2dddeb87d39073d570787d1fa11f51bbc5afe12ac2818236",
+        "LocalScript": "04a188bfea987a9405ef59eadff3d3b50f566f8b9dd057d36781b2b073850e02"
+      },
+      "actualLookupSHA256": "20971d3271b6a85b6a2a7a4e38f4de147c423870c81b4e86bd72e329802abd28",
+      "limits": "Actual generated payloads; table services/JSON/known-body hash boundary. No Studio SES or native object certificate."
+    },
+    {
+      "pass": true,
+      "path": "ServerScriptService.Prøve \"😀\"",
+      "sourceBytes": 28,
+      "cases": 135,
+      "checks": 423,
+      "compiles": [
+        {
+          "optimization": "-O0",
+          "pass": true
+        },
+        {
+          "optimization": "-O1",
+          "pass": true
+        }
+      ],
+      "fixtureSHA256": "a3e290c4b89b51c2ae8eb9de3a554c8b80f2812a46a5fc7fa8f0faa1527800e5",
+      "generatedUpdates": {
+        "ModuleScript": "6b192a8659b543862ef4811273818a3c00bf9600dc935ba75c933f77640e3aa8",
+        "Script": "f7446aaf49fc9d7d7280376b9af2810a0947246a67288a7d383e08d0df27a961",
+        "LocalScript": "fb4f6eea3e97d5a8e8f9fe7f2a0cbb8b20ff1f9e471a747f0c40ca96ab89f46d"
+      },
+      "generatedCreates": {
+        "ModuleScript": "b5a528cb52d9e9fb10bee133c27ade544a3db5dc429ef61f35f0262c344a4ced",
+        "Script": "b5e893a108e8827ef68a13837d778b9a1c4e602cb588c72d63cd1e6f2c84fb7f",
+        "LocalScript": "610760d940af717006bb17d61ae5d786c5d03102ec9f2505470f84b1c7d62702"
+      },
+      "actualLookupSHA256": "20971d3271b6a85b6a2a7a4e38f4de147c423870c81b4e86bd72e329802abd28",
+      "limits": "Actual generated payloads; table services/JSON/known-body hash boundary. No Studio SES or native object certificate."
+    }
+  ],
+  "unchangedOldUnicodeGate": {
+    "pass": true,
+    "checks": 20,
+    "stdout": "generic installer payloads: 20 checks passed (actual offline Luau)\n"
+  },
+  "limits": "Actual main, S13 metadata validation/reader in bounded namespace, local files and generated callbacks. Native/JSON/SHA scheduler boundaries fake. Large read responses bounded64lines/8k; write literal is one larger request with real native transport still pending. No real SES/creation/compile/gameplay certificate."
+}

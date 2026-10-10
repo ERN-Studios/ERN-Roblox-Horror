@@ -1,0 +1,9 @@
+{
+  "schema": "combined-parent-v6-driver-setup-failure-v1",
+  "candidateGateRan": false,
+  "error": "Driver expected old detached-own then branch; V6 driver already includes parent-set-before-error alternative. Failure before generated port execution.",
+  "candidateSHA256": "a4c0832b88bba7e151d4bae47007e9b20eacde5cd6f3a7d3f9685fe2942bbaf7",
+  "driverSHA256": "9e5796e3048e388d79f17845e7c577c3e82405b924bf84e5595a68f27bab418f",
+  "nativeCalls": 0,
+  "productionWrites": 0
+}

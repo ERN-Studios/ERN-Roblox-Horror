@@ -1,0 +1,25 @@
+{
+  "schema": "generic-installer-production-layout-candidate-v3",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "baseCandidateSHA256": "40b1bef366922f18015411e6c665f4caec25a80f789ed173c1e27d44b179ea2a",
+  "candidateSHA256": "1c6d5c2f9be48b5bbfe21a5fed33774b662938590e59ee6c7879cd5405ce153d",
+  "productionInstallerSHA256": "4e9e6177f602f6b1519e682b70e661cec13928aec7ce3e608365163b3285292f",
+  "dependenciesCopiedByteExact": {
+    "sync_from_studio.py": {
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    },
+    "push_repo_to_studio.py": {
+      "bytes": 32272,
+      "sha256": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399"
+    },
+    "studio_source_contract.py": {
+      "bytes": 6297,
+      "sha256": "fbe02af9eb9470b20662fdaaa126ecbb6caff02d52d2baa8ef1eb86d9ef86d94"
+    }
+  },
+  "scope": "Candidate-only isolated project/tools production path layout. Fresh native metadata/CAS, strict presence, safe owned create/cleanup, bounded read namespace, preserved unknown target fields and immediate manifest CAS. No native or large write transport certification."
+}

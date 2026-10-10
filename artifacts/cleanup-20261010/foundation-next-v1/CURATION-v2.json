@@ -1,0 +1,452 @@
+{
+  "schema": "completed-foundation-curation-v2",
+  "supersedesAsCurrentCuration": "CURATION-v1.json; prior file unchanged",
+  "candidateStatus": "V6 candidate only; native authoring/editor/large-write pending; no production promotion",
+  "V5CombinedOwnershipGatePassed": false,
+  "V6OfflineComposedGatePassed": true,
+  "files": [
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/candidate-generated-guards.luau",
+      "bytes": 35717,
+      "sha256": "333f21782283323a2605321a70e3550a8fb682da971225449b59e9bfcdff830a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/candidate-preparation-v2.json",
+      "bytes": 357,
+      "sha256": "5ffc7876713b6791e2077b7f3cfb17e81e2532c765875b30fd81dfd5c9208379"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/candidate-preparation.json",
+      "bytes": 384,
+      "sha256": "a143b8de5ff3ddff596acc06a7b1b096d787ec5e0057c22a8ec6d0b758e11b0e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/candidate-tests-v2.json",
+      "bytes": 3838,
+      "sha256": "f7f8093c9cbc5efb3a339d3b8b634a346a7d9f8352dd040765411eb9856eea22"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/curate-foundation-v1.py",
+      "bytes": 5971,
+      "sha256": "83f7a64da07816ed1647d04c9a3a8f115fb2edb51c7cbaddcbcb678a6e78744e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/CURATION-v1.json",
+      "bytes": 19699,
+      "sha256": "9b9cee631a0eb50cc321bc2ae4b8573cf9785f1e59f54b3f1e333917a9e7cedc"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/CURATION-v1.md",
+      "bytes": 1187,
+      "sha256": "49894b73d4399e74fd899f0bb580401c615d20b630c17747f5c487f0c91f496c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/diagnose-installer-baseline.py",
+      "bytes": 9687,
+      "sha256": "b1ad50bf9fba25228259fd588b95bd5224fe548f5a8475b15a450f54590c6b17"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/failed-attempt-v1.json",
+      "bytes": 595,
+      "sha256": "5bee388c465a4985bfcc0b7d097fc53d70b8b05e4bc4ae2f90afa981af41252a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/failed-attempt-v1.test.py",
+      "bytes": 20094,
+      "sha256": "a7c4a53d8c754c3f248ce8ba60f2acfda00cf1a050fa0bd9da19b6c1ff1a2719"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/install_new_scripts.candidate-v2.py",
+      "bytes": 12791,
+      "sha256": "40b1bef366922f18015411e6c665f4caec25a80f789ed173c1e27d44b179ea2a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/install_new_scripts.candidate.py",
+      "bytes": 12722,
+      "sha256": "e8addf46659f7cd3b089f10b210f5cfdba9d7ab17d918053db850c6d82ad339a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-baseline.json",
+      "bytes": 6874,
+      "sha256": "be31858f925d1d386ba2ac76f86a8c888877447340b2d15b3adbd5390980f953"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/failure-v1.json",
+      "bytes": 2046,
+      "sha256": "646e2d4a80cc3910ef81d1a33423f974beedec9ef640dc2d082750eb343841f9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/failure-v2.json",
+      "bytes": 1436,
+      "sha256": "bf3a70eae73bd98366a1c3ba45d4efb305b6190ca3c62effc35f51a743ee5ede"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/failure-v3.json",
+      "bytes": 333,
+      "sha256": "a6eb6ccfa74d04b218a3711180d90468943962d8b6ea89d971a37edffe580878"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/failure-v4.json",
+      "bytes": 1772,
+      "sha256": "1d11a406420666df9511a3b7cdb63de9ae6c54176be4c33f2c94fea131adf375"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/preparation.json",
+      "bytes": 1187,
+      "sha256": "66dd5748ec73d6f9188ee2f81ccc2de0c8fb0228b6d04c96b0c33328b10a76d3"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/test_candidate.py",
+      "bytes": 21997,
+      "sha256": "c41bc1d01d3f279e8f7c44f2c1dd64a02f1dd4d713457ec8ba6dc5a41b54ae7c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/test_candidate_v2.py",
+      "bytes": 22139,
+      "sha256": "5f5d2b83861cffa756f1b410a62f1da97fafdd65abff682eb14bf9755dbd9965"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/test_candidate_v3.py",
+      "bytes": 22189,
+      "sha256": "2302d322eeb5677bdda4ec13583dace9b71450b456a88175c65cef1450ebaa04"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/test_candidate_v4.py",
+      "bytes": 22224,
+      "sha256": "0ebf1a79f0ba3d1fcb3e20c02837c03963fc21b2b35b5f5c34921832fae6cc73"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/tools/install_new_scripts.py",
+      "bytes": 17924,
+      "sha256": "1c6d5c2f9be48b5bbfe21a5fed33774b662938590e59ee6c7879cd5405ce153d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/tools/push_repo_to_studio.py",
+      "bytes": 32272,
+      "sha256": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/tools/studio_source_contract.py",
+      "bytes": 6297,
+      "sha256": "fbe02af9eb9470b20662fdaaa126ecbb6caff02d52d2baa8ef1eb86d9ef86d94"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v3/tools/sync_from_studio.py",
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/atomic-failure-v1.json",
+      "bytes": 2117,
+      "sha256": "26f966ab06d0b1c129a4727a11699a05c4b6bfd93140aea619f3a9843fae2c7f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/failure-v1.json",
+      "bytes": 2477,
+      "sha256": "6e6fd7cf2a5bac33739c21801b63c8c47e5e8c766c19d0c5d1ccc125bff9378b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/failure-v2.json",
+      "bytes": 1512,
+      "sha256": "1c28e79abe27f2335e10589a54ae292b5782177ab710a86a3bea61963d36417e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/ports-v3.json",
+      "bytes": 20040,
+      "sha256": "f834dba8761e519b215b72be35f382a774fc4648487a34475a33943e35858c3b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/preparation.json",
+      "bytes": 890,
+      "sha256": "18242edc1a7d7cbbf88d38077d28efe267cb7375b1e30e0c47d3197d2c320c16"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/test_atomic_faults.py",
+      "bytes": 8462,
+      "sha256": "d226e14e12fbc65d56db98cc0625f08826afd3e3d704d00806179fa3cfdd94a9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/test_candidate.py",
+      "bytes": 22224,
+      "sha256": "0ebf1a79f0ba3d1fcb3e20c02837c03963fc21b2b35b5f5c34921832fae6cc73"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/test_candidate_v2.py",
+      "bytes": 22222,
+      "sha256": "c2b2a26a400435b72a1a083f8df636dd6054410362b1aeae83a9f59c07f0eba1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/test_candidate_v3.py",
+      "bytes": 22281,
+      "sha256": "e6d18b6210e558841360af345382937426e89365fa9358f58c80a3c95164cd6d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/tools/install_new_scripts.py",
+      "bytes": 17911,
+      "sha256": "48b104a30d436c603edc4c21972719d2b57cf419a92664a11e60f1346a3431e1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/tools/push_repo_to_studio.py",
+      "bytes": 32272,
+      "sha256": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/tools/studio_source_contract.py",
+      "bytes": 6297,
+      "sha256": "fbe02af9eb9470b20662fdaaa126ecbb6caff02d52d2baa8ef1eb86d9ef86d94"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v4/tools/sync_from_studio.py",
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/atomic-ports-v1.json",
+      "bytes": 2925,
+      "sha256": "94f1dabab9cd2ff5c0e4137534bcfbcf4b0514f3501fc6a5c9e2da9f55c98664"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/atomic-ports-v2.json",
+      "bytes": 5674,
+      "sha256": "2367109c53056561eca23a71f0fb8d4f7389673c89a2fe38411d89071167c3dd"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/frozen-pins-v1.json",
+      "bytes": 4641,
+      "sha256": "c0c9fd4c12474b0b07e8362db58bc540ee775cb6d585267087532f9b7cf3100c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/NATIVE_AUTHORING_PLAN.md",
+      "bytes": 8497,
+      "sha256": "67b0b7bb3d480bb1e8711f1d7a7cfe17d3222db342d9aa233f5845bde335d606"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/ports-v1.json",
+      "bytes": 20040,
+      "sha256": "ffe552157a4037db36e6596cff4c73c86e5c04a53d3369f9fc035ad0bc1c15c8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/preparation.json",
+      "bytes": 859,
+      "sha256": "8067c9f0791363586723ecbf8921ab8ac4a0f76cded95e4cc2688c96681a8f54"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/production-candidate.diff",
+      "bytes": 25652,
+      "sha256": "90fe10df27cf004e2e9f55ab90b0b77cc76096e986e5c7fb407425fc0e0605a8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/REVIEW.md",
+      "bytes": 8556,
+      "sha256": "fef49d660ff2d1816a115bc366ac12c1ffa551ed44d5cf90433958b878fe2595"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/test_atomic_faults.py",
+      "bytes": 8462,
+      "sha256": "d226e14e12fbc65d56db98cc0625f08826afd3e3d704d00806179fa3cfdd94a9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/test_atomic_faults_v2.py",
+      "bytes": 12287,
+      "sha256": "35c68eb23516c8ae62926da0323107e67c9e921e379a5b317e78a7270027b45e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/test_candidate_v3.py",
+      "bytes": 22281,
+      "sha256": "e6d18b6210e558841360af345382937426e89365fa9358f58c80a3c95164cd6d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/tools/install_new_scripts.py",
+      "bytes": 18606,
+      "sha256": "33d91899ea6de4abab01d0fe2c2f837ebd4c7f588e3b0018a038484ad6c27e2f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/tools/push_repo_to_studio.py",
+      "bytes": 32272,
+      "sha256": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/tools/studio_source_contract.py",
+      "bytes": 6297,
+      "sha256": "fbe02af9eb9470b20662fdaaa126ecbb6caff02d52d2baa8ef1eb86d9ef86d94"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v5/tools/sync_from_studio.py",
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/atomic-ports-v1.json",
+      "bytes": 5674,
+      "sha256": "88c98bf918cec4fe5fd76000932321837645cae21b3a048c8b07c333432d5304"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/frozen-pins-v1.json",
+      "bytes": 3087,
+      "sha256": "51682c2129a212d16aac1cec41a3d6d838565254abdef640d0c42020f7519597"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/ports-v1.json",
+      "bytes": 20040,
+      "sha256": "3f65585f14ed6b4035ac3469b8deccb3fbe7128a672513bff1e85d1854847fc0"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/preparation.json",
+      "bytes": 650,
+      "sha256": "e75d94271e0a2cb1bb78e655af03ef3434adfb16ec91692c841185829d9bb830"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/REVIEW.md",
+      "bytes": 2471,
+      "sha256": "28606e3aafd44d3d1d085aebe7087cdcc860fc02374cdf82daaaa16aeca1cfd9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/test_atomic_faults_v2.py",
+      "bytes": 12287,
+      "sha256": "35c68eb23516c8ae62926da0323107e67c9e921e379a5b317e78a7270027b45e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/test_candidate_v3.py",
+      "bytes": 22281,
+      "sha256": "a31c11408f54e7beb9216b81df103bbfa07b04957a6f90e4efada470fffc8d98"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/tools/install_new_scripts.py",
+      "bytes": 18654,
+      "sha256": "a4c0832b88bba7e151d4bae47007e9b20eacde5cd6f3a7d3f9685fe2942bbaf7"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/tools/push_repo_to_studio.py",
+      "bytes": 32272,
+      "sha256": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/tools/studio_source_contract.py",
+      "bytes": 6297,
+      "sha256": "fbe02af9eb9470b20662fdaaa126ecbb6caff02d52d2baa8ef1eb86d9ef86d94"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/installer-v6/tools/sync_from_studio.py",
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/prepare-installer-candidate.py",
+      "bytes": 10973,
+      "sha256": "119798806f1dbe0a6511ae74617d8293f928c908fd9636f4b2e843552486ceaa"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/prepare-installer-v3.py",
+      "bytes": 12938,
+      "sha256": "bb4a633f79887e7dab55273e7109e51d67ad982cca9638b0aed13c3627edbea1"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/REVIEW.md",
+      "bytes": 8993,
+      "sha256": "c8cda4a1b453df3f96bf1d3b5310c6cf8b2fb8be99342a59b8a0e9a2a47735dd"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/STATUS_AFTER_S17.md",
+      "bytes": 1388,
+      "sha256": "a3b5c0c24cec5bf3de406a2d60ef9ed10ad18244419137db75bb30042e2b0dd0"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/storage-v3-lexical-proof-v1.json",
+      "bytes": 1047,
+      "sha256": "b16591a7b33859f757f9b72010f5eb8e014dc24328c7d03936959ad6658d81bd"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-fault-peer-v1.json",
+      "bytes": 10324,
+      "sha256": "f91f1a56af9fe2ddd5d38f56805c7e6f8c44dcb3e602a458746eebbbfd7b588a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-peer-review-v1.json",
+      "bytes": 12050,
+      "sha256": "d7d6c68add3a3aa9a55b9f2269883c3583827c4b5f2a58a7e2db5f22563da1c8"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/storage-v4-receiver-peer-v1.json",
+      "bytes": 10391,
+      "sha256": "57f9e12f4a0f481211f83253a8502fb642adf60ab2e5613c6067e7c3482196d6"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-next-v1/test-installer-candidate.py",
+      "bytes": 20106,
+      "sha256": "4783448add95920e328c9ef2f4163aef5f6a9a4142d2d83cfd1ca4481845985c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-parent-cas-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-parent-cas-v1/curate_extension_v1.py",
+      "bytes": 3190,
+      "sha256": "f7c4ed7772fe0d0e5e948c159d93e7a4e80b4e1fcd7eed468f9c1469eee95f62"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-parent-cas-v1/test_parent_combined.py",
+      "bytes": 3604,
+      "sha256": "9e5796e3048e388d79f17845e7c577c3e82405b924bf84e5595a68f27bab418f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-parent-cas-v1/test_parent_combined_v2.py",
+      "bytes": 3594,
+      "sha256": "5aec71c56048c9e66bda9951eeb982827dfc7839b4fc50578e7564679a9b061b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-parent-cas-v1/v5-negative-v1.json",
+      "bytes": 1147,
+      "sha256": "dd0ebeeb5cfd20ae9fbb79b696419647caf00ddff0e8eb90bcc1aaffdaa25b06"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-parent-cas-v1/v6-driver-failure-v1.json",
+      "bytes": 475,
+      "sha256": "d7287cac0a3df1d2361f33d5bd6bb0b47ece90b8261c43a57fe84c92e7c5d1d5"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/foundation-parent-cas-v1/v6-positive-v2.json",
+      "bytes": 1946,
+      "sha256": "3533b3e2744474783bd8ec698f3e25fcf5584c053014c0538dd722dd6a633737"
+    }
+  ],
+  "excluded": [],
+  "secretScan": {
+    "patterns": 7,
+    "filesScanned": 86,
+    "bytesScanned": 991053,
+    "findings": [],
+    "scope": "Static recognizable secret-pattern scan, no runtime/private-config read; unknown/encoded credentials not universally excluded."
+  },
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "indexWrites": 0,
+  "commitWrites": 0,
+  "limits": "Root explicitly stages exact pinned paths after hash/diff review. Curation output itself is new and not self-pinned; no git add -A. V5 earlier ports do not certify its failed combined state. V6 remains pending native authoring/transport."
+}
