@@ -1,0 +1,296 @@
+{
+  "schema": "mongotv-retired-authoring-controlled-absence-independent-peer-v2",
+  "preparationEligibleForNativeTrial": true,
+  "nativeExecuted": false,
+  "deletionApproved": false,
+  "referenceAbsenceCertified": false,
+  "reviewedSourceSHA256": "d3ae28019d2ee0a32ddd798db47f7a1e2a248ef36e8df0b4d58f097df73f6176",
+  "reviewedSourceBytes": 111584,
+  "reviewedConfig": {
+    "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/trial-config.json",
+    "bytes": 60527,
+    "sha256": "69f0bd08db4630d4f822e98c3fa363e299e748db5a4e7d3c6f78c45f223001e2"
+  },
+  "reviewedDriver": {
+    "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/run-root-trial.py",
+    "bytes": 8373,
+    "sha256": "eb57d5cc9c6af3ef87ddf0b95f8434a227915794cbb274e23d136c1063ba70b9"
+  },
+  "frozenPins": {
+    "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/frozen-pins-v1.json",
+    "bytes": 9263,
+    "sha256": "4bc713636254ed530b20d3f2988f84af84119c59db2821a74214804c0cf0688d"
+  },
+  "frozenInputPinsVerified": 42,
+  "v1All25FrozenPinsStillExact": true,
+  "reviewedPins": [
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/.gitattributes",
+      "bytes": 48,
+      "sha256": "49dffe7429b40b59963bc69f0eb3380aee58f34852095bd99262ec132f1dd78b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/assemble-v2.py",
+      "bytes": 2533,
+      "sha256": "8ee042be7e47c8999135772e96add88d0b888ae4ec8ec52590e40aa4be912e8d"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/freeze-v2.py",
+      "bytes": 2151,
+      "sha256": "ca7ae9277898f6587e41d3450edc4f407b2d9cd37bfc82b937ceb1da5205161e"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/native-trial.luau",
+      "bytes": 25788,
+      "sha256": "98a1465f66c40e4f0586ee0b803d9654a7b9ad020c9c3972b7138887bcc2caf4"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/offline-faults-v1.json",
+      "bytes": 19466,
+      "sha256": "2e9a780b09c30d55b0be04b41f556d68a6c52a5e3375889f7b56ce86e2c59733"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/offline-native-boundaries-attempt-v1.json",
+      "bytes": 11758,
+      "sha256": "f69dca89b114779af38a5fb51442ba70c5b624bfbe7c68689017da0f48ab5e70"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/preparation-v1.json",
+      "bytes": 55743,
+      "sha256": "439149f2aedb4f2973cbe2f6362fb7424609bef4919d277e166effcbf8e06e92"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/REVIEW.md",
+      "bytes": 5488,
+      "sha256": "12600e41980794f4c783a1084cde737dbd1c6aaf7b92890c38e4c9336b8e9538"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/run-root-trial.py",
+      "bytes": 8373,
+      "sha256": "eb57d5cc9c6af3ef87ddf0b95f8434a227915794cbb274e23d136c1063ba70b9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/test-native-boundaries.py",
+      "bytes": 11089,
+      "sha256": "a18dc086e5966ed44bd21996715172bee5b4b214bca7bb210b3f736b65a286f9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/test-transaction.py",
+      "bytes": 3778,
+      "sha256": "f63ea91c1fff3b7655d24aa78f50f49dce3c44012ac772aa6f5459fd868afa76"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/transaction-core.luau",
+      "bytes": 3118,
+      "sha256": "a44a362229f2bf06d9b1d59b47d321f59e1efd6a5c485d524e8ed0ce6d8d8e55"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/transaction-faults.luau",
+      "bytes": 6202,
+      "sha256": "f1e13c13df16a0f0fbc692f4a7804472b9441f41f420cdaacb70239abfc63c64"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/trial-config.json",
+      "bytes": 60527,
+      "sha256": "69f0bd08db4630d4f822e98c3fa363e299e748db5a4e7d3c6f78c45f223001e2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/trial-source.luau",
+      "bytes": 111584,
+      "sha256": "d3ae28019d2ee0a32ddd798db47f7a1e2a248ef36e8df0b4d58f097df73f6176"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/V1_INVOCATION_EDGE_REVIEW.json",
+      "bytes": 1203,
+      "sha256": "d7022cfa7eaddd85f4f1d842ac1c6291015b8c682700090dc326999ed4268d48"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/V1_KNOWN_FAILURE_ADDENDUM.json",
+      "bytes": 990,
+      "sha256": "1ba54f21cde9fbb99bef5d54ad6fb7a1c40f9e54f07526fbdb6a9100a95ba157"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 4804,
+      "sha256": "9fef3032bc262f5f149f1a2f7ce15941433e3cdcbf1dc8f63993472ed2979137"
+    },
+    {
+      "path": "tools/cleanup_20261009/retired_authoring_archive_common.luau",
+      "bytes": 22101,
+      "sha256": "d9a783c71d56591580ceab53f914f1cc8832365b68f5fe275cf279cd5634f5ad"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/frozen-pins-v1.json",
+      "bytes": 5529,
+      "sha256": "fd251d5f8485688fd8c4be569832b5c2785cdbfe53b5a0738c9da5d958b9704f"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-trial.luau",
+      "bytes": 24850,
+      "sha256": "59ed6159fd85a74ffb43cf77fea885abb76d19e7c789f231351f8189c66e9f28"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/preparation-v1.json",
+      "bytes": 54454,
+      "sha256": "a02fe0ef5b50ca3dc29a70f9bdf77e84e43179f01ef18dfc240b15e5a8a1b337"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/request-provenance.json",
+      "bytes": 347,
+      "sha256": "dd52f70051dd9801a2dba0e257cf5d86c76e3532d7694fa7ba3dbf5f8db90a3c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/root-api.json",
+      "bytes": 7405,
+      "sha256": "793dca73d3e612fb3b935bd14c88f8a46d2d3fcc9d725a6d49daec639ce4617a"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/root-completion-raw.txt",
+      "bytes": 6583,
+      "sha256": "45b943d597668085792ad67dd9b5a8ddda9e2e76a39685e86864990c60bcf436"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/root-completion.json",
+      "bytes": 8887,
+      "sha256": "94e286f017fc8a2f178fc5d401b6b4801383a1423bd513887b2c5c3bbd12b492"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/root-console-after.json",
+      "bytes": 887,
+      "sha256": "b4fef92b2ea7dab74be11e7af8e016e381f5f33ce2a3e85f4db2bf61ef21b1b2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/root-console-before.json",
+      "bytes": 887,
+      "sha256": "b4fef92b2ea7dab74be11e7af8e016e381f5f33ce2a3e85f4db2bf61ef21b1b2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/root-mode-after.json",
+      "bytes": 250,
+      "sha256": "67077d1f6e23fbb766ba47576221d17089b7ea3cf6c2d3a078142664b7a6a266"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/root-mode-before.json",
+      "bytes": 250,
+      "sha256": "67077d1f6e23fbb766ba47576221d17089b7ea3cf6c2d3a078142664b7a6a266"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/root-provenance.json",
+      "bytes": 353,
+      "sha256": "19f51b89121e59ce3f77b8770e04723397921a8f2a36b2d8ca84c4db52687df3"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/ROOT_REVIEW.json",
+      "bytes": 2184,
+      "sha256": "323af7c94438e17fe1191adcb9b38430aecb61476e46b7f30baf26826bd44994"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-00.json",
+      "bytes": 15028,
+      "sha256": "d34da59173761c695ba85d19d6fc60805f67b07befdb387c428c51969c67bfbb"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-01.json",
+      "bytes": 25635,
+      "sha256": "c7931a20e06c915877a614a5b048aa284b8a4dc953320634ba68e19296b009f2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-02.json",
+      "bytes": 26313,
+      "sha256": "b9d2399c554defda15b664a43fcff4b9862df4c28beaa7028472034b1b0a0f00"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-03.json",
+      "bytes": 26129,
+      "sha256": "18702353c20acc613e1285fca9786f92fa10eb6da7abe6316274147c4d59f4aa"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-04.json",
+      "bytes": 26142,
+      "sha256": "08b5afde391f11b0df0069cff4574c5b1788eee5b78e33e00252e23afafd79d5"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-05.json",
+      "bytes": 25717,
+      "sha256": "b50a408ba21c3cab7fe14c9d65e06f22f3279b015fbdb66e5645ca0640e2ebee"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-06.json",
+      "bytes": 27971,
+      "sha256": "ceafaab3cecff54d55d96a4150dbd89407b0fc7304214d55d3460d98da52b72c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-07.json",
+      "bytes": 28338,
+      "sha256": "e2e69b0673b250634be3ef96c8c2a06cc13e9921b6fa02b0120c024dcc99f8e9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-08.json",
+      "bytes": 28197,
+      "sha256": "5d633259ecea6c396b1aa651fce2bffda19994161fa912b7e5ca4d8e2aa7b478"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-09.json",
+      "bytes": 14197,
+      "sha256": "54ef851c8dd904e3ef1868233738a305bfbfeebd7330555b124f907e2aabc4ca"
+    }
+  ],
+  "sourceAssemblyByteExact": true,
+  "independentCoreReplay": {
+    "path": "artifacts/cleanup-20261010/clients-storage-authoring-peer-v2/offline-core-rerun-v1.json",
+    "bytes": 19466,
+    "sha256": "2e9a780b09c30d55b0be04b41f556d68a6c52a5e3375889f7b56ce86e2c59733"
+  },
+  "independentNativeBoundaryReplay": {
+    "path": "artifacts/cleanup-20261010/clients-storage-authoring-peer-v2/offline-native-boundaries-rerun-v1.json",
+    "bytes": 11758,
+    "sha256": "f69dca89b114779af38a5fb51442ba70c5b624bfbe7c68689017da0f48ab5e70"
+  },
+  "independentDefaultDriver": {
+    "path": "artifacts/cleanup-20261010/clients-storage-authoring-peer-v2/driver-default-rerun-v1.json",
+    "bytes": 436,
+    "sha256": "2ed20bbe997ad3296f295cd2fc289316e3071fc2175572dcd321cbacdefd3a56"
+  },
+  "authorReplayByteIdentical": true,
+  "actualCoreCases": 51,
+  "actualCoreAssertions": 3018,
+  "actualNativeSliceCases": 38,
+  "actualNativeSliceAssertions": 2070,
+  "coreCompileUnits": 5,
+  "boundaryCompileUnits": 1,
+  "v1CompletionRead": {
+    "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/root-completion.json",
+    "bytes": 8887,
+    "sha256": "94e286f017fc8a2f178fc5d401b6b4801383a1423bd513887b2c5c3bbd12b492"
+  },
+  "v1KnownCompletion": "Domain refusal before any Parent write/selector phase;2probes destroyed,all213Sources/originalnative exact,leasesreleased,connections0,pending0. No V1 retry.",
+  "v1Qualification": {
+    "path": "artifacts/cleanup-20261010/clients-storage-authoring-peer-v1/V1_QUALIFICATION.json",
+    "bytes": 1601,
+    "sha256": "f290a2eb24027daaccdd5782959abb86855a8b3e0eee161fe401e8aea452ec02"
+  },
+  "exactDeltaReview": [
+    "Native rollbackEligibility now requires actual entry.invoked or unchanged originalSS Parent. An uninvoked foreign nil is preserved pending; unchanged original is harmlessly disarmed. Existing lease/mode/exacttree/namecollision/Parent checks remain.",
+    "Actual test extracts complete V1/V2 rollbackEligibility,setParent,B.environment and unique slices,executes unchanged core and whole current RuntimeBake. It reproduces V1 inverse adoption and V2 preservation for nested lease throw,immediate Parent CAS refusal and epoch refusal at roots1/3/5; also harmless disarm and owned commit-then-error recovery.",
+    "The reviewed full native helpers have no listener/task initializer. require(probe) only returns an uncalled factory; actual helper bodies execute against narrow frozen read facades and denied task/require/Instance/AssetService/workspace/script/shared/_G boundaries.",
+    "Server-data projection explicitly controls IsClientfalse/IsServertrue,while actual Edit IsClient/IsServer values are separately observed. Actual whole GetManifest client-domain rejection must occur before any asset selector; nil/true/false facade behavior is replayed offline.",
+    "Native phase reports and driver explicitly require controlledServerDataDomain and21 controlled negatives across3fresh phases; this does not certify an actual server/gameplay domain.",
+    "Actual nested boundaries and whole body are executed,not replaced with copied behavioral implementation. Table/metatable guards remain controlled boundaries; no engine scheduling or native forest recovery is inferred.",
+    "Driver verifies both offline receipt inputpins,binds peer.reviewedSourceSHA256 to actual Source,and makes only one bounded native request. Unknown transport/envelope stops further calls,rollback and retry; raw API/completion evidence preserved.",
+    "Exact scoped inverse remains independent of unrelated Source/epoch final-pass gates. Fresh probe Source/editor/hierarchy/properties/attrs/tags ownership,independent cleanup/disconnect retention,current-purpose nonce ledger and all213 finalguards remain unchanged.",
+    "Native selected R4/V2/elevator data/facts/identities and original8,050,869B archive invariance remain mandatory. Protected reflected Instance references remain unresolved; permanentRemoval/deletionApproved/referenceAbsenceCertified stayfalse."
+  ],
+  "supersession": "V2 eligibility applies only to this exact new executable. Original V1 code/pins/peer/qualification and known failed native execution remain immutable. V1 composed hook gap is now represented by exact-source counterexample; no old native success is fabricated.",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "runtimeWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "modeSwitches": 0,
+  "remainingGates": [
+    "Root fresh Edit/place/universe and actual new V2 native completion; no native trial PASS here.",
+    "Unknown or pending outcome needs fresh known-ended reconciliation; never cancellation/retry assumptions.",
+    "Protected reference proof/archive and separate permanent-removal approval remain pending even on actual V2 trialPASS."
+  ],
+  "limits": "Independent exact-code delta review +offline actual core/slices/whole-body domain tests only. No actual Instance scheduling,native absence/recovery,gameplay,multiplayer,streaming,reserved-server,rendering,performance or deletion proof. Final guards are point-in-time and expected event budgets do not prove actor provenance."
+}

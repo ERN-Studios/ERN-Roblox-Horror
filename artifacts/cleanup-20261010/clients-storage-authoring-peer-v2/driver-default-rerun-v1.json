@@ -1,0 +1,11 @@
+{
+  "driver": {
+    "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/run-root-trial.py",
+    "bytes": 8373,
+    "sha256": "eb57d5cc9c6af3ef87ddf0b95f8434a227915794cbb274e23d136c1063ba70b9"
+  },
+  "exitCode": 0,
+  "stdout": "{\"prepared\": true, \"nativeCalls\": 0, \"sourceSHA256\": \"d3ae28019d2ee0a32ddd798db47f7a1e2a248ef36e8df0b4d58f097df73f6176\", \"deletionApproved\": false}\n",
+  "stderr": "",
+  "nativeCalls": 0
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "mongotv-retired-bpy-export-stubs-frozen-pins-v1",
+  "artifactOnly": true,
+  "files": [
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-stubs-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-stubs-v1/actual-port-v1.json",
+      "rawBytes": 5485,
+      "rawSHA256": "7ef0fec4934cfc8ce31db9c58b95cb42c24b0e26aa4384b8b5084e2f4e53f188"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-stubs-v1/prepare_and_verify.py",
+      "rawBytes": 8970,
+      "rawSHA256": "49a152c7d77dc0fd9cad265c086ea2c91d49ca08f3e394abd40375349d357838"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-stubs-v1/proposal-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-stubs-v1/proposal-v1/before/tools/export_entity_animations.py",
+      "rawBytes": 3389,
+      "rawSHA256": "fafeb0da290bc05e910ba62150a77e0bd19710ef0331dfcfc63e2f00b7d55cf0"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-stubs-v1/proposal-v1/before/tools/export_entity_keyframes.py",
+      "rawBytes": 4812,
+      "rawSHA256": "3f6cf7a7c71de8968687c2b71242750adb2dc5a45fb68e395f68f7ff8889b8cf"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-stubs-v1/proposal-v1/candidate/tools/export_entity_animations.py",
+      "rawBytes": 501,
+      "rawSHA256": "e88e6c06d372fc2758e2236588bf4320653ebe9103404e4dda8fd6a2335536d2"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-stubs-v1/proposal-v1/candidate/tools/export_entity_keyframes.py",
+      "rawBytes": 501,
+      "rawSHA256": "e88e6c06d372fc2758e2236588bf4320653ebe9103404e4dda8fd6a2335536d2"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-stubs-v1/proposal-v1/proposal.json",
+      "rawBytes": 7288,
+      "rawSHA256": "3ffb3770364427bc945fc07b31335360a8e258a71c25d355bf21c4c3da2a63bb"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-stubs-v1/REVIEW.md",
+      "rawBytes": 3617,
+      "rawSHA256": "533df5927771d862877aa6e324961210db5b1fa65e093ba1ed8961a0dfa79107"
+    }
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0
+}

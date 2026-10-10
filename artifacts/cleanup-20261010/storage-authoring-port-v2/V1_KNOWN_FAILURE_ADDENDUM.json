@@ -1,0 +1,27 @@
+{
+  "schema": "retired-authoring-v1-known-failure-addendum-v1",
+  "actualNativeV1Completion": {
+    "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/root-completion.json",
+    "bytes": 8887,
+    "sha256": "94e286f017fc8a2f178fc5d401b6b4801383a1423bd513887b2c5c3bbd12b492"
+  },
+  "knownCompleted": true,
+  "parentWrites": 0,
+  "selectorPhases": 0,
+  "failure": "Preview bake is server-only",
+  "all213SourcesUnchanged": true,
+  "fiveNativeForestsRecoveredExactly": true,
+  "probesCreated": 2,
+  "probesDestroyed": 2,
+  "probesRemaining": 0,
+  "connectionsRetained": 0,
+  "pendingOriginals": [],
+  "ownedNamespacesReleased": true,
+  "actualDetachTrialOccurred": false,
+  "runtimeRegressionDemonstrated": false,
+  "v1Retried": false,
+  "nativeCallsByArtifactAuthor": 0,
+  "v2NativeExecuted": false,
+  "deletionApproved": false,
+  "limits": "Actual safe V1 failure, not absence/selector success. V2 controlled server-data projection requires new peer/native gate."
+}

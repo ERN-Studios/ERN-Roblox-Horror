@@ -1,0 +1,13 @@
+{
+  "schema": "retired-authoring-v1-invocation-edge-v1",
+  "v1FrozenPreserved": true,
+  "v1ActualRootExecutionAlreadyRunning": true,
+  "nativeCallsByReviewer": 0,
+  "reviewedV1SourceSHA256": "19573ccb3fbcd7ae007d256479df5c5c5bfabb713ab45531adf3f448a9e250eb",
+  "rootRequestState": "Known completion pending; no cancellation, retry or parallel native calls",
+  "fault": "Core marks attempted immediately before native hook. Hook B.lease/immediate Parent CAS can refuse before entry.invoked=true. Foreign nil then passes V1 scoped inverse eligibility and can be reparented even though no own detach setter ran.",
+  "normalPassBoundary": "A normal V1 PASS with all10 logged setter invocations and no primary/rollback error does not exercise this refusal edge. Preserve actual result; do not generalize recovery ownership from it.",
+  "v2Fix": "If entry.invoked=false, inverse requires root still exact original ServerStorage; otherwise preserve foreign nil/pending and perform no inverse write. Exact-tree/namecollision/lease/Parent CAS remain mandatory.",
+  "deletionApproved": false,
+  "status": "V2 new immutable candidate requires actual nested-hook fault and peer before any later native execution"
+}

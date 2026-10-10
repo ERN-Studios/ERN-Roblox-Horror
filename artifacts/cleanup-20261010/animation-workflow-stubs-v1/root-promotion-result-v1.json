@@ -1,0 +1,41 @@
+{
+  "schema": "mongotv-animation-stubs-root-promotion-v1",
+  "pass": true,
+  "nativeWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "rollback": {},
+  "files": [
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "beforeBytes": 4812,
+      "beforeSHA256": "3f6cf7a7c71de8968687c2b71242750adb2dc5a45fb68e395f68f7ff8889b8cf",
+      "candidateBytes": 501,
+      "candidateSHA256": "e88e6c06d372fc2758e2236588bf4320653ebe9103404e4dda8fd6a2335536d2",
+      "originalS25Archive": {
+        "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/before/tools/export_entity_keyframes.py",
+        "rawSHA256": "ab59e31bb5e63646f895c0455c9cdd63d1be4cbd177b06436201bc0dd4d559dc"
+      }
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "beforeBytes": 3389,
+      "beforeSHA256": "fafeb0da290bc05e910ba62150a77e0bd19710ef0331dfcfc63e2f00b7d55cf0",
+      "candidateBytes": 501,
+      "candidateSHA256": "e88e6c06d372fc2758e2236588bf4320653ebe9103404e4dda8fd6a2335536d2",
+      "originalS25Archive": {
+        "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/before/tools/export_entity_animations.py",
+        "rawSHA256": "1acc70432b429377158a04c25aca1e445562e139199ad584bc276069144cc2e4"
+      }
+    }
+  ],
+  "port": {
+    "exitCode": 0,
+    "stdout": "{\"pass\": true, \"cliCases\": 16, \"imports\": 4, \"mutants\": 4, \"retainedHelpers\": 13, \"retainedFiles\": 21, \"removedSourceBytes\": 7199, \"verifiedInstalled\": true, \"nativeCalls\": 0}\r\n",
+    "stderr": ""
+  },
+  "removedSourceBytes": 7199,
+  "installedPortSHA256": "8d43083ceec88211eff548a07fef30deec192f18623a2e491c728805e6e353e3",
+  "attemptedToolWrites": 2,
+  "limits": "Two already-retired/unimportable local authoring exporters; originals fully archived. Scoped CAS/readback is not process-wide atomicity. No native asset/cache/runtime feature removal or performance gain."
+}

@@ -1,0 +1,448 @@
+{
+  "schema": "retired-authoring-actual-native-boundaries-offline-v2",
+  "passed": true,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "inputs": [
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-trial.luau",
+      "bytes": 24850,
+      "sha256": "59ed6159fd85a74ffb43cf77fea885abb76d19e7c789f231351f8189c66e9f28"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/native-trial.luau",
+      "bytes": 25788,
+      "sha256": "98a1465f66c40e4f0586ee0b803d9654a7b9ad020c9c3972b7138887bcc2caf4"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v2/transaction-core.luau",
+      "bytes": 3118,
+      "sha256": "a44a362229f2bf06d9b1d59b47d321f59e1efd6a5c485d524e8ed0ce6d8d8e55"
+    },
+    {
+      "path": "ServerScriptService/LobbyReimaginedPreview/RuntimeBake.ModuleScript.lua",
+      "bytes": 12341,
+      "sha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28"
+    }
+  ],
+  "limits": "Exact native slices with table/metatable service and Parent boundaries. No actual Instance/engine scheduling/asset/absence/reference/gameplay/deletion proof.",
+  "extractedActualSlices": [
+    {
+      "version": "v1",
+      "rollbackSHA256": "b00739a84ebc97617883bae0f1c975a973cc1dcf7e1eb0b1a1b7f8fb3c5345df",
+      "setParentSHA256": "c70fe495ff0fc41d6c65d1e799bb5bafc0d6e74c1189614415fee6644cd8fae7",
+      "environmentSHA256": "cdd27077ab882c4aeb9e94f2d873ac35f5f5ec3358e6b24d5958c8699825a161",
+      "uniqueSHA256": "77f5e6813366eabc6dc7597bcafe846fd61a2dd1fa09902276f84a2a913cd08e"
+    },
+    {
+      "version": "v2",
+      "rollbackSHA256": "fb941477a8fe77ec4a068e52226cae457f6de36b3f90501d5ae251ba5916f525",
+      "setParentSHA256": "c70fe495ff0fc41d6c65d1e799bb5bafc0d6e74c1189614415fee6644cd8fae7",
+      "environmentSHA256": "f1e8b740e5aac757bf5815d1b6c232e33e45117d9ea3db80380357c61b6fdc6c",
+      "uniqueSHA256": "77f5e6813366eabc6dc7597bcafe846fd61a2dd1fa09902276f84a2a913cd08e"
+    }
+  ],
+  "fixtureBytes": 45208,
+  "fixtureSHA256": "56b583187f272622e9f56d484fad67988b3f07d93d8f7c1071a7533e332e33dd",
+  "compile": {
+    "exitCode": 0,
+    "stderr": ""
+  },
+  "exitCode": 0,
+  "stderr": "",
+  "replay": {
+    "cases": 38,
+    "checks": 2070,
+    "passed": true,
+    "results": [
+      {
+        "counterexample": false,
+        "fault": "success",
+        "foreignNilPreserved": false,
+        "parentWrites": 10,
+        "passed": true,
+        "pending": {},
+        "version": "v1"
+      },
+      {
+        "counterexample": true,
+        "fault": "foreign-nil-throw",
+        "foreignNilPreserved": false,
+        "parentWrites": 1,
+        "passed": false,
+        "pending": {},
+        "target": 1,
+        "version": "v1"
+      },
+      {
+        "counterexample": true,
+        "fault": "foreign-nil-cas",
+        "foreignNilPreserved": false,
+        "parentWrites": 1,
+        "passed": false,
+        "pending": {},
+        "target": 1,
+        "version": "v1"
+      },
+      {
+        "counterexample": true,
+        "fault": "foreign-nil-epoch",
+        "foreignNilPreserved": false,
+        "parentWrites": 1,
+        "passed": false,
+        "pending": {},
+        "target": 1,
+        "version": "v1"
+      },
+      {
+        "counterexample": false,
+        "fault": "refuse-still-original",
+        "foreignNilPreserved": false,
+        "parentWrites": 0,
+        "passed": false,
+        "pending": {},
+        "target": 1,
+        "version": "v1"
+      },
+      {
+        "counterexample": false,
+        "fault": "commit-then-error",
+        "foreignNilPreserved": false,
+        "parentWrites": 2,
+        "passed": false,
+        "pending": {},
+        "target": 1,
+        "version": "v1"
+      },
+      {
+        "counterexample": true,
+        "fault": "foreign-nil-throw",
+        "foreignNilPreserved": false,
+        "parentWrites": 5,
+        "passed": false,
+        "pending": {},
+        "target": 3,
+        "version": "v1"
+      },
+      {
+        "counterexample": true,
+        "fault": "foreign-nil-cas",
+        "foreignNilPreserved": false,
+        "parentWrites": 5,
+        "passed": false,
+        "pending": {},
+        "target": 3,
+        "version": "v1"
+      },
+      {
+        "counterexample": true,
+        "fault": "foreign-nil-epoch",
+        "foreignNilPreserved": false,
+        "parentWrites": 5,
+        "passed": false,
+        "pending": {},
+        "target": 3,
+        "version": "v1"
+      },
+      {
+        "counterexample": false,
+        "fault": "refuse-still-original",
+        "foreignNilPreserved": false,
+        "parentWrites": 4,
+        "passed": false,
+        "pending": {},
+        "target": 3,
+        "version": "v1"
+      },
+      {
+        "counterexample": false,
+        "fault": "commit-then-error",
+        "foreignNilPreserved": false,
+        "parentWrites": 6,
+        "passed": false,
+        "pending": {},
+        "target": 3,
+        "version": "v1"
+      },
+      {
+        "counterexample": true,
+        "fault": "foreign-nil-throw",
+        "foreignNilPreserved": false,
+        "parentWrites": 9,
+        "passed": false,
+        "pending": {},
+        "target": 5,
+        "version": "v1"
+      },
+      {
+        "counterexample": true,
+        "fault": "foreign-nil-cas",
+        "foreignNilPreserved": false,
+        "parentWrites": 9,
+        "passed": false,
+        "pending": {},
+        "target": 5,
+        "version": "v1"
+      },
+      {
+        "counterexample": true,
+        "fault": "foreign-nil-epoch",
+        "foreignNilPreserved": false,
+        "parentWrites": 9,
+        "passed": false,
+        "pending": {},
+        "target": 5,
+        "version": "v1"
+      },
+      {
+        "counterexample": false,
+        "fault": "refuse-still-original",
+        "foreignNilPreserved": false,
+        "parentWrites": 8,
+        "passed": false,
+        "pending": {},
+        "target": 5,
+        "version": "v1"
+      },
+      {
+        "counterexample": false,
+        "fault": "commit-then-error",
+        "foreignNilPreserved": false,
+        "parentWrites": 10,
+        "passed": false,
+        "pending": {},
+        "target": 5,
+        "version": "v1"
+      },
+      {
+        "actualEditBoundaryIsClient": true,
+        "controlledClient": false,
+        "selectors": {},
+        "semanticDomainCase": true,
+        "serverOnlyRejected": true,
+        "version": "v1"
+      },
+      {
+        "actualEditBoundaryIsClient": true,
+        "controlledClient": true,
+        "selectors": {},
+        "semanticDomainCase": true,
+        "serverOnlyRejected": true,
+        "version": "v1"
+      },
+      {
+        "actualEditBoundaryIsClient": true,
+        "controlledClient": false,
+        "selectors": {},
+        "semanticDomainCase": true,
+        "serverOnlyRejected": true,
+        "version": "v1"
+      },
+      {
+        "counterexample": false,
+        "fault": "success",
+        "foreignNilPreserved": false,
+        "parentWrites": 10,
+        "passed": true,
+        "pending": {},
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "foreign-nil-throw",
+        "foreignNilPreserved": true,
+        "parentWrites": 0,
+        "passed": false,
+        "pending": [
+          "old1"
+        ],
+        "target": 1,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "foreign-nil-cas",
+        "foreignNilPreserved": true,
+        "parentWrites": 0,
+        "passed": false,
+        "pending": [
+          "old1"
+        ],
+        "target": 1,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "foreign-nil-epoch",
+        "foreignNilPreserved": true,
+        "parentWrites": 0,
+        "passed": false,
+        "pending": [
+          "old1"
+        ],
+        "target": 1,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "refuse-still-original",
+        "foreignNilPreserved": false,
+        "parentWrites": 0,
+        "passed": false,
+        "pending": {},
+        "target": 1,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "commit-then-error",
+        "foreignNilPreserved": false,
+        "parentWrites": 2,
+        "passed": false,
+        "pending": {},
+        "target": 1,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "foreign-nil-throw",
+        "foreignNilPreserved": true,
+        "parentWrites": 4,
+        "passed": false,
+        "pending": [
+          "old3"
+        ],
+        "target": 3,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "foreign-nil-cas",
+        "foreignNilPreserved": true,
+        "parentWrites": 4,
+        "passed": false,
+        "pending": [
+          "old3"
+        ],
+        "target": 3,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "foreign-nil-epoch",
+        "foreignNilPreserved": true,
+        "parentWrites": 4,
+        "passed": false,
+        "pending": [
+          "old3"
+        ],
+        "target": 3,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "refuse-still-original",
+        "foreignNilPreserved": false,
+        "parentWrites": 4,
+        "passed": false,
+        "pending": {},
+        "target": 3,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "commit-then-error",
+        "foreignNilPreserved": false,
+        "parentWrites": 6,
+        "passed": false,
+        "pending": {},
+        "target": 3,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "foreign-nil-throw",
+        "foreignNilPreserved": true,
+        "parentWrites": 8,
+        "passed": false,
+        "pending": [
+          "old5"
+        ],
+        "target": 5,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "foreign-nil-cas",
+        "foreignNilPreserved": true,
+        "parentWrites": 8,
+        "passed": false,
+        "pending": [
+          "old5"
+        ],
+        "target": 5,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "foreign-nil-epoch",
+        "foreignNilPreserved": true,
+        "parentWrites": 8,
+        "passed": false,
+        "pending": [
+          "old5"
+        ],
+        "target": 5,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "refuse-still-original",
+        "foreignNilPreserved": false,
+        "parentWrites": 8,
+        "passed": false,
+        "pending": {},
+        "target": 5,
+        "version": "v2"
+      },
+      {
+        "counterexample": false,
+        "fault": "commit-then-error",
+        "foreignNilPreserved": false,
+        "parentWrites": 10,
+        "passed": false,
+        "pending": {},
+        "target": 5,
+        "version": "v2"
+      },
+      {
+        "actualEditBoundaryIsClient": true,
+        "controlledClient": false,
+        "selectors": [
+          "LobbyReimaginedBlenderSource20261001R4"
+        ],
+        "semanticDomainCase": true,
+        "serverOnlyRejected": false,
+        "version": "v2"
+      },
+      {
+        "actualEditBoundaryIsClient": true,
+        "controlledClient": true,
+        "selectors": {},
+        "semanticDomainCase": true,
+        "serverOnlyRejected": true,
+        "version": "v2"
+      },
+      {
+        "actualEditBoundaryIsClient": true,
+        "controlledClient": false,
+        "selectors": [
+          "LobbyReimaginedBlenderSource20261001R4"
+        ],
+        "semanticDomainCase": true,
+        "serverOnlyRejected": false,
+        "version": "v2"
+      }
+    ]
+  }
+}

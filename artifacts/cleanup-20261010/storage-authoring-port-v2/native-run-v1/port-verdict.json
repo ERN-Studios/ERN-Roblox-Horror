@@ -1,0 +1,7 @@
+{
+  "schema": "retired-authoring-controlled-absence-verdict-v1",
+  "trialPassed": true,
+  "deletionApproved": false,
+  "referenceAbsenceCertified": false,
+  "limits": "Exact same-original trial and current asset selectors only; unreadable reference boundary and permanent deletion remain pending."
+}

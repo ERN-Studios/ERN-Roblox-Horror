@@ -1,0 +1,204 @@
+{
+  "schema": "mongotv-retired-bpy-export-stubs-actual-port-v1",
+  "pass": true,
+  "verifiedInstalled": false,
+  "proposalSHA256": "3ffb3770364427bc945fc07b31335360a8e258a71c25d355bf21c4c3da2a63bb",
+  "testSHA256": "49a152c7d77dc0fd9cad265c086ea2c91d49ca08f3e394abd40375349d357838",
+  "cliCases": 16,
+  "importCases": 4,
+  "actualCases": [
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "phase": "before",
+      "actualCLICases": [
+        {
+          "flags": [],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--help"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--v10"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--v3",
+            "--force"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        }
+      ],
+      "actualImportRetirement": true,
+      "optionalNativeBoundaryCalls": []
+    },
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "phase": "candidate",
+      "actualCLICases": [
+        {
+          "flags": [],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--help"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--v10"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--v3",
+            "--force"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        }
+      ],
+      "actualImportRetirement": true,
+      "optionalNativeBoundaryCalls": []
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "phase": "before",
+      "actualCLICases": [
+        {
+          "flags": [],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--help"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--v10"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--v3",
+            "--force"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        }
+      ],
+      "actualImportRetirement": true,
+      "optionalNativeBoundaryCalls": []
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "phase": "candidate",
+      "actualCLICases": [
+        {
+          "flags": [],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--help"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--v10"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        },
+        {
+          "flags": [
+            "--v3",
+            "--force"
+          ],
+          "exitCode": 1,
+          "retirementMessageExact": true
+        }
+      ],
+      "actualImportRetirement": true,
+      "optionalNativeBoundaryCalls": []
+    }
+  ],
+  "mutants": [
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "mutation": "remove import refusal",
+      "contractRejected": true,
+      "observed": "Import returned instead of expected retirement error"
+    },
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "mutation": "remove CLI refusal",
+      "contractRejected": true,
+      "observed": "RuntimeError instead of expected SystemExit CLI contract"
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "mutation": "remove import refusal",
+      "contractRejected": true,
+      "observed": "Import returned instead of expected retirement error"
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "mutation": "remove CLI refusal",
+      "contractRejected": true,
+      "observed": "RuntimeError instead of expected SystemExit CLI contract"
+    }
+  ],
+  "retainedPureHelperCases": [
+    "hierarchy root nil and named child",
+    "empty hierarchy",
+    "row-major matrix data",
+    "Roblox rest translation and basis",
+    "axis reflection maps scaled Blender translation",
+    "identity quaternion",
+    "quarter turn quaternion",
+    "scale stripped before quaternion solve",
+    "antipodal normalized shortest path",
+    "half turn interpolation",
+    "low alpha clamp",
+    "high alpha clamp",
+    "retained pure Blender sampler generator"
+  ],
+  "retainedInputsAndReceipts": 21,
+  "allFourProductionToolsUnchangedDuringReplay": true,
+  "runtimeIdSourceUnchanged": true,
+  "runtimeIdSourceSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
+  "activePublishedIdCount": 8,
+  "nativeCalls": 0,
+  "assetUploads": 0,
+  "networkCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "limits": "Actual installed-before/archived-after CLI and complete Python source imports at controlled optional/native boundaries. No bpy initializer runs; seven retained publisher/sampler helpers retain13behaviors. Only two already-unimportable retired workflows lose unreachable source. No native assets/cache/reference/deletion/gameplay/performance proof."
+}

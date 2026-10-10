@@ -250,6 +250,8 @@ den aktuelle kontekst, selv om de genlæste native root-ID’er er uændrede.
 
 ### S26 / S04 — faktisk native V1 afvist før mappernes fravær
 
+Lokal commit: `90a2ad15cbe824252d524d92dd217d38cc1371aa`; ingen push/publicering.
+
 Den frosne V1-kilde blev faktisk udført én gang i det korrekte Edit-sted.
 API-completion er kendt afsluttet efter89.234s; tiden er ikke en performancegevinst.
 Actual R4 `RuntimeBake.GetManifest` afviste Edit-domænets `RunService.IsClient`
@@ -279,7 +281,55 @@ nul Source/editor conflicts, mirror/manifestmismatch eller coveragegaps.
 [Fuld readonly parity](artifacts/cleanup-20261010/storage-authoring-port-v1/after-failed-v1-parity/result.json).
 Ingen native runtime- eller packageændring tilskrives S26.
 
-### S04 og CORE-027 — bevarede kandidater
+### S27 / T11 — døde exporterbodies fjernet efter pensionering
+
+`export_entity_keyframes.py` og `export_entity_animations.py` er reduceret fra
+4812/3389 til501 bytes hver:7199 døde Sourcebytes fjernet. Begge imports/CLI var
+allerede pensioneret før bpy-initializers; nye små stubs giver samme tydelige
+retirementbesked. Eksakte originaler og S25-guarded før-kilder er fuldt arkiveret.
+Ingen aktive import-/subprocess-/safe_name-callers blev fundet. Syv pure helpers
+i publisher/sampler,21 keyframe/receipt/builderfiler og alle otte gameplay-ID’er
+bevares byte-exact. [Faktisk two-file promotion](artifacts/cleanup-20261010/animation-workflow-stubs-v1/root-promotion-result-v1.json).
+
+Root før og faktisk installeret:16 CLI-processer,4 imports,4 semantic mutants
+og13 retained helperbehaviors PASS. Ingen native/network/upload/manifest/index
+writes fra portene, ingen rollback nødvendig. [Installeret port](artifacts/cleanup-20261010/animation-workflow-stubs-v1/root-installed-port-v1.json).
+Dette er sourceoprydning, ingen målt gameplay-/FPS-/memorygevinst.
+
+### S28 / S04 — faktisk fem-package fravær/restoration PASS
+
+Immutable V2 retter den konkrete composed setter-ejerskabsgrænse og registrerer
+Edit-domænet særskilt. Uafhængige actual-source porte51/3018 og38/2070 samt
+hele fem compileunits bestod før Root native invocation. Native V2 er faktisk
+afsluttet og valideret: alle fem samme originaler var midlertidigt fraværende,
+R4/V2/elevator-selector/data-port bestod før/fravær/restored med21 kontrollerede
+missing/incomplete/client-domain-fejlveje.10 Parentwrites med fem detach- og fem
+restore-readbacks bestod; ingen original Sourcewrite eller permanent sletning.
+
+Exact8050869-byte originalarkiv og2870333-byte aktive selected native-data,
+deres readable facts/identities og alle213 Source/editor/class/properties/attrs/
+tags er uændrede. Scoped recovery, final og post-cleanup guards PASS. To probes
+skabt/fjernet,0 tilbage,0 pending originals/cleanupfejl/forbindelser og frigivne
+egne namespaces. [Faktisk native review](artifacts/cleanup-20261010/storage-authoring-port-v2/native-run-v1/ROOT_REVIEW.json).
+
+Actual Edit var IsClient=true/IsServer=false. Hele helperbodies bruger en eksplicit
+kontrolleret server-datafacade; dette er ingen actual-server gameplaytest. Ingen
+Ensure/Build/Begin/download/upload eller player/multiplayer/streaming/teleport
+er certificeret.115.141s tooltid og1.679462s no-yield-trial er portvarigheder,
+ingen performancegevinst. De24 unreadable referencekinds er fortsat selvstændigt
+afventende. `deletionApproved=false`, `referenceAbsenceCertified=false`; de fem
+mapper står igen i ServerStorage. Permanent sletning følger først selvstændig
+referenceport. V1 og dets safe0-Parentwrite negative resultat er urørt.
+
+Separat faktisk readonly efter-parity10:28:56–10:29:09Z PASS:213 scripts,
+15 remotes,228rows,52 ServerStorage-rødder og417075 sceneobjekter. Catalog
+`81115530329fefcca83091e74379f63983ca0aa4b1da0b43bc64e653956623dd`
+er uændret; nul Source/editor conflicts, mirror/manifest/class/propertymismatch
+eller coveragegaps. [Efterport](artifacts/cleanup-20261010/storage-authoring-port-v2/after-parity-v1/result.json).
+Denne separate parity er Source/registrerede properties, ikke fuld asset/reference/
+gameplay-parity. S28's egne213 originalguards dækker attributes/tags under prøven.
+
+### ServerStorage og lobby — bevarede kandidater
 
 Ejeren har pensioneret hele den gamle lobby som fallback: «Den kan altid bygges,
 der skal ikke være et fallback.» Ved serverboot kalder GameManager stadig
@@ -290,11 +340,11 @@ regressionsport er afventende. Eksisterende shop-test fejler allerede før
 cleanup fordi den forventer8texturekeys, mens aktuel kilde har10; dette negative
 baselinefund skal bevares, og en aktuel featureport etableres først.
 
-Fem gamle authoringpakker er fortsat beholdt. Arkiv/reopen er bestået, men
-frisk closure og faktisk kontrolleret absence/restoration/asset-selectorport
-mangler. Foreløbigt review kan afgrænse brede gameplaykrav for udelukkende
-pensionerede data; det er en betinget vurdering, ingen erstatning for native
-fraværstest og ingen certificering af gameplay/MP/stream/teleport.
+Fem gamle authoringpakker er fortsat beholdt. Arkiv/reopen og faktisk kontrolleret
+absence/restoration/asset-selectorport er bestået i S28. Permanent fjernelse
+afventer fortsat compatible protected Instance-references. Kun en komplet frisk
+data-only closure kan afgrænse bredere gameplaykrav; de kontrollerede datafacader
+certificerer ikke gameplay/MP/stream/teleport.
 
 ### S20 / C04 — privat Exit-konstant, gennemført
 
@@ -858,13 +908,15 @@ native non-script spilobjekter blev slettet som oprydning. Ejerens native
 spilbackup bevares; et sourcespejl erstatter den ikke.
 
 Aktive L2/pump/Foam/Slide/generated-L6/disabled/manual workflows, non-arena/
-v1-kit/original-lobby-fallbacks og de nuværende gameplay-/ranking-/rate-/UI-/
+v1-kit-fallbacks og de nuværende gameplay-/ranking-/rate-/UI-/
 økonomipolicies beholdes. Permanente entitlements/receipt/grant/migration-data
 er obligatorisk bevaret. 27 tidligere beslutningsrækker er disponeret sådan
 under bevaringsmandatet. En eventuel senere pensionering eller policyændring
 kræver sit eget produktvalg og tests; den afventer ikke et svar i denne batch.
 De allerede godkendte gamle Lobby-/Level1-/TEMPPreview-workflows kræver
 derimod de beskrevne manglende native testporte, ingen ny tilladelse.
+Den gamle fulde lobbyfallback og Studio-animationworkflows er senere også
+pensioneret af ejeren. Deres konkrete runtime-/nativefjernelser følger egne porte.
 
 Level2 living-participant safe spawn, anden distinct pump, tredje distinct
 escalation, active-round navigation/retry/reset og server CPU/memory er ikke
@@ -940,8 +992,9 @@ ls-remote; ingen cleanup-push/publicering. Den oprindelige RoundUI og dens
 working-only Sourcehash/bytes-row er stadig bevarende ustaged. Scoped commits
 inkluderer kun hver batches egne target-/metadatafelter og reviewede beviser.
 
-**Afventer:** de fem S04-pakkers aktive R4/V2/elevator-/fejl-/cleanup-/respawn-/
-reentry-/asset-/multiplayer-/streamingporte; fuld 23-træers native restoration;
+**Afventer:** S04's protected-reference-port før permanent pakkeændring;
+S28 har siden bestået R4/V2/elevator-data/fravær/restoration-porten. Bredere
+gameplaykrav afgrænses kun ved komplet data-only closure. Fuld 23-træers native restoration;
 øvrige konkrete
 runtime-/økonomi-/clientporte i planen. De afklarede workflows er pensioneret
 lokalt. Manglende nødvendige testporte er årsagen til de bevarede kandidater,
