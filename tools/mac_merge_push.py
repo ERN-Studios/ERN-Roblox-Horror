@@ -142,4 +142,5 @@ def main():
         raise SystemExit(f'{failed} file(s) not written')
 
 
-main()
+if __name__ == '__main__':
+    main()
