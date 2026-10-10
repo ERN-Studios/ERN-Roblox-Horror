@@ -1,0 +1,134 @@
+{
+  "schema": "retired-authoring-controlled-absence-frozen-pins-v1",
+  "frozen": true,
+  "nativeExecuted": false,
+  "deletionApproved": false,
+  "reviewedSourceSHA256": "19573ccb3fbcd7ae007d256479df5c5c5bfabb713ab45531adf3f448a9e250eb",
+  "pins": [
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/.gitattributes",
+      "bytes": 48,
+      "sha256": "49dffe7429b40b59963bc69f0eb3380aee58f34852095bd99262ec132f1dd78b"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/REVIEW.md",
+      "bytes": 6584,
+      "sha256": "c040b7b269533043c048d5c37517994e7d81da886088c6737defc797f3fda5d7"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/native-trial.luau",
+      "bytes": 24850,
+      "sha256": "59ed6159fd85a74ffb43cf77fea885abb76d19e7c789f231351f8189c66e9f28"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/transaction-core.luau",
+      "bytes": 3118,
+      "sha256": "a44a362229f2bf06d9b1d59b47d321f59e1efd6a5c485d524e8ed0ce6d8d8e55"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/transaction-faults.luau",
+      "bytes": 6202,
+      "sha256": "f1e13c13df16a0f0fbc692f4a7804472b9441f41f420cdaacb70239abfc63c64"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/prepare-trial.py",
+      "bytes": 6974,
+      "sha256": "cd3d28acaa238dd69ecbab919cbb0afaa6012887e16e5ca3d2bfa9bbdc05a940"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/test-transaction.py",
+      "bytes": 3778,
+      "sha256": "f63ea91c1fff3b7655d24aa78f50f49dce3c44012ac772aa6f5459fd868afa76"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/run-root-trial.py",
+      "bytes": 7622,
+      "sha256": "6516a4af027a16cbe24c87e9b4880e96798de342502cd01182c6c1b8c3b198bf"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/preparation-failure-v1.json",
+      "bytes": 780,
+      "sha256": "7a52f6cc87b9135dc39081a0123ec0f9fb3ac9f4582c71ff226f319742eb48c9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/trial-config.json",
+      "bytes": 60527,
+      "sha256": "e1e84df3aa470ad3145f58eaafc12886d8b67a4fee4382e67cc0a4c6d84f5f30"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/trial-source.luau",
+      "bytes": 110646,
+      "sha256": "19573ccb3fbcd7ae007d256479df5c5c5bfabb713ab45531adf3f448a9e250eb"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/preparation-v1.json",
+      "bytes": 54454,
+      "sha256": "a02fe0ef5b50ca3dc29a70f9bdf77e84e43179f01ef18dfc240b15e5a8a1b337"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/offline-faults-v1.json",
+      "bytes": 19466,
+      "sha256": "5b1e8bf9a8bfe2299a10b34f1fe9a7df30c055731a5727b129843bda2d6020b0"
+    },
+    {
+      "path": "tools/cleanup_20261009/retired_authoring_archive_common.luau",
+      "bytes": 22101,
+      "sha256": "d9a783c71d56591580ceab53f914f1cc8832365b68f5fe275cf279cd5634f5ad"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 4804,
+      "sha256": "9fef3032bc262f5f149f1a2f7ce15941433e3cdcbf1dc8f63993472ed2979137"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-00.json",
+      "bytes": 15028,
+      "sha256": "d34da59173761c695ba85d19d6fc60805f67b07befdb387c428c51969c67bfbb"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-01.json",
+      "bytes": 25635,
+      "sha256": "c7931a20e06c915877a614a5b048aa284b8a4dc953320634ba68e19296b009f2"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-02.json",
+      "bytes": 26313,
+      "sha256": "b9d2399c554defda15b664a43fcff4b9862df4c28beaa7028472034b1b0a0f00"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-03.json",
+      "bytes": 26129,
+      "sha256": "18702353c20acc613e1285fca9786f92fa10eb6da7abe6316274147c4d59f4aa"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-04.json",
+      "bytes": 26142,
+      "sha256": "08b5afde391f11b0df0069cff4574c5b1788eee5b78e33e00252e23afafd79d5"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-05.json",
+      "bytes": 25717,
+      "sha256": "b50a408ba21c3cab7fe14c9d65e06f22f3279b015fbdb66e5645ca0640e2ebee"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-06.json",
+      "bytes": 27971,
+      "sha256": "ceafaab3cecff54d55d96a4150dbd89407b0fc7304214d55d3460d98da52b72c"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-07.json",
+      "bytes": 28338,
+      "sha256": "e2e69b0673b250634be3ef96c8c2a06cc13e9921b6fa02b0120c024dcc99f8e9"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-08.json",
+      "bytes": 28197,
+      "sha256": "5d633259ecea6c396b1aa651fce2bffda19994161fa912b7e5ca4d8e2aa7b478"
+    },
+    {
+      "path": "artifacts/cleanup-20261010/storage-authoring-port-v1/before-parity-v2/native-page-09.json",
+      "bytes": 14197,
+      "sha256": "54ef851c8dd904e3ef1868233738a305bfbfeebd7330555b124f907e2aabc4ca"
+    }
+  ]
+}

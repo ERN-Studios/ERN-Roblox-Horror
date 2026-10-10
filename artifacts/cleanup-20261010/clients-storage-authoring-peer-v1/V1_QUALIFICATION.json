@@ -1,0 +1,19 @@
+{
+  "schema": "mongotv-s04-peer-v1-nested-hook-qualification-v1",
+  "priorPeerReceipt": {
+    "file": "artifacts/cleanup-20261010/clients-storage-authoring-peer-v1/REVIEW.json",
+    "sha256": "02c45e5c198307c04b443d3914520de124f2ceb2925fa762c57edb5430bba7dd"
+  },
+  "priorSourceSHA256": "19573ccb3fbcd7ae007d256479df5c5c5bfabb713ab45531adf3f448a9e250eb",
+  "additionalNativeEligibility": false,
+  "permanentDeletionCertified": false,
+  "actualRegressionObserved": false,
+  "rootNativeRequestStatusAtReport": "V1 request already active; Root waits known completion. No cancellation or retry authorized.",
+  "concreteEdge": "Core marks attempted before hooks.setParent. Actual native hook rechecks lease and Parent before entry.invoked. If a foreign nil Parent arrives before that nested check and the hook refuses, inverse eligibility lacks invoked and may restore foreign nil.",
+  "priorFixtureGap": "V1 fixture marks invoked at hook entry and therefore did not represent the native hook refusal before actual setter invocation. Core and hook were reviewed separately; nested composed boundary was missed.",
+  "requiredDelta": "Immutable V2 must retain foreign nil if actual native setter was never invoked, while permitting harmless disarm when original Parent remains; actual nested-hook before-invocation negative must run.",
+  "retention": "V1 source/pins/author receipt/peer receipt and active request evidence remain unchanged. New qualification supersedes the unresolved safety claim without asserting an actual native fault.",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "indexWrites": 0
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "mongotv-final-parity-diagnostic-v1",
+  "complete": false,
+  "nativeWrites": 0,
+  "repositorySourceWrites": 0,
+  "manifestWrites": 0,
+  "modeSwitches": 0,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "limits": "Metadata/hash snapshot of authoritative Edit Sources. No gameplay, full native assets, publication or continuous epoch guarantee. Failed stability guards leave partial evidence.",
+  "error": "",
+  "finishedUtc": "2026-10-10T09:54:48.358871+00:00"
+}

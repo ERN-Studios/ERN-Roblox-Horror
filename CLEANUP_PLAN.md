@@ -1,7 +1,7 @@
 # MongoTV oprydningsplan — 2026-10-09
 
 Studio er source of truth. PlaceId **131311258779917**, universe **10559217407**.
-Seneste fulde parity, 2026-10-10 09:56:06–09:56:16Z: **213 scripts,15 remotes,228 rows**,
+Seneste fulde parity, 2026-10-10 10:16:00–10:16:10Z: **213 scripts,15 remotes,228 rows**,
 52 ServerStorage-rødder og417075 sceneobjekter; nul mismatch/conflicts/gaps.
 Studio-proxy er genforbundet til nyt sessions-ID; den gamle shared cleanup-ledger
 var ikke tilgængelig. Historiske held-original pointers er derfor ikke certificeret i denne kontekst.
@@ -26,6 +26,18 @@ level-lifecycle og authoringværktøjer bevares og genkontrolleres særskilt.
 | S23 / T01–T03 | Downstream `GameManager.Script.lua`, `Level2PoolroomsPresentation.LocalScript.lua`, `NoiseReporter.LocalScript.lua`; tre manifestrows bytes/sha/editor-match/trailing-LF bookkeeping alene. [Scope](artifacts/cleanup-20261010/concurrent-export-v2/export-scope.json). | Friske stable213/15 captures har tre native afvigelser; alle tidligere raw mirrors/docs/manifest checkpointet. Ingen native writes, andre210 Sources og alle uejede manifestfelter bevares. Concurrent arbejde tilskrives ophavsmændene. | S13 Source/editor/identity/class/props/attrs/tags for tre targets; hele native catalog før/efter;6 O0/O1 compiles; Source39/full65; ny separat213/15/228 parity uden mismatch. V2/V3 reviewproblemer bevaret, kun V4 anvendt. | gennemført — [eksport](artifacts/cleanup-20261010/concurrent-export-v2/export-result.json), [parity](artifacts/cleanup-20261010/concurrent-export-v2/after/result.json) |
 | S04 / T16,T17 | Fem native authoringpakker: `Level1BlenderKit`, `LobbyReimaginedBlenderSource20261001`, `R2`, `R3`, `R3B`; pensionerede workflows afklaret. R4/V2/elevator bevares. | Arkiv1617objekter/8050869nativebytes og exact reopen bestod. Historisk0scripts/ingen readable externalrefs; frisk fuld Source/asset/reference-closure stadig nødvendig. Lav runtime-risiko kan først fastslås ved denne closure, navn/Disabled tæller ikke. | Actual kontrolleret fravær og præcis Parent-restoration, aktuelle R4/V2/elevator-selector-/assetdata uændret og213 originals beskyttet. Bred gameplay/MP/stream/teleport er fortsat uverificeret; kan afgrænses som selvstændige porte KUN hvis frisk closure dokumenterer rent pensionerede data. [Foreløbigt review](artifacts/cleanup-20261010/storage-authoring-disposition-v1/PRELIMINARY_ARCHIVE_REVIEW-v2.json). | afventer test — fem originalpakker beholdes |
 | S24 / CORE-027 | `GameManager.buildLobby` samt `TunnelLobbyBuilder.Build` og R4 `Builder.Build`: udskil minimal live spawn/shop/support/queue-kontrakt; fjern gammel dekorationsopbygning og original-spawn-fallback i afgrænsede batches. | Full Build er IKKE sikker at disable: R4 kopierer shop, flytter live supportboard, GameManager kører gamle stationer og R4 queue engine; party/signal/light/room-consumers kortlægges. Middel/høj ved migration; forventet færre objekter, ingen målt CPU/FPS/memorygevinst. | Aktuel normalboot først, shop/support/party/signal og alle R4 queues; kontrolleret kandidat i isoleret kopi, spawn/join/reset/return/reentry, failure cleanup, MP/stream; reserved-server klientporte særskilt. Gammel shop-test FAIL forventer8artkeys, aktuel har10; negativt baselinefund bevares og faktisk aktuel kontraktport forberedes. | afventer test — fallback pensioneret som produktbeslutning, ingen runtimeændring endnu |
+
+S25 er lokalt committed som `b2c16a6d4352d1333a9b94973fb84b5975856f79`.
+S26 / S04-V1 er faktisk udført og kendt afsluttet, men FAIL før alle Parentwrites:
+actual `RuntimeBake.GetManifest` afviste Edit/client-servicefacaden som server-only.
+To probes skabt/fjernet,0 tilbage;213 Sources, eksakt fem-root nativearkiv og
+originalguards uændrede,0 connections/pending og egne namespaces frigivet.
+[Actual review](artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/ROOT_REVIEW.json).
+Det er ingen native fraværstest eller slettegodkendelse. En ekstra composed-hook
+ejerskabskant blev fundet mens V1 allerede kørte; [peer-kvalifikation](artifacts/cleanup-20261010/clients-storage-authoring-peer-v1/V1_QUALIFICATION.json)
+bevares. Ny immutable V2 med faktisk server-boundary/nested-hook-fejlport og peer
+kræves. Fem mapper beholdes;24 typer inaccessible Instance-references er fortsat
+et selvstændigt permanent-removal-blocker. Readonly efter-parity ovenfor bestod.
 
 | Ny batch / fund | Præcis kandidat og ændring | Bevis / dependency-closure | Risiko og gevinst | Før/efter-port | Status |
 |---|---|---|---|---|---|

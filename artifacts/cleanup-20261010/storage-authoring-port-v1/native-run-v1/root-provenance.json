@@ -1,0 +1,8 @@
+{
+  "actualNativeResponse": true,
+  "executedSourceSHA256": "19573ccb3fbcd7ae007d256479df5c5c5bfabb713ab45531adf3f448a9e250eb",
+  "actualCompletionRawSHA256": "45b943d597668085792ad67dd9b5a8ddda9e2e76a39685e86864990c60bcf436",
+  "rootClientWallSeconds": 89.234,
+  "noRetry": true,
+  "limits": "Elapsed tool duration is not a performance improvement."
+}

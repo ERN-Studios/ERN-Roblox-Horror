@@ -1,0 +1,669 @@
+{
+  "meta": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T09:56:09Z",
+    "sceneCount": 417075,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "81115530329fefcca83091e74379f63983ca0aa4b1da0b43bc64e653956623dd",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "rows": [
+    {
+      "minusOneTrailingLFSHA256": "1d49be5d130879faef5a8f51a6569d3e871b760b8597ad2ef13caff96fdb3237",
+      "instanceId": "1_408347",
+      "rawEditorSHA256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "PuzzleManager"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 115391,
+      "readStable": true,
+      "canonicalBytes": 115391,
+      "sourceSHA256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40",
+      "parentId": "1_15621",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40",
+      "rawSourceSHA256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40",
+      "path": "ServerScriptService.Level 1 Systems.PuzzleManager"
+    },
+    {
+      "minusOneTrailingLFSHA256": "8f954520cb8b8aa91594352a395a4cf1c759cb679271829bc28e8c741ea34ecc",
+      "instanceId": "1_42715",
+      "rawEditorSHA256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Configuration"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 12107,
+      "readStable": true,
+      "canonicalBytes": 12107,
+      "sourceSHA256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "rawSourceSHA256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Configuration"
+    },
+    {
+      "minusOneTrailingLFSHA256": "0b603a30885a28c4c72c6753e48e6a5c8d21bb40c3a220d1c0ddf6770e89902f",
+      "instanceId": "1_42728",
+      "rawEditorSHA256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Exit Transition Test Suite"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 47083,
+      "readStable": true,
+      "canonicalBytes": 47083,
+      "sourceSHA256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "rawSourceSHA256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Exit Transition Test Suite"
+    },
+    {
+      "minusOneTrailingLFSHA256": "9677f016b66574944a76064b34125c1ced2abb5c9553bbaa49368ffc7e3c2a85",
+      "instanceId": "1_42718",
+      "rawEditorSHA256": "e1ad3a0a111a9c0053b321b7ba82e20a85f348a9a6ff73fdf765f1860573f758",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Objective Controller"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 50980,
+      "readStable": true,
+      "canonicalBytes": 50980,
+      "sourceSHA256": "e1ad3a0a111a9c0053b321b7ba82e20a85f348a9a6ff73fdf765f1860573f758",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "e1ad3a0a111a9c0053b321b7ba82e20a85f348a9a6ff73fdf765f1860573f758",
+      "rawSourceSHA256": "e1ad3a0a111a9c0053b321b7ba82e20a85f348a9a6ff73fdf765f1860573f758",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller"
+    },
+    {
+      "minusOneTrailingLFSHA256": "c2f3e2c04395e7461a2e16ca4ff514f48e68e66fc0a4a05b377fdd265a53ae58",
+      "instanceId": "1_42723",
+      "rawEditorSHA256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Animation Adapter"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 16481,
+      "readStable": true,
+      "canonicalBytes": 16481,
+      "sourceSHA256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "rawSourceSHA256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter"
+    },
+    {
+      "minusOneTrailingLFSHA256": "c97a258d36519d2988836d2cc1d6a49fa8317a116bf51a7c68f5a9658977b209",
+      "instanceId": "1_42721",
+      "rawEditorSHA256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Configuration"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 16193,
+      "readStable": true,
+      "canonicalBytes": 16193,
+      "sourceSHA256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "rawSourceSHA256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration"
+    },
+    {
+      "minusOneTrailingLFSHA256": "a31ea86c666972f90eca5e753d8c7ced486758802c2ba7cc90748ed778e9f52d",
+      "instanceId": "1_42727",
+      "rawEditorSHA256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Controller"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 99086,
+      "readStable": true,
+      "canonicalBytes": 99086,
+      "sourceSHA256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "rawSourceSHA256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller"
+    },
+    {
+      "minusOneTrailingLFSHA256": "c74548ad2fb776013e6c34cd0c2b24ab096e04a8f7c28ccc3aae47fcbbf0f8b3",
+      "instanceId": "1_42724",
+      "rawEditorSHA256": "3af9563be049c290b3ac9877cca94e8679bf8a9094eebd999a84b7d932a604e8",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Navigator"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 124369,
+      "readStable": true,
+      "canonicalBytes": 124369,
+      "sourceSHA256": "3af9563be049c290b3ac9877cca94e8679bf8a9094eebd999a84b7d932a604e8",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "3af9563be049c290b3ac9877cca94e8679bf8a9094eebd999a84b7d932a604e8",
+      "rawSourceSHA256": "3af9563be049c290b3ac9877cca94e8679bf8a9094eebd999a84b7d932a604e8",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator"
+    },
+    {
+      "minusOneTrailingLFSHA256": "d769941877e1bdbf2a1731861201e45a6ba721dab86f2daa080ef0abf22b897b",
+      "instanceId": "1_42725",
+      "rawEditorSHA256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Observer"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 17971,
+      "readStable": true,
+      "canonicalBytes": 17971,
+      "sourceSHA256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "rawSourceSHA256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer"
+    },
+    {
+      "minusOneTrailingLFSHA256": "e8e140c81731d8dba6772365bcac3fa4feb8792a4ebb26714d6743c11e90b1d3",
+      "instanceId": "1_42722",
+      "rawEditorSHA256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Proxy Factory"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 11278,
+      "readStable": true,
+      "canonicalBytes": 11278,
+      "sourceSHA256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "rawSourceSHA256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory"
+    },
+    {
+      "minusOneTrailingLFSHA256": "6ecd24814765c8d289fe619c4bd1055cb41823236a8dbac25bd85f61c561205a",
+      "instanceId": "1_42729",
+      "rawEditorSHA256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Configuration"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 691,
+      "readStable": true,
+      "canonicalBytes": 691,
+      "sourceSHA256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "rawSourceSHA256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Configuration"
+    },
+    {
+      "minusOneTrailingLFSHA256": "aa8e43b9550c1e7b71e8668ba9d4326fcdd8f64a42ab54719da26f04cb6826a5",
+      "instanceId": "1_42732",
+      "rawEditorSHA256": "69275a49cf43bb2174cda313fdb3ad41f13f8efb5ee6bb04acbc1811c211e44c",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Controller"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 41664,
+      "readStable": true,
+      "canonicalBytes": 41664,
+      "sourceSHA256": "69275a49cf43bb2174cda313fdb3ad41f13f8efb5ee6bb04acbc1811c211e44c",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "69275a49cf43bb2174cda313fdb3ad41f13f8efb5ee6bb04acbc1811c211e44c",
+      "rawSourceSHA256": "69275a49cf43bb2174cda313fdb3ad41f13f8efb5ee6bb04acbc1811c211e44c",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller"
+    },
+    {
+      "minusOneTrailingLFSHA256": "fa6c1fb6a1fd77f7b602b3a621a927e303ef92e9736172ce1e520a605f502667",
+      "instanceId": "1_42730",
+      "rawEditorSHA256": "ab318044f367b69dc643c065f81f549c0c22e7c903bdd01cb398f4a07ad95549",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Navigator"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 138829,
+      "readStable": true,
+      "canonicalBytes": 138829,
+      "sourceSHA256": "ab318044f367b69dc643c065f81f549c0c22e7c903bdd01cb398f4a07ad95549",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "ab318044f367b69dc643c065f81f549c0c22e7c903bdd01cb398f4a07ad95549",
+      "rawSourceSHA256": "ab318044f367b69dc643c065f81f549c0c22e7c903bdd01cb398f4a07ad95549",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator"
+    },
+    {
+      "minusOneTrailingLFSHA256": "b62cc5f3b46b3a812c69611ae5d5d11a506ba51d550e11b7997a279578511a60",
+      "instanceId": "1_42731",
+      "rawEditorSHA256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Rig Adapter"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 7632,
+      "readStable": true,
+      "canonicalBytes": 7632,
+      "sourceSHA256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "rawSourceSHA256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter"
+    },
+    {
+      "minusOneTrailingLFSHA256": "dfc6007925ef6be784aee07e652e4d9bddf1b107a9ffddbebda37400c500df44",
+      "instanceId": "6_33155104",
+      "rawEditorSHA256": "8608150767d697f3f6fda087748bc2b31ddb2a67c552d14922cd46b75c556cfa",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Poolrooms Runtime"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 22302,
+      "readStable": true,
+      "canonicalBytes": 22302,
+      "sourceSHA256": "8608150767d697f3f6fda087748bc2b31ddb2a67c552d14922cd46b75c556cfa",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "8608150767d697f3f6fda087748bc2b31ddb2a67c552d14922cd46b75c556cfa",
+      "rawSourceSHA256": "8608150767d697f3f6fda087748bc2b31ddb2a67c552d14922cd46b75c556cfa",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Poolrooms Runtime"
+    },
+    {
+      "minusOneTrailingLFSHA256": "0de62fd9d7c9ca6d91d56cd3216d00a027e9c324416a30bc50ead044f2d50373",
+      "instanceId": "1_42719",
+      "rawEditorSHA256": "6f77656fb77fb4ee10053b5e6ea0eb5d3313e4ed5fda08b8694eea3ff06c7dd9",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Round Adapter"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 9496,
+      "readStable": true,
+      "canonicalBytes": 9496,
+      "sourceSHA256": "6f77656fb77fb4ee10053b5e6ea0eb5d3313e4ed5fda08b8694eea3ff06c7dd9",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "6f77656fb77fb4ee10053b5e6ea0eb5d3313e4ed5fda08b8694eea3ff06c7dd9",
+      "rawSourceSHA256": "6f77656fb77fb4ee10053b5e6ea0eb5d3313e4ed5fda08b8694eea3ff06c7dd9",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter"
+    },
+    {
+      "minusOneTrailingLFSHA256": "883d5e74961618c60d7f0ce88ec873736bc0e7f5d7072477e6a88f70577b3f15",
+      "instanceId": "1_408344",
+      "rawEditorSHA256": "8b7a60f37ea7c4687be0063d15e4e8d3852b56421e94219fa33890c89c09c689",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Slide Ragdoll Service"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 22185,
+      "readStable": true,
+      "canonicalBytes": 22185,
+      "sourceSHA256": "8b7a60f37ea7c4687be0063d15e4e8d3852b56421e94219fa33890c89c09c689",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "Script",
+      "sourceEditorMatches": true,
+      "editorSHA256": "8b7a60f37ea7c4687be0063d15e4e8d3852b56421e94219fa33890c89c09c689",
+      "rawSourceSHA256": "8b7a60f37ea7c4687be0063d15e4e8d3852b56421e94219fa33890c89c09c689",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service"
+    },
+    {
+      "minusOneTrailingLFSHA256": "9a35bb3df2b194779e3d24865d65f9e426385c401177fa91501d9a2cae54d888",
+      "instanceId": "6_33155141",
+      "rawEditorSHA256": "d74c6a33207209df2c7e546b3d4f1527918c04019639f37283f2ad8cd3d43537",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 World Builder"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 263658,
+      "readStable": true,
+      "canonicalBytes": 263658,
+      "sourceSHA256": "d74c6a33207209df2c7e546b3d4f1527918c04019639f37283f2ad8cd3d43537",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "d74c6a33207209df2c7e546b3d4f1527918c04019639f37283f2ad8cd3d43537",
+      "rawSourceSHA256": "d74c6a33207209df2c7e546b3d4f1527918c04019639f37283f2ad8cd3d43537",
+      "path": "ServerScriptService.Level 2 Systems.Level 2 World Builder"
+    },
+    {
+      "minusOneTrailingLFSHA256": "748a9624e120b99a14b6fad1991751f1adc2edd8c69b812b92586b1a394d33fa",
+      "instanceId": "1_42726",
+      "rawEditorSHA256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 POOL FOAM"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 8054,
+      "readStable": true,
+      "canonicalBytes": 8054,
+      "sourceSHA256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "rawSourceSHA256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "path": "ServerScriptService.Level 2 Systems.README - LEVEL 2 POOL FOAM"
+    },
+    {
+      "minusOneTrailingLFSHA256": "288fdd8ef226c85c90257bc13a4c82c85af0bbe4765aae73a992fb07d6b82f09",
+      "instanceId": "1_42720",
+      "rawEditorSHA256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 TWEAKS"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 5828,
+      "readStable": true,
+      "canonicalBytes": 5828,
+      "sourceSHA256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "parentId": "1_15619",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "rawSourceSHA256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "path": "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS"
+    },
+    {
+      "minusOneTrailingLFSHA256": "00ab810bb81cda226a767bf18ae04c8c2ff2ccecbab969ad489287dc9495ead1",
+      "instanceId": "1_42771",
+      "rawEditorSHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Kit Warmup"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 2965,
+      "readStable": true,
+      "canonicalBytes": 2965,
+      "sourceSHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+      "parentId": "1_409634",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+      "rawSourceSHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+      "path": "ServerScriptService.Level 3 Kit Warmup"
+    },
+    {
+      "minusOneTrailingLFSHA256": "27a6952f443f2cb4b19222ebe816f373098e33bd3d400f383740ffb923c75573",
+      "instanceId": "1_42748",
+      "rawEditorSHA256": "81118f18a222559da860961d23727b876a46298d12609d91c3fbd460425e2ce6",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Balloon Dressing"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 12479,
+      "readStable": true,
+      "canonicalBytes": 12479,
+      "sourceSHA256": "81118f18a222559da860961d23727b876a46298d12609d91c3fbd460425e2ce6",
+      "parentId": "1_15620",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "81118f18a222559da860961d23727b876a46298d12609d91c3fbd460425e2ce6",
+      "rawSourceSHA256": "81118f18a222559da860961d23727b876a46298d12609d91c3fbd460425e2ce6",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Balloon Dressing"
+    },
+    {
+      "minusOneTrailingLFSHA256": "9990a4332e84bdaee20f8e7e2efd712bd49c515ba52271f77db2e8a162ca6e8d",
+      "instanceId": "1_42736",
+      "rawEditorSHA256": "76752edb0cb176b14f98c41478f4858efbfaed31c2f1d90db82fdad901d08500",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Configuration"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 19831,
+      "readStable": true,
+      "canonicalBytes": 19831,
+      "sourceSHA256": "76752edb0cb176b14f98c41478f4858efbfaed31c2f1d90db82fdad901d08500",
+      "parentId": "1_15620",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "76752edb0cb176b14f98c41478f4858efbfaed31c2f1d90db82fdad901d08500",
+      "rawSourceSHA256": "76752edb0cb176b14f98c41478f4858efbfaed31c2f1d90db82fdad901d08500",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration"
+    },
+    {
+      "minusOneTrailingLFSHA256": "a7b540d17522e47faeaa268f6db6c0e0a788cf5b1ecbcf8728ed2c0e743a71bc",
+      "instanceId": "1_42747",
+      "rawEditorSHA256": "19a59fc800920a881463159c0f724179671355936e4cfca2e8b2fd588e1a6911",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Crayon Wall Art"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 8896,
+      "readStable": true,
+      "canonicalBytes": 8896,
+      "sourceSHA256": "19a59fc800920a881463159c0f724179671355936e4cfca2e8b2fd588e1a6911",
+      "parentId": "1_15620",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "19a59fc800920a881463159c0f724179671355936e4cfca2e8b2fd588e1a6911",
+      "rawSourceSHA256": "19a59fc800920a881463159c0f724179671355936e4cfca2e8b2fd588e1a6911",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Crayon Wall Art"
+    }
+  ]
+}

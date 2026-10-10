@@ -206,6 +206,8 @@ installeret port kræves efter S23; ServerStorage/CORE-027 prioriteres nu.
 
 ### S25 / T11,T15 — fire gamle animationentrypoints pensioneret
 
+Lokal commit: `b2c16a6d4352d1333a9b94973fb84b5975856f79`; ingen push/publicering.
+
 Ejeren har pensioneret de gamle Studio-animationworkflows. Fire lokale værktøjer
 afviser nu CLI/export/publish før Studio-, Blender- eller uploadoperationer.
 `publish_code`, publisherens `main`, retargeted `studio_rest` og `main` afviser
@@ -246,7 +248,38 @@ Proxyens sessions-ID er ændret; den gamle shared cleanup-ledger var ikke længe
 tilgængelig. Historiske held-original references kan derfor ikke certificeres i
 den aktuelle kontekst, selv om de genlæste native root-ID’er er uændrede.
 
-### S04 og CORE-027 — næste native porte
+### S26 / S04 — faktisk native V1 afvist før mappernes fravær
+
+Den frosne V1-kilde blev faktisk udført én gang i det korrekte Edit-sted.
+API-completion er kendt afsluttet efter89.234s; tiden er ikke en performancegevinst.
+Actual R4 `RuntimeBake.GetManifest` afviste Edit-domænets `RunService.IsClient`
+som «Preview bake is server-only». Ingen selectorfase blev godkendt og ingen
+af de fem originals fik en Parentwrite. Dette er en testdomæneafvisning, ingen
+observeret gameplay-regression eller gennemført fraværstest.
+
+To friske tomme probes blev staged og fjernet,0 tilbage. Alle213 originals’
+Source/editor/metadata og det præcise8050869-byte fem-root nativearkiv bestod
+efterkontrol; scoped recovery og final/post-cleanup guards PASS. Ingen pending
+originals, cleanupfejl eller efterladte forbindelser; begge egne namespaces
+frigivet. Console før/efter er identisk med de eksisterende sound- og readonly
+JSON-encoding-fejl; der hævdes ingen ren console. [Faktisk receipt/review](artifacts/cleanup-20261010/storage-authoring-port-v1/native-run-v1/ROOT_REVIEW.json).
+
+Reflektionsscannen nåede181108 Instance-valued slots og24 unreadable kinds.
+Compatible protected serialized endpoints/editor-/physics-references er endnu
+ikke frikendt; permanent sletning er fortsat afventende. Under V1-execution fandt
+review en composed setter-hook-kant før `entry.invoked`, som den oprindelige
+offlinefixture ikke dækkede. Actual V1 udførte ingen Parentsetter. Eksakt kilde,
+peer og fejlresultat er urørt; [separat kvalifikation](artifacts/cleanup-20261010/clients-storage-authoring-peer-v1/V1_QUALIFICATION.json)
+bevares, og ny V2/actual negative/peer kræves før en ny scoped prøve. Ingen retry
+af V1, cancellation, rollback af foreign arbejde eller Play-mode-switch.
+
+Separat efter-parity10:16:00–10:16:10Z PASS:213 scripts,15 remotes,228rows,
+52 ServerStorage-rødder,417075 sceneobjekter og uændret catalog811155…;
+nul Source/editor conflicts, mirror/manifestmismatch eller coveragegaps.
+[Fuld readonly parity](artifacts/cleanup-20261010/storage-authoring-port-v1/after-failed-v1-parity/result.json).
+Ingen native runtime- eller packageændring tilskrives S26.
+
+### S04 og CORE-027 — bevarede kandidater
 
 Ejeren har pensioneret hele den gamle lobby som fallback: «Den kan altid bygges,
 der skal ikke være et fallback.» Ved serverboot kalder GameManager stadig

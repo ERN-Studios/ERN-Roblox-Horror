@@ -1,0 +1,12 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Failed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[EntityKill] Cinematic ground-pin knockout sequence active\n[EntityAI] eye markers: Workspace.Entity.EyeL · Workspace.Entity.EyeR\n[EntityAI] glowing eyes active: 2/2\n[EntityAnimations] Transition controller active\n[TunnelLobbyBuilder] bays open: 1, 2, 3, 4  |  launch stations: 16\nFailed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[LobbyLoading] lobby in 15.1 s, 35 assets, 0 failed\nFailed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\nmikkelczar joined live editing session.\nCan't convert to JSON\nStack Begin\nScript 'AssistantCommand', Line 33\nStack End"
+      }
+    ],
+    "isError": false
+  }
+}

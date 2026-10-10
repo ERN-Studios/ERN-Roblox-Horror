@@ -1,0 +1,14 @@
+{
+  "schema": "retired-authoring-controlled-absence-preparation-failure-v1",
+  "passed": false,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "preparedOutputsCreated": 0,
+  "failure": "AssertionError: current UIDevice mirror differs from the frozen 09:35 native/manifest Source",
+  "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
+  "mirrorLFBytes": 101439,
+  "mirrorLFSHA256": "863027af3565a3ac224b2fcdbdc365b76dd23d6a2b74f7598e3fc7bd39af61d4",
+  "nativeRawBytes": 100997,
+  "nativeRawSHA256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+  "disposition": "Preserved concurrent working candidate in place. Root authorized actual fresh native pins for a data-only trial; no overwrite or normalization. A new Root-owned native capture is required."
+}
