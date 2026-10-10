@@ -1,0 +1,632 @@
+{
+  "codec": "OGG Vorbis q6",
+  "date": "2026-10-10T14:53:06.805480+00:00",
+  "listening_verified": false,
+  "network_used": false,
+  "provider": "ElevenLabs",
+  "sample_rate": 44100,
+  "script_sha256": "61c42b261b094c222c3c868f2f4582957d50cd87aa4fe5a66aee3e80e56a3447",
+  "sounds": {
+    "bed_a1_cistern": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a flooded cistern hall of 104 tiled columns, ankle-deep still water, ceiling 17 m",
+      "prompt": "Room tone inside a vast flooded underground cistern with a hundred tiled columns: deep hollow cool air, countless tiny far-off water trickles blended into one soft continuous wet murmur, a long smooth cathedral reverb. Still water: no waves, no lapping, no splashes, no voices, no music. Steady, seamless loop.",
+      "raw_sha256": "fbaae89be5deb83433c340494e9a657b72528315ca602ec5f05d9437b37aa49c",
+      "section": "A1",
+      "selected_take": "bed_a1_cistern__take4.mp3",
+      "take_number": 4
+    },
+    "bed_a2_rotunda": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a domed blue and gold mosaic rotunda, 38 m high, a whispering gallery with fountain spouts",
+      "prompt": "Room tone inside a huge domed mosaic bath-house rotunda: warm round resonant air, a soft low tone like a singing bowl held very faintly, fountain water pouring steadily far across the hall heard as a smooth diffuse reverberant wash, the dome focusing every sound. No voices, no choir, no music. Steady, seamless loop.",
+      "raw_sha256": "9c738ec1278816b3a4028c2f342fdeeaf99b1fee0434b59509a5fa8645c4b518",
+      "section": "A2",
+      "selected_take": "bed_a2_rotunda__take5.mp3",
+      "take_number": 5
+    },
+    "bed_a3_nave": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a colossal concrete nave, ceiling 25 to 45 m, the biggest space in the level",
+      "prompt": "Room tone of an enormous empty concrete hall forty metres high: slow heavy air moving through the space, a deep distant rumble of far machinery, a faint hollow wind tone drifting between giant columns, a huge long dark reverb. Dry and cold, no water, no voices, no music. Steady, seamless loop.",
+      "raw_sha256": "6cde5cb1b63b814555893af901d9563d445ff0396be6d6f1702e40c9fbf81659",
+      "section": "A3",
+      "selected_take": "bed_a3_nave__take8.mp3",
+      "take_number": 8
+    },
+    "bed_a4_stepwell": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a tiled stepwell shaft with glass rails, 33 m tall, a small pool at the bottom",
+      "prompt": "Room tone at the bottom of a deep tiled stairwell shaft with glass balustrades: still bright air, a thin high glassy resonance like wind across the rim of a glass, a small steady trickle of water echoing from far below, hard short slap echoes. No waves, no voices, no music. Steady, seamless loop.",
+      "raw_sha256": "67aabe778903f068498d7e434b53b4a710881d0214057511921be5a856ea8595",
+      "section": "A4",
+      "selected_take": "bed_a4_stepwell__take11.mp3",
+      "take_number": 11
+    },
+    "bed_a5_natatorium": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a competition swimming hall with a fabric membrane roof on steel trusses and ribbon windows onto desert",
+      "prompt": "Room tone of an empty indoor competition swimming hall under a fabric membrane roof: desert wind pressing softly on the roof fabric in slow low flutters, a soft pool filtration hum, wide bright airy room with a long reverb, a perfectly calm flat pool. No splashing, no waves, no voices, no music. Steady, seamless loop.",
+      "raw_sha256": "3d3670cafb4aee21106e8bbb3a9d30529f2ea35aca5024a22b0f5147b00cb929",
+      "section": "A5",
+      "selected_take": "bed_a5_natatorium__take7.mp3",
+      "take_number": 7
+    },
+    "bed_a6_atrium": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a dry ten-storey atrium of yellow doors over a drained pool",
+      "prompt": "Room tone of a dry empty ten-storey atrium lined with hundreds of closed doors: tall dead-quiet air, a faint electrical buzz of many small lamps, a very soft air-conditioning tone from far above, a long empty reverb. Completely dry: no water, no voices, no footsteps, no music. Steady, seamless loop.",
+      "raw_sha256": "ec809c66af2d2f641f518ce6c0c9c396ccf545cc6be8c90e64ae92153eaa6adc",
+      "section": "A6",
+      "selected_take": "bed_a6_atrium__take4.mp3",
+      "take_number": 4
+    },
+    "bed_exit_flume": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "the cabin and the inside of a fibreglass water-slide tube",
+      "prompt": "Room tone inside a large fibreglass water-slide tube: hollow plastic resonance, air rushing softly along the tube, a thin sheet of water trickling down its floor, a low drum-like boom of the tube walls. No voices, no screams, no music. Steady, seamless loop.",
+      "raw_sha256": "9daab53487af04cf4487d810df5fe7492825fedf3b43e330a8a558c85e23be6e",
+      "section": "EXIT",
+      "selected_take": "bed_exit_flume__take5.mp3",
+      "take_number": 5
+    },
+    "bed_p0_stairwell": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a hard narrow tiled stairwell and a locker changing room",
+      "prompt": "Room tone of a narrow tiled stairwell beside an empty changing room: close boxy air, one old fluorescent tube humming with a faint electrical buzz, a small extractor fan turning behind a wall, short hard echoes. No water, no voices, no footsteps, no music. Steady, seamless loop.",
+      "raw_sha256": "ed5ad2aa1f6d58cdee84e8260854988901b066b4d06cac7b2d48485e6d1460cc",
+      "section": "P0",
+      "selected_take": "bed_p0_stairwell__take4.mp3",
+      "take_number": 4
+    },
+    "bed_p1_pipes": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a concrete service stair on steel grating with iron pipes",
+      "prompt": "Room tone of a concrete service stairwell full of iron pipes: water rushing softly inside the pipes, a warm low boiler hum, a faint steady metallic ring from the steel grating, close dry concrete echoes. No drips, no voices, no footsteps, no music. Steady, seamless loop.",
+      "raw_sha256": "6596b19cfc646edc04ad32d8d784792e524b880f0f9efc75703d1f4a76ee6f41",
+      "section": "P1",
+      "selected_take": "bed_p1_pipes__take4.mp3",
+      "take_number": 4
+    },
+    "bed_p2_culvert": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a narrow concrete culvert beside a stepped water cascade",
+      "prompt": "Room tone inside a narrow concrete water culvert: a dense close hush of water running fast along a channel, a low tunnel resonance that booms softly, damp hard walls very near. Constant flow with no waves, no splashes, no voices, no music. Steady, seamless loop.",
+      "raw_sha256": "15f50d309e16cbcc8b917eaf440cc28fc241ee87dd9b1133541a80151a9c93fc",
+      "section": "P2",
+      "selected_take": "bed_p2_culvert__take2.mp3",
+      "take_number": 2
+    },
+    "bed_p3_vent": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a low wet stone corridor with wall vents and a drain channel",
+      "prompt": "Room tone of a low stone service corridor: a soft tonal air-duct drone with a slow beating wobble, a narrow drain channel gurgling quietly along the floor, damp close walls. No hiss, no drips, no voices, no footsteps, no music. Steady, seamless loop.",
+      "raw_sha256": "227d6640e42702accbd922e4bc5dbd6858c683b80b2918821c04a0b9272c4933",
+      "section": "P3",
+      "selected_take": "bed_p3_vent__take4.mp3",
+      "take_number": 4
+    },
+    "bed_p4_lockers": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "an old dark-wood and brass locker room and a concrete stair",
+      "prompt": "Room tone of an old wood-panelled locker room: warm dry dead air, an electric wall clock mechanism humming softly, a cast-iron radiator ticking very faintly, small close room. No water, no voices, no footsteps, no music. Steady, seamless loop.",
+      "raw_sha256": "69c0fccac0857bfafdbef1da4730abc36727bf3294c47675f7ad56a24e7e894e",
+      "section": "P4",
+      "selected_take": "bed_p4_lockers__take7.mp3",
+      "take_number": 7
+    },
+    "bed_p5_doors": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a tight corridor of 44 identical doors with lit windows",
+      "prompt": "Room tone of a long narrow hotel corridor of closed doors: muffled close carpeted air, a faint mains hum behind many doors, one distant ventilation tone, a soft electrical buzz from small lamps. No water, no voices, no footsteps, no music. Steady, seamless loop.",
+      "raw_sha256": "5cd59ea400a6213c9b6fe7c969b431668cb0fa04e49c6db76d56fc894b3cad19",
+      "section": "P5",
+      "selected_take": "bed_p5_doors__take4.mp3",
+      "take_number": 4
+    },
+    "bed_s_desert": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "a small tiled kiosk standing alone on open desert, the level's start",
+      "prompt": "Wide open desert at midday heard from inside a small tiled kiosk with its door open: a steady light dry wind over sand, a soft low whistle through a gap, fine sand grains ticking on glass now and then. Vast empty outdoor air, no birds, no insects, no voices, no music. Steady, seamless loop.",
+      "raw_sha256": "a19e01a739efa73fb6a3ec5069d42d27381636f49b2a248e0eaa92971bef75c3",
+      "section": "S",
+      "selected_take": "bed_s_desert__take11.mp3",
+      "take_number": 11
+    },
+    "loop_gutter": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "the overflow gutter along the edge of the competition pool",
+      "prompt": "A swimming pool overflow gutter: a thin steady sheet of water slipping over a tiled edge and trickling along a narrow drain channel, small hollow gurgles in the grating. Gentle and close, constant, no waves, no splashes, no voices, no music. Steady, seamless loop.",
+      "raw_sha256": "d90cbde4bdc1191f3627eb9b91f8aeeadab1cc21decbc848d02e05b33b15dbbf",
+      "section": "A5",
+      "selected_take": "loop_gutter__take2.mp3",
+      "take_number": 2
+    },
+    "loop_impellers": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "four half-submerged impellers turning in the pump bay at the end of the nave",
+      "prompt": "Large half-submerged impellers turning slowly in a deep concrete pump bay: a slow heavy churn and gulp of thick water on every blade pass, a deep motor drone underneath, a hollow wet resonance of the basin. No splashing at the surface, no voices, no music. Steady, seamless loop.",
+      "raw_sha256": "72419458097dd86af98b6221b560393f8e9bed1675bb753e67c66075c2db5827",
+      "section": "A3",
+      "selected_take": "loop_impellers__take6.mp3",
+      "take_number": 6
+    },
+    "loop_pumphouse": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": "the rusted pump house in the middle of the flooded cistern",
+      "prompt": "An old rusted pump idling inside a small iron pump house: a slow heavy rhythmic thrum of a motor, a loose cover plate rattling softly on every turn, a faint whine of a worn bearing. Close and mechanical, no water sounds, no voices, no music. Steady, seamless loop.",
+      "raw_sha256": "36ef7ac2a279a34528864a6ae40d4cb3607c2a63f34ca39560c83149223c1433",
+      "section": "A1",
+      "selected_take": "loop_pumphouse__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a1_drips": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "In a huge flooded tiled hall: a short run of five or six single water drops falling one after another into shallow still water from a high ceiling, each with a bright plink and a long hall echo, then silence. No voices, no music.",
+      "raw_sha256": "8f57cb99c875994470a24eaa8e990007d88dc6792fc835e49457b1a2136b4b76",
+      "section": "A1",
+      "selected_take": "shot_a1_drips__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a1_moan": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A long low moan of air moving through a forest of tiled columns in a flooded cistern: it rises slowly once, wavers and falls away into a long reverb. Wind only, tonal and hollow, not a voice, no music.",
+      "raw_sha256": "68e5e32072d5723e63ad8a3c298f4c8cdc7aec9af3e62274fd8fea674d8f62ca",
+      "section": "A1",
+      "selected_take": "shot_a1_moan__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a1_plink": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "One small hard object, like a loose mosaic tile, dropped onto wet ceramic: a single bright ceramic click that ricochets between tiled columns as a fast fluttering echo and dies away in a large flooded hall. No voices, no music.",
+      "raw_sha256": "252317081931ec8267fcc1caec6097a90dc95be53f84794c095148f5147a0d1a",
+      "section": "A1",
+      "selected_take": "shot_a1_plink__take2.mp3",
+      "take_number": 2
+    },
+    "shot_a1_pump_clank": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "Far across a large flooded hall, an old iron pump housing gives one dull heavy metallic clank followed by a short shuddering rattle that settles. Distant, reverberant, then quiet. No voices, no music.",
+      "raw_sha256": "62d42bc8d8b82e5e30838f40774c151ae38d74a256c6d567211a3a20ffcfa512",
+      "section": "A1",
+      "selected_take": "shot_a1_pump_clank__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a1_stir": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "Far away in a flooded tiled hall, something slowly stirs shallow water: one soft slow swirl, two gentle wet slaps against a column, then stillness with a long echo. Quiet and unexplained. No voices, no breathing, no music.",
+      "raw_sha256": "3de9d9de34412da9efd859105922dc7a81364d60d716420f39d4191467b21d06",
+      "section": "A1",
+      "selected_take": "shot_a1_stir__take2.mp3",
+      "take_number": 2
+    },
+    "shot_a1_tile": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A ceramic wall tile cracks with one sharp dry tick, and a small fragment falls into shallow water with a tiny plop, in a large reverberant tiled hall. Then silence. No voices, no music.",
+      "raw_sha256": "5ef548ee8bfd486f51ce97147271cfc2ae38a42fd2f612a44d5b41e1d1f41a51",
+      "section": "A1",
+      "selected_take": "shot_a1_tile__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a2_brass": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A brass ventilation grille ticks three times as it cools, small clear metallic ticks with a warm round echo under a stone dome. Then silence. No voices, no music.",
+      "raw_sha256": "c8bbca74a3d69ae9f88fb65c059fe3eda206e611682adef0be354dccce98448d",
+      "section": "A2",
+      "selected_take": "shot_a2_brass__take5.mp3",
+      "take_number": 5
+    },
+    "shot_a2_disc": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A very large bronze disc gives one extremely soft low gong-like ring, as if lightly brushed, with a long warm shimmering decay under a great stone dome. Gentle, not struck hard, no voices, no music.",
+      "raw_sha256": "210639fd751bee669c255d7efec118248b417c2c05b9bd26e91419771a990056",
+      "section": "A2",
+      "selected_take": "shot_a2_disc__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a2_flutter": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A single water drop falls into a still pool directly under a large stone dome: one bright plink followed by a rapid fluttering ricochet echo spiralling up the dome and fading. No voices, no music.",
+      "raw_sha256": "ac2c309d8c8069b0265a621161d02778472a7c4a91035879a13933f0efd4ed64",
+      "section": "A2",
+      "selected_take": "shot_a2_flutter__take2.mp3",
+      "take_number": 2
+    },
+    "shot_a2_gulp": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A stone fountain spout chokes for a moment: the pouring water stutters, the pipe gulps air twice with a hollow glug, and the steady pour returns, across a large domed hall. No voices, no music.",
+      "raw_sha256": "1c12911c4c99ba4feecf608671c60070410ef3f2c366e21a1c2eafef3beb6377",
+      "section": "A2",
+      "selected_take": "shot_a2_gulp__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a2_whoosh": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A soft airy whoosh travels once around the wall of a large domed whispering gallery, moving from one side to the other and fading. Air only, smooth and round, not a voice, not a whisper of words, no music.",
+      "raw_sha256": "fe3339fb6068d54fe6008eccee04e8680cb9b2df26780befb506209dd3f6d13e",
+      "section": "A2",
+      "selected_take": "shot_a2_whoosh__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a3_boom": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "One enormous distant concrete boom, like a massive slab settling somewhere deep in a colossal empty hall: a low heavy thud and then a very long dark rumbling reverb tail that slowly dies. No voices, no music.",
+      "raw_sha256": "8e10e565533f148ec107569f69c49bfc7b581c3df18826fe89ff0fe9e1bd1e6f",
+      "section": "A3",
+      "selected_take": "shot_a3_boom__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a3_chain": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "Far away in an enormous concrete hall a heavy iron chain shifts: a slow drag of thick links over concrete, a few heavy clinks, then it settles. Long dark reverb. No voices, no music.",
+      "raw_sha256": "b3ab4f88d3ae89f37af1b263659f71bfe5c27273aba35f93d9961cf56d36822e",
+      "section": "A3",
+      "selected_take": "shot_a3_chain__take2.mp3",
+      "take_number": 2
+    },
+    "shot_a3_grit": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "Fine concrete grit and dust trickling down from very high above onto a concrete floor in a vast empty hall: a short dry pattering shower of small grains, a couple of larger pebbles, then silence. No voices, no music.",
+      "raw_sha256": "70f0a097822cf944e82d95101a06f368ad9472f46ae9eede541ae63bcc5f198e",
+      "section": "A3",
+      "selected_take": "shot_a3_grit__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a3_lamp_buzz": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A sodium vapour lamp high in a huge concrete hall buzzes loudly for a moment, stutters with two electrical clicks and a small glassy tink, then settles back into a steady quiet hum. No voices, no music.",
+      "raw_sha256": "923c2f0499e67c7b00ac339bc51649679a0703e1bb3a60d6406084ec68bd5b07",
+      "section": "A3",
+      "selected_take": "shot_a3_lamp_buzz__take2.mp3",
+      "take_number": 2
+    },
+    "shot_a3_pit_breath": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A slow cold exhale of air rising out of a very deep concrete shaft: a soft hollow whoosh that swells and fades once, with a deep resonant undertone from far below. Air only, not a voice, no music.",
+      "raw_sha256": "1da9ba0b18c96f840fa9c5dac079ec007d1523810bcdd5b933a0dbc0f909cc7a",
+      "section": "A3",
+      "selected_take": "shot_a3_pit_breath__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a3_pit_stone": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A small stone falls down a very deep concrete shaft: it clicks off the walls again and again, each click quieter and further down, fading into nothing without ever landing. Huge hall reverb. No voices, no music.",
+      "raw_sha256": "0a067007b82ab9d1f9bd88cf654287d5cb9ee4cce6b081a05f5e0e67f3b15fba",
+      "section": "A3",
+      "selected_take": "shot_a3_pit_stone__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a3_surge": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "Water surging through a very large pipe somewhere far off in a concrete building: a deep muffled rushing swell that rises, holds for a moment and drains away, with a low boom at the end. No splashing, no voices, no music.",
+      "raw_sha256": "426b6346bfee6da2c63821b58627aaca02e4c26f4813ee39d70269189acb1c0d",
+      "section": "A3",
+      "selected_take": "shot_a3_surge__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a4_drop": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "One single heavy drop of water falls a long way down a tall tiled shaft into a small deep pool: a round deep plunk with a slow tall vertical echo climbing back up. Then silence. No voices, no music.",
+      "raw_sha256": "479bb4fea3333fdb00a7551f037468a1765ef72d5cf19db9382b9167c43dadf6",
+      "section": "A4",
+      "selected_take": "shot_a4_drop__take4.mp3",
+      "take_number": 4
+    },
+    "shot_a4_glass": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A large glass balustrade panel under tension gives one clear glassy ping and a short creak, ringing with a long bright shimmer in a tall tiled stairwell. No breaking, no voices, no music.",
+      "raw_sha256": "fa9bfac41335be708b91c149d78505676c3e3449cd6ac30d03070283cc5d0cca",
+      "section": "A4",
+      "selected_take": "shot_a4_glass__take2.mp3",
+      "take_number": 2
+    },
+    "shot_a4_rail": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A long steel handrail in a tall tiled stairwell rings softly as if tapped once far above: a clear metallic note that travels down the rail and decays slowly with a faint wobble. No voices, no footsteps, no music.",
+      "raw_sha256": "49d08f94d7bc6315140fc1b29a285f0c93352fe29e2883bdc3f9e689ea563b21",
+      "section": "A4",
+      "selected_take": "shot_a4_rail__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a4_steps_above": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "Two slow wet bare footsteps on tile, heard from several flights up a tall tiled stairwell, far away and echoing, then nothing. Quiet and unexplained. No voices, no breathing, no music.",
+      "raw_sha256": "273acfa1343469bdfa52060daf44fb94e6fef145a6d65cd07cabb97724f0b356",
+      "section": "A4",
+      "selected_take": "shot_a4_steps_above__take5.mp3",
+      "take_number": 5
+    },
+    "shot_a4_tile_steps": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A small ceramic tile fragment bounces down five or six tiled stair steps, each bounce lighter and quicker, and comes to rest, in a tall reverberant stairwell. No voices, no music.",
+      "raw_sha256": "a43f3f4d69eeb6fe845d34b5a178d8e1b799496f03e0c169f91e76dcf89a583c",
+      "section": "A4",
+      "selected_take": "shot_a4_tile_steps__take2.mp3",
+      "take_number": 2
+    },
+    "shot_a4_valve": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A small old brass valve squeaks through a quarter turn, followed by a brief rush of water inside a wall pipe that quickly stops. Close, tiled room echo. No voices, no music.",
+      "raw_sha256": "eb7a99942b5c7ac5da384328bf133c41d150bf0c1514993f17e78e3a92f91da5",
+      "section": "A4",
+      "selected_take": "shot_a4_valve__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a5_glug": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A swimming pool overflow drain swallows air: three deep hollow glugs getting slower, then a soft sucking gurgle that fades, echoing in a large tiled hall. No voices, no music.",
+      "raw_sha256": "4d8b4acd2203786c8e48dd2e49ce99a2c0d15406b973decb4b7f46650e952b99",
+      "section": "A5",
+      "selected_take": "shot_a5_glug__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a5_ladder": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A stainless steel pool ladder knocks once against the tiled pool edge with a hollow metallic clonk and a brief ring, in a large quiet swimming hall. No splash, no voices, no music.",
+      "raw_sha256": "ceb98e8ab137a16f00cfb7c4a1cf8330136fd810d3a6aba0f438ddc6bc8176ff",
+      "section": "A5",
+      "selected_take": "shot_a5_ladder__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a5_roof": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A gust of wind presses on the fabric membrane roof of a large empty swimming hall: one slow deep flap of taut fabric, steel cables creaking, the roof settling back. Big bright room reverb. No voices, no music.",
+      "raw_sha256": "86270f09db3333e58a76fe3553e238412cdbfb1008e5b91a7cd9a3476ca65879",
+      "section": "A5",
+      "selected_take": "shot_a5_roof__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a5_rope": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "The hard plastic floats of a swimming lane rope click softly against each other along its length, a gentle rattling ripple that runs from near to far across a calm pool and stops. No splashing, no voices, no music.",
+      "raw_sha256": "22c5d7c1291e6137f36f3f7d8352370fe80eae0ae53464bd972d57ef7d73e297",
+      "section": "A5",
+      "selected_take": "shot_a5_rope__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a5_seat": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "One plastic folding stadium seat flips up by itself with a hard hollow clack, somewhere in the empty stands of a large swimming hall, echoing once across the room. No voices, no music.",
+      "raw_sha256": "c339383e1f6470f5837c7ceb59ba071beb2f861f933da698c855eea7d7e7d480",
+      "section": "A5",
+      "selected_take": "shot_a5_seat__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a5_truss": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "High in the roof of a large swimming hall a steel truss ticks as it expands: tick, tick, and a small bright ting, spaced apart, with a long airy reverb. No voices, no music.",
+      "raw_sha256": "fac59ec04691bdc1bf32315bc7eabdc11b851aa12d7b2393515ac5f682234b7a",
+      "section": "A5",
+      "selected_take": "shot_a5_truss__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a6_bulb": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A small lamp bulb fizzes for a second, crackles and goes out with one quiet glassy pop. Close and dry, small electrical sound in a quiet hall. No voices, no music.",
+      "raw_sha256": "fa0c857d901890690d5405e7510ec7b256b1c7db86ae6554df982a54b94f00b1",
+      "section": "A6",
+      "selected_take": "shot_a6_bulb__take4.mp3",
+      "take_number": 4
+    },
+    "shot_a6_creak": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "Somewhere along an upper gallery of a tall empty atrium, a door slowly creaks open a few centimetres on dry hinges and stops. Long dry echo, then silence. No voices, no footsteps, no music.",
+      "raw_sha256": "049ddd7b4c429baff06d32b653008fcb788f95b3d772b353b5c81825c54721a7",
+      "section": "A6",
+      "selected_take": "shot_a6_creak__take2.mp3",
+      "take_number": 2
+    },
+    "shot_a6_drain": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A dry floor drain in the bottom of an empty drained swimming pool gurgles with air: a hollow dry rattling gurgle from deep in the pipe, rising once and fading. No water splashing, no voices, no music.",
+      "raw_sha256": "887108538b91401921fa84443f324a3beb6a8a19080693de2b39f6552846ecce",
+      "section": "A6",
+      "selected_take": "shot_a6_drain__take1.mp3",
+      "take_number": 1
+    },
+    "shot_a6_knock": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "Two soft slow knocks on the inside of a wooden door, far along a gallery in a tall empty atrium, muffled and distant with a dry echo. Then silence. No voices, no footsteps, no music.",
+      "raw_sha256": "9247c2db5ee482b88f44ed8ba871d9e523e94e0ac0b92806851cdb466514440b",
+      "section": "A6",
+      "selected_take": "shot_a6_knock__take3.mp3",
+      "take_number": 3
+    },
+    "shot_a6_latch": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A door latch clicks shut several floors above in a tall empty hotel atrium: one small precise metallic click and a soft wooden thud, far away, with a long dry echo. No voices, no footsteps, no music.",
+      "raw_sha256": "6e8ce776d33fee514b7f7ffac31321cddab9d116bbb4a79c53d603db2681fe6f",
+      "section": "A6",
+      "selected_take": "shot_a6_latch__take2.mp3",
+      "take_number": 2
+    },
+    "shot_a6_stair": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A steel spiral staircase rings faintly as if a single step was trodden high above: one dull footfall on metal and a long quiet ringing of the whole stair, in a tall dry atrium. No voices, no music.",
+      "raw_sha256": "7b3370de1c9067b666ae7067a1af95a2bde3e167dd0f83aa30ed283b12b58f8e",
+      "section": "A6",
+      "selected_take": "shot_a6_stair__take1.mp3",
+      "take_number": 1
+    },
+    "shot_p5_buzz": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A small wall lamp in a quiet corridor flickers: a short electrical buzz, two faint clicks of a failing starter, then a steady quiet hum again. Close and dry. No voices, no music.",
+      "raw_sha256": "41d8140a8586164037fc49b4107f0c06066b3b4ea889e6ceb3113886a30de522",
+      "section": "P5",
+      "selected_take": "shot_p5_buzz__take1.mp3",
+      "take_number": 1
+    },
+    "shot_p5_handle": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A metal door handle is slowly pressed down once and released, from behind a closed wooden door in a quiet carpeted corridor: a soft squeak, a click of the latch, the spring return. No voices, no footsteps, no music.",
+      "raw_sha256": "18c6599c22a536ac38ec4cc0df41ed4e1b85ffe8fc9003c1849a0856b7c8e848",
+      "section": "P5",
+      "selected_take": "shot_p5_handle__take4.mp3",
+      "take_number": 4
+    },
+    "shot_p_drain": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A narrow floor drain channel in a stone corridor gurgles: water sucked down in a slow spiral with a hollow throaty gurgle and a final soft glug. Close and wet. No voices, no music.",
+      "raw_sha256": "044a98ada1945551772594068376b9c3b79a52b49eafb3bbc77b6c74481a200c",
+      "section": "P3,P2",
+      "selected_take": "shot_p_drain__take1.mp3",
+      "take_number": 1
+    },
+    "shot_p_grating": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A steel grating floor flexes under a weight somewhere above: one low metallic groan and a rattle of a loose grate panel settling, in a concrete stairwell. No voices, no footsteps, no music.",
+      "raw_sha256": "181b61bf24f27d2883a9f50c69cff399fa21a940582f8cb0922af6b529b5f54e",
+      "section": "P1",
+      "selected_take": "shot_p_grating__take1.mp3",
+      "take_number": 1
+    },
+    "shot_p_hangers": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "Three or four wire coat hangers swing and chime softly against each other on a rail, a thin bright metallic tinkle that slows and stops, in a small quiet locker room. No voices, no music.",
+      "raw_sha256": "a371bb727bc0795412d6392526f23dfe1937fb4dd674fcee00e9beafefc8fc27",
+      "section": "P0,P4",
+      "selected_take": "shot_p_hangers__take1.mp3",
+      "take_number": 1
+    },
+    "shot_p_locker": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A thin metal locker door swings slowly on a dry hinge and taps shut with a light hollow metallic clack, in a small tiled changing room. No voices, no footsteps, no music.",
+      "raw_sha256": "45656f318f5a0a5de2cd718d4492340cbed860c2c2a3fc7ef09c47521e47d131",
+      "section": "P0,P4",
+      "selected_take": "shot_p_locker__take1.mp3",
+      "take_number": 1
+    },
+    "shot_p_pipe_knock": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "Water hammer in old iron pipes: three hard knocks travelling away along a pipe run, each further and quieter, with a ringing metallic tail, in a concrete service corridor. No voices, no music.",
+      "raw_sha256": "ae66069b551d7df9ca179e29207b29bde8877abb5998fb3c15d5ef53f6e1ac8a",
+      "section": "P1,P3",
+      "selected_take": "shot_p_pipe_knock__take1.mp3",
+      "take_number": 1
+    },
+    "shot_s_gust": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A gust of desert wind throws a handful of sand against a window of a small kiosk: a rising whoosh, a dry hiss of grains on glass, and the wind dropping away again. Open outdoor air. No voices, no music.",
+      "raw_sha256": "fe2ec733909b9ae59dd19af92115ba19d69f06abb63f0a1fbb66d0c3d2f97988",
+      "section": "S",
+      "selected_take": "shot_s_gust__take2.mp3",
+      "take_number": 2
+    },
+    "shot_s_shutter": {
+      "generation_ids": [],
+      "generation_log_matches": [],
+      "place": null,
+      "prompt": "A loose metal roller shutter on a small kiosk rattles in a light wind: a few soft uneven clatters and one longer shiver of thin metal slats, then still. Open dry outdoor air. No voices, no music.",
+      "raw_sha256": "739472704de332f5fda807e6120d3e0ad56150c9455dfd3f4a9bc1be4dacb81e",
+      "section": "S",
+      "selected_take": "shot_s_shutter__take1.mp3",
+      "take_number": 1
+    }
+  },
+  "synthetic_audio_outputs": false
+}

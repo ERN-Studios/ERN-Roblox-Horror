@@ -1,0 +1,282 @@
+{
+ "bed_a1_cistern": {
+  "asset_id": 135803852146927,
+  "master_sha256": "e1cfb8ddf44d13fc6649d1fce86adb1621a04a3daa23ccb5fe3080fb7ee1d4a8",
+  "moderation": "Approved"
+ },
+ "bed_a2_rotunda": {
+  "asset_id": 139525900666325,
+  "master_sha256": "2a51cae7a283ffae73a0de248c2f150d0d0932197f7abee790f9b7701c86ef12",
+  "moderation": "Approved"
+ },
+ "bed_a4_stepwell": {
+  "asset_id": 92888163488821,
+  "master_sha256": "44a80a6d74450e96cf6eadf8724855d8c609f8b1ab41a23a05f4b6e0423440f0",
+  "moderation": "Reviewing"
+ },
+ "bed_a5_natatorium": {
+  "asset_id": 104631648727610,
+  "master_sha256": "4c949f998b0fc195d1f1a25a03aec289951a91e7d021d4952c52e2dd42ab464e",
+  "moderation": "Approved"
+ },
+ "bed_a6_atrium": {
+  "asset_id": 76493878690826,
+  "master_sha256": "879744fa28b14accdb758bdad6ebdff2c65dae864ce01e1e7e0c67f9025c7a14",
+  "moderation": "Approved"
+ },
+ "bed_exit_flume": {
+  "asset_id": 96379716706159,
+  "master_sha256": "4d6ef0912feed1f8549bebfb7fc55fcb796faa9b9535925906b7c264712110ff",
+  "moderation": "Approved"
+ },
+ "bed_p0_stairwell": {
+  "asset_id": 129799424667535,
+  "master_sha256": "5b0e7580494e500ea972981e30f18fb5dc11d86e411caf06a3638391c128e683",
+  "moderation": "Approved"
+ },
+ "bed_p1_pipes": {
+  "asset_id": 107082639946056,
+  "master_sha256": "0fa9326b6173413a5b08347228dd9e77d7fc5ca0f8d53c9752860fc4fbc66711",
+  "moderation": "Approved"
+ },
+ "bed_p2_culvert": {
+  "asset_id": 86095670159774,
+  "master_sha256": "6c294f93aadc4dd83184681e4786a54ec83f5e443ed19d503ae4410ed8fc65b2",
+  "moderation": "Approved"
+ },
+ "bed_p4_lockers": {
+  "asset_id": 78136748884957,
+  "master_sha256": "c58de0d80cc4de158a5b8b8ede06246ef9819e4e1d93ad2f6537bd441da4b815",
+  "moderation": "Approved"
+ },
+ "bed_p5_doors": {
+  "asset_id": 102764521888789,
+  "master_sha256": "e706160c2593120aab2e840cf4f1087ae2c9eea3164fd04d5aae4768ba420a26",
+  "moderation": "Approved"
+ },
+ "loop_gutter": {
+  "asset_id": 127893073896019,
+  "master_sha256": "93164d9e2069666ae4f96f9192784a1314ddd12eda67c58759f7c643f888b13e",
+  "moderation": "Approved"
+ },
+ "loop_impellers": {
+  "asset_id": 108570434680524,
+  "master_sha256": "9aecb87cfccc5bf74ae8734a1d44bb766b63ea62f69c6284210d880a9c14649f",
+  "moderation": "Approved"
+ },
+ "loop_pumphouse": {
+  "asset_id": 109420791423913,
+  "master_sha256": "1153d4025659f25225840453fcccc2eb5a615430706320c08efea3d092036498",
+  "moderation": "Approved"
+ },
+ "shot_a1_drips": {
+  "asset_id": 99318460675534,
+  "master_sha256": "226a83def31bd5627282edc8ac356a0e92530e62df2f8f09e5ca2242810d6f77",
+  "moderation": "Approved"
+ },
+ "shot_a1_moan": {
+  "asset_id": 120391435777565,
+  "master_sha256": "57b2fb5329b5e10ede181c2f055185e913c291b382645052764f94bb0138b996",
+  "moderation": "Approved"
+ },
+ "shot_a1_plink": {
+  "asset_id": 111947757194339,
+  "master_sha256": "657b4746e5e9571d504a69d58d3c3de885242d6cfd19cccbc23ef2a8c1f44014",
+  "moderation": "Approved"
+ },
+ "shot_a1_pump_clank": {
+  "asset_id": 134365455495657,
+  "master_sha256": "a64e327b07b0c3bf0f6668728867c66ed27e732a13d4586354a2320e8c56d77b",
+  "moderation": "Approved"
+ },
+ "shot_a2_brass": {
+  "asset_id": 71157893401873,
+  "master_sha256": "310fcdeb3fdfe7d116ba19ef8102cc0879cef790ea32d402c9548caa67e17b78",
+  "moderation": "Approved"
+ },
+ "shot_a2_disc": {
+  "asset_id": 83864193302333,
+  "master_sha256": "72e0f77b97b0838de28226330303ee39c1ce3a532e8c30f5072c3d0c1849214d",
+  "moderation": "Approved"
+ },
+ "shot_a2_flutter": {
+  "asset_id": 77569452580311,
+  "master_sha256": "fc29b67155c42f86b2bf0e5fe8ac13e5d7183ab0229de51c248d8b6c8fe6639d",
+  "moderation": "Approved"
+ },
+ "shot_a2_gulp": {
+  "asset_id": 116814057800413,
+  "master_sha256": "d543eb5ccf815f72359ea69ad690571edf175f649d96ea4b1baa19133f7e1a89",
+  "moderation": "Approved"
+ },
+ "shot_a2_whoosh": {
+  "asset_id": 77609156580502,
+  "master_sha256": "5fca4f3738c9f7421c95bbf31cfff41e619a87f235af939888e22b558c032bcc",
+  "moderation": "Approved"
+ },
+ "shot_a3_boom": {
+  "asset_id": 135783158140910,
+  "master_sha256": "7ec98779204953b26da686d39fc9a3d12055096bb0f7c1825b07fa21c9673827",
+  "moderation": "Approved"
+ },
+ "shot_a3_chain": {
+  "asset_id": 82580067155798,
+  "master_sha256": "362637d48c6085cf236aab216471709536c428465a8ddd3fbfdc00a48826f313",
+  "moderation": "Approved"
+ },
+ "shot_a3_grit": {
+  "asset_id": 123395424469758,
+  "master_sha256": "7f9107be71ea6850d42fe1075e173907b15fe7355b946aac8b99a629226053b9",
+  "moderation": "Approved"
+ },
+ "shot_a3_lamp_buzz": {
+  "asset_id": 102908949591474,
+  "master_sha256": "904fe0c31e125eb2b3f5451a934b76cdfab5624dbfbc9b04097c634f70235b13",
+  "moderation": "Approved"
+ },
+ "shot_a3_pit_breath": {
+  "asset_id": 99810352765463,
+  "master_sha256": "bbe2ffe4b772b6bfdffa57a3fb5d6021cf6690550b5e80a684e7d7f962c2fb93",
+  "moderation": "Approved"
+ },
+ "shot_a3_pit_stone": {
+  "asset_id": 124187747804497,
+  "master_sha256": "2c4cdf2170a71a729a6adf112f842bbe692f8c81b3628fc4b736ed2e0b3b6729",
+  "moderation": "Approved"
+ },
+ "shot_a3_surge": {
+  "asset_id": 82673263314306,
+  "master_sha256": "f28d815936325040dc54def4f42b6167145d7ae3062f550b05087a2659128aa3",
+  "moderation": "Approved"
+ },
+ "shot_a4_drop": {
+  "asset_id": 139507395147172,
+  "master_sha256": "29a86556dd17ff4939e65ec949cd2563f10f60e9e93f9fcf8035475ca4e179a8",
+  "moderation": "Approved"
+ },
+ "shot_a4_glass": {
+  "asset_id": 122047035913043,
+  "master_sha256": "99975eac4338a6e2424ac9db92431dafb530443e33bb8416561af295e879e3fc",
+  "moderation": "Approved"
+ },
+ "shot_a4_rail": {
+  "asset_id": 125276109627538,
+  "master_sha256": "02a113e010d9e9c5d0a23f0d528efe1afafbe5bfaf3d4b3e9637f1343b29406f",
+  "moderation": "Approved"
+ },
+ "shot_a4_steps_above": {
+  "asset_id": 74415704239191,
+  "master_sha256": "cc85093c7bbd3b0d984702c321d69df8d81c33b470e7e9bb844e88d520696d5c",
+  "moderation": "Approved"
+ },
+ "shot_a4_tile_steps": {
+  "asset_id": 72757909277907,
+  "master_sha256": "75903d2c5c1440e64a2fc3114aec9d29e0de4219d511895cf36f74f7fccaaefe",
+  "moderation": "Approved"
+ },
+ "shot_a4_valve": {
+  "asset_id": 101386146186948,
+  "master_sha256": "faa23c27515f990c63a7236d197fac4dbea9684ae1710f674b632da8ffeb3498",
+  "moderation": "Approved"
+ },
+ "shot_a5_glug": {
+  "asset_id": 130410676462172,
+  "master_sha256": "86a7b86b1e9ec9a634c0f8df67b4ad053162391a1e2756f54f64728c50f2b378",
+  "moderation": "Approved"
+ },
+ "shot_a5_ladder": {
+  "asset_id": 100975912002552,
+  "master_sha256": "a70299cd58c6921120669fbcbf7ebb1d58bfabd67735edc33f274e30e836b922",
+  "moderation": "Approved"
+ },
+ "shot_a5_roof": {
+  "asset_id": 107266781102946,
+  "master_sha256": "0ab4999b886f9cfdc690c98c91eb6f3aa4da7cc86ce7f80b6e82baab117f77e1",
+  "moderation": "Approved"
+ },
+ "shot_a5_rope": {
+  "asset_id": 126874046637827,
+  "master_sha256": "0fbc44c05c9be39bc29827760fca2d1ce59c183c4074469089fcdf36d6f5c81a",
+  "moderation": "Approved"
+ },
+ "shot_a5_seat": {
+  "asset_id": 71369871553402,
+  "master_sha256": "4a8c02772bc8f6d015e3576fa07a7c12042de2212b86f59ace2d76d687257637",
+  "moderation": "Approved"
+ },
+ "shot_a5_truss": {
+  "asset_id": 125781954653249,
+  "master_sha256": "c036bf9c2d7a7d00b24634d77cba5da57c2df8d9bc4e1138100d09695bed8d61",
+  "moderation": "Approved"
+ },
+ "shot_a6_bulb": {
+  "asset_id": 137259213624837,
+  "master_sha256": "407d9192846f481ccf5fb1b7e12f81c3a28ac595c8fd3dd53a1d305e3619563b",
+  "moderation": "Approved"
+ },
+ "shot_a6_creak": {
+  "asset_id": 73744765604526,
+  "master_sha256": "bf2c2fb470448aeae89b27a7300d74a22dbc2625b6d673b39b7990c4c297f8cc",
+  "moderation": "Approved"
+ },
+ "shot_a6_drain": {
+  "asset_id": 75947498632929,
+  "master_sha256": "5594647d620b40aef49a88f6a5023ba690cf634dbacfed47b5d0d41f4807c4ff",
+  "moderation": "Approved"
+ },
+ "shot_a6_knock": {
+  "asset_id": 120612484007965,
+  "master_sha256": "a3bd14c3f1b0b4679e01a8bafb4f8c53a951ac46b61c13fd69bd646ee7b28596",
+  "moderation": "Approved"
+ },
+ "shot_a6_latch": {
+  "asset_id": 103357907199890,
+  "master_sha256": "deaf2fac50d7220458479e5d61070c749a48dc422cac81a68ce2f7ca1f2d5310",
+  "moderation": "Approved"
+ },
+ "shot_a6_stair": {
+  "asset_id": 114627615459908,
+  "master_sha256": "637306081d27ea11cc1e7376945613bcf792f56998aa413e5ea67834eff3aef0",
+  "moderation": "Approved"
+ },
+ "shot_p5_buzz": {
+  "asset_id": 101925135757005,
+  "master_sha256": "dc449d176c3a874b31fa502097c38037025b94af849d81687f6cdc62e2fb7ab3",
+  "moderation": "Approved"
+ },
+ "shot_p5_handle": {
+  "asset_id": 124178760047784,
+  "master_sha256": "453a75d9d554ce28ed3c1584ceb43af54edff641f68c6ebbf3755c4d44bf4739",
+  "moderation": "Approved"
+ },
+ "shot_p_drain": {
+  "asset_id": 96582920631428,
+  "master_sha256": "0ac01ffb5beb1bd7f628b89ac04bb9b472f16706aada0b47b2f80a9bc54eb90d",
+  "moderation": "Approved"
+ },
+ "shot_p_grating": {
+  "asset_id": 127202161984062,
+  "master_sha256": "0e2e9f47730c3b2554c30dece45da9c59fba85dc2728b35249084c80ea8549a3",
+  "moderation": "Approved"
+ },
+ "shot_p_locker": {
+  "asset_id": 80801019752385,
+  "master_sha256": "2b9c7706eb28c473fc78cbfce48f7dce15df93dada768bcbb6162f559cd2ca6c",
+  "moderation": "Approved"
+ },
+ "shot_p_pipe_knock": {
+  "asset_id": 83228692335975,
+  "master_sha256": "339cd0e280492ef96fdeb3fedf278cc54b3509d79e1358434da6b1e7f5255c29",
+  "moderation": "Approved"
+ },
+ "shot_s_gust": {
+  "asset_id": 84135580364977,
+  "master_sha256": "434fc491c9a88cad2ce7e781b767348751765a7fde60864eb76d2a6b677ceb2b",
+  "moderation": "Approved"
+ },
+ "shot_s_shutter": {
+  "asset_id": 85210416378710,
+  "master_sha256": "a67cd454affb8cb9f86cbb7b176baf87990adc21598b5ba8a6256f377f3bc886",
+  "moderation": "Approved"
+ }
+}

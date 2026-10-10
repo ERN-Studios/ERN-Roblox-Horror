@@ -1,0 +1,37 @@
+{
+ "about": "Second pass, 2026-10-10. The first pass of beds came out as near-silence (the prompts said 'room tone', 'soft', 'faint', 'quiet': ElevenLabs gave exactly that, 13 of 14 beds mastered 14 to 38 LU under target and failed). These prompts name a present, continuous SOUND SOURCE at a constant level, with body between 300 Hz and 3 kHz so a phone speaker plays it. Same keys; takes continue from take 4.",
+ "rules": {
+  "provider": "ElevenLabs eleven_text_to_sound_v2",
+  "prompt_influence": 0.6,
+  "beds": {"seconds": 24, "loop": true, "takes": 4, "first_take": 4},
+  "loops": {"seconds": 20, "loop": true, "takes": 3, "first_take": 4},
+  "shots": {"loop": false, "takes": 3, "first_take": 3},
+  "max_prompt_characters": 440
+ },
+ "beds": [
+  {"key": "bed_a1_cistern", "prompt": "Constant loud trickling and dripping of water all around inside a huge flooded stone cistern: hundreds of drips and thin streams falling into shallow water without pause, bright and wet, with a long cathedral echo. Full, present, steady level from start to end. No waves, no lapping, no splashes, no voices, no music. Seamless loop."},
+  {"key": "bed_a3_nave", "prompt": "Loud continuous roar of industrial ventilation in an enormous concrete hall: a deep steady rumble with a strong hollow mid-range wind howl through giant columns and a constant airy rush on top. Full, present, constant level, huge reverb. No water, no voices, no music, no swells. Seamless loop."},
+  {"key": "bed_a4_stepwell", "prompt": "Constant bright resonant whistle of air moving up a tall tiled stairwell shaft, like a steady tone blown across a bottle, with a small continuous trickle of water echoing below. Clear, present, glassy, steady level from start to end. No swells, no waves, no voices, no music. Seamless loop."},
+  {"key": "bed_a2_rotunda", "prompt": "Loud continuous fountain water pouring into a pool inside a huge stone dome, heard as a full reverberant wash, with a steady warm metallic drone like a large singing bowl ringing underneath. Rich, present, constant level, long round echo. No waves, no voices, no choir, no music. Seamless loop."},
+  {"key": "bed_a5_natatorium", "prompt": "Loud steady hum and airy rush of a large air handling unit in an empty indoor swimming hall, with a constant fluttering rumble of a fabric roof in wind above. Full, present, wide and bright, constant level from start to end. No splashing, no waves, no voices, no music. Seamless loop."},
+  {"key": "bed_a6_atrium", "prompt": "Constant electrical buzz and hum of hundreds of small lamps in a tall dry hotel atrium, a steady mains hum with a clear buzzing edge, and a continuous air-conditioning whoosh from above. Full, present, dry, constant level. No water, no voices, no footsteps, no music. Seamless loop."},
+  {"key": "bed_s_desert", "prompt": "Steady strong desert wind blowing over sand and around a small building: a constant full whoosh with a clear whistling tone through a gap. Present, dry, wide open air, constant level from start to end with no gusts. No birds, no insects, no voices, no music. Seamless loop."},
+  {"key": "bed_p0_stairwell", "prompt": "Loud buzzing fluorescent tube lights and a whirring extractor fan in a narrow tiled stairwell: a steady electrical buzz with a clear harsh edge over a constant fan whirr. Close, boxy, present, constant level. No water, no voices, no footsteps, no music. Seamless loop."},
+  {"key": "bed_p1_pipes", "prompt": "Loud continuous rush of water inside big iron pipes in a concrete boiler room, with a steady roaring boiler burner and a ringing metallic resonance. Full, close, present, constant level from start to end. No drips, no bangs, no voices, no music. Seamless loop."},
+  {"key": "bed_p3_vent", "prompt": "Loud steady drone of air blowing through a metal ventilation duct in a low stone corridor: a full tonal whoosh with a slow wobbling beat and a rattling grille. Close, present, constant level. No drips, no voices, no footsteps, no music. Seamless loop."},
+  {"key": "bed_p4_lockers", "prompt": "Loud steady hum of an old electric motor behind a wooden wall, like an old refrigerator compressor, with a constant faint rattle of a loose metal plate and a ticking wall clock. Close, warm, present, constant level. No water, no voices, no footsteps, no music. Seamless loop."},
+  {"key": "bed_p5_doors", "prompt": "Loud steady electrical transformer hum in a long narrow corridor, a strong mains buzz with a clear nasal edge, and a constant whir of small ventilation fans behind many doors. Close, dry, present, constant level. No water, no voices, no footsteps, no music. Seamless loop."},
+  {"key": "bed_exit_flume", "prompt": "Loud constant rush of air and a thin stream of water running down the inside of a big fibreglass water slide tube: a full hollow plastic roar with a steady hiss of water on plastic. Present, close, constant level from start to end. No voices, no screams, no music. Seamless loop."}
+ ],
+ "loops": [
+  {"key": "loop_impellers", "prompt": "A big water pump impeller churning in a concrete basin, close: a loud rhythmic slosh and gulp of water on every blade pass, about one per second, with a clear whirring motor whine and a rattling steel grating. Full, present, mechanical, constant level. No voices, no music. Seamless loop."}
+ ],
+ "shots": [
+  {"key": "shot_a2_brass", "seconds": 5, "prompt": "Three loud clear metallic ticks of a brass ventilation grille cooling down, one after another, each a bright sharp tick with a short ringing echo under a stone dome. Close and present. No voices, no music."},
+  {"key": "shot_a4_drop", "seconds": 6, "prompt": "One loud heavy drop of water plunging into a deep pool at the bottom of a tall tiled shaft: a full round plunk with a clear splash ring and a long echo climbing up the shaft. Close and present. No voices, no music."},
+  {"key": "shot_a4_steps_above", "seconds": 6, "prompt": "Two loud slow wet bare footsteps slapping on tile in a tall tiled stairwell, one after another, each with a clear echo, then silence. Present and distinct. No voices, no breathing, no music."},
+  {"key": "shot_a6_bulb", "seconds": 4, "prompt": "A light bulb fizzes loudly for a second with a sharp electrical crackle and then bursts with one clear glassy pop. Close, dry and present. No voices, no music."},
+  {"key": "shot_a6_knock", "seconds": 5, "prompt": "Two loud slow knocks on a heavy wooden door, knuckles on wood, each a full hollow knock with a dry echo in a tall empty hall. Present and distinct, then silence. No voices, no footsteps, no music."},
+  {"key": "shot_p5_handle", "seconds": 5, "prompt": "A metal door handle is pushed down firmly and released: a loud clear squeak, a hard click of the latch and the spring snapping back, on a wooden door in a quiet corridor. Close and present. No voices, no footsteps, no music."}
+ ]
+}
