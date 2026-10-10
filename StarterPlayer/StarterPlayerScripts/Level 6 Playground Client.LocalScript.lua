@@ -258,7 +258,9 @@ local function sound(name, id, volume, looped)
 end
 -- Owner, 2026-10-03: the level was far too loud. GENERAL scales every effect and loop; the doll (its voice,
 -- its PA copies and its footsteps) is only halved; the music takes the general cut and then half again.
-local GENERAL, ENTITY, MUSIC = 0.35, 0.5, 0.5
+-- Owner, 2026-10-10: "al lyd fra entity over PA system ... er alt for højt, det skal skrues ned med 50%": ENTITY 0.5 -> 0.25
+-- (its mouth, the PA copies, the hall announcements, its footsteps and the exit-room line all go through it).
+local GENERAL, ENTITY, MUSIC = 0.35, 0.25, 0.5
 local SFX = {
 	ping = sound("Ping", "rbxasset://sounds/electronicpingshort.wav", 0.8 * GENERAL), -- dunk
 }
