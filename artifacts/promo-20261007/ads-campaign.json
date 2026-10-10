@@ -311,6 +311,11 @@
     "at": "2026-10-10T23:41:27",
     "budget_in_micro_usd": 6000000,
     "why": "owner, 2026-10-10 night: \"Kan vi ikke lave om p\u00e5 kampagnen som den bruger 6 credits om dagen og ikke 11\""
+   },
+   {
+    "at": "2026-10-10T23:43:43",
+    "duration_in_days": 6,
+    "why": "owner, 2026-10-11 just after midnight: \"Lad os sige 6 dage med 6 om dagen\""
    }
   ]
  },
