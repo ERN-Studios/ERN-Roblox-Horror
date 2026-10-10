@@ -21,9 +21,10 @@ View.MysteryTitlePool = {"UNRECORDED", "NO FOOTAGE", "TAPE ENDS HERE", "??? WHER
 	"UNMAPPED", "BLANK TAPE", "ANYONE THERE?", "??? EXIT?"}
 View.MysteryTitleMode = "fixed"
 View.Cards = {
+	-- LEVER_PATH_20261010 (puzzle-client): the loading steps teach the return trip to the lever.
 	[1] = {Eyebrow = "LEVEL 1", Title = "RESTORE THE POWER", Tip = "L1Entity", Steps = {
-		"Restore the fuse boxes. Fuses hide under the brightest ceiling lights.",
-		"Pull the levers. Follow the current to find them.", "Get out through the lit exit door."}},
+		"Fill the fuse boxes. Fuses sit in relays under the amber lights.",
+		"Then go back along the cable. It leads to the lever.", "Get out through the lit exit door."}},
 	[3] = {Eyebrow = "LEVEL 3", Title = "FIND THE CDS", Tip = "L3Manager", Steps = {
 		"Find the CDs hidden around the mall.", "Bring the CDs to the player.", "Follow the reader to the exit."}},
 	[4] = {Eyebrow = "LEVEL 4 \u{B7} THE LAST SHOW", Title = "RESTORE THE POWER", Tip = "L4Usher", Steps = {

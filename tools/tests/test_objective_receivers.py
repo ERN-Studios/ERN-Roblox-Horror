@@ -52,9 +52,17 @@ applyPuzzleStatus('begin', 3, 3)
 expect(RoundHud.State.Title, 'RESTORE THE POWER', 'begin title')
 expect(RoundHud.State.Count, 0, 'begin boxes')
 expect(RoundHud.State.Goal, 3, 'server box goal')
-expect(RoundHud.State.Lines[1], 'Find a fuse under a bright ceiling light.', 'no fuse guidance')
+-- LEVER_PATH_20261010 (puzzle-client): pin both actions and keep every guide line within the card budget.
+expect(RoundHud.State.Lines[1], 'Find a fuse relay under the amber lights.', 'no fuse guidance')
+expect(RoundHud.State.Lines[2], 'Pull the fuse out. Carry it to a fuse box.', 'no fuse extraction guidance')
+nearRelay = true
+publishObjective()
+expect(RoundHud.State.Status.Text, 'A fuse relay is close.', 'nearby relay status')
+expect(RoundHud.State.Status.Kind, 'warning', 'nearby relay warning')
 applyPuzzleStatus('carry', 2)
-expect(RoundHud.State.Lines[1], 'Fill a fuse box.', 'carried fuse next action')
+expect(RoundHud.State.Lines[1], 'Follow a colored cable to a fuse box.', 'carried fuse next action')
+expect(RoundHud.State.Lines[2], 'Insert the fuse. Then go back the same way.', 'carried fuse return guidance')
+expect(RoundHud.State.Status, nil, 'carried fuse suppresses nearby relay status')
 applyPuzzleStatus('boxes', 2, 3)
 expect(RoundHud.State.Count, 2, 'boxes update')
 expect(RoundHud.State.Done, false, 'partial boxes')
@@ -65,7 +73,15 @@ expect(RoundHud.State.Title, 'PULL THE LEVERS', 'phase transition')
 expect(RoundHud.State.Count, 0, 'lever reset')
 applyPuzzleStatus('lever', 2, 4, 8, true)
 expect(RoundHud.State.Count, 2, 'latched levers update')
-expect(RoundHud.State.Lines[2], 'They stay on. There is no time limit.', 'no invented countdown')
+expect(RoundHud.State.Lines[1], 'Go back along the cable from the fuse box.', 'lever return guidance')
+expect(RoundHud.State.Lines[2], 'Where it splits, follow the moving current.', 'lever junction guidance')
+expect(RoundHud.State.Status.Text, 'Levers stay on. No time limit.', 'no invented countdown')
+expect(RoundHud.State.Status.Kind, 'info', 'lever persistence is informational')
+for _, line in ipairs({
+    'Find a fuse relay under the amber lights.', 'Pull the fuse out. Carry it to a fuse box.',
+    'Follow a colored cable to a fuse box.', 'Insert the fuse. Then go back the same way.',
+    'Go back along the cable from the fuse box.', 'Where it splits, follow the moving current.',
+}) do expect(#line <= 43, true, 'guide line fits card: ' .. line) end
 applyPuzzleStatus('msg', 'You have no fuses')
 expect(RoundHud.Rows[1].Detail, 'You have no fuses', 'private refusal survives')
 applyPuzzleStatus('team', 'MikkelCzar', 'box', 'POWERED A BOX 1/3')
@@ -79,9 +95,22 @@ expect(RoundHud.State.Title, 'GET OUT', 'exit title')
 expect(RoundHud.State.Compass.Target, worldAttrs.ExitPos, 'replicated exit target')
 expect(RoundHud.State.Compass.State, 'locked', 'exit compass locked')
 expect(RoundHud.State.Count, nil, 'completed count retires')
+-- EXIT_COMPASS_20261010 (puzzle-client): one feed row per exit edge, rearmed by the next begin.
+expect(RoundHud.Rows[3].Detail, 'Exit open. Follow the green marker.', 'exit marker announcement')
+expect(RoundHud.Rows[3].Kind, 'LEVEL', 'exit announcement uses existing level feed')
+applyPuzzleStatus('exit')
+expect(#RoundHud.Rows, 3, 'duplicate exit does not repeat announcement')
 playerAttrs.Spectating = true
 applyPuzzleStatus('begin', 3, 3)
 expect(RoundHud.State.Lines[1], 'Find fuses and fill the fuse boxes.', 'no invented watched private carry')
+expect(RoundHud.State.Lines[2], 'Follow the colored cables to the fuse boxes.', 'watched general cable guidance preserved')
+expect(nearRelay, false, 'next begin clears old relay proximity')
+nearRelay = true
+publishObjective()
+expect(RoundHud.State.Status, nil, 'spectator never gets own-body proximity')
+applyPuzzleStatus('exit')
+expect(#RoundHud.Rows, 4, 'next puzzle rearms exit announcement for spectators')
+expect(RoundHud.Rows[4].Detail, 'Exit open. Follow the green marker.', 'spectator exit announcement')
 worldAttrs.SelectedLevel = 2
 local old = RoundHud.State
 applyPuzzleStatus('boxes', 1, 3)

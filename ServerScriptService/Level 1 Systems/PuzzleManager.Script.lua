@@ -2,8 +2,9 @@
 -- PASTE INTO: ServerScriptService → Insert Object → Script → rename to "PuzzleManager"
 --
 -- The win objective. Per player: 2 fuse relays spawn, 1 fuse box, 1 lever.
---   • Fuses are extracted from wall-mounted ZYNTRA relays. Extraction opens
---     the cabinet, flickers nearby lights, and emits noise that attracts Entity.
+-- RELAY_OPEN_20261010 (puzzle-server): exposed fuses keep the cabinet readable before and after use.
+--   • Fuses are extracted from open wall-mounted ZYNTRA relays. Extraction
+--     flickers nearby lights and emits noise that attracts Entity.
 --   • Fuse boxes are MOUNTED ON WALLS and need 1 fuse each. Inserting one ramps
 --     the danger (more flicker, faster entity) and makes the entity appear in
 --     that AREA (~10 cells away — near, not on top of you).
@@ -401,6 +402,51 @@ local function pickWallSpots(count, minDist, edgeOnly, avoid)
 	return frames
 end
 
+-- RELAY_FINDABLE_20261010 (puzzle-server): reserve one nearby relay before random stations can crowd it out.
+local function pickWallSpotNearElevator(minCells, maxCells, avoid)
+	avoid = avoid or {}
+	local GRID = attr("GRID", 40)
+	local CELL = attr("CELL", 24)
+	local O = attr("ORIGIN", -480)
+	local ELEV_X = attr("ELEV_X", 20)
+	local ELEV_Y = attr("ELEV_Y", 20)
+	local pits = pitRects()
+	local candidates = {}
+	for x = math.max(2, ELEV_X - maxCells), math.min(GRID - 1, ELEV_X + maxCells) do
+		for z = math.max(2, ELEV_Y - maxCells), math.min(GRID - 1, ELEV_Y + maxCells) do
+			local distance = math.max(math.abs(x - ELEV_X), math.abs(z - ELEV_Y))
+			if distance >= minCells and distance > 3 then
+				candidates[#candidates + 1] = { x, z }
+			end
+		end
+	end
+	-- Search the whole ring without replacement, so an unlucky random pass cannot miss a valid wall.
+	while #candidates > 0 do
+		local cell = table.remove(candidates, math.random(#candidates))
+		local c = cellCenter(cell[1], cell[2], CELL, O)
+		if inAnyPit(c.X, c.Z, pits) then continue end
+		local fy = floorY(c.X, c.Z)
+		if not fy then continue end
+		local pos = Vector3.new(c.X, fy, c.Z)
+		local wp, n = nearestWall(pos)
+		if wp then
+			local at = Vector3.new(wp.X, pos.Y + 4, wp.Z)
+			local mountX = math.floor((at.X - O) / CELL) + 1
+			local mountZ = math.floor((at.Z - O) / CELL) + 1
+			local distance = math.max(math.abs(mountX - ELEV_X), math.abs(mountZ - ELEV_Y))
+			local ok = distance >= minCells and distance <= maxCells and decorClear(at, 7)
+			for _, u in ipairs(avoid) do
+				if (u - at).Magnitude < 2.2 * CELL then ok = false break end
+			end
+			if ok then
+				table.insert(avoid, at)
+				return CFrame.lookAt(at, at + n)
+			end
+		end
+	end
+	return nil
+end
+
 -- exit mount flush against one of the 4 OUTER BORDER walls, facing inward, so
 -- the doorway actually leads out of the level
 local function pickExitOnBorder(avoid, minDist)
@@ -461,6 +507,8 @@ local function entityToArea(pos, cells)
 	for _ = 1, 150 do
 		local x = math.random(2, GRID - 1)
 		local z = math.random(2, GRID - 1)
+		-- ENTITY_UNSTUCK_20261010 (puzzle-server): the elevator shell has no safe random arrival point.
+		if x == attr("ELEV_X", -1) and z == attr("ELEV_Y", -1) then continue end
 		local cx = O + (x - 0.5) * CELL
 		local cz = O + (z - 0.5) * CELL
 		local fy = floorY(cx, cz)
@@ -741,8 +789,7 @@ local function workspaceSurfaceLights()
 	return list
 end
 
--- Wall-mounted replacement for loose floor fuses. The relay remains in the
--- world after use so its open, empty state tells players it was searched.
+-- RELAY_OPEN_20261010 (puzzle-server): the exposed cabinet stays in the world so an empty fuse slot records use.
 local function makeFuseRelay(cf, folder)
 	local model = Instance.new("Model")
 	model.Name = "FuseRelay"
@@ -769,27 +816,23 @@ local function makeFuseRelay(cf, folder)
 		Color3.fromRGB(23, 25, 24), Enum.Material.Metal).CanCollide = false
 	relayPart("InnerPanel", Vector3.new(4.85, 5.95, 0.2), CFrame.new(0, -0.1, -1.08),
 		Color3.fromRGB(69, 72, 68), Enum.Material.Metal).CanCollide = false
+	-- RELAY_FINDABLE_20261010 (seen in play): the kit's cabinet face is cream, and a cream fuse on it all but
+	-- vanished. A dark plate behind the fuse is what makes the open cabinet read as "the fuse is the thing to take".
+	local backing = relayPart("FuseBacking", Vector3.new(4.3, 5.4, 0.06), CFrame.new(0, -0.1, -1.215),
+		Color3.fromRGB(16, 18, 17), Enum.Material.Metal)
+	backing.CanCollide = false
+	backing.CanQuery = false
+	backing.CanTouch = false
 
-	local door = relayPart("RelayDoor", Vector3.new(5.15, 6.25, 0.2), CFrame.new(0, 0, -1.42),
-		Color3.fromRGB(38, 41, 40), Enum.Material.DiamondPlate, 0.18)
-	door.CanCollide = false
-	door.CanQuery = false -- a door swung open on a client must not block the prompt's line of sight
-	-- The hinge is on -X; +86 swings the door out into the room (-Z faces the room).
-	-- Level 1 Hardware Client animates the same swing from these attributes.
-	local doorHinge = cf * CFrame.new(-2.58, 0, -1.42)
-	local openDoorCF = doorHinge * CFrame.Angles(0, math.rad(86), 0) * CFrame.new(2.58, 0, 0)
-	model:SetAttribute("DoorHinge", doorHinge)
-	model:SetAttribute("DoorHingeOffset", 2.58)
-	model:SetAttribute("DoorOpenDegrees", 86)
-
+	-- RELAY_FINDABLE_20261010 (puzzle-server): the visible fuse lights its own recess until extraction.
 	local core = relayPart("Fuse", Vector3.new(0.9, 2.65, 0.72), CFrame.new(0, -0.35, -1.25),
 		Color3.fromRGB(218, 174, 38), Enum.Material.Neon)
 	core.CanCollide = false
 	core.CanQuery = false
 	local coreLight = Instance.new("PointLight")
 	coreLight.Color = core.Color
-	coreLight.Brightness = 0.8
-	coreLight.Range = 8
+	coreLight.Brightness = 1.1 -- 1.6 washed the cabinet out (seen in play)
+	coreLight.Range = 11
 	coreLight.Parent = core
 	local capTop = relayPart("FuseCap", Vector3.new(1.08, 0.22, 0.86), CFrame.new(0, 1.02, -1.25),
 		Color3.fromRGB(81, 78, 68), Enum.Material.Metal)
@@ -801,33 +844,65 @@ local function makeFuseRelay(cf, folder)
 	end
 	local fuseParts = { core, capTop, capBottom }
 
-	local indicator = relayPart("RelayIndicator", Vector3.new(1.1, 0.55, 0.24), CFrame.new(1.65, 2.35, -1.56),
+	-- RELAY_FINDABLE_20261010 (puzzle-server): an anchored amber bar throws a pool below the readable header.
+	local indicator = relayPart("RelayIndicator", Vector3.new(5.85, 0.2, 0.3), CFrame.new(0, 3.63, -0.16),
 		Color3.fromRGB(255, 178, 42), Enum.Material.Neon)
 	indicator.CanCollide = false
 	indicator.CanQuery = false
+	indicator.CanTouch = false
 	local indicatorLight = Instance.new("PointLight")
-	indicatorLight.Color = indicator.Color
-	indicatorLight.Brightness = 1.4
-	indicatorLight.Range = 13
+	indicatorLight.Color = Color3.fromRGB(255, 170, 50)
+	indicatorLight.Brightness = 1.1 -- 1.8 washed the cabinet out (seen in play)
+	indicatorLight.Range = 20
 	indicatorLight.Shadows = true
 	indicatorLight.Parent = indicator
 
-	local handle = relayPart("ReleaseHandle", Vector3.new(0.38, 1.7, 0.38), CFrame.new(-1.85, 0.15, -1.72)
-		* CFrame.Angles(0, 0, math.rad(-18)), Color3.fromRGB(184, 116, 31), Enum.Material.Metal)
-	handle.CanCollide = false
-	handle.CanQuery = false
-
-	local labelPlate = relayPart("RelayLabel", Vector3.new(3.25, 0.72, 0.16), CFrame.new(-0.35, 2.35, -1.55),
+	-- RELAY_FINDABLE_20261010 (puzzle-server): a self-lit fuse pictogram distinguishes extraction from insertion.
+	local labelPlate = relayPart("RelaySign", Vector3.new(5.85, 1.3, 0.24), CFrame.new(0, 4.45, -0.13),
 		Color3.fromRGB(13, 16, 15), Enum.Material.Metal)
 	labelPlate.CanCollide = false
 	labelPlate.CanQuery = false
+	labelPlate.CanTouch = false
 	local surface = Instance.new("SurfaceGui")
 	surface.Face = Enum.NormalId.Front
-	surface.CanvasSize = Vector2.new(520, 120)
-	surface.LightInfluence = 0.25
+	surface.CanvasSize = Vector2.new(780, 173)
+	surface.LightInfluence = 0
+	surface.Brightness = 1
 	surface.Parent = labelPlate
+	local pictogram = {}
+	for _, spec in ipairs({
+		{ "FuseIconBody", 77, 27, 46, 120, Color3.fromRGB(255, 198, 76) },
+		{ "FuseIconCapTop", 70, 15, 60, 16, Color3.fromRGB(120, 112, 96) },
+		{ "FuseIconCapBottom", 70, 139, 60, 16, Color3.fromRGB(120, 112, 96) },
+	}) do
+		local frame = Instance.new("Frame")
+		frame.Name = spec[1]
+		frame.Position = UDim2.fromOffset(spec[2], spec[3])
+		frame.Size = UDim2.fromOffset(spec[4], spec[5])
+		frame.BackgroundColor3 = spec[6]
+		frame.BorderSizePixel = 0
+		frame.Parent = surface
+		if spec[1] == "FuseIconBody" then
+			local corner = Instance.new("UICorner")
+			corner.CornerRadius = UDim.new(0, 10)
+			corner.Parent = frame
+		end
+		pictogram[#pictogram + 1] = frame
+	end
+	local title = Instance.new("TextLabel")
+	title.Name = "Title"
+	title.Position = UDim2.fromOffset(170, 6)
+	title.Size = UDim2.fromOffset(600, 100)
+	title.BackgroundTransparency = 1
+	title.Font = Enum.Font.GothamBlack
+	title.Text = "FUSE"
+	title.TextColor3 = Color3.fromRGB(255, 198, 76)
+	title.TextScaled = true
+	title.Parent = surface
 	local label = Instance.new("TextLabel")
-	label.Size = UDim2.fromScale(1, 1)
+	label.Name = "Status"
+	label.Position = UDim2.fromOffset(170, 110)
+	label.Size = UDim2.fromOffset(600, 56)
 	label.BackgroundTransparency = 1
 	label.Font = Enum.Font.Code
 	label.Text = "ZYNTRA RELAY  //  LIVE"
@@ -835,19 +910,7 @@ local function makeFuseRelay(cf, folder)
 	label.TextScaled = true
 	label.Parent = surface
 
-	-- These controls live on the door. Weld them to it so opening the cabinet
-	-- cannot leave the label, lamp, or handle floating beside the relay.
-	for _, doorControl in ipairs({ indicator, handle, labelPlate }) do
-		doorControl.Anchored = false
-		doorControl.Massless = true
-		local weld = Instance.new("WeldConstraint")
-		weld.Part0 = door
-		weld.Part1 = doorControl
-		weld.Parent = doorControl
-	end
-
-	-- The prompt sits just in front of the closed door face but hangs off the body, so the door can
-	-- swing open on clients during the hold without carrying the prompt away.
+	-- RELAY_OPEN_20261010 (puzzle-server): the body keeps the original prompt position and line-of-sight contract.
 	local promptPoint = Instance.new("Attachment")
 	promptPoint.Name = "InteractionPoint"
 	promptPoint.Position = Vector3.new(0, 0, -1.17)
@@ -856,19 +919,20 @@ local function makeFuseRelay(cf, folder)
 	prompt.HoldDuration = RELAY_HOLD_TIME
 	prompt.KeyboardKeyCode = Enum.KeyCode.E
 
+	-- RELAY_FINDABLE_20261010 (puzzle-server): a nearby player can hear the live cabinet before seeing its fuse.
 	local hum = Instance.new("Sound")
 	hum.Name = "RelayHum"
 	hum.SoundId = "rbxasset://sounds/electronicpingshort.wav"
-	hum.Volume = 0.055
+	hum.Volume = 0.16
 	hum.PlaybackSpeed = 0.22
 	hum.Looped = true
-	hum.RollOffMinDistance = 4
-	hum.RollOffMaxDistance = 28
+	hum.RollOffMode = Enum.RollOffMode.InverseTapered
+	hum.RollOffMinDistance = 8
+	hum.RollOffMaxDistance = 60
 	hum.Parent = body
 	hum:Play()
 
-	-- A restrained cluster of warm ceiling lamps helps exploration without
-	-- turning the relay into a beacon visible across the entire maze.
+	-- RELAY_FINDABLE_20261010 (puzzle-server): amber separates live relay clusters from the normal cream ceiling.
 	local candidates = {}
 	for _, item in ipairs(workspaceSurfaceLights()) do
 		if item.Parent and item.Parent:IsA("BasePart") then
@@ -893,11 +957,11 @@ local function makeFuseRelay(cf, folder)
 			panel:SetAttribute("FuseBasePanelMaterial", panel.Material.Name)
 		end
 		light:SetAttribute("FuseClusterCount", count + 1)
-		light.Brightness = math.max(light.Brightness, 2.6)
-		light.Range = math.max(light.Range, 42)
-		light.Color = Color3.fromRGB(255, 224, 150)
+		light.Brightness = math.max(light.Brightness, 2.6) -- 3.2 flattened the whole room to one yellow (seen in play)
+		light.Range = math.max(light.Range, 48)
+		light.Color = Color3.fromRGB(255, 176, 64)
 		light.Enabled = true
-		panel.Color = Color3.fromRGB(255, 230, 155)
+		panel.Color = Color3.fromRGB(255, 206, 112) -- the skin draws the panel matte: a deeper orange read as a red alarm tile
 		panel.Material = Enum.Material.Neon
 		cluster[#cluster + 1] = light
 	end
@@ -939,12 +1003,13 @@ local function makeFuseRelay(cf, folder)
 				for _, light in ipairs(cluster) do
 					if light and light.Parent then light.Brightness = 0.03 end
 				end
-				indicatorLight.Brightness = 0.05
+				-- RELAY_FINDABLE_20261010 (puzzle-server): a late extraction flicker must not relight an already empty cabinet.
+				if model:GetAttribute("ContainsFuse") == true then indicatorLight.Brightness = 0.05 end
 				task.wait(0.08)
 				for _, light in ipairs(cluster) do
 					if light and light.Parent then light.Brightness = 3.4 end
 				end
-				indicatorLight.Brightness = 2.2
+				if model:GetAttribute("ContainsFuse") == true then indicatorLight.Brightness = 1.5 end
 				task.wait(0.1)
 			end
 			releaseCluster()
@@ -958,12 +1023,11 @@ local function makeFuseRelay(cf, folder)
 		body = body,
 		core = core,
 		fuseParts = fuseParts,
-		door = door,
-		openDoorCF = openDoorCF,
 		indicator = indicator,
 		indicatorLight = indicatorLight,
 		label = label,
-		handle = handle,
+		title = title,
+		pictogram = pictogram,
 		hum = hum,
 		prompt = prompt,
 		flickerAndRelease = flickerAndRelease,
@@ -1030,6 +1094,27 @@ local function makeBox(cf, folder)
 	statusLabel.TextScaled = true
 	statusLabel.Parent = gui
 
+	-- RELAY_FINDABLE_20261010 (puzzle-server): the insertion header separates a fuse box from an extraction relay.
+	local sign = build(cf, Vector3.new(4.45, 0.9, 0.2), CFrame.new(0, 3.2, -0.12),
+		Color3.fromRGB(13, 16, 15), Enum.Material.Metal, model, "FuseBoxSign")
+	sign.CanCollide = false
+	sign.CanQuery = false
+	sign.CanTouch = false
+	local signGui = Instance.new("SurfaceGui")
+	signGui.Face = Enum.NormalId.Front
+	signGui.CanvasSize = Vector2.new(600, 120)
+	signGui.LightInfluence = 0
+	signGui.Brightness = 1
+	signGui.Parent = sign
+	local signLabel = Instance.new("TextLabel")
+	signLabel.Size = UDim2.fromScale(1, 1)
+	signLabel.BackgroundTransparency = 1
+	signLabel.Font = Enum.Font.GothamBlack
+	signLabel.Text = "INSERT FUSE"
+	signLabel.TextColor3 = Color3.fromRGB(230, 75, 70)
+	signLabel.TextScaled = true
+	signLabel.Parent = signGui
+
 	local pp = makePrompt(body, "Insert Fuse", "Fuse Box (0/" .. FUSES_PER_BOX .. ")", 12)
 	pp.RequiresLineOfSight = false
 	pp.MaxActivationDistance = 12
@@ -1037,7 +1122,7 @@ local function makeBox(cf, folder)
 	model.Parent = folder
 	return {
 		model = model, cf = cf, body = body, ind = ind, indicatorLight = indicatorLight,
-		slots = slots, statusLabel = statusLabel, prompt = pp, count = 0, complete = false
+		slots = slots, statusLabel = statusLabel, signLabel = signLabel, prompt = pp, count = 0, complete = false
 	}
 end
 
@@ -1122,6 +1207,15 @@ local function makeLever(cf, folder)
 	local statusLight = build(cf, Vector3.new(0.62, 0.62, 0.2), CFrame.new(1.05, 1.75, -0.72),
 		Color3.fromRGB(125, 22, 22), Enum.Material.Neon, model, "StatusLight")
 	statusLight.CanQuery = false
+	-- LEVER_PATH_20261010 (puzzle-server): a cool beacon remains distinct during the red building alert.
+	local beacon = Instance.new("PointLight")
+	beacon.Name = "LeverBeacon"
+	beacon.Enabled = false
+	beacon.Color = Color3.fromRGB(215, 235, 255)
+	beacon.Brightness = 1
+	beacon.Range = 24
+	beacon.Shadows = false
+	beacon.Parent = statusLight
 	local statusPlate = build(cf, Vector3.new(2.1, 0.62, 0.2), CFrame.new(-0.35, 1.75, -0.72),
 		Color3.fromRGB(18, 19, 21), Enum.Material.Metal, model, "StatusPlate")
 	statusPlate.CanQuery = false
@@ -1137,6 +1231,27 @@ local function makeLever(cf, folder)
 	statusLabel.TextColor3 = Color3.fromRGB(230, 70, 65)
 	statusLabel.TextScaled = true
 	statusLabel.Parent = sg
+
+	-- LEVER_PATH_20261010 (puzzle-server): a self-lit header makes the destination readable beyond prompt range.
+	local sign = build(cf, Vector3.new(3.45, 1, 0.2), CFrame.new(0, 3.35, -0.12),
+		Color3.fromRGB(13, 16, 15), Enum.Material.Metal, model, "LeverSign")
+	sign.CanCollide = false
+	sign.CanQuery = false
+	sign.CanTouch = false
+	local signGui = Instance.new("SurfaceGui")
+	signGui.Face = Enum.NormalId.Front
+	signGui.CanvasSize = Vector2.new(420, 120)
+	signGui.LightInfluence = 0
+	signGui.Brightness = 1
+	signGui.Parent = sign
+	local signLabel = Instance.new("TextLabel")
+	signLabel.Size = UDim2.fromScale(1, 1)
+	signLabel.BackgroundTransparency = 1
+	signLabel.Font = Enum.Font.GothamBlack
+	signLabel.Text = "LEVER"
+	signLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
+	signLabel.TextScaled = true
+	signLabel.Parent = signGui
 
 	local anchor = Instance.new("Part")
 	anchor.Name = "Interact"
@@ -1159,12 +1274,24 @@ local function makeLever(cf, folder)
 	pullSound.RollOffMaxDistance = 45
 	pullSound.Parent = plate
 
+	-- LEVER_PATH_20261010 (puzzle-server): the ready lever can be heard locally without another uploaded asset.
+	local readyPing = Instance.new("Sound")
+	readyPing.Name = "LeverReadyPing"
+	readyPing.SoundId = "rbxasset://sounds/electronicpingshort.wav"
+	readyPing.PlaybackSpeed = 1.5
+	readyPing.Volume = 0.45
+	readyPing.RollOffMode = Enum.RollOffMode.InverseTapered
+	readyPing.RollOffMinDistance = 10
+	readyPing.RollOffMaxDistance = 80
+	readyPing.Parent = plate
+
 	model:SetAttribute("LeverHinge", cf * LEVER_HINGE)
 	model:SetAttribute("LeverUp", LEVER_UP)
 	model:SetAttribute("LeverDown", LEVER_DOWN)
 	model.Parent = folder
 	return { model = model, cf = cf, plate = plate, handle = handle, knob = knob,
 		prompt = pp, statusLight = statusLight, statusLabel = statusLabel,
+		beacon = beacon, signLabel = signLabel, readyPing = readyPing,
 		pullSound = pullSound, latched = false }
 end
 
@@ -1370,7 +1497,7 @@ local function startPuzzle()
 	session = {
 		active = true, stage = "fuses", conns = {}, folder = folder,
 		boxes = {}, levers = {}, circuits = {}, relays = {}, fuses = {}, carried = {}, exit = nil,
-		boxesDone = 0, boxCount = boxCount, latchMode = true,
+		boxesDone = 0, boxCount = boxCount,
 		escaped = {}, escapeAnnounced = false, -- who's out + first-escape latch
 		participants = roundPlayerSet, fuseCharacters = {},
 	}
@@ -1440,6 +1567,8 @@ local function startPuzzle()
 
 	-- Wall relays share the station avoidance list with fuse boxes, levers, and
 	-- the exit, so props and puzzle machinery cannot conceal or overlap them.
+	-- RELAY_FINDABLE_20261010 (puzzle-server): reserve the first hunt inside the elevator's 4–6-cell ring.
+	local starterCF = pickWallSpotNearElevator(4, 6, stations)
 	local relayFrames = pickWallSpots(fuseCount, 2.2 * CELLv, false, stations)
 	if #relayFrames < fuseCount then
 		-- Top up to the SPAWN target with tighter spacing, not merely to what
@@ -1448,6 +1577,11 @@ local function startPuzzle()
 		for _, fallbackCF in ipairs(pickWallSpots(fuseCount - #relayFrames, 1.1 * CELLv, false, stations)) do
 			table.insert(relayFrames, fallbackCF)
 		end
+	end
+	-- RELAY_FINDABLE_20261010 (puzzle-server): keep the party's spawn target while replacing one distant relay.
+	if starterCF then
+		if #relayFrames >= fuseCount then table.remove(relayFrames) end
+		table.insert(relayFrames, 1, starterCF)
 	end
 	workspace:SetAttribute("Level1RelaysPlaced", #relayFrames)
 	for _, cf in ipairs(relayFrames) do
@@ -1461,7 +1595,7 @@ local function startPuzzle()
 			local extractionRecord = owningSession.fuseCharacters[player]
 			local extractionPosition = player.Character.HumanoidRootPart.Position
 			relay.extracting = true
-			-- Clients swing the door open and fly the fuse to whoever took it (Level 1 Hardware Client).
+			-- RELAY_OPEN_20261010 (puzzle-server): clients fly the exposed fuse to whoever took it.
 			status:FireAllClients("relayextract", relay.model, player)
 			relay.prompt.Enabled = false
 			relay.label.Text = "RELEASING  //  STAND BY"
@@ -1528,7 +1662,7 @@ local function startPuzzle()
 				relay.extracted = true
 				relay.model:SetAttribute("ContainsFuse", false)
 				workspace:SetAttribute("Level1RelaysExtracted", (workspace:GetAttribute("Level1RelaysExtracted") or 0) + 1)
-				relay.door.CFrame = relay.openDoorCF
+				-- RELAY_OPEN_20261010 (puzzle-server): extraction destroys the fuse without indexing a removed door.
 				for _, fusePart in ipairs(relay.fuseParts) do
 					if fusePart.Parent then fusePart:Destroy() end
 				end
@@ -1538,6 +1672,14 @@ local function startPuzzle()
 				relay.indicatorLight.Range = 4
 				relay.label.Text = "EMPTY  //  POWER ISOLATED"
 				relay.label.TextColor3 = Color3.fromRGB(188, 89, 68)
+				-- RELAY_FINDABLE_20261010 (puzzle-server): the empty header records a searched cabinet from a distance.
+				if relay.title then
+					relay.title.Text = "EMPTY"
+					relay.title.TextColor3 = Color3.fromRGB(188, 89, 68)
+				end
+				for _, frame in ipairs(relay.pictogram or {}) do
+					if frame.Parent then frame.BackgroundTransparency = 0.7 end
+				end
 
 				updateEntityObjectiveTarget()
 			end)
@@ -1618,6 +1760,11 @@ local function startPuzzle()
 				box.indicatorLight.Range = 10
 				box.statusLabel.Text = "POWER RESTORED"
 				box.statusLabel.TextColor3 = Color3.fromRGB(90, 255, 115)
+				-- RELAY_FINDABLE_20261010 (puzzle-server): a completed insertion header no longer asks for another fuse.
+				if box.signLabel then
+					box.signLabel.Text = "POWERED"
+					box.signLabel.TextColor3 = Color3.fromRGB(90, 255, 115)
+				end
 				session.boxesDone += 1
 				status:FireAllClients("boxes", session.boxesDone, session.boxCount)
 				-- This pair's cable now carries power OUT of the box: the client
@@ -1721,21 +1868,54 @@ local function startPuzzle()
 	function session.updateLeverLights()
 		if not session then return end
 		for _, lv in ipairs(session.levers) do
-			local selfOn = lv.latched
-			if lv.statusLabel then
-				if session.stage ~= "levers" then
-					lv.statusLabel.Text = "LOCKED"
-					lv.statusLabel.TextColor3 = Color3.fromRGB(230, 70, 65)
-					lv.statusLight.Color = Color3.fromRGB(125, 22, 22)
-				elseif selfOn then
+			-- LEVER_PATH_20261010 (puzzle-server): one state drives every lever cue, including latched levers after shutdown.
+			local state = lv.latched and "LATCHED" or (session.stage == "levers" and "READY" or "LOCKED")
+			if lv.model then lv.model:SetAttribute("LeverState", state) end
+			if state == "LATCHED" then
+				if lv.statusLabel then
 					lv.statusLabel.Text = "LATCHED"
 					lv.statusLabel.TextColor3 = Color3.fromRGB(100, 255, 125)
-					lv.statusLight.Color = Color3.fromRGB(55, 235, 80)
-				else
+				end
+				if lv.statusLight then lv.statusLight.Color = Color3.fromRGB(55, 235, 80) end
+				if lv.beacon then
+					lv.beacon.Enabled = true
+					lv.beacon.Color = Color3.fromRGB(55, 235, 80)
+					lv.beacon.Brightness = 0.9
+					lv.beacon.Range = 14
+				end
+				if lv.signLabel then
+					lv.signLabel.Text = "ON"
+					lv.signLabel.TextColor3 = Color3.fromRGB(55, 235, 80)
+				end
+				if lv.readyPing then lv.readyPing:Stop() end
+			elseif state == "READY" then
+				if lv.statusLabel then
 					lv.statusLabel.Text = "READY"
 					lv.statusLabel.TextColor3 = Color3.fromRGB(255, 185, 65)
-					lv.statusLight.Color = Color3.fromRGB(235, 120, 30)
 				end
+				if lv.statusLight then lv.statusLight.Color = Color3.fromRGB(235, 120, 30) end
+				if lv.beacon then
+					lv.beacon.Enabled = true
+					lv.beacon.Color = Color3.fromRGB(215, 235, 255)
+					lv.beacon.Brightness = 1 -- 2 plus the client's pulse blew the wall out to white (seen in play)
+					lv.beacon.Range = 24
+				end
+				if lv.signLabel then
+					lv.signLabel.Text = "PULL  \u{25BC}"
+					lv.signLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+				end
+			else
+				if lv.statusLabel then
+					lv.statusLabel.Text = "LOCKED"
+					lv.statusLabel.TextColor3 = Color3.fromRGB(230, 70, 65)
+				end
+				if lv.statusLight then lv.statusLight.Color = Color3.fromRGB(125, 22, 22) end
+				if lv.beacon then lv.beacon.Enabled = false end
+				if lv.signLabel then
+					lv.signLabel.Text = "LEVER"
+					lv.signLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
+				end
+				if lv.readyPing then lv.readyPing:Stop() end
 			end
 			if lv.statusLights then
 				for j, sl in ipairs(lv.statusLights) do
@@ -2270,6 +2450,8 @@ local function startPuzzle()
 		station.model:SetAttribute("CircuitColorName", WIRE_COLOR_NAMES[pairIndex])
 
 		local isFuseBox = station.model.Name:find("^FuseBox") ~= nil
+		-- RELAY_FINDABLE_20261010 (puzzle-server): the insertion header uses the same colour as its paired cable.
+		if isFuseBox and station.signLabel then station.signLabel.TextColor3 = color end
 		local jackY = isFuseBox and -1.76 or -1.88
 		local jackZ = isFuseBox and -1.43 or -0.73
 		local jack = build(station.cf, Vector3.new(isFuseBox and 2.65 or 2.45, 0.24, 0.22),
@@ -2422,7 +2604,9 @@ local function startPuzzle()
 	end))
 
 	function session.onAllBoxes()
-		if session.stage ~= "fuses" then return end
+		if not session or not session.active or session.stage ~= "fuses" then return end
+		-- LEVER_PATH_20261010 (puzzle-server): cue tasks belong to this round and must not follow a replacement session.
+		local owningSession = session
 		session.stage = "levers"
 		updateEntityObjectiveTarget()
 
@@ -2432,20 +2616,25 @@ local function startPuzzle()
 		-- no remote event is needed.
 		workspace:SetAttribute("LightMode", "ALERT")
 
-		-- Show POWER RESTORED for three seconds, then blink ALERT.
+		-- LEVER_PATH_20261010 (puzzle-server): leave a steady powered lamp while the plate explains where to go next.
 		for _, poweredBox in ipairs(session.boxes) do
 			task.spawn(function()
 				task.wait(3)
 				local show = true
-				while session and session.active and session.stage == "levers"
+				while session == owningSession and owningSession.active and owningSession.stage == "levers"
 					and poweredBox.model and poweredBox.model.Parent do
-					poweredBox.statusLabel.Text = show and "ALERT" or ""
-					poweredBox.statusLabel.TextColor3 = Color3.fromRGB(255, 65, 55)
-					poweredBox.ind.Color = show and Color3.fromRGB(255, 45, 35) or Color3.fromRGB(90, 8, 8)
-					poweredBox.indicatorLight.Color = poweredBox.ind.Color
-					poweredBox.indicatorLight.Brightness = show and 2.2 or 0.25
+					if poweredBox.statusLabel then
+						poweredBox.statusLabel.Text = show and "FOLLOW CABLE" or "TO THE LEVER"
+						poweredBox.statusLabel.TextColor3 = poweredBox.model:GetAttribute("CircuitColor")
+							or Color3.fromRGB(90, 255, 115)
+					end
+					if poweredBox.ind then poweredBox.ind.Color = Color3.fromRGB(50, 220, 60) end
+					if poweredBox.indicatorLight then
+						poweredBox.indicatorLight.Color = Color3.fromRGB(50, 220, 60)
+						poweredBox.indicatorLight.Brightness = 1.8
+					end
 					show = not show
-					task.wait(0.45)
+					task.wait(1.2)
 				end
 			end)
 		end
@@ -2453,8 +2642,21 @@ local function startPuzzle()
 		for _, lv in ipairs(session.levers) do
 			lv.prompt.Enabled = true
 			lv.prompt.ObjectText = "Power Exit Door"
+			-- LEVER_PATH_20261010 (puzzle-server): a ready lever pings only until latched or its round ends.
+			if lv.readyPing then
+				task.spawn(function()
+					while session == owningSession and owningSession.active and owningSession.stage == "levers"
+						and not lv.latched and lv.model and lv.model.Parent and lv.readyPing.Parent do
+						lv.readyPing:Play()
+						task.wait(2.4)
+					end
+					if lv.readyPing.Parent then lv.readyPing:Stop() end
+				end)
+			end
 		end
 		status:FireAllClients("levers", #session.levers, 0)
+		-- LEVER_PATH_20261010 (puzzle-server): the shared feed tells the party to leave the completed boxes immediately.
+		status:FireAllClients("msg", "Power on. Go back along the cable.")
 		if session.broadcastLeverStatus then session.broadcastLeverStatus() end
 		if session.updateLeverLights then session.updateLeverLights() end
 
