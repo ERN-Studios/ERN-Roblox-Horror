@@ -121,6 +121,14 @@ for key, row in pairs(SPEC.sounds) do
 	sound:SetAttribute("Provider", "ElevenLabs")
 	sound:SetAttribute("Gain", row.gain)   -- what the client multiplies its volume by: the masters are not equally loud
 end
+if SPEC.face then
+	bank:SetAttribute("FaceSheets", SPEC.face.sheets)
+	bank:SetAttribute("FaceFrames", SPEC.face.frames)
+	bank:SetAttribute("FaceFps", SPEC.face.fps)
+	bank:SetAttribute("FaceGrid", SPEC.face.grid)
+	bank:SetAttribute("FaceFrame", SPEC.face.frame)
+end
+table.insert(report, "face sheets: " .. tostring(bank:GetAttribute("FaceSheets")))
 bank.Parent = ReplicatedStorage
 table.sort(report)
 return string.format("INSTALLED %%s: %%d meshes; sounds %%d added, %%d re-pointed, %%d in the folder\\n%%s", SPEC.revision, #fresh:GetChildren(),
@@ -162,10 +170,18 @@ def main():
             if row.get('moderation') == 'Approved':
                 sounds[key] = {'id': str(row['asset_id']), 'sha': row['master_sha256'], 'loop': key in ('shade_presence', 'shade_hands'),
                                'gain': levels.get(key, {}).get('gain', 1)}
+    # the face in the dark: only when every sheet is uploaded and approved (the client shows two eyes until then)
+    face = None
+    face_spec, face_ids = ROOT / 'artifacts' / 'level2-shade-face-20261010' / 'face.json', HERE / 'face_ids.json'
+    if face_spec.exists() and face_ids.exists():
+        spec, known = json.loads(face_spec.read_text()), json.loads(face_ids.read_text())
+        if all(known.get(name, {}).get('moderation') == 'Approved' for name in spec['sheets']):
+            face = {'sheets': ','.join(str(known[name]['asset_id']) for name in spec['sheets']), 'frames': spec['frames'],
+                    'fps': spec['fps'], 'grid': spec['grid'], 'frame': spec['frame']}
     if dry:
-        print(f'{len(sounds)} approved sounds would be installed')
+        print(f'{len(sounds)} approved sounds would be installed; face sheets {"ready" if face else "not ready"}')
         return
-    print(studio.luau(BUILD % json.dumps({'revision': REVISION, 'meshes': meshes, 'sounds': sounds})))
+    print(studio.luau(BUILD % json.dumps({'revision': REVISION, 'meshes': meshes, 'sounds': sounds, 'face': face})))
 
 
 if __name__ == '__main__':

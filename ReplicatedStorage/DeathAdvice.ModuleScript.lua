@@ -95,11 +95,12 @@ DeathAdvice.Causes = {
 	-- Level 2 Shade.ModuleScript.lua, kill(): the shadow reached StrikeDistance (4.5 studs) behind the hunted player
 	-- without that player holding it in view for SeenSeconds (0.3 s).
 	-- WHY THIS TIP: stalkStep sends it away (recoil) the moment the hunted player has had it on screen that long, and
-	-- it only ever closes in while unwatched; its whispers are played from where it is.
+	-- it only ever closes in while unwatched; its whispers are played from where it is. pickStill starts a hunt on
+	-- anybody who has not left a four-stud circle for StillSeconds (10), every time, so moving on is the other half.
 	L2Shade = {
 		Title = "THE SHADOW TOOK YOU",
 		Cause = "A shadow reached you from behind while you looked away.",
-		Tip = "When the whispers close in behind you, turn round and look at it.",
+		Tip = "Keep moving, and when whispers close in behind you, turn and look.",
 	},
 	-- Level 3 Mall Manager AI Controller.ModuleScript.lua:2424.
 	-- WHY THIS TIP: a hidden player is reached through a table check --

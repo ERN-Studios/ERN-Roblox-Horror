@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-10T16:12:52.680929+00:00",
+  "capturedAtUtc": "2026-10-10T16:35:44.625805+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -49,8 +49,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/DeathAdvice.ModuleScript.lua",
-      "bytes": 9533,
-      "sha256": "55ab1db79ecb8ac2fe18e840d5bdef082b82f704b3af47143c6937539db3fbb0",
+      "bytes": 9676,
+      "sha256": "c7b40dc1f69fc93b75789fbad39eefdb04b018cf454ae4d1325510061c64afc3",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4963,8 +4963,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Shade.ModuleScript.lua",
-      "bytes": 19761,
-      "sha256": "31a8603c27a67aeca6f37438ed173f67bb69d93c29a7f99c5b5c4b1d1d66d637",
+      "bytes": 21771,
+      "sha256": "58a2ebaac3096c7621f88994cdf15f0ffb77d0fc3f74c31d7e003c054884d950",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4982,8 +4982,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Shade Client.LocalScript.lua",
-      "bytes": 34193,
-      "sha256": "fddf1b172806ac7c5ce9833728e38b8db129cc0049a46e580fa698baf994f697",
+      "bytes": 39412,
+      "sha256": "2d60f1ba78a58e555ab68c575ec244107bc6b28ecfae6aba2967fc751426541d",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

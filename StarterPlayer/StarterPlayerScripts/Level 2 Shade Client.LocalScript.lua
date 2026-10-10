@@ -283,11 +283,85 @@ black.Size, black.BackgroundColor3, black.BackgroundTransparency, black.BorderSi
 black.Parent = gui
 gui.Parent = player:WaitForChild("PlayerGui")
 
+-- The face in the dark (owner, 2026-10-10: "et meget klamt shadow figure ansigt, som vises når man er blevet trukket
+-- ned i det shadow realm ... omridset af hovedet og hvide lysende øjne og ingen mund"). A Blender animation played as a
+-- flipbook over the black: sheets of FaceGrid x FaceGrid frames, their asset ids in the folder's attribute FaceSheets
+-- (tools/level2_shade/install_shade.py). Until the pictures exist two eyes open in the dark instead.
+local faceHolder = Instance.new("Frame")
+faceHolder.AnchorPoint, faceHolder.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5)
+faceHolder.Size, faceHolder.SizeConstraint = UDim2.fromScale(1, 1), Enum.SizeConstraint.RelativeYY
+faceHolder.BackgroundTransparency, faceHolder.BorderSizePixel, faceHolder.ZIndex, faceHolder.Visible = 1, 0, 6, false
+faceHolder.Parent = gui
+local face = {labels = {}, eyes = {}, source = nil, frames = 0, fps = 12, grid = 3, size = 340}
+for index = 1, 2 do
+	local eye = Instance.new("Frame")
+	eye.AnchorPoint, eye.BackgroundColor3, eye.BorderSizePixel, eye.ZIndex, eye.Visible = Vector2.new(0.5, 0.5), Color3.new(1, 1, 1), 0, 7, false
+	eye.Position = UDim2.fromScale(index == 1 and 0.41 or 0.6, 0.44)
+	local round = Instance.new("UICorner")
+	round.CornerRadius = UDim.new(1, 0)
+	round.Parent = eye
+	eye.Parent = faceHolder
+	face.eyes[index] = eye
+end
+local function faceSetup()
+	local sheets = bank:GetAttribute("FaceSheets")
+	if type(sheets) ~= "string" or sheets == face.source then return end
+	face.source = sheets
+	for _, label in ipairs(face.labels) do label:Destroy() end
+	face.labels = {}
+	face.grid = math.max(1, tonumber(bank:GetAttribute("FaceGrid")) or 3)
+	face.size = tonumber(bank:GetAttribute("FaceFrame")) or 340
+	face.fps = tonumber(bank:GetAttribute("FaceFps")) or 12
+	for id in sheets:gmatch("%d+") do
+		local label = Instance.new("ImageLabel")
+		label.BackgroundTransparency, label.BorderSizePixel, label.ZIndex, label.Visible = 1, 0, 6, false
+		label.Size, label.Image = UDim2.fromScale(1, 1), "rbxassetid://" .. id
+		label.ImageRectSize = Vector2.new(face.size, face.size)
+		label.Parent = faceHolder
+		table.insert(face.labels, label)
+	end
+	face.frames = math.min(tonumber(bank:GetAttribute("FaceFrames")) or math.huge, #face.labels * face.grid * face.grid)
+	task.spawn(function() pcall(function() game:GetService("ContentProvider"):PreloadAsync(face.labels) end) end)
+end
+-- `elapsed` seconds into the face; nil puts it away. `steady` (ReduceFlashing) stops before the white fills the screen.
+local function faceShow(elapsed, steady)
+	if not elapsed then
+		faceHolder.Visible = false
+		return
+	end
+	faceHolder.Visible = true
+	if #face.labels == 0 or face.frames < 1 then
+		local open = smooth(elapsed / 0.9)
+		local near = 1 + (steady and 0.6 or 2.4) * smooth((elapsed - 2.3) / 0.7)
+		for index, eye in ipairs(face.eyes) do
+			local wide = (index == 1 and 0.034 or 0.028) * near
+			eye.Size = UDim2.fromScale(wide, wide * open * (0.55 + 0.1 * math.noise(elapsed * 7, index)))
+			eye.Visible = open > 0.02 and elapsed < 3
+		end
+		return
+	end
+	local index = math.floor(elapsed * face.fps) + 1
+	local last = steady and math.max(1, face.frames - 6) or face.frames
+	local over = index > face.frames
+	index = math.clamp(index, 1, last)
+	local per = face.grid * face.grid
+	local sheet, cell = (index - 1) // per + 1, (index - 1) % per
+	for i, label in ipairs(face.labels) do
+		label.Visible = i == sheet and not over
+		if i == sheet then label.ImageRectOffset = Vector2.new((cell % face.grid) * face.size, (cell // face.grid) * face.size) end
+	end
+	for _, eye in ipairs(face.eyes) do eye.Visible = false end
+end
+
+local busy = false     -- a recoil, the warning or the kill owns the screen
 local dark = {edge = 0, black = 0, pulse = 0}
 local function showDark()
 	local strength = math.clamp(math.max(dark.edge, dark.pulse), 0, 1)
 	for _, frame in ipairs(edges) do frame.BackgroundTransparency = 1 - strength end
 	black.BackgroundTransparency = 1 - math.clamp(dark.black, 0, 1)
+	-- while it has the victim (the kill and the dark after it) the black is over every other HUD; the death card that
+	-- follows is another script's and must not be under it
+	gui.DisplayOrder = (busy and dark.black > 0.5) and 1000 or 45
 	gui.Enabled = strength > 0.01 or dark.black > 0.01
 end
 
@@ -296,7 +370,6 @@ end
 ---------------------------------------------------------------------------------------------------------------------
 local view = {pieces = {}, name = nil, alpha = 0, cf = nil, surface = nil, serial = -1, whisperAt = 0, supportAt = 0,
 	supported = true, unsupportedUntil = 0, reportAt = 0, seenSent = 0}
-local busy = false     -- a recoil, the warning or the kill owns the screen
 
 local function viewPiece(name)
 	local p = view.pieces[name]
@@ -508,7 +581,7 @@ local function playWarn(userId, floorPoint, direction)
 end
 
 local HUSHED = {"RoundExitGui", "FoundFootageHUD", "FlashlightPopup"}
-local function playKill(userId, floorPoint, direction, seconds)
+local function playKill(userId, floorPoint, direction, seconds, realm)
 	local mine = userId == player.UserId
 	local riser, pool = piece("Shade_Rise"), piece("Shade_Pool")
 	if not riser or not pool then return end
@@ -546,6 +619,8 @@ local function playKill(userId, floorPoint, direction, seconds)
 	local camera = workspace.CurrentCamera
 	local startCF, startFov = camera and camera.CFrame, camera and camera.FieldOfView
 	local hushed = {}
+	local realmSounds = {}
+	if mine then faceSetup() end
 	if mine and camera then camera.CameraType = Enum.CameraType.Scriptable end
 	local t0 = os.clock()
 	-- a play test can stretch the whole sequence to look at it (the server's own clock has to be stretched to match)
@@ -580,6 +655,16 @@ local function playKill(userId, floorPoint, direction, seconds)
 			hidden.Part.Transparency = 1
 		end
 		if not (mine and camera and startCF) then return end
+		if t >= seconds + 0.25 then
+			-- down in the dark: nothing but black, and then its face
+			local inDark = t - seconds - 0.25
+			dark.black, dark.edge = 1, 0
+			faceShow(inDark, player:GetAttribute("ReduceFlashing") == true)
+			if not realmSounds[1] then realmSounds[1] = true; flatSound("shade_whisper_f", 0.9) end
+			if inDark > 1.0 and not realmSounds[2] then realmSounds[2] = true; flatSound("shade_near_a", 1) end
+			if inDark > 2.45 and not realmSounds[3] then realmSounds[3] = true; flatSound("shade_whisper_e", 1) end
+			return
+		end
 		-- the victim: turned to face it, held, and taken down as the dark closes
 		for _, name in ipairs(HUSHED) do
 			local other = player.PlayerGui:FindFirstChild(name)
@@ -623,6 +708,7 @@ local function playKill(userId, floorPoint, direction, seconds)
 		busy = false
 		if not mine then return end
 		dark.black, dark.edge = 1, 0
+		faceShow(nil)
 		task.spawn(function()
 			-- dead in the level: the black holds until the spectate view owns the screen (or the body turned out to live)
 			local held = os.clock()
@@ -647,17 +733,33 @@ local function playKill(userId, floorPoint, direction, seconds)
 		end)
 	end
 
-	run((seconds + 0.25) * slow, frame, finish)
+	run((seconds + 0.25 + (mine and realm or 0)) * slow, frame, finish)
 end
 
-remote.OnClientEvent:Connect(function(what, _serial, a, b, c, d)
+-- A play test can look at the face alone: player attribute Level2ShadeTestFace = true plays it once on black.
+local function playFaceAlone()
+	faceSetup()
+	local slow = math.clamp(tonumber(player:GetAttribute("Level2ShadeTestSlow")) or 1, 1, 20)
+	busy = true
+	run(3.4 * slow, function(t)
+		dark.black = 1
+		faceShow(t / slow, false)
+		player:SetAttribute("Level2ShadeView", string.format("face %.2f, %d sheets, %d frames", t / slow, #face.labels, face.frames))
+	end, function()
+		faceShow(nil)
+		dark.black = 0
+		busy = false
+	end)
+end
+
+remote.OnClientEvent:Connect(function(what, _serial, a, b, c, d, e)
 	if not inLevel() then return end
 	if what == "recoil" and typeof(a) == "CFrame" then
 		playRecoil(a, b)
 	elseif what == "warn" and typeof(b) == "Vector3" and typeof(c) == "Vector3" then
 		playWarn(a, b, c)
 	elseif what == "kill" and typeof(b) == "Vector3" and typeof(c) == "Vector3" then
-		playKill(a, b, c, type(d) == "number" and d or 3.6)
+		playKill(a, b, c, type(d) == "number" and d or 3.6, type(e) == "number" and e or 0)
 	end
 end)
 
@@ -782,6 +884,10 @@ RunService.RenderStepped:Connect(function(dt)
 		voiceQuiet(dt)
 		if not busy then dark.edge = math.max(0, dark.edge - dt * 1.5) end
 		if phase == "idle" then player:SetAttribute("Level2ShadeView", glimpse.live and player:GetAttribute("Level2ShadeView") or "none") end
+	end
+	if player:GetAttribute("Level2ShadeTestFace") == true then
+		player:SetAttribute("Level2ShadeTestFace", "playing")
+		playFaceAlone()
 	end
 	if glimpse.live then
 		glimpse.live()

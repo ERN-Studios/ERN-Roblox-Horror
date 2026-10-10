@@ -6,6 +6,10 @@
 --
 -- THE RULE A PLAYER CAN LEARN: it hunts one player at a time, from behind. While nobody looks it closes in; the hunted
 -- player turning round and holding it in view sends it away. Unseen at arm's length it takes them.
+-- Owner, 2026-10-10 (night): "den skal konsekvent komme efter en bagved en hvis man står stille for længe. Står man
+-- stille i mere end 10 sek så kommer den efter en og andre spillere kan godt se den, det er spilleren den chaser der
+-- skal kigge rundt." So: a player who has not left a four-stud circle for ten seconds is hunted at once, every time
+-- (STILL_20261010). Everybody sees the shadow; only the hunted player's look sends it away.
 --
 -- The server owns: who is hunted, how far behind them the shadow is, where on the map that puts it (a wall or the
 -- floor), whether the hunted player has it in view, the warning and the kill. It owns nothing you see or hear:
@@ -27,7 +31,7 @@
 --   client -> server  "seen", serial                       (the hunted player's client: it is on my screen, unobstructed)
 --   server -> client  "recoil", serial, anchor, surface
 --                     "warn", serial, userId, floorPoint, direction
---                     "kill", serial, userId, floorPoint, direction, seconds
+--                     "kill", serial, userId, floorPoint, direction, seconds, realmSeconds
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -54,6 +58,9 @@ Shade.Config = {
 	RecoilSeconds = 1.4,
 	WarnSeconds = 1.8,
 	KillSeconds = 3.6,
+	RealmSeconds = 3.4,            -- after the drag the victim is in the dark with its face before the death is counted
+	StillSeconds = 10,             -- owner: standing still longer than this brings it, every time
+	StillRadius = 4,               -- "still" = has not left a circle of this radius
 	KillSinkFrom = 1.5,
 	KillSinkStuds = 7,
 	WallCheckHeight = 5,           -- a wall counts when it is still there this far up: kerbs and steps are floor
@@ -175,6 +182,7 @@ end
 
 local function rest(handle, range)
 	handle.Stalk = nil
+	if handle.LastTarget then handle.Still[handle.LastTarget] = nil end   -- ten new seconds for the one it just left
 	handle.NextAt = os.clock() + gap(handle, range or C.GapSeconds)
 	publish(handle, "idle", 0)
 end
@@ -252,11 +260,11 @@ local function kill(handle, player, direction)
 	humanoid.WalkSpeed, humanoid.JumpPower, humanoid.AutoRotate = 0, 0, false
 	root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
 	root.Anchored = true
-	send(handle, "kill", handle.Serial, player.UserId, floorUnder(handle, root), direction, C.KillSeconds)
+	send(handle, "kill", handle.Serial, player.UserId, floorUnder(handle, root), direction, C.KillSeconds, C.RealmSeconds)
 	task.spawn(function()
 		local t0 = os.clock()
 		local whole = true
-		while os.clock() - t0 < C.KillSeconds do
+		while os.clock() - t0 < C.KillSeconds + C.RealmSeconds do
 			if handle.Kill ~= token or not validWorld(handle) or player.Character ~= character or humanoid.Health <= 0
 				or not root:IsDescendantOf(workspace) then
 				whole = false
@@ -286,6 +294,7 @@ end
 
 local function begin(handle, player, root)
 	handle.Serial += 1
+	handle.LastTarget = player
 	local back = flat(-root.CFrame.LookVector) or Vector3.zAxis
 	handle.Stalk = {Player = player, Bearing = math.atan2(back.X, back.Z), Distance = C.StartDistance, Seen = 0,
 		LastSeenReport = -math.huge, LastReportAt = -math.huge,
@@ -312,6 +321,21 @@ local function pick(handle)
 		if roll <= 0 then return entry[1], entry[2] end
 	end
 	return pool[#pool][1], pool[#pool][2]
+end
+
+-- The player who has stood still the longest, if anybody has for StillSeconds.
+local function pickStill(handle, now)
+	local best, bestRoot, longest = nil, nil, C.StillSeconds
+	for _, player in ipairs(Players:GetPlayers()) do
+		local mark = handle.Still[player]
+		if mark and now - mark.Since >= longest then
+			local _, _, root = eligible(handle, player)
+			if root and not inSafeSection(handle, root.Position) then
+				best, bestRoot, longest = player, root, now - mark.Since
+			end
+		end
+	end
+	return best, bestRoot
 end
 
 local function stalkStep(handle, dt, now)
@@ -362,13 +386,27 @@ local function step(handle, dt)
 			local v = root.AssemblyLinearVelocity
 			local running = Vector3.new(v.X, 0, v.Z).Magnitude > C.LoudSpeed and 1 or 0
 			handle.Loud[player] = (handle.Loud[player] or 0) * 0.98 + running * 0.02
+			local mark = handle.Still[player]
+			if not mark or (root.Position - mark.At).Magnitude > C.StillRadius then
+				handle.Still[player] = {At = root.Position, Since = now}
+			end
+		else
+			handle.Still[player] = nil
 		end
 	end
 	if handle.Stalk then
 		stalkStep(handle, dt, now)
-	elseif handle.Phase == "idle" and now >= handle.NextAt then
-		local player, root = pick(handle)
-		if player then begin(handle, player, root) else handle.NextAt = now + 4 end
+	elseif handle.Phase == "idle" and now >= handle.GraceUntil then
+		-- standing still brings it at once; otherwise it comes when its own quiet time is over
+		local player, root = pickStill(handle, now)
+		if player then
+			handle.LastReason = "still"
+			begin(handle, player, root)
+		elseif now >= handle.NextAt then
+			player, root = pick(handle)
+			handle.LastReason = "timer"
+			if player then begin(handle, player, root) else handle.NextAt = now + 4 end
+		end
 	end
 end
 
@@ -402,7 +440,7 @@ function Shade.Start(world, force)
 	if not bank then return nil end
 	local collision = world:FindFirstChild("Collision")
 	if not collision then return nil end
-	local handle = {World = world, Bank = bank, Serial = bank:GetAttribute("ShadeSerial") or 0, Warned = {}, Loud = {},
+	local handle = {World = world, Bank = bank, Serial = bank:GetAttribute("ShadeSerial") or 0, Warned = {}, Loud = {}, Still = {},
 		Guards = collision:FindFirstChild("Guards"), Safe = {}, Stopped = false, Phase = "idle",
 		Origin = world:GetAttribute("Origin") or Vector3.zero}
 	if typeof(handle.Origin) ~= "Vector3" then handle.Origin = Vector3.zero end
@@ -428,6 +466,7 @@ function Shade.Start(world, force)
 		end
 	end
 	handle.NextAt = os.clock() + C.GraceSeconds
+	handle.GraceUntil = handle.NextAt
 	active = handle
 	publish(handle, "idle", 0)
 	bank:SetAttribute("ShadeLive", true)
