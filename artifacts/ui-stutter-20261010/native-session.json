@@ -1,0 +1,513 @@
+{
+  "task": "UI input stutter",
+  "date": "2026-10-10",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "baselineSources": [
+    {
+      "path": "ReplicatedStorage.UIDevice",
+      "className": "ModuleScript",
+      "identity": "1_42697",
+      "sourceEditorMatch": true,
+      "properties": {
+        "Archivable": true
+      },
+      "attributes": [],
+      "bytes": 100997
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ProtectionHUD",
+      "className": "LocalScript",
+      "identity": "1_31093",
+      "sourceEditorMatch": true,
+      "properties": {
+        "Enabled": true,
+        "Archivable": true,
+        "RunContext": "Legacy"
+      },
+      "attributes": [],
+      "bytes": 44987
+    },
+    {
+      "path": "ReplicatedStorage.RoundHud",
+      "className": "ModuleScript",
+      "identity": "1_42712",
+      "sourceEditorMatch": true,
+      "properties": {
+        "Archivable": true
+      },
+      "attributes": [],
+      "bytes": 76673
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "className": "LocalScript",
+      "identity": "1_31069",
+      "sourceEditorMatch": true,
+      "properties": {
+        "Enabled": true,
+        "Archivable": true,
+        "RunContext": "Legacy"
+      },
+      "attributes": {
+        "ObjectiveUIVersion": "20260902_1"
+      },
+      "bytes": 244615
+    },
+    {
+      "path": "ReplicatedStorage.LoadingCardView",
+      "className": "ModuleScript",
+      "identity": "0_43635647",
+      "sourceEditorMatch": true,
+      "properties": {
+        "Archivable": true
+      },
+      "attributes": [],
+      "bytes": 8923
+    }
+  ],
+  "install": {
+    "bytes": 101439,
+    "path": "ReplicatedStorage.UIDevice",
+    "properties": {
+      "Archivable": true
+    },
+    "identity": "1_42697",
+    "installed": true,
+    "changedScripts": 1,
+    "attributes": [],
+    "className": "ModuleScript",
+    "consumersUnchanged": true,
+    "installedAt": "2026-10-10T09:47:17Z",
+    "callbackCalls": 1,
+    "sourceEditorMatch": true
+  },
+  "probe": {
+    "candidateBytes": 101439,
+    "probeDestroyed": true,
+    "nativeCompileAndRequire": true,
+    "originalsUnchanged": true,
+    "changedScripts": 0
+  },
+  "probeLifetimeFinding": {
+    "threadStatus": "suspended",
+    "ticksAfter": 5,
+    "connectionAfterDestroy": true,
+    "eventsBefore": 1,
+    "eventsAfter": 2,
+    "ticksBefore": 2
+  },
+  "before": {
+    "raw": [
+      {
+        "input": "MouseMovement",
+        "t": 0.2554963000584394,
+        "normalized": "Keyboard"
+      },
+      {
+        "input": "MouseButton1",
+        "t": 0.37246380001306534,
+        "normalized": "Keyboard"
+      },
+      {
+        "input": "Keyboard",
+        "t": 9.963561299955472,
+        "normalized": "Keyboard"
+      },
+      {
+        "input": "MouseMovement",
+        "t": 13.4632958000293,
+        "normalized": "Keyboard"
+      },
+      {
+        "input": "MouseButton1",
+        "t": 13.551744400057942,
+        "normalized": "Keyboard"
+      },
+      {
+        "input": "Keyboard",
+        "t": 18.181225599953905,
+        "normalized": "Keyboard"
+      }
+    ],
+    "elapsed": 19.115006800042465,
+    "changed": [
+      {
+        "ending": false,
+        "input": "MouseMovement",
+        "t": 0.25661709997802973,
+        "viewport": "773, 443",
+        "queue": false
+      },
+      {
+        "ending": false,
+        "input": "MouseButton1",
+        "t": 0.3728213000576943,
+        "viewport": "773, 443",
+        "queue": false
+      },
+      {
+        "ending": false,
+        "input": "Keyboard",
+        "t": 9.964077200042084,
+        "viewport": "773, 443",
+        "queue": false
+      },
+      {
+        "ending": false,
+        "input": "MouseMovement",
+        "t": 13.463761299964972,
+        "viewport": "773, 443",
+        "queue": false
+      },
+      {
+        "ending": false,
+        "input": "MouseButton1",
+        "t": 13.552035999950022,
+        "viewport": "773, 443",
+        "queue": false
+      },
+      {
+        "ending": false,
+        "input": "Keyboard",
+        "t": 18.18199630000163,
+        "viewport": "773, 443",
+        "queue": false
+      }
+    ],
+    "added": [
+      {
+        "t": 0.35590359999332577,
+        "name": "DeathCause",
+        "identity": "0_80068758"
+      },
+      {
+        "t": 0.35619950003456324,
+        "name": "DeathCauseDocked",
+        "identity": "0_80068830"
+      },
+      {
+        "t": 0.3566923000616953,
+        "name": "ResultsWindow",
+        "identity": "0_80068843"
+      },
+      {
+        "t": 0.3581059999996796,
+        "name": "LoadingCard",
+        "identity": "0_80069294"
+      },
+      {
+        "t": 0.44924780004657805,
+        "name": "DeathCause",
+        "identity": "0_80069634"
+      },
+      {
+        "t": 0.449514799984172,
+        "name": "DeathCauseDocked",
+        "identity": "0_80069706"
+      },
+      {
+        "t": 0.4499512000475079,
+        "name": "ResultsWindow",
+        "identity": "0_80069719"
+      },
+      {
+        "t": 0.45147289999295026,
+        "name": "LoadingCard",
+        "identity": "0_80070170"
+      },
+      {
+        "t": 10.045762300025672,
+        "name": "DeathCause",
+        "identity": "0_80070513"
+      },
+      {
+        "t": 10.046260499977507,
+        "name": "DeathCauseDocked",
+        "identity": "0_80070585"
+      },
+      {
+        "t": 10.046771400026046,
+        "name": "ResultsWindow",
+        "identity": "0_80070598"
+      },
+      {
+        "t": 10.048750999965705,
+        "name": "LoadingCard",
+        "identity": "0_80071049"
+      },
+      {
+        "t": 13.514045199961402,
+        "name": "DeathCause",
+        "identity": "0_80071387"
+      },
+      {
+        "t": 13.514276999980211,
+        "name": "DeathCauseDocked",
+        "identity": "0_80071459"
+      },
+      {
+        "t": 13.514651700039394,
+        "name": "ResultsWindow",
+        "identity": "0_80071472"
+      },
+      {
+        "t": 13.515749100013636,
+        "name": "LoadingCard",
+        "identity": "0_80071923"
+      },
+      {
+        "t": 13.615840399987064,
+        "name": "DeathCause",
+        "identity": "0_80072263"
+      },
+      {
+        "t": 13.616178900003433,
+        "name": "DeathCauseDocked",
+        "identity": "0_80072335"
+      },
+      {
+        "t": 13.616712299990468,
+        "name": "ResultsWindow",
+        "identity": "0_80072348"
+      },
+      {
+        "t": 13.617875900003128,
+        "name": "LoadingCard",
+        "identity": "0_80072799"
+      },
+      {
+        "t": 18.28564010001719,
+        "name": "DeathCause",
+        "identity": "0_80073141"
+      },
+      {
+        "t": 18.286000499967486,
+        "name": "DeathCauseDocked",
+        "identity": "0_80073213"
+      },
+      {
+        "t": 18.286701899953187,
+        "name": "ResultsWindow",
+        "identity": "0_80073226"
+      },
+      {
+        "t": 18.289000599994324,
+        "name": "LoadingCard",
+        "identity": "0_80073677"
+      }
+    ],
+    "final": {
+      "DeathCause": "0_80073141",
+      "LoadingCard": "0_80073677",
+      "DeathCauseDocked": "0_80073213",
+      "ResultsWindow": "0_80073226"
+    },
+    "frames": 1110,
+    "frameIntervalMS": {
+      "p50": 16.65250025689602,
+      "mean": 17.267022876756954,
+      "max": 121.76480144262314,
+      "over50": 11,
+      "p95": 18.49769987165928
+    },
+    "viewport": "773, 443",
+    "gamepad": false,
+    "inRound": false,
+    "initial": {
+      "DeathCause": "0_80067875",
+      "LoadingCard": "0_80068411",
+      "DeathCauseDocked": "0_80067947",
+      "ResultsWindow": "0_80067960"
+    }
+  },
+  "after": {
+    "raw": [
+      {
+        "input": "MouseMovement",
+        "t": 0.14856839994899929,
+        "normalized": "Keyboard"
+      },
+      {
+        "input": "MouseButton1",
+        "t": 0.1665593000361696,
+        "normalized": "Keyboard"
+      },
+      {
+        "input": "Keyboard",
+        "t": 3.681284400052391,
+        "normalized": "Keyboard"
+      },
+      {
+        "input": "MouseMovement",
+        "t": 7.732004499994218,
+        "normalized": "Keyboard"
+      },
+      {
+        "input": "MouseButton1",
+        "t": 7.748574599972926,
+        "normalized": "Keyboard"
+      },
+      {
+        "input": "Keyboard",
+        "t": 12.49822690000292,
+        "normalized": "Keyboard"
+      }
+    ],
+    "elapsed": 12.631885200040415,
+    "changed": [],
+    "added": [],
+    "final": {
+      "DeathCause": "0_80739118",
+      "LoadingCard": "0_80739654",
+      "DeathCauseDocked": "0_80739190",
+      "ResultsWindow": "0_80739203"
+    },
+    "frames": 757,
+    "frameIntervalMS": {
+      "p50": 16.642900183796883,
+      "mean": 16.665036587076585,
+      "max": 19.715599715709686,
+      "over50": 0,
+      "p95": 18.067600205540657
+    },
+    "viewport": "773, 443",
+    "gamepad": false,
+    "inRound": false,
+    "initial": {
+      "DeathCause": "0_80739118",
+      "LoadingCard": "0_80739654",
+      "DeathCauseDocked": "0_80739190",
+      "ResultsWindow": "0_80739203"
+    }
+  },
+  "layoutChecks": {
+    "physicalMobileTested": false,
+    "physicalGamepadTested": false,
+    "viewportRefresh": true,
+    "notificationCount": 9,
+    "modalReturn": true,
+    "touchForm": true,
+    "borrowedStateRestored": true,
+    "modalRefresh": true,
+    "pointerReturn": true
+  },
+  "hudAB": {
+    "runtimeOnly": true,
+    "scene": "idle lobby",
+    "enabledRestored": true,
+    "limitation": "Frame cap and rendering/other clients limit attribution; no direct ProtectionHUD script CPU profile; no active-round or device performance conclusion",
+    "samples": [
+      {
+        "label": "current HUD active, hidden in lobby",
+        "elapsed": 4.0660998821258545,
+        "renderGPUMS": {
+          "p50": 19.438080489635468,
+          "mean": 17.15076449647389,
+          "max": 23.189056664705276,
+          "p95": 22.01971225440502,
+          "n": 61
+        },
+        "frameIntervalMS": {
+          "p50": 66.5099024772644,
+          "mean": 66.65737511681729,
+          "max": 69.56920027732849,
+          "p95": 68.77999752759933,
+          "n": 61
+        },
+        "renderCPUMS": {
+          "p50": 3.887099912390113,
+          "mean": 3.980411472348649,
+          "max": 5.89819997549057,
+          "p95": 5.2017997950315475,
+          "n": 61
+        }
+      },
+      {
+        "label": "runtime HUD script disabled, same lobby scene",
+        "elapsed": 4.000192783772945,
+        "renderGPUMS": {
+          "p50": 19.12662386894226,
+          "mean": 15.90024218459109,
+          "max": 23.495424538850784,
+          "p95": 21.358687430620193,
+          "n": 60
+        },
+        "frameIntervalMS": {
+          "p50": 66.74069911241531,
+          "mean": 66.6698797295491,
+          "max": 68.66709887981415,
+          "p95": 68.22670251131058,
+          "n": 60
+        },
+        "renderCPUMS": {
+          "p50": 3.414799924939871,
+          "mean": 3.526578327485671,
+          "max": 6.811799947172403,
+          "p95": 4.349199589341879,
+          "n": 60
+        }
+      }
+    ]
+  },
+  "hudABUsableForAttribution": false,
+  "hudABExclusionReason": "Both phases ran near 15 FPS due Studio background throttling; neither demonstrates ProtectionHUD script CPU attribution.",
+  "cleanup": {
+    "nativeProbeObjectsDestroyed": true,
+    "layoutAttributesRestored": true,
+    "playRecorderDisconnected": true,
+    "editSessionListenersRequireReopen": false,
+    "placeReopened": true,
+    "readScopeCleared": true,
+    "candidateScopeCleared": true
+  },
+  "physicalGamepadTested": false,
+  "physicalMobileTested": false,
+  "multiplayerTested": false,
+  "activeRoundTested": false,
+  "published": true,
+  "publish": {
+    "confirmedBy": "Studio output: Published new changes; Place published; Add publish notes to v2943",
+    "version": 2943,
+    "publishedAtCopenhagen": "2026-10-10 11:53:33",
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "activeServersRestarted": false,
+    "githubPushed": false
+  },
+  "reopen": {
+    "studioId": "b609b91a-e648-42ab-ba5f-a996912e9552",
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "capturedAt": "2026-10-10T09:55:15Z",
+    "all213SourceEditorPairsPreserved": true,
+    "changedClassCounts": [
+      {
+        "className": "UIDragDetectorService",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "className": "PluginConnectionService",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "className": "SpawnerService",
+        "before": 1,
+        "after": 0
+      }
+    ],
+    "uidProperties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    },
+    "uidAttributes": [],
+    "uidBytes": 101439,
+    "dataModelPlaceVersion": 2859,
+    "dataModelPlaceVersionNote": "Live-edit DataModel still reports 2859; publication version 2943 is established by explicit Studio successful-publish output, not this stale property."
+  },
+  "sourceSHA256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+  "installedSHA256": "863027af3565a3ac224b2fcdbdc365b76dd23d6a2b74f7598e3fc7bd39af61d4"
+}

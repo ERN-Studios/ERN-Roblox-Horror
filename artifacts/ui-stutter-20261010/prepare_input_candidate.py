@@ -15,9 +15,12 @@ AFTER = '''\t-- Mouse and keyboard inputs share one hint layout. Rebuild consume
 \t-- when their semantic input category changes, rather than on every raw
 \t-- mouse/key transition. Real device and layout changes keep their own signals.
 \tlocal previousInput = UIDevice.LastInput()
+\tlocal previousGamepadEnabled = UserInputService.GamepadEnabled
 \tUserInputService.LastInputTypeChanged:Connect(function()
 \t\tlocal input = UIDevice.LastInput()
-\t\tif input == previousInput then return end
+\t\tlocal gamepadEnabled = UserInputService.GamepadEnabled
+\t\tif input == previousInput and gamepadEnabled == previousGamepadEnabled then return end
+\t\tpreviousGamepadEnabled = gamepadEnabled
 \t\tpreviousInput = input
 \t\tif touchFormFactor then return end
 \t\tchangedEvent:Fire(UIDevice.Layout())

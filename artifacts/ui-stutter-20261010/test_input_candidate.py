@@ -13,7 +13,7 @@ import subprocess
 import sys
 import tempfile
 
-from prepare_input_candidate import SOURCE, ROOT, candidate
+from prepare_input_candidate import AFTER, BEFORE, SOURCE, ROOT, candidate
 
 sys.path.insert(0, str(ROOT / "tools/tests"))
 import test_equipment_hud as equipment
@@ -62,9 +62,19 @@ local atPointer = changed
 input("Keyboard")
 check(changed == atPointer, "normalized cache advances while handheld input-only events are suppressed")
 check(device.Binding("[Q]", "[RT]") == "[Q]", "hardware form flip restores current pointer hint")
+input("Gamepad1")
+local beforeDisconnect = changed
+ctx.UserInputService.GamepadEnabled = false
+input("Gamepad2")
+check(changed == beforeDisconnect + 1 and device.Binding("[Q]", "[RT]") == "[Q]", "same-category event after controller disconnect restores keyboard glyph")
+ctx.UserInputService.GamepadEnabled = true
+input("Gamepad1")
+check(changed == beforeDisconnect + 2 and device.Binding("[Q]", "[RT]") == "[RT]", "same-category event after controller reconnect restores gamepad glyph")
+input("Keyboard")
+local beforeViewport = changed
 ctx.camera.ViewportSize = Vector2.new(1440, 900)
 ctx.camera:GetPropertyChangedSignal("ViewportSize"):Fire()
-check(changed > atPointer, "actual viewport resize still notifies consumers")
+check(changed > beforeViewport, "actual viewport resize still notifies consumers")
 local beforeHardware = changed
 ctx.UserInputService.MouseEnabled = false
 ctx.UserInputService:GetPropertyChangedSignal("MouseEnabled"):Fire()
@@ -88,7 +98,14 @@ def main():
     parser.add_argument("--receipt", type=Path)
     args = parser.parse_args()
     source = args.source.read_text(encoding="utf-8")
-    proposed = candidate(source)
+    # Also exercise the real module after the verified candidate is installed.
+    # Reconstruct only the raw-event mutant; never modify the source mirror.
+    if source.count(AFTER) == 1 and BEFORE not in source:
+        proposed = source
+        raw_broadcasting = source.replace(AFTER, BEFORE, 1)
+    else:
+        proposed = candidate(source)
+        raw_broadcasting = source
     if equipment.CONTEXT.count(CONTEXT_ANCHOR) != 1:
         raise ValueError("Equipment fake input service changed")
     fake_context = equipment.CONTEXT.replace(CONTEXT_ANCHOR, CONTEXT_EXTRA + CONTEXT_ANCHOR, 1)
@@ -104,9 +121,10 @@ def main():
         if result.returncode:
             raise RuntimeError(result.stdout + result.stderr)
         mutations = {
-            "original raw input broadcasting": source,
+            "original raw input broadcasting": raw_broadcasting,
             "gamepad notifications removed": proposed.replace("\t\tchangedEvent:Fire(UIDevice.Layout())", "\t\t-- missing hint notification", 1),
             "cache not updated during handheld input": proposed.replace("\t\tpreviousInput = input\n\t\tif touchFormFactor then return end", "\t\tif touchFormFactor then return end\n\t\tpreviousInput = input", 1),
+            "controller availability omitted from hint cache": proposed.replace("input == previousInput and gamepadEnabled == previousGamepadEnabled", "input == previousInput", 1),
         }
         for name, changed in mutations.items():
             if run(args.luau, program(changed), folder / "mutation.luau").returncode == 0:

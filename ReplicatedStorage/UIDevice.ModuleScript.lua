@@ -1996,9 +1996,17 @@ do
 		if movementIntent ~= nil then UIDevice.SuppressTouchMovement(movementIntent) end
 	end)
 
-	-- Last input only affects desktop/gamepad hint SELECTION, never the touch
-	-- decision, but captions still need to be rebuilt when it changes.
+	-- Mouse and keyboard inputs share one hint layout. Rebuild consumers only
+	-- when their semantic input category changes, rather than on every raw
+	-- mouse/key transition. Real device and layout changes keep their own signals.
+	local previousInput = UIDevice.LastInput()
+	local previousGamepadEnabled = UserInputService.GamepadEnabled
 	UserInputService.LastInputTypeChanged:Connect(function()
+		local input = UIDevice.LastInput()
+		local gamepadEnabled = UserInputService.GamepadEnabled
+		if input == previousInput and gamepadEnabled == previousGamepadEnabled then return end
+		previousGamepadEnabled = gamepadEnabled
+		previousInput = input
 		if touchFormFactor then return end
 		changedEvent:Fire(UIDevice.Layout())
 	end)

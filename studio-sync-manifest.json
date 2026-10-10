@@ -233,8 +233,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
-      "bytes": 100997,
-      "sha256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+      "bytes": 101439,
+      "sha256": "863027af3565a3ac224b2fcdbdc365b76dd23d6a2b74f7598e3fc7bd39af61d4",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

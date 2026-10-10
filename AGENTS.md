@@ -39,6 +39,11 @@
 - Verify authoritative originals during staging and after both success and
   failure. Keep non-script clones test-owned, and destroy probe objects and
   restore borrowed runtime state even when an assertion or callback throws.
+- Destroying a required ModuleScript does not stop its service listeners or
+  spawned tasks: a native lifecycle probe on 2026-10-10 verified both continued
+  after destruction. Explicitly own and disconnect/cancel those resources, or
+  run the module inside a disposable Play DataModel and stop that test. Do not
+  require a full module against Edit services solely to prove compilation.
 - A native contract probe on synthetic objects is not a gameplay, multiplayer,
   streaming or actual-asset performance pass.
 
