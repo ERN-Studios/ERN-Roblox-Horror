@@ -3,7 +3,13 @@
 Runs production RoundHud, ShopBinder and Round HUD event driver in the HUD engine. Compile uses -O0
 to expose register ceilings. Assertions cover semantic attention, authored Stack geometry, spectator
 compass origin, transient pooling/dedupe, captions, round/modal gates, remount and retained loss data.
-Real fonts, masks and pad hit routing still require Studio QA.
+EXIT_COMPASS_20261010 (owner: "Make the compass marker to the exit more distinct."): a locked GET OUT
+wears the exit look (UIStyle.Hud.Exit, "EXIT 23 m", text outline, facing cue with hysteresis, three
+arrival swells and none under ReduceFlashing, an every-Heartbeat needle, the QA stamps
+HudExit/HudFacing/HudBearing, and on touch the compass pinned under the collapsed bar behind its fit
+guard), and every other compass state is written exactly as before, including after an exit.
+Real fonts, masks and pad hit routing still require Studio QA; so does how the green and the swell read
+on a lit wall.
 """
 
 import ast
@@ -181,12 +187,16 @@ do -- Compass front, edge clamp, behind, static states, exit-only arrival and wa
 	check(left.Text == "\u{25C0}" and left.Position.X.Scale < rightX, "left behind target clamps left")
 	local _, readout = compass(Vector3.new(0, 100, -3.571))
 	check(readout.Text == "28 m", "distance includes vertical separation while bearing remains planar")
+	-- EXIT_COMPASS_20261010 (owner: "Make the compass marker to the exit more distinct."): a locked
+	-- GET OUT names what it points at ("EXIT 28 m", was "28 m") and arrives in UIStyle.Hud.Exit,
+	-- the door's green (was RailTeal). The CD readouts either side are unchanged.
+	local Exit = ctx:Require("UIStyle").Hud.Exit
 	_, readout = compass(Vector3.new(0, 100, -3.571), "GET OUT")
-	check(readout.Text == "28 m", "different-floor exit cannot arrive from planar proximity")
+	check(readout.Text == "EXIT 28 m", "different-floor exit cannot arrive from planar proximity")
 	_, readout = compass(Vector3.new(0, 0, -3.571))
 	check(readout.Text == "1 m", "near CD remains metre distance rather than exit arrival")
 	_, readout = compass(Vector3.new(0, 0, -3.571), "GET OUT")
-	check(readout.Text == "AT THE EXIT" and readout.TextColor3 == P.RailTeal, "GET OUT under8m arrives")
+	check(readout.Text == "AT THE EXIT" and readout.TextColor3 == Exit, "GET OUT under8m arrives")
 	local chevron
 	chevron, readout = compass(nil, nil, "inRoom")
 	check(chevron.TextColor3 == P.Coral and readout.Text == "IN THIS ROOM", "same-room static Coral")
@@ -244,6 +254,259 @@ do -- Native font fallback can be wider/taller than the imported ASCII sample wi
 		check(source.Text == "v" and source:GetAttribute("FigmaFontSize") ~= nil and not source.TextScaled,
 			"glyph fit never rewrites source template")
 	end
+end
+
+do -- EXIT_COMPASS_20261010: a locked GET OUT wears the exit look; every other compass state is as it was.
+	local ctx, Hud, P = start()
+	ctx.Hud = Hud
+	local Exit, Accent = ctx:Require("UIStyle").Hud.Exit, Color3.fromRGB(255, 0, 0)
+	local Strip = Color3.fromRGB(61, 142, 89) -- 45 % of the way from Line (38,49,52) to the exit green
+	check(Exit == Color3.fromRGB(90, 255, 135), "UIStyle.Hud.Exit is the exit door's header green")
+	local function set(change) Hud.SetObjective(state(change)); ctx:Flush() end
+	local function at(degrees, studs) -- a point `degrees` right of dead ahead for the fixture camera
+		local r = math.rad(degrees)
+		return Vector3.new(math.sin(r) * (studs or 100), 0, -math.cos(r) * (studs or 100))
+	end
+	local function exitAt(target) set({Title = "GET OUT", Compass = {State = "locked", Target = target}}) end
+	local function stamps(row) return row:GetAttribute("HudExit"), row:GetAttribute("HudFacing"), row:GetAttribute("HudBearing") end
+	set()
+	local row, chevron, readout = part(ctx, "Compass"), part(ctx, "Compass/Chevron"), part(ctx, "Compass/Readout")
+	local centre, baseline = part(ctx, "Compass/Centre"), part(ctx, "Compass/Baseline")
+	local was = {Centre = centre.BackgroundColor3, Baseline = baseline.BackgroundColor3, Nodes = #row:GetDescendants(),
+		StrokeColor = readout.TextStrokeColor3, Stroke = readout.TextStrokeTransparency}
+	check(was.Centre == P.Cream and was.Baseline == P.Line, "fixture: the import draws a Cream centre line on a Line baseline")
+	check(chevron.TextColor3 == Accent and readout.TextColor3 == P.Sage and readout.Text == "10 m"
+		and stamps(row) == nil, "a CD compass keeps the level accent and carries no exit stamp")
+	check(chevron.TextStrokeTransparency ~= 0.35 and readout.TextStrokeTransparency ~= 0.35
+		and chevron.TextStrokeColor3 ~= P.Ink and readout.TextStrokeColor3 ~= P.Ink, "and no outline")
+
+	exitAt(at(45, 50.5))
+	check(readout.Text == "EXIT 14 m" and readout.TextColor3 == P.Cream, "exit readout names what it points at, in Cream")
+	check(chevron.Text == "\u{25BC}" and chevron.TextColor3 == Exit, "exit chevron is the door's green, not the level accent")
+	check(baseline.BackgroundColor3 == Strip and centre.BackgroundColor3 == was.Centre,
+		"strip baseline leans to the green; centre line untouched while not facing")
+	for _, label in ipairs({chevron, readout}) do
+		check(label.TextStrokeColor3 == P.Ink and label.TextStrokeTransparency == 0.35,
+			"Ink outline through the TextLabel's own stroke: " .. label.Name)
+		check(label:FindFirstChildOfClass("UIStroke") == nil, "never a UIStroke (UIRegression would measure the whole box): " .. label.Name)
+	end
+	check(#row:GetDescendants() == was.Nodes, "exit look adds no node under the Compass row")
+	local isExit, facing, bearing = stamps(row)
+	check(isExit == true and facing == false and bearing == 45, "QA stamps: exit, not facing, 45 degrees right")
+
+	exitAt(at(10))
+	check(select(2, stamps(row)) == false and centre.BackgroundColor3 == was.Centre, "10 degrees off is not yet facing")
+	exitAt(at(5))
+	check(select(2, stamps(row)) == true and centre.BackgroundColor3 == Exit and readout.TextColor3 == Exit
+		and readout.Text == "EXIT 28 m", "facing the exit turns the centre line and readout green")
+	exitAt(at(10))
+	isExit, facing, bearing = stamps(row)
+	check(facing == true and bearing == 10 and centre.BackgroundColor3 == Exit, "facing holds out to 12 degrees once found")
+	exitAt(at(15))
+	check(select(2, stamps(row)) == false and centre.BackgroundColor3 == was.Centre and readout.TextColor3 == P.Cream,
+		"turning away gives the centre line and readout back")
+	exitAt(at(100))
+	check(chevron.Text == "\u{25B6}" and chevron.TextColor3 == Exit and select(3, stamps(row)) == 100,
+		"an exit behind still pins the green glyph at the strip's end")
+	exitAt(at(40, 20))
+	check(readout.Text == "AT THE EXIT" and readout.TextColor3 == Exit and select(2, stamps(row)) == false,
+		"arrival reads AT THE EXIT in the door's green without facing it")
+
+	local function restored(description)
+		check(centre.BackgroundColor3 == was.Centre and baseline.BackgroundColor3 == was.Baseline,
+			description .. ": centre line and baseline are the import's again")
+		for _, label in ipairs({chevron, readout}) do
+			check(label.TextStrokeColor3 == was.StrokeColor and label.TextStrokeTransparency == was.Stroke,
+				description .. ": outline removed from " .. label.Name)
+		end
+		check(stamps(row) == nil and select(2, stamps(row)) == nil and select(3, stamps(row)) == nil,
+			description .. ": exit stamps cleared")
+	end
+	set({Title = "GET OUT", Compass = {State = "calibrating", Target = at(0)}})
+	check(readout.Text == "CALIBRATING" and readout.TextColor3 == P.Sage and chevron.TextColor3 == Accent,
+		"a GET OUT that is still calibrating is not the exit look")
+	restored("calibrating")
+	exitAt(at(5))
+	set({Compass = {State = "inRoom"}})
+	check(chevron.TextColor3 == P.Coral and readout.Text == "IN THIS ROOM" and readout.TextColor3 == P.Coral, "same-room Coral after an exit")
+	restored("inRoom")
+	exitAt(at(5))
+	set()
+	check(chevron.TextColor3 == Accent and readout.Text == "10 m" and readout.TextColor3 == P.Sage, "CD compass after an exit")
+	restored("locked CD")
+	exitAt(at(5))
+	Hud.SetObjective({Level = 3, Title = "GET OUT", Lines = {}})
+	ctx:Flush()
+	check(not row.Visible, "a GET OUT without a compass hides the row")
+	restored("hidden row")
+
+	-- Arrival: three 1 Hz swells, then steady; once per exit; nothing swells under ReduceFlashing.
+	local function whiter() return chevron.TextColor3 ~= Exit and chevron.TextColor3.R > Exit.R and chevron.TextColor3.G == Exit.G end
+	exitAt(at(45))
+	check(chevron.TextColor3 == Exit and baseline.BackgroundColor3 == Strip, "the swell starts from the steady look")
+	beat(ctx, 0.5)
+	check(whiter() and baseline.BackgroundColor3 == Exit, "half a second in: chevron toward white, strip at full green")
+	check(readout.TextColor3 == P.Cream and centre.BackgroundColor3 == was.Centre, "the swell moves no other colour")
+	beat(ctx, 0.5)
+	check(chevron.TextColor3 == Exit and baseline.BackgroundColor3 == Strip, "each swell returns to the steady look")
+	beat(ctx, 1.5)
+	check(whiter(), "third swell at 2.5 s")
+	beat(ctx, 0.5)
+	check(chevron.TextColor3 == Exit and baseline.BackgroundColor3 == Strip, "steady after three swells")
+	beat(ctx, 0.5)
+	check(chevron.TextColor3 == Exit, "no fourth swell")
+	exitAt(at(0))
+	beat(ctx, 0.2)
+	check(whiter() and readout.TextColor3 == Exit, "finding the exit gives one short swell")
+	beat(ctx, 0.3)
+	check(chevron.TextColor3 == Exit and baseline.BackgroundColor3 == Strip and centre.BackgroundColor3 == Exit,
+		"which ends in the steady facing look")
+	set()
+	ctx.Player:SetAttribute("ReduceFlashing", true)
+	exitAt(at(45))
+	for _ = 1, 8 do
+		beat(ctx, 0.25)
+		check(chevron.TextColor3 == Exit and baseline.BackgroundColor3 == Strip, "ReduceFlashing: nothing swells on arrival")
+	end
+	exitAt(at(0))
+	beat(ctx, 0.2)
+	check(chevron.TextColor3 == Exit and centre.BackgroundColor3 == Exit, "ReduceFlashing: nor on facing; the steady cue remains")
+	ctx.Player:SetAttribute("ReduceFlashing", false)
+	set()
+	exitAt(at(45))
+	beat(ctx, 0.5)
+	check(whiter(), "a new exit swells again: the clock is per exit, not per session")
+	-- A swell is never joined or restarted in mid-phase (review, 2026-10-10). This exit is 0.5 s old.
+	beat(ctx, 2.25)
+	exitAt(at(0)) -- found at 2.75 s, inside the third arrival swell
+	check(whiter() and centre.BackgroundColor3 == Exit and readout.TextColor3 == Exit,
+		"found during the arrival swells: the steady facing cue is immediate")
+	beat(ctx, 0.35)
+	check(chevron.TextColor3 == Exit and baseline.BackgroundColor3 == Strip and centre.BackgroundColor3 == Exit,
+		"and no facing swell takes over part-way up when the arrival swells end")
+	exitAt(at(15))
+	exitAt(at(0)) -- lost and found again, now that the arrival swells are over
+	beat(ctx, 0.15)
+	check(whiter(), "found after the arrival swells: one facing swell")
+	exitAt(at(15)) -- overshoot past the cone ...
+	beat(ctx, 0.15)
+	exitAt(at(0)) -- ... and correct back, 0.3 s into that swell
+	check(whiter() and centre.BackgroundColor3 == Exit, "overshoot and correct: the running swell is not cut back to green")
+	beat(ctx, 0.1)
+	check(chevron.TextColor3 == Exit and baseline.BackgroundColor3 == Strip,
+		"nor started over: it ends 0.4 s after it began")
+	Hud.Clear()
+	exitAt(at(45))
+	check(part(ctx, "Compass/Chevron") ~= chevron, "Clear remounted the card")
+	row, chevron, readout = part(ctx, "Compass"), part(ctx, "Compass/Chevron"), part(ctx, "Compass/Readout")
+	centre, baseline = part(ctx, "Compass/Centre"), part(ctx, "Compass/Baseline")
+	beat(ctx, 0.5)
+	check(whiter(), "Clear drops the swell clock with the round")
+
+	-- The needle: every Heartbeat for a locked exit, the 0.1 s clock for everything else.
+	beat(ctx, 3)
+	local x = chevron.Position.X.Scale
+	ctx.Workspace.CurrentCamera = {CFrame = {LookVector = Vector3.new(1, 0, 0)}} -- turned 90 degrees right
+	ctx.RunService.Heartbeat:Fire(0.016)
+	check(chevron.Position.X.Scale < x and select(3, stamps(row)) == -45, "exit needle follows the camera on the very next Heartbeat")
+	ctx.Player.Character:FindFirstChildOfClass("Humanoid").Health = 0
+	ctx.RunService.Heartbeat:Fire(0.016)
+	check(readout.Text == "EXIT 28 m" and stamps(row) == true, "a subject that just died never flashes LOCATING between renders")
+	beat(ctx, 0.1)
+	check(not card(ctx).Visible, "the 0.1 s render then hides the card of a dead subject")
+	ctx.Player.Character:FindFirstChildOfClass("Humanoid").Health = 100
+	set()
+	beat(ctx, 0.1)
+	x = chevron.Position.X.Scale
+	ctx.Workspace.CurrentCamera = {CFrame = {LookVector = Vector3.new(0, 0, -1)}}
+	ctx.RunService.Heartbeat:Fire(0.016)
+	check(card(ctx).Visible and chevron.Position.X.Scale == x, "every other locked compass keeps its 0.1 s clock")
+	beat(ctx, 0.1)
+	check(chevron.Position.X.Scale > x, "and still follows on it")
+
+	-- The QA fixture can show the card with no living subject. A locked exit then has no bearing:
+	-- it reads LOCATING like any other compass and may not keep any of the exit look.
+	exitAt(at(5))
+	check(stamps(row) == true and centre.BackgroundColor3 == Exit and readout.TextStrokeTransparency == 0.35,
+		"dressed again on the remounted card")
+	ctx.Workspace:SetAttribute("UIRegressionForceLevel3Reader", true)
+	ctx.Player.Character:FindFirstChildOfClass("Humanoid").Health = 0
+	beat(ctx, 0.1)
+	check(card(ctx).Visible and readout.Text == "LOCATING" and chevron.TextColor3 == Accent and readout.TextColor3 == P.Sage,
+		"fixture without a living subject: a locked exit has no bearing and reads LOCATING")
+	restored("no bearing")
+end
+
+do -- EXIT_COMPASS_20261010: on touch a locked exit keeps its compass under the collapsed bar, if that fits.
+	local EXIT = {Level = 3, Title = "GET OUT", Lines = {"Reach the revealed wall frame."},
+		Compass = {State = "locked", Target = Vector3.new(35.71, 0, -35.71)}}
+	local function phone(bottom)
+		local ctx, Hud = start({touch = true, viewport = Vector2.new(844, 390),
+			safe = {Left = 47, Top = 58, Right = 797, Bottom = bottom or 369}})
+		ctx.Hud = Hud
+		return ctx, Hud
+	end
+	local ctx, Hud = phone()
+	Hud.SetObjective(EXIT)
+	ctx:Flush()
+	local root = card(ctx)
+	local bar, line, compassRow = part(ctx, "Bar").Size.Y.Offset, part(ctx, "Guide1").Size.Y.Offset, part(ctx, "Compass").Size.Y.Offset
+	check(part(ctx, "Compass").Visible and part(ctx, "Guide1").Visible and root.Size.Y.Offset == bar + line + compassRow,
+		"expanded exit pill: bar, line and compass")
+	beat(ctx, 6)
+	check(root.Visible and opacity(root) == 1 and part(ctx, "Compass").Visible and not part(ctx, "Guide1").Visible,
+		"collapsed exit pill keeps its compass")
+	check(root.Size.Y.Offset == bar + compassRow and root.Size.Y.Offset == 48, "collapsed exit pill is bar + compass, 48 px")
+	check(text(root, "Compass/Readout") == "EXIT 14 m" and part(ctx, "Compass/Readout").TextSize >= 12,
+		"pinned readout keeps the touch 12 px floor")
+	check(part(ctx, "Hit").Size.Y.Offset == 44, "the 44 px tap target is unchanged")
+	ctx.Workspace.CurrentCamera = {CFrame = {LookVector = Vector3.new(1, 0, 0)}}
+	ctx.RunService.Heartbeat:Fire(0.016)
+	check(part(ctx, "Compass"):GetAttribute("HudBearing") == -45, "the pinned needle is live")
+	part(ctx, "Hit").Activated:Fire()
+	ctx:Flush()
+	check(root.Size.Y.Offset == bar + line + compassRow and part(ctx, "Guide1").Visible, "a tap still expands the exit pill")
+	beat(ctx, 6)
+	check(root.Size.Y.Offset == bar + compassRow and part(ctx, "Compass").Visible, "and it collapses back onto bar + compass")
+	Hud.SetObjective(state())
+	beat(ctx, 6)
+	check(root.Size.Y.Offset == 44 and not part(ctx, "Compass").Visible, "any other locked compass still collapses with the pill")
+	Hud.SetObjective({Level = 3, Title = "GET OUT", Lines = {}, Compass = {State = "calibrating", Target = EXIT.Compass.Target}})
+	beat(ctx, 6)
+	check(root.Size.Y.Offset == 44 and not part(ctx, "Compass").Visible, "an exit that is not locked yet is not pinned")
+
+	-- The fit guard. The fake TopRightPanel offers safe.Bottom - 58 - 16 px above the controls.
+	local function room(height, change)
+		local tight, hud = phone(58 + 16 + height)
+		local value = table.clone(EXIT)
+		for key, item in pairs(change or {}) do value[key] = item end
+		hud.SetObjective(value)
+		tight:Flush()
+		beat(tight, 0.1)
+		return tight
+	end
+	local tight = room(bar + compassRow) -- the expanded pill does not fit, bar + compass exactly does
+	check(card(tight).Visible and part(tight, "Compass").Visible and not part(tight, "Guide1").Visible
+		and card(tight).Size.Y.Offset == bar + compassRow, "a forced collapse keeps the compass when bar + compass fit")
+	beat(tight, 6)
+	check(card(tight).Visible and part(tight, "Compass").Visible, "and it stays after the six seconds")
+	part(tight, "Hit").Activated:Fire()
+	tight:Flush() -- no Heartbeat: the forced collapse itself must keep the row, not the next render
+	check(part(tight, "Compass").Visible and not part(tight, "Guide1").Visible and card(tight).Size.Y.Offset == bar + compassRow,
+		"a tap that cannot expand leaves the pinned compass up, with no blink until the next render")
+	tight = room(bar + compassRow - 1) -- one pixel short, but the 44 px bar alone fits
+	check(card(tight).Visible and not part(tight, "Compass").Visible and card(tight).Size.Y.Offset == 44,
+		"no room for bar + compass: the card stays, the compass waits for a tap")
+	beat(tight, 6)
+	check(card(tight).Visible and not part(tight, "Compass").Visible, "the guard never trades the whole card for the compass")
+	local danger = {Status = {Text = "The water is no longer safe.", Kind = "danger"}}
+	local status = part(room(400, danger), "StatusRow").Size.Y.Offset
+	tight = room(bar + status + compassRow, danger)
+	check(card(tight).Visible and part(tight, "StatusRow").Visible and part(tight, "Compass").Visible
+		and card(tight).Size.Y.Offset == bar + status + compassRow, "a danger row is counted: bar + danger + compass fit")
+	tight = room(bar + status + compassRow - 1, danger)
+	check(card(tight).Visible and part(tight, "StatusRow").Visible and not part(tight, "Compass").Visible,
+		"one pixel short with a danger row: the danger row stays, the compass does not")
 end
 
 do -- Modal exclusion is immediate; the original hold/rest deadlines continue behind it.

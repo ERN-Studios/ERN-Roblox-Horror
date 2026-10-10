@@ -52,6 +52,10 @@
 --       BUILD-PLAN fields, plus optional OnOrderActivate. Counter={Label,Current,Max} serves results.
 --       Wrong-level/inactive/nil receivers cannot erase the active card. A valid watched subject
 --       supplies compass origin. Semantic changes expand/wake6s; target/timer updates do not.
+--       EXIT_COMPASS_20261010: Title "GET OUT" with Compass = {State = "locked", Target = Vector3}
+--       is the exit compass. It alone wears UIStyle.Hud.Exit ("EXIT 23 m", an outline, a facing
+--       cue, an arrival swell, an every-frame needle, and on touch it stays under the collapsed
+--       bar). QA reads the attributes HudExit / HudFacing / HudBearing on the Compass part.
 --   RoundHud.Feed({Kind,Actor?,Detail,Key?}) -> accepted
 --       Actor is Player/name/id, resolved to DisplayName.2 PC/1 touch rows,4s, sameKey2s merge.
 --   RoundHud.Caption(speaker,text,seconds?) -> accepted
@@ -468,6 +472,54 @@ local objective = {Serial = 0, Connections = {}}
 local lastObjective
 local renderObjective
 
+-- EXIT_COMPASS_20261010 (owner: "Make the compass marker to the exit more distinct."). The exit
+-- compass was a 10 px chevron in the level's own accent (in Level 1 the yellow of the walls and of
+-- every other accent on the card) that read "23 m", stepped ten times a second and arrived
+-- unannounced at the moment the lights die. While a GET OUT objective has its exit locked the row
+-- now wears a look of its own: UIStyle.Hud.Exit (the door's green) on the chevron and the strip's
+-- baseline, "EXIT 23 m", an Ink text outline, a cue when the camera faces the exit, three slow
+-- swells on arrival, a needle that follows the camera every frame, and on touch it stays up under
+-- the collapsed bar. The key is the convention paintCompass already had for "AT THE EXIT"
+-- (Title == "GET OUT"), so Level 1, 3 and 4 get it with no publisher change.
+-- NOTHING ELSE CHANGES: every other compass state is written exactly as before, and whatever the
+-- exit look writes is put back from the values read off the mounted clone (undressExit). It adds
+-- no node under the Compass row (UIRegression would count one as a rectangle of its own), and it
+-- resizes nothing: the row's real size is a template change.
+local EXIT = {
+	-- UIStyle owns the colour. The literal is the same green, for a place where this module landed
+	-- and UIStyle's new field did not: a nil here compiles, loads and only shows at the exit, as an
+	-- error on every frame that also stops this module's 0.1 s refresh (review, 2026-10-10).
+	Green = UIStyle.Hud.Exit or Color3.fromRGB(90, 255, 135), White = Color3.new(1, 1, 1),
+	FaceIn = 8, FaceOut = 12,     -- degrees off dead ahead; in and out differ so the cue cannot chatter
+	Swells = 3, FaceSwell = 0.4,  -- seconds: three 1 Hz swells on arrival, one short one on facing
+	Strip = 0.45,                 -- how far the baseline leans from its own colour to the green at rest
+	Stroke = 0.35,                -- TextStrokeTransparency of the Ink outline
+}
+
+local function exitLocked(state)
+	local compass = state and state.Compass
+	return compass ~= nil and state.Title == "GET OUT" and compass.State == "locked" and typeof(compass.Target) == "Vector3"
+end
+
+-- Color3:Lerp, written out: the offline HUD engine (tools/tests/hud_harness.luau) has no Lerp.
+local function blend(from, to, alpha)
+	return Color3.new(from.R + (to.R - from.R) * alpha, from.G + (to.G - from.G) * alpha, from.B + (to.B - from.B) * alpha)
+end
+
+-- Touch only: the pill collapses to its bar six seconds after every change or tap, and it took
+-- the exit compass with it, so a phone player had the way out for six seconds per tap. While an
+-- exit is locked the row stays up under the collapsed bar, but only if bar + compass (+ a danger
+-- row, which stays up too) fit above the control cluster: a card that does not fit is hidden
+-- WHOLE (placeObjective, objective.Fits), and no card is worse than no compass. 16 is the reach
+-- placeObjective asks TopRightPanel for on touch.
+local function pinsExit(state, parts, root)
+	local bar, row = parts.Bar, parts.Compass
+	if not bar or not row or not exitLocked(state) then return false end
+	local need = bar.Size.Y.Offset + row.Size.Y.Offset
+	if state.Status and state.Status.Kind == "danger" and parts.StatusRow then need += parts.StatusRow.Size.Y.Offset end
+	return UIDevice.TopRightPanel(root.Size.X.Offset + 16, need).Height >= need
+end
+
 local function textAt(root, path, value, color)
 	local node = Binder.text(Binder.at(root, path))
 	if node then node.Text = value or ""; if color then node.TextColor3 = color end end
@@ -534,7 +586,12 @@ local function placeObjective()
 	if objective.Bundle == "HUD_Touch" and objective.Expanded and panel.Height < height then
 		objective.Expanded = false
 		local danger = objective.State.Status and objective.State.Status.Kind == "danger"
-		for name, part in pairs(objective.Parts) do part.Visible = name == "Bar" or (name == "StatusRow" and danger == true) end
+		-- EXIT_COMPASS_20261010: the same collapsed rows renderObjective draws, so a pinned exit
+		-- compass does not blink off until the next render.
+		local pin = pinsExit(objective.State, objective.Parts, root)
+		for name, part in pairs(objective.Parts) do
+			part.Visible = name == "Bar" or (name == "StatusRow" and danger == true) or (name == "Compass" and pin)
+		end
 		task.defer(placeObjective)
 		return
 	end
@@ -549,6 +606,7 @@ local function unmountObjective()
 	objective.Connections = {}
 	if objective.Root then objective.Root:Destroy() end
 	objective.Root, objective.Parts, objective.Hit, objective.OrderHit, objective.Attention = nil, nil, nil, nil, nil
+	objective.CompassNodes = nil -- EXIT_COMPASS_20261010: the row cache belongs to the destroyed clone
 end
 
 local function expandObjective()
@@ -656,18 +714,87 @@ local function mountObjective()
 	return true
 end
 
-local function paintCompass(state)
+-- EXIT_COMPASS_20261010: the row's nodes, found once per mounted clone. The exit needle repaints
+-- every frame, and five Binder walks a frame (Binder.base builds a table for every node it tests)
+-- would be garbage for nothing. The table also carries what the exit look has to remember about
+-- this clone: what the import drew (Authored), whether the look is on (Dressed), the last readout
+-- and the last QA stamps.
+local function compassNodes(part)
+	local nodes = objective.CompassNodes
+	if not nodes or nodes.Part ~= part then
+		local centre, baseline = Binder.at(part, "Centre"), Binder.at(part, "Baseline")
+		nodes = {Part = part, Chevron = Binder.text(Binder.at(part, "Chevron")), Readout = Binder.text(Binder.at(part, "Readout")),
+			Ticks = Binder.at(part, "Ticks"),
+			Centre = centre and centre:IsA("GuiObject") and centre or nil,
+			Baseline = baseline and baseline:IsA("GuiObject") and baseline or nil}
+		objective.CompassNodes = nodes
+	end
+	return nodes
+end
+
+-- QA readbacks on the Compass part (a play session reads the GUI, never this module's state):
+-- HudExit, HudFacing, and HudBearing in whole degrees off dead ahead (right is positive). Written
+-- only when they change, and nil whenever the row is not wearing the exit look.
+local function stampExit(nodes, exit, facing, bearing)
+	if nodes.HudExit ~= exit then nodes.HudExit = exit; nodes.Part:SetAttribute("HudExit", exit) end
+	if nodes.HudFacing ~= facing then nodes.HudFacing = facing; nodes.Part:SetAttribute("HudFacing", facing) end
+	if nodes.HudBearing ~= bearing then nodes.HudBearing = bearing; nodes.Part:SetAttribute("HudBearing", bearing) end
+end
+
+-- The exit look's writes beyond the chevron and readout colours (paintCompass owns those for every
+-- state). Colours only, on nodes the import already has: no tween, no instance, nothing resized.
+local function dressExit(nodes, facing, swell, bearing)
+	local chevron, readout, centre, baseline = nodes.Chevron, nodes.Readout, nodes.Centre, nodes.Baseline
+	if not nodes.Dressed then
+		nodes.Dressed = true
+		local authored = nodes.Authored
+		if not authored then
+			-- Read once per clone, before the first exit write: undressExit puts exactly this back.
+			authored = {Centre = centre and centre.BackgroundColor3, Baseline = baseline and baseline.BackgroundColor3,
+				ChevronStroke = chevron.TextStrokeColor3, ChevronStrokeAlpha = chevron.TextStrokeTransparency,
+				ReadoutStroke = readout.TextStrokeColor3, ReadoutStrokeAlpha = readout.TextStrokeTransparency}
+			nodes.Authored = authored
+			nodes.Strip = baseline and blend(authored.Baseline, EXIT.Green, EXIT.Strip)
+		end
+		-- The card has no backing (mountObjective), so its copy sits straight on lit walls. The
+		-- outline is the TextLabel's own stroke, never a UIStroke: UIRegression measures a label
+		-- that carries a UIStroke by its whole box (Fit.drawnRect), which would report the readout
+		-- colliding with a chevron pinned at the strip's right end.
+		chevron.TextStrokeColor3, chevron.TextStrokeTransparency = P.Ink, EXIT.Stroke
+		readout.TextStrokeColor3, readout.TextStrokeTransparency = P.Ink, EXIT.Stroke
+	end
+	if centre then centre.BackgroundColor3 = facing and EXIT.Green or nodes.Authored.Centre end
+	if baseline then
+		baseline.BackgroundColor3 = swell > 0
+			and blend(nodes.Authored.Baseline, EXIT.Green, EXIT.Strip + (1 - EXIT.Strip) * swell) or nodes.Strip
+	end
+	stampExit(nodes, true, facing, math.floor(bearing + 0.5))
+end
+
+local function undressExit(nodes)
+	if not nodes or not nodes.Dressed then return end
+	nodes.Dressed = false
+	local authored, chevron, readout = nodes.Authored, nodes.Chevron, nodes.Readout
+	if nodes.Centre then nodes.Centre.BackgroundColor3 = authored.Centre end
+	if nodes.Baseline then nodes.Baseline.BackgroundColor3 = authored.Baseline end
+	chevron.TextStrokeColor3, chevron.TextStrokeTransparency = authored.ChevronStroke, authored.ChevronStrokeAlpha
+	readout.TextStrokeColor3, readout.TextStrokeTransparency = authored.ReadoutStroke, authored.ReadoutStrokeAlpha
+	stampExit(nodes, nil, nil, nil)
+end
+
+-- `frame` is true on the every-frame exit repaint (the Heartbeat at the end of this file).
+local function paintCompass(state, frame)
 	local part = objective.Parts.Compass
 	if not part or not part.Visible then return end
 	local compass = state.Compass
-	local chevron = Binder.text(Binder.at(part, "Chevron"))
-	local readout = Binder.text(Binder.at(part, "Readout"))
-	local ticks = Binder.at(part, "Ticks")
+	local nodes = compassNodes(part)
+	local chevron, readout, ticks = nodes.Chevron, nodes.Readout, nodes.Ticks
 	if not chevron or not readout then return end
 	local mode = compass.State
 	local color = UIStyle.Hud.Accent[state.Level] or P.Cream
 	local glyph, text, fraction = "\u{25BC}", "LOCATING", 0.5
 	local readColor = P.Sage
+	local exit, facing, swell, bearing = false, false, 0, nil
 	if mode == "calibrating" then text = "CALIBRATING"
 	elseif mode == "inRoom" then text, color, readColor = "IN THIS ROOM", P.Coral, P.Coral
 	elseif mode == "locked" and typeof(compass.Target) == "Vector3" then
@@ -678,11 +805,54 @@ local function paintCompass(state)
 			local dx, dy, dz = target.X - position.X, target.Y - position.Y, target.Z - position.Z
 			local metres = math.sqrt(dx * dx + dy * dy + dz * dz) / 3.571
 			local look = camera.CFrame.LookVector
-			local bearing = math.deg(math.atan2(look.X * dz - look.Z * dx, look.X * dx + look.Z * dz))
+			bearing = math.deg(math.atan2(look.X * dz - look.Z * dx, look.X * dx + look.Z * dz))
 			fraction = (math.clamp(bearing, -60, 60) + 60) / 120
 			if bearing < -60 then glyph = "\u{25C0}" elseif bearing > 60 then glyph = "\u{25B6}" end
-			text = tostring(math.floor(metres + 0.5)) .. " m"
-			if state.Title == "GET OUT" and metres < 8 then text, readColor = "AT THE EXIT", P.RailTeal end
+			if state.Title ~= "GET OUT" then
+				text = tostring(math.floor(metres + 0.5)) .. " m"
+			else
+				-- EXIT_COMPASS_20261010: this branch IS exitLocked(state). Say what the needle points
+				-- at, in the door's colour: "23 m" in the level's accent did not. "EXIT 999 m" is
+				-- 10 characters and the row is authored for 12 ("IN THIS ROOM"). The word carries it
+				-- for a player who cannot tell the green from the accent.
+				exit, color, readColor = true, EXIT.Green, P.Cream
+				local whole = math.floor(metres + 0.5)
+				if nodes.Metres ~= whole then nodes.Metres, nodes.MetresText = whole, "EXIT " .. whole .. " m" end
+				text = nodes.MetresText
+				if metres < 8 then text, readColor = "AT THE EXIT", EXIT.Green end
+				-- Facing: the centre line and the readout turn green while the camera looks at the
+				-- exit, so "that way" is a state the player can see, not a triangle to line up.
+				local now = workspace:GetServerTimeNow()
+				objective.ExitAt = objective.ExitAt or now
+				facing = math.abs(bearing) <= (objective.Facing and EXIT.FaceOut or EXIT.FaceIn)
+				-- A swell is never joined or restarted in mid-phase (review, 2026-10-10). Finding the
+				-- exit while the arrival swells still run starts no swell of its own: it took over at
+				-- the three-second mark part-way up, a one-frame jump to near white. And finding it
+				-- again inside a running facing swell (overshoot, correct back: how a camera is aimed)
+				-- lets that swell finish instead of cutting it to green and starting over.
+				if facing and not objective.Facing and now - objective.ExitAt >= EXIT.Swells
+					and now - (objective.FacingAt or -math.huge) >= EXIT.FaceSwell then objective.FacingAt = now end
+				objective.Facing = facing
+				if facing then readColor = EXIT.Green end
+				-- Arrival: the row first paints as an exit at the moment the maze goes dark, and
+				-- nothing else announces it. Three slow swells of the chevron toward white and of the
+				-- strip toward full green, then one short one each time the camera finds the exit.
+				-- 1 Hz on a few hundred pixels; under ReduceFlashing nothing swells at all and the
+				-- steady colours carry it.
+				if player:GetAttribute("ReduceFlashing") ~= true then
+					local since = now - objective.ExitAt
+					if since < EXIT.Swells then
+						swell = 0.5 - 0.5 * math.cos(since * 2 * math.pi)
+					elseif objective.FacingAt and now - objective.FacingAt < EXIT.FaceSwell then
+						swell = math.sin((now - objective.FacingAt) / EXIT.FaceSwell * math.pi)
+					end
+					if swell > 0 then color = blend(EXIT.Green, EXIT.White, 0.7 * swell) end
+				end
+			end
+		elseif frame then
+			-- No living subject or no camera: the 0.1 s render decides what the card shows then
+			-- (it hides it). The every-frame needle must not flash LOCATING in between.
+			return
 		end
 	end
 	-- A symbol is a bounded bearing graphic, not a text line. Framewisp stamped the ASCII sample
@@ -704,6 +874,9 @@ local function paintCompass(state)
 	-- Roblox disables TextScaled when wrapping is disabled; this single glyph keeps both enabled.
 	chevron.TextScaled, chevron.TextWrapped = true, true
 	chevron.Text, chevron.TextColor3, readout.Text, readout.TextColor3 = glyph, color, text, readColor
+	-- EXIT_COMPASS_20261010: the rest of the exit look, or its removal the first time this clone
+	-- paints anything else. A row that never showed an exit is not written to here at all.
+	if exit then dressExit(nodes, facing, swell, bearing) else undressExit(nodes) end
 	-- Position along the authored tick strip, not the entire compass part (readout occupies its end).
 	if ticks then
 		local a, p, size = ticks.AnchorPoint, ticks.Position, ticks.Size
@@ -733,7 +906,9 @@ renderObjective = function()
 		elseif name == "Guide1" then part.Visible = expanded and state.Lines[1] ~= nil
 		elseif name == "Guide2" then part.Visible = expanded and state.Lines[2] ~= nil
 		elseif name == "StatusRow" then part.Visible = state.Status ~= nil and (expanded or state.Status.Kind == "danger")
-		elseif name == "Compass" then part.Visible = expanded and state.Compass ~= nil end
+		-- EXIT_COMPASS_20261010: `expanded` is only ever false on touch, where a locked exit keeps
+		-- its compass under the collapsed bar when that fits (pinsExit).
+		elseif name == "Compass" then part.Visible = state.Compass ~= nil and (expanded or pinsExit(state, parts, root)) end
 	end
 	RoundHud.Paint(root, touch and "ObjectivePill" or "ObjectiveCard", state.Level)
 	local eyebrow = state.Eyebrow or ("LEVEL " .. state.Level .. (state.Level == 4 and " \u{B7} THE LAST SHOW" or ""))
@@ -757,6 +932,13 @@ renderObjective = function()
 		textAt(root, "StatusRow/Label", state.Status.Text, color)
 		local bar = Binder.at(root, "StatusRow/Bar")
 		if bar then bar.BackgroundColor3 = color end
+	end
+	-- EXIT_COMPASS_20261010: the arrival swell plays once per exit, so its clock and the facing
+	-- latch are dropped whenever the objective is not a locked exit. Here, not in paintCompass: that
+	-- returns early on a hidden row and would never get to it. Clear() drops them with the round.
+	if not exitLocked(state) then
+		objective.ExitAt, objective.Facing, objective.FacingAt = nil, nil, nil
+		undressExit(objective.CompassNodes)
 	end
 	paintCompass(state)
 	placeObjective()
@@ -1200,6 +1382,7 @@ function RoundHud.Clear()
 	detector.Root, detector.Attention, detector.Bundle = nil, nil, nil
 	objective.Serial += 1
 	objective.State, objective.Key, objective.ViewKey, objective.Expanded = nil, nil, nil, false
+	objective.ExitAt, objective.Facing, objective.FacingAt = nil, nil, nil -- EXIT_COMPASS_20261010: the next round's exit swells again
 	unmountObjective()
 	feed.Serial += 1
 	feed.Entries = {}
@@ -1353,6 +1536,14 @@ end
 if UIDevice.OnScreenOwningModalChanged then UIDevice.OnScreenOwningModalChanged(refreshOwned) end
 local elapsed = 0
 RunService.Heartbeat:Connect(function(dt)
+	-- EXIT_COMPASS_20261010: the compass's only clock was the 0.1 s refresh below, so the needle
+	-- stepped ten times a second while the player turned. A locked exit repaints its row every
+	-- frame instead: one atan2 and a handful of property writes on cached nodes, and a write of
+	-- the value a property already has fires nothing. Only the exit: every other compass state
+	-- keeps its 0.1 s clock. Root.Visible is the last 0.1 s render's verdict on whether the card
+	-- may show (modals, loading, a wrong level, a card that does not fit).
+	local state = objective.State
+	if exitLocked(state) and objective.Parts and objective.Root and objective.Root.Visible then paintCompass(state, true) end
 	elapsed += dt
 	if elapsed < 0.1 then return end
 	elapsed = 0
