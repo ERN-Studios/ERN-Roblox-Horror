@@ -1,0 +1,116 @@
+{
+  "schema": "mongotv-s18-c06-cas-frozen-v1",
+  "frozenAtUtc": "2026-10-10T08:01:29.100616+00:00",
+  "status": "prepared; independent peer and parent-owned installed native gate pending",
+  "nativeCallsByThisPreparation": 0,
+  "productionSourceWritesByThisPreparation": 0,
+  "manifestWritesByThisPreparation": 0,
+  "files": [
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/cas-v1/apply_preview_noop_cleanup.py",
+      "bytes": 27154,
+      "sha256": "43a237fd8440b8dffc165b7ab3d1691036e15f0a4d21a2f8e243d427ebc7f39d"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/cas-v1/preview_noop_source_cas.luau",
+      "bytes": 8863,
+      "sha256": "8f75132652ac0a3042492d2caf6b1e2ad6175848f53547d0ff676023b2923046"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/cas-v1/test_apply_preview_noop_cleanup.py",
+      "bytes": 22121,
+      "sha256": "ec378ecaa0ae2b291298d5994525591b761963635001652f553abd51f24471a7"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/cas-v1/test_preview_native_cas_guards.py",
+      "bytes": 9694,
+      "sha256": "2ca838e532f630a57feb0a4400a136784fa7c1308b8223c88cdf4487cc752b68"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/cas-v1/offline-wrapper-tests-v3.json",
+      "bytes": 6969,
+      "sha256": "4e0bc3d85314a89c7aeb403eee6ddda6bfae6e15412c5416bbbc941c7363f600"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/cas-v1/native-guard-tests-v1.json",
+      "bytes": 1350,
+      "sha256": "652aa8fab43095501220e6a3e81b9439ed43462e3dcee6f1c553f3615a4698b6"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/cas-v1/offline-proposal-v1/proposal.json",
+      "bytes": 2798,
+      "sha256": "abc327355aa37ab8fa1477201888358a507446be75ada3f73703f3df1e4c4e43"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/cas-v1/CAS_REVIEW.md",
+      "bytes": 5591,
+      "sha256": "8218a043fc09a5e995ff83834d95375cd0af15c01d03d30e210840d8457a4852"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/prepare_preview_probe.py",
+      "bytes": 15790,
+      "sha256": "2c1160dfcd1cb3c08763b7947c2f53fa74aefc3292d8a06338263b9daf70d033"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/proposal.json",
+      "bytes": 8617,
+      "sha256": "2f9ccc27d2c478b5b1f262205845c3e23748bf7d98b28bc877e65afb5330c3d0"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/before.source.luau",
+      "bytes": 1622,
+      "sha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/candidate.source.luau",
+      "bytes": 1407,
+      "sha256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/native-before-result-v1.json",
+      "bytes": 1350,
+      "sha256": "41c672c4827a1475549cdeca9fef47b4647a8443c936153157b29ff409f32bc6"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/native-binding-v1/binding.json",
+      "bytes": 2454,
+      "sha256": "33297c6591dceb3f3345e417ab1a2a3aa339ee89f28c843e5af8f41091764db8"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/native-binding-v1/native-before.luau",
+      "bytes": 52046,
+      "sha256": "3126993ffb25e6f1fac426162ada278af5b2d68ca33173c22a50b932fee1ef92"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/clients-next-v1/native-binding-v1/native-installed.luau",
+      "bytes": 52045,
+      "sha256": "4c1f01191e99ac61b55cb78383c51e6cc0820dbbd5911bf717661a74b7ca0dfc"
+    }
+  ],
+  "target": {
+    "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+    "instanceId": "1_31106",
+    "parentId": "1_410029",
+    "className": "LocalScript",
+    "beforeBytes": 1622,
+    "candidateBytes": 1407,
+    "bytesRemoved": 215,
+    "beforeSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+    "candidateSHA256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+  },
+  "nativeScriptCount": 213,
+  "offline": {
+    "wrapperCases": 34,
+    "wrapperAssertions": 260,
+    "actualBeforeValidatorCases": 7,
+    "actualTransformCases": 5,
+    "actualTransformAssertions": 8,
+    "actualNativeGuardCases": 15,
+    "actualNativeGuardAssertions": 75,
+    "generatedCompilePasses": 12,
+    "actualTransformCompilePasses": 2,
+    "actualNativeGuardCompilePasses": 2
+  },
+  "parentCommand": "python -B artifacts/cleanup-20261010/clients-next-v1/cas-v1/apply_preview_noop_cleanup.py --apply",
+  "limits": "No Studio invocation or production write by this agent. Offline MCP/engine/console/git boundaries are controlled. Native gameplay/multiplayer/streaming/performance certification is not inferred."
+}

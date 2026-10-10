@@ -1,0 +1,31 @@
+{
+  "contract": {
+    "beforeBehaviorSHA256": "041fc594a54bea026b0112a0ca3877b4012652a98f844f50e85e71f5ac70c060",
+    "semanticNegativeControls": 2,
+    "candidateBehaviorSHA256": "041fc594a54bea026b0112a0ca3877b4012652a98f844f50e85e71f5ac70c060",
+    "semanticNegativeRejected": true,
+    "reentryChecks": 910,
+    "pairedChecks": 910,
+    "checksPerVersion": 455
+  },
+  "readAtUtc": "2026-10-10T07:50:45Z",
+  "nativeOriginalSourceWrites": 0,
+  "remainingProbes": 0,
+  "nativeOriginalAttributeWrites": 0,
+  "nativeOriginalParentWrites": 0,
+  "cleanupErrors": [],
+  "borrowedRuntimeState": false,
+  "contractPassed": true,
+  "probesDestroyed": 4,
+  "ownedLeaseReleased": true,
+  "installed": false,
+  "originalsUnchanged": true,
+  "limits": "Actual full Level4PreviewPrompt source with test-owned native ProximityPrompt instances and real Enabled/DescendantAdded signals. Players/DevAccess/service results and descendant delivery are controlled boundaries. No live client, gameplay, real access/admission, multiplayer, streaming, teleport or performance certification.",
+  "modeSwitches": 0,
+  "probesCreated": 4,
+  "pass": true,
+  "schema": "mongotv-preview-noop-native-contract-v1",
+  "originalSourceCoverage": 213,
+  "rootClientWallSeconds": 33.875,
+  "rootExecutedCodeSHA256": "3126993ffb25e6f1fac426162ada278af5b2d68ca33173c22a50b932fee1ef92"
+}

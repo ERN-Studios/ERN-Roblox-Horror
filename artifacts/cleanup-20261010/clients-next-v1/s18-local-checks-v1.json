@@ -1,0 +1,35 @@
+{
+  "schema": "s18-root-local-gates-v1",
+  "pass": true,
+  "installedSourceCompiles": [
+    {
+      "optimization": "-O0",
+      "exitCode": 0,
+      "sourceSHA256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+    },
+    {
+      "optimization": "-O1",
+      "exitCode": 0,
+      "sourceSHA256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+    }
+  ],
+  "rootObservedContractCommands": [
+    {
+      "command": "python -B tools/tests/test_studio_source_contract.py",
+      "exitCode": 0,
+      "checks": 39
+    },
+    {
+      "command": "python -B tools/tests/test_full_sync_contract.py",
+      "exitCode": 0,
+      "checks": 65
+    }
+  ],
+  "contractEvidence": "Root actually executed both commands after S18; exit results and stdout observed through exec tools. This receipt records results; it is not a stored stdout transcript.",
+  "exactSourceRemovalBytes": 215,
+  "manifestChangedFields": [
+    "target.bytes",
+    "target.sha256"
+  ],
+  "nativeGameplayCertificate": false
+}

@@ -17,8 +17,9 @@ Source-ændringer og ét nyt native script blev eksporteret nedstrøms; deres
 gameplayimplementering tilskrives de andre udviklere. Tidligere dirty RoundUI
 er bevaret byte-exact i privat checkpoint før den nye Studio-version blev
 spejlet. Ingen native writes. Hele scopes og testgrænser er registreret nedenfor.
-Vores valgte afventende runtimeforslag står stadig uimplementeret; eksternt
-implementerede ændringer beskrives særskilt uden oprydningskredit.
+S18 har siden fjernet den genbekræftede private C06 no-op-blok. Øvrige
+afventende runtimeforslag står stadig uimplementeret; eksternt implementerede
+ændringer beskrives særskilt uden oprydningskredit.
 
 Alle **129** oprindelige fund var genkontrolleret og disponeret ved den foregående
 afslutning. De nye samtidige Sources betyder, at berørte hypoteser skal
@@ -55,6 +56,51 @@ Et lokalt importpreflight havde forkert root-parent og fejlede før MCP-
 initialisering eller Source/manifestwrites. Afvist toolcopy og årsag er bevaret;
 rettet eksport bestod. [Capture/landing/tests/parity](artifacts/cleanup-20261010/resume-baseline-v1/export-result.json).
 Ingen native Source-/objekt-/property-/modewrites, publicering eller GitHub-push.
+
+S17 lokal commit: `fee5023fd5ce1e14e8c2205b7c8c008bc59ebc71`.
+
+### S18 / C06 — privat Level4PreviewPrompt no-op, gennemført
+
+Kun den215-byte gamle special-UserId-branch/kommentar og to nil→nil writes
+er fjernet:1622→1407 LFbytes. Den private plain PROMPTS-literal har alene
+to Level4-keys; der er ingen metatable, observers eller Level6-writers.
+Alle øvrige bytes, DevAccess-require/fail-closed, aktive filtre, callbacks,
+events, remotes og adgangspolitik er bevaret. Hele aktuelle script-, server-
+entry-, DevAccess- og relevante authoring-closure er genkontrolleret.
+
+Root-native før og installeret:455 checks/version,910 paired og910 reentry,
+samme behavior hash, to aktive semantic mutants afvist. Fire friske
+ModuleScripts skabt og fjernet pr. port; nul tilbage, lease frigivet og alle
+213 originalers Source/editor/class/identity/properties/attrs/tags uændrede
+under proberne. Faktiske test-ejede ProximityPrompts og Enabled/DescendantAdded
+signaler er brugt; Players/DevAccess/delivery er kontrollerede boundaries.
+Dette er no-op-kontraktbevis, ikke live gameplay, respawn, MP eller streaming.
+
+Frisk native CAS kontrollerede213 originals før og inde i SES-callback;
+kun præcis target Source blev skrevet. Native Source er eksporteret med
+64-line/8k bounded chunks, metadata med20-row/20k pages. Manifestets eneste
+ændring er target sha256/bytes. Alle øvrige212 Sources og manifestfields
+blev genkontrolleret efter installeret port. Console før/efter er identisk
+med eksisterende fejl; ingen rollback eller ny regression i native batch.
+Uafhængig peer genkørte34 wrappercases/260 checks,15 actual Luau guardcases/
+75 checks samt forward/inverse-anchor og receipt-integration. En fundet
+post-replace rollbackfejl og den faktiske receipt-integration blev rettet
+før native execution; timeout giver pending uden samtidig retry/rollback.
+
+Source39/full-sync65 efter-kontrakter PASS. Separat faktisk parity ved
+08:04:44–08:04:55Z:213 scripts,15 remotes,228 rows,52 ServerStorage-rødder,
+nul mismatch/missing/extra/Source-editor-conflict eller propertycoveragegap.
+Den separate parity dækker ikke attrs/tags eller fulde non-script assets;
+S18's egne213-originalguards dækker scriptattrs/tags. Ingen målt performance-
+gevinst, publicering, GitHub-push eller modeswitch.
+
+Root havde præoprettet parity-readerens egen .gitattributes. Første lokale
+opstart afviste derfor FileExistsError før MCP-initialisering; afvist forsøg
+er bevaret. Ny destination bruger identisk frozen reader og bestod.
+[Installation/rollback-receipt](artifacts/cleanup-20261010/clients-next-v1/preview-source-install-v1/result.json),
+[native installeret port](artifacts/cleanup-20261010/clients-next-v1/preview-source-install-v1/native-installed-result.json),
+[uafhængig peer](artifacts/cleanup-20261010/clients-next-v1/cas-v1/peer-review-v1.json),
+[separat parity](artifacts/cleanup-20261010/clients-next-v1/final-parity-v2/result.json).
 
 S08 har nu pensioneret Level1-legacybuildens standalone `main` og de offentlige
 gamle import-/QA-/publish-/exporttargets i syv lokale filer. Aktive defaults
@@ -474,7 +520,7 @@ angiver særskilt, hvad de fem inputfiler og fire receipts dokumenterer.
 | Batch/fund | Allerede gennemført lokal port | Manglende port / disposition |
 |---|---|---|
 | B11 / LE-34 | S11 Puzzle47/version94reentry og S14 Room752/version1504paired/reentry, native før/kandidat/installeret CAS/export/212-parity/console PASS. | Afgrænsede private kodefelter gennemført `a7c7bac4`/`5ad5c03d`; gamle L2-authoringguides beholdes. Historiske Play-afvisninger og eksisterende Room-cleanupfejl er bevaret. |
-| B12 / C04,C06,C07,C26 | S15 C26-kommentarer gennemført `920abdee`:7195bytes,197O0/O1 funktioner/UI105/105/native212-parity. Øvrige historiske local-porte bevares. | Loading announced beholdes; samlet Loading-unit ugyldig, C07 ny afgrænsning. Øvrige otte gyldige runtime-units afventer egne native full/Touch/lobby/loading-porte; ingen original/runtimefeature fjernet dér. RoundUI er ikke mål. |
+| B12 / C04,C06,C07,C26 | S15 C26-kommentarer gennemført `920abdee`:7195bytes,197O0/O1 funktioner/UI105/105/native212-parity. Øvrige historiske local-porte bevares. | Loading announced beholdes; samlet Loading-unit ugyldig, C07 ny afgrænsning. S18 C06 no-op gennemført med455/910/910 native checks,213 originalguards/CAS/installeret port/parity. Øvrige syv gyldige runtime-units afventer egne native full/Touch/lobby/loading-porte; ingen runtimefeature fjernet dér. RoundUI er ikke mål. |
 | B14 / LE-32 Usher | S16 actual68/version136paired/reentry,2mutants,4probe-cleanup/212-original guards, CAS/export/installeret/console PASS. | De86bytes private rester er fjernet i `dc1561d1`; perception/nav/capture-boundaries er kontrollerede. Fuld AI/gameplay/asset/performance-verifikation er fortsat særskilt. |
 | B04 / CORE-024 | Rettet native syntetisk Add/Emit-gate86 PASS, cleanup0 og originaler uændrede. Public default/PLAN,66 colliders/28 lenses bevares. | Faktisk R4-kit/full Builder/MaterialPolish/lobby/physical/multiplayer/streaming-port mangler. Historisk fixtures fulde failure-cleanup kræver hardening før genbrug. Proposal er uimplementeret. [Review](artifacts/cleanup-20261009/core024/REVIEW.md). |
 | CORE-025 | Private rester/require-closure genkontrolleret. | Før/efter full-builder/kit/initializer/lobby-support/queue/shop-port mangler; require fjernes ikke alene fra tekstsøgning. |

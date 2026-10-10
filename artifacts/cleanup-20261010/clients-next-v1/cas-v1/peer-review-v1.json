@@ -1,0 +1,173 @@
+{
+  "schema": "mongotv-s18-client-private-noop-cas-independent-peer-v1",
+  "pass": true,
+  "reviewedAtUtc": "2026-10-10T08:01:53.820263+00:00",
+  "reviewer": "foundation_next",
+  "headAtReview": "fee5023fd5ce1e14e8c2205b7c8c008bc59ebc71",
+  "scope": {
+    "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+    "nativePath": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt",
+    "instanceId": "1_31106",
+    "parentId": "1_410029",
+    "className": "LocalScript",
+    "bytesRemoved": 215,
+    "beforeSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+    "afterSHA256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3",
+    "nativeWritesByPeer": 0,
+    "productionWritesByPeer": 0,
+    "manifestWritesByPeer": 0,
+    "indexWritesByPeer": 0
+  },
+  "independentReruns": {
+    "actualWrapper": {
+      "pass": true,
+      "cases": 34,
+      "checks": 260,
+      "receipt": "cas-v1/peer-offline-v1/wrapper-receipt.json",
+      "beforeReceiptIntegrationCases": 7,
+      "beforeReceiptIntegrationChecks": 7
+    },
+    "actualUniqueAnchorTransform": {
+      "pass": true,
+      "cases": 5,
+      "checks": 8,
+      "compile": [
+        "O0",
+        "O1"
+      ]
+    },
+    "actualExtractedNativeGuardAndCallback": {
+      "pass": true,
+      "cases": 15,
+      "checks": 75,
+      "originalCoverage": 213,
+      "compile": [
+        "O0",
+        "O1"
+      ],
+      "receipt": "cas-v1/peer-offline-v1/native-guard-tests-v1.json"
+    }
+  },
+  "reviewedContracts": {
+    "sourceScope": "Exact unique nonempty anchor removes only the five-line nil-assignment no-op over two absent private PROMPTS keys. No metatable/writers/observers at branch; active DevAccess, filters, real prompt watchers and normal Legacy LocalScript LocalPlayer domain retained. Nil LocalPlayer/synthetic getter throws outside the supported domain were not certified.",
+    "freshNativeCAS": "Fresh exact path/identity/parent/class/properties/attributes/tags and all 213 Source/editor originals are checked before mutation and again inside UpdateSourceAsync callback, then final full original census/readback. Final guards are point-in-time, not a continuous all-object epoch certificate.",
+    "boundedReads": "20 native metadata rows/page <=20000 response bytes; full 213 unique Source identity coverage; 64-line Source chunks <=8000 response bytes; chunk export bracketed by target reads plus all-original verification after final yielding chunk.",
+    "repoMirror": "Verified native candidate Source only; target manifest sha256/bytes change only. Working unknown target fields and other manifest rows preserved; separately derived HEAD projection avoids staging unrelated working manifest metadata.",
+    "rollback": "Actual outcome observed after commit-then-error. Exact own native candidate can reverse with fresh CAS; unknown/foreign native outcome receives no forced restore. File Source/manifest attempt flags set before actual atomic replace so post-replace failures enter outcome recovery. Restore only exact owned bytes/Source fields, retaining unrelated metadata and foreign target changes.",
+    "receiptIntegration": "Uses actual native-before-result-v1.json and rootExecutedCodeSHA256. Shared validator checks schema, installed flag, contractPassed, 213 originals, created/destroyed 4/4, zero remainder/cleanup errors/original Source-Parent-attribute writes/mode switches, released lease, no borrowed state, 455/910/910 checks, matching behavior hashes and two rejected semantic controls.",
+    "installedRequest": "Exactly one pinned native-installed code request with 180-second timeout and <=20000-byte parsed result. Unknown transport outcome leaves the existing candidate and matching repo state intact, performs no subsequent native call/rollback/retry, and reports failure for manual current-native reconciliation."
+  },
+  "resolvedPeerFindings": [
+    {
+      "finding": "Atomic outcome flags were previously set after post-replace readback; candidate installed then failure could skip owned recovery.",
+      "status": "fixed",
+      "evidence": "Attempts are flagged before replace; five actual-os.replace postread/exception-after-replace fixtures preserve foreign bytes/fields and recover owned state."
+    },
+    {
+      "finding": "Actual before receipt path/key mismatch and incomplete installed completion validation.",
+      "status": "fixed",
+      "evidence": "Actual Root receipt copied/validated by seven integration cases; nine installed negatives exercise coverage, probes, writes, mode, cleanup, semantic controls, oversized/error result and unknown timeout handling."
+    }
+  ],
+  "historicalEvidence": {
+    "rootNativeBeforePass": true,
+    "rootNativeBeforeSourceCoverage": 213,
+    "rootNativeBeforeNativeOriginalSourceWrites": 0,
+    "rootNativeBeforeChecksPerVersion": 455,
+    "rootNativeBeforePairedChecks": 910,
+    "rootNativeBeforeReentryChecks": 910,
+    "rootNativeBeforeWallSeconds": 33.875,
+    "thisIsNotActualCASOrInstalledPass": true
+  },
+  "requiredRootLandingGates": [
+    "Use these exact frozen pins and fresh native all-213/current target Source/editor/class/metadata reads; stop if another session is in Play or any source/catalog baseline differs.",
+    "Retain private exact before checkpoints; execute only this native Source CAS, then verified native export, strict installed contract, distinct after observation, repo parity, console/diff review.",
+    "If transport leaves an installed probe outcome unknown, preserve candidate and reconcile the current native lease/probe/original state before any retry or rollback.",
+    "Commit only exact task files after staged-diff review; this peer receipt does not authorize publication."
+  ],
+  "limits": [
+    "Wrapper native/MCP/console/git responses are explicit fake boundaries; actual Python filesystem/CAS/manifest/recovery code executed.",
+    "Native guard fixtures execute exact extracted template guard/identity/mutation/callback code with controlled table metadata, known-body hash, JSON and scheduler boundaries; not actual ScriptEditorService certification.",
+    "Root before native probes used test-owned prompt instances and real signals with controlled Players/DevAccess/delivery boundaries. Actual scoped CAS and installed native pass are still Root-owned and pending at this receipt.",
+    "No full gameplay, admission, multiplayer, streaming, teleport, public release, whole-place/non-script asset, actual performance or full remote inventory behavior certificate. File CAS is checked immediately before atomic replacement, without a cross-process file lock.",
+    "All 213 script identity/Source/editor/metadata originals are guarded; mirror parity reports recorded script properties/attributes only. Remote rows and unrelated manifests remain unchanged but are not newly native-certified by this batch."
+  ],
+  "rawFilePins": {
+    "artifacts/cleanup-20261010/clients-next-v1/cas-v1/apply_preview_noop_cleanup.py": {
+      "bytes": 27154,
+      "sha256": "43a237fd8440b8dffc165b7ab3d1691036e15f0a4d21a2f8e243d427ebc7f39d"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/cas-v1/preview_noop_source_cas.luau": {
+      "bytes": 8863,
+      "sha256": "8f75132652ac0a3042492d2caf6b1e2ad6175848f53547d0ff676023b2923046"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/cas-v1/test_apply_preview_noop_cleanup.py": {
+      "bytes": 22121,
+      "sha256": "ec378ecaa0ae2b291298d5994525591b761963635001652f553abd51f24471a7"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/cas-v1/test_preview_native_cas_guards.py": {
+      "bytes": 9694,
+      "sha256": "2ca838e532f630a57feb0a4400a136784fa7c1308b8223c88cdf4487cc752b68"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/cas-v1/peer-offline-v1/wrapper-receipt.json": {
+      "bytes": 6969,
+      "sha256": "4e0bc3d85314a89c7aeb403eee6ddda6bfae6e15412c5416bbbc941c7363f600"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/cas-v1/peer-offline-v1/native-guard-tests-v1.json": {
+      "bytes": 1350,
+      "sha256": "652aa8fab43095501220e6a3e81b9439ed43462e3dcee6f1c553f3615a4698b6"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/cas-v1/offline-wrapper-tests-v3.json": {
+      "bytes": 6969,
+      "sha256": "4e0bc3d85314a89c7aeb403eee6ddda6bfae6e15412c5416bbbc941c7363f600"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/cas-v1/native-guard-tests-v1.json": {
+      "bytes": 1350,
+      "sha256": "652aa8fab43095501220e6a3e81b9439ed43462e3dcee6f1c553f3615a4698b6"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/cas-v1/offline-proposal-v1/proposal.json": {
+      "bytes": 2798,
+      "sha256": "abc327355aa37ab8fa1477201888358a507446be75ada3f73703f3df1e4c4e43"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/native-before-result-v1.json": {
+      "bytes": 1350,
+      "sha256": "41c672c4827a1475549cdeca9fef47b4647a8443c936153157b29ff409f32bc6"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/native-binding-v1/binding.json": {
+      "bytes": 2454,
+      "sha256": "33297c6591dceb3f3345e417ab1a2a3aa339ee89f28c843e5af8f41091764db8"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/native-binding-v1/native-before.luau": {
+      "bytes": 52046,
+      "sha256": "3126993ffb25e6f1fac426162ada278af5b2d68ca33173c22a50b932fee1ef92"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/native-binding-v1/native-installed.luau": {
+      "bytes": 52045,
+      "sha256": "4c1f01191e99ac61b55cb78383c51e6cc0820dbbd5911bf717661a74b7ca0dfc"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/proposal.json": {
+      "bytes": 8617,
+      "sha256": "2f9ccc27d2c478b5b1f262205845c3e23748bf7d98b28bc877e65afb5330c3d0"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/before.source.luau": {
+      "bytes": 1622,
+      "sha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/proposal-v1/candidate.source.luau": {
+      "bytes": 1407,
+      "sha256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+    },
+    "artifacts/cleanup-20261010/clients-next-v1/prepare_preview_probe.py": {
+      "bytes": 15790,
+      "sha256": "2c1160dfcd1cb3c08763b7947c2f53fa74aefc3292d8a06338263b9daf70d033"
+    },
+    "tools/push_repo_to_studio.py": {
+      "bytes": 32272,
+      "sha256": "ff723ad277d0f3569e9419f4d05e6450fd1238e849cf9c7f2d767e9efedb8399"
+    },
+    "tools/sync_from_studio.py": {
+      "bytes": 36910,
+      "sha256": "88f2c440fbb85264d54d17471c92afeb64436626c7033162443f484f120f77e6"
+    }
+  }
+}

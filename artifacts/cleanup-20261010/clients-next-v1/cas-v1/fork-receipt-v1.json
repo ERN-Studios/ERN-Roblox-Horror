@@ -1,0 +1,9 @@
+{
+  "sourceWrapperSHA256": "623293809774a27b9fe9ff636045e9a74d895370324e80fb4b6a268033c526b9",
+  "sourceCasSHA256": "1882107e22f6ad95e630835b0890d9f2508ea8adee7cc3cdc3cc90a7ecda31fe",
+  "outputWrapperSHA256": "b3839e4ecf1f9be678b4f270d421af338650e0c422d033d4eb6b62a20da596c0",
+  "outputCasSHA256": "8f75132652ac0a3042492d2caf6b1e2ad6175848f53547d0ff676023b2923046",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0
+}

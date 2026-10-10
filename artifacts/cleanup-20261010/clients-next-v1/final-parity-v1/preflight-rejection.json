@@ -1,0 +1,10 @@
+{
+  "schema": "s18-parity-local-preflight-rejection-v1",
+  "status": "rejected before MCP initialization",
+  "error": "FileExistsError: .gitattributes pre-created by Root preparation, while frozen reader exclusively creates it",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "productionWrites": 0,
+  "readerSHA256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d",
+  "correction": "Fresh final-parity-v2 destination leaves reader-owned .gitattributes absent; original frozen reader unchanged."
+}

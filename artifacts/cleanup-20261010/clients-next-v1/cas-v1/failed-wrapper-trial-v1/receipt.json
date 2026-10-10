@@ -1,0 +1,15 @@
+{
+  "pass": false,
+  "failure": "success expected wrapper outcome",
+  "reason": "One controlled FakeClient installed replay retained68/136instead455/910; actual wrapper rolled back its own native+Source+manifest tempfixture output",
+  "reproduction": "First test_apply_preview_noop_cleanup.py invocation before fixture fix",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "canonicalSourceWrites": 0,
+  "manifestWrites": 0,
+  "toolHashes": {
+    "apply_preview_noop_cleanup.py": "6e9d4d527cec028dde30af91a6e20376e5940b661c3d995d89521d901e667f1d",
+    "preview_noop_source_cas.luau": "8f75132652ac0a3042492d2caf6b1e2ad6175848f53547d0ff676023b2923046",
+    "test_apply_preview_noop_cleanup.py": "1f5a465614d7fa2a49bd3010ac77cb2e9ddc17f3824b452efea6ed8ca7403f0f"
+  }
+}

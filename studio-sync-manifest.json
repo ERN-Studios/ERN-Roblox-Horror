@@ -3753,8 +3753,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
-      "bytes": 1622,
-      "sha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "bytes": 1407,
+      "sha256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
