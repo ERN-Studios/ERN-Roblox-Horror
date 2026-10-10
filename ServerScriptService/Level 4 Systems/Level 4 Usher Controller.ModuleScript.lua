@@ -38,10 +38,10 @@ local position = Vector3.zero     -- feet position
 local facing = Vector3.new(0, 0, -1)
 local path, pathIndex = nil, 1
 local state = "Dormant"
-local target, targetReason = nil, nil
+local target = nil
 local lastKnown = nil
-local nextHopAt, nextThinkAt, nextReplanAt = 0, 0, 0
-local beamTime, stunUntil, stunCooldownUntil = 0, 0, 0
+local nextHopAt, nextReplanAt = 0, 0
+local beamTime, stunCooldownUntil = 0, 0
 local beamers = {}
 local shush = nil                 -- { Player, Character, EndsAt }
 local capture = nil               -- leased capture record
@@ -673,7 +673,6 @@ local function think(elapsed)
 		target = newTarget
 		nextReplanAt = 0
 	end
-	targetReason = reason
 	if stateFolder then stateFolder:SetAttribute("Level4_UsherTarget", target and target.UserId or 0) end
 	if target then
 		local _, _, r = bodyOf(target)
@@ -924,7 +923,7 @@ function Usher.Stop()
 		stateFolder:SetAttribute("Level4_UsherState", "Dormant")
 		stateFolder:SetAttribute("Level4_UsherTarget", 0)
 	end
-	beamTime, stunUntil, stunCooldownUntil, nextHopAt = 0, 0, 0, 0
+	beamTime, stunCooldownUntil, nextHopAt = 0, 0, 0
 end
 
 return Usher

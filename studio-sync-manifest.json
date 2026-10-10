@@ -1400,8 +1400,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 Usher Controller.ModuleScript.lua",
-      "bytes": 34745,
-      "sha256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "bytes": 34659,
+      "sha256": "ec4252424a0a513ca370851a5ff45b212bab4c2bfcbe20cba58c0a740a2b2a2f",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

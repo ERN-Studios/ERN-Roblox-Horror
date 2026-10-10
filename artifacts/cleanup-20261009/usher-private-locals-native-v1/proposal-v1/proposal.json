@@ -1,0 +1,270 @@
+{
+  "schema": "usher-private-locals-native-proposal-v1",
+  "pass": true,
+  "finding": "LE-32",
+  "file": "ServerScriptService/Level 4 Systems/Level 4 Usher Controller.ModuleScript.lua",
+  "beforeSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+  "candidateSHA256": "ec4252424a0a513ca370851a5ff45b212bab4c2bfcbe20cba58c0a740a2b2a2f",
+  "removedBytes": 86,
+  "checksPerVersion": 68,
+  "pairedChecks": 136,
+  "reentryChecks": 136,
+  "semanticNegativeControls": 2,
+  "ownershipCases": 8,
+  "ownershipChecks": 20,
+  "nativeScriptCount": 212,
+  "originals": [
+    {
+      "bytes": 34745,
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "instanceId": "1_42775",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_15624",
+      "attributes": [],
+      "className": "ModuleScript",
+      "sha256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "tags": [],
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Usher Controller"
+      ],
+      "sourceSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3"
+    },
+    {
+      "bytes": 8952,
+      "studioPath": "ReplicatedStorage.DeathAdvice",
+      "instanceId": "1_42705",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_408323",
+      "attributes": [],
+      "className": "ModuleScript",
+      "sha256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "tags": [],
+      "segments": [
+        "ReplicatedStorage",
+        "DeathAdvice"
+      ],
+      "sourceSHA256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2"
+    },
+    {
+      "bytes": 7425,
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "instanceId": "1_42772",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_15624",
+      "attributes": [],
+      "className": "ModuleScript",
+      "sha256": "af6225d22fb998db4cd2417cd552f934c75ff2c82cb223c4dd9e27daefd98aa6",
+      "tags": [],
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Configuration"
+      ],
+      "sourceSHA256": "af6225d22fb998db4cd2417cd552f934c75ff2c82cb223c4dd9e27daefd98aa6"
+    },
+    {
+      "bytes": 15758,
+      "studioPath": "ServerScriptService.Level4RoundGenerator",
+      "instanceId": "1_42778",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_409634",
+      "attributes": [],
+      "className": "ModuleScript",
+      "sha256": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566",
+      "tags": [],
+      "segments": [
+        "ServerScriptService",
+        "Level4RoundGenerator"
+      ],
+      "sourceSHA256": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566"
+    },
+    {
+      "bytes": 2197,
+      "studioPath": "ServerScriptService.NoiseRegistry",
+      "instanceId": "1_42713",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_409634",
+      "attributes": [],
+      "className": "ModuleScript",
+      "sha256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "tags": [],
+      "segments": [
+        "ServerScriptService",
+        "NoiseRegistry"
+      ],
+      "sourceSHA256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7"
+    },
+    {
+      "bytes": 7408,
+      "studioPath": "ServerScriptService.PlayerProtection",
+      "instanceId": "1_42755",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "parentId": "1_409634",
+      "attributes": [],
+      "className": "ModuleScript",
+      "sha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "tags": [],
+      "segments": [
+        "ServerScriptService",
+        "PlayerProtection"
+      ],
+      "sourceSHA256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b"
+    }
+  ],
+  "templateSHA256": "2737a0918fa304feae6da3b379b606d0babefcb2d59a367a93bf977232f216c9",
+  "toolSHA256": "ef12efdbf411dbca2988cf5154d9599d6f1e6672e46ee2f6c8c333a0dfc0042f",
+  "nativeCodeHashes": {
+    "before": "675c5a924b4b3446ef12b62ce7db5785ba6d3215ab591efd86591db15ba0777a",
+    "installed": "871bf20d4534133d64dd16017830cf91937f44c5c650e57a2c1a38c80ad51014"
+  },
+  "payloadHashes": {
+    "before": "2fffd3314b9f057be9855f00fd6d59dc9547d7b8b2723a3c628bf6435e304744",
+    "candidate": "8b0653be0313a161b8ddba4c140a1c6b8dad8148fd1b0087df2879a29adbbb0f",
+    "reasonNegative": "fea71c7571ad1faa504d32fecd065da017082246285c9a7790d191d6d8abc5ba",
+    "cooldownNegative": "112491359486dd21f21a4eba6e655da4d0dbc6e0617258db5a9d4a0818b06297"
+  },
+  "compileChecks": [
+    {
+      "input": "native-before",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "675c5a924b4b3446ef12b62ce7db5785ba6d3215ab591efd86591db15ba0777a"
+    },
+    {
+      "input": "native-before",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "675c5a924b4b3446ef12b62ce7db5785ba6d3215ab591efd86591db15ba0777a"
+    },
+    {
+      "input": "native-installed",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "871bf20d4534133d64dd16017830cf91937f44c5c650e57a2c1a38c80ad51014"
+    },
+    {
+      "input": "native-installed",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "871bf20d4534133d64dd16017830cf91937f44c5c650e57a2c1a38c80ad51014"
+    },
+    {
+      "input": "payload-before",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "2fffd3314b9f057be9855f00fd6d59dc9547d7b8b2723a3c628bf6435e304744"
+    },
+    {
+      "input": "payload-before",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "2fffd3314b9f057be9855f00fd6d59dc9547d7b8b2723a3c628bf6435e304744"
+    },
+    {
+      "input": "payload-candidate",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "8b0653be0313a161b8ddba4c140a1c6b8dad8148fd1b0087df2879a29adbbb0f"
+    },
+    {
+      "input": "payload-candidate",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "8b0653be0313a161b8ddba4c140a1c6b8dad8148fd1b0087df2879a29adbbb0f"
+    },
+    {
+      "input": "payload-reasonNegative",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "fea71c7571ad1faa504d32fecd065da017082246285c9a7790d191d6d8abc5ba"
+    },
+    {
+      "input": "payload-reasonNegative",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "fea71c7571ad1faa504d32fecd065da017082246285c9a7790d191d6d8abc5ba"
+    },
+    {
+      "input": "payload-cooldownNegative",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "112491359486dd21f21a4eba6e655da4d0dbc6e0617258db5a9d4a0818b06297"
+    },
+    {
+      "input": "payload-cooldownNegative",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "112491359486dd21f21a4eba6e655da4d0dbc6e0617258db5a9d4a0818b06297"
+    },
+    {
+      "input": "ownership",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "e936f429531c4160784fc125a721444655a34ada74404eb08ceb0636392bf282"
+    },
+    {
+      "input": "ownership",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "e936f429531c4160784fc125a721444655a34ada74404eb08ceb0636392bf282"
+    },
+    {
+      "input": "beforeFullSource",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3"
+    },
+    {
+      "input": "beforeFullSource",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3"
+    },
+    {
+      "input": "candidateFullSource",
+      "optimization": "-O0",
+      "pass": true,
+      "sourceSHA256": "ec4252424a0a513ca370851a5ff45b212bab4c2bfcbe20cba58c0a740a2b2a2f"
+    },
+    {
+      "input": "candidateFullSource",
+      "optimization": "-O1",
+      "pass": true,
+      "sourceSHA256": "ec4252424a0a513ca370851a5ff45b212bab4c2bfcbe20cba58c0a740a2b2a2f"
+    }
+  ],
+  "immutableInputHashes": {
+    "artifacts/cleanup-20261009/local-helpers-host.luau": "d7333b5cfcf813de0f60a22f4b0795286530d7f9bf8a777409d506e3efd69b45",
+    "artifacts/cleanup-20261009/additional-locals-host.luau": "425d7a48747a06bd378145ee17abec7d914d0459eebd2449cf806454837477ce",
+    "artifacts/cleanup-20261009/usher-locals-host.luau": "f01cba0e6df96fb01102654345e991ad06d94f57c93f479933193602d089d0cb"
+  },
+  "originalPortSHA256": "e21fc02fe0f6db80d0c44a9fb66c6007583f49c1b21f8e0e91b44cc5f91e5061",
+  "recentNativeMetadataPath": "artifacts/cleanup-20261009/remaining-private-locals-native-v1/room-source-install-v1/native-final.json",
+  "recentNativeMetadataSHA256": "6a482f3449d8da2ac31ff1a859e64e141216c3db77f7f48186d30ad50a9e41cf",
+  "currentManifestSHA256": "eeacad05bcb9ccf0a04679ab0adc473cbe7b3a9283fda4b1fa3e80318d78bdbe",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "scope": "Actual Source state/chooseTarget/think/setState/setBeamers/Stop with explicit controlled engine/perception/nav/capture boundaries. No live module initializer, round, real capture/jumpscare/physics/assets/multiplayer/streaming/performance certificate.",
+  "status": "offline meaningful paired failure/retry/reentry contracts pass; Root native-before/installation/final ports pending"
+}

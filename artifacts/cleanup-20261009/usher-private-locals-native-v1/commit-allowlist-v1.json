@@ -1,0 +1,191 @@
+{
+  "schema": "usher-private-locals-commit-allowlist-v1",
+  "generatedAtUtc": "2026-10-10T00:44:22.297301+00:00",
+  "scope": "Exactly five frozen reviewed tools, five appended explicit -text rules, native-before/installed/current metadata evidence and derivation. Root separately stages verified Usher Source and two-field scoped HEAD manifest, plus root scope record. No staging by preparer.",
+  "fileCountExcludingSelf": 35,
+  "totalBytesExcludingSelf": 1441884,
+  "files": [
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/closure.json",
+      "bytes": 8814,
+      "sha256": "315467e28a5c249fa0d191e6af431c7df605e713d931fb6f7b8a9ecd34cb2e18"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/curate-installed-proof.py",
+      "bytes": 10335,
+      "sha256": "131fdec0fdf11aaa3c603e70767ad3d0f66b9975e6dd6787e680e06bea008827"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/freeze-v1.json",
+      "bytes": 2194,
+      "sha256": "e3e08fa87ff27b4924b4599d792ff022656d48338151db01231c6d98d61b47f5"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/proposal-v1/before.module.luau",
+      "bytes": 43336,
+      "sha256": "2fffd3314b9f057be9855f00fd6d59dc9547d7b8b2723a3c628bf6435e304744"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/proposal-v1/candidate.module.luau",
+      "bytes": 43250,
+      "sha256": "8b0653be0313a161b8ddba4c140a1c6b8dad8148fd1b0087df2879a29adbbb0f"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/proposal-v1/cooldownNegative.module.luau",
+      "bytes": 43226,
+      "sha256": "112491359486dd21f21a4eba6e655da4d0dbc6e0617258db5a9d4a0818b06297"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/proposal-v1/native-before.luau",
+      "bytes": 192896,
+      "sha256": "675c5a924b4b3446ef12b62ce7db5785ba6d3215ab591efd86591db15ba0777a"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/proposal-v1/native-installed.luau",
+      "bytes": 192895,
+      "sha256": "871bf20d4534133d64dd16017830cf91937f44c5c650e57a2c1a38c80ad51014"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/proposal-v1/ownership-fixture.luau",
+      "bytes": 3605,
+      "sha256": "e936f429531c4160784fc125a721444655a34ada74404eb08ceb0636392bf282"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/proposal-v1/proposal.json",
+      "bytes": 9581,
+      "sha256": "007f5d6d9e1cdb8b68b6edd64d9fad494cd50dd3db72572fa3a494e6ab0ae15f"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/proposal-v1/reasonNegative.module.luau",
+      "bytes": 43206,
+      "sha256": "fea71c7571ad1faa504d32fecd065da017082246285c9a7790d191d6d8abc5ba"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/REVIEW.before-native-v1.md",
+      "bytes": 11032,
+      "sha256": "81947630a002b20c77393343c1df683d7c429532c79853574e0cc08975e9c7cd"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/REVIEW.md",
+      "bytes": 14268,
+      "sha256": "499f1a1053ae79ba85589dce939702206832276649a801f252680baabeafe120"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-native-before-result.json",
+      "bytes": 1217,
+      "sha256": "f41a599d7fb2828dd5b95df7aab3b3c941fd23b3f849f4f921e653594bbc2aac"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/apply.luau",
+      "bytes": 109514,
+      "sha256": "65e3f02fca787a72364848a7bc0594af0ea49a247ec2915659bc47e910aa6266"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/bounded-transport-and-parity-proof.json",
+      "bytes": 2624,
+      "sha256": "48139a0cc7af2117c00415d697dacfdb4a22f3d5f9ecf1c11339c6f91c675022"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/native-after-source-originals-final.luau",
+      "bytes": 109607,
+      "sha256": "85edd52e9228c6d8ea7cec3f15de4267443ed6cb99e70921d43d6c4feeba6ca4"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/native-after.json",
+      "bytes": 130599,
+      "sha256": "aea14d1e85013a994613af7da8d0e961772f04891a2043ec0bb176a6cebbfffa"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/native-before-source-originals-final.luau",
+      "bytes": 109607,
+      "sha256": "bf2898652313f5faa54f2dff2a734b2a78af1c6452f5776621045e0f9358c456"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/native-before.json",
+      "bytes": 130599,
+      "sha256": "18c545dd09d4b95935697a7af59109d9892bc3fa80f24989c13d2e485702bc21"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/native-final.json",
+      "bytes": 130599,
+      "sha256": "aea14d1e85013a994613af7da8d0e961772f04891a2043ec0bb176a6cebbfffa"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/native-installed-result.json",
+      "bytes": 1216,
+      "sha256": "3c4a324bfcaa3ff0e26bea8a442f85a487db0cb3f64a588c0e759ebb0115451a"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/result.json",
+      "bytes": 4002,
+      "sha256": "0076d9c25acb8a762e9f50a63fccb26de72983d142082e18af6892b0d06a43f9"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-install-v1/snapshot-1-001.luau",
+      "bytes": 9724,
+      "sha256": "036597c43dcee776c714ab594b85141888ef3b102ae3de6036958057991d17a0"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-proposal-v1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-proposal-v1/offline-wrapper-tests-final.json",
+      "bytes": 3542,
+      "sha256": "1ec6db50ee455b139b7210c93bedd807855ca59be8ffef1f025c529a6f55f8c9"
+    },
+    {
+      "path": "artifacts/cleanup-20261009/usher-private-locals-native-v1/usher-source-proposal-v1/proposal.json",
+      "bytes": 2800,
+      "sha256": "e91a5663f858c22755eea02e2d4019992df44ce2ba2a28a75f12735928c9efa8"
+    },
+    {
+      "path": "tools/cleanup_20261009/.gitattributes",
+      "bytes": 2324,
+      "sha256": "911d507aca8d46f58edf19d6a56deda4bbc6b6c37a570cb06308a18d2cc2e1bd"
+    },
+    {
+      "path": "tools/cleanup_20261009/apply_usher_private_locals_cleanup.py",
+      "bytes": 24541,
+      "sha256": "623293809774a27b9fe9ff636045e9a74d895370324e80fb4b6a268033c526b9"
+    },
+    {
+      "path": "tools/cleanup_20261009/prepare_usher_private_locals_probe.py",
+      "bytes": 15983,
+      "sha256": "ef12efdbf411dbca2988cf5154d9599d6f1e6672e46ee2f6c8c333a0dfc0042f"
+    },
+    {
+      "path": "tools/cleanup_20261009/test_apply_usher_private_locals_cleanup.py",
+      "bytes": 16578,
+      "sha256": "acb7f7fba0345e7251bd559f6785fce24ce59793266f42a424ea56e8a3314d64"
+    },
+    {
+      "path": "tools/cleanup_20261009/usher_private_locals_probe.luau",
+      "bytes": 8878,
+      "sha256": "2737a0918fa304feae6da3b379b606d0babefcb2d59a367a93bf977232f216c9"
+    },
+    {
+      "path": "tools/cleanup_20261009/usher_private_locals_source_cas.luau",
+      "bytes": 9268,
+      "sha256": "1882107e22f6ad95e630835b0890d9f2508ea8adee7cc3cdc3cc90a7ecda31fe"
+    }
+  ],
+  "exclude": [
+    "private .git rollback Sources/editor/full raw metadata pages/working-HEAD manifests",
+    "already committed raw Usher.before/Usher.candidate source duplicates",
+    "owner RoundUI and working-only manifest row",
+    "other runtime/mainDocs/recheck files or other actors tools/optimization work"
+  ],
+  "limits": "Actual local unread-state Source targeting/stun/Stop contracts with explicit controlled perception/nav/capture/engine boundaries. No full initializer/capture/round/gameplay/MP/streaming/assets/nav/performance certificate."
+}

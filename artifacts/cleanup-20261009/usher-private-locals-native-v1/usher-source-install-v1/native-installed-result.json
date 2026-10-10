@@ -1,0 +1,30 @@
+{
+  "contract": {
+    "beforeBehaviorSHA256": "8dd7b422c11106477bf58191b04d4143616446687240163a5bcb0c402c1f89de",
+    "semanticNegativeControls": 2,
+    "candidateBehaviorSHA256": "8dd7b422c11106477bf58191b04d4143616446687240163a5bcb0c402c1f89de",
+    "semanticNegativeRejected": true,
+    "reentryChecks": 136,
+    "pairedChecks": 136,
+    "checksPerVersion": 68
+  },
+  "readAtUtc": "2026-10-10T00:41:49Z",
+  "nativeOriginalSourceWrites": 0,
+  "remainingProbes": 0,
+  "nativeOriginalAttributeWrites": 0,
+  "nativeOriginalParentWrites": 0,
+  "cleanupErrors": [],
+  "borrowedRuntimeState": false,
+  "contractPassed": true,
+  "probesDestroyed": 4,
+  "ownedLeaseReleased": true,
+  "installed": true,
+  "originalsUnchanged": true,
+  "limits": "Actual Usher chooseTarget/think/setBeamers/Stop contract against local-only perception/nav/capture/engine boundary tables. No live round, real asset, real multiplayer, streaming, respawn, teleport or performance certification.",
+  "modeSwitches": 0,
+  "probesCreated": 4,
+  "pass": true,
+  "schema": "mongotv-usher-private-locals-native-contract-v1",
+  "originalSourceCoverage": 212,
+  "nativeInputSHA256": "871bf20d4534133d64dd16017830cf91937f44c5c650e57a2c1a38c80ad51014"
+}

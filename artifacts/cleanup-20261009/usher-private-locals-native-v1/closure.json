@@ -1,0 +1,228 @@
+{
+  "schema": "usher-private-locals-closure-v1",
+  "pass": true,
+  "files": [
+    {
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Usher Controller.ModuleScript.lua",
+      "bytesRaw": 34745,
+      "sha256Raw": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "bytesLF": 34745,
+      "sha256LF": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "ServerScriptService/Level4RoundGenerator.ModuleScript.lua",
+      "bytesRaw": 15758,
+      "sha256Raw": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566",
+      "bytesLF": 15758,
+      "sha256LF": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566",
+      "studioPath": "ServerScriptService.Level4RoundGenerator",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Objective Controller.ModuleScript.lua",
+      "bytesRaw": 50254,
+      "sha256Raw": "a01afa1615437ecec70f7b77acef4b1ad3feb30ba11c2d040f01bc1ace9bb9c2",
+      "bytesLF": 50254,
+      "sha256LF": "a01afa1615437ecec70f7b77acef4b1ad3feb30ba11c2d040f01bc1ace9bb9c2",
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
+      "bytesRaw": 16515,
+      "sha256Raw": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "bytesLF": 16515,
+      "sha256LF": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Configuration.ModuleScript.lua",
+      "bytesRaw": 7425,
+      "sha256Raw": "af6225d22fb998db4cd2417cd552f934c75ff2c82cb223c4dd9e27daefd98aa6",
+      "bytesLF": 7425,
+      "sha256LF": "af6225d22fb998db4cd2417cd552f934c75ff2c82cb223c4dd9e27daefd98aa6",
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Usher Nav.ModuleScript.lua",
+      "bytesRaw": 370812,
+      "sha256Raw": "a0ebc21544cf40e7a8d8280dc431ce65b396473b8c9b3cb5ae43fe4cbd3d60e5",
+      "bytesLF": 370812,
+      "sha256LF": "a0ebc21544cf40e7a8d8280dc431ce65b396473b8c9b3cb5ae43fe4cbd3d60e5",
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Nav",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Test Suite.ModuleScript.lua",
+      "bytesRaw": 6821,
+      "sha256Raw": "59f1cd5e87c72c89a60e0f1c4119a5d931b9084ba9689df1e1b94f06a3869335",
+      "bytesLF": 6821,
+      "sha256LF": "59f1cd5e87c72c89a60e0f1c4119a5d931b9084ba9689df1e1b94f06a3869335",
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "ServerScriptService/NoiseRegistry.ModuleScript.lua",
+      "bytesRaw": 2197,
+      "sha256Raw": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "bytesLF": 2197,
+      "sha256LF": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "studioPath": "ServerScriptService.NoiseRegistry",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "ServerScriptService/PlayerProtection.ModuleScript.lua",
+      "bytesRaw": 7587,
+      "sha256Raw": "f39d683aed56a668bdafb204e04a376305ca3899ad233fd47ff169915bd484e0",
+      "bytesLF": 7408,
+      "sha256LF": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "studioPath": "ServerScriptService.PlayerProtection",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "ReplicatedStorage/DeathAdvice.ModuleScript.lua",
+      "bytesRaw": 8952,
+      "sha256Raw": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "bytesLF": 8952,
+      "sha256LF": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "studioPath": "ReplicatedStorage.DeathAdvice",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 4 Round Client.LocalScript.lua",
+      "bytesRaw": 49585,
+      "sha256Raw": "6909fa9518d2c6ff5d58f6958871bdf7ec18eb8115118a8311900c04f38bfd27",
+      "bytesLF": 49585,
+      "sha256LF": "6909fa9518d2c6ff5d58f6958871bdf7ec18eb8115118a8311900c04f38bfd27",
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "className": "LocalScript",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Enabled": true
+      },
+      "attributes": [],
+      "sourceEditorMatches": true
+    },
+    {
+      "file": "tools/level4_blender/usher_nav.py",
+      "bytesRaw": 26360,
+      "sha256Raw": "81b6a8845b5f23260eec065b9e5856944c9fa25e255c29e09d71826cf7786fc4",
+      "bytesLF": 26360,
+      "sha256LF": "81b6a8845b5f23260eec065b9e5856944c9fa25e255c29e09d71826cf7786fc4"
+    },
+    {
+      "file": "tools/level4_blender/README.md",
+      "bytesRaw": 13271,
+      "sha256Raw": "7f72e285ef2c1c775ed0462f3d1d3ba5542832b39ed0372191559d8083692536",
+      "bytesLF": 13271,
+      "sha256LF": "7f72e285ef2c1c775ed0462f3d1d3ba5542832b39ed0372191559d8083692536"
+    },
+    {
+      "file": "tools/level4_blender/upload.luau",
+      "bytesRaw": 3499,
+      "sha256Raw": "550f1f5dca742700307a6f936248b5e1fff5e703f349a31b2ff8931922834f84",
+      "bytesLF": 3407,
+      "sha256LF": "a2577e8623c9a1c10dc1cf56d7fdd493647eea9106735e2d726a37abc4bd3607"
+    },
+    {
+      "file": "tools/level4_blender/serve.py",
+      "bytesRaw": 2313,
+      "sha256Raw": "3faaaea1fab70ad7696da7b33b71a44da3a99dff322593be6f215d7497371021",
+      "bytesLF": 2252,
+      "sha256LF": "9de45fc29db7afe5e30cf5594834e90178d37df08d41fd9b9f965c686eebc8bb"
+    },
+    {
+      "file": "tools/performance_research/capture_sources.py",
+      "bytesRaw": 6118,
+      "sha256Raw": "519a94dc145a437a25e82a4d19b52f27d730e0104c9b2df14bbb404dcdc0f179",
+      "bytesLF": 6118,
+      "sha256LF": "519a94dc145a437a25e82a4d19b52f27d730e0104c9b2df14bbb404dcdc0f179"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/usher-locals/candidate-manifest.json",
+      "bytesRaw": 3468,
+      "sha256Raw": "85a182d1963165fe105020add0a117980068840bfd1a3a14e7cd1d22b20ad7bd",
+      "bytesLF": 3397,
+      "sha256LF": "b5bb2c6215effa38a46894a8647c47f25c9fbe3198aaf8c8d4f386b659ffa840"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/verify_usher_locals.py",
+      "bytesRaw": 8751,
+      "sha256Raw": "e21fc02fe0f6db80d0c44a9fb66c6007583f49c1b21f8e0e91b44cc5f91e5061",
+      "bytesLF": 8751,
+      "sha256LF": "e21fc02fe0f6db80d0c44a9fb66c6007583f49c1b21f8e0e91b44cc5f91e5061"
+    }
+  ],
+  "status": "source closure unchanged; Root fresh native-before/install/final ports pending",
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "note": "Read-only hashes, no whole Source payloads; native expected metadata comes from Root actual S14 final snapshot and is rechecked by prospective probe."
+}

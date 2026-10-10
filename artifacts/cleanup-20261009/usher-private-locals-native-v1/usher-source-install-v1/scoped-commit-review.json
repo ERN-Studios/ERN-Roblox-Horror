@@ -1,0 +1,17 @@
+{
+  "schema": "s16-root-scoped-staging-review-v1",
+  "pass": true,
+  "curationSHA256": "1a9542a49b8a87b58b32c51f5e11273f1fc2bc6d2166bd38d697fe216bdea78a",
+  "curatedPaths": 38,
+  "stagedPaths": 41,
+  "runtimeSource": "ServerScriptService/Level 4 Systems/Level 4 Usher Controller.ModuleScript.lua",
+  "sourceSHA256": "ec4252424a0a513ca370851a5ff45b212bab4c2bfcbe20cba58c0a740a2b2a2f",
+  "sourceBytes": 34659,
+  "removedPrivateStateBytes": 86,
+  "scopedManifestSHA256": "82a391047554ef9cd3e3eaea626b455a10073802579b02422ea9d395b1d55dee",
+  "manifestDelta": "Only target sha256 and bytes; working-only original RoundUI source fields excluded.",
+  "excludedRoundUISourceSHA256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73",
+  "modeSwitches": 0,
+  "publishedByThisBatch": false,
+  "pushedByThisBatch": false
+}

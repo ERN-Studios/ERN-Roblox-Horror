@@ -1,0 +1,87 @@
+{
+  "pass": true,
+  "schema": "mongotv-usher-source-cas-offline-proposal-v1",
+  "bytesRemoved": 86,
+  "scope": "ServerScriptService/Level 4 Systems/Level 4 Usher Controller.ModuleScript.lua",
+  "beforeSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+  "afterSHA256": "ec4252424a0a513ca370851a5ff45b212bab4c2bfcbe20cba58c0a740a2b2a2f",
+  "compileChecks": [
+    {
+      "operation": "capture",
+      "optimization": "-O0",
+      "sourceSHA256": "036597c43dcee776c714ab594b85141888ef3b102ae3de6036958057991d17a0",
+      "pass": true
+    },
+    {
+      "operation": "capture",
+      "optimization": "-O1",
+      "sourceSHA256": "036597c43dcee776c714ab594b85141888ef3b102ae3de6036958057991d17a0",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O0",
+      "sourceSHA256": "caf037d9ae839ba44a3ea6356aee88f3f1fa10424ef7d00206d9c76a8c16b196",
+      "pass": true
+    },
+    {
+      "operation": "observe",
+      "optimization": "-O1",
+      "sourceSHA256": "caf037d9ae839ba44a3ea6356aee88f3f1fa10424ef7d00206d9c76a8c16b196",
+      "pass": true
+    },
+    {
+      "operation": "target",
+      "optimization": "-O0",
+      "sourceSHA256": "8877db226e69dfd14bafa17d32a69bb101dec98f9f3362c3003c3a94da79b5e5",
+      "pass": true
+    },
+    {
+      "operation": "target",
+      "optimization": "-O1",
+      "sourceSHA256": "8877db226e69dfd14bafa17d32a69bb101dec98f9f3362c3003c3a94da79b5e5",
+      "pass": true
+    },
+    {
+      "operation": "verify",
+      "optimization": "-O0",
+      "sourceSHA256": "cd84bf390c309a01476c8e03bc6f5a9f64de74539ba1d3be1757a06235cbb9c2",
+      "pass": true
+    },
+    {
+      "operation": "verify",
+      "optimization": "-O1",
+      "sourceSHA256": "cd84bf390c309a01476c8e03bc6f5a9f64de74539ba1d3be1757a06235cbb9c2",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O0",
+      "sourceSHA256": "b09d9d3a6f5b265ad5364550ca1a160b2a25b745a8c08ef76c368b5215c8800f",
+      "pass": true
+    },
+    {
+      "operation": "apply",
+      "optimization": "-O1",
+      "sourceSHA256": "b09d9d3a6f5b265ad5364550ca1a160b2a25b745a8c08ef76c368b5215c8800f",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O0",
+      "sourceSHA256": "fb53ef05795f8d9f9647c6c58d14747465e9c2f3ad031b58770b8e1baa29077e",
+      "pass": true
+    },
+    {
+      "operation": "rollback",
+      "optimization": "-O1",
+      "sourceSHA256": "fb53ef05795f8d9f9647c6c58d14747465e9c2f3ad031b58770b8e1baa29077e",
+      "pass": true
+    }
+  ],
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "manifestWrites": 0,
+  "templateSHA256": "1882107e22f6ad95e630835b0890d9f2508ea8adee7cc3cdc3cc90a7ecda31fe",
+  "status": "pending independent wrapper/negative review and fresh usher-native-before"
+}

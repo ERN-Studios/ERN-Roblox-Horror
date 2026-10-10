@@ -1,0 +1,59 @@
+{
+  "schema": "usher-installed-bounded-transport-and-parity-proof-v1",
+  "pass": true,
+  "generatedAtUtc": "2026-10-10T00:42:21.469012+00:00",
+  "nativeSourceRows": 212,
+  "targetOnlySourceDrift": [
+    {
+      "instanceId": "1_42775",
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "fields": {
+        "bytes": {
+          "before": 34745,
+          "after": 34659
+        },
+        "sha256": {
+          "before": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+          "after": "ec4252424a0a513ca370851a5ff45b212bab4c2bfcbe20cba58c0a740a2b2a2f"
+        }
+      }
+    }
+  ],
+  "identitiesClassesParentsPropertiesAttrsTagsUnchanged": true,
+  "afterAndFinalRowsByteEquivalent": true,
+  "metadataPagesPerSnapshot": 11,
+  "totalSavedMetadataPages": 33,
+  "maxSavedPrettyPageBytes": 14875,
+  "wireMetadataResponseCapEnforcedByExecutedWrapper": 20000,
+  "wireSourceResponseCapEnforcedByExecutedWrapper": 8000,
+  "actualSourceReadChunkLines": 64,
+  "staticAlignedBeforeSource": {
+    "chunks": 15,
+    "maxBytes": 3363,
+    "lines": 930
+  },
+  "staticAlignedCandidateSource": {
+    "chunks": 15,
+    "maxBytes": 3363,
+    "lines": 929
+  },
+  "sourceChunkSizeScope": "Static exact Source bytes at the actual 64-line alignment; actual response caps enforced before parsing, no measured wire size claimed.",
+  "privateOriginalSourceSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+  "privateOriginalEditorSHA256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+  "privateOriginalEditorExact": true,
+  "actualCASCodeSHA256": "65e3f02fca787a72364848a7bc0594af0ea49a247ec2915659bc47e910aa6266",
+  "actualResultSHA256": "0076d9c25acb8a762e9f50a63fccb26de72983d142082e18af6892b0d06a43f9",
+  "actualInstalledReplaySHA256": "3c4a324bfcaa3ff0e26bea8a442f85a487db0cb3f64a588c0e759ebb0115451a",
+  "actualBeforePortSHA256": "f41a599d7fb2828dd5b95df7aab3b3c941fd23b3f849f4f921e653594bbc2aac",
+  "beforeBehaviorSHA256": "8dd7b422c11106477bf58191b04d4143616446687240163a5bcb0c402c1f89de",
+  "checksPerVersion": 68,
+  "pairedChecks": 136,
+  "reentryChecks": 136,
+  "probesCreatedDestroyedPerRun": 4,
+  "consoleBeforeAfterExact": true,
+  "other211SourceRowsPreserved": true,
+  "noRollbackNeeded": true,
+  "nativeCallsByProofDerivation": 0,
+  "productionWritesByProofDerivation": 0,
+  "scope": "Point-time original Source/editor/recorded metadata and actual Source private-state/targeting/stun/Stop controlled-boundary contracts. No full initializer/nav/capture/round/gameplay/assets/multiplayer/streaming/performance certificate."
+}

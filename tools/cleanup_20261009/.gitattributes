@@ -50,3 +50,8 @@ prepare_c26_comments.py -text
 apply_c26_comments_cleanup.py -text
 c26_comments_source_cas.luau -text
 test_apply_c26_comments_cleanup.py -text
+prepare_usher_private_locals_probe.py -text
+usher_private_locals_probe.luau -text
+apply_usher_private_locals_cleanup.py -text
+usher_private_locals_source_cas.luau -text
+test_apply_usher_private_locals_cleanup.py -text

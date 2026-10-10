@@ -1,0 +1,109 @@
+{
+  "pass": true,
+  "cases": [
+    {
+      "scenario": "success",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "play",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "beforeWrite",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "commitThenError",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "observeUnknown",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "foreignNative",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "replay",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "actorManifest",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "actorSource",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "actorTargetRow",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "console",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "truncatedCapture",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "oversizedCapture",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "shortPage",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "catalogDrift",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    },
+    {
+      "scenario": "chunkFailure",
+      "pass": true,
+      "nativeBoundary": "fake only; actual wrapper/files/manifest/CAS/rollback executed"
+    }
+  ],
+  "checks": 109,
+  "nativeCalls": 0,
+  "productionWrites": 0,
+  "actualNativeTransform": {
+    "pass": true,
+    "cases": 5,
+    "checks": 8,
+    "compileChecks": [
+      {
+        "optimization": "-O0",
+        "pass": true
+      },
+      {
+        "optimization": "-O1",
+        "pass": true
+      }
+    ],
+    "fixtureSHA256": "6b8a825220543924926964e7ca562c6b692ae3e79714f9e2671dd63ddcb64909",
+    "actualTransformSHA256": "14f8159af537c6931de07f15a5791691817d94512c0c99eadeef9dc003247348",
+    "scope": "Actual native-template five exact anchors/forward/reverse transform; known exact body SHA boundary, not real ScriptEditorService callback or native guard certification."
+  },
+  "wrapperSHA256": "623293809774a27b9fe9ff636045e9a74d895370324e80fb4b6a268033c526b9",
+  "templateSHA256": "1882107e22f6ad95e630835b0890d9f2508ea8adee7cc3cdc3cc90a7ecda31fe",
+  "limits": "Fake MCP/native/console/git boundaries; actual filesystem and wrapper operations. Real native source CAS and global after-port remain parent-owned."
+}
