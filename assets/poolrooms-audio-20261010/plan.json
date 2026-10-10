@@ -1942,6 +1942,13 @@
    ]
   },
   {
+   "key": "bed_a4_stepwell",
+   "sections": [
+    "A4"
+   ],
+   "volume": 0.45
+  },
+  {
    "key": "bed_a2_rotunda",
    "sections": [
     "A2"
@@ -2020,13 +2027,6 @@
    "key": "bed_hall",
    "sections": [
     "A3"
-   ],
-   "volume": 0.5
-  },
-  {
-   "key": "bed_hall",
-   "sections": [
-    "A4"
    ],
    "volume": 0.5
   },
