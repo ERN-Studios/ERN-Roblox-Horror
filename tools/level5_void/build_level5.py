@@ -10,9 +10,9 @@ Teal tests walking fully and sprint at edge only on its 10-stud square tops.
 Walkways >=5 (Rose/Blue/Amber >=7), Mint beams >=4; landings >=7, >=11 long
 except Teal. <=80 gaps and individual room budgets. Checkpoints every <=3 gaps
 and <=90 route studs, on >=7x7 level ground with >=3 edge clearance, with yaw.
-Transparent collidable 0.6 side guards span -0.5..+7.5 above the surface, including
-gaps, except rests/plazas/Mint beams; spiral stairs have outer guards only.
-Guards are trimmed against walkable tops and both routes sampled every 0.5 stud.
+v4.2, 2026-10-11, owner: "Du skal lige fjerne de der usynlige vægge i siderne i level 5, som du tilføjede".
+The invisible side guards of v4 are OFF (GUARDS_ON = False; their code and asserts stay for the day they are
+wanted). Ivory's stair, which narrows away from its column, has the slot filled with a flush stone band (`Fill`).
 Neon Edge strips mark both edges of every gap. Nothing floats outside STACKED;
 no crossing; monolith clearance includes alternative routes. Route points remain
 0.9 before a gap / 2.0 after it; touching Amber +3 blocks use jump+hop, not GAPS.
@@ -43,6 +43,9 @@ COLOURS = {
 }
 PARTS, BALLS, LIGHTS, ROUTE, CHECKPOINTS, GAPS, PLATES, FOOT = [], [], [], [], [], [], [], []
 ALTS, GUARDS, EXTENT, FINALE, METRICS = [], [], {}, {}, {}
+# v4.2 (owner, 2026-10-11: "Du skal lige fjerne de der usynlige vægge i siderne i level 5, som du tilføjede"):
+# no invisible side walls. The code that lays them is kept behind this switch; with it off no `Guard` part is made.
+GUARDS_ON = False
 GUARD_COVERAGE = []
 ROOFED, STACKED = {'rose', 'blue', 'amber'}, {'crimson', 'ivory'}
 random.seed(505)
@@ -549,6 +552,7 @@ def square_stair(p,cx,cz,column,turns,w0,w1,gaps):
     p.corner(90,9)
     # Foot is the midpoint of the west side; half-side first and last.
     p.h=90; p.way()
+    first=len(FOOT)
     segments=[radius]+[2*radius]*(round(4*turns)-1)+[radius]
     for side,length in enumerate(segments):
         progress=side/max(1,len(segments)-1)
@@ -569,6 +573,15 @@ def square_stair(p,cx,cz,column,turns,w0,w1,gaps):
         if side<len(segments)-1:
             p.corner(-90,9)
     assert abs(abs(p.h-90)-360*turns)<1e-6, f'{p.section}: piece {p.last["i"]} has the wrong number of turns'
+    # v4.2: a stair that narrows on a constant centre line leaves a slot between its inner edge and the pillar
+    # (up to 2.1 studs at Ivory's top). Without the invisible walls that slot is filled: a flush stone band from
+    # the pillar's face to the tread, so the pale stair still narrows to the eye and nobody drops through.
+    for f in FOOT[first:]:
+        slot=(w0/2-.4)-f['w']/2
+        if f['sec']!=p.section or f.get('outer')!=1 or f['n']=='Joint' or slot<.25: continue
+        c,s_=math.cos(math.radians(f['yaw'])),math.sin(math.radians(f['yaw']))
+        off=(f['w']/2+w0/2-.4+.3)/2                      # middle of the band, from the piece's centre line inward
+        part('Fill',(f['l'],1.4,slot+.3),(f['x']+s_*off,f['top']-.7,f['z']-c*off),'stone',yaw=f['yaw'])
     # End at the east midpoint, turn outward on a level top joint.
     p.outer=None; p.both=False
     p.turn(90,9)
@@ -731,6 +744,7 @@ def cut_interval(f, x, z, dx, dz, length, grow=.311):
 
 
 def guard_run(sec,x,z,heading,length,top):
+    if not GUARDS_ON: return
     dx,dz=math.cos(math.radians(heading)),math.sin(math.radians(heading))
     runs=[(0.,length)]
     for f in FOOT:

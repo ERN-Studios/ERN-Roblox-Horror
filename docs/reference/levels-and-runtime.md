@@ -1710,3 +1710,19 @@ nemmere på telefon og tablet som du siger". This replaces v3 ("much harder", 20
   missing from GameManager; the known hud_b8 caption check).
 - **Left out:** 2-3 layouts per room chosen per round (my own idea in the list given to the owner). The rooms differ
   from each other, and Mint and Teal offer a choice, but a room is the same every round.
+
+### Changed 2026-10-11 (just after midnight) - Level 5: the invisible side walls are gone (in Studio, NOT published by this session)
+
+Owner, after v4 went live in v2979: "Du skal lige fjerne de der usynlige vægge i siderne i level 5, som du tilføjede".
+
+- `build_level5.py` v4.2: `GUARDS_ON = False`. No `Guard` part is made (946 before); the code that lays and checks
+  them stays behind the switch. Everything else of v4 is as it was: the short straight gaps, the wide landings, the
+  lit edges, the 161 checkpoints, the fall that puts you back, the jump assist.
+- Without them a body can walk off the side of a walkway again (they are 5 to 8 wide; Mint's beams 4.4 never had
+  walls). A fall costs a few steps, not a life.
+- Ivory's stair narrows away from its square column, which left a slot of up to 2.1 studs on the inside near the top.
+  The walls used to cover it; now 148 flush stone bands (`Fill`) close it, so the pale stair still narrows to the
+  eye and nobody drops through or wedges.
+- Re-imported (1,284 geometry parts, 0 guards). Walked with auto-jump in Rose, Mint, Crimson and Ivory: every jump
+  made. Not tested: a real phone.
+- **Do not add invisible walls to a level again without being asked.**
