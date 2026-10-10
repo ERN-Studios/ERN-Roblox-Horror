@@ -1,35 +1,34 @@
-# Next task — Level 2 audio pilot
+# Level 2 audio — state after 2026-10-10, and what is owed
 
-Owner: `Main RBLX GAME DEV` (Claude), active again since the evening of 2026-10-10. It retains Studio ownership.
-Optional helper: one Codex gpt-6.1-sol Medium/Standard job for file inventory and audio QC only.
-No automatic readers/review teams, no helper Studio calls and no further subagents.
+Owner: `Main RBLX GAME DEV` (Claude), Studio owner. The pilot order that stood here (3–5 sounds first) was replaced by
+the owner the same evening: "Færdiggør følgende punkter" — the whole pack was to go in. It did.
 
-Goal: reconcile the existing Level 2 files and choose 3–5 representative sounds.
-Then move that small selection through upload, scoped installation and listening before extending the package.
+## What is in Studio
 
-Start at `/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009`, branch `codex/poolrooms-audio-20261009`.
-Check git status and exact live Studio/audio-plan baselines; do not infer installation from filenames.
+- `ReplicatedStorage.Level2Poolrooms`: plan `poolrooms-audio-20261010-v3`, 65 Sound templates (9 from 2026-10-09 kept).
+  15 beds, 6 loops, 46 one-shot rows. Built by `tools/poolrooms_audio_20261010/make_plan.py`, installed by `install.py`
+  (re-runnable; refuses a `Plan.Value` it does not know).
+- Client `Level 2 Poolrooms Ambience` (`AUDIO_SECTIONS_20261010`), pushed and recorded in the manifest.
+- Own bed: P0, A1, P1, P2, A4, A2, P4, A5, P5, A6, EXIT. Shared: S and P3 on `bed_service`, A3 on `bed_hall`
+  (nobody else uses it now).
+- Left out, with reason: `bed_a3_nave`, `bed_p3_vent`, `bed_s_desert` failed the high-band floor gate (the "no AI
+  static" check) in three ElevenLabs passes, 11 takes each; `shot_a1_stir`, `shot_a1_tile`, `shot_p_hangers` failed QC.
+  Do not force them through: write a different source for those three sections instead (not wind/vent noise, which is
+  what the gate cannot tell from hiss).
 
-Existing material to reconcile:
+## Evidence
 
-- `assets/poolrooms-audio-20261009/`: older plan, QC, recipes, provenance, sound IDs and upload receipt.
-- `assets/poolrooms-audio-20261010/plan.design.json`: newer untracked design, not evidence of installation.
-- `tools/poolrooms_audio_20261010/`: untracked make_plan.py, upload.py and install.py.
-- `StarterPlayer/StarterPlayerScripts/Level 2 Poolrooms Ambience.LocalScript.lua`: mirrored client; read the live source before editing.
-- Check the paused session's saved mastering/generation outputs and job paths; do not regenerate a whole pack by default.
+- Offline: `python3 tools/tests/test_poolrooms_audio.py --luau-dir <luau binaries>` → 24 PASS, one of them the shipped
+  plan walked through the real client.
+- Studio play, solo, muted through a SoundGroup: every section S…A6 reported its bed, loaded sounds, own one-shots,
+  `Level2PoolroomsAudioSkipped` empty. Scripts: `~/Projects/stayquiet-session-tools/l2audio/{goto.lua,read.lua,walk.py}`.
 
-Confirmed context: the 2026-10-10 work produced additional recordings/mastering, but the paused owner's report said those new sounds were not uploaded, installed or heard. Earlier 2026-10-09 receipts are a different batch. Reconcile these separately.
-The owner wants the first section's waves at a very low level, quieter wading steps, no quiet AI static and no audible abrupt cutoff.
+## Owed
 
-Deliverables/checks:
+1. **Nobody has listened to any of it.** Numbers passed; ears have not. The owner's earlier wishes still stand: first
+   section's waves very low, quieter wading steps, no quiet static, no abrupt cutoff. First thing to do with sound on.
+2. Phone speaker and a second player: untested.
+3. Three sections without a bed of their own (above).
 
-1. Save a file inventory with hashes, provenance, section assignment, QC status and any missing source path.
-2. Select 3–5 examples covering a bed, a random sound and different relevant sections; justify each briefly.
-3. Check clipping, noise/static, fades, loop seam and intended runtime gain. Listen before uploading.
-4. Studio owner uploads only this pilot; preserve owner/permissions and record asset receipts/IDs.
-5. Install against fresh source/plan baselines with existing safe sync and full readback.
-6. Hear the pilot in representative gameplay and inspect client/server logs, loading and sound state.
-7. Save evidence and a scoped commit; publish verified game changes under the existing policy.
-8. Expand only after the pilot's listening/mixing result is acceptable. Report missing checks exactly.
-
-This is a saved next-task order. The setup optimisation does not start the audio task.
+Raw takes, mastering tool and job logs: `/Users/zeanjuul4/Projects/stayquiet-l2-codex/audio` (outside the repo, 16
+third-pass takes included). Masters, QC, recipes, provenance and ids: `assets/poolrooms-audio-20261010/`.

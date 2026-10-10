@@ -1524,3 +1524,36 @@ scripts: read and edit the mirror in the worktree.
 
 **Not verified in this batch**: more than one player anywhere, phones, how any sound sounds, a real stuck Entity and its
 recovery, a natural lunge by eye, the camcorder look in Levels 2 to 6 and on the kill cams, the TAGGED card in Level 6.
+
+### Added 2026-10-10 (evening) - Hip height, Level 2 lamps/brightness/audio, Level 6 feedback, developers off the time boards
+
+- **"Gliding in the floor, almost cannot move" (Level 1 and 2) was one bug: `Humanoid.HipHeight` computed from half a
+  body.** The round body (StarterCharacter, R15 with AnimationConstraints) reaches the owning client in pieces and the
+  engine, with `AutomaticScalingEnabled`, worked the hip height out of what had arrived (0, -0.097, 0.936 instead of
+  2.605). The body sank; in Level 2 it then found the shallow Terrain water and swam. Fix in three places: the place's
+  `StarterCharacter.Humanoid` has automatic scaling off and `HipHeight = 2.605` (attribute `HipHeightFix`; a place
+  edit, no mirror file); GameManager measures root-to-sole after loading and publishes `ZyntraHipHeight`;
+  NoiseReporter (`HIP_HEIGHT_20261010`) holds the humanoid to it. 4 of 4 fresh rounds broken before, 11 of 11 good
+  after. Measure HipHeight on a FRESH round start before believing any other theory about slow walking.
+- Same push: `POOL_EXIT_20261010` (a swimmer pressed against a pool edge is lifted out) and `CROUCH_LATCH_20261010`.
+- **Level 2**: +10% on screen is `ExposureCompensation 0.24` in Level2PoolroomsPresentation (measured +10.4% mean
+  pixel value). 360 pit lamps (12 rows down each wall of the five A3 death pits, fading with depth) and `A6 Exit Lamp`
+  live in `Level2PoolroomsMap."Owner Props"`; `tools/level2_props/`. Mesh vertex colours MULTIPLY the part colour:
+  upload lamp meshes with white vertex colours. Audio: `docs/workflow/next-level2-audio.md`.
+- **Level 6** (game module): `AIR_WALK_20261010` (going home between rounds is a real, uninterruptible walk; an
+  off-graph approach point needs floor under it), `CHASE_LETGO_20261010` (60 studs for 1.5 s ends a chase, then calm
+  pathfinding to the nearest player, 6 s grace), `ARRIVAL_ALL_20261010` (the game and announcements start when
+  everyone has passed the Play Zone sign; 90 s wait, 240 s cap). Client: PA and entity volumes halved. Arena: a narrow
+  framed way in on the right 9.6 studs past the gate (no nav change), and uprights/posts/hub ring tying the top
+  walkways' railings to their decks. `import_arena.py` and `pbr/apply_pbr.py` now find the model in Workspace OR
+  ServerStorage (LevelWorldStorage parks maps 4/5/6 in ServerStorage in Edit). Solo play: 0 of about 700 samples in
+  the air over rounds 2 and 3. Geometry seen only in a Blender render
+  (`~/Projects/stayquiet-session-tools/l6render/`), not in game: Studio's viewport was a 1250x116 strip.
+- **Lobby**: `BOARD_NO_DEVS_20261010` in Level Leaderboards: developers (DevAccess) are not submitted, and their stored
+  rows are skipped and removed on read. Not testable in Studio (no DataStore there).
+- **Shadow entity for Level 2**: concept pictures only, `~/Desktop/Level 2 entity concept/` (13 pictures, five
+  directions). Nothing built; the owner picks a direction first.
+- Not done by anybody: listening to the new sounds; two players; a phone; the look of the Level 6 changes in game.
+- The publish click by Codex computer use must be started with the model pinned (`-m gpt-6.1-sol`, Low,
+  `service_tier="default"`): `~/.codex/config.toml` on this Mac defaults to ultra/priority, and
+  `tools/agents/start-codex.sh` rejects `--enable`. `~/Projects/stayquiet-session-tools/publish_when_idle.sh`.
