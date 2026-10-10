@@ -1554,6 +1554,8 @@ recovery, a natural lunge by eye, the camcorder look in Levels 2 to 6 and on the
 - **Shadow entity for Level 2**: concept pictures only, `~/Desktop/Level 2 entity concept/` (13 pictures, five
   directions). Nothing built; the owner picks a direction first.
 - Not done by anybody: listening to the new sounds; two players; a phone; the look of the Level 6 changes in game.
-- The publish click by Codex computer use must be started with the model pinned (`-m gpt-6.1-sol`, Low,
+- **Not published by this session**: the owner took publishing over that evening (AGENTS.md, Publishing preference).
+  Waiting in Studio after v2943: Level 2 audio, the Level 6 changes, the leaderboard change.
+- If the Codex computer-use publish is ever wanted again, it must be started with the model pinned (`-m gpt-6.1-sol`, Low,
   `service_tier="default"`): `~/.codex/config.toml` on this Mac defaults to ultra/priority, and
   `tools/agents/start-codex.sh` rejects `--enable`. `~/Projects/stayquiet-session-tools/publish_when_idle.sh`.

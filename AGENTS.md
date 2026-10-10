@@ -67,6 +67,12 @@
 
 ## Publishing preference
 
+**Current, owner on 2026-10-10 (evening): "Bare fremover lad mig puplish indtil jeg siger andet."** The owner presses
+File > Publish to Roblox themselves until they say otherwise. Agents do not publish, do not start a computer-use publish
+and do not leave an idle-waiting publish job armed. Finish, verify, commit, and report exactly what is waiting in Studio
+unpublished. The points below describe the older standing preference and apply again only when the owner says so; the
+limits in them (no other places, no access changes, no server restarts) stand regardless.
+
 The user instructed on 2026-08-31: always publish completed game changes.
 
 - After implementing and verifying requested changes, publish the current Roblox Studio place to the existing experience: place ID `131311258779917`, universe ID `10559217407`.

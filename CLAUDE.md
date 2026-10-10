@@ -138,7 +138,7 @@ This replaces historical model, workflow, ownership and test defaults.
 - UI actions use authorised app-bound tools and current UI observations.
 - Existing hands-off/frontmost safeguards still apply to real Studio keys/clicks.
 - This setup permits MonoCode operation; it does not waive unrelated GUI safeguards.
-- Publish completed verified requested game changes under AGENTS.md's policy.
+- The owner publishes (since 2026-10-10 evening): report what waits in Studio; see AGENTS.md.
 - Material blockers prevent publish; saving, committing and publishing are distinct.
 - Verify successful publish and the newest published version where accessible.
 - A toast or asset Updated timestamp alone can mislead.
