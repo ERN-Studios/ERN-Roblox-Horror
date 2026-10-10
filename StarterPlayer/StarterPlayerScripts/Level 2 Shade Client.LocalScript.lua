@@ -361,7 +361,7 @@ local function showDark()
 	black.BackgroundTransparency = 1 - math.clamp(dark.black, 0, 1)
 	-- while it has the victim (the kill and the dark after it) the black is over every other HUD; the death card that
 	-- follows is another script's and must not be under it
-	gui.DisplayOrder = (busy and dark.black > 0.5) and 1000 or 45
+	gui.DisplayOrder = (busy and dark.black > 0.5) and 2000 or 45   -- ProtectionHUD (the item keys) sits at 1001
 	gui.Enabled = strength > 0.01 or dark.black > 0.01
 end
 
@@ -868,6 +868,7 @@ RunService.RenderStepped:Connect(function(dt)
 	end
 	if not wasIn then
 		wasIn = true
+		faceSetup()   -- its pictures are fetched now, not in the second they are needed
 		glimpse.nextAt = os.clock() + random:NextNumber(25, 45)
 	end
 	local turn = {}
