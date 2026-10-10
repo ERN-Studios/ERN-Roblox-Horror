@@ -1,0 +1,93 @@
+{
+  "schema": "mongotv-local-animation-retirement-promotion-v1",
+  "pass": true,
+  "startedAtUtc": "2026-10-10T10:06:06.686896+00:00",
+  "headAtStart": "28f9c59a3bd6398029f0ce5444fe1c98686a6191",
+  "nativeWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "assetUploads": 0,
+  "rollback": {},
+  "installedPort": {
+    "exitCode": 0,
+    "stdout": "{\"pass\": true, \"cliCases\": 16, \"cases\": 32, \"helpersPerVersion\": 13, \"cacheIds\": 8, \"cacheNegative\": 1, \"retained\": 21, \"nativeCalls\": 0}\r\n",
+    "stderr": ""
+  },
+  "files": [
+    {
+      "file": "tools/publish_entity_animations.py",
+      "beforeBytes": 7859,
+      "beforeSHA256": "dbe24a9733e2e9ddeb58f290a9ccbd9acdad63b4580fce965a9dfe90bfbb72a2",
+      "candidateBytes": 8323,
+      "candidateSHA256": "a995f56543b7f47d6516ecee6afc9d374e5688a8f222de6237dbcdf08f0bef0c",
+      "retiredCallableEntries": [
+        "publish_code",
+        "main"
+      ],
+      "pureFunctionASTUnchanged": [
+        "luau_table"
+      ],
+      "syntaxPassed": true,
+      "allOriginalBytesRetainedInArchive": true,
+      "cliGuardBeforeOptionalAndStudioImports": true,
+      "importWorkflowRetired": false
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "beforeBytes": 15994,
+      "beforeSHA256": "79e89584723b1325bb1e40558e9858ec2d12a0052f6afa7fe862da689b307786",
+      "candidateBytes": 16458,
+      "candidateSHA256": "a954cc62bdde4811bca2754aaf79f9c9d07a36fc7334cf6b15554840e5583c4e",
+      "retiredCallableEntries": [
+        "studio_rest",
+        "main"
+      ],
+      "pureFunctionASTUnchanged": [
+        "blender_sample_code",
+        "matrix",
+        "roblox_local",
+        "convert_blender",
+        "quaternion_xyzw",
+        "slerp_xyzw"
+      ],
+      "syntaxPassed": true,
+      "allOriginalBytesRetainedInArchive": true,
+      "cliGuardBeforeOptionalAndStudioImports": true,
+      "importWorkflowRetired": false
+    },
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "beforeBytes": 4402,
+      "beforeSHA256": "ab59e31bb5e63646f895c0455c9cdd63d1be4cbd177b06436201bc0dd4d559dc",
+      "candidateBytes": 4812,
+      "candidateSHA256": "3f6cf7a7c71de8968687c2b71242750adb2dc5a45fb68e395f68f7ff8889b8cf",
+      "retiredCallableEntries": [],
+      "pureFunctionASTUnchanged": [
+        "safe_name"
+      ],
+      "syntaxPassed": true,
+      "allOriginalBytesRetainedInArchive": true,
+      "cliGuardBeforeOptionalAndStudioImports": true,
+      "importWorkflowRetired": true
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "beforeBytes": 2979,
+      "beforeSHA256": "1acc70432b429377158a04c25aca1e445562e139199ad584bc276069144cc2e4",
+      "candidateBytes": 3389,
+      "candidateSHA256": "fafeb0da290bc05e910ba62150a77e0bd19710ef0331dfcfc63e2f00b7d55cf0",
+      "retiredCallableEntries": [],
+      "pureFunctionASTUnchanged": [
+        "safe_name"
+      ],
+      "syntaxPassed": true,
+      "allOriginalBytesRetainedInArchive": true,
+      "cliGuardBeforeOptionalAndStudioImports": true,
+      "importWorkflowRetired": true
+    }
+  ],
+  "installedPortSHA256": "4865e27f7942f03c15790334323bb9ff706a5caeddce6b6de8751fa4235c2e58",
+  "finishedAtUtc": "2026-10-10T10:06:08.770002+00:00",
+  "attemptedLocalToolWrites": 4,
+  "limits": "Scoped compare/write/readback, not cross-process atomicity. Four retired authoring entrypoints only; full exact original bytes archived. Native forests, all upload-cache metadata and gameplay Sources untouched. Offline optional/native boundaries and documented cache fixtures do not certify current native cache data or playback."
+}

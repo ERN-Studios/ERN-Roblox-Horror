@@ -1,0 +1,119 @@
+{
+  "schema": "mongotv-animation-regeneration-input-scope-v1",
+  "status": "Inputs retained, regeneration equivalence to every native save/version not tested",
+  "currentV10InputFiles": 8,
+  "versionedPublishedReceipts": 11,
+  "files": [
+    {
+      "file": "assets/animations/entity/keyframes_v3/walk_restrained.json",
+      "rawBytes": 141397,
+      "rawSHA256": "35ce6b07e95bfdba1a73c15e9d5c99732e2018cf00d9aeddbf6f7ef4a72f311d"
+    },
+    {
+      "file": "assets/animations/entity/keyframes_v3/run_chase_corrected.json",
+      "rawBytes": 141421,
+      "rawSHA256": "d93dce51b6c3af8121f802e1f36bf0a8c6e73b1bb65116ff7f806863012b22ba"
+    },
+    {
+      "file": "assets/animations/entity/keyframes_v3/watch.json",
+      "rawBytes": 621486,
+      "rawSHA256": "5445e6074f0c1c78e09f3b2e00d9f28bbb8caf10e53c1753a0b981581715d905"
+    },
+    {
+      "file": "assets/animations/entity/keyframes_v3/yell_howl.json",
+      "rawBytes": 228604,
+      "rawSHA256": "40f430463f61ebc94c66a0b4e0bf9e815e794cba0838744b31ddf9fa3ac93619"
+    },
+    {
+      "file": "assets/animations/entity/keyframes_v3/yell_fromrun.json",
+      "rawBytes": 301770,
+      "rawSHA256": "c5e1ba6dc137c8ecb3f7c93addb65b18e27a09476258aa0ae5c513032b82903c"
+    },
+    {
+      "file": "assets/animations/entity/keyframes_v3/lunge.json",
+      "rawBytes": 252828,
+      "rawSHA256": "4594baebc9bdb28acfd6ca33b65e69cc469ecadf816741c407aba80a5bd1417b"
+    },
+    {
+      "file": "assets/animations/entity/keyframes_v3/lunge_fromrun.json",
+      "rawBytes": 183195,
+      "rawSHA256": "52a6774385a1dd98f0082ea738503a5a3b8c7184cfb161b199d144d4445d18d9"
+    },
+    {
+      "file": "assets/animations/entity/keyframes_v3/kill_hunched_groundpunch.json",
+      "rawBytes": 525379,
+      "rawSHA256": "2f9b4ebe112e1b6a74c7f7b7bf326c40032fa700bc856680e4faa0814920c457"
+    },
+    {
+      "file": "assets/animations/entity/published-assets-v10-full.json",
+      "rawBytes": 850,
+      "rawSHA256": "54400c8571bb5de7b340ad77e27b6fa948d5dd28e4bfa1e351ca6e0c712df781"
+    },
+    {
+      "file": "assets/animations/entity/published-assets-v2.json",
+      "rawBytes": 812,
+      "rawSHA256": "6423c95946fe6d63f6726cc10e17483a170b13b69f18c4cf5a4d465bb6b41437"
+    },
+    {
+      "file": "assets/animations/entity/published-assets-v3.json",
+      "rawBytes": 809,
+      "rawSHA256": "f60d45feddbc2cf297e7c78eb174cfa6437a86541dccb2d90fffe30406763d66"
+    },
+    {
+      "file": "assets/animations/entity/published-assets-v4.json",
+      "rawBytes": 817,
+      "rawSHA256": "d586c0b28e6ac13c4fb18db26df4f7d29abae92c4acaa5339c3f64fb51165b4b"
+    },
+    {
+      "file": "assets/animations/entity/published-assets-v5.json",
+      "rawBytes": 818,
+      "rawSHA256": "acd737a896ca819711aff6a15e0b1844815d9e767caa0f24eccaa254158cde0d"
+    },
+    {
+      "file": "assets/animations/entity/published-assets-v6-actions.json",
+      "rawBytes": 255,
+      "rawSHA256": "aa1b7c264f70436e5101c5997b5718b258f4dd90914f0e7832e2dddc7b5cf61a"
+    },
+    {
+      "file": "assets/animations/entity/published-assets-v6-walk.json",
+      "rawBytes": 118,
+      "rawSHA256": "f5872e79a15cdf9b4eb08fe6221ba3adf970c9abc8abd3ceb21d064c6ae43367"
+    },
+    {
+      "file": "assets/animations/entity/published-assets-v7-actions.json",
+      "rawBytes": 242,
+      "rawSHA256": "8e499041b4db19db3bb5514f7c1fce800975210e2e19cdbb1723840df9071a5b"
+    },
+    {
+      "file": "assets/animations/entity/published-assets-v8-actions.json",
+      "rawBytes": 241,
+      "rawSHA256": "0b2b12721a3bbe89fdac6c81f97dd499884f3d31af1505886b8825bc9cb717c7"
+    },
+    {
+      "file": "assets/animations/entity/published-assets-v9-actions.json",
+      "rawBytes": 128,
+      "rawSHA256": "be7f6090a860e912f9ffd772c910e589a8744f7119b17c915d171e87667e8b04"
+    },
+    {
+      "file": "assets/animations/entity/published-assets.json",
+      "rawBytes": 698,
+      "rawSHA256": "e2467b050a94ee6c3bc7f35f601fe0db0d37d03da8f4bdaaae27fc66dcd50698"
+    },
+    {
+      "file": "tools/build_corrected_entity_actions.py",
+      "rawBytes": 5991,
+      "rawSHA256": "46f897f17d0b0de02492d35b0963ebbf064241ac39d40fdeab56c74f564fc634"
+    },
+    {
+      "file": "tools/build_entity_kill_animation.py",
+      "rawBytes": 10578,
+      "rawSHA256": "62c193a3caf8b5f0cd96ff3cf884deeb8c3519ebf421bb416af00abe1f1b563b"
+    }
+  ],
+  "retargetingBoundary": "Current exporter requires open Blender Armature/actions and exact live Entity Bone CFrames; original rest rig and all archived native editor saves remain separately required. Existing JSON inputs do not prove lossless reconstruction of every native root child.",
+  "nativeCalls": 0,
+  "runtimeWrites": 0,
+  "toolWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0
+}

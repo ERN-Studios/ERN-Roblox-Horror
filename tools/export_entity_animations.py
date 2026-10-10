@@ -7,6 +7,12 @@ Export each gameplay action from the current Blender file as a Roblox FBX.
 
 from __future__ import annotations
 
+# Owner retired this exact Studio authoring workflow, 2026-10-10.
+RETIRED_WORKFLOW_MESSAGE = 'Retired Studio entity-animation authoring workflow. Published gameplay IDs, versioned receipts and regeneration inputs are retained. This entrypoint performs no upload or Studio operation.'
+if __name__ == '__main__':
+    raise SystemExit(RETIRED_WORKFLOW_MESSAGE)
+raise RuntimeError(RETIRED_WORKFLOW_MESSAGE)
+
 from pathlib import Path
 import re
 

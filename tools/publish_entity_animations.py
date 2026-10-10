@@ -2,6 +2,11 @@
 
 from __future__ import annotations
 
+# Owner retired this exact Studio authoring workflow, 2026-10-10.
+RETIRED_WORKFLOW_MESSAGE = 'Retired Studio entity-animation authoring workflow. Published gameplay IDs, versioned receipts and regeneration inputs are retained. This entrypoint performs no upload or Studio operation.'
+if __name__ == '__main__':
+    raise SystemExit(RETIRED_WORKFLOW_MESSAGE)
+
 import json
 import sys
 import time
@@ -86,6 +91,7 @@ def luau_table(mapping: dict[str, str | None]) -> str:
 
 
 def publish_code(payload: str) -> str:
+    raise RuntimeError(RETIRED_WORKFLOW_MESSAGE)
     return f'''local HttpService = game:GetService("HttpService")
 local ServerStorage = game:GetService("ServerStorage")
 local AssetService = game:GetService("AssetService")
@@ -147,6 +153,7 @@ return HttpService:JSONEncode({{name=data.name,id=tostring(idOrError),reused=fal
 
 
 def main() -> int:
+    raise RuntimeError(RETIRED_WORKFLOW_MESSAGE)
     client = StudioMcpClient(find_mcp_batch())
     results: dict[str, object] = {}
     try:

@@ -9,6 +9,11 @@ per-bone basis mapping before producing KeyframeSequence JSON.
 
 from __future__ import annotations
 
+# Owner retired this exact Studio authoring workflow, 2026-10-10.
+RETIRED_WORKFLOW_MESSAGE = 'Retired Studio entity-animation authoring workflow. Published gameplay IDs, versioned receipts and regeneration inputs are retained. This entrypoint performs no upload or Studio operation.'
+if __name__ == '__main__':
+    raise SystemExit(RETIRED_WORKFLOW_MESSAGE)
+
 import json
 import math
 from pathlib import Path
@@ -104,6 +109,7 @@ result = out'''
 
 
 def studio_rest() -> dict[str, list[float]]:
+    raise RuntimeError(RETIRED_WORKFLOW_MESSAGE)
     client = StudioMcpClient(find_mcp_batch())
     try:
         client.initialize()
@@ -213,6 +219,7 @@ def slerp_xyzw(a: list[float], b: list[float], alpha: float) -> list[float]:
 
 
 def main() -> int:
+    raise RuntimeError(RETIRED_WORKFLOW_MESSAGE)
     blender = blender_execute(blender_sample_code(), timeout=240)["result"]
     studio = studio_rest()
     missing = [name for name in BONES if name not in studio]

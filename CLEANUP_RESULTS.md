@@ -161,6 +161,8 @@ S19 lokal commit: `51d3095afb3e6f62bb73c7fd0a8c6b491a205d82`.
 
 ### S23 / T01–T03 — tre samtidige Studio-Sources eksporteret
 
+Lokal commit: `3d8e44df2e0fd1cb8be6c39faccf231281367d75`; ingen push/publicering.
+
 GameManager, Level2PoolroomsPresentation og NoiseReporter er hentet friskt fra
 native Source med editor-equality og eksakte identity/class/Enabled/Disabled/
 RunContext/attributes/tags. NoiseReporter var ændret igen siden S21-afvisningen;
@@ -202,7 +204,49 @@ og det fejlede forsøg beholdes. Den41-byte literal-kandidat står stadig afvent
 og gammel immutable installer-destination genbruges ikke. Ny closure/native/
 installeret port kræves efter S23; ServerStorage/CORE-027 prioriteres nu.
 
-### S04 og CORE-027 — nyere ejerbeslutning og næste porte
+### S25 / T11,T15 — fire gamle animationentrypoints pensioneret
+
+Ejeren har pensioneret de gamle Studio-animationworkflows. Fire lokale værktøjer
+afviser nu CLI/export/publish før Studio-, Blender- eller uploadoperationer.
+`publish_code`, publisherens `main`, retargeted `studio_rest` og `main` afviser
+også programmatisk brug. De to gamle bpy-exporteres import-initializer er
+pensioneret; syv pure helpers i de to sikkert importérbare moduler er uændrede.
+README beskriver den nye status. [Eksakte før-kilder og scope](artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/proposal.json)
+er arkiveret, og private checkpoints bevarer de fire værktøjer og tre dokumenter.
+
+Root genafspillede førporten og derefter porten mod de faktisk installerede
+entrypoints:32 entrycases inklusive16 CLI-processer,13 helper-scenarier pr.
+version og otte actual generated-Lua cached-ID-fixtures plus én missing-ID-negativ
+PASS. Ingen upload, netværks- eller native writes under portene. Alle21 aktuelle
+keyframe-/receipt-/builderfiler og runtime-ID-kilden er byte-identiske.
+[Faktisk promotion](artifacts/cleanup-20261010/animation-workflow-retirement-v1/root-promotion-result-v1.json)
+skrev kun fire lokale værktøjer; [installeret port](artifacts/cleanup-20261010/animation-workflow-retirement-v1/root-installed-port-v1.json)
+bestod. Ingen rollback blev nødvendig. Den tidligere fixturefejl er bevaret.
+
+Frisk native læsning10:04:32Z bekræftede Source/editor-equality og class/properties/
+attributes/tags på seks aktuelle animationsconsumers. Alle otte gameplay-ID’er
+bevares. `MongoTVEntityAnimations` har223367 objekter/117 topchildren;
+`RBX_ANIMSAVES` har85712/27. Begge originalrødder og al native uploadcache
+bevares. Den første readonly rapport fejlede ved JSON-encoding af en hashværdi;
+separat V2 bruger eksplicit hashhex og bestod. Begge receipts bevares; ingen
+native write eller mode-switch blev anmodet. En lokal receipt-skrivningsfejl
+(`ReferenceError` før første filoperation) blev rettet uden productionwrites.
+
+Portene bruger kontrollerede servicegrænser og dokumenterede cachefixtures;
+de certificerer ikke alle aktuelle native versions/PublishedAssetId/AnimationId/
+references eller playback. Fuld native archive/reopen, reference- og fraværsport
+for de309079 animationobjekter afventer. Ingen FPS-, CPU- eller memorygevinst er
+målt. Permanent native sletning er ikke gennemført af denne batch.
+
+Den seneste fulde readonly før-parity09:56:06–09:56:16Z bestod med213 scripts/
+15 remotes/228rows,52 ServerStorage-rødder og417075 sceneobjekter. Catalog
+`81115530329fefcca83091e74379f63983ca0aa4b1da0b43bc64e653956623dd`.
+En anden actors UIDevice/manifestarbejde og lokale commit `28f9c59a` er bevaret.
+Proxyens sessions-ID er ændret; den gamle shared cleanup-ledger var ikke længere
+tilgængelig. Historiske held-original references kan derfor ikke certificeres i
+den aktuelle kontekst, selv om de genlæste native root-ID’er er uændrede.
+
+### S04 og CORE-027 — næste native porte
 
 Ejeren har pensioneret hele den gamle lobby som fallback: «Den kan altid bygges,
 der skal ikke være et fallback.» Ved serverboot kalder GameManager stadig

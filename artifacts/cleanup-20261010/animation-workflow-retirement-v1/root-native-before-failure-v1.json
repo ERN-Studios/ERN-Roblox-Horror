@@ -1,0 +1,9 @@
+{
+  "schema": "mongotv-animation-readonly-before-failure-v1",
+  "nativeWrites": 0,
+  "sourceWrites": 0,
+  "modeSwitches": 0,
+  "error": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Tools.ExecuteLuauTool:86: sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Util.CommandExecution:54: Can't convert to JSON",
+  "reason": "ComputeStringHash value passed directly to JSONEncode; replaced with explicit ComputeBufferHash hex encoding in separately recorded v2 readonly request."
+}
+

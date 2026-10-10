@@ -1,0 +1,141 @@
+{
+  "cacheRoots": [
+    {
+      "tags": [],
+      "id": "1_15647",
+      "class": "Folder",
+      "parentId": "1_409635",
+      "name": "MongoTVEntityAnimations",
+      "nodes": 223367,
+      "attributes": [],
+      "children": 117,
+      "archivable": true
+    },
+    {
+      "tags": [],
+      "id": "1_41652",
+      "class": "Model",
+      "parentId": "1_409635",
+      "name": "RBX_ANIMSAVES",
+      "nodes": 85712,
+      "attributes": [],
+      "children": 27,
+      "archivable": true
+    }
+  ],
+  "universeId": 10559217407,
+  "readAtUtc": "2026-10-10T10:04:32Z",
+  "objectWrites": 0,
+  "mode": "Edit",
+  "placeId": 131311258779917,
+  "sourceRows": [
+    {
+      "bytes": 10869,
+      "path": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "source": "local RunService = game:GetService(\"RunService\")\nlocal ReplicatedStorage = game:GetService(\"ReplicatedStorage\")\n\n-- Blender action mapping. Empty slots are safe: the controller falls back to a\n-- compatible clip until the exported action has received its Roblox asset id.\nlocal ANIMATION_IDS = {\n\tWatch = \"92831421568704\",              -- Blender v10: zero-origin, seamless loop\n\tWalk = \"121187609243437\",              -- Blender v10: restrained, zero-origin, seamless loop\n\tRun = \"90840395594409\",                -- Blender v10: predatory jog, zero-origin, seamless loop\n\tHowl = \"102035504530432\",              -- Blender v10: first-sight howl\n\tYellFromRun = \"132425538759403\",       -- Blender v10: chase/pit howl with normalized origin\n\tLunge = \"70970124497806\",              -- Blender v10: neutral-to-lunge\n\tLungeFromRun = \"132839013239254\",      -- Blender v10: chase-to-lunge with normalized origin\n\tKill = \"94135265462008\",               -- Blender v10: hunched ground-pin knockout\n}\n\nlocal WALK_ANIM_SPEED = 9\nlocal RUN_ANIM_SPEED = 15\nlocal ANIM_SPEED_MIN = 0.08\nlocal ANIM_SPEED_MAX = 2.5\nlocal LOCOMOTION_FADE = 0.25\nlocal ACTION_FADE = 0.12\nlocal SPEED_SMOOTH_SECONDS = 0.10\nlocal MOVE_ENTER_SPEED = 0.55\nlocal MOVE_EXIT_SPEED = 0.18\n\nlocal entity = workspace:WaitForChild(\"Entity\", 30)\nif not entity then\n\twarn(\"[EntityAnimations] Entity was not found\")\n\treturn\nend\n\nlocal humanoid = entity:WaitForChild(\"Humanoid\", 10)\nlocal root = entity:WaitForChild(\"HumanoidRootPart\", 10)\nif not humanoid or not root then\n\twarn(\"[EntityAnimations] Humanoid or HumanoidRootPart was not found\")\n\treturn\nend\n\nlocal animator = humanoid:FindFirstChildOfClass(\"Animator\")\nif not animator then\n\tanimator = Instance.new(\"Animator\")\n\tanimator.Parent = humanoid\nend\n\nfor _, oldTrack in ipairs(animator:GetPlayingAnimationTracks()) do\n\t-- A round restart replaces this controller's tracks, not other animation\n\t-- owners' tracks on the imported rig.\n\tif oldTrack.Animation and oldTrack.Animation.Parent == script then oldTrack:Stop(ACTION_FADE) end\nend\n\nlocal ownedAnimations = {}\nlocal function loadTrack(name, id, looped, priority)\n\tif id == \"\" then return nil end\n\tlocal animation = Instance.new(\"Animation\")\n\tanimation.Name = name\n\tanimation.AnimationId = \"rbxassetid://\" .. id\n\tanimation.Parent = script\n\tlocal ok, track = pcall(function()\n\t\treturn animator:LoadAnimation(animation)\n\tend)\n\tif not ok then\n\t\twarn(\"[EntityAnimations] Could not load \" .. name .. \": \" .. tostring(track))\n\t\tanimation:Destroy()\n\t\treturn nil\n\tend\n\ttable.insert(ownedAnimations, animation)\n\ttrack.Name = name\n\ttrack.Looped = looped\n\ttrack.Priority = priority\n\treturn track\nend\n\nlocal tracks = {\n\tWatch = loadTrack(\"Watch\", ANIMATION_IDS.Watch, true, Enum.AnimationPriority.Idle),\n\tWalk = loadTrack(\"Walk\", ANIMATION_IDS.Walk, true, Enum.AnimationPriority.Movement),\n\tRun = loadTrack(\"Run_Chase\", ANIMATION_IDS.Run, true, Enum.AnimationPriority.Movement),\n\tHowl = loadTrack(\"Yell_Howl\", ANIMATION_IDS.Howl, false, Enum.AnimationPriority.Action4),\n\tYellFromRun = loadTrack(\"Yell_FromRun\", ANIMATION_IDS.YellFromRun, false, Enum.AnimationPriority.Action4),\n\tLunge = loadTrack(\"Lunge\", ANIMATION_IDS.Lunge, false, Enum.AnimationPriority.Action4),\n\tLungeFromRun = loadTrack(\"Lunge_FromRun\", ANIMATION_IDS.LungeFromRun, false, Enum.AnimationPriority.Action4),\n\tKill = loadTrack(\"Kill_GroundPinPunch\", ANIMATION_IDS.Kill, false, Enum.AnimationPriority.Action4),\n}\n\nlocal function releaseTracks()\n\t-- Stop changes playback; Destroy releases each loaded controller-owned\n\t-- track from the reused Animator, including clips that never played.\n\tfor _, track in pairs(tracks) do\n\t\tif track.IsPlaying then track:Stop(ACTION_FADE) end\n\t\ttrack:Destroy()\n\tend\n\tfor _, animation in ipairs(ownedAnimations) do animation:Destroy() end\n\ttable.clear(tracks)\n\ttable.clear(ownedAnimations)\nend\n\nif not tracks.Walk or not tracks.Run then\n\twarn(\"[EntityAnimations] Walk/Run ids must be valid for locomotion\")\n\treleaseTracks()\n\treturn\nend\n\nlocal currentLocomotion = nil\nlocal currentAction = nil\nlocal actionSerial = 0\nlocal actionEndConnection = nil\nlocal killCaptureId = nil\nlocal gaitPhase = nil\nlocal smoothedSpeed = 0\nlocal moving = false\nlocal closed = false\nlocal connections = {}\nlocal events = {}\nlocal function connect(signal, callback)\n\tlocal connection = signal:Connect(callback)\n\ttable.insert(connections, connection)\n\treturn connection\nend\n\nlocal function captureGaitPhase()\n\tlocal track = currentLocomotion and tracks[currentLocomotion]\n\tif (currentLocomotion == \"Walk\" or currentLocomotion == \"Run\") and track and track.Length > 0 then\n\t\tgaitPhase = (track.TimePosition / track.Length) % 1\n\tend\nend\n\nlocal function stopLocomotion(fade)\n\tcaptureGaitPhase()\n\tfor _, name in ipairs({ \"Watch\", \"Walk\", \"Run\" }) do\n\t\tlocal track = tracks[name]\n\t\tif track and track.IsPlaying then track:Stop(fade) end\n\tend\n\tcurrentLocomotion = nil\nend\n\nlocal function switchLocomotion(name, speed)\n\tlocal track = tracks[name]\n\tif not track then return end\n\tif currentLocomotion == name and track.IsPlaying then\n\t\ttrack:AdjustSpeed(speed or 1)\n\t\treturn\n\tend\n\tcaptureGaitPhase()\n\tfor _, other in ipairs({ \"Watch\", \"Walk\", \"Run\" }) do\n\t\tif other ~= name then\n\t\t\tlocal track = tracks[other]\n\t\t\tif track and track.IsPlaying then track:Stop(LOCOMOTION_FADE) end\n\t\tend\n\tend\n\tcurrentLocomotion = name\n\t-- The current v10 walk and predatory jog share the same authored foot cycle.\n\t-- Align normalized phase after Play so crossfades do not restart the stride.\n\tif not track.IsPlaying then track:Play(LOCOMOTION_FADE, 1, speed or 1)\n\telse track:AdjustWeight(1, LOCOMOTION_FADE); track:AdjustSpeed(speed or 1) end\n\tif (name == \"Walk\" or name == \"Run\") and gaitPhase and track.Length > 0 then\n\t\ttrack.TimePosition = gaitPhase * track.Length\n\tend\nend\n\nlocal function playAction(track)\n\tif closed or not track then return end\n\t-- A late howl/lunge notification must never replace the captured kill clip.\n\tif workspace:GetAttribute(\"EntityKillActive\") == true and track ~= tracks.Kill then return end\n\tif currentAction == track and track.IsPlaying then return end\n\tactionSerial += 1\n\tlocal thisSerial = actionSerial\n\tif actionEndConnection then actionEndConnection:Disconnect(); actionEndConnection = nil end\n\tif currentAction and currentAction ~= track and currentAction.IsPlaying then\n\t\tcurrentAction:Stop(ACTION_FADE)\n\tend\n\tstopLocomotion(ACTION_FADE)\n\t-- Idle stays beneath the Action4 layer so its final fade cannot expose the\n\t-- rig's bind pose for a frame before locomotion resumes.\n\tswitchLocomotion(\"Watch\", 1)\n\tcurrentAction = track\n\tactionEndConnection = track.Ended:Once(function()\n\t\tif not closed and currentAction == track and actionSerial == thisSerial then\n\t\t\tcurrentAction = nil\n\t\t\tactionEndConnection = nil\n\t\tend\n\tend)\n\ttrack:Play(ACTION_FADE, 1, 1)\nend\n\nlocal function bindEvent(name, callback)\n\tlocal old = entity:FindFirstChild(name)\n\tif old and old:IsA(\"BindableEvent\") then old:Destroy() end\n\tlocal event = Instance.new(\"BindableEvent\")\n\tevent.Name = name\n\tevent.Parent = entity\n\tconnect(event.Event, callback)\n\ttable.insert(events, event)\n\treturn event\nend\n\nbindEvent(\"PlayHowl\", function()\n\tplayAction(tracks.Howl)\nend)\n\nbindEvent(\"PlayYell\", function()\n\tplayAction(tracks.YellFromRun or tracks.Howl)\nend)\n\nbindEvent(\"PlayKill\", function(captureId)\n\tif type(captureId) ~= \"string\" or workspace:GetAttribute(\"EntityKillActive\") ~= true\n\t\tor workspace:GetAttribute(\"EntityKillCaptureId\") ~= captureId then return end\n\tif killCaptureId == captureId then return end\n\tkillCaptureId = captureId\n\tplayAction(tracks.Kill)\nend)\n\nbindEvent(\"CancelKill\", function(captureId)\n\tif killCaptureId ~= captureId then return end\n\tkillCaptureId = nil\n\tif currentAction == tracks.Kill then\n\t\tactionSerial += 1\n\t\tif actionEndConnection then actionEndConnection:Disconnect(); actionEndConnection = nil end\n\t\tif currentAction and currentAction.IsPlaying then currentAction:Stop(ACTION_FADE) end\n\t\tcurrentAction = nil\n\tend\nend)\n\nconnect(workspace:GetAttributeChangedSignal(\"EntityLunge\"), function()\n\t-- ENTITY_MOTION_20261010: the data layer owns the three-part lunge.\n\t-- Check here so installing the folder after startup also takes effect.\n\tif ReplicatedStorage:FindFirstChild(\"Level1EntityMotion\") then return end\n\tplayAction(tracks.LungeFromRun or tracks.Lunge)\nend)\n\nlocal function cleanup()\n\tif closed then return end\n\tclosed = true\n\tactionSerial += 1\n\tif actionEndConnection then actionEndConnection:Disconnect(); actionEndConnection = nil end\n\tfor _, connection in ipairs(connections) do connection:Disconnect() end\n\ttable.clear(connections)\n\treleaseTracks()\n\tfor _, event in ipairs(events) do event:Destroy() end\n\ttable.clear(events)\nend\n-- One stable, explicitly owned handoff. GameManager invokes it while this\n-- Script is still enabled; deferred teardown signals may otherwise be lost.\nlocal release = script:FindFirstChild(\"ReleaseAnimations\")\nif release then\n\tassert(release:IsA(\"BindableFunction\") and release:GetAttribute(\"OwnerSystem\") == \"Level1EntityAnimation\",\n\t\t\"ReleaseAnimations is owned by another system\")\nelse\n\trelease = Instance.new(\"BindableFunction\")\n\trelease.Name = \"ReleaseAnimations\"\n\trelease:SetAttribute(\"OwnerSystem\", \"Level1EntityAnimation\")\n\trelease.Parent = script\nend\nrelease.OnInvoke = cleanup\nconnect(entity.AncestryChanged, function()\n\tif not entity:IsDescendantOf(workspace) then cleanup() end\nend)\nconnect(entity.Destroying, cleanup)\nconnect(script.Destroying, cleanup)\nconnect(script:GetPropertyChangedSignal(\"Enabled\"), function() if not script.Enabled then cleanup() end end)\n\nconnect(RunService.Heartbeat, function(dt)\n\tif closed then return end\n\tif humanoid.Health <= 0 then\n\t\tcleanup()\n\t\treturn\n\tend\n\n\tlocal velocity = root.AssemblyLinearVelocity\n\tlocal horizontalSpeed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude\n\tif root.Anchored or workspace:GetAttribute(\"EntityPaused\") == true then horizontalSpeed = 0 end\n\tlocal alpha = 1 - math.exp(-math.clamp(dt, 0, 0.25) / SPEED_SMOOTH_SECONDS)\n\tsmoothedSpeed += (horizontalSpeed - smoothedSpeed) * alpha\n\tif moving then moving = smoothedSpeed > MOVE_EXIT_SPEED\n\telse moving = smoothedSpeed >= MOVE_ENTER_SPEED end\n\t-- Ended fires after the action's fade completes. Keep its ownership until\n\t-- then; locomotion must not resume during a kill or a fading one-shot.\n\tif currentAction or workspace:GetAttribute(\"EntityKillActive\") == true then return end\n\tlocal aiState = workspace:GetAttribute(\"EntityState\")\n\n\tif not moving then\n\t\tswitchLocomotion(\"Watch\", 1)\n\telseif aiState == \"CHASE\" then\n\t\tswitchLocomotion(\"Run\", math.clamp(smoothedSpeed / RUN_ANIM_SPEED, ANIM_SPEED_MIN, ANIM_SPEED_MAX))\n\telse\n\t\t-- TRACK/SEARCH is intentionally a fast walk after sight is lost.\n\t\tswitchLocomotion(\"Walk\", math.clamp(smoothedSpeed / WALK_ANIM_SPEED, ANIM_SPEED_MIN, ANIM_SPEED_MAX))\n\tend\nend)\n\nprint(\"[EntityAnimations] Transition controller active\")\n",
+      "tags": [],
+      "id": "1_408349",
+      "class": "Script",
+      "parentId": "1_15621",
+      "attributes": [],
+      "editorMatches": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sha256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9"
+    },
+    {
+      "bytes": 25299,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 1 Entity Motion",
+      "tags": [],
+      "id": "9_5659704",
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "attributes": [],
+      "editorMatches": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sha256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238"
+    },
+    {
+      "bytes": 194657,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "tags": [],
+      "id": "1_42742",
+      "class": "ModuleScript",
+      "parentId": "1_15620",
+      "attributes": [],
+      "editorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sha256": "3b8e0734183af35e2aba7b258cd0e3c87c377cb9d323f4a5586bcb06f6663b3e"
+    },
+    {
+      "bytes": 188782,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "tags": [],
+      "id": "1_42783",
+      "class": "ModuleScript",
+      "parentId": "1_15625",
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "635b3c5d3ab2ac5230e746a70f430492336aeffde6493fa011c1c87f49a514df"
+      },
+      "editorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914"
+    },
+    {
+      "bytes": 24422,
+      "path": "ServerScriptService.LunaTribute",
+      "tags": [],
+      "id": "1_408353",
+      "class": "Script",
+      "parentId": "1_409634",
+      "attributes": [],
+      "editorMatches": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sha256": "d04548421adab66453a12a5cc829d0810a96e096a55bac0d2bfbd4d1b59f245d"
+    },
+    {
+      "bytes": 196628,
+      "path": "ServerScriptService.GameManager",
+      "tags": [],
+      "id": "1_408341",
+      "class": "Script",
+      "parentId": "1_409634",
+      "attributes": [],
+      "editorMatches": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sha256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4"
+    }
+  ],
+  "sourceWrites": 0
+}
+

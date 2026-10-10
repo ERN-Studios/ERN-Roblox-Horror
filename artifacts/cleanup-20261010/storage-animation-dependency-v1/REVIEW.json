@@ -1,0 +1,75 @@
+{
+  "schema": "mongotv-animation-storage-current-dependency-scope-v1",
+  "candidate": "T15/T11",
+  "status": "KEEP pending full native child/reference/archive/recovery evidence, controlled absence and owner workflow decision",
+  "nativeCensusPin": {
+    "file": "artifacts/cleanup-20261010/concurrent-export-v2/storage-census-v1.json",
+    "rawBytes": 21877,
+    "rawSHA256": "8eaa94d3c309b81ba2afd97ac0ec782f85f1b39cd48f10e2e573c4abe24b4dff",
+    "catalogSHA256": "e0ec39a63fe5ecb9285245480d38523a7de00f900c88146ba9fc288522969630",
+    "readAtUtc": "2026-10-10T09:37:12Z"
+  },
+  "roots": [
+    {"name": "MongoTVEntityAnimations", "className": "Folder", "instanceId": "1_15647", "parentId": "1_409635", "nodeCount": 223367, "descendantScriptCount": 0, "archivable": true, "attributes": [], "tags": []},
+    {"name": "RBX_ANIMSAVES", "className": "Model", "instanceId": "1_41652", "parentId": "1_409635", "nodeCount": 85712, "descendantScriptCount": 0, "archivable": true, "attributes": [], "tags": []}
+  ],
+  "currentLocalEvidence": [
+    {"file": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua", "rawBytes": 10869, "rawSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9", "manifestSourceMatches": true},
+    {"file": "StarterPlayer/StarterPlayerScripts/Level 1 Entity Motion.LocalScript.lua", "rawBytes": 25299, "rawSHA256": "7a4734112fcfee5322766d7c92d9f9eda2054196920e42275de79d3536e1a238", "manifestSourceMatches": true},
+    {"file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua", "rawBytes": 194657, "rawSHA256": "3b8e0734183af35e2aba7b258cd0e3c87c377cb9d323f4a5586bcb06f6663b3e", "manifestSourceMatches": true},
+    {"file": "ServerScriptService/Level 6 Systems/Level 6 Mall Manager AI Controller.ModuleScript.lua", "rawBytes": 188782, "rawSHA256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914", "manifestSourceMatches": true},
+    {"file": "ServerScriptService/LunaTribute.Script.lua", "rawBytes": 24422, "rawSHA256": "d04548421adab66453a12a5cc829d0810a96e096a55bac0d2bfbd4d1b59f245d", "manifestSourceMatches": true},
+    {"file": "ServerScriptService/GameManager.Script.lua", "rawBytes": 196628, "rawSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4", "manifestSourceMatches": true},
+    {"file": "tools/publish_entity_animations.py", "rawBytes": 7859, "rawSHA256": "dbe24a9733e2e9ddeb58f290a9ccbd9acdad63b4580fce965a9dfe90bfbb72a2"},
+    {"file": "tools/export_entity_keyframes.py", "rawBytes": 4402, "rawSHA256": "ab59e31bb5e63646f895c0455c9cdd63d1be4cbd177b06436201bc0dd4d559dc"},
+    {"file": "tools/export_entity_keyframes_retargeted.py", "rawBytes": 15994, "rawSHA256": "79e89584723b1325bb1e40558e9858ec2d12a0052f6afa7fe862da689b307786"},
+    {"file": "tools/export_entity_animations.py", "rawBytes": 2979, "rawSHA256": "1acc70432b429377158a04c25aca1e445562e139199ad584bc276069144cc2e4"},
+    {"file": "assets/animations/entity/published-assets-v10-full.json", "rawBytes": 850, "rawSHA256": "54400c8571bb5de7b340ad77e27b6fa948d5dd28e4bfa1e351ca6e0c712df781"},
+    {"file": "tools/tests/test_level1_entity_animation.py", "rawBytes": 19258, "rawSHA256": "7e49e1c1383384084e11eefe0babec931d5ee41af93a45aa65f7c2e470a56ce4"}
+  ],
+  "sourceRuntimeLiteralRootReferencesFound": 0,
+  "activeRuntimeSelections": [
+    "EntityAnimation constructs eight own Animation children from explicit published asset IDs. Alternate Yell/Lunge clips are runtime track fallbacks, not old-folder lookup.",
+    "Current Level 1 Entity Motion reads ReplicatedStorage.Level1EntityMotion.Clips JSON only. It retains server action IDs and missing-data/disabled ownership fallbacks.",
+    "L3 and L6 Mall Manager load the exact Level3Assets.EntityAnimations.MallManager.Walk Animation. They remove InitialPoses/AnimSaves from the cloned manager, not these ServerStorage roots.",
+    "LunaTribute uses its own explicit published animation IDs. GameManager invokes EntityAnimation ReleaseAnimations and restarts entity script ownership."
+  ],
+  "runtimePublishedV10Ids": {
+    "Watch": "92831421568704",
+    "Walk": "121187609243437",
+    "Run": "90840395594409",
+    "Howl": "102035504530432",
+    "YellFromRun": "132425538759403",
+    "Lunge": "70970124497806",
+    "LungeFromRun": "132839013239254",
+    "Kill": "94135265462008"
+  },
+  "publisherEvidence": {
+    "file": "tools/publish_entity_animations.py",
+    "lines": [94, 95, 98, 100, 128, 130, 144, 148],
+    "behavior": "Exact versioned KeyframeSequence PublishedAssetId cache returns reused=true. An absent root creates a fresh sequence and invokes AssetService.CreateAssetAsync. Deleting the cache can duplicate uploads even while current gameplay continues using the existing asset IDs.",
+    "retention": "Keep PublishedAssetId attributes, versioned receipts, source keyframes and publishing/import workflows until explicit retirement or a tested external-cache replacement."
+  },
+  "authoringEvidence": [
+    "README.md:660-663 documents Blender authoring/retargeted export followed by publishing and versioned manifests.",
+    "Current publisher retains v1-v10 options and PublishedAssetId reuse plus assets/animations/entity/published-assets*.json receipts. T11 deprecated default-path concern remains a separate workflow candidate, not root deletion authorization.",
+    "RBX_ANIMSAVES has no direct textual caller found in current production/tools search. Native children/object references and manual editor/plugin workflows have not been read or tested. The root name is insufficient retirement evidence."
+  ],
+  "ownerDecisionRequired": true,
+  "decisionScope": "Whether these exact animation authoring roots should move out of the release place while preserving animation workbench/publishing reuse, or whether their manual workflows should be retired. Prior lobby/Level1 kit retirement does not retire animation workflows.",
+  "missingGates": [
+    "Fresh full child/class/property/attribute/content/PublishedAssetId inventory and readable/unknown inbound references for both exact roots; current census is root-only.",
+    "Complete off-place sourcepack with current versioned assets/receipts, native export/reopen equivalence and exact restoration.",
+    "Before/controlled absence/restored actual same-ID playback, locomotion/actions/kill and new JSON-motion missing-data/reentry/cleanup fallbacks in Roblox client.",
+    "Publisher reuse must preserve IDs and avoid AssetService uploads after moving the cache, or the command workflow must be explicitly retired. Manual AnimationEditor/plugin decision and import/export port remain open."
+  ],
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "runtimeSourceWrites": 0,
+  "toolWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "testsRerun": 0,
+  "receiptPreparationFailure": "An attempted read-only local receipt generator failed in PowerShell argument parsing before receipt creation. The prior Source hash inventory read completed separately; no native/runtime/tool/manifest/index mutation was requested. This static receipt preserves that limitation and does not credit the failed command as an executed ID-set test.",
+  "limits": "Read-only local scope evidence plus Root's existing native root census. Whole production Source literal/registration scans and relevant actual selectors were read; this is not a full gameplay audit of every L3/L6 branch, fresh continuous native epoch, child asset/reference proof or removal approval. Zero scripts and309079 root+descendant nodes are not MB/FPS/memory measurements. Unknown dynamic/native/plugin references remain uncertified."
+}

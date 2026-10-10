@@ -1,0 +1,426 @@
+{
+  "schema": "mongotv-retired-animation-workflow-actual-ports-v1",
+  "pass": true,
+  "cases": [
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "actualCandidateCLI",
+      "flags": [],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--help"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--v10"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--v3",
+        "--force"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "actualOriginalCLIBoundary",
+      "pass": true,
+      "reached": [
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "beforeCallable",
+      "entry": "publish_code",
+      "pass": true,
+      "reached": []
+    },
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "beforeCallable",
+      "entry": "main",
+      "pass": true,
+      "reached": [
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "candidateCallable",
+      "entry": "publish_code",
+      "pass": true,
+      "reached": []
+    },
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "candidateCallable",
+      "entry": "main",
+      "pass": true,
+      "reached": []
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "actualCandidateCLI",
+      "flags": [],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--help"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--v10"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--v3",
+        "--force"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "actualOriginalCLIBoundary",
+      "pass": true,
+      "reached": [
+        "blender_execute"
+      ]
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "beforeCallable",
+      "entry": "studio_rest",
+      "pass": true,
+      "reached": [
+        "find_mcp_batch"
+      ]
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "beforeCallable",
+      "entry": "main",
+      "pass": true,
+      "reached": [
+        "blender_execute"
+      ]
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "candidateCallable",
+      "entry": "studio_rest",
+      "pass": true,
+      "reached": []
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "candidateCallable",
+      "entry": "main",
+      "pass": true,
+      "reached": []
+    },
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "phase": "actualCandidateCLI",
+      "flags": [],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--help"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--v10"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--v3",
+        "--force"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "phase": "actualOriginalCLIBoundary",
+      "pass": true,
+      "reached": [
+        "bpy.data"
+      ]
+    },
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "phase": "beforeImport",
+      "pass": true,
+      "reached": [
+        "bpy.data"
+      ]
+    },
+    {
+      "file": "tools/export_entity_keyframes.py",
+      "phase": "candidateImport",
+      "pass": true,
+      "reached": []
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "phase": "actualCandidateCLI",
+      "flags": [],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--help"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--v10"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "phase": "actualCandidateCLI",
+      "flags": [
+        "--v3",
+        "--force"
+      ],
+      "pass": true,
+      "optionalNativeImportsReached": false
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "phase": "actualOriginalCLIBoundary",
+      "pass": true,
+      "reached": [
+        "bpy.data"
+      ]
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "phase": "beforeImport",
+      "pass": true,
+      "reached": [
+        "bpy.data"
+      ]
+    },
+    {
+      "file": "tools/export_entity_animations.py",
+      "phase": "candidateImport",
+      "pass": true,
+      "reached": []
+    }
+  ],
+  "helperCases": [
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "before",
+      "pass": true,
+      "cases": [
+        "hierarchy root nil and named child",
+        "empty hierarchy"
+      ]
+    },
+    {
+      "file": "tools/publish_entity_animations.py",
+      "phase": "candidate",
+      "pass": true,
+      "cases": [
+        "hierarchy root nil and named child",
+        "empty hierarchy"
+      ]
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "before",
+      "pass": true,
+      "cases": [
+        "row-major matrix data",
+        "Roblox rest translation and basis",
+        "axis reflection maps scaled Blender translation",
+        "identity quaternion",
+        "quarter turn quaternion",
+        "scale stripped before quaternion solve",
+        "antipodal normalized shortest path",
+        "half turn interpolation",
+        "low alpha clamp",
+        "high alpha clamp",
+        "retained pure Blender sampler generator"
+      ]
+    },
+    {
+      "file": "tools/export_entity_keyframes_retargeted.py",
+      "phase": "candidate",
+      "pass": true,
+      "cases": [
+        "row-major matrix data",
+        "Roblox rest translation and basis",
+        "axis reflection maps scaled Blender translation",
+        "identity quaternion",
+        "quarter turn quaternion",
+        "scale stripped before quaternion solve",
+        "antipodal normalized shortest path",
+        "half turn interpolation",
+        "low alpha clamp",
+        "high alpha clamp",
+        "retained pure Blender sampler generator"
+      ]
+    }
+  ],
+  "cacheCases": [
+    {
+      "name": "Walk_Restrained",
+      "assetId": "121187609243437",
+      "negative": false,
+      "pass": true,
+      "stdout": "cache checks 8",
+      "generatedCodeSHA256": "f18eabb6c31756b61fd912a7dace063d1fa6879173e25bb61f3e28bf8b20329e",
+      "nativeCalls": 0
+    },
+    {
+      "name": "Run_PredatoryJog",
+      "assetId": "90840395594409",
+      "negative": false,
+      "pass": true,
+      "stdout": "cache checks 8",
+      "generatedCodeSHA256": "8d76d175dbc7cc8ecd9555bd2dad41ab029931b74b685a8f1bee3e93beb3cc38",
+      "nativeCalls": 0
+    },
+    {
+      "name": "Watch",
+      "assetId": "92831421568704",
+      "negative": false,
+      "pass": true,
+      "stdout": "cache checks 8",
+      "generatedCodeSHA256": "ff35ecf7f26f81dd3c6a9f5e558bf6276098b890aab5b11f23d2e6bc4038a1fb",
+      "nativeCalls": 0
+    },
+    {
+      "name": "Yell_Howl",
+      "assetId": "102035504530432",
+      "negative": false,
+      "pass": true,
+      "stdout": "cache checks 8",
+      "generatedCodeSHA256": "5ef38705da6ff8998502ff102f36a97b9e2a3f4197109f9c100d0b98190eed69",
+      "nativeCalls": 0
+    },
+    {
+      "name": "Yell_FromRun",
+      "assetId": "132425538759403",
+      "negative": false,
+      "pass": true,
+      "stdout": "cache checks 8",
+      "generatedCodeSHA256": "71d9a41234162d921b18df3f1dd2be75507ada5f79bf5d1015830c16f5e17085",
+      "nativeCalls": 0
+    },
+    {
+      "name": "Lunge",
+      "assetId": "70970124497806",
+      "negative": false,
+      "pass": true,
+      "stdout": "cache checks 8",
+      "generatedCodeSHA256": "c5cf424a0ee3f745fbd5f995dd823b71f1d08c2c36cd01f4e558d9e852a01eba",
+      "nativeCalls": 0
+    },
+    {
+      "name": "Lunge_FromRun",
+      "assetId": "132839013239254",
+      "negative": false,
+      "pass": true,
+      "stdout": "cache checks 8",
+      "generatedCodeSHA256": "01fd78010c4f1a4c71924153e68e3899e1871ac41d1cc591f36f5d9ae80b4227",
+      "nativeCalls": 0
+    },
+    {
+      "name": "Kill_CloseHunchPunch",
+      "assetId": "94135265462008",
+      "negative": false,
+      "pass": true,
+      "stdout": "cache checks 8",
+      "generatedCodeSHA256": "6786891e771c6de7ddb21f9c5b6277ede046b681e93c3f886483958cc76f650c",
+      "nativeCalls": 0
+    },
+    {
+      "name": "Walk_Restrained",
+      "assetId": "121187609243437",
+      "negative": true,
+      "pass": true,
+      "stdout": "cache checks 6",
+      "generatedCodeSHA256": "f18eabb6c31756b61fd912a7dace063d1fa6879173e25bb61f3e28bf8b20329e",
+      "nativeCalls": 0
+    }
+  ],
+  "candidateCLICases": 16,
+  "pureHelperCasesPerVersion": 13,
+  "actualOriginalGeneratedCacheIds": 8,
+  "missingCacheIdNegative": true,
+  "retainedInputReceiptFiles": 21,
+  "proposalSHA256": "83f67e07e7917c3b6a8e63e0b9ee974b2ee90cbd8e45aa359dd95696ec55b57b",
+  "testSHA256": "510d2e68839d586c6ca8454171279d8664c99a03db7fa1cc75b37e392517a350",
+  "verifiedInstalled": true,
+  "runtimeIdFileSHA256": "6392c4420fd7bcf52e1d8c7abd73930b55d41f738eb74a4939bf455118ebb5a9",
+  "runtimeIdFileUnchanged": true,
+  "nativeCalls": 0,
+  "networkCalls": 0,
+  "assetUploads": 0,
+  "productionWrites": 0,
+  "runtimeWrites": 0,
+  "toolWrites": 0,
+  "manifestWrites": 0,
+  "indexWrites": 0,
+  "limits": "Whole archived/candidate Python CLI/import/retired callables and unchanged pure-helper behaviors; whole original generated Luau early cache return with actual input bytes and8 versioned published-ID fixtures. Optional Blender/Studio services and cached metadata are controlled boundaries; no current native cache-child/data/reference proof, actual upload or gameplay playback is certified. Huge roots are not removed and need independent archive/absence/recovery gates. Historical deprecated bpy imports were unsafe authoring initializers and intentionally now refuse."
+}

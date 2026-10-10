@@ -1,0 +1,13 @@
+{
+  "schema": "retired-animation-authoring-port-failure-v1",
+  "pass": false,
+  "testSHA256": "d61e4e967b3642eb991c628524763ce35d684e5364a880e4ae534fc90713f892",
+  "command": "python -B artifacts/cleanup-20261010/animation-workflow-retirement-v1/verify_guards.py --receipt artifacts/cleanup-20261010/animation-workflow-retirement-v1/actual-ports-v1.json",
+  "error": "actual-cache.luau:15: Expected closing parenthesis; got numeric published asset ID121187609243437",
+  "cause": "Fixture used global ID placeholder replacement that modified the durable ID and reuse response label; not candidate behavior. Direct-call actions list was also rebound instead of clearing captured list and is corrected before rerun.",
+  "receiptWritten": false,
+  "productionWrites": 0,
+  "nativeCalls": 0,
+  "networkCalls": 0,
+  "assetUploads": 0
+}

@@ -657,10 +657,12 @@ through a real `luau` binary against a fake DataModel, so it needs `LUAU_BIN`
 (or `tools/tests/luau`). Without one it reports every test as *not executed* and
 exits non-zero rather than reporting green; `--fixture-only` verifies the
 synthesized pending queue the suite needs and runs anywhere.
-- **Animation pipeline**: author/fix clips in Blender
-  (`blender_mcp_client.py`, `build_*` scripts) → export retargeted keyframes
-  (`export_entity_keyframes_retargeted.py`) → publish as Roblox animations
-  (`publish_entity_animations.py`, versioned manifests in `assets/animations/`).
+- **Entity animation authoring**: the owner retired the four old Studio/Blender
+  export/publish entrypoints on 2026-10-10. They now refuse before export,
+  Studio access or upload. Published gameplay IDs, native upload-cache metadata,
+  versioned receipts, current keyframe inputs and shared Blender builders are
+  retained. Exact old tool sources and tested retirement boundaries are in
+  [the workflow archive](artifacts/cleanup-20261010/animation-workflow-retirement-v1/REVIEW.md).
 - **Automated playtests**: `playtest_level1.py` (server/client health, cable
   overlap detector, lunge/run probes), `playtest_entity_kill.py`,
   `playtest_lobby_avatar_transition.py`, `playtest_ui_pit_regressions.py`, plus

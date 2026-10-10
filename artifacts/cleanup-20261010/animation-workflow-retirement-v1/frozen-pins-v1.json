@@ -1,0 +1,99 @@
+{
+  "schema": "mongotv-retired-animation-workflow-frozen-pins-v1",
+  "artifactOnly": true,
+  "files": [
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/actual-ports-v2.json",
+      "rawBytes": 11444,
+      "rawSHA256": "929fdcc86dea37d9d6e96581ac1c028ee3e8d67e2d7ecab484ab2927841105e7"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/actual-ports-v3.json",
+      "rawBytes": 11601,
+      "rawSHA256": "cef01f88b8893315c9715662472a69aee0fe22017fcb9dc6dedb6d6c59e81432"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/port-failure-v1/failure.json",
+      "rawBytes": 830,
+      "rawSHA256": "15c939268ef604df5d4b9aea2df2d624d6d3a42e568230fb610b70f00e71b0d6"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/port-failure-v1/verify_guards.before.py",
+      "rawBytes": 13464,
+      "rawSHA256": "d61e4e967b3642eb991c628524763ce35d684e5364a880e4ae534fc90713f892"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/prepare_guards.py",
+      "rawBytes": 8164,
+      "rawSHA256": "2918b300b43e75764d96ad019f261677aa28c438acfe68313be6fb641fba5a5f"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/before/tools/export_entity_animations.py",
+      "rawBytes": 2979,
+      "rawSHA256": "1acc70432b429377158a04c25aca1e445562e139199ad584bc276069144cc2e4"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/before/tools/export_entity_keyframes.py",
+      "rawBytes": 4402,
+      "rawSHA256": "ab59e31bb5e63646f895c0455c9cdd63d1be4cbd177b06436201bc0dd4d559dc"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/before/tools/export_entity_keyframes_retargeted.py",
+      "rawBytes": 15994,
+      "rawSHA256": "79e89584723b1325bb1e40558e9858ec2d12a0052f6afa7fe862da689b307786"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/before/tools/publish_entity_animations.py",
+      "rawBytes": 7859,
+      "rawSHA256": "dbe24a9733e2e9ddeb58f290a9ccbd9acdad63b4580fce965a9dfe90bfbb72a2"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/candidate/tools/export_entity_animations.py",
+      "rawBytes": 3389,
+      "rawSHA256": "fafeb0da290bc05e910ba62150a77e0bd19710ef0331dfcfc63e2f00b7d55cf0"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/candidate/tools/export_entity_keyframes.py",
+      "rawBytes": 4812,
+      "rawSHA256": "3f6cf7a7c71de8968687c2b71242750adb2dc5a45fb68e395f68f7ff8889b8cf"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/candidate/tools/export_entity_keyframes_retargeted.py",
+      "rawBytes": 16458,
+      "rawSHA256": "a954cc62bdde4811bca2754aaf79f9c9d07a36fc7334cf6b15554840e5583c4e"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/candidate/tools/publish_entity_animations.py",
+      "rawBytes": 8323,
+      "rawSHA256": "a995f56543b7f47d6516ecee6afc9d374e5688a8f222de6237dbcdf08f0bef0c"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/proposal-v1/proposal.json",
+      "rawBytes": 8829,
+      "rawSHA256": "83f67e07e7917c3b6a8e63e0b9ee974b2ee90cbd8e45aa359dd95696ec55b57b"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/REVIEW.md",
+      "rawBytes": 6102,
+      "rawSHA256": "6235688308257f359b141bc5c367be4c446bdc31b9d66b7d2351efac36cc8039"
+    },
+    {
+      "file": "artifacts/cleanup-20261010/animation-workflow-retirement-v1/verify_guards.py",
+      "rawBytes": 14090,
+      "rawSHA256": "510d2e68839d586c6ca8454171279d8664c99a03db7fa1cc75b37e392517a350"
+    }
+  ],
+  "authorReceipt": "actual-ports-v3.json",
+  "nativeCalls": 0,
+  "productionWrites": 0
+}
