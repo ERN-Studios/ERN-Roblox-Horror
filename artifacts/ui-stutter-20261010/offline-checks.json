@@ -1,0 +1,16 @@
+{
+  "source": "ReplicatedStorage/UIDevice.ModuleScript.lua",
+  "sourceSHA256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+  "candidateSHA256": "521a535c8790530571475fe561ef6cb5b73e5e29f2d9a5933530402ecd1cc072",
+  "candidateCompiled": true,
+  "inputContract": "UIDevice input event contract: 14 checks passed",
+  "mutationsRejected": [
+    "original raw input broadcasting",
+    "gamepad notifications removed",
+    "cache not updated during handheld input"
+  ],
+  "equipmentContract": "Equipment HUD: 750 checks passed (real ProtectionHUD + real RoundHud over the HUD_PC import + real UIDevice plan, offline Luau)",
+  "studioModified": false,
+  "nativeFrameTimeMeasured": false,
+  "scope": "Offline actual-source event behavior and equipment/control-plan contract"
+}
