@@ -133,7 +133,7 @@ LOBBY** alone, with no route to a Level 4.
 
 ## 🟨 Level 1 — The Yellow Maze (done)
 
-Procedurally generated 40×40 office maze (corridors, plazas, pit rooms, and a
+Procedurally generated 32×32 office maze (corridors, plazas, pit rooms, and a
 brushed-aluminum service elevator with its own roof texture), new layout every
 round.
 
@@ -875,7 +875,7 @@ quick tests (don't sync the overrides). All three read through
 
 | Script | Setting | Testing | Production |
 |---|---|---|---|
-| `Level 1 Systems`/MazeGenerator | `GRID` (`L1_Grid`) | `10` | `40` — the maze is GRID × GRID cells |
+| `Level 1 Systems`/MazeGenerator | `GRID` (`L1_Grid`) | `10` | `32` — the maze is GRID × GRID cells |
 | GameManager | `ELEVATOR_TIME` (`Lobby_ElevatorSeconds`) | `2` | `19` (matches the elevator sound) |
 | GameManager | `QUEUE_TIME` (`Lobby_QueueSeconds`) | — | `10` — the lobby countdown once a party fills |
 

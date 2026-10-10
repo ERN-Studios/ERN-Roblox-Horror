@@ -72,7 +72,9 @@ Master.Entries = {
 	{Key = "L1_Grid", Label = "Labyrint-gitter", Level = "Level 1", Group = "Størrelse",
 	 Source = "L1Maze", Path = "GRID", Minimum = 8, Maximum = 60, Step = 1,
 	 Integer = true, Live = false,
-	 Note = "40 i produktion, 10 til test. Arealet vokser kvadratisk."},
+	 -- MAZE_SMALLER_20261010 (owner): production went 40 -> 32; the number itself is MazeGenerator's.
+	 -- The note also has to carry the one rule a hand-set value can break without any warning.
+	 Note = "32 i produktion, 10 til test. Arealet vokser kvadratisk. floor(GRID/2) skal være lige (32, 36, 40), ellers mangler de to garanterede lamper ved elevatoren; testværdien 10 har dem ikke."},
 	{Key = "L1_Cell", Label = "Cellestørrelse", Level = "Level 1", Group = "Størrelse",
 	 Source = "L1Maze", Path = "CELL", Minimum = 12, Maximum = 48, Step = 1,
 	 Integer = true, Live = false},
