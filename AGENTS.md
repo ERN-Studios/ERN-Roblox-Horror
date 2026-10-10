@@ -4,13 +4,17 @@
 
 - Current checkout is `/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009`,
   branch `codex/poolrooms-audio-20261009`; the main checkout is stale for game work.
-- One named agent owns Studio (currently the paused `Main RBLX GAME DEV` Claude
-  session). Handover must record the previous owner idle, checkpoint and new owner.
+- One named agent owns Studio (currently the `Main RBLX GAME DEV` Claude session,
+  the owner's fixed main agent). Handover must record the previous owner idle, checkpoint and new owner.
 - At most one extra agent works concurrently on a scoped independent deliverable.
   Subagents/CLI jobs/Operator workers count; helpers must not touch shared Studio
   or start more agents. Preserve unknown sessions and collaborators' work.
-- Ordinary sessions: Opus Medium with Fast/Ultracode off; gpt-6.1-sol Medium,
-  Standard. Low suits known simple procedures; higher reasoning is task-specific.
+- Models (owner, 2026-10-10 evening). Claude Opus 5.5: High for the main agent that drives
+  Studio, debugging and integration, Medium for bounded routine work; Standard speed, Fast
+  and automatic Ultracode workflows off. Codex gpt-6.1-sol: Medium for bounded deliverables,
+  High from the start for hard debugging, complex client/server interplay or risky reviews,
+  Low for simple known procedures; Standard speed, Fast off. Ultra is never a default and is
+  never hardcoded in a start command.
 - No compulsory Codex share in every batch and no compulsory Claude final QA.
   Each task owner implements/integrates and verifies; cross-model review needs a reason.
 - Use `tools/agents/start-codex.sh` for bounded Codex jobs and the delegation

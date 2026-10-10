@@ -1,6 +1,6 @@
 # Next task — Level 2 audio pilot
 
-Owner: `Main RBLX GAME DEV` (Claude), currently paused. It retains Studio ownership.
+Owner: `Main RBLX GAME DEV` (Claude), active again since the evening of 2026-10-10. It retains Studio ownership.
 Optional helper: one Codex gpt-6.1-sol Medium/Standard job for file inventory and audio QC only.
 No automatic readers/review teams, no helper Studio calls and no further subagents.
 

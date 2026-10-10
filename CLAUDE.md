@@ -13,7 +13,7 @@ This replaces historical model, workflow, ownership and test defaults.
 - Preserve dirty files and other developers' results before reconciliation.
 - Delegate Codex through `tools/agents/start-codex.sh`.
 - Standalone Claude starts through `tools/agents/start-claude.sh`.
-- Both launchers resolve this checkout and select Medium/Standard by default.
+- Both launchers resolve this checkout: Claude High, Codex Medium, both Standard speed.
 - Preserve checkpoints before replacing long sessions with fresh context.
 
 ## Studio is the sole source of truth
@@ -31,7 +31,8 @@ This replaces historical model, workflow, ownership and test defaults.
 ## One owner and at most one helper
 
 - One named agent owns Studio writes, playtests, keys, installation and publish.
-- Current owner: paused MonoCode session `Main RBLX GAME DEV` (Claude).
+- Current owner: MonoCode session `Main RBLX GAME DEV` (Claude), the owner's fixed main agent
+  for this project (owner, 2026-10-10 evening); active again since then.
 - It keeps ownership until a recorded handover; setup checks do not take it over.
 - At most one extra agent may work concurrently on one isolated deliverable.
 - Subagents, CLI jobs, workflows and Operator workers count toward this limit.
@@ -48,9 +49,16 @@ This replaces historical model, workflow, ownership and test defaults.
 
 ## Model settings
 
-- Claude: existing Opus (`opus`, currently Opus 5.5), Medium, Fast off.
-- Codex: gpt-6.1-sol, model_reasoning_effort=medium, Standard.
-- Known simple procedures may use the launchers' --low option.
+- Owner's model setup, 2026-10-10 (evening); it replaces the Medium-for-all default of the same afternoon.
+- Claude: Opus 5.5 (`opus`). High is the default for the main agent that drives Studio,
+  debugging and integration; Medium for clearly bounded routine work. Standard speed, Fast off.
+- Automatic Ultracode workflows are off by default.
+- Codex: gpt-6.1-sol. Medium is the default for bounded code, installers, Blender, audio
+  processing and other self-contained deliverables. Start at High for hard debugging, complex
+  client/server interplay or a review of a change with real risk. Low for simple known procedures.
+- Codex speed is Standard (service_tier=default); Fast (priority) stays off.
+- Ultra is never a default and is never written into a start command.
+- Launchers: start-claude.sh [--medium]; start-codex.sh [--high|--low].
 - Raise reasoning for a concrete difficult task, then return to defaults.
 - Do not hardcode ultra, xhigh, ultracode or priority into routine launches.
 - Installed Codex catalog labels service tier priority as Fast.

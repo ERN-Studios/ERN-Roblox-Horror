@@ -2,9 +2,10 @@
 # Project-scoped launch; inherits existing credentials, MCP and permissions.
 set -eu
 stayquiet_root="$(cd -- "$(dirname -- "$0")/../.." && pwd -P)"
-stayquiet_effort=medium
-if [[ "${1:-}" == --low ]]; then
-  stayquiet_effort=low
+# Owner, 2026-10-10 (evening): High is the main agent's default; --medium for clearly bounded routine work.
+stayquiet_effort=high
+if [[ "${1:-}" == --medium ]]; then
+  stayquiet_effort=medium
   shift
 fi
 cd -- "$stayquiet_root"

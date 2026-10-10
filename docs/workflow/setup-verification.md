@@ -71,3 +71,26 @@ Read [next-level2-audio.md](next-level2-audio.md), reconcile the existing batche
 - [Codex speed](https://learn.chatgpt.com/docs/agent-configuration/speed)
 - [Codex subagent settings](https://learn.chatgpt.com/docs/agent-configuration/subagents)
 - Installed CLI help, app-server protocol schema and model catalog were also checked; local effective receipts take precedence over historical examples.
+
+## Addendum, 2026-10-10 evening: the owner's model setup
+
+The owner kept Claude as the fixed main agent and set: Claude Opus 5.5 at High for the main agent (Medium for bounded
+routine work), Codex gpt-6.1-sol at Medium (High for hard debugging, client/server interplay and risky reviews, Low for
+simple known procedures), both at Standard speed, Fast off, automatic Ultracode workflows off, Ultra never a default or
+hardcoded. Changed for it: `.claude/settings.json` in both checkouts (`effortLevel` high), `tools/agents/start-claude.sh`
+(High, `--medium`), `tools/agents/start-codex.sh` (Medium, `--high`, `--low`), CLAUDE.md, AGENTS.md and the main
+checkout's redirect. `.codex/config.toml` was already Medium / `service_tier="default"`. Receipts are below.
+
+Receipts, 2026-10-10 16:13 to 16:16 (fresh jobs started from /tmp through the launchers):
+
+| Job | Model | Reasoning | Speed | Source of the reading |
+| --- | --- | --- | --- | --- |
+| `start-codex.sh exec` | gpt-6.1-sol | medium | no `priority` anywhere in the job record; launcher passes `service_tier="default"` | CLI header and rollout `01a12628-f5b0-7771-9312-fd272badfaa1` |
+| `start-codex.sh --high exec` | gpt-6.1-sol | high | as above | CLI header, session `01a12629-1113-74c1-8583-14d9b3364ca5` |
+| `start-codex.sh --low exec` | gpt-6.1-sol | low | as above | CLI header, session `01a12629-2841-7852-8b19-c65baf4b59cd` |
+| `start-claude.sh -p` | claude-opus-5-5 | `--effort high` in the live process | `fast_mode_state: off` | process flags and the stream's init/result events |
+| Main session (MonoCode) | `--model opus` | `--effort high`, `--settings {}` (no ultracode) | not shown in its flags | process flags of the resumed session |
+
+The Codex job record does not state its service tier, so "Standard" for Codex rests on the explicit launcher flag and the
+project config, not on a returned value. MonoCode's own picker for a NEW session in its UI is shared UI state the session
+cannot set: check it shows High (Claude) or Medium (Codex) and Standard before starting one by hand.
