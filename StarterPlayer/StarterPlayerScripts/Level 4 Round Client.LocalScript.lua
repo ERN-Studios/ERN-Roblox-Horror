@@ -265,9 +265,24 @@ local function refreshPanel()
         state.Title, state.Tag = "LOAD THE PROJECTORS", "PROJECTORS LOADED"
         state.Count, state.Goal = st("Level4_ReelsLoaded") or 0, st("Level4_ReelGoal") or 3
         local carried = math.max(0, tonumber(subject:GetAttribute("Level4_ReelsCarried")) or 0)
-        state.Lines = {("You carry %d reel%s."):format(carried, carried == 1 and "" or "s")}
+        -- REEL_HINTS_20261011 (owner: a hint in the guide text for where the reels are): the places come FIRST, and
+        -- what is carried after them. A guide line is one unwrapped line: a list too long for it runs on into the
+        -- second.
+        local carry = ("You carry %d reel%s."):format(carried, carried == 1 and "" or "s")
         local rooms = reelRooms(st("Level4_ReelRooms"))
-        if rooms then state.Lines[2] = rooms end
+        if not rooms then
+            state.Lines = {carry, carried > 0 and "Load them in the projector booths." or nil}
+        elseif #rooms <= 44 then
+            state.Lines = {rooms, carry}
+        else
+            local cut = 0
+            for at in string.gmatch(rooms, "(), ") do if at <= 44 then cut = at end end
+            if cut > 0 then
+                state.Lines = {string.sub(rooms, 1, cut - 1), string.sub(rooms, cut + 2) .. (carried > 0 and ("  \u{B7}  carrying " .. carried) or "")}
+            else
+                state.Lines = {rooms, carry}
+            end
+        end
         state.Status = breakerStatus(nameOf(st("Level4_BreakerHolder")),
             (st("Level4_FuseUntil") or 0) - workspace:GetServerTimeNow())
         state.Done = state.Count >= state.Goal
@@ -307,15 +322,35 @@ local function track(d)
 end
 
 local modelConnections = {}
-local function watchModel()
+local watchedModel = nil
+local watchScreen, forgetScreen, clearScreens
+local function releaseModel()
 	for _, c in ipairs(modelConnections) do c:Disconnect() end
 	table.clear(modelConnections)
-	table.clear(zoneLights); table.clear(zoneNeon); table.clear(tracked)
+	if clearScreens then clearScreens() end
+	for d in pairs(tracked) do
+		if d:IsA("Light") then
+			local brightness = d:GetAttribute("L4Brightness")
+			if brightness then d.Brightness = brightness end
+		end
+	end
+	table.clear(zoneLights); table.clear(zoneNeon); table.clear(tracked); table.clear(stutterUntil)
+	watchedModel = nil
+end
+local function watchModel()
 	local model = cinema()
+	if watchedModel == model then return end
+	releaseModel()
 	if not model then return end
-	for _, d in ipairs(model:GetDescendants()) do track(d) end
-	table.insert(modelConnections, model.DescendantAdded:Connect(track))
+	watchedModel = model
+	local function added(d)
+		track(d)
+		watchScreen(d)
+	end
+	for _, d in ipairs(model:GetDescendants()) do added(d) end
+	table.insert(modelConnections, model.DescendantAdded:Connect(added))
 	table.insert(modelConnections, model.DescendantRemoving:Connect(function(d)
+		forgetScreen(d)
 		local id = tracked[d]
 		if not id then return end
 		tracked[d] = nil
@@ -323,6 +358,9 @@ local function watchModel()
 			local i = table.find(list, d)
 			if i then table.remove(list, i) end
 		end
+	end))
+	table.insert(modelConnections, model.AncestryChanged:Connect(function()
+		if not model:IsDescendantOf(workspace) then releaseModel() end
 	end))
 end
 
@@ -462,6 +500,7 @@ end
 local filmRunning = {}
 local function startFilm(part)
 	if filmRunning[part] then return end
+	local token = {}
 	local frames = {}
 	for _, g in ipairs(screenGui(part, "L4Film")) do
 		local f = Instance.new("Frame")
@@ -476,10 +515,10 @@ local function startFilm(part)
 		scratch.Parent = f
 		table.insert(frames, { f, scratch })
 	end
-	filmRunning[part] = true
+	filmRunning[part] = token
 	task.spawn(function()
 		local rng = Random.new()
-		while filmRunning[part] and part.Parent do
+		while filmRunning[part] == token and part:IsDescendantOf(workspace) do
 			local v = reduceFlashing() and 0.85 or rng:NextNumber(0.6, 1)
 			for _, pair in ipairs(frames) do
 				pair[1].BackgroundColor3 = Color3.fromRGB(200, 205, 220):Lerp(Color3.fromRGB(70, 75, 95), 1 - v)
@@ -489,6 +528,34 @@ local function startFilm(part)
 			task.wait(reduceFlashing() and 0.6 or 0.07)
 		end
 	end)
+end
+
+local screenConnections = {}
+forgetScreen = function(part)
+	local connection = screenConnections[part]
+	if connection then connection:Disconnect(); screenConnections[part] = nil end
+	filmRunning[part] = nil
+	for i = #screenGuis, 1, -1 do
+		local gui = screenGuis[i]
+		if gui.Parent == part then
+			gui:Destroy()
+			table.remove(screenGuis, i)
+		end
+	end
+end
+clearScreens = function()
+	for part in pairs(screenConnections) do forgetScreen(part) end
+	table.clear(filmRunning)
+	for _, gui in ipairs(screenGuis) do gui:Destroy() end
+	table.clear(screenGuis)
+end
+watchScreen = function(part)
+	if not part:IsA("BasePart") or not part:HasTag("L4Screen") or screenConnections[part] then return end
+	local function check()
+		if part:GetAttribute("L4FilmRunning") == true then startFilm(part) end
+	end
+	screenConnections[part] = part:GetAttributeChangedSignal("L4FilmRunning"):Connect(check)
+	check()
 end
 
 -- owner 2026-10-04: the white exit screen bloomed so hard the word could not be read -> a dark panel with cream
@@ -1050,6 +1117,12 @@ local function startRound()
 	active = true
 	roundToken += 1
 	gui.Enabled = true
+	table.insert(roundConnections, workspace.ChildAdded:Connect(function(child)
+		if active and child.Name == MODEL_NAME then watchModel() end
+	end))
+	table.insert(roundConnections, workspace.ChildRemoved:Connect(function(child)
+		if child == watchedModel then releaseModel() end
+	end))
 	watchModel()
 	buildUsher()
 	local remotes = ReplicatedStorage:WaitForChild(REMOTES_NAME, 10)
@@ -1064,19 +1137,6 @@ local function startRound()
 				table.insert(buffer, { CF = cf, S = stateCode, H = hidden == true, T = t })
 				while #buffer > 24 do table.remove(buffer, 1) end
 			end))
-		end
-	end
-	-- screens whose projector is running (late join / re-entry included)
-	local model = cinema()
-	if model then
-		local function check(d)
-			if d:IsA("BasePart") and d:GetAttribute("L4FilmRunning") == true then startFilm(d) end
-		end
-		for _, d in ipairs(model:GetDescendants()) do
-			if d:IsA("BasePart") and d:HasTag("L4Screen") then
-				check(d)
-				table.insert(roundConnections, d:GetAttributeChangedSignal("L4FilmRunning"):Connect(function() check(d) end))
-			end
 		end
 	end
 	local accum, glintAccum = 0, 0
@@ -1123,22 +1183,11 @@ local function stopRound()
 		if typeof(c) == "RBXScriptConnection" then c:Disconnect() elseif type(c) == "thread" then pcall(task.cancel, c) end
 	end
 	table.clear(roundConnections)
-	for _, c in ipairs(modelConnections) do c:Disconnect() end
-	table.clear(modelConnections)
+	releaseModel()
 	destroyUsher()
 	closeKeypad()
 	closeNote()
-	table.clear(filmRunning)
-	for _, g in ipairs(screenGuis) do g:Destroy() end
-	table.clear(screenGuis)
-	-- hand every light back to the replicated (restored) values
-	for d in pairs(tracked) do
-		if d:IsA("Light") then
-			local b = d:GetAttribute("L4Brightness")
-			if b then d.Brightness = b end
-		end
-	end
-	table.clear(tracked); table.clear(zoneLights); table.clear(zoneNeon); table.clear(stutterUntil)
+	-- releaseModel handed streamed lights and screens back before clearing their references.
 end
 
 local function sync()

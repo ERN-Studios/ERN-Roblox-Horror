@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-10T20:52:05.952841+00:00",
+  "capturedAtUtc": "2026-10-10T23:20:53.025294+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -549,8 +549,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
-      "bytes": 69873,
-      "sha256": "1e07534e523915f891b11605e6e6f8ea50a4714d324cc69fc74f2812fd61b55e",
+      "bytes": 72012,
+      "sha256": "0819f1e1b22153217e00c69d5559eae86eeb48608a4944cad6375b9a240b3f73",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1312,8 +1312,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 Configuration.ModuleScript.lua",
-      "bytes": 7425,
-      "sha256": "af6225d22fb998db4cd2417cd552f934c75ff2c82cb223c4dd9e27daefd98aa6",
+      "bytes": 8881,
+      "sha256": "88827e33c7211313e519c381bd83576d4b9a6235d0fb40bd6f33eda5c3a1f05c",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1350,8 +1350,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 Objective Controller.ModuleScript.lua",
-      "bytes": 50254,
-      "sha256": "a01afa1615437ecec70f7b77acef4b1ad3feb30ba11c2d040f01bc1ace9bb9c2",
+      "bytes": 51827,
+      "sha256": "d9299c13b463494418f99f4bfeeb89aa2ef9d063ffef6f69c62b8e0b5c75921a",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3901,8 +3901,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 4 Round Client.LocalScript.lua",
-      "bytes": 48561,
-      "sha256": "05aa2da7877fb30fa4f3d43792d2ebb05a6987f143b09e0814dbd75fa3c38f03",
+      "bytes": 50377,
+      "sha256": "8c7ebcaf6290da81547db3cdd2f2478e4e5c9a4af30f2a279d78ac2165bc35d3",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4147,8 +4147,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Lobby Tunnel Reach Client.LocalScript.lua",
-      "bytes": 31937,
-      "sha256": "11a493d5423d1234eaa20f2ff6248a3807fa7baf0455b7f6f9814d7e190b22c9",
+      "bytes": 33748,
+      "sha256": "cd22ae21b19bdddabe0016e4718ba6b8c77175bde5c2aff4becf449544628d5d",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

@@ -1726,3 +1726,50 @@ Owner, after v4 went live in v2979: "Du skal lige fjerne de der usynlige vægge 
 - Re-imported (1,284 geometry parts, 0 guards). Walked with auto-jump in Rose, Mint, Crimson and Ivory: every jump
   made. Not tested: a real phone.
 - **Do not add invisible walls to a level again without being asked.**
+
+### Changed 2026-10-11 (night) - Level 1 Entity: the run comes AT you and springs out of the stride; Level 4 reels shine; the lobby creature is heard by distance (in Studio, NOT published by this session)
+
+Owner: "Du skal seriøst fikse entity run/chase animation, som du lavede analyse af en video af tidligere"; "De der
+filmruller man skal finde skal lyse langt mere op, så være tydelig når man spotter dem. Der skal også være et hint til
+hvor de befinder sig i guide teksten"; "Monsteret efter hegnet, når den bliver vækket kan alle i lobby høre dens lyde,
+få det til at fade ud og være næsten helt mute når man er i den anden ende ved spawn".
+
+- **The run (RUN_HUNT_20261011, `tools/level1_entity/work/build_clips.py`).** The owner's film of a live chase, frame
+  by frame: head on, RUN_FRONT was a gorilla's waddle (arms out to the sides, feet 1.8 apart, ten degrees of
+  side-rock), and just before the spring the Entity stood up straight and stopped coming for half a second. Now:
+  track .58 (feet 1.2 apart), hips 3.62, lean 43, list 4, sway .16, yaw 15, bob .66; both hands stay IN FRONT of the
+  body below the shoulders and reach at the prey in turn (`run_arm`). A hand reaching forward at shoulder height read,
+  from the player's low eye, as an arm waved over the head: that is why they are below the shoulders.
+- **The wind-up is the last stride of the run (LUNGE_GATHER_20261011).** `Lunge_Windup` is gait phases .84 to 1.30 at
+  the run's speed: the leading foot lands, the body sinks to 3.22 with the swinging foot carried lower, both arms
+  swing down and back on an arc, and it ends at that foot's push-off, which is `Lunge_Flight`'s first key
+  (`WIND_END`, `windup_end_feet`). EntityAI no longer freezes the body for it: it keeps running at SPEED_CHASE
+  straight at the player (it still stops if a wall or a pit comes between). Writing the root's CFrame every frame
+  (`faceFlat`) braked it from 26 to 12 studs/s within the stride, so that is only done when it stands.
+- **Two things the spring needed once it left from a run (18 to 22 studs away instead of 22 to 28):** its horizontal
+  speed is now distance over the arc's own flight time (`lungeSpeed`, 30 to 62) so the arc comes DOWN at the player
+  (at 62 it reached them at the top and a catch held the Entity 2.7 studs in the air); and "landed" is being back at
+  the launch height coming down, not `FloorMaterial`, which stays stale in the air and called every spring landed
+  at 0.28 s, two studs up and seven short.
+- Measured in Studio play: 23 to 32 studs/s through the wind-up, then the spring, down on the floor 3 to 4 studs
+  (flat) from the player; the client plays Run, windup, flight, moving_land, Run. `workspace.TestLungeAlways`
+  (Studio only) makes the lunge roll certain. Judged on the real body from the player's view
+  (`render_real.py --views player --dark`); videos in `~/Desktop/Level 1 entity - nyt loeb` ("v3 ...").
+  NOT seen: the new run moving in the live game with my own eyes; the owner's verdict.
+- **Level 4 reels (REEL_GLOW_20261011, REEL_HINTS_20261011).** Studio already had a reel light from 2026-10-10 that
+  was not in this checkout (2.5 over 12 studs, `glow`); my first push put a second `Glow` key in the configuration
+  and would have broken the reels: found by the merge conflict, fixed before any test. Now `Reels.Glow` is 3.5
+  breathing to 6.0 over 22 studs, with an `Occluded` Highlight (an outline only where the reel is in view) and a
+  glint of 20 a second at size 1.4 (`reelShine`). The guide lines put the places first: "Reels: Cafe, Cinema 1
+  seats, Women's room" (`Reels.SpotHints`, where in the room; a dropped reel is named by its room), then what is
+  carried; a list over 44 characters runs on into the second line (a guide line is one unwrapped line).
+- **Lobby creature (REACH_HEARING_20261011).** The comment's distances were wrong: the spawn is 238 studs from the end
+  wall and 386 from the eyes, inside the deep emitter's 400. Every sound of the creature (not the kill the taken
+  player hears) is now in a SoundGroup whose volume follows the LISTENER's distance into the lobby from the fence:
+  1.0 at the fence, 0.85 at 30 studs from the end wall, 0.51 at 70, 0.21 at 120, 0.03 from 180 to the spawn
+  (measured in play through the group's `Want` attribute; nobody has listened).
+- **The Mac ran out of memory during this** (swap 8.8 of 9.2 GB after about ten play sessions and several Blender
+  renders): Studio stopped answering, was killed by pid and reopened with the `roblox-studio:` URL; everything pushed
+  was still there. `/tmp/l1batch` had been cleared by the system: it is a link to
+  `~/Projects/stayquiet-session-tools/l1batch` now. A backgrounded shell that still holds a `qa.py stop` will stop
+  the NEXT play session when it gets there.

@@ -45,8 +45,14 @@ GAITS = {
     # and its feet tracked 2.4 studs apart, so in the game it was an upright waddle with hanging arms. This one is
     # built for the front silhouette: low and far forward with the head thrust out, a narrow track, a hard drop and
     # rise, shoulders rolling and swaying, and arms that pump from the hip to the shoulder at the sides.
-    'Run':dict(seconds=.70,frames=70,speed=27.2,duty=.30,front=2.90,width=.90,clear=1.85,
-               height=3.85,bob=.62,lean=37,yaw=22,list=10.0,sway=.42,heel=72),
+    # RUN_HUNT_20261011 (owner, after filming it in the live game: "Du skal seriøst fikse entity run/chase
+    # animation"). Frame by frame the RUN_FRONT charge read, head on, as a gorilla's waddle: the arms flew out to the
+    # sides (the back hand 1.9 studs wide of the shoulder), the feet tracked 1.8 apart and the body rocked ten
+    # degrees from side to side. This one comes AT the player: a narrow track, the body lower and further over its
+    # feet with the head down between the shoulders, hardly any side-rock, a harder rise and fall, and arms that
+    # reach forward at the prey one after the other, close to the body, instead of out to the sides.
+    'Run':dict(seconds=.70,frames=70,speed=27.2,duty=.30,front=2.90,width=.58,clear=1.85,
+               height=3.62,bob=.66,lean=43,yaw=15,list=4.0,sway=.16,heel=72),
 }
 
 def foot_path(p,g,side):
@@ -119,24 +125,30 @@ def safe_wrist(pose,side,target,pole_offset=None):
     result=RIG.solve_chain(pose,side+'Arm',side+'ForeArm',side+'Hand',target,pole,clamp=False)
     return np.asarray(target), result
 
+def run_arm(S,side,p):
+    """The charge's wrist target, finger direction and curl for one arm at gait phase p (S = that shoulder)."""
+    sign=-1 if side=='Left' else 1
+    phase=p+(0 if side=='Left' else .5)
+    # Each arm works against its own leg; the claws open at the front of the reach.
+    fwd=-math.cos(TAU*(phase+.03))
+    a=float(smooth(.5+.5*fwd))
+    amp=1.08 if side=='Right' else .96
+    # RUN_HUNT_20261011: arms flung out to the sides read as flapping, and a hand reaching forward at shoulder
+    # height read, from the player's low eye, as an arm waved over the head. Both hands stay IN FRONT of the body
+    # and below the shoulders, a little wide of the chest so they show beside it: each in turn stretches out at
+    # the prey with the claws open, then is drawn back, cocked, beside the ribs. It runs to grab, it does not pump.
+    front=np.array([sign*1.05,-.55,-3.25*amp]); back=np.array([sign*1.25,-1.90,-1.55*amp])
+    target=S+mix(back,front,a)+np.array([0,-.50*(1-fwd*fwd),0])
+    direction=mix(np.array([sign*.10,-.55,-.83]),np.array([sign*.12,-.10,-.99]),a)       # fingers at the prey throughout
+    return target,direction/np.linalg.norm(direction),.46-.28*a
+
 def arms_gait(pose,p,name):
     for side in ['Left','Right']:
         sign=-1 if side=='Left' else 1
         phase=p+(0 if side=='Left' else .5)
         S=RIG.fk(pose)[side+'Arm'][:3,3]
         if name=='Run':
-            # Each arm pumps against its own leg: back and out as that foot lands, driven forward across the chest
-            # as it pushes off. Elbows stay bent; the claws open at the front of the swing.
-            fwd=-math.cos(TAU*(phase+.03))
-            a=float(smooth(.5+.5*fwd))
-            amp=1.08 if side=='Right' else .96
-            # Seen from the front (where the hunted player is) the arms have to stay OUT of the face and read wide:
-            # the forward hand comes up beside the chest, never across it; the back hand is thrown out behind the hip.
-            front=np.array([sign*1.15,-.30,-2.35*amp]); back=np.array([sign*1.90,-2.70,1.55*amp])
-            target=S+mix(back,front,a)+np.array([0,-.50*(1-fwd*fwd),0])
-            direction=mix(np.array([sign*.45,-.75,.50]),np.array([sign*.20,.15,-.97]),a)
-            direction=direction/np.linalg.norm(direction)
-            curl=.46-.28*a
+            target,direction,curl=run_arm(S,side,p)
         else:
             wave=math.sin(TAU*(phase+.07))
             amp=(1.03 if name=='Walk' else 1.50)*(1.12 if side=='Right' else .91)
@@ -171,7 +183,7 @@ def build_gait(name):
         bob=-g['bob']*math.cos(2*TAU*(p-(.09 if name=='Run' else .07)))
         lean=max(0,g['lean']-13.3)/.84+2*math.sin(2*TAU*(p-.07))
         torso(pose,p,lean,g['yaw'],g['list'],g['sway'],g['height']+bob,wind=3 if name!='Run' else -4,
-              head=(-34,-36,3) if name=='Run' else None)
+              head=(-38,-40,3) if name=='Run' else None)
         feet={s:foot_path(p,g,s) for s in ['Left','Right']}
         poses.append(pose); feet_all.append(feet)
     origin=RIG.rest_world['Hips'][:3,3]
@@ -197,6 +209,56 @@ def build_gait(name):
                 stride=g['seconds']*g['speed'],speed=g['speed'],contacts=[0,.5],
                 notes=f"IK toe tracks; duty {g['duty']:.2f}; max reach-driven hip correction {max(envelopes):.3f} stud; measured finger axes.")
 
+# LUNGE_GATHER_20261011 (owner's film of a chase: just before it sprang, the Entity stood up straight with its arms
+# down and stopped coming for half a second). The wind-up was a planted brace that began upright, and the server froze
+# the body for it. It is now the LAST STRIDE OF THE CHARGE, at the charge's speed: the leading foot lands, the body
+# sinks low over it and both arms swing down and back, and it leaves the ground from that foot's push-off. The server
+# keeps the Entity running through it (EntityAI, LUNGE_GATHER_20261011), so the feet track the floor.
+WINDUP_P0, WINDUP_SPAN = .84, .46          # gait phases covered: .46 of a .70 s cycle = .322 s
+WIND_END = (3.22, -.35, 50.0, 8.0)          # hip height, hip forward, lean, wind at push-off = the flight's first key
+
+def gather_gait(s):
+    # as the body sinks the swinging foot is carried lower: a high knee under a low hip whips the thigh round
+    return dict(GAITS['Run'],clear=GAITS['Run']['clear']*(1-.60*s))
+
+def windup_end_feet():
+    return {side:foot_path((WINDUP_P0+WINDUP_SPAN)%1,gather_gait(1.0),side) for side in ['Left','Right']}
+
+def windup_pose(u):
+    g=GAITS['Run']; p=WINDUP_P0+WINDUP_SPAN*u
+    s=float(smooth((u-.10)/.90)); k=1-s
+    bob=-g['bob']*math.cos(2*TAU*(p-.09))
+    lean_run=max(0,g['lean']-13.3)/.84+2*math.sin(2*TAU*(p-.07))
+    height=float(mix(g['height']+bob,WIND_END[0],s)); forward=float(mix(-.44,WIND_END[1],s))
+    lean=float(mix(lean_run,WIND_END[2],s)); wind=float(mix(-4,WIND_END[3],s))
+    pose={}
+    torso(pose,p,lean,g['yaw']*k,g['list']*k,g['sway']*k,height,forward,wind)
+    # the head stays on the prey through the stride and settles into the flight's
+    sn=math.sin(TAU*p); nod=2.5*math.cos(2*TAU*(p-.10))*k
+    RIG.set_root_rotation(pose,'neck',rotation(float(mix(-38+nod*.5,-7,s)),wind*.12,0)@RIG.rest_world['neck'][:3,:3])
+    RIG.set_root_rotation(pose,'Head',rotation(float(mix(-40+nod,-6,s)),2.5*sn*k,float(mix(3,5,s)))@RIG.rest_world['Head'][:3,:3])
+    feet={side:foot_path(p%1,gather_gait(s),side) for side in ['Left','Right']}
+    H=RIG.fk(pose)['Hips'][:3,3].copy(); H[1]-=reach_adjustment(pose,feet)+.015
+    RIG.set_root_position(pose,'Hips',H)
+    for side,ft in feet.items():
+        sign=-1 if side=='Left' else 1
+        bend=max(0,-ft['pitch'])*(1-float(smooth((ft['toe'][1]+FLOOR_UP-.035)/.9)))
+        RIG.solve_leg_toe(side,pose,ft['toe'],ft['pitch'],ft['yaw'],point(-.0937*k+sign*1.3,2.0,5.0),toe_bend_deg=bend,clamp=False)
+    a=float(smooth((u-.05)/.80))                     # the sweep: down past the hip and back, on an arc under the shoulder
+    for side in ['Left','Right']:
+        sign=-1 if side=='Left' else 1
+        S=RIG.fk(pose)[side+'Arm'][:3,3]
+        target,direction,curl=run_arm(S,side,p)
+        v=target-S
+        theta=float(mix(math.degrees(math.atan2(-v[2],-v[1])),-65,a)); radius=float(mix(math.hypot(v[1],v[2]),3.40,a))
+        lateral=float(mix(sign*v[0],1.0,a))
+        target=S+np.array([sign*lateral,-radius*math.cos(deg(theta)),-radius*math.sin(deg(theta))])
+        direction=mix(direction,np.array([sign*.08,-.25,-1]),a)
+        safe_wrist(pose,side,target)
+        RIG.orient_hand(pose,side,direction/np.linalg.norm(direction),mix(np.array([-sign,0,-.2]),np.array([-sign,0,-.15]),a))
+        RIG.curl_fingers(pose,side,float(mix(curl,.12,a)),float(mix(.24,.43,a)))
+    return pose,feet
+
 def lunge_pose(name,u,run_zero):
     if name=='Lunge_Windup':
         height,f,lean,wind=sequence_keys([(0,[4.08,-.44,15,0]),(.31,[3.90,-.75,28,5]),(1,[3.02,-1.1,49,12])],u)
@@ -205,13 +267,15 @@ def lunge_pose(name,u,run_zero):
         wrists=sequence_keys([(0,[2.4,4.4,-1.1]),(.31,[2.4,4.25,-1.6]),(1,[2.65,4.65,-1.8])],u)
         curl=.12; spread=.40
     elif name=='Lunge_Flight':
-        height,f,lean,wind=sequence_keys([(0,[3.02,-1.1,49,12]),(.25,[4.10,.30,65,-8]),(.5,[4.08,.32,68,-8]),(.78,[3.70,.45,72,-4]),(1,[3.2,.25,72,0])],u)
-        feet={}
+        height,f,lean,wind=sequence_keys([(0,list(WIND_END)),(.25,[4.10,.30,65,-8]),(.5,[4.08,.32,68,-8]),(.78,[3.70,.45,72,-4]),(1,[3.2,.25,72,0])],u)
+        feet={}; start=windup_end_feet()
         for side in ['Left','Right']:
             sign=-1 if side=='Left' else 1
+            first=start[side]['toe']
             # Let the heels trail below the hip rather than sweep through its IK pole.
-            toe=sequence_keys([(0,[sign*1.08,.06,2.25 if side=='Left' else -2.4]),(.35,[sign*1.0,.90,-3.0]),(.55,[sign*1.05,1.0,-2.9]),(1,[sign*1.05,.15,1.6 if side=='Left' else -1.4])],u)
-            feet[side]=dict(toe=point(*toe),pitch=float(sequence_keys([(0,0 if side=='Left' else -48),(.25,-55),(.6,-35),(1,-10)],u)),yaw=sign*7,stance=False)
+            toe=sequence_keys([(0,[first[0],first[1]+FLOOR_UP,-first[2]]),(.35,[sign*1.0,.90,-3.0]),(.55,[sign*1.05,1.0,-2.9]),(1,[sign*1.05,.15,1.6 if side=='Left' else -1.4])],u)
+            feet[side]=dict(toe=point(*toe),pitch=float(sequence_keys([(0,start[side]['pitch']),(.25,-55),(.6,-35),(1,-10)],u)),yaw=sign*7,stance=False,
+                            bend0=max(0,-start[side]['pitch'])*(1-float(smooth((first[1]+FLOOR_UP-.035)/.9))))
         wrists=sequence_keys([(0,[2.65,4.65,-1.8]),(.10,[3.8,5.3,1.5]),(.22,[1.35,6.9,6.2]),(.5,[1.35,6.95,6.35]),(.78,[1.2,4.1,5.5]),(1,[1.25,2.4,4.8])],u)
         curl=float(sequence_keys([(0,.12),(.22,.04),(.55,.16),(1,.60)],u)); spread=.35*(1-u)+.08
     else:
@@ -226,7 +290,8 @@ def lunge_pose(name,u,run_zero):
     H=RIG.fk(pose)['Hips'][:3,3].copy(); H[1]-=reach_adjustment(pose,feet)+.015
     RIG.set_root_position(pose,'Hips',H)
     for side,ft in feet.items():
-        bend=0 if name=='Lunge_Flight' else max(0,-ft['pitch'])
+        # the pushing foot's toe unbends as it leaves the floor (it was bent under the heel at the gather's end)
+        bend=ft.get('bend0',0)*(1-float(smooth(u/.15))) if name=='Lunge_Flight' else max(0,-ft['pitch'])
         RIG.solve_leg_toe(side,pose,ft['toe'],ft['pitch'],ft['yaw'],point(-1.3 if side=='Left' else 1.3,2.0,5),toe_bend_deg=bend,clamp=False)
     for side in ['Left','Right']:
         sign=-1 if side=='Left' else 1
@@ -291,14 +356,16 @@ def blend_pose(a,b,t):
     return result
 
 def build_lunge(name,run_zero):
-    seconds={'Lunge_Windup':.32,'Lunge_Flight':.428,'Lunge_Land':.35}[name]
+    seconds={'Lunge_Windup':WINDUP_SPAN*GAITS['Run']['seconds'],'Lunge_Flight':.428,'Lunge_Land':.35}[name]
     N={'Lunge_Windup':33,'Lunge_Flight':85,'Lunge_Land':43}[name]
     poses=[]; feet=[]
     for i in range(N):
-        pose,ft=lunge_pose(name,i/(N-1),run_zero)
+        pose,ft=windup_pose(i/(N-1)) if name=='Lunge_Windup' else lunge_pose(name,i/(N-1),run_zero)
         poses.append(pose); feet.append(ft)
-    return dict(poses=poses,feet=feet,frames=N,fps=N/seconds,seconds=seconds,loop=False,stride=0,speed=0,contacts=[],
-                notes={'Lunge_Windup':'Stopped brace to asymmetric coil; planted toes, hold endpoint.',
+    # the gather is run at the charge's speed: its stance foot is judged against a floor moving at that speed
+    return dict(poses=poses,feet=feet,frames=N,fps=N/seconds,seconds=seconds,loop=False,stride=0,
+                speed=GAITS['Run']['speed'] if name=='Lunge_Windup' else 0,contacts=[],
+                notes={'Lunge_Windup':'The last stride of the charge at its speed: lands, sinks, arms swept back, ends at push-off.',
                 'Lunge_Flight':'Body-relative .428s arc; claw reach completes by u=.35 (.150s) and holds through apex; root carries ballistic motion.',
                 'Lunge_Land':'Stationary hand catch and hip absorb; finishes exactly at Run phase zero.'}[name])
 
