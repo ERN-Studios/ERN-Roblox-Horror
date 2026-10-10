@@ -1,0 +1,108 @@
+{
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "plan": "T01: export concurrent authoritative Sources and fresh remote Archivable metadata; no runtime feature change",
+  "scope": [
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "native": {
+        "minusOneTrailingLFSHA256": "78f44549ee9610c891ac04bfa8c96858aed707061f43443ee54b9c307ae07685",
+        "instanceId": "1_408341",
+        "rawEditorSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "sourceReadable": true,
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "propertyReadErrors": [],
+        "rawBytes": 196628,
+        "readStable": true,
+        "canonicalBytes": 196628,
+        "sourceSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+        "parentId": "1_409634",
+        "editorReadable": true,
+        "className": "Script",
+        "sourceEditorMatches": true,
+        "editorSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+        "rawSourceSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+        "path": "ServerScriptService.GameManager"
+      },
+      "reason": "concurrent-native-source"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level2PoolroomsPresentation.LocalScript.lua",
+      "native": {
+        "minusOneTrailingLFSHA256": "8c7c61f5cf9372798a97663e230c9e576c753f6baac098121f09ac825b66ea69",
+        "instanceId": "1_31119",
+        "rawEditorSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "sourceReadable": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level2PoolroomsPresentation"
+        ],
+        "propertyReadErrors": [],
+        "rawBytes": 14900,
+        "readStable": true,
+        "canonicalBytes": 14900,
+        "sourceSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+        "parentId": "1_410029",
+        "editorReadable": true,
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "editorSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+        "rawSourceSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+        "path": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation"
+      },
+      "reason": "concurrent-native-source"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+      "native": {
+        "minusOneTrailingLFSHA256": "1cd4f667b81f3b70cc699d63edf06bd2f716ffedc8b076981ff8ac02b7912f0c",
+        "instanceId": "1_31066",
+        "rawEditorSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "sourceReadable": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "NoiseReporter"
+        ],
+        "propertyReadErrors": [],
+        "rawBytes": 54956,
+        "readStable": true,
+        "canonicalBytes": 54956,
+        "sourceSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+        "parentId": "1_410029",
+        "editorReadable": true,
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "editorSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+        "rawSourceSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+        "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter"
+      },
+      "reason": "concurrent-native-source"
+    }
+  ]
+}

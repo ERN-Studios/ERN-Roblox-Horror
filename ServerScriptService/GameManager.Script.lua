@@ -584,6 +584,35 @@ local function loadGameplayCharacter(player, allowed, loadRecord)
  -- during the elevator brief. Never mark the lobby avatar awaiting this load.
  if ok and player.Character and player.Character ~= previous then
   player.Character:SetAttribute("ZyntraGameplayCharacter", true)
+  -- HIP_HEIGHT_20261010: the owning client can work the round body's hip height out from a half-arrived rig and
+  -- keep it (the body then stands in the floor). The server always has the whole rig: publish its figure, and
+  -- NoiseReporter holds the client's copy to it. The template itself has automatic scaling off since the same day.
+  local body = player.Character
+  local hum = body:FindFirstChildOfClass("Humanoid")
+  if hum then
+   -- The rig itself says how high the root stands: root underside to the lower sole, read here in the rest
+   -- pose (nothing animates the server's copy this early). It overrules a saved figure that has gone stale.
+   local root = body:FindFirstChild("HumanoidRootPart")
+   local sole
+   for _, name in ipairs({"LeftFoot", "RightFoot"}) do
+    local foot = body:FindFirstChild(name)
+    if foot and foot:IsA("BasePart") then
+     local y = foot.Position.Y - foot.Size.Y / 2
+     sole = sole and math.min(sole, y) or y
+    end
+   end
+   local measured = root and root:IsA("BasePart") and sole and (root.Position.Y - root.Size.Y / 2 - sole) or nil
+   if measured and measured >= 1 and measured <= 5 and math.abs(hum.HipHeight - measured) > 0.25 then
+    warn(string.format("[GameManager] round body hip height %.3f does not fit its rig (%.3f): using the rig", hum.HipHeight, measured))
+    hum.HipHeight = measured
+   end
+   local function publishHipHeight()
+    local height = hum.HipHeight
+    if height >= 0.5 and height <= 6 then body:SetAttribute("ZyntraHipHeight", height) end
+   end
+   publishHipHeight()
+   hum:GetPropertyChangedSignal("HipHeight"):Connect(publishHipHeight)
+  end
  end
  -- Record this load before releasing the gate, even if its body is incomplete.
  -- A re-entry refusal may discard only this still-current owned Character.

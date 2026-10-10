@@ -1,0 +1,64 @@
+{
+  "pass": true,
+  "nativeWrites": 0,
+  "compiles": [
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "optimization": "-O0",
+      "exitCode": 0,
+      "canonicalSourceSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+      "compiledBytes": 135483,
+      "compiledSHA256": "182d409b952e52a9f847bc668761c96ba2ba9af45fab4428dbe912050c3054f4"
+    },
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "optimization": "-O1",
+      "exitCode": 0,
+      "canonicalSourceSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+      "compiledBytes": 128468,
+      "compiledSHA256": "737acd277d1f1d8d1f0a201d77522dc7d650a98bb5814d96f744f30429dfb334"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level2PoolroomsPresentation.LocalScript.lua",
+      "optimization": "-O0",
+      "exitCode": 0,
+      "canonicalSourceSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+      "compiledBytes": 15104,
+      "compiledSHA256": "d212621ce31796b561f2ce5fa4d5dfa8ff8b726e85349868af7a441c52ff7455"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level2PoolroomsPresentation.LocalScript.lua",
+      "optimization": "-O1",
+      "exitCode": 0,
+      "canonicalSourceSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+      "compiledBytes": 14169,
+      "compiledSHA256": "a1939cd66a5049d1f1dcb6239dd379e25b2676885dbe7e46c35c51c36bd3a353"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+      "optimization": "-O0",
+      "exitCode": 0,
+      "canonicalSourceSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+      "compiledBytes": 30783,
+      "compiledSHA256": "eca65ac181ec382a1532de00adcb165fdaa36c8eb33b5c33f48a03981f212f80"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+      "optimization": "-O1",
+      "exitCode": 0,
+      "canonicalSourceSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+      "compiledBytes": 28821,
+      "compiledSHA256": "783f8b0ab7e9c78f5cf8287bbec21ac562edca72cda7ecd175a952262f41d522"
+    }
+  ],
+  "rootObservedSourceContract": {
+    "exitCode": 0,
+    "checks": 39
+  },
+  "rootObservedFullSyncContract": {
+    "exitCode": 0,
+    "checks": 65
+  },
+  "contractEvidence": "Root executed both after export; stdout observed in tool output. Compiles executed by this closure script.",
+  "limits": "Downstream preservation of concurrent work; no runtime/gameplay/performance verification or implementation credit"
+}

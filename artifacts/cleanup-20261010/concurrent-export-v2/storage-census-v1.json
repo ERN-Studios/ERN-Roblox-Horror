@@ -1,0 +1,783 @@
+{
+  "modeSwitches": 0,
+  "after": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T09:37:12Z",
+    "sceneCount": 417078,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "e0ec39a63fe5ecb9285245480d38523a7de00f900c88146ba9fc288522969630",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "nativeWrites": 0,
+  "limits": "Readonly root facts; not full asset/ref properties or deletion approval",
+  "roots": [
+    {
+      "instanceId": "1_15626",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Archive",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 1315,
+      "descendantScriptCount": 18,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41665",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatBaselineRig_20260924",
+      "className": "Model",
+      "tags": [
+        "Assistant:422cc5a2-918d-43fd-adc0-6c7e5d1c3c13"
+      ],
+      "nodeCount": 109,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41670",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatFalseSunTopper_20260924",
+      "className": "Model",
+      "tags": [
+        "Assistant:e5f75c0b-1a82-444d-b4f7-a932c8f5c4f8"
+      ],
+      "nodeCount": 5,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41687",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatSignalArchitectTopper_20260925",
+      "className": "Model",
+      "tags": [
+        "Assistant:6bac2338-3ed5-424f-a4c6-925f2102737d"
+      ],
+      "nodeCount": 3,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41673",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatSkin_BaselineYellow_20260924",
+      "className": "Model",
+      "tags": [
+        "Assistant:422cc5a2-918d-43fd-adc0-6c7e5d1c3c13"
+      ],
+      "nodeCount": 109,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41679",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatSkin_BlacksiteDirector_20260924",
+      "className": "Model",
+      "tags": [
+        "Assistant:422cc5a2-918d-43fd-adc0-6c7e5d1c3c13"
+      ],
+      "nodeCount": 109,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41683",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatSkin_FalseSun_20260924",
+      "className": "Model",
+      "tags": [
+        "Assistant:422cc5a2-918d-43fd-adc0-6c7e5d1c3c13"
+      ],
+      "nodeCount": 109,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41675",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatSkin_PoolService_20260924",
+      "className": "Model",
+      "tags": [
+        "Assistant:422cc5a2-918d-43fd-adc0-6c7e5d1c3c13"
+      ],
+      "nodeCount": 109,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41685",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatSkin_SignalArchitect_20260924",
+      "className": "Model",
+      "tags": [
+        "Assistant:422cc5a2-918d-43fd-adc0-6c7e5d1c3c13"
+      ],
+      "nodeCount": 109,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "DevSuitSource": "HazmatSkin_BaselineYellow_20260924 clone + Codex ColorMap 137400739559825 (SYUaXHKQ, 2026-09-24)"
+      }
+    },
+    {
+      "instanceId": "1_41681",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatSkin_StaticWraith_20260924",
+      "className": "Model",
+      "tags": [
+        "Assistant:422cc5a2-918d-43fd-adc0-6c7e5d1c3c13"
+      ],
+      "nodeCount": 109,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41677",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatSkin_SuburbSurvey_20260924",
+      "className": "Model",
+      "tags": [
+        "Assistant:422cc5a2-918d-43fd-adc0-6c7e5d1c3c13"
+      ],
+      "nodeCount": 109,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41667",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "HazmatStaticWraithTopper_20260924",
+      "className": "Model",
+      "tags": [
+        "Assistant:7bc11c96-ca62-4085-a766-86317938e214"
+      ],
+      "nodeCount": 5,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_38274",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.50_a3.20_d2.20_s26",
+      "className": "MeshPart",
+      "tags": [],
+      "nodeCount": 1,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2_ArchRibMeshKey": "r13.20_vs1.90_fd1.50_a3.20_d2.20_s26",
+        "CodexUploadedAssetId": "121489049526127"
+      }
+    },
+    {
+      "instanceId": "1_38275",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.80_a3.20_d2.20_s26",
+      "className": "MeshPart",
+      "tags": [],
+      "nodeCount": 1,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2_ArchRibMeshKey": "r13.20_vs1.90_fd1.80_a3.20_d2.20_s26",
+        "CodexUploadedAssetId": "105818906248010"
+      }
+    },
+    {
+      "instanceId": "1_38268",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Closed Slide End Cap Template",
+      "className": "MeshPart",
+      "tags": [],
+      "nodeCount": 1,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2_InnerRadius": 0.885,
+        "Level2_OuterRadius": 1.015,
+        "Level2_BaseRadius": 1,
+        "Level2_TemplateKind": "ClosedEndCap"
+      }
+    },
+    {
+      "instanceId": "1_38269",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Column Flare Template",
+      "className": "MeshPart",
+      "tags": [],
+      "nodeCount": 1,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_38257",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Column Flare Template 4.500:7.200",
+      "className": "MeshPart",
+      "tags": [],
+      "nodeCount": 2,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2_ColumnFlareShaftDiameter": 4.5,
+        "Level2_ColumnFlareTileStuds": 9
+      }
+    },
+    {
+      "instanceId": "1_38267",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Column Flare Template 5.500:7.425",
+      "className": "MeshPart",
+      "tags": [],
+      "nodeCount": 2,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2_ColumnFlareShaftDiameter": 5.5,
+        "Level2_ColumnFlareTileStuds": 9
+      }
+    },
+    {
+      "instanceId": "1_38249",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Column Flare Template 9.000:10.200",
+      "className": "MeshPart",
+      "tags": [],
+      "nodeCount": 2,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2_ColumnFlareShaftDiameter": 9,
+        "Level2_ColumnFlareTileStuds": 9
+      }
+    },
+    {
+      "instanceId": "1_417489",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Column Tile Surface Template",
+      "className": "SurfaceAppearance",
+      "tags": [],
+      "nodeCount": 1,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_38261",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Fitted Slide Cradle Template",
+      "className": "MeshPart",
+      "tags": [],
+      "nodeCount": 1,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2_OuterRadius": 1.1,
+        "Level2_TemplateKind": "ContinuousGroundedU",
+        "Level2_InnerRadius": 0.985,
+        "Level2_CenterYOffset": 0.317559956,
+        "Level2_BaseRadius": 1,
+        "Level2_BaseLength": 1
+      }
+    },
+    {
+      "instanceId": "1_15650",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Kids Round Skylight Templates",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 4,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2_TemplateVersion": 1,
+        "Level2_Purpose": "Baked round roof modules for generated Level 2 kids rooms"
+      }
+    },
+    {
+      "instanceId": "1_38256",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Open Slide End Cap Template",
+      "className": "MeshPart",
+      "tags": [],
+      "nodeCount": 1,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2_TemplateKind": "OpenEndCap",
+        "Level2_BaseRadius": 1,
+        "Level2_CenterYOffset": 0.28869075
+      }
+    },
+    {
+      "instanceId": "1_38258",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Sealed Open Slide Segment Template",
+      "className": "MeshPart",
+      "tags": [],
+      "nodeCount": 1,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2_TemplateKind": "Open",
+        "Level2_CenterYOffset": 0.28869075,
+        "Level2_BaseRadius": 1,
+        "Level2_BaseLength": 1
+      }
+    },
+    {
+      "instanceId": "1_15648",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 2 Slide Assets",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 4,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_40071",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 4 Cinema Blender",
+      "className": "Model",
+      "tags": [],
+      "nodeCount": 14465,
+      "descendantScriptCount": 2,
+      "attributes": {
+        "Level4Revision": 11,
+        "BoundsCenter": null,
+        "Level4Source": "Blender",
+        "SourceBlend": "G:/Blender/Level4_Cinema/Level4_Cinema.blend",
+        "BoundsSize": null,
+        "StudsPerMetre": 3.571428571428571,
+        "PartCount": 14465
+      }
+    },
+    {
+      "instanceId": "1_15704",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 4 Templates",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 101,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41644",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 5 Void",
+      "className": "Model",
+      "tags": [],
+      "nodeCount": 2628,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "BoundsCenter": null,
+        "Origin": null,
+        "Bottom": -420,
+        "Level5Preview": true,
+        "BoundsSize": null,
+        "PreviewOnly": true,
+        "Level5PreviewReady": true
+      }
+    },
+    {
+      "instanceId": "1_41645",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level 6 Indoor Playground",
+      "className": "Model",
+      "tags": [],
+      "nodeCount": 20319,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "ExitPosition": null,
+        "Source": "tools/level6_playground/build_arena.py",
+        "Level6PreviewReady": true,
+        "Ready": true,
+        "PreviewOnly": true,
+        "PBR": "PBR_20261006",
+        "HomePosition": null,
+        "Origin": null,
+        "Arena": true,
+        "Level6Preview": true,
+        "ExitDoorPosition": null
+      }
+    },
+    {
+      "instanceId": "1_16419",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level1BlenderKit",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 1215,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "ManifestSha256": "35bd18f1e08c2cc63166ff877f83ffe6d5e99e7d46a347426584713d4a50fb22",
+        "Ready": true,
+        "Complete": true,
+        "Build": "level1-blender-20261002"
+      }
+    },
+    {
+      "instanceId": "1_16626",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level1BlenderKitV2",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 1816,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "ManifestSha256": "dbfb65f59d765fdf1266734442b69f921fa7ae61295c17a715e69cf47a0b3c53",
+        "Ready": true,
+        "Complete": true,
+        "Build": "level1-quality-20261002-v2"
+      }
+    },
+    {
+      "instanceId": "1_15706",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level1ElevatorInsetKit",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 288,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "SteelAlbedo": "rbxassetid://91807512336692",
+        "Complete": true,
+        "ManifestSha256": "68dcba4e34a92815e9cb9b4df59182eb4d2de340023de18189eb860bbb90dfc6",
+        "SteelTint": null,
+        "SteelMetal": "rbxassetid://76319635380604",
+        "SteelNormal": "rbxassetid://115249450797513",
+        "SteelRough": "rbxassetid://105745940919181",
+        "Ready": true,
+        "Build": "level1-elevator-inset-20261004"
+      }
+    },
+    {
+      "instanceId": "1_15641",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level2Assets",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 326,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "0_33155145",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level2LegacyArchive_20261009",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 7506,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2PromotionBackup": true
+      }
+    },
+    {
+      "instanceId": "1_41646",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level2PoolroomsMap",
+      "className": "Model",
+      "tags": [],
+      "nodeCount": 31519,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level2NewMap": true,
+        "Source": "G:/Blender/Level2_Poolrooms_New_20261006/Level2_Poolrooms_New.blend",
+        "Origin": null,
+        "Generated": "2026-10-08 14:16:25",
+        "SourceMtime": "Thu Oct  8 14:14:40 2026",
+        "BoundsCenter": null,
+        "A2LionTarget": null,
+        "Level2ArrivalSlot5": null,
+        "Level2ArrivalSlot4": null,
+        "L2NTerrainRegions": "[[69072,224,-4,69440,232,640],[69684,272,-44,69784,284,60],[69908,144,216,70048,164,340],[69468,164,152,69900,176,392],[69980,176,-20,70020,188,20],[69668,120,-488,69756,300,-272],[70000,156,144,70024,184,184],[70000,156,180,70024,168,200],[70000,172,92,70024,188,148]]",
+        "A2ReflectorNormal": null,
+        "CollisionPacket": "5a613ab5f50b009c",
+        "L2NReady": true,
+        "Level2ArrivalSlot2": null,
+        "StudsPerMetre": 2.86,
+        "Route": "P0 A1 P1 A3 P2 A4 P3 A2 P4 A5 P5 A6 EXIT",
+        "PromotionRevision": "live20261009",
+        "A2ReflectorCentre": null,
+        "TerrainPacket": "346bf330aa1ab565",
+        "Level2ArrivalSlot6": null,
+        "PartCount": 30281,
+        "Level2ArrivalSlot1": null,
+        "Level2ArrivalSlotCount": 6,
+        "BoundsSize": null,
+        "PreviewOnly": false,
+        "Level2ArrivalSlot3": null
+      }
+    },
+    {
+      "instanceId": "1_15651",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level3Assets",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 2421,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_17071",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level6ArenaSlideSource",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 15,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_15819",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level6BlenderSource",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 131,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level6Owned": true,
+        "Version": "WornParty20260930-v2",
+        "Ready": true
+      }
+    },
+    {
+      "instanceId": "1_15871",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level6BlenderSourceRevision20261001",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 873,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "InstalledCount": 279,
+        "Level6Owned": true,
+        "Version": "Level6Revised20261001",
+        "SourceBlendSHA256": "d2eddfce3820a27f01cdd53b93b719ec8bf8d048b9313bc6cdf29610344acc6b",
+        "Ready": true
+      }
+    },
+    {
+      "instanceId": "1_15705",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level6CounterSource",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 12,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "FeetY": -4.095,
+        "StudsPerMetre": 6.3,
+        "Texture": "rbxassetid://75241590136508"
+      }
+    },
+    {
+      "instanceId": "1_16180",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Level6TextureImportReferences",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 1,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Level6Owned": true
+      }
+    },
+    {
+      "instanceId": "1_16181",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "LobbyReimaginedBlenderSource20261001",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 97,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Ready": true,
+        "ManifestSHA256": "d681698aceefa0c97f213c6ff77e216f76d36ac14a81bd32363a271988e2a6a3",
+        "AtlasSHA256": "ab7f03b928fa2e8eef5232ee77211c58df0c22cf761fead586aac821db0f1ce2",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "instanceId": "1_16219",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "LobbyReimaginedBlenderSource20261001R2",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 97,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Ready": true,
+        "ManifestSHA256": "9e25ce55ccfd8aec36878770967c83f6b1eb72676f9c783c562b5864ab333c3c",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "instanceId": "1_16257",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "LobbyReimaginedBlenderSource20261001R3",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 104,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Ready": true,
+        "ChangedSources": 9,
+        "ManifestSHA256": "d242eed49d5cab337067ffd6dd3c84207a05a094bd2784dd5a7188dc068a760e",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "instanceId": "1_16298",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "LobbyReimaginedBlenderSource20261001R3B",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 104,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "Ready": true,
+        "ManifestSHA256": "c4289515c6253bf6414f745723a4466fbef59e9c40e179f13c14412349b72ba3",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "instanceId": "1_16339",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "LobbyReimaginedBlenderSource20261001R4",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 196,
+      "descendantScriptCount": 0,
+      "attributes": {
+        "RecoveryCaptureId": "a3e80689-a0f2-4f26-8d6e-f5b8b4adaaf7",
+        "Ready": true,
+        "ManifestSHA256": "17b68efc473a0f100cf6ce6b9389332a5f2a87d82faf7694a0536a82483bc995",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "instanceId": "1_17077",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "LobbyTunnelReachSource",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 19,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_15647",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "MongoTVEntityAnimations",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 223367,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "0_79287173",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "OptimizationAuthoringArchive",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 12062,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "0_79287982",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "PoolroomsContainedColliders_20261009",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 268,
+      "descendantScriptCount": 0,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_15640",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "Project Mirror",
+      "className": "Folder",
+      "tags": [],
+      "nodeCount": 3,
+      "descendantScriptCount": 2,
+      "attributes": []
+    },
+    {
+      "instanceId": "1_41652",
+      "parentId": "1_409635",
+      "archivable": true,
+      "name": "RBX_ANIMSAVES",
+      "className": "Model",
+      "tags": [],
+      "nodeCount": 85712,
+      "descendantScriptCount": 0,
+      "attributes": []
+    }
+  ],
+  "pass": true,
+  "before": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T09:37:11Z",
+    "sceneCount": 417078,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "e0ec39a63fe5ecb9285245480d38523a7de00f900c88146ba9fc288522969630",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  }
+}

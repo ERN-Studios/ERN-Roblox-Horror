@@ -159,6 +159,66 @@ fejlfixture er ikke en native authoring-/transportcertificering.
 
 S19 lokal commit: `51d3095afb3e6f62bb73c7fd0a8c6b491a205d82`.
 
+### S23 / T01–T03 — tre samtidige Studio-Sources eksporteret
+
+GameManager, Level2PoolroomsPresentation og NoiseReporter er hentet friskt fra
+native Source med editor-equality og eksakte identity/class/Enabled/Disabled/
+RunContext/attributes/tags. NoiseReporter var ændret igen siden S21-afvisningen;
+den seneste observerede kilde er bevaret. Private checkpoints gemmer alle tre
+gamle raw mirrors, manifest og de eksisterende dirty plan/resultfiler.
+
+Kun tre Sourcespejle og deres Source-bookkeeping i manifest er skrevet lokalt.
+Ingen native Source/object/propertywrites eller mode-switch. Andre210 Sources,
+alle øvrige manifestrows/felter og tidligere historiske operationcounts er
+bevarede. Andre udvikleres ændringer krediteres ikke som oprydning.
+
+V2/V3 blev aldrig anvendt: peer fandt en foreign-manifest rollback-afhængighed
+og en manglende read-error/late-validation failure-receipt. De er bevaret og
+rettet i V4 før faktisk eksport. [Peer](artifacts/cleanup-20261010/clients-export-peer-v1/REVIEW.json)
+er statisk review; [actual export](artifacts/cleanup-20261010/concurrent-export-v2/export-result.json)
+bestod separat. Ingen rollback blev nødvendig. Recovery er afgrænset CAS med
+bevarelse/afventende frisk afstemning ved foreign/unreadable dependent files;
+der hævdes ingen kontinuerlig cross-process-transaktion.
+
+Tre kilder × O0/O1 compile PASS; Source39 og full-sync65 PASS.
+Ny komplet native parity09:35:46–09:35:57Z:213 scripts,15 remotes,228 rows,
+52 ServerStorage-rødder og417078 sceneobjekter; nul Source/editor conflicts,
+mismatch, missing/extra mirrors eller property coveragegaps.
+Catalog SHA `e0ec39a63fe5ecb9285245480d38523a7de00f900c88146ba9fc288522969630`.
+Sceneantallet er ændret af samtidige Studio-edits og tilskrives ikke eksporten.
+Ny readonly storage-census09:37:12Z har samme catalog og52 rødder.
+Attributes/tags er præcist kontrolleret på tre targets; final census er Source/
+editor/class/identity/registrerede properties, ikke fuld asset/reference-parity.
+Dette er ingen gameplay-, MP-, streaming-, teleport- eller performancepass.
+
+### S21 / C04 — faktisk førkontrol afvist, Hiding uændret
+
+Det faktiske native førinventar fandt tre samtidige Sources, som afveg fra
+repo/manifest. Installerens mirror-guard afviste forsøget FØR native parser
+eller Source-CAS. Nul native Sourcewrites blev anmodet; target Hiding er
+uændret. Dette er en baselineafvisning, ikke en runtime-regression.
+[Read-only diagnose](artifacts/cleanup-20261010/clients-hiding-v1/baseline-refusal-v1.json)
+og det fejlede forsøg beholdes. Den41-byte literal-kandidat står stadig afventende,
+og gammel immutable installer-destination genbruges ikke. Ny closure/native/
+installeret port kræves efter S23; ServerStorage/CORE-027 prioriteres nu.
+
+### S04 og CORE-027 — nyere ejerbeslutning og næste porte
+
+Ejeren har pensioneret hele den gamle lobby som fallback: «Den kan altid bygges,
+der skal ikke være et fallback.» Ved serverboot kalder GameManager stadig
+TunnelLobbyBuilder før R4; samme-server return/reset genbruger lobbyen, mens en
+ny lobbyserver bygger den igen. Builderen har fortsat aktive shop/support/spawn/
+stationkontrakter; hele Build slettes derfor ikke blindt. Udskillelse og faktisk
+regressionsport er afventende. Eksisterende shop-test fejler allerede før
+cleanup fordi den forventer8texturekeys, mens aktuel kilde har10; dette negative
+baselinefund skal bevares, og en aktuel featureport etableres først.
+
+Fem gamle authoringpakker er fortsat beholdt. Arkiv/reopen er bestået, men
+frisk closure og faktisk kontrolleret absence/restoration/asset-selectorport
+mangler. Foreløbigt review kan afgrænse brede gameplaykrav for udelukkende
+pensionerede data; det er en betinget vurdering, ingen erstatning for native
+fraværstest og ingen certificering af gameplay/MP/stream/teleport.
+
 ### S20 / C04 — privat Exit-konstant, gennemført
 
 Kun den73-LFbyte ubrugte `HINT_HEIGHT = 36`-deklaration er fjernet fra
@@ -197,6 +257,8 @@ performancepass, native packagefjernelse, publicering eller GitHub-push.
 [peer](artifacts/cleanup-20261010/storage-exit-peer-v1/V2_REVIEW.json),
 [native provenance](artifacts/cleanup-20261010/clients-exit-v1/native-response-provenance-v1/root-provenance.json),
 [parity](artifacts/cleanup-20261010/clients-exit-v1/final-parity-v1/result.json).
+
+S20 lokal commit: `7fa4d2e13d64bb10732d62d35d8b219e0cf55583`.
 
 ### F01 / T06-extension — authoringinstaller, forberedt og afventer native test
 

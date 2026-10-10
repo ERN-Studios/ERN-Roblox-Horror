@@ -1,0 +1,104 @@
+{
+  "schema": "mongotv-final-parity-diagnostic-v1",
+  "complete": true,
+  "nativeWrites": 0,
+  "repositorySourceWrites": 0,
+  "manifestWrites": 0,
+  "modeSwitches": 0,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "limits": "Metadata/hash snapshot of authoritative Edit Sources. No gameplay, full native assets, publication or continuous epoch guarantee. Failed stability guards leave partial evidence.",
+  "nativeBegin": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T09:30:58Z",
+    "sceneCount": 417078,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "e0ec39a63fe5ecb9285245480d38523a7de00f900c88146ba9fc288522969630",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "nativeEnd": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T09:31:09Z",
+    "sceneCount": 417078,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "e0ec39a63fe5ecb9285245480d38523a7de00f900c88146ba9fc288522969630",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "repoSnapshotStable": true,
+  "nativeSourceEditorConflictCount": 0,
+  "counts": {
+    "nativeScripts": 213,
+    "nativeRemotes": 15,
+    "nativeTotal": 228,
+    "actualManifestScripts": 213,
+    "actualManifestRemotes": 15,
+    "actualManifestTotal": 228,
+    "declaredManifest": {
+      "scripts": 213,
+      "remoteEvents": 15,
+      "total": 228,
+      "created": 12,
+      "updated": 18,
+      "unchanged": 215,
+      "studioTrailingNewline": 0
+    }
+  },
+  "declaredManifestCountsMatchActual": true,
+  "mismatches": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "kind": "workingSourceHash",
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "nativeSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+      "workingSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1"
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "kind": "manifestSourceHash",
+      "nativeSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+      "manifestSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation",
+      "kind": "workingSourceHash",
+      "file": "StarterPlayer/StarterPlayerScripts/Level2PoolroomsPresentation.LocalScript.lua",
+      "nativeSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+      "workingSHA256": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation",
+      "kind": "manifestSourceHash",
+      "nativeSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+      "manifestSHA256": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "kind": "workingSourceHash",
+      "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+      "nativeSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+      "workingSHA256": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "kind": "manifestSourceHash",
+      "nativeSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+      "manifestSHA256": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5"
+    }
+  ],
+  "missingNative": [],
+  "extraNative": [],
+  "extraWorkingFiles": [],
+  "manifestPropertyCoverageGaps": [],
+  "manifestPropertyCoverageGapCount": 0,
+  "nativeScriptPropertyReadErrors": [],
+  "sourceAndRecordedPropertyParity": false,
+  "attributesTagsAndNonScriptNativeAssetsCompared": false,
+  "finishedUtc": "2026-10-10T09:31:09.494968+00:00"
+}

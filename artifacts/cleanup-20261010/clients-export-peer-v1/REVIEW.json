@@ -1,0 +1,49 @@
+{
+  "schema": "concurrent-downstream-export-static-peer-v1",
+  "pass": true,
+  "reviewedFile": "artifacts/cleanup-20261010/concurrent-export-v2/export-v4.py",
+  "rawBytes": 13495,
+  "rawSHA256": "0cc145973d2a871e9c3655a73ff0e4f5907d1a8f5528fb0afff6c99dae0674b0",
+  "syntaxASTPassed": true,
+  "readScope": [
+    "Full V2 source, full V3 source and exact V4 delta/recovery completion branch",
+    "Actual frozen parity-reader catalog Source/editor/class/identity/property census",
+    "Actual read_native_record Source/editor/class/identity/property/attribute/tag chunk brackets",
+    "Previously reviewed scoped CAS temporary identity/body and recovery patterns"
+  ],
+  "addressedBlockers": [
+    {
+      "version": "V2",
+      "issue": "A foreign manifest edit could remain at exported owned fields while exact-owned Source mirrors rolled back, creating Source/manifest drift.",
+      "resolution": "A foreign attempted dependency blocks every automatic rollback; all landed fields are preserved pending fresh native reconciliation. Known-owned recovery rechecks the dependent set before every scoped restore and stops on a new foreign observation or CAS exception."
+    },
+    {
+      "version": "V3",
+      "issue": "Missing/unreadable recovery files or final checks outside the recovery try could bypass immutable failure evidence.",
+      "resolution": "Read failures during ownership or recovery preserve pending evidence and stop. All final Source/manifest/HEAD assertions now execute within failure handling."
+    }
+  ],
+  "scopeChecks": {
+    "exactThreeConcurrentSourcePathsOnly": true,
+    "manifestOwnedFieldsOnly": ["bytes", "sha256", "sourceEditorMatches", "studioTrailingNewline"],
+    "allOtherManifestContentComparedExact": true,
+    "mirroredFileSetGuardBeforeWrites": true,
+    "allPriorMirrorBytesGuardedBeforeAndCheckedAfter": true,
+    "nativeSourceEditorCatalogBrackets": true,
+    "selectedFreshMetadataComparedBeforeApply": true,
+    "temporaryCleanupRequiresOwnedIdentityAndBody": true,
+    "rawMirrorManifestDocumentationCheckpointPreserved": true,
+    "nativeMutationPathFound": false,
+    "modeSwitchPathFound": false
+  },
+  "peerActions": {
+    "helperExecutions": 0,
+    "actualFixtures": 0,
+    "nativeCalls": 0,
+    "productionWrites": 0,
+    "manifestWrites": 0,
+    "indexWrites": 0,
+    "ownedArtifactWritesOnly": true
+  },
+  "limits": "Static point-in-time peer review only. V2 and V3 were not applied. No continuous filesystem/native transaction or actual export/parity is certified. Baseline catalog includes all Sources/editor/identity/class/properties; full attrs/tags are bracketed for the three selected records, not the entire scene. Non-script native assets and gameplay are outside this Source-only downstream export. A concurrent failure leaves evidence and requires fresh authoritative reconciliation before claiming parity. Root owns all helper/native execution and final full parity."
+}

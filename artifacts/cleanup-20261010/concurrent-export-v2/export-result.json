@@ -1,0 +1,49 @@
+{
+  "pass": true,
+  "headAtLanding": "7fa4d2e13d64bb10732d62d35d8b219e0cf55583",
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "sourceMirrorWrites": [
+    "ServerScriptService/GameManager.Script.lua",
+    "StarterPlayer/StarterPlayerScripts/Level2PoolroomsPresentation.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua"
+  ],
+  "manifestBeforeSHA256": "e17883cde75144d3ef652af33f1e4ac68c0048ead12a9a7c61826cb578408ae7",
+  "manifestAfterSHA256": "115903849226484d1e6fcd15d28270f35511a18270669091069a07b0ec4770cc",
+  "counts": {
+    "scripts": 213,
+    "remoteEvents": 15,
+    "total": 228,
+    "created": 12,
+    "updated": 18,
+    "unchanged": 215,
+    "studioTrailingNewline": 0
+  },
+  "nativeStart": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T09:35:17Z",
+    "sceneCount": 417078,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "e0ec39a63fe5ecb9285245480d38523a7de00f900c88146ba9fc288522969630",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "nativeEnd": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T09:35:19Z",
+    "sceneCount": 417078,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "e0ec39a63fe5ecb9285245480d38523a7de00f900c88146ba9fc288522969630",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "privateCheckpoint": "Private .git/mongotv-cleanup-20261010/concurrent-export-v2; all three previous raw mirrors, manifest and existing dirty documentation preserved",
+  "historicalOperationCountsPreserved": true,
+  "limits": "Scoped downstream export, not implementation or gameplay approval of other developers changes"
+}

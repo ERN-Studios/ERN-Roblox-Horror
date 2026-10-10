@@ -1,0 +1,62 @@
+{
+  "schema": "s21-root-saved-baseline-difference-v1",
+  "pass": true,
+  "differences": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "field": "sourceSHA256",
+      "repoOrManifest": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "nativeBefore": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4"
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "field": "manifestSHA256",
+      "repoOrManifest": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "nativeBefore": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4"
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "field": "bytes",
+      "repoOrManifest": 195000,
+      "nativeBefore": 196628
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation",
+      "field": "sourceSHA256",
+      "repoOrManifest": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93",
+      "nativeBefore": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation",
+      "field": "manifestSHA256",
+      "repoOrManifest": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93",
+      "nativeBefore": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation",
+      "field": "bytes",
+      "repoOrManifest": 14552,
+      "nativeBefore": 14900
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "field": "sourceSHA256",
+      "repoOrManifest": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5",
+      "nativeBefore": "33d832f38905e36f5c00b4a22caa07baddadffecf18add92a25aef327a128578"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "field": "manifestSHA256",
+      "repoOrManifest": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5",
+      "nativeBefore": "33d832f38905e36f5c00b4a22caa07baddadffecf18add92a25aef327a128578"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "field": "bytes",
+      "repoOrManifest": 49115,
+      "nativeBefore": 54977
+    }
+  ],
+  "sourceWritesRequested": 0,
+  "limits": "Read-only comparison of actual saved S21 native-before snapshot, current repo and manifest; no new native observation."
+}

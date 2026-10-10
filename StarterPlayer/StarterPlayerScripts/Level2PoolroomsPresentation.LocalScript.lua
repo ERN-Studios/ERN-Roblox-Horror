@@ -34,7 +34,10 @@ local GRADE = { -- {model attribute, target, property, default}
 	{"GradeColorShiftBottom", "Lighting", "ColorShift_Bottom", Color3.new(0, 0, 0)},
 	{"GradeDiffuse", "Lighting", "EnvironmentDiffuseScale", 0.08}, -- no sky fill indoors
 	{"GradeSpecular", "Lighting", "EnvironmentSpecularScale", 0.35}, -- the wet tiles still glint
-	{"GradeExposure", "Lighting", "ExposureCompensation", -0.05},
+	-- BRIGHTER_20261010 (owner: "gør mappet 10% lysere"): was -0.05. Measured on one settled first-person view of the
+	-- A6 gallery: 0.24 lifts the picture's mean pixel value by 10.4% (22.8% more light, nothing clips); 0.0875 would be
+	-- 10% more light but only 4.9% on screen. Exposure is the one dial that lifts sun, lamps, Neon and torch alike.
+	{"GradeExposure", "Lighting", "ExposureCompensation", 0.24},
 	{"GradeShadows", "Lighting", "GlobalShadows", true}, -- a shaft is the roof's shadow with a hole in it
 	{"GradeShadowSoftness", "Lighting", "ShadowSoftness", 0.2},
 	{"GradeDensity", "Atmosphere", "Density", 0.3}, -- distance sinks into the dark (Fog is inert under an Atmosphere)

@@ -1,0 +1,133 @@
+{
+  "pass": true,
+  "headAtCapture": "7fa4d2e13d64bb10732d62d35d8b219e0cf55583",
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "sourceMirrorWrites": 0,
+  "manifestWrites": 0,
+  "start": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T09:32:14Z",
+    "sceneCount": 417078,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "e0ec39a63fe5ecb9285245480d38523a7de00f900c88146ba9fc288522969630",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "end": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-10T09:32:16Z",
+    "sceneCount": 417078,
+    "placeId": 131311258779917,
+    "rowCount": 228,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "e0ec39a63fe5ecb9285245480d38523a7de00f900c88146ba9fc288522969630",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "records": [
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "ServerScriptService.GameManager",
+        "tags": [],
+        "instanceId": "1_408341",
+        "rawEditorSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+        "placeId": 131311258779917,
+        "parentId": "1_409634",
+        "canonicalBytes": 196628,
+        "sourceSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "className": "Script",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "cf7423ed5baec73ab944aa6c2b869cb87c630c8d631cb05d65e09cb089d6e6f1",
+      "capturedSHA256": "59e4d7350d436d6f2b252742f0dd43d00ce3b0aed8980dddbe54ed24a75765d4"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level2PoolroomsPresentation.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation",
+        "tags": [],
+        "instanceId": "1_31119",
+        "rawEditorSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 14900,
+        "sourceSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level2PoolroomsPresentation"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93",
+      "capturedSHA256": "4283fc7a685893b3e0e62cebdc7520268ebb125760b800bfeb5bb4fff15d12ce"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+      "reason": "concurrent-native-source",
+      "native": {
+        "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+        "tags": [],
+        "instanceId": "1_31066",
+        "rawEditorSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+        "placeId": 131311258779917,
+        "parentId": "1_410029",
+        "canonicalBytes": 54956,
+        "sourceSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+        "properties": {
+          "Enabled": true,
+          "LinkedSource": "",
+          "Disabled": false,
+          "RunContext": "Enum.RunContext.Legacy",
+          "Archivable": true
+        },
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "NoiseReporter"
+        ],
+        "className": "LocalScript",
+        "sourceEditorMatches": true,
+        "attributes": {},
+        "rawSourceSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6",
+        "universeId": 10559217407
+      },
+      "beforeRawSHA256": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5",
+      "capturedSHA256": "3c80a7e0264b2b2a972419e52e5c2cd5ed6791b3f82d81ada22e893d152f71d6"
+    }
+  ],
+  "limits": "Read-time scoped Source/editor/class/property/attribute/tag capture; no gameplay or complete asset validation"
+}
