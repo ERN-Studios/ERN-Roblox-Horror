@@ -2130,3 +2130,34 @@ style and a hexagon. They are called Retail Merchandising Units."
   overview are kept beside them), plan `plan_v3.png` from `tools/lobby_reach/mall_plan.py`, delivered with captions to
   `~/Desktop/Lobby - forladt indkoebscenter (forslag)/v3`. Off: a slight floor sheen in three pictures, the stand
   from above has four stools and its side counter on the other side. Still a proposal; nothing built.
+
+### Started 2026-10-11 (22:25) - BUILDING the mall lobby: Blender build by Codex Ultra, then Claude's QA, import beside the old lobby, and wiring
+
+Owner: "Amazing. Use blender to make a lobby exactly like those pictures with the layout following the blue print,
+import it to the game, make it fully functional like our current lobby and place it out and beside the existing
+lobby so we as DEVs can noclip out and look at it. Make sure the layout of the signs follow layout, color and font
+as the level 2 example attached as a photo [a crop of round two's sign: pale cream-yellow backlit box, thin dark
+frame, DARK GREY CONDENSED BOLD SANS, one centred line]. Use Claude to do the groundwork, but make Codex 6.1 sol
+ultra do the heavy lifting with rendering and all that stuff, and make sure Claude QAs its work before importing
+anything."
+
+- **Sign style is the owner's crop** (`artifacts/lobby-mall-20261011/refs/owner_sign_reference.png`), NOT round
+  three's dark-red chunky lettering. Every sign box in the build follows it.
+- **Phases.** A (running): Codex Ultra writes `tools/lobby_mall/build_mall.py` (the whole design as code: Blender
+  scene, `artifacts/lobby-mall-20261011/build/mall.json` for the importer, generated tiling textures),
+  `check_mall.py` and `render_mall.py` (the thirteen views of W01..W13 plus a plan and a lit dark wing), brief
+  `artifacts/lobby-mall-20261011/build/BRIEF.md`. B: Claude QAs renders, data and checks BEFORE anything is imported.
+  C: Claude writes `tools/lobby_mall/import_mall.py` (native Parts, MaterialVariants from the textures, SurfaceGui
+  signs in a condensed bold face, lights) and builds the model beside the present lobby (an offset on x, same z and
+  floor). D: wiring it like the present lobby (queue pads, shop, leaderboards, DJ, the Reach past the tape), then a
+  walk on foot.
+- **Groundwork measured in play (the present lobby):** concourse x 180..260, z -900..-621; six bays x 149..172 and
+  268..291 at z -869..-811, -789..-731, -709..-651; 24 queue pads, FOUR per level in a 2 x 2 grid (x 148/166 or
+  274/292, z = bay centre -/+ 13.2; Parts 14.8 x 1 x 14.8 with attributes `R3QueueId` 101..124, `LevelNumber`,
+  `QueueDisplayIndex` 1..4, `QueueRadius` 7.41, `QueueDetectorShape` Circle, `LobbyReimaginedOwned`); shop display on
+  the east wall at z -800 with ten pressure plates (`PreviewShopPressurePlates`: Supporter, AdvancedEquipment,
+  Tokens4, Tokens20, EmergencyReentry, ExpeditionPack, CosmeticEquipment, SpeedPotion, RouteMarker, EntityDetector);
+  seven leaderboards; stage deck x 205..235, z -655..-632; spawn (220, 30.4, -860); the Reach's frame at z -621.
+- **My decision, to tell the owner:** the pictures he approved show THREE pads in a row per shop, so the build has
+  18 pads (three stations a level), not today's 24. Each level can then hold three parties forming at once
+  instead of four.
