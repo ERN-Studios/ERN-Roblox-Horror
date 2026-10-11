@@ -2181,3 +2181,63 @@ anything."
   the importer: `anchors.shop_spots` (eleven buy spots) and `anchors.skin_plinths` (the game's real suit models are
   to stand there). Prices on the plates are today's config values and must be bound to the config when wired. The
   build job was stopped and restarted a third time for this.
+
+## 2026-10-12 - the mall lobby stands in Studio beside the present lobby, and works
+
+`Workspace.LobbyMallPreview` (marker `MALL_LOBBY_20261012`) is the Blender build, 300 studs EAST of the present lobby
+(same z, same floor y 30; lit concourse x 480..560, z -900..-621, dark wing to z -421). The present lobby is
+untouched and stays the one players spawn in; developers noclip over. Nothing here is published by me.
+
+**Rebuild it:** `/usr/local/bin/python3 tools/lobby_mall/import_mall.py` (Studio in Edit). It DESTROYS the model and
+builds it again from `artifacts/lobby-mall-20261011/build/mall.json`, so anything placed in the model by hand is lost;
+change `build_mall.py` or the importer instead. Order after a change to the design: `build_mall.py` (Blender) ->
+`check_mall.py` -> `make_pbr.py` -> `upload_textures.py` (only maps whose file changed) -> `import_mall.py`.
+
+**What the import adds to Codex's build** (found in my QA of it):
+- every normal and roughness map the build wrote was flat (44 maps, zero variation): `make_pbr.py` derives real ones
+  from the colour maps into `build/textures_pbr/` (not in git; seed 611, byte-identical on a rerun). 16 surfaces are
+  MaterialVariants `Mall <key>` (ids in `tools/lobby_mall/texture_ids.json`); the ceiling's colour map lost its
+  stain (one on every 2 x 2 tiles read as polka dots down the hall); terrazzo tiles at 10 studs, not 16.
+- signs are SurfaceGuis in the owner's sign style: cream face (236,226,160) drawn by the gui at LightInfluence 0,
+  Oswald Bold in (72,66,54), one line. Two engine facts: TextScaled never draws above 100 px, so PixelsPerStud is
+  chosen to put the label near 145 px; and one line is forced with no-break spaces (TextWrapped = false together
+  with TextScaled draws the text as a dot).
+- lights: the build's lamp colours pulled 60 % toward warm white and brightness = 0.42 x sqrt(Blender's), panels
+  1.0, plus a small `CeilingWash` PointLight under each lit panel (a panel only throws down, and the ceiling was
+  black). Judge the light IN PLAY: Edit's lighting is not the lobby's. RoundUI's enclosed-lobby pass now also holds
+  inside the mall's `BoundsMin`/`BoundsMax`.
+- the game's own suit models (`ServerStorage.HazmatSkin_<id>_20260924`, 5.4 studs) stand on the six plinths; the
+  build's stand-in mannequins are hidden (`StandIn`), not deleted.
+- a station's pole and plate do not collide (on foot the character walked into the pole and stopped).
+
+**Wiring (all in existing scripts; no new script):**
+- QUEUES: 18 pads = stations **201-218** of the same engine (`QueueBridge.IsMall` / `BuildMall`, id = 200 +
+  (level-1)*3 + station; GameManager's `bindR3` binds both models). Each pad is its own bay Model under
+  `Anchors.QueueBays` (`ChamberFloor`, `CircularBayDiameter` 26, zone attribute `MallQueueId`), its render owner a
+  hanging dot-matrix board carrying `QueueTitle`/`QueueSubtitle`. Clearing the model's `MallQueuesReady` takes all
+  18 out of service. The party dialog shows a mall pad's own number 1-3 (`stationLabel` in RoundUI). The present
+  lobby's 24 stations (101-124) are unchanged and both sets run at once.
+- SHOP: `LobbyShopDisplay.mallSpotUnder` gives the item card to whoever stands within 1.9 studs of a spot under
+  `Anchors.ShopSpots` (attribute `ShopItemKey`, a pale ring on the carpet). `EntityShield` has a spot and a
+  counter but is not for sale in the config, so no card opens there. Each skin plinth carries a ProximityPrompt
+  `MallSkinPrompt`; Shop Display Client opens the shop window's Skins page at that skin.
+- BOARDS: `Level Leaderboards` pins each level's list to `Anchors.Boards.level<N>` as a printed sheet (`PAPER`
+  look of `buildFace`) and a paper copy of TOP SUPPORTERS to `directory` (a clone of `DonationLeaderboardDisplay`
+  whose text is kept in step every 5 s).
+- DJ: `Lobby DJ` knows two desks (`consoles()`); the nearest one to the player is used. `Anchors.DJConsole`
+  reaches down to the deck because the DJ is stood at the desk part's foot.
+- THE CREATURE: one creature, two dark ends. The model's `ReachFrame` (at the tape), `ReachFence` 1 and
+  `ReachGround` 200 are a second place for `Lobby Tunnel Reach`; asleep with every hand home it moves to whichever
+  end somebody has walked into, and the client follows the republished `Frame`. The tape does not collide.
+
+**Tested in Studio play (one player):** party dialog on a mall pad; a Level 1 round started from station 202; the
+item card at the Advanced Equipment spot; DJ mode behind the mall's desk; past the tape the hands crept out, took the
+player and the lobby respawned them; a walk on foot over 19 legs (every shop, the stand, the stage, the tape) with
+no stop that was not a planter, the chairs or a pole. NOT tested: two players, a phone, Levels 5 and 6 from a
+mall pad, a real purchase, the skin prompt pressed with a key (its route was not exercised), the leaderboards with
+real data (Studio shows the demo rows).
+
+**Known differences from the concept pictures:** the showcases are sparse blockouts (The Void is a pink room with
+black slabs, Mall Party a table and balloons), the suits stand in a T-pose, the dark wing is dim rather than black,
+and there is no flicker on the one dim panel (its `Flicker` attribute is set, nothing reads it yet). Tests
+`test_lobby_shop_display` and `test_spectator_count` fail, and failed the same way on the commit before this work.

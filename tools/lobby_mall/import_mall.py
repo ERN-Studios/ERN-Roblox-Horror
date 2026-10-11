@@ -89,7 +89,10 @@ for _, p in ipairs(HttpService:JSONDecode([==[%s]==])) do
 		part.Shape = p.shape == "Cylinder" and Enum.PartType.Cylinder or p.shape == "Ball" and Enum.PartType.Ball or Enum.PartType.Block
 	end
 	part.Name = p.name
-	part.Anchored, part.CanCollide, part.CanTouch = true, p.collide == true, false
+	-- a station's pole and plate stand on the straight line from the hall to its pad: on foot (2026-10-12) the
+	-- character walked into the pole and stopped. The round base still collides.
+	local thin = p.name:find("StationPost", 1, true) or p.name:match("_Station%%d+_") ~= nil
+	part.Anchored, part.CanCollide, part.CanTouch = true, p.collide == true and not thin, false
 	part.CastShadow = p.size[1] * p.size[2] * p.size[3] > 2
 	part.TopSurface, part.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
 	part.Size = Vector3.new(p.size[1], p.size[2], p.size[3])
