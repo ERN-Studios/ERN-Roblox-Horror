@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-11T10:08:50.394622+00:00",
+  "capturedAtUtc": "2026-10-11T11:04:12.484459+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -591,8 +591,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityKill.Script.lua",
-      "bytes": 11569,
-      "sha256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "bytes": 16635,
+      "sha256": "0e53046664312e2bc104a6b906278f54f1d17dd5b5c39aa28c6f892cdb37f67b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3565,8 +3565,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
-      "bytes": 7088,
-      "sha256": "7e5cedc84631a6af3f7edc126cb6775c9c498f42e851484c4980c3a3a6846a88",
+      "bytes": 13538,
+      "sha256": "ec9e0e62220b2e899dc10e4f2d21937676b72927f3ae2a8d2158925cf9ca7929",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4921,8 +4921,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 1 Entity Motion.LocalScript.lua",
-      "bytes": 25767,
-      "sha256": "b726a11d0726fb20d66b6e53a8cca424557691e80ec35179965289dcc5431f1c",
+      "bytes": 26805,
+      "sha256": "f107427757645f46791fc908779be987481b36ed1d42d2afe4bea2ba8b929801",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

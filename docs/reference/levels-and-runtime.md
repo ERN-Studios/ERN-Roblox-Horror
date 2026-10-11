@@ -1888,3 +1888,38 @@ Owner: "Fjern den høje lyd som spiller når man er blevet fanget af entity". It
 Entity's capture fired. The id is now empty (CAPTURE_SOUND_REMOVED_20261011), which the existing guard treats as "play
 nothing". Left as they were: the scream the OTHER living players hear at the place of a death (`DEATH_SOUND`, 0.5) and
 the Entity's own howls. Not played in a round after the change; the guard was read, not exercised.
+
+### Added 2026-10-11 (afternoon) - Level 1 kill "the stranglehold" (Kill_Choke): built and in Studio, SWITCHED OFF until the owner approves
+
+Owner picked idea 10 of ten: "Kvælertaget: den løfter dig i struben med én arm, så dine fødder slipper gulvet.
+Kameraet ryster, synet snævrer ind fra kanterne, den vipper hovedet på skrå som et nysgerrigt dyr, og så slipper
+lyset" (= the victim's screen goes black). The one-off Codex Ultra job he ordered for it authored the clip.
+
+- **The clip (Codex, gpt-6.1-sol ultra; `tools/level1_entity/out/KILL_REPORT.md`):** `Kill_Choke`, a seventh entry of
+  the motion layer's `clips.json`: 5.4 s, 162 frames at 30, with `marks` (grab 0.30, lifted 1.30, tilt 2.90, squeeze
+  3.40, dark 4.10, release 4.20) and `tracks` in the Entity's root space (`grip` = the throat in the hand, `head`,
+  `eyes`). The six old clips are byte for byte unchanged. Rebuild and renders: see the report.
+- **The switch:** `ReplicatedStorage.Level1EntityMotion` attribute `KillStyle = "Choke"`. It is NOT set in the place:
+  the ground-pin kill runs as before (played once after the change: same camera, death at 4.13 s, no errors). To
+  switch the stranglehold on after the owner's yes: set that attribute in Edit. To go back: remove it.
+- **KILL_CHOKE_20261011, three scripts.** `EntityKill` (server): with the switch on and the clip sound, it takes its
+  timing from the marks, does not play the old Animator clip, and carries the victim from the `grip` track every
+  Heartbeat (upright, throat in the hand, turned to the Entity's head; PlatformStand from the grab; unanchored at
+  `release` so the body falls); it publishes `workspace.EntityKillStyle` and `EntityKillStartedAt` (server time).
+  `Level 1 Entity Motion` (every client): plays `Kill_Choke` on the bones for the length of the kill, clocked from
+  `EntityKillStartedAt`, with a 0.12 s cross-fade in. `JumpscareUI` (the victim): the camera rides the `grip` track
+  (0.5 above, 0.25 back) and looks at the `eyes` track, shake grows with the hold (off with ReduceCameraShake), the
+  lens goes 70 to 64, the victim's own body is hidden, and vision closes through a round soft-edged hole (13 rings
+  of UIStroke; 1.25 of the screen's width down to 0.5 at the squeeze and 0.14 at the dark); the black is the ordinary
+  death fade.
+- **Measured in Studio play, switch set at runtime only (four kills):** the clip on the real bones is within 0.001
+  stud of the authored head track at the moment of drawing (read in a render step after the layer; a Heartbeat read
+  shows the Animator's pose and is useless), head roll 28 degrees in the tilt, feet 4.4 studs off the floor, the
+  victim's throat 0.1 to 0.3 studs from the grip, camera 3.2 studs from the eyes in the hold and 2.0 in the squeeze,
+  dead at the dark, the body falls at release, no script errors. Screenshots of the real view:
+  `artifacts/level1-entity-kill-20261011/live_in_game_sheet.jpg`. The Entity's real eye attachments (`EyeL`, `EyeR`
+  under the Head bone) lie 0.28 stud from the point Codex measured on the mesh: about 5 degrees at that distance, left.
+- **NOT tested:** an Entity Shield pressed during the hold (the cancel path is the old one), a second player watching,
+  R6 or very tall or small avatars (the neck offset is measured per avatar, held to 0.6 to 1.8), a phone, and the
+  last change to the narrowing's timing (numbers only). The hand-off into the walk afterwards was not judged by eye.
+  The HUD stays on screen during the kill, as it did in the old one.

@@ -4,7 +4,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
 
 local BIND_NAME = "L1EntityMotion"
-local CLIP_NAMES = {"Walk", "Prowl", "Run", "Lunge_Windup", "Lunge_Flight", "Lunge_Land"}
+local CLIP_NAMES = {"Walk", "Prowl", "Run", "Lunge_Windup", "Lunge_Flight", "Lunge_Land", "Kill_Choke"}
+-- KILL_CHOKE_20261011: the stranglehold is a seventh clip, played here for the length of a kill when the server says
+-- so (workspace.EntityKillStyle = "Choke", clock from workspace.EntityKillStartedAt in server time). Any other kill
+-- still silences this layer, as before.
+local chokeActive = false
 local ACTION_IDS = { ["102035504530432"] = true, ["132425538759403"] = true, ["94135265462008"] = true }
 local ACTION_NAMES = { Yell_Howl = true, Yell_FromRun = true, Kill_GroundPinPunch = true }
 local LAND_COMPRESS_DEGREES = {Spine02 = 6, Spine01 = 4, Spine = 2, Head = -12}
@@ -334,6 +338,11 @@ local function step(dt)
 		and not isLunging and phase ~= "flight" and phase ~= "windup" then
 		standY = standY and math.min(position.Y, standY + dt * 0.5) or position.Y
 	end
+	local chokeClip = kill and not paused and not disabled and workspace:GetAttribute("EntityKillStyle") == "Choke" and clips.Kill_Choke or nil
+	if (chokeClip ~= nil) ~= chokeActive then
+		chokeActive = chokeClip ~= nil
+		beginPhase(nil, chokeActive and 0.12 or 0.25)      -- cross-fade into the hold, and out of it into whatever follows
+	end
 	if kill or paused or disabled then
 		phase, pendingWindup, absorbAge = nil, false, 1
 	elseif pendingWindup and os.clock() - pendingWindupAt <= 0.6 then
@@ -399,7 +408,7 @@ local function step(dt)
 	local lungeClip = phase == "windup" and clips.Lunge_Windup or phase == "flight" and clips.Lunge_Flight or phase == "land" and clips.Lunge_Land or nil
 	local frozen = debugClip and clips[debugClip] or nil
 	local gaitPlaying = phase == nil or phase == "moving_land"
-	local want = not disabled and not kill and not paused and not serverAction and (frozen ~= nil or (lungeClip ~= nil) or (validGaits and gaitPlaying and (moving or phase == "moving_land")))
+	local want = chokeClip ~= nil or (not disabled and not kill and not paused and not serverAction and (frozen ~= nil or (lungeClip ~= nil) or (validGaits and gaitPlaying and (moving or phase == "moving_land"))))
 	local fadeSeconds = want and 0.18 or (kill and 0.12 or 0.22)
 	weight = want and math.min(1, weight + dt / fadeSeconds) or math.max(0, weight - dt / fadeSeconds)
 	if disabled then weight = 0 end
@@ -438,7 +447,7 @@ local function step(dt)
 	-- Quaternion blends bend the foot path below either source; a measured pair lift preserves clearance.
 	local blendLift = 0.68 * walkWeight * prowlWeight + 0.68 * prowlWeight * runWeight + 1.40 * walkWeight * runWeight
 	local stride = validGaits and (walk.stride * walkWeight + (prowl and prowl.stride or 0) * prowlWeight + run.stride * runWeight) or 1
-	if validGaits and gaitPlaying and not lungeClip and not frozen then
+	if validGaits and gaitPlaying and not lungeClip and not frozen and not chokeClip then
 		local nextPhase = gaitPhase + speed * dt / math.max(stride, 0.01)
 		if want and moving then
 			if workspace:GetAttribute("L1EntityStep") == nil then workspace:SetAttribute("L1EntityStep", stepSerial) end
@@ -452,10 +461,16 @@ local function step(dt)
 	if walk then wi0, wi1, wa = atPhase(walk, gaitPhase) end
 	if prowl then pi0, pi1, pa = atPhase(prowl, gaitPhase) end
 	if run then ri0, ri1, ra = atPhase(run, gaitPhase) end
-	local single = frozen or lungeClip
+	local single = frozen or chokeClip or lungeClip
 	local si0, si1, sa = 1, 1, 0
 	if single then
 		local p = frozen and debugPhase or (phase == "flight" and phaseAge / 0.428 or phaseAge / single.duration)
+		if chokeClip and not frozen then
+			local startedAt = workspace:GetAttribute("EntityKillStartedAt")
+			local age = finite(startedAt) and workspace:GetServerTimeNow() - startedAt or phaseAge
+			if not finite(age) or age < 0 or age > 30 then age = phaseAge end
+			p = age / chokeClip.duration
+		end
 		si0, si1, sa = atPhase(single, p)
 	end
 	local transition = transitionDuration > 0 and math.clamp(transitionAge / transitionDuration, 0, 1) or 1
@@ -504,7 +519,7 @@ local function step(dt)
 	debugClock += dt
 	if debugClock >= 0.1 then
 		debugClock = 0
-		local gait = frozen and debugClip or lungeClip and (phase or "lunge") or (runWeight >= prowlWeight and runWeight > walkWeight and "Run" or prowlWeight > walkWeight and "Prowl" or "Walk")
+		local gait = frozen and debugClip or chokeClip and "Kill_Choke" or lungeClip and (phase or "lunge") or (runWeight >= prowlWeight and runWeight > walkWeight and "Run" or prowlWeight > walkWeight and "Prowl" or "Walk")
 		publishDebug(gait)
 	end
 end

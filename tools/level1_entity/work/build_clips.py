@@ -4,13 +4,14 @@ Run Blender -b --python work/build_clips.py -- [--only=Walk] [--no-render] [--fl
 FLOOR_UP is also an environment override. No assets are downloaded or published.
 """
 import sys, os, json, math, argparse
+sys.dont_write_bytecode = True
 from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
-from rig_math import Rig, rot_x, rot_y, rot_z, mat_to_quat, quat_to_mat, slerp
+from rig_math import Rig, rot_x, rot_y, rot_z, mat_to_quat, quat_to_mat, slerp, basis_mapping, unit
 
 FLOOR_UP = float(os.environ.get('FLOOR_UP', '8.0'))
 RIG = None
@@ -369,6 +370,179 @@ def build_lunge(name,run_zero):
                 'Lunge_Flight':'Body-relative .428s arc; claw reach completes by u=.35 (.150s) and holds through apex; root carries ballistic motion.',
                 'Lunge_Land':'Stationary hand catch and hip absorb; finishes exactly at Run phase zero.'}[name])
 
+# KILL_CHOKE_20261011. Mesh-space measurements are deliberately independent of Blender.
+# The exported mesh has geometry/weights but no UVs or texture. These two measured
+# visor-surface samples are eye-placement references, not a claim to recover texture pixels.
+CHOKE_EYE_SAMPLES = np.array([[-.36827253,2.63174619,-.01394369],
+                              [.34959571,2.63818334,.02056613]])
+CHOKE_EYES = CHOKE_EYE_SAMPLES.mean(axis=0)
+CHOKE_EYE_VERTEX_IDS = [5729,7487]
+CHOKE_MARKS = dict(grab=.30,lifted=1.30,tilt=2.90,squeeze=3.40,dark=4.10,release=4.20)
+CHOKE_SECONDS = 5.40
+
+def real_body():
+    mesh=json.loads((ROOT/'input/mesh.json').read_text())
+    scale=float(mesh['head'].split()[3].split(',')[1])/float(mesh['head'].split()[1].split(',')[1])
+    v=np.array(mesh['verts'],float).reshape(-1,11)
+    ids=v[:,3:7].astype(int); weights=v[:,7:11]/1000
+    weights[ids<0]=0; ids[ids<0]=0; weights/=np.maximum(weights.sum(1,keepdims=True),1e-9)
+    binds=[]
+    for c in mesh['bone_cframes']:
+        m=np.eye(4);m[:3,3]=np.array(c[:3])*scale;m[:3,:3]=np.array(c[3:]).reshape(3,3)
+        binds.append(np.linalg.inv(m))
+    return dict(positions=np.c_[v[:,:3]*scale/10000,np.ones(len(v))],bones=ids,weights=weights,
+                inverse_bind=np.array(binds),names=mesh['bones'],tris=np.array(mesh['tris']).reshape(-1,3),
+                dominant=ids[np.arange(len(v)),weights.argmax(1)])
+
+def skin_root(body,world):
+    matrices=np.array([world[n]@body['inverse_bind'][i] for i,n in enumerate(body['names'])])
+    return sum(np.einsum('nij,nj->ni',matrices[body['bones'][:,k]],body['positions'])[:,:3]*body['weights'][:,k:k+1]
+               for k in range(4))
+
+def choke_hand_rotation():
+    # Fingers sweep across the front of the throat; palm faces inward from the right.
+    a=RIG.hand_axes['Right']
+    return rot_x(deg(20))@basis_mapping(a['finger'],a['palm'],[0,0,-1],[-1,0,0])
+
+def choke_grip_local():
+    # Measured centre of palm/knuckle cup: 1.55 beyond wrist, .43 into the curl.
+    # On the skinned, curled hand Middle1/2/3 lie .326/.335/.322 studs
+    # above the horizontal plane. With the final 20-degree rising palm, their
+    # cup centre is .365 above the finger/palm plane. Including it seats the throat inside the
+    # middle-finger cup rather than putting those fingers against the jaw.
+    a=RIG.hand_axes['Right']
+    return a['finger']*1.55+a['palm']*.43+choke_hand_rotation().T@np.array([0,.365,0])
+
+def choke_points(world):
+    hand=world['RightHand']; head=world['Head']
+    return dict(grip=hand[:3,3]+hand[:3,:3]@choke_grip_local(),head=head[:3,3],
+                eyes=head[:3,3]+head[:3,:3]@CHOKE_EYES)
+
+def victim_eye(grip,head):
+    away=np.asarray(grip)-np.asarray(head);away[1]=0;away=unit(away)
+    return np.asarray(grip)+np.array([0,.5,0])+away*.25
+
+def victim_basis(grip,head):
+    forward=np.asarray(head)-np.asarray(grip);forward[1]=0;forward=unit(forward)
+    right=unit(np.cross(forward,[0,1,0]))
+    return np.column_stack([right,[0,1,0],-forward])
+
+def victim_blocks():
+    # Offsets relative to throat. Feet at -4.1; crown at +1.1 = 5.2 tall.
+    return [('torso',[0,-1.05,0],[1.45,1.70,1.0]),('neck',[0,0,0],[.80,.30,.80]),
+            ('head',[0,.55,0],[1.20,1.10,1.0]),
+            ('armL',[-.925,-1.25,0],[.40,2.20,.80]),('armR',[.925,-1.25,0],[.40,2.20,.80]),
+            ('legL',[-.39,-3.0,0],[.65,2.20,.90]),('legR',[.39,-3.0,0],[.65,2.20,.90])]
+
+def build_choke(run,walk):
+    N=162;times=np.linspace(0,CHOKE_SECONDS,N);poses=[];feet_all=[]
+    # Exact Run phase .10 upper body, with a mesh-clear stopping plant below it.
+    start=run['poses'][7];finish=blend_pose(walk['poses'][0],walk['poses'][0],0)
+    endW=RIG.fk(finish);handR=endW['RightHand'][:3,:3].copy()
+    RIG.solve_chain(finish,'RightArm','RightForeArm','RightHand',endW['RightHand'][:3,3]+[.35,0,-.50],
+                    endW['RightForeArm'][:3,3],clamp=False)
+    RIG.set_root_rotation(finish,'RightHand',handR)
+    startW=RIG.fk(start);finishW=RIG.fk(finish)
+    body=real_body();solemask=np.array(['Foot' in body['names'][d] or 'Toe' in body['names'][d] for d in body['dominant']])
+    finalsole=skin_root(body,finishW)[solemask,1].min()+FLOOR_UP
+    for t in times:
+        lift=float(smooth((t-.30)/1.0));settle=float(smooth((t-4.20)/1.20))
+        breath=.022*math.sin(TAU*(t-1.3)/2.1)*float(smooth((t-1.3)/.35))*(1-settle)
+        # Tilt has only head/neck movement. Effort/breath resume after its stop.
+        if 2.0<=t<=2.9: breath=0
+        pitch=float(sequence_keys([(0,35),(.30,27),(1.30,17),(3.40,17),(4.10,23),(4.30,21),(5.20,13)],t))
+        height=float(sequence_keys([(0,3.42),(.30,3.42),(1.30,4.08),(4.10,4.08),(4.30,4.04),(5.20,4.12)],t))+breath
+        pose={};torso(pose,0,pitch,0,0,0,height,hip_forward=-.60+.25*lift,wind=-5*lift)
+        # Counterbalance: pelvis under the load, ribs rotate back, right shoulder
+        # drops under the weight and rolls forward. These are rotations, not arm stretch.
+        for n,k in [('Spine02',.45),('Spine01',.30),('Spine',.25)]:
+            W=RIG.fk(pose);RIG.set_root_rotation(pose,n,rotation(-5*lift*k,0,-3*lift*k)@W[n][:3,:3])
+        W=RIG.fk(pose)
+        RIG.set_root_rotation(pose,'RightShoulder',rotation(2*lift+breath*18,4*lift,-5*lift)@W['RightShoulder'][:3,:3])
+        tilt=30*float(smooth((t-2.0)/.90))*(1-float(smooth((t-3.40)/.70)))
+        W=RIG.fk(pose)
+        RIG.set_root_rotation(pose,'neck',rotation(-25+10*float(smooth((t-3.4)/.7)),-5*lift, -tilt*.15)@RIG.rest_world['neck'][:3,:3])
+        RIG.set_root_rotation(pose,'Head',rotation(-36+7*float(smooth((t-3.4)/.7)),2,tilt)@RIG.rest_world['Head'][:3,:3])
+        # Fixed, wide, staggered soles from .65s until release. Opening/closing
+        # phases are explicit steps and are excluded from planted-slide assertions.
+        feet={}
+        plant=float(smooth(t/.65))
+        for side in ['Left','Right']:
+            sign=-1 if side=='Left' else 1
+            initial=startW[side+'ToeBase'][:3,3].copy();initial[1]=max(initial[1],-FLOOR_UP+.35)
+            fixed=point(sign*1.22,.40,1.15 if side=='Left' else -.55)
+            toe=mix(initial,fixed,plant)
+            ft=dict(toe=toe,pitch=0,yaw=sign*8,stance=t>=.65 and t<=4.20)
+            feet[side]=ft
+        H=RIG.fk(pose)['Hips'][:3,3].copy();H[1]-=reach_adjustment(pose,feet)+.015;RIG.set_root_position(pose,'Hips',H)
+        for side,ft in feet.items():
+            RIG.solve_leg_toe(side,pose,ft['toe'],0,ft['yaw'],point(-1.3 if side=='Left' else 1.3,2,4),clamp=False)
+        W=RIG.fk(pose)
+        grip=sequence_keys([(0,choke_points(startW)['grip']),(.30,[0,-3.90,-3.70]),
+                            (1.30,[0,.20,-5.55]),(3.40,[0,.20,-5.55]),
+                            (4.10,[0,.40,-4.95]),(5.40,[0,.40,-4.95])],t)
+        if t>1.3 and not 2<=t<=2.9 and t<4.1:
+            grip+=np.array([.007*math.sin(TAU*t*6),breath*.4,.007*math.cos(TAU*t*7)])
+        hr=rot_x(deg(-20*(1-lift)))@choke_hand_rotation()
+        if t<.20:
+            hr=quat_to_mat(slerp(mat_to_quat(startW['RightHand'][:3,:3]),mat_to_quat(hr),float(smooth(t/.20))))
+        wrist=grip-hr@choke_grip_local()
+        S=W['RightArm'][:3,3]
+        RIG.solve_chain(pose,'RightArm','RightForeArm','RightHand',wrist,S+[1.2,-3.2,-.8],clamp=False)
+        RIG.set_root_rotation(pose,'RightHand',hr)
+        curl=float(sequence_keys([(0,.12),(.30,.58),(1.30,.61),(1.65,.65),(2.0,.65),(2.90,.65),(3.20,.70),(3.40,.70),(4.10,.82),(4.20,.08),(5.40,.23)],t))
+        RIG.curl_fingers(pose,'Right',curl,.10)
+        S=RIG.fk(pose)['LeftArm'][:3,3]
+        safe_wrist(pose,'Left',S+np.array([-.22,-3.6,-.20]))
+        RIG.orient_hand(pose,'Left',[-.06,-1,-.15],[1,0,0])
+        RIG.curl_fingers(pose,'Left',.24+.045*math.sin(TAU*t/2.4) if not 2<=t<=2.9 else .20,.13)
+        # .12s start blending conserves the run's pose while the catch arrives.
+        if t<.20: pose=blend_pose(start,pose,float(smooth(t/.20)))
+        if settle:
+            pose=blend_pose(pose,finish,settle)
+            # Walk@0 has a sole .894 under the floor on this exported body.
+            # Preserve its upper body; settle to a floor-corrected lower-body
+            # standing pose, recording the handoff discrepancy in QA/report.
+            for side,ft in feet.items():
+                toe=mix(ft['toe'],finishW[side+'ToeBase'][:3,3]+[0,-finalsole+.04,0],settle)
+                current=RIG.fk(pose)[side+'Foot'][:3,:3]
+                ankle=toe-current@RIG.rest[side+'ToeBase'][:3,3]
+                RIG.solve_chain(pose,side+'UpLeg',side+'Leg',side+'Foot',ankle,point(-1.3 if side=='Left' else 1.3,2,5),clamp=False)
+                RIG.set_root_rotation(pose,side+'Foot',current)
+                ft['toe']=toe;ft['stance']=False
+        # Mesh soles, not just pivots, must clear. Raise each requested toe by
+        # its measured skin penetration while preserving the pelvis/upper body.
+        for unused in range(2):
+            W=RIG.fk(pose);verts=skin_root(body,W)
+            for side in ['Left','Right']:
+                mask=np.array([body['names'][d].startswith(side) and ('Foot' in body['names'][d] or 'Toe' in body['names'][d]) for d in body['dominant']])
+                pen=max(0,.025-(verts[mask,1].min()+FLOOR_UP))
+                if pen:
+                    r=W[side+'Foot'][:3,:3];ankle=W[side+'Foot'][:3,3]+[0,pen,0]
+                    RIG.solve_chain(pose,side+'UpLeg',side+'Leg',side+'Foot',ankle,point(-1.3 if side=='Left' else 1.3,2,5),clamp=False)
+                    RIG.set_root_rotation(pose,side+'Foot',r)
+        poses.append(pose);feet_all.append(feet)
+    # Local quaternion blends follow curved wrist arcs. Equalize those arcs in
+    # the unplanted catch and release intervals rather than speeding through
+    # their middle. The pose endpoints and fixed-foot hold stay unchanged.
+    for first,last in [(0,int(np.argmin(abs(times-.30)))),(int(np.searchsorted(times,4.20)),N-1)]:
+        originals=poses[first:last+1];points=np.array([choke_points(RIG.fk(p))['grip'] for p in originals])
+        arc=np.r_[0,np.cumsum(np.linalg.norm(np.diff(points,axis=0),axis=1))]
+        for j,target in enumerate(np.linspace(0,arc[-1],len(originals))):
+            k=min(len(originals)-2,max(0,int(np.searchsorted(arc,target)-1)))
+            u=float((target-arc[k])/max(arc[k+1]-arc[k],1e-9))
+            retimed=blend_pose(originals[k],originals[k+1],u)
+            if first==0:
+                # The stopping feet have their own .65s plant. Do not compress
+                # their orientation changes to match the claw's faster arc.
+                for side in ['Left','Right']:
+                    for suffix in ['UpLeg','Leg','Foot','ToeBase']:
+                        n=side+suffix
+                        if n in originals[j]:retimed[n]=originals[j][n].copy()
+            poses[first+j]=retimed
+    return dict(poses=poses,feet=feet_all,frames=N,fps=30,seconds=CHOKE_SECONDS,loop=False,stride=0,speed=0,contacts=[],
+                marks=CHOKE_MARKS,notes='One-arm throat cup, body rise/counterbalance, planted mesh soles; curious 30-degree roll; release after dark.')
+
 def export_clip(clip):
     # Neutral scapula tracks prevent the old server gait from changing our arm IK basis.
     names=[n for n in RIG.order if n!='Root']
@@ -392,6 +566,12 @@ def export_clip(clip):
         keyframes.append([time,rows])
     data={k:clip[k] for k in ['frames','fps','loop','stride','speed','contacts']}
     data['bones']=bones; data['hips']=hips
+    if 'marks' in clip:
+        data['seconds']=clip['seconds'];data['marks']=dict(clip['marks'])
+        data['tracks']={n:[] for n in ['grip','head','eyes']}
+        for pose in decode_export(data):
+            for n,p in choke_points(RIG.fk(pose)).items():
+                data['tracks'][n].extend(int(round(float(v)*1000)) for v in p)
     return data,keyframes,float_quats
 
 def decode_export(data):
@@ -404,6 +584,170 @@ def decode_export(data):
         if 'Hips' in pose: pose['Hips'][:3,3]=np.array(data['hips'][3*i:3*i+3])/1000
         poses.append(pose)
     return poses
+
+def point_tri_distance(p,tris):
+    a,b,c=tris[:,0],tris[:,1],tris[:,2]
+    ab=b-a;ac=c-a;n=np.cross(ab,ac);norm=np.sum(n*n,axis=1)
+    ap=p-a;distance=np.sum(ap*n,axis=1)/np.maximum(norm,1e-18)
+    proj=p-distance[:,None]*n
+    d00=np.sum(ab*ab,axis=1);d01=np.sum(ab*ac,axis=1);d11=np.sum(ac*ac,axis=1)
+    pp=proj-a;d20=np.sum(pp*ab,axis=1);d21=np.sum(pp*ac,axis=1);den=d00*d11-d01*d01
+    v=(d11*d20-d01*d21)/np.maximum(den,1e-18);w=(d00*d21-d01*d20)/np.maximum(den,1e-18)
+    best=np.where((v>=0)&(w>=0)&(v+w<=1)&(norm>1e-18),distance*distance*norm,np.inf)
+    for x,y in [(a,b),(b,c),(c,a)]:
+        edge=y-x;u=np.clip(np.sum((p-x)*edge,axis=1)/np.maximum(np.sum(edge*edge,axis=1),1e-18),0,1)
+        best=np.minimum(best,np.sum((p-x-u[:,None]*edge)**2,axis=1))
+    return math.sqrt(float(best.min()))
+
+def triangle_box_overlap(tris,half):
+    # Triangle-vs-box SAT: 3 box axes, face normal, 9 edge cross axes.
+    live=np.all(tris.min(1)<=half,axis=1)&np.all(tris.max(1)>=-half,axis=1)
+    tris=tris[live]
+    if len(tris)==0:return 0
+    edges=[tris[:,1]-tris[:,0],tris[:,2]-tris[:,1],tris[:,0]-tris[:,2]]
+    axes=[np.cross(edges[0],edges[1])]+[np.cross(e,np.eye(3)[j]) for e in edges for j in range(3)]
+    ok=np.ones(len(tris),bool)
+    for axis in axes:
+        projections=np.einsum('nkj,nj->nk',tris,axis);radius=np.abs(axis)@half
+        ok&=(projections.min(1)<=radius+1e-8)&(projections.max(1)>=-radius-1e-8)
+    return int(ok.sum())
+
+def triangle_pairs_overlap(a,b):
+    # SAT for two triangles, including in-plane separating axes for coplanar pairs.
+    ea=[a[:,1]-a[:,0],a[:,2]-a[:,1],a[:,0]-a[:,2]]
+    eb=[b[:,1]-b[:,0],b[:,2]-b[:,1],b[:,0]-b[:,2]]
+    na=np.cross(ea[0],ea[1]);nb=np.cross(eb[0],eb[1])
+    axes=[na,nb]+[np.cross(x,y) for x in ea for y in eb]+[np.cross(na,x) for x in ea]+[np.cross(nb,x) for x in eb]
+    live=np.ones(len(a),bool)
+    for axis in axes:
+        pa=np.einsum('nkj,nj->nk',a,axis);pb=np.einsum('nkj,nj->nk',b,axis)
+        live&=(pa.min(1)<=pb.max(1)+1e-9)&(pb.min(1)<=pa.max(1)+1e-9)
+    return int(live.sum())
+
+def mesh_pair_intersections(a,b):
+    # Broad phase is bounded: filter the body to the hand's overall AABB, then
+    # pair only overlapping triangle AABBs in small batches.
+    lo=a.min((0,1));hi=a.max((0,1));bl=b.min(1);bh=b.max(1)
+    b=b[np.all(bh>=lo,axis=1)&np.all(bl<=hi,axis=1)]
+    if not len(b):return 0
+    bl=b.min(1);bh=b.max(1);count=0
+    for start in range(0,len(a),128):
+        aa=a[start:start+128];al=aa.min(1);ah=aa.max(1)
+        pairs=np.all(ah[:,None,:]>=bl[None,:,:],axis=2)&np.all(al[:,None,:]<=bh[None,:,:],axis=2)
+        ia,ib=np.where(pairs)
+        if len(ia):count+=triangle_pairs_overlap(aa[ia],b[ib])
+    return count
+
+def grabbing_arm_max_ndc(vertices,cam,eyes):
+    forward=unit(eyes-cam);right=unit(np.cross(forward,[0,1,0]));up=np.cross(right,forward)
+    v=vertices-cam;z=v@forward;x=v@right;y=v@up;tan=math.tan(deg(35))
+    inside=(z>.01)&(np.abs(x/np.maximum(z,.01))<tan)
+    return float(np.max(y[inside]/(z[inside]*tan))) if inside.any() else -100.
+
+def qa_choke_between_frames(data,body,foot_mask,safe_tris,torso_tris,hand_tris,grab_mask):
+    poses=decode_export(data)
+    result=dict(samples=0,min_mesh_sole_height=100.,min_camera_clearance=100.,hand_body_intersections=0,
+                victim_envelope_intersections=0,min_victim_feet_height=100.,hold_eye_distance_min=100.,hold_eye_distance_max=0.,
+                max_held_grip_interpolation_error=0.,max_grabbing_arm_vertical_ndc=-100.)
+    tracks=np.array(data['tracks']['grip']).reshape(-1,3)/1000
+    for i in range(len(poses)-1):
+        for u in [.25,.5,.75]:
+            W=RIG.fk(blend_pose(poses[i],poses[i+1],u));P=choke_points(W)
+            t=(i+u)*data['seconds']/(data['frames']-1);v=skin_root(body,W);result['samples']+=1
+            result['min_mesh_sole_height']=min(result['min_mesh_sole_height'],float(v[foot_mask,1].min()+FLOOR_UP))
+            result['hand_body_intersections']+=mesh_pair_intersections(v[hand_tris],v[torso_tris])
+            if data['marks']['grab']<=t<=data['marks']['release']:
+                cam=victim_eye(P['grip'],P['head'])
+                result['min_camera_clearance']=min(result['min_camera_clearance'],point_tri_distance(cam,v[safe_tris]))
+                local=(v-P['grip'])@victim_basis(P['grip'],P['head'])-[0,-1.5,0]
+                result['victim_envelope_intersections']+=triangle_box_overlap(local[torso_tris],np.array([1.1,2.6,.5]))
+                error=float(np.linalg.norm(P['grip']-mix(tracks[i],tracks[i+1],u)))
+                result['max_held_grip_interpolation_error']=max(result['max_held_grip_interpolation_error'],error)
+                if t<=data['marks']['dark']:
+                    result['max_grabbing_arm_vertical_ndc']=max(result['max_grabbing_arm_vertical_ndc'],
+                        grabbing_arm_max_ndc(v[grab_mask],cam,P['eyes']))
+            if data['marks']['lifted']<=t<=data['marks']['dark']:
+                result['min_victim_feet_height']=min(result['min_victim_feet_height'],float(P['grip'][1]+FLOOR_UP-4.1))
+            if data['marks']['lifted']<=t<=data['marks']['squeeze']:
+                distance=float(np.linalg.norm(victim_eye(P['grip'],P['head'])-P['eyes']))
+                result['hold_eye_distance_min']=min(result['hold_eye_distance_min'],distance)
+                result['hold_eye_distance_max']=max(result['hold_eye_distance_max'],distance)
+    checks=dict(interpolated_mesh_floor=result['min_mesh_sole_height']>=0,
+                interpolated_camera=result['min_camera_clearance']>=1.2,
+                interpolated_hand_body=result['hand_body_intersections']==0,
+                interpolated_victim_body=result['victim_envelope_intersections']==0,
+                interpolated_lift=result['min_victim_feet_height']>=1.5,
+                interpolated_hold_distance=3<=result['hold_eye_distance_min']<=result['hold_eye_distance_max']<=4.5,
+                held_grip_interpolation=result['max_held_grip_interpolation_error']<.05,
+                interpolated_grab_arm_below_view=result['max_grabbing_arm_vertical_ndc']<=-1.)
+    result['scope']='Three interior quaternion-interpolated samples per source interval; sampled evidence, not an analytic continuous collision proof.'
+    return result,checks
+
+def qa_choke(clip,data,worlds):
+    body=real_body();names=body['names'];dom=np.array([names[x] for x in body['dominant']])
+    safe=np.array([not (n.startswith('RightHand') or n=='RightForeArm') for n in dom])
+    torso=np.array([n in ['Hips','Spine02','Spine01','Spine','LeftShoulder','LeftArm','LeftForeArm'] or
+                    n.startswith(('LeftHand','LeftUpLeg','LeftLeg','LeftFoot','LeftToe','RightUpLeg','RightLeg','RightFoot','RightToe')) for n in dom])
+    foot=np.array(['Foot' in n or 'Toe' in n for n in dom]);tris=body['tris']
+    safe_tris=tris[np.all(safe[tris],axis=1)];torso_tris=tris[np.any(torso[tris],axis=1)]
+    tracks={k:np.array(v).reshape(-1,3)/1000 for k,v in data['tracks'].items()}
+    times=np.linspace(0,clip['seconds'],clip['frames']);marks=clip['marks']
+    heights=[];dists=[];deltas=np.linalg.norm(np.diff(tracks['grip'],axis=0),axis=1)
+    bends=[];rolls=[];mincamera=100;minsole=100;intersections=0;minvolume=100;maxtrack=0
+    handbody=100;hand_mesh_intersections=0;hand_intersection_frames=[];max_grab_ndc=-100.
+    handmask=np.array([n.startswith('RightHand') for n in dom])
+    grabmask=~safe
+    hand_tris=tris[np.all(handmask[tris],axis=1)]
+    for i,(t,W) in enumerate(zip(times,worlds)):
+        grip,head,eyes=[tracks[k][i] for k in ['grip','head','eyes']];cam=victim_eye(grip,head)
+        exact=choke_points(W)
+        maxtrack=max(maxtrack,max(float(np.max(np.abs(exact[k]-tracks[k][i]))) for k in tracks))
+        v=skin_root(body,W);minsole=min(minsole,float(v[foot,1].min()+FLOOR_UP))
+        hits=mesh_pair_intersections(v[hand_tris],v[torso_tris]);hand_mesh_intersections+=hits
+        if hits:hand_intersection_frames.append([i,hits])
+        A=W['RightArm'][:3,3];B=W['RightForeArm'][:3,3];C=W['RightHand'][:3,3]
+        bends.append(math.degrees(math.acos(float(np.clip(np.dot(unit(B-A),unit(C-B)),-1,1)))))
+        # Root Z roll of Head delta over its measured rest basis.
+        delta=W['Head'][:3,:3]@np.linalg.inv(RIG.rest_world['Head'][:3,:3]);rolls.append(math.degrees(math.atan2(delta[1,0],delta[0,0])))
+        if marks['grab']<=t<=marks['release']:
+            mincamera=min(mincamera,point_tri_distance(cam,v[safe_tris]))
+            if t<=marks['dark']:max_grab_ndc=max(max_grab_ndc,grabbing_arm_max_ndc(v[grabmask],cam,eyes))
+            basis=victim_basis(grip,head);local=(v-grip)@basis
+            # Full requested 2.2 x 5.2 x 1 envelope, not only the thinner blocks.
+            centred=local-np.array([0,-1.5,0]);half=np.array([1.1,2.6,.5])
+            intersections+=triangle_box_overlap(centred[torso_tris],half)
+            signed=np.linalg.norm(np.maximum(np.abs(centred[torso])-half,0),axis=1)
+            minvolume=min(minvolume,float(signed.min()))
+            # Wrist, palm cup and every phalanx against torso/legs/left arm skin.
+            for n in ['RightHand']+[n for n in RIG.order if n.startswith('RightHand') and n!='RightHand']:
+                handbody=min(handbody,point_tri_distance(W[n][:3,3],v[torso_tris]))
+        if marks['lifted']<=t<=marks['dark']:heights.append(grip[1]+FLOOR_UP)
+        if marks['lifted']<=t<=marks['squeeze']:dists.append(float(np.linalg.norm(cam-eyes)))
+    holdroll=rolls[np.argmin(abs(times-marks['tilt']))]
+    grab_delta=float(deltas[times[1:]<=marks['grab']+.04].max())
+    after_delta=float(deltas[times[1:]>marks['grab']+.04].max())
+    report=dict(marks=marks,min_grip_height_lifted_to_dark=min(heights),min_victim_feet_clearance=min(heights)-4.1,
+                hold_eye_distance_min=min(dists),hold_eye_distance_max=max(dists),tilt_end_head_roll_degrees=holdroll,
+                max_grip_step_grab=grab_delta,max_grip_step_after_grab=after_delta,min_right_elbow_bend_degrees=min(bends),
+                min_mesh_sole_height=minsole,min_camera_to_non_grab_mesh=mincamera,
+                victim_envelope_intersecting_triangles=intersections,min_victim_envelope_to_skin_vertex=minvolume,
+                min_hand_joint_to_body_surface=handbody,max_track_rounding_error=maxtrack,
+                right_hand_body_intersecting_triangle_pairs=hand_mesh_intersections,
+                right_hand_body_intersection_frames=hand_intersection_frames,
+                max_grabbing_arm_vertical_ndc=max_grab_ndc,
+                eye_reference_head_local=CHOKE_EYES.tolist(),grip_reference_hand_local=choke_grip_local().tolist(),
+                eye_surface_vertex_indices=CHOKE_EYE_VERTEX_IDS,
+                measurement_scope='Quantized FK, real linear-blend skin, triangle camera distance, triangle/OBB victim envelope and triangle/triangle hand/body SAT at all source frames.')
+    checks=dict(victim_feet_lift=min(heights)>=5.6,hold_camera_distance=min(dists)>=3 and max(dists)<=4.5,
+                head_tilt=25<=abs(holdroll)<=35,grab_grip_step=grab_delta<=.9,after_grab_grip_step=after_delta<=.25,
+                bent_right_elbow=min(bends)>8,mesh_floor=minsole>=-.002,camera_clearance=mincamera>=1.2,
+                victim_body_clearance=intersections==0,hand_body_joint_clearance=handbody>.05,
+                hand_mesh_body_clearance=hand_mesh_intersections==0,
+                grab_arm_below_view=max_grab_ndc<=-1.,
+                quantized_fk_tracks=maxtrack<=.000501)
+    between,between_checks=qa_choke_between_frames(data,body,foot,safe_tris,torso_tris,hand_tris,grabmask)
+    report['between_frames']=between;checks.update(between_checks)
+    return report,checks
 
 def qa_clip(name,clip,data,float_q):
     # QA the quantized payload the player will decode, not just perfect pre-export targets.
@@ -451,6 +795,9 @@ def qa_clip(name,clip,data,float_q):
                 floor=min_foot>=-.02,loop=not clip['loop'] or ratio<1.5,
                 joint_flips=max_rotation<35,quaternion_normalized=max_q_error<.0001,quaternion_sign_continuous=min_dot>=0,
                 loop_zero_mean=not clip['loop'] or mean_horizontal<.001)
+    if name=='Kill_Choke':
+        extra,extra_checks=qa_choke(clip,data,worlds);report.update(extra);checks.update(extra_checks)
+    checks={k:bool(v) for k,v in checks.items()}
     report['asserts']=checks; report['passed']=all(checks.values())
     return report
 
@@ -458,16 +805,18 @@ def main():
     global RIG,FLOOR_UP
     parser=argparse.ArgumentParser(); parser.add_argument('--only'); parser.add_argument('--no-render',action='store_true')
     parser.add_argument('--qa-only',action='store_true')
+    parser.add_argument('--kill-job',action='store_true',help='write only clips/QA and the dedicated real-mesh kill blend')
     parser.add_argument('--floor-up',type=float,default=FLOOR_UP)
     args=parser.parse_args(sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else [])
     FLOOR_UP=args.floor_up; RIG=Rig(ROOT/'input/rig.json')
     rest=RIG.verify_rest(); print('REST',rest,flush=True)
-    names=list(GAITS)+['Lunge_Windup','Lunge_Flight','Lunge_Land']
+    old_names=list(GAITS)+['Lunge_Windup','Lunge_Flight','Lunge_Land'];names=old_names+['Kill_Choke']
     if args.only and args.only not in names: parser.error('Unknown clip')
     clips={n:build_gait(n) for n in GAITS}
     run_zero=clips['Run']['poses'][0]
-    clips.update({n:build_lunge(n,run_zero) for n in names[3:]})
-    out=ROOT/'out'; (out/'keyframes_v4').mkdir(parents=True,exist_ok=True)
+    clips.update({n:build_lunge(n,run_zero) for n in old_names[3:]})
+    clips['Kill_Choke']=build_choke(clips['Run'],clips['Walk'])
+    out=ROOT/'out'
     # --only replaces that entry; .blend is always rebuilt with all six Actions.
     selected=[args.only] if args.only else names
     data=json.loads((out/'clips.json').read_text()) if args.only and (out/'clips.json').exists() else {}
@@ -478,9 +827,11 @@ def main():
         print(f"{name:15} {report['frames']:3} {report['max_leg_reach']:.4f} leg {report['max_arm_reach']:.4f} arm {report['max_stance_slide_per_frame']:.5f} slide {report['loop_ratio']:.3f} loop {report['max_joint_rotation_degrees']:.2f} deg {report['passed']}",flush=True)
         if name in selected:
             data[name]=payload; qa[name]=report
-            publish=dict(name=name,looped=clips[name]['loop'],priority='Movement' if clips[name]['loop'] else 'Action4',
-                         retarget='Studio-rest-direct-ENTITY_MOTION_20261010',duration=clips[name]['seconds'],frames=keys)
-            (out/'keyframes_v4'/f'{name}.json').write_text(json.dumps(publish,separators=(',',':')))
+            if not args.qa_only and not args.kill_job:
+                publish=dict(name=name,looped=clips[name]['loop'],priority='Movement' if clips[name]['loop'] else 'Action4',
+                             retarget='Studio-rest-direct-ENTITY_MOTION_20261010',duration=clips[name]['seconds'],frames=keys)
+                (out/'keyframes_v4').mkdir(exist_ok=True)
+                (out/'keyframes_v4'/f'{name}.json').write_text(json.dumps(publish,separators=(',',':')))
     (out/'clips.json').write_text(json.dumps(data,separators=(',',':')))
     qa['_build']=dict(floor_up=FLOOR_UP,rest=rest,loop_metric='RMS local joint angle + Hips translation; wrap / mean interior transition',
         quantization='xyzw x10000 integers re-normalized on decode; Hips local xyz x1000',flight_floor='Conservative launch-height root; positive root flight height only adds floor clearance',
@@ -489,9 +840,35 @@ def main():
     failures={n:[k for k,v in qa[n]['asserts'].items() if not v] for n in selected if not qa[n]['passed']}
     if failures: raise AssertionError(json.dumps(failures))
     if args.qa_only: return
-    from preview import build_preview
+    if not args.kill_job:
+        from preview import build_preview
+        for name,c in clips.items():c['poses']=decode_export(export_clip(c)[0])
+        build_preview(RIG,clips,out,FLOOR_UP,ROOT/'input/entity_watch_v1.fbx',render=not args.no_render,only=args.only)
+        print('BUILD COMPLETE',flush=True)
+        return
+    # Keep this scoped build inside the authorized outputs. The legacy preview
+    # also writes work/preview_report.json and keyframes, which this job cannot.
+    import bpy
+    from preview import _make_armature,_key_actions
     for name,c in clips.items(): c['poses']=decode_export(export_clip(c)[0])
-    build_preview(RIG,clips,out,FLOOR_UP,ROOT/'input/entity_watch_v1.fbx',render=not args.no_render,only=args.only)
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    armature=_make_armature(RIG);parity=_key_actions(armature,RIG,clips)
+    body=real_body();mesh=bpy.data.meshes.new('Real_Entity_Studio_Mesh')
+    mesh.from_pydata(skin_root(body,RIG.rest_world).tolist(),[],body['tris'].tolist())
+    obj=bpy.data.objects.new('Real_Entity',mesh);bpy.context.collection.objects.link(obj);obj.matrix_world=armature.matrix_world.copy()
+    for j,n in enumerate(body['names']):
+        group=obj.vertex_groups.new(name=n)
+        for k in range(4):
+            for i in np.where((body['bones'][:,k]==j)&(body['weights'][:,k]>0))[0]:
+                group.add([int(i)],float(body['weights'][i,k]),'ADD')
+    mod=obj.modifiers.new('Studio_exact_rig','ARMATURE');mod.object=armature
+    armature.animation_data.action=bpy.data.actions['Kill_Choke']
+    action=armature.animation_data.action
+    for k,v in CHOKE_MARKS.items():action.pose_markers.new(k).frame=round(1+v*30)
+    scene=bpy.context.scene;scene.render.fps=30;scene.frame_start=1;scene.frame_end=163;scene.frame_set(1)
+    (out/'blend').mkdir(exist_ok=True);bpy.context.preferences.filepaths.save_version=0
+    bpy.ops.wm.save_as_mainfile(filepath=str(out/'blend'/'kill_choke.blend'))
+    print('BLENDER FK',parity,flush=True)
     print('BUILD COMPLETE',flush=True)
 
 if __name__=='__main__': main()
