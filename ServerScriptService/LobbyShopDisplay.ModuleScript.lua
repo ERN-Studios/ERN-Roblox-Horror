@@ -503,13 +503,38 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		return nil
 	end
 
+	-- MALL_LOBBY_20261012: the mall lobby's Shop & Supplies (Workspace.LobbyMallPreview.Anchors.ShopSpots). Its
+	-- buy spots stand round a hexagon of counters, so they are round, and a spot answers for any key the config
+	-- sells. The card and the purchase route are the same ones as above.
+	local MALL_SPOT, MALL_SLACK = 1.9, 0.5
+	local function mallSpotUnder(position, current)
+		local mall = workspace:FindFirstChild("LobbyMallPreview")
+		local anchors = mall and mall:FindFirstChild("Anchors")
+		local folder = anchors and anchors:FindFirstChild("ShopSpots")
+		if not folder then return nil end
+		local best, bestDistance
+		for _, spot in ipairs(folder:GetChildren()) do
+			local key = spot:GetAttribute("ShopItemKey")
+			if spot:IsA("BasePart") and type(key) == "string" and ((Config.Passes and Config.Passes[key])
+				or (Config.Products and Config.Products[key]) or (Config.Items and Config.Items[key])) then
+				local delta = position - spot.Position
+				local distance = Vector2.new(delta.X, delta.Z).Magnitude
+				if math.abs(delta.Y) <= 8 and distance <= MALL_SPOT + (key == current and MALL_SLACK or 0) then
+					if key == current then return current end
+					if not bestDistance or distance < bestDistance then best, bestDistance = key, distance end
+				end
+			end
+		end
+		return best
+	end
+
 	local function focusFor(player)
 		if player:GetAttribute("InRound") == true then return nil end
 		local character = player.Character
 		local root = character and character:FindFirstChild("HumanoidRootPart")
 		if not root then return nil end
 		local current = player:GetAttribute(FOCUS_ATTRIBUTE)
-		return plateUnder(root.Position, current) or r3PlateUnder(root.Position, current)
+		return plateUnder(root.Position, current) or r3PlateUnder(root.Position, current) or mallSpotUnder(root.Position, current)
 	end
 
 	task.spawn(function()

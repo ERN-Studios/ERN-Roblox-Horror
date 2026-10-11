@@ -4090,15 +4090,20 @@ end
 if not IS_RESERVED_ROUND_SERVER then
  local r3Models = setmetatable({}, {__mode = "k"})
  local function bindR3(model)
-  if model.Name ~= "LobbyReimaginedPreview" or not model:IsA("Model") or model.Parent ~= workspace
-   or model:GetAttribute("LobbyReimaginedOwned") ~= true then return end
+  -- MALL_LOBBY_20261012 (owner: a mall lobby beside this one, "fully functional like our current lobby", three
+  -- pads a level): its 18 pads are stations of this same engine under their own ids (201-218, QueueBridge.BuildMall).
+  local mall = model.Name == "LobbyMallPreview"
+  if not model:IsA("Model") or model.Parent ~= workspace then return end
+  if not mall and (model.Name ~= "LobbyReimaginedPreview" or model:GetAttribute("LobbyReimaginedOwned") ~= true) then return end
   if r3Models[model] then return end
   local ownerFolder = script.Parent:FindFirstChild("LobbyReimaginedPreview")
   local module = ownerFolder and ownerFolder:FindFirstChild("QueueBridge")
   if not module or not module:IsA("ModuleScript") then return end
   local bridge = require(module)
-  if not bridge.IsLobby(model) then return end
-  local ok, specs = pcall(bridge.Build, model)
+  if mall then
+   if not (bridge.IsMall and bridge.IsMall(model)) then return end
+  elseif not bridge.IsLobby(model) then return end
+  local ok, specs = pcall(if mall then bridge.BuildMall else bridge.Build, model)
   if not ok then warn("[R3 Queue Bridge] " .. tostring(specs)); return end
   local registered = {}
   for _, station in ipairs(specs) do
@@ -4142,9 +4147,9 @@ if not IS_RESERVED_ROUND_SERVER then
  end
  local watched = setmetatable({}, {__mode = "k"})
  local function watchR3(model)
-  if model.Name ~= "LobbyReimaginedPreview" or not model:IsA("Model") or watched[model] then return end
+  if (model.Name ~= "LobbyReimaginedPreview" and model.Name ~= "LobbyMallPreview") or not model:IsA("Model") or watched[model] then return end
   watched[model] = true
-  local readyConnection = model:GetAttributeChangedSignal("Ready"):Connect(function() bindR3(model) end)
+  local readyConnection = model:GetAttributeChangedSignal(if model.Name == "LobbyMallPreview" then "MallQueuesReady" else "Ready"):Connect(function() bindR3(model) end)
   local ancestryConnection = model.AncestryChanged:Connect(function()
    if model.Parent == workspace then task.defer(bindR3, model) end
   end)

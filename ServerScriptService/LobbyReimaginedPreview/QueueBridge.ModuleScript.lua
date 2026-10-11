@@ -52,6 +52,60 @@ function Bridge.Build(model)
 	return result
 end
 
+-- MALL_LOBBY_20261012 (owner: a mall lobby beside this one, "fully functional like our current lobby", with THREE
+-- pads a level). Its pads are stations of the same engine under their own ids, 201-218, so the 24 above are not
+-- touched and both lobbies queue at once. A pad is a zone under its own bay Model exactly as above (ChamberFloor,
+-- CircularBayDiameter, QueueRenderOwner with QueueTitle and QueueSubtitle); tools/lobby_mall/import_mall.py makes them.
+-- Clearing the model's MallQueuesReady attribute takes all 18 out of service.
+local MALL_NAME, MALL_FIRST, MALL_PER, MALL_COUNT = "LobbyMallPreview", 201, 3, 18
+
+function Bridge.IsMall(model)
+	return typeof(model) == "Instance" and model:IsA("Model") and model.Name == MALL_NAME
+		and model.Parent == workspace and model:GetAttribute("MallQueuesReady") == true
+end
+
+function Bridge.BuildMall(model)
+	assert(Bridge.IsMall(model), "Mall queue model is not ready")
+	local found, result = {}, {}
+	for _, zone in ipairs(model:GetDescendants()) do
+		local id = zone:GetAttribute("MallQueueId")
+		if id ~= nil then
+			assert(zone:IsA("BasePart") and type(id) == "number" and id % 1 == 0
+				and id >= MALL_FIRST and id < MALL_FIRST + MALL_COUNT, "Invalid mall queue zone/id")
+			assert(not found[id], "Duplicate mall queue id")
+			local ordinal = id - MALL_FIRST
+			local level, displayIndex = math.floor(ordinal / MALL_PER) + 1, ordinal % MALL_PER + 1
+			assert(zone:GetAttribute("LevelNumber") == level
+				and zone:GetAttribute("QueueDisplayIndex") == displayIndex, "Mall queue metadata mismatch")
+			assert(zone.Anchored and not zone.CanCollide and not zone.CanTouch and not zone.CanQuery,
+				"Queue detector must be anchored/nonphysical")
+			local radius = zone:GetAttribute("QueueRadius")
+			assert(zone:GetAttribute("QueueDetectorShape") == "Circle" and type(radius) == "number"
+				and radius == radius and radius > 0 and radius < math.huge
+				and radius <= math.min(zone.Size.X, zone.Size.Z) * .5 + 1e-4, "Invalid circular detector")
+			local bay = zone.Parent
+			local floor = bay and bay:FindFirstChild("ChamberFloor")
+			local diameter = bay and bay:GetAttribute("CircularBayDiameter")
+			assert(bay and bay:IsA("Model") and floor and floor:IsA("BasePart")
+				and type(diameter) == "number" and diameter > radius * 2,
+				"Queue zone requires direct bay parent, ChamberFloor and diameter")
+			local ownerRef = zone:FindFirstChild("QueueRenderOwner")
+			local owner = ownerRef and ownerRef:IsA("ObjectValue") and ownerRef.Value
+			assert(owner and owner:IsA("Model") and owner:IsDescendantOf(model), "Missing queue render owner")
+			local title, sub = owner:FindFirstChild("QueueTitle", true), owner:FindFirstChild("QueueSubtitle", true)
+			assert(title and title:IsA("TextLabel") and sub and sub:IsA("TextLabel"), "Missing queue text labels")
+			found[id] = {index = id, displayIndex = displayIndex, level = level, mall = true,
+				zone = zone, title = title, sub = sub, color = zone.Color, busy = false,
+				revisionOwned = true, lobbyOwner = model, renderOwner = owner, previewOnly = level > 4, previewQueue = level > 4}
+		end
+	end
+	for id = MALL_FIRST, MALL_FIRST + MALL_COUNT - 1 do
+		assert(found[id], "Missing mall queue id " .. id)
+		table.insert(result, found[id])
+	end
+	return result
+end
+
 -- Called by existing DEV preview handlers before AND after their streaming yield.
 -- This does not replace their allowlist, living-avatar, reach, cooldown or floor checks.
 function Bridge.IsPreviewEntry(part, level)
@@ -94,15 +148,20 @@ function Bridge.RegisterPreviewLauncher(level, controller, callbacks)
 end
 
 local function ownedStation(station)
-    if type(station) ~= "table" or station.revisionOwned ~= true or station.revisionRetired
-        or not Bridge.IsLobby(station.lobbyOwner) then return false end
+    if type(station) ~= "table" or station.revisionOwned ~= true or station.revisionRetired then return false end
+    -- MALL_LOBBY_20261012: a mall pad is owned by the mall model under its own id range (see BuildMall)
+    local first, per, count, key = FIRST_ID, 4, COUNT, "R3QueueId"
+    if station.mall == true then
+        first, per, count, key = MALL_FIRST, MALL_PER, MALL_COUNT, "MallQueueId"
+        if not Bridge.IsMall(station.lobbyOwner) then return false end
+    elseif not Bridge.IsLobby(station.lobbyOwner) then return false end
     local zone = station.zone
     return typeof(zone) == "Instance" and zone:IsA("BasePart")
         and zone:IsDescendantOf(station.lobbyOwner)
-        and zone:GetAttribute("R3QueueId") == station.index
+        and zone:GetAttribute(key) == station.index
         and zone:GetAttribute("LevelNumber") == station.level
-        and station.index >= FIRST_ID and station.index < FIRST_ID + COUNT
-        and math.floor((station.index - FIRST_ID) / 4) + 1 == station.level
+        and station.index >= first and station.index < first + count
+        and math.floor((station.index - first) / per) + 1 == station.level
 end
 
 local function liveLauncher(station)

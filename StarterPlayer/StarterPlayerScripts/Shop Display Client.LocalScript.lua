@@ -35,6 +35,15 @@ local FOCUS_ATTRIBUTE = "ZyntraShopFocus"
 local BUY_EVENT_NAME = "ZyntraShopBuy"
 local TOUCH_TAP = 44
 
+-- MALL_LOBBY_20261012 (owner: the mall lobby's Shop & Supplies must showcase every skin). Each skin stands on a
+-- plinth there with a prompt (`MallSkinPrompt`, attribute SkinId, made by tools/lobby_mall/import_mall.py): it opens
+-- the shop window's own Skins page at that skin's card, where the price, BUY and EQUIP already are.
+game:GetService("ProximityPromptService").PromptTriggered:Connect(function(prompt, who)
+	if who ~= player or prompt.Name ~= "MallSkinPrompt" or player:GetAttribute("InRound") == true then return end
+	local open = player:WaitForChild("PlayerScripts"):FindFirstChild("ZyntraShopUIOpen")
+	if open and open:IsA("BindableFunction") then pcall(open.Invoke, open, "Skins", prompt:GetAttribute("SkinId")) end
+end)
+
 -- ANALYTICS_20260921. The server cannot see a card open or a demo start, so
 -- the client reports those two facts and nothing else, fire-and-forget, on
 -- the existing ZyntraAction remote. The server validates the key against the
@@ -719,22 +728,31 @@ local function motionAllowed()
 		and player:GetAttribute("ReduceCameraShake") ~= true
 end
 
-local elapsed = 0
+local elapsed, scanElapsed = 0, 0.5
 RunService.Heartbeat:Connect(function(delta)
 	elapsed += delta
+	if player:GetAttribute("InRound") == true or workspace:GetAttribute("RoundActive") == true then
+		if animating then restoreMotion() end
+		scanElapsed = 0.5
+		return
+	end
+	scanElapsed += delta
 	local current = (shopModel and shopModel.Parent) and shopModel or lobbyShop()
 	if current ~= shopModel then
 		restoreMotion()
 		shopModel = current
 		collect(shopModel)
+		scanElapsed = 0
 	end
 	-- Replication hands a client the model BEFORE its boxes: measured in Studio
 	-- Play on 2026-09-16, the first collect found the model and none of the
 	-- eight boxes, and the row then stood still for the whole session. The
 	-- server stamps ShopItemCount on the model once every box is built, so
 	-- until this client holds that many it keeps collecting.
-	if shopModel and #boxes < (tonumber(shopModel:GetAttribute("ShopItemCount")) or 0) then
+	-- Streamed-out boxes may stay absent; retry at most twice a second.
+	if scanElapsed >= 0.5 and shopModel and #boxes < (tonumber(shopModel:GetAttribute("ShopItemCount")) or 0) then
 		collect(shopModel)
+		scanElapsed = 0
 	end
 	if not motionAllowed() then
 		if animating then restoreMotion() end

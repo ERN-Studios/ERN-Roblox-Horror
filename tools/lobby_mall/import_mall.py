@@ -254,23 +254,76 @@ local function marker(parent, name, pos, size)
 	return p
 end
 local function folder(name) local f = Instance.new("Folder"); f.Name = name; f.Parent = anchors; return f end
--- queue bays: the structure the queue bridge reads (zone parts under a bay model), three stations a level
-local bays, byLevel = folder("QueueBays"), {}
+-- queue bays: what QueueBridge.BuildMall reads. One bay Model a pad (the engine puts a turned-away player back
+-- inside the bay's diameter), the zone turned so its front looks at the concourse (a cancelled host is set down
+-- five studs in front of it), and a hanging dot-matrix board as the render owner with the two lines the engine writes.
+local bays = folder("QueueBays")
+local AMBER = Color3.fromRGB(255, 176, 60)
+local MONO = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Bold)
 for _, pad in ipairs(a.pads) do
-	local bay = byLevel[pad.level]
-	if not bay then
-		bay = Instance.new("Model"); bay.Name = "QueueBay_Level" .. pad.level
-		bay:SetAttribute("LevelNumber", pad.level)
-		bay.Parent = bays; byLevel[pad.level] = bay
-	end
-	local zone = marker(bay, "QueueZone" .. pad.station, v3(pad.pos) + Vector3.new(0, 0.4, 0), Vector3.new(pad.radius * 2, 1, pad.radius * 2))
+	local at = v3(pad.pos)
+	local out = Vector3.new(pad.pos[1] < a.spawn[1] and 1 or -1, 0, 0)
+	local bay = Instance.new("Model")
+	bay.Name = string.format("QueueBay_L%%d_S%%d", pad.level, pad.station)
+	bay:SetAttribute("LevelNumber", pad.level)
+	bay:SetAttribute("CircularBayDiameter", 26)
+	bay.Parent = bays
+	marker(bay, "ChamberFloor", at, Vector3.new(26, 0.1, 26))
+	local zone = marker(bay, "QueueZone", at + Vector3.new(0, 0.4, 0), Vector3.new(pad.radius * 2, 1, pad.radius * 2))
+	zone.CFrame = CFrame.lookAt(zone.Position, zone.Position + out)
+	zone.Color = AMBER
+	zone:SetAttribute("MallQueueId", 200 + (pad.level - 1) * 3 + pad.station)
 	zone:SetAttribute("LevelNumber", pad.level)
 	zone:SetAttribute("QueueDisplayIndex", pad.station)
 	zone:SetAttribute("QueueRadius", pad.radius)
 	zone:SetAttribute("QueueDetectorShape", "Circle")
+	local render = Instance.new("Model")
+	render.Name = "QueueRender"
+	render.Parent = bay
+	local board = Instance.new("Part")
+	board.Name, board.Anchored, board.CanCollide, board.CanTouch, board.CanQuery = "QueueBoard", true, false, false, false
+	board.Material, board.Color, board.Size = Enum.Material.SmoothPlastic, Color3.fromRGB(18, 16, 14), Vector3.new(9.6, 2.7, 0.35)
+	board.CFrame = CFrame.lookAt(at + Vector3.new(0, 9.2, 0), at + Vector3.new(0, 9.2, 0) + out)
+	board.Parent = render
+	for side = -1, 1, 2 do
+		local rod = Instance.new("Part")
+		rod.Name, rod.Anchored, rod.CanCollide, rod.CanTouch, rod.CanQuery = "QueueBoardRod", true, false, false, false
+		rod.Material, rod.Color, rod.Size = Enum.Material.Metal, Color3.fromRGB(62, 58, 46), Vector3.new(0.14, 2.4, 0.14)
+		rod.CFrame = board.CFrame * CFrame.new(side * 4.2, 2.55, 0)
+		rod.Parent = render
+	end
+	local g = Instance.new("SurfaceGui")
+	g.Name, g.Face, g.SizingMode, g.PixelsPerStud, g.LightInfluence, g.Brightness = "QueueDisplay", Enum.NormalId.Front, Enum.SurfaceGuiSizingMode.PixelsPerStud, 50, 0, 1.4
+	local function line(name, y, h, text)
+		local l = Instance.new("TextLabel")
+		l.Name, l.BackgroundTransparency, l.FontFace, l.TextColor3 = name, 1, MONO, AMBER
+		l.AnchorPoint, l.Position, l.Size = Vector2.new(0.5, 0), UDim2.fromScale(0.5, y), UDim2.fromScale(0.94, h)
+		l.TextScaled, l.Text = true, text
+		l.Parent = g
+		return l
+	end
+	line("QueueTitle", 0.07, 0.5, "STATION " .. pad.station .. "  •  0/6")
+	line("QueueSubtitle", 0.62, 0.28, "STEP ON THE PAD")
+	g.Parent = board
+	local ref = Instance.new("ObjectValue")
+	ref.Name, ref.Value = "QueueRenderOwner", render
+	ref.Parent = zone
 end
 local spots = folder("ShopSpots")
-for _, spot in ipairs(a.shop_spots) do marker(spots, spot.key, v3(spot.pos), Vector3.new(3, 0.2, 3)):SetAttribute("ProductKey", spot.key) end
+-- a buy spot: LobbyShopDisplay opens the item's card for whoever stands within 1.9 studs of it; a pale ring on the
+-- carpet says where
+for _, spot in ipairs(a.shop_spots) do
+	local m = marker(spots, spot.key, v3(spot.pos), Vector3.new(3.8, 0.2, 3.8))
+	m:SetAttribute("ShopItemKey", spot.key)
+	local g = Instance.new("SurfaceGui")
+	g.Name, g.Face, g.SizingMode, g.PixelsPerStud, g.LightInfluence = "SpotRing", Enum.NormalId.Top, Enum.SurfaceGuiSizingMode.PixelsPerStud, 30, 1
+	local ring = Instance.new("Frame")
+	ring.AnchorPoint, ring.Position, ring.Size, ring.BackgroundTransparency = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5), UDim2.fromScale(0.86, 0.86), 1
+	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0.5, 0); corner.Parent = ring
+	local stroke = Instance.new("UIStroke"); stroke.Thickness, stroke.Color, stroke.Transparency = 4, Color3.fromRGB(236, 226, 160), 0.25; stroke.Parent = ring
+	ring.Parent = g
+	g.Parent = m
+end
 local boards = folder("Boards")
 for _, b in ipairs(a.boards) do
 	local normal = Vector3.new(b.normal[1], b.normal[2], b.normal[3])
@@ -279,11 +332,21 @@ for _, b in ipairs(a.boards) do
 	p:SetAttribute("BoardKey", b.key)
 end
 marker(anchors, "Spawn", v3(a.spawn))
-marker(anchors, "DJConsole", v3(a.dj_console))
+-- Lobby DJ stands its DJ at this part's foot, 2.9 studs behind it: the part reaches down to the stage deck
+local deckTop = a.stage_deck.max[2]
+marker(anchors, "DJConsole", v3(a.dj_console), Vector3.new(4, math.max(0.5, (a.dj_console[2] - deckTop) * 2), 2))
 marker(anchors, "ShopStand", v3(a.shop_stand.centre)):SetAttribute("Radius", a.shop_stand.radius)
 local deck = marker(anchors, "StageDeck", (v3(a.stage_deck.min) + v3(a.stage_deck.max)) / 2, Vector3.new(a.stage_deck.max[1] - a.stage_deck.min[1], math.max(a.stage_deck.max[2] - a.stage_deck.min[2], 0.2), a.stage_deck.max[3] - a.stage_deck.min[3]))
 local wing = marker(anchors, "DarkWing", (v3(a.dark_wing.min) + v3(a.dark_wing.max)) / 2, Vector3.new(a.dark_wing.max[1] - a.dark_wing.min[1], a.dark_wing.max[2] - a.dark_wing.min[2], a.dark_wing.max[3] - a.dark_wing.min[3]))
 anchors:SetAttribute("TapeZ", a.tape_z)
+-- the creature's second dark end (Lobby Tunnel Reach): x across, y up from the floor, z = studs past the tape
+model:SetAttribute("ReachFrame", CFrame.new(v3({a.spawn[1], a.spawn[2], a.tape_z})))
+model:SetAttribute("ReachFence", 1)
+model:SetAttribute("ReachGround", a.dark_wing.max[3] - a.tape_z)
+-- the tape is a line, not a wall: the owner's whole point is that you can walk past it
+for _, d in ipairs(model.Parts.Tape:GetChildren()) do
+	if d.Name == "DangerTape" then d.CanCollide = false end
+end
 -- the six skins: the game's own suit model on each plinth when its template is in the place
 local plinths, placed, standIns = folder("SkinPlinths"), 0, 0
 local ServerStorage = game:GetService("ServerStorage")
@@ -293,6 +356,12 @@ for _, pl in ipairs(a.skin_plinths) do
 	local m = marker(plinths, pl.skin, at)
 	m.CFrame = CFrame.lookAt(at, at + facing)
 	m:SetAttribute("SkinId", pl.skin)
+	local prompt = Instance.new("ProximityPrompt")          -- Shop Display Client opens the Skins page at this skin
+	prompt.Name, prompt.ActionText, prompt.ObjectText = "MallSkinPrompt", "VIEW SKIN", "SHOP & SUPPLIES"
+	prompt.HoldDuration, prompt.MaxActivationDistance, prompt.RequiresLineOfSight = 0, 9, false
+	prompt.UIOffset = Vector2.new(0, -40)
+	prompt:SetAttribute("SkinId", pl.skin)
+	prompt.Parent = m
 	local template = ServerStorage:FindFirstChild("HazmatSkin_" .. pl.skin .. "_20260924", true)
 	m:SetAttribute("TemplateFound", template ~= nil)
 	if template and template:IsA("Model") then
@@ -318,5 +387,6 @@ for _, pl in ipairs(a.skin_plinths) do
 end
 local total = 0
 for _, d in ipairs(model:GetDescendants()) do if d:IsA("BasePart") then total += 1 end end
+model:SetAttribute("MallQueuesReady", true)
 return string.format("anchors: %%d pads in %%d bays, %%d shop spots, %%d boards, %%d real suits on plinths (%%d stand-in parts hidden); model has %%d parts", #a.pads, #bays:GetChildren(), #a.shop_spots, #a.boards, placed, standIns, total)
 ''' % (NAME, ', '.join(map(str, OFFSET)), J(data['anchors']))))

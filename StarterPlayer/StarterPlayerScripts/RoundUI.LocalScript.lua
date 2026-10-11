@@ -1030,6 +1030,11 @@ applyQueueDeviceLayout()
 UIDevice.Changed:Connect(applyQueueDeviceLayout)
 
 local queueStation = nil
+-- MALL_LOBBY_20261012: the mall lobby's pads are stations 201-218 of the same engine; a player reads the pad's own 1-3
+local function stationLabel(n)
+ n = tonumber(n)
+ return if n and n >= 201 and n <= 218 then (n - 201) % 3 + 1 else n
+end
 local queueSizeValue = 6
 local queuePrivacyValue = "public"
 local queueSubmitting = false
@@ -1040,7 +1045,7 @@ local function refreshQueuePanel()
  queuePrivacyButton.Text = friendsOnly and "FRIENDS ONLY" or "PUBLIC  •  EVERYONE"
  queuePrivacyButton.TextColor3 = friendsOnly and Color3.fromRGB(255, 218, 125) or Color3.fromRGB(125, 255, 178)
  queuePrivacyStroke.Color = friendsOnly and Color3.fromRGB(255, 202, 95) or Color3.fromRGB(120, 255, 175)
- queueStationLabel.Text = queueStation and ("STATION " .. queueStation .. "  •  YOU ARE THE HOST") or "YOU ARE THE HOST"
+ queueStationLabel.Text = queueStation and ("STATION " .. stationLabel(queueStation) .. "  •  YOU ARE THE HOST") or "YOU ARE THE HOST"
  local modes = queueShade:GetAttribute("QueueLaunchModes")
  local trial = modes == "trial,preview"   -- "trial" alone is a public host: the ordinary CREATE PARTY
  queueSubmit.Text = queueSubmitting and (trial and "STARTING..." or "CREATING PARTY...") or (trial and "TRIAL ROUND" or "CREATE PARTY")
@@ -3898,7 +3903,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		local maximum = math.clamp(math.floor(tonumber(a) or 6), 1, 6)
 		local privacyText = b == "friends" and "FRIENDS ONLY" or "PUBLIC"
 		local stationNumber = tonumber(c)
-		local stationText = stationNumber and ("STATION " .. stationNumber .. "  •  ") or ""
+		local stationText = stationNumber and ("STATION " .. stationLabel(stationNumber) .. "  •  ") or ""
 		setMsg(stationText .. "PARTY OPEN  •  MAX " .. maximum .. "  •  " .. privacyText, Color3.fromRGB(120, 255, 175))
 		label.Size = UDim2.new(0, 700, 0, 68)
 
@@ -3911,7 +3916,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	elseif ev == "queuewaitinghost" then
 		queueShade.Visible = false
 		local stationNumber = tonumber(a)
-		setMsg((stationNumber and ("STATION " .. stationNumber .. "  •  ") or "") .. "HOST CHOOSING PARTY SETTINGS", Color3.fromRGB(220, 210, 155))
+		setMsg((stationNumber and ("STATION " .. stationLabel(stationNumber) .. "  •  ") or "") .. "HOST CHOOSING PARTY SETTINGS", Color3.fromRGB(220, 210, 155))
 		label.Size = UDim2.new(0, 700, 0, 68)
 
 	elseif ev == "queueaccessdenied" then
@@ -3925,14 +3930,14 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		queueShade.Visible = false
 		local stationNumber = tonumber(a)
 		local hostName = tostring(b or "HOST")
-		setMsg((stationNumber and ("STATION " .. stationNumber .. "  •  ") or "") .. "FRIENDS ONLY" .. string.char(10) .. "ONLY FRIENDS OF " .. string.upper(hostName) .. " CAN JOIN", Color3.fromRGB(255, 205, 110))
+		setMsg((stationNumber and ("STATION " .. stationLabel(stationNumber) .. "  •  ") or "") .. "FRIENDS ONLY" .. string.char(10) .. "ONLY FRIENDS OF " .. string.upper(hostName) .. " CAN JOIN", Color3.fromRGB(255, 205, 110))
 		label.Size = UDim2.new(0, 700, 0, 92)
 
 	elseif ev == "queuefull" then
 		queueShade.Visible = false
 		local stationNumber = tonumber(a)
 		local maximum = math.clamp(math.floor(tonumber(b) or 6), 1, 6)
-		setMsg((stationNumber and ("STATION " .. stationNumber .. "  •  ") or "") .. "PARTY FULL  •  " .. maximum .. "/" .. maximum, Color3.fromRGB(255, 205, 110))
+		setMsg((stationNumber and ("STATION " .. stationLabel(stationNumber) .. "  •  ") or "") .. "PARTY FULL  •  " .. maximum .. "/" .. maximum, Color3.fromRGB(255, 205, 110))
 		label.Size = UDim2.new(0, 700, 0, 68)
 
 	elseif ev == "lobbycountdown" then
@@ -3941,7 +3946,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		local stationNumber = tonumber(c)
 		local maximum = math.clamp(math.floor(tonumber(d) or 6), 1, 6)
 		local privacyText = e == "friends" and "FRIENDS ONLY" or "PUBLIC"
-		local stationText = stationNumber and ("STATION " .. stationNumber .. "  •  ") or ""
+		local stationText = stationNumber and ("STATION " .. stationLabel(stationNumber) .. "  •  ") or ""
 		local modeText = f == "trial" and "  •  TRIAL ROUND" or (f == "preview" and "  •  MAP PREVIEW" or "")
 		setMsg(stationText .. "GAME BEGINS IN " .. tostring(a) .. string.char(10)
 			.. count .. "/" .. maximum .. " READY  •  " .. privacyText .. modeText, Color3.fromRGB(120, 255, 175))

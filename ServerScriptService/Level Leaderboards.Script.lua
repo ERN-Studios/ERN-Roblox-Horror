@@ -152,11 +152,19 @@ end
 
 local boards = {}               -- level -> {faces = {{podium = {...}, rows = {...}}, ...}}
 
-local function buildFace(panel, face, level)
+-- MALL_LOBBY_20261012: `look` is how a face is printed. The lobby's own boards are lit screens (LIT); the mall lobby's
+-- are sheets of paper pinned to its notice boards (PAPER, below), the same layout scaled to the sheet.
+local LIT = {ink = INK, card = CARD, accent = MINT, pale = PALE, muted = MUTED, pps = PPS, light = 0}
+local PAPER = {ink = Color3.fromRGB(232, 226, 204), card = Color3.fromRGB(212, 204, 178), accent = Color3.fromRGB(104, 62, 40),
+	pale = Color3.fromRGB(50, 44, 36), muted = Color3.fromRGB(118, 106, 86), light = 0.75,
+	podium = {Color3.fromRGB(150, 102, 16), Color3.fromRGB(84, 94, 104), Color3.fromRGB(142, 78, 36)}}
+local function buildFace(panel, face, level, look)
+	look = look or LIT
+	local INK, CARD, MINT, PALE, MUTED = look.ink, look.card, look.accent, look.pale, look.muted
 	local gui = Instance.new("SurfaceGui")
 	gui.Name, gui.Face = "Leaderboard", face
-	gui.SizingMode, gui.PixelsPerStud = Enum.SurfaceGuiSizingMode.PixelsPerStud, PPS
-	gui.LightInfluence, gui.Brightness, gui.ClipsDescendants, gui.MaxDistance = 0, 1, true, 160
+	gui.SizingMode, gui.PixelsPerStud = Enum.SurfaceGuiSizingMode.PixelsPerStud, look.pps
+	gui.LightInfluence, gui.Brightness, gui.ClipsDescendants, gui.MaxDistance = look.light, 1, true, 160
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	local function box(class, x, y, w, h, parent)             -- in studs from the face's top left
 		local item = Instance.new(class)
@@ -182,7 +190,8 @@ local function buildFace(panel, face, level)
 	local rule = box("Frame", 0.4, 2.42, W - 0.8, 0.04)
 	rule.BackgroundColor3 = MINT
 	local parts = {podium = {}, rows = {}}
-	for place, style in ipairs(PODIUM) do
+	for place, plain in ipairs(PODIUM) do
+		local style = look.podium and setmetatable({colour = look.podium[place]}, {__index = plain}) or plain
 		local card = box("Frame", 0.25, style.top, W - 0.5, style.height)
 		card.BackgroundColor3 = CARD
 		local bar = box("Frame", 0.25, style.top, 0.12, style.height)
@@ -191,7 +200,7 @@ local function buildFace(panel, face, level)
 		local name = line("", 1.38, style.top + style.height * 0.1, W - 1.75, style.height * 0.42, style.name, style.colour,
 			Enum.Font.GothamBold, Enum.TextXAlignment.Left)
 		local time = line("", 1.38, style.top + style.height * 0.5, W - 1.75, style.height * 0.44, style.time,
-			style.colour:Lerp(Color3.new(1, 1, 1), 0.45), Enum.Font.GothamBlack, Enum.TextXAlignment.Left)
+			style.colour:Lerp(look.podium and Color3.new(0, 0, 0) or Color3.new(1, 1, 1), 0.45), Enum.Font.GothamBlack, Enum.TextXAlignment.Left)
 		parts.podium[place] = {rank = rank, name = name, time = time}
 	end
 	for index = 1, TOP - #PODIUM do
@@ -304,12 +313,86 @@ local function read(level)
 	return rows
 end
 
+-- MALL_LOBBY_20261012: the mall lobby beside this one has a notice board by each shop (LobbyMallPreview.Anchors.
+-- Boards, `level1`..`level6`, front face toward the concourse). The same list is pinned to it as a printed sheet and
+-- redrawn with the lobby's own.
+local function buildMallSheet(level)
+	local mall = workspace:FindFirstChild("LobbyMallPreview")
+	local anchors = mall and mall:FindFirstChild("Anchors")
+	local folder = anchors and anchors:FindFirstChild("Boards")
+	local board = folder and folder:FindFirstChild("level" .. level)
+	if not (board and board:IsA("BasePart")) then return nil end
+	local scale = math.min((board.Size.Y - 0.5) / H, (board.Size.X - 0.5) / W)
+	local sheet = Instance.new("Part")
+	sheet.Name = "Level " .. level .. " Leaderboard Sheet"
+	sheet.Size, sheet.Color, sheet.Material = Vector3.new(W * scale, H * scale, 0.04), PAPER.ink, Enum.Material.SmoothPlastic
+	sheet.CFrame = board.CFrame * CFrame.new(0, 0, -0.1)
+	sheet.Anchored, sheet.CanCollide, sheet.CanTouch, sheet.CanQuery, sheet.CastShadow = true, false, false, false, false
+	sheet.Parent = board
+	local look = setmetatable({pps = PPS / scale}, {__index = PAPER})
+	return buildFace(sheet, Enum.NormalId.Front, level, look)
+end
+
 for level = 1, LEVELS do
 	boards[level] = buildBoard(level)
+	local sheet = buildMallSheet(level)
+	if sheet then
+		boards[level] = boards[level] or {faces = {}}
+		table.insert(boards[level].faces, sheet)
+	end
 	shown[level] = {}
 	redraw(level)
 end
 workspace:SetAttribute("LevelLeaderboards", "LEVEL_LEADERBOARDS_20261008")
+
+-- MALL_LOBBY_20261012: the mall's big DIRECTORY board carries TOP SUPPORTERS. That board is drawn by
+-- TunnelLobbyBuilder on this server (the SurfaceGui `DonationLeaderboardDisplay`); this pins a paper copy of it to
+-- the mall's board and keeps the copy's text in step. Nothing about the ranking itself is touched.
+task.spawn(function()
+	local mall = workspace:FindFirstChild("LobbyMallPreview")
+	local anchors = mall and mall:FindFirstChild("Anchors")
+	local folder = anchors and anchors:FindFirstChild("Boards")
+	local board = folder and folder:FindFirstChild("directory")
+	if not (board and board:IsA("BasePart")) then return end
+	local source
+	for _ = 1, 90 do
+		for _, d in ipairs(lobby:GetDescendants()) do
+			if d:IsA("SurfaceGui") and d.Name == "DonationLeaderboardDisplay" then source = d; break end
+		end
+		if source then break end
+		task.wait(2)
+	end
+	if not source then return end
+	local canvas = source.CanvasSize
+	local width = math.min(board.Size.X - 1, (board.Size.Y - 1) * canvas.X / canvas.Y)
+	local sheet = Instance.new("Part")
+	sheet.Name = "Top Supporters Sheet"
+	sheet.Size, sheet.Color, sheet.Material = Vector3.new(width, width * canvas.Y / canvas.X, 0.04), PAPER.ink, Enum.Material.SmoothPlastic
+	sheet.CFrame = board.CFrame * CFrame.new(0, 0, -0.1)
+	sheet.Anchored, sheet.CanCollide, sheet.CanTouch, sheet.CanQuery, sheet.CastShadow = true, false, false, false, false
+	sheet.Parent = board
+	local copy = source:Clone()
+	copy.Face, copy.Adornee, copy.LightInfluence, copy.Brightness = Enum.NormalId.Front, nil, PAPER.light, 1
+	for _, d in ipairs(copy:GetDescendants()) do
+		if d:IsA("Frame") then
+			local _, _, value = d.BackgroundColor3:ToHSV()
+			d.BackgroundColor3 = if value < 0.35 then (if d.Parent == copy then PAPER.ink else PAPER.card) else PAPER.accent
+		elseif d:IsA("TextLabel") then
+			d.TextColor3 = PAPER.pale
+		elseif d:IsA("UIStroke") then
+			d.Color = PAPER.accent
+		end
+	end
+	copy.Parent = sheet
+	local from, to = source:GetDescendants(), copy:GetDescendants()
+	while sheet.Parent and source.Parent do
+		for index, d in ipairs(from) do
+			local twin = to[index]
+			if d:IsA("TextLabel") and twin and twin:IsA("TextLabel") and twin.Text ~= d.Text then twin.Text = d.Text end
+		end
+		task.wait(5)
+	end
+end)
 
 local step = 0
 while true do

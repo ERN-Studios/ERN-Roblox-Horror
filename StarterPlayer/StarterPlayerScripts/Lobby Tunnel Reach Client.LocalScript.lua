@@ -39,6 +39,12 @@ for _, name in ipairs(PIECES) do
 	if not kit:WaitForChild(name, 60) then return end
 end
 local frame = root:GetAttribute("Frame")
+-- MALL_LOBBY_20261012: the creature has two dark ends now (the mall lobby's dark wing is the second) and the server
+-- moves this frame to whichever one somebody has walked into, while it is asleep.
+root:GetAttributeChangedSignal("Frame"):Connect(function()
+	local moved = root:GetAttribute("Frame")
+	if typeof(moved) == "CFrame" then frame = moved end
+end)
 local hand = HttpService:JSONDecode(root:GetAttribute("Hand"))
 local ARMS = root:GetAttribute("Arms")
 local POSES = hand.poses
