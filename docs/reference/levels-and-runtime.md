@@ -1965,3 +1965,13 @@ P1, A3, ...); the stair is P1.
   hall's film over the tunnel shows no edge or patch; no ray from the middle of any of the five shafts meets water
   before a wall (was 10, 31, 19, 0 and 47 of 384). Pictures: `artifacts/level2-water-20261011/`. NOT checked: the
   other seven water blocks, a walk of the whole level, a phone.
+
+### Changed 2026-10-11 (14:35 local) - The stranglehold is SWITCHED ON in Studio (not published by this session)
+
+The owner published v2999 at 14:17 local (12:17 UTC) with the stranglehold still switched off, and then asked "Er du
+sikker på den nye kill animation for entity i level 1 er live?". It was not: v2999 carries the code and the clip but
+plays the old ground-pin kill, because `KillStyle` was unset. Taken as the go: `ReplicatedStorage.Level1EntityMotion`
+now has `KillStyle = "Choke"` in the saved place (one undo point). Played once with the saved switch and no test
+attribute: the stranglehold ran to the end, the narrowing went 1.16 to 0.14 of the width (the timing changed last),
+dead at the dark, no errors. It goes live with the owner's next publish; servers on v2999 keep the old kill until
+they are restarted. Back to the old kill: remove the attribute.
