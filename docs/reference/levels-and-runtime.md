@@ -2014,3 +2014,16 @@ når den smasker dem i ansigtet."
   is modest; from below, the red eye dots sit at the top edge of the head; nobody has listened to the crunch; a
   shield pressed mid-kill, a second player (and so the positional crunch), R6 and odd-sized avatars, a phone (25
   full-screen strokes and a blur) were not run.
+
+### Asked 2026-10-11 (evening) - An exclusive skin for content creators: six ideas drawn, nothing built
+
+Owner: "Der skal laves et exclusive skin [til] content creators som spiller vores spil og er supporter. Kom med idéer
+til hvordan det skin kan se ud ingame ... Det skal være sådan vi DEVs kan give dem det" and then "Lav billeder af
+idéerne". Six concept pictures (front and back of the real suit; Codex's image tool at Medium from the suit's own
+reference renders, no lettering; captions set with Pillow) are in `artifacts/creator-skin-20261011/` and in
+`~/Desktop/Creator skin - ideer`: Field Recorder (my recommendation: it matches the game's REC camcorder HUD), Found
+Footage, Live Unit, Night Operator, Director's Cut, Spotlight. They are concepts, not the game's model: in 01 the
+hood came out white and the camera sits on the shoulder. Proposed, NOT built: a skin of a new kind that cannot be
+bought, given and taken back from the developers' menu beside GIVE RESEARCH TOKENS (a player on the server or a
+UserId; a saved list so it also reaches someone offline at their next join), with the menu showing whether the
+player owns Supporter. Open: which idea, and whether Supporter is a hard requirement.
