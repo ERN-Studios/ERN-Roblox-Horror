@@ -88,10 +88,10 @@ local PAGES = {
 			or "F switches it on and off. The battery runs down."},
 		{"3", "FOLLOW THE OBJECTIVE", "The panel on screen says what to do next. If something comes, hide or run."},
 	}},
-	-- PLAY_ROUTE_20261011: the page said "bring a team" and "walk to a gate"; a round can be started alone, and PLAY at
-	-- the top of the lobby's screen now takes you to a pad
+	-- PLAY_ROUTE_20261011: the page said "bring a team" and "walk to a gate"; a round can be started alone, and a marker
+	-- seen through the walls stands over a free LEVEL 1 pad (the PLAY button it once named is gone)
 	{kicker = "START A ROUND", title = "ALONE OR WITH FRIENDS", rows = {
-		{"1", "PRESS PLAY", "PLAY, at the top of the screen, sets you on a LEVEL 1 pad. Or walk: the gates are along the tunnel, and every level is open."},
+		{"1", "FIND A GATE", "The START LEVEL 1 HERE marker shows a free LEVEL 1 pad through the walls. The other gates are along the tunnel, and every level is open."},
 		{"2", "CREATE PARTY", "On the pad, press CREATE PARTY. You can play alone; friends step on the same pad to join you."},
 		{"3", "FRIENDS PAY OFF", "Each Roblox friend in your round gives you +10% tokens. If you go down, you watch your team."},
 	}},
@@ -430,7 +430,7 @@ local TOPICS = {
 		{"6  Playground", "Hide and seek. Touch the yellow post in three searches without being seen, then run for the exit."},
 	}},
 	{"PLAYING TOGETHER", {
-		{"Start a round", "Press PLAY in the lobby (or walk to a level gate and step on a pad), then CREATE PARTY. You can play alone."},
+		{"Start a round", "Walk to a level gate and step on a pad (START LEVEL 1 HERE marks a free one), then CREATE PARTY. You can play alone."},
 		{"Join one", "Step on a pad that someone else has opened before it launches."},
 		{"Friends", "Each Roblox friend in your round gives you +10% tokens."},
 		{"Leaving", "The LOBBY chip in the top left takes you back to the lobby during a round."},
@@ -704,43 +704,20 @@ task.spawn(function()
 	end
 end)
 
--- PLAY_ROUTE_20261011 (owner, after the UI review: "Fix alle phone og tablet issues her"; both reviews' first
--- finding). The lobby's screen offered the shop, upgrades, rewards, the wheel and music, and nothing that says where
--- the GAME is: three players in four left from the lobby, and on a phone 12% ever started a round. This is the missing
--- way in, on every device:
---   A PLAY button at the top of the screen for as long as the player stands in the lobby with nothing open. Pressing
---   it sets them on a free LEVEL 1 pad (the nearest one nobody is standing on), where the party dialog opens as it
---   does for anyone who walks there; the round still starts from CREATE PARTY.
---   A marker over that pad ("START HERE"), seen through the tunnel, for those who would rather walk.
--- It stands down near any pad (the queue's own lines take the top of the screen there), in a round, under the welcome
--- card, the wheel and every window that owns the screen. For a test: gui attribute `Go` (any change presses it).
+-- PLAY_ROUTE_20261011 / PLAY_BUTTON_REMOVED_20261011. The lobby said nothing about where the GAME is, so a marker
+-- stands over a free LEVEL 1 pad ("START LEVEL 1 HERE"), seen through the tunnel's walls. The PLAY button that set a
+-- player on that pad was at the top of the screen for half a day; the owner had it removed after streamers' feedback
+-- ("Remove the 'Play level 1 alone or with friends' but keep the visible through walls 'Start level 1 here'").
+-- The marker stands down near the pad itself, in a round, under the welcome card, the wheel and every window that owns
+-- the screen.
 task.spawn(function()
 	local playerGui = player:WaitForChild("PlayerGui")
-	local holder = Instance.new("ScreenGui")
-	holder.Name, holder.ResetOnSpawn, holder.IgnoreGuiInset, holder.DisplayOrder = "PlayRoute", false, true, 6
-	local button = Instance.new("TextButton")
-	button.Name, button.Text, button.AutoButtonColor, button.Visible = "Play", "", true, false
-	button.BackgroundColor3, button.BorderSizePixel = Color3.fromRGB(20, 62, 46), 0
-	button.Parent = holder
-	Instance.new("UICorner", button).CornerRadius = UDim.new(0, 10)
-	local line = Instance.new("UIStroke", button)
-	line.Color, line.Thickness, line.ApplyStrokeMode = GREEN, 2, Enum.ApplyStrokeMode.Border
-	local title = Instance.new("TextLabel")
-	title.Name, title.BackgroundTransparency, title.Font, title.TextColor3 = "Title", 1, Enum.Font.GothamBlack, PAPER
-	title.Text, title.AnchorPoint, title.Position = "\u{25B6}  PLAY LEVEL 1", Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 5)
-	title.Parent = button
-	local under = Instance.new("TextLabel")
-	under.Name, under.BackgroundTransparency, under.Font, under.TextColor3 = "Under", 1, Enum.Font.GothamMedium, Color3.fromRGB(176, 214, 196)
-	under.Text, under.AnchorPoint, under.Position = "ALONE OR WITH FRIENDS", Vector2.new(0.5, 1), UDim2.new(0.5, 0, 1, -5)
-	under.Parent = button
-	holder.Parent = playerGui
-
 	local marker = Instance.new("BillboardGui")
 	marker.Name, marker.ResetOnSpawn, marker.AlwaysOnTop, marker.LightInfluence = "PlayRouteMarker", false, true, 0
 	marker.Size, marker.StudsOffsetWorldSpace, marker.MaxDistance, marker.Enabled = UDim2.fromOffset(190, 54), Vector3.new(0, 10, 0), 700, false
 	local sign = Instance.new("TextLabel")
 	sign.BackgroundColor3, sign.BackgroundTransparency, sign.BorderSizePixel, sign.Size = Color3.fromRGB(12, 30, 24), 0.2, 0, UDim2.fromScale(1, 1)
-	sign.Font, sign.TextSize, sign.TextColor3, sign.Text = Enum.Font.GothamBlack, 18, GREEN, "START HERE\nLEVEL 1"
+	sign.Font, sign.TextSize, sign.TextColor3, sign.Text = Enum.Font.GothamBlack, 18, GREEN, "START LEVEL 1\nHERE"
 	sign.Parent = marker
 	Instance.new("UICorner", sign).CornerRadius = UDim.new(0, 8)
 	marker.Parent = playerGui
@@ -756,13 +733,12 @@ task.spawn(function()
 		end
 	end
 	local function flat(a, b) return Vector3.new(a.X - b.X, 0, a.Z - b.Z).Magnitude end
-	-- the nearest LEVEL 1 pad nobody else stands on (any LEVEL 1 pad if they are all taken), and how near ANY pad is
+	-- the nearest LEVEL 1 pad nobody else stands on (any LEVEL 1 pad if they are all taken)
 	local function choose(from)
-		local best, bestScore, nearestAny = nil, math.huge, math.huge
+		local best, bestScore = nil, math.huge
 		for _, pad in ipairs(pads) do
-			local away = flat(pad.Position, from)
-			nearestAny = math.min(nearestAny, away)
 			if pad:GetAttribute("LevelNumber") == 1 then
+				local away = flat(pad.Position, from)
 				local taken = false
 				for _, other in ipairs(Players:GetPlayers()) do
 					local root = other ~= player and other.Character and other.Character:FindFirstChild("HumanoidRootPart")
@@ -772,33 +748,8 @@ task.spawn(function()
 				if score < bestScore then best, bestScore = pad, score end
 			end
 		end
-		return best, nearestAny
+		return best
 	end
-	local target, hush = nil, 0
-	local function go()
-		local character = player.Character
-		local root = character and character:FindFirstChild("HumanoidRootPart")
-		if not target or not root or not button.Visible then return end
-		hush = os.clock() + 3
-		button.Visible = false
-		root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
-		character:PivotTo(CFrame.new(target.Position + Vector3.new(0, 4, 0)) * root.CFrame.Rotation)
-	end
-	button.Activated:Connect(go)
-	holder:GetAttributeChangedSignal("Go"):Connect(go)
-	local function place()
-		local device = UIDevice.Layout()
-		local wide, tall = 250, 48
-		if device.Class == "tablet" then wide, tall = 300, 56 elseif not device.IsTouch then wide, tall = 270, 48 end
-		wide = math.max(170, math.min(wide, device.Safe.Width - 340))    -- clear of the rail on the left and the token pill's column on the right
-		button.Size = UDim2.fromOffset(wide, tall)
-		title.Size, title.TextSize = UDim2.new(1, -16, 0, tall * 0.48), device.Class == "tablet" and 22 or 19
-		under.Size, under.TextSize = UDim2.new(1, -16, 0, tall * 0.3), device.Class == "tablet" and 13 or 11
-		button.Position = UIDevice.LocalPosition(holder, device.Safe.Left + (device.Safe.Width - wide) / 2, device.Safe.Top + 6)
-	end
-	place()
-	UIDevice.Changed:Connect(place)
-	local first = false
 	while true do
 		findPads()
 		local character = player.Character
@@ -806,17 +757,9 @@ task.spawn(function()
 		local inLobby = player:GetAttribute("InRound") ~= true and workspace:GetAttribute("ReservedRoundServer") ~= true
 			and player:GetAttribute("LuckyWheelOpen") ~= true and player:GetAttribute("LobbyLoadingDone") == true
 			and player:GetAttribute("WelcomeCardOpen") ~= true and not UIDevice.ScreenOwningModalOpen()
-		local nearest
-		if root then target, nearest = choose(root.Position) else target, nearest = nil, 0 end
-		local show = inLobby and root ~= nil and target ~= nil and nearest > 9 and os.clock() > hush
-		if button.Visible ~= show then button.Visible = show end
+		local target = root and choose(root.Position) or nil
 		marker.Adornee = target
 		marker.Enabled = inLobby and target ~= nil and root ~= nil and flat(root.Position, target.Position) > 9
-		-- a first visit gets a slow pulse on the frame; nobody else needs to be waved at
-		if player:GetAttribute("ZyntraFirstLogin") == true and not first then
-			first = true
-			TweenService:Create(line, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {Thickness = 4}):Play()
-		end
 		task.wait(0.4)
 	end
 end)
