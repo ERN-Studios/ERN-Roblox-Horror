@@ -772,6 +772,9 @@ local function introConditions(): boolean
 		and player:GetAttribute(BRIEFING_ATTRIBUTE) ~= true
 		and not modalBlocksStore()
 		and not UIDevice.ScreenOwningModalOpen()
+		-- NEW_PLAYER_TOKENS_20261011: the first-tokens card (First Entry Guide) goes first; this note follows it
+		and player:GetAttribute("WelcomeCardOpen") ~= true
+		and player:GetAttribute("ZyntraTokenGuide") ~= true
 end
 
 local function syncRewardsIntro()
@@ -800,7 +803,7 @@ local function introDismiss()
 end
 introGotIt.Activated:Connect(introDismiss)
 introGotItHit.Activated:Connect(introDismiss)
-for _, attribute in ipairs({"InRound", BRIEFING_ATTRIBUTE}) do
+for _, attribute in ipairs({"InRound", BRIEFING_ATTRIBUTE, "WelcomeCardOpen", "ZyntraTokenGuide"}) do
 	player:GetAttributeChangedSignal(attribute):Connect(syncRewardsIntro)
 end
 

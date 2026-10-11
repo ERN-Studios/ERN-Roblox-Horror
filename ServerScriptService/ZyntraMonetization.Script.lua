@@ -663,7 +663,9 @@ end
 local function newProfile()
 	return {
 		Version = 4,
-		Tokens = RunService:IsStudio() and Config.Studio.StartingTokens or 0,
+		-- NEW_PLAYER_TOKENS_20261011: a simulated first login in Studio starts where a live new player does
+		Tokens = RunService:IsStudio() and workspace:GetAttribute("DevSimulateFirstLogin") ~= true
+			and Config.Studio.StartingTokens or 0,
 		StaminaLevel = 0,
 		BatteryLevel = 0,
 		CompletedLevels = 0,
@@ -715,6 +717,8 @@ local function newProfile()
 			-- REWARDS_INTRO_20260922 (Trello MsEn2mya): the one-time Rewards/Wheel
 			-- note shown after the first real level completion.
 			RewardsIntroSeen = false,
+			-- NEW_PLAYER_TOKENS_20261011: the one-time card about a new player's first tokens
+			TokenGuideSeen = false,
 		},
 		Colors = {
 			Hazmat = colorData(Config.Colors.HazmatDefault),
@@ -885,6 +889,7 @@ local function normalizeProfile(data)
 	data.Settings.LobbyBriefingClaimId = data.Settings.LobbyBriefingPlayed == true
 		and type(claimId) == "string" and #claimId <= 128 and claimId or nil
 	data.Settings.RewardsIntroSeen = data.Settings.RewardsIntroSeen == true
+	data.Settings.TokenGuideSeen = data.Settings.TokenGuideSeen == true
 	-- Accessibility switches are a fixed, config-driven key set: a hand-edited
 	-- save can neither add keys nor push a non-boolean into a player attribute,
 	-- and an untouched switch lands on its documented default.
@@ -899,6 +904,7 @@ local function normalizeProfile(data)
 	data.Grants = type(data.Grants) == "table" and data.Grants or {}
 	data.Grants.Supporter = data.Grants.Supporter == true
 	data.Grants.AdvancedEquipment = data.Grants.AdvancedEquipment == true
+	data.Grants.WelcomeTokens = data.Grants.WelcomeTokens == true or nil
 	-- Receipt acknowledgement must be permanent. Roblox can retry any unresolved
 	-- PurchaseId long after the original purchase; pruning old IDs would allow a
 	-- delayed retry to grant the product and donation total a second time.
@@ -1152,6 +1158,8 @@ local function applyAttributes(player, data)
 	-- draws a slot; the profile packet carries the same numbers for the terminal.
 	player:SetAttribute("ZyntraSpeedPotions", data.Items.SpeedPotion)
 	player:SetAttribute("ZyntraRouteMarkers", data.Items.RouteMarker)
+	-- NEW_PLAYER_TOKENS_20261011: true while the first-tokens card is still owed to a player who was given them
+	player:SetAttribute("ZyntraTokenGuide", data.Grants.WelcomeTokens == true and data.Settings.TokenGuideSeen ~= true)
 	-- Accessibility switches are published under their own bare names because
 	-- that is what the client readers already ask for (ReduceCameraShake,
 	-- ReduceFlashing, CaptionsEnabled, DisableCaptions) -- do not prefix them.
@@ -2300,14 +2308,25 @@ local function loadProfile(player, loadState)
 		task.spawn(function()
 			for attempt = 1, 3 do
 				if not player.Parent or sessions[player] == nil then return end
+				-- NEW_PLAYER_TOKENS_20261011: the first tokens are banked in the same save, behind their own marker
+				local gift = math.max(0, math.floor(tonumber(Config.NewPlayerTokens) or 0))
 				local banked = mutate(player, function(data)
-					if data.WelcomeReentry ~= nil then return false end
-					data.WelcomeReentry = "granted"
-					data.ReentryCredits += 1
-					return true
+					local changed = false
+					if data.WelcomeReentry == nil then
+						data.WelcomeReentry = "granted"
+						data.ReentryCredits += 1
+						changed = true
+					end
+					if gift > 0 and data.Grants.WelcomeTokens ~= true then
+						data.Grants.WelcomeTokens = true
+						data.Tokens += gift
+						changed = true
+					end
+					return changed
 				end)
 				local loaded = sessions[player]
-				if banked or (loaded and loaded.data.WelcomeReentry ~= nil) then return end
+				if banked or (loaded and loaded.data.WelcomeReentry ~= nil
+					and (gift == 0 or loaded.data.Grants.WelcomeTokens == true)) then return end
 				task.wait(1.5 * attempt)
 			end
 			warn("[Zyntra] Welcome re-entry could not be banked for userId", player.UserId)
@@ -3833,6 +3852,18 @@ local function markRewardsIntroSeen(player)
 	end)
 end
 
+-- NEW_PLAYER_TOKENS_20261011. The same target-state write for the first-tokens card.
+local function markTokenGuideSeen(player)
+	local session = sessions[player]
+	if not session or session.closing then return end
+	if session.data.Settings.TokenGuideSeen == true then return end
+	mutateIdempotent(player, function(data)
+		if data.Settings.TokenGuideSeen == true then return false end
+		data.Settings.TokenGuideSeen = true
+		return true
+	end)
+end
+
 local function claimWheelPrize(player)
 	local session = sessions[player]
 	if not session or session.closing then return end
@@ -3971,6 +4002,7 @@ local WRITE_BEARING_ACTIONS = {
 	SpinDailyWheel = true,
 	ClaimWheelPrize = true,
 	MarkRewardsIntroSeen = true,
+	MarkTokenGuideSeen = true,
 	BuyItem = true,
 	BuySkin = true,
 	EquipSkin = true,
@@ -4140,6 +4172,8 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		claimWheelPrize(player)
 	elseif action == "MarkRewardsIntroSeen" then
 		markRewardsIntroSeen(player)
+	elseif action == "MarkTokenGuideSeen" then
+		markTokenGuideSeen(player)
 	elseif action == "BuyItem" then
 		buyItem(player, payload)
 	elseif action == "BuySkin" then

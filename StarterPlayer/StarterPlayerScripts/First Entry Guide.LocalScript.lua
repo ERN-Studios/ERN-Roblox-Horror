@@ -59,15 +59,6 @@ local AMBER = Color3.fromRGB(255, 203, 79)
 -- prices and rewards straight from the config
 local config = nil
 pcall(function() config = require(game:GetService("ReplicatedStorage"):WaitForChild("ZyntraConfig", 10)) end)
-local function find(root, key, depth)                               -- the first table that carries `key`, a few levels down
-	if type(root) ~= "table" or depth > 4 then return nil end
-	if root[key] ~= nil then return root end
-	for _, value in pairs(root) do
-		local found = find(value, key, depth + 1)
-		if found then return found end
-	end
-	return nil
-end
 local function costOf(name, fallback)
 	local found = nil
 	local function walk(node, depth)
@@ -79,7 +70,9 @@ local function costOf(name, fallback)
 	return found or fallback
 end
 local perClear = config and tonumber(config.LevelCompletionTokens) or 2
-local starting = (find(config, "StartingTokens", 0) or {}).StartingTokens or 25
+-- NEW_PLAYER_TOKENS_20261011: the card said "You start with 25", which was Studio's test balance; a live new player
+-- started with none. They are now given Config.NewPlayerTokens at a first login, and that is the number shown.
+local starting = math.max(0, math.floor(config and tonumber(config.NewPlayerTokens) or 0))
 local shield, potion, markers = costOf("Entity Shield", 5), costOf("Speed Potion", 3), costOf("Route Marker Pack", 2)
 
 local PAGES = {
@@ -103,8 +96,8 @@ local PAGES = {
 		{"3", "FRIENDS PAY OFF", "Each Roblox friend in your round gives you +10% tokens. If you go down, you watch your team."},
 	}},
 	{kicker = "RESEARCH TOKENS", title = "EARN THEM, SPEND THEM", accent = AMBER, rows = {
-		{"+", "EARN", ("You start with %d. Clear a level: +%d. More from DAILY REWARDS and the LUCKY WHEEL on the left."):format(starting, perClear)},
-		{"-", "SPEND IN THE SHOP", ("Entity Shield %d  ·  Speed Potion %d  ·  Route Markers %d. Open SHOPS on the left."):format(shield, potion, markers)},
+		{"+", "EARN", ((starting > 0 and ("You start with %d. "):format(starting) or "") .. "Clear a level: +%d. More from DAILY REWARDS and the LUCKY WHEEL on the left."):format(perClear)},
+		{"-", "SPEND IN THE SHOP", ("Entity Shield %d  ·  Speed Potion %d  ·  Route Markers %d. Open SHOP on the left."):format(shield, potion, markers)},
 		{"^", "UPGRADE FOR GOOD", "UPGRADES makes your stamina and your flashlight battery last longer, permanently."},
 	}, foot = "We are a team of only 2 people making this game. A like, a favourite or a note in our Discord goes a long way."},
 }
@@ -252,6 +245,153 @@ local function show()
 	end))
 end
 
+-- TOKEN_CARD_20261011 (owner: "nye spillere starter med et par tokens, og en pop up guide til hvordan man bruger dem
+-- og til hvad"). ZyntraMonetization banks Config.NewPlayerTokens at a first login and publishes ZyntraTokenGuide for
+-- as long as this card is owed. It comes once, at a quiet moment in the lobby: after the player's first round, or on
+-- arrival at a later visit, and never on top of the welcome card. OPEN SHOP and LATER both mark it seen
+-- (MarkTokenGuideSeen); a round that starts under it closes it unanswered, so it comes back afterwards.
+-- `workspace.DevShowTokenCard = true` (Studio) shows it regardless; the gui's attribute Press = "shop" / "later"
+-- answers it without an input device.
+local TOKEN_CARD_QUIET = 3
+local tokenCardOpen, tokenCardAnswered = false, false
+local function showTokens()
+	if tokenCardOpen or open or player:GetAttribute("InRound") == true or workspace:GetAttribute("ReservedRoundServer") == true then return end
+	tokenCardOpen = true
+	local items = type(config) == "table" and type(config.Items) == "table" and config.Items or {}
+	local shieldSeconds = type(config) == "table" and type(config.ProtectionItem) == "table" and tonumber(config.ProtectionItem.DurationSeconds) or 5
+	local potionItem, markerItem = items.SpeedPotion or {}, items.RouteMarker or {}
+	local ROWS = {
+		{shield, UIDevice.Caption("ENTITY SHIELD", "[Q]", "[D-PAD DOWN]"), ("%d tokens. The entity cannot take you for %d seconds."):format(shield, shieldSeconds)},
+		{potion, UIDevice.Caption("SPEED POTION", "[T]", "[D-PAD RIGHT]"), ("%d tokens. %d%% faster for %d seconds. Once per round."):format(
+			potion, math.floor(((tonumber(potionItem.SpeedMultiplier) or 1.3) - 1) * 100 + 0.5), tonumber(potionItem.DurationSeconds) or 6)},
+		{markers, UIDevice.Caption("ROUTE MARKERS", "[X]", "[RT]"), ("%d tokens. %d markers that show your team the way."):format(markers, tonumber(markerItem.PackSize) or 3)},
+	}
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "TokenCard"
+	gui.ResetOnSpawn, gui.IgnoreGuiInset, gui.DisplayOrder = false, true, 60
+	local shade = Instance.new("Frame")
+	shade.Name = "Shade"
+	shade.Size, shade.BackgroundColor3, shade.BackgroundTransparency, shade.BorderSizePixel = UDim2.fromScale(1, 1), Color3.new(0, 0, 0), 1, 0
+	shade.Active = true
+	shade.Parent = gui
+	local compact = UIDevice.Layout().Class == "phone"                  -- the welcome card's two layouts
+	local W, H = 580, compact and 336 or 414
+	local card = Instance.new("Frame")
+	card.Name = "Card"
+	card.AnchorPoint, card.Position, card.Size = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5), UDim2.fromOffset(W, H)
+	card.BackgroundColor3, card.BackgroundTransparency, card.BorderSizePixel = INK, 0.03, 0
+	card.Parent = shade
+	Instance.new("UICorner", card).CornerRadius = UDim.new(0, 16)
+	local stroke = Instance.new("UIStroke", card)
+	stroke.Color, stroke.Thickness, stroke.Transparency = AMBER, 2, 0.25
+	local scale = Instance.new("UIScale", card)
+	local function fit()
+		local view = UIDevice.Layout().Viewport
+		scale.Scale = math.clamp(math.min((view.X - 28) / W, (view.Y - 28) / H), 0.5, 1.3)
+	end
+	fit()
+	local connections = {UIDevice.Changed:Connect(fit)}
+	local function text(name, content, size, colour, x, y, w, h, font)
+		local item = Instance.new("TextLabel")
+		item.Name, item.Text, item.TextSize, item.TextColor3 = name, content, size, colour
+		item.Font = font or Enum.Font.GothamMedium
+		item.BackgroundTransparency, item.TextWrapped = 1, true
+		item.TextXAlignment, item.TextYAlignment = Enum.TextXAlignment.Left, Enum.TextYAlignment.Top
+		item.Position, item.Size = UDim2.fromOffset(x, y), UDim2.fromOffset(w, h)
+		item.Parent = card
+		return item
+	end
+	local function button(name, label, colour, textColour, x, anchor, width)
+		local item = Instance.new("TextButton")
+		item.Name, item.Text, item.TextSize, item.Font, item.TextColor3 = name, label, 18, Enum.Font.GothamBlack, textColour
+		item.AnchorPoint, item.Position, item.Size = Vector2.new(anchor, 1), UDim2.new(anchor, x, 1, compact and -10 or -18), UDim2.fromOffset(width, compact and 46 or 50)
+		item.BackgroundColor3, item.BorderSizePixel, item.AutoButtonColor = colour, 0, true
+		item.Parent = card
+		Instance.new("UICorner", item).CornerRadius = UDim.new(0, 10)
+		return item
+	end
+	text("Kicker", "ZYNTRA  //  A GIFT FOR NEW PLAYERS", 13, AMBER, 34, compact and 14 or 24, W - 68, 16, Enum.Font.Code)
+	text("Title", ("YOUR FIRST %d RESEARCH TOKENS"):format(starting), compact and 24 or 28, PAPER, 34, compact and 31 or 44, W - 68, compact and 28 or 36, Enum.Font.GothamBlack)
+	text("Lead", touch and "Spend them in the SHOP, on the left, before a round. In a round, tap an item on your screen to use it."
+		or "Spend them in the SHOP, on the left, before a round. In a round, press the item's key to use it.",
+		15, SOFT, 34, compact and 61 or 86, W - 68, 36)
+	local top, pitch = compact and 100 or 134, compact and 49 or 60
+	for index, row in ipairs(ROWS) do
+		local y = top + (index - 1) * pitch
+		local badge = Instance.new("TextLabel")
+		badge.Name = "Price" .. index
+		badge.Position, badge.Size = UDim2.fromOffset(34, y), UDim2.fromOffset(44, 44)
+		badge.BackgroundColor3, badge.BackgroundTransparency, badge.BorderSizePixel = AMBER, 0.82, 0
+		badge.Text, badge.TextSize, badge.TextColor3, badge.Font = tostring(row[1]), 24, AMBER, Enum.Font.GothamBlack
+		badge.Parent = card
+		Instance.new("UICorner", badge).CornerRadius = UDim.new(1, 0)
+		text("Head" .. index, row[2], compact and 17 or 19, PAPER, 94, y + (compact and 1 or 0), W - 128, 22, Enum.Font.GothamBold)
+		text("Text" .. index, row[3], 15, SOFT, 94, y + (compact and 22 or 24), W - 128, 20)
+	end
+	text("Foot", ("Clear a level: +%d tokens. REWARDS and WHEEL, on the left, give more."):format(perClear),
+		13, SOFT, 34, top + #ROWS * pitch + 2, W - 68, 18)
+	local later = button("Later", "LATER", Color3.fromRGB(30, 40, 36), PAPER, 34, 0, 120)
+	local shop = button("Shop", "OPEN SHOP", Color3.fromRGB(42, 150, 100), Color3.new(1, 1, 1), -34, 1, 230)
+	gui.Parent = player:WaitForChild("PlayerGui")
+	player:SetAttribute("WelcomeCardOpen", true)                        -- the lobby's own buttons stand down as for the welcome card
+	UIDevice.SuppressTouchMovement(true)
+	TweenService:Create(shade, TweenInfo.new(0.3), {BackgroundTransparency = 0.45}):Play()
+
+	local function close(answer)
+		if not tokenCardOpen then return end
+		tokenCardOpen = false
+		for _, connection in ipairs(connections) do connection:Disconnect() end
+		player:SetAttribute("WelcomeCardOpen", nil)
+		UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
+		gui:Destroy()
+		if not answer then return end
+		tokenCardAnswered = true
+		local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
+		local action = remotes and remotes:FindFirstChild("ZyntraAction")
+		if action and action:IsA("RemoteEvent") then action:FireServer("MarkTokenGuideSeen") end
+		if answer == "shop" then
+			local opener = player:WaitForChild("PlayerScripts"):FindFirstChild("ZyntraOpenTerminal")
+			if opener and opener:IsA("BindableEvent") then opener:Fire("Shop") end
+		end
+	end
+	later.Activated:Connect(function() close("later") end)
+	shop.Activated:Connect(function() close("shop") end)
+	table.insert(connections, gui:GetAttributeChangedSignal("Press"):Connect(function()
+		local press = gui:GetAttribute("Press")
+		if press == "shop" or press == "later" then close(press) end
+	end))
+	table.insert(connections, UserInputService.InputBegan:Connect(function(event)
+		local key = event.KeyCode
+		if key == Enum.KeyCode.Escape or key == Enum.KeyCode.ButtonB then close("later")
+		elseif key == Enum.KeyCode.Return or key == Enum.KeyCode.KeypadEnter or key == Enum.KeyCode.ButtonA then close("shop") end
+	end))
+	table.insert(connections, player:GetAttributeChangedSignal("InRound"):Connect(function()
+		if player:GetAttribute("InRound") == true then close(nil) end
+	end))
+end
+task.spawn(function()
+	local played, quietSince = false, nil
+	while not tokenCardAnswered do
+		task.wait(0.5)
+		local inRound = player:GetAttribute("InRound") == true
+		if inRound then played = true end
+		local owed = (RunService:IsStudio() and workspace:GetAttribute("DevShowTokenCard") == true)
+			or (starting > 0 and player:GetAttribute("ZyntraTokenGuide") == true
+				and (played or player:GetAttribute("ZyntraFirstLogin") == false))
+		local quiet = owed and not inRound and not tokenCardOpen and workspace:GetAttribute("ReservedRoundServer") ~= true
+			and player:GetAttribute("LobbyLoadingDone") == true and player:GetAttribute("WelcomeCardOpen") ~= true
+			and player:GetAttribute("DispatchBriefingOpen") ~= true and not UIDevice.ScreenOwningModalOpen()
+		if not quiet then
+			quietSince = nil
+		elseif not quietSince then
+			quietSince = os.clock()
+		elseif os.clock() - quietSince >= TOKEN_CARD_QUIET then
+			quietSince = nil
+			showTokens()
+		end
+	end
+end)
+
 -- HELP: every important part of the game, a few plain lines each ------------------------------------------------
 local KEYS = touch and {sneak = "the sneak button", sprint = "the sprint button", light = "the flashlight button", use = "Tap the prompt"}
 	or {sneak = "Hold Ctrl", sprint = "Hold Shift", light = "F", use = "Hold E"}
@@ -301,9 +441,9 @@ local TOPICS = {
 		{"Emergency Re-entry", "Puts you back in the round once. Your first one is free; more are offered for Robux when you go down."},
 	}},
 	{"TOKENS", {
-		{"Earning", ("You start with %d. Clearing a level gives +%d, more with friends."):format(starting, perClear)},
+		{"Earning", ((starting > 0 and ("New players are given %d. "):format(starting) or "") .. "Clearing a level gives +%d, more with friends."):format(perClear)},
 		{"Free tokens", "DAILY REWARDS and the LUCKY WHEEL on the left rail give tokens and items."},
-		{"Spending", "SHOPS for items, UPGRADES for permanent stamina and battery."},
+		{"Spending", "SHOP for items, UPGRADES for permanent stamina and battery."},
 	}},
 	{"ITEMS", {
 		{"Entity Shield", ("%d tokens. Saves you from one attack."):format(shield)},

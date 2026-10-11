@@ -1834,3 +1834,37 @@ computer".
   dance); paused while walking and resumed; no overlap at 1366 x 768, 1024 x 768, 844 x 390 or 568 x 320. NOT tested:
   two players watching each other, an R6 avatar, a real phone. The DJ booth itself is still for the team only, so
   the button only ever shows while one of the team has a track on.
+
+### Added 2026-10-11 (morning) - New players start with 5 tokens and get a card about them (in Studio, NOT published by this session)
+
+Owner: "Måske skal nye spillere starte med et par tokens, og en pop up guide til hvordan man bruger dem og til hvad?"
+and, to a proposal of 10, "Hvad med bare 5?".
+
+- **What was wrong before:** a live new player started with 0 tokens. The welcome card said "You start with 25",
+  which was `Config.Studio.StartingTokens`, Studio's own test balance. Nothing could be bought before three cleared
+  levels.
+- **NEW_PLAYER_TOKENS_20261011.** `ZyntraConfig.NewPlayerTokens = 5` (one number; 0 switches it off). At a first
+  login `ZyntraMonetization` banks it in the SAME save as the free re-entry, behind its own marker
+  `Grants.WelcomeTokens`, so it can never be banked twice and a failed save is retried (three tries, as before).
+  Accounts that already existed get nothing. 5 buys one Entity Shield, or a Speed Potion and a Route Marker Pack.
+- **The card (TOKEN_CARD_20261011, in `First Entry Guide`).** The server publishes the player attribute
+  `ZyntraTokenGuide` while the card is owed (tokens given, `Settings.TokenGuideSeen` not yet true). It comes once, in
+  the lobby, after three quiet seconds: after the player's first round in a first visit, or on arrival at a later
+  visit. Never in a round, on a round server, over the welcome card, the briefing or any window that owns the screen.
+  It names the three items with price and effect, how they are used (the key on a computer, "tap" on touch), and
+  where more tokens come from. OPEN SHOP (Enter) opens the shop; LATER (Esc) closes it; both send
+  `MarkTokenGuideSeen`. A round that starts under it closes it unanswered and it comes back afterwards. It raises
+  `WelcomeCardOpen` while it is up, so PLAY, DANCE and the thumbstick stand down as for the welcome card. The
+  REWARDS/WHEEL note after a first clear (`ZyntraStore`) now waits until this card has been answered.
+- **Wording corrected:** the welcome card's token page says "You start with 5"; Help says "New players are given 5";
+  "SHOPS" is "SHOP" in this script's texts, which is what the button on the rail reads.
+- **For a test:** `workspace.DevSimulateFirstLogin = true` in Edit now also starts the Studio profile at 0 tokens
+  instead of 25 (Studio still adds the Supporter pass's 10); `workspace.DevShowTokenCard = true` shows the card
+  regardless; `PlayerGui.TokenCard` attribute `Press` = "shop" / "later" answers it. Remove the attributes after.
+- **Tested:** `tools/tests/test_welcome_tokens.py` runs the real save code and the real first-login block against a
+  fake DataStore (once only, one write, retry after a failure, nothing for a returning player, 0 switches it off).
+  In Studio play: a simulated first login held 5 tokens and a free re-entry, the welcome card said 5, the card did
+  not come before a round and came after one, OPEN SHOP opened the shop and LATER closed it, neither came back; all
+  text fits at 844 x 390 touch and 1366 x 768 computer (`artifacts/ui-review-20261011/screen_tokencard_*`). NOT
+  tested: a real first login against the live DataStore (Studio does not use it), a real phone, and the last two
+  small edits after the pictures (the card is 10 px taller on a computer, "the SHOP").

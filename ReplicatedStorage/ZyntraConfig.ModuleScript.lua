@@ -12,6 +12,10 @@ return {
 	SupportLeaderboardRefreshSeconds = 90,
 	TokenPercentPerLevel = TokenPercentPerLevel,
 	LevelCompletionTokens = 2,
+	-- NEW_PLAYER_TOKENS_20261011 (owner: "nye spillere starter med et par tokens ... hvad med bare 5?"). Banked once,
+	-- at a first login, by ZyntraMonetization; the welcome card and the token card read the number from here. 5 buys
+	-- one Entity Shield, or a Speed Potion and a Route Marker Pack.
+	NewPlayerTokens = 5,
 	-- UPGRADE_COST_20260924 (Trello KF7FDmP1): each Stamina/Battery level costs
 	-- one token more than the last -- level 1 costs 1, level 10 costs 10. The
 	-- argument is the level the player holds NOW. Server and shop both read it.

@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-11T08:45:29.763187+00:00",
+  "capturedAtUtc": "2026-10-11T09:27:30.462879+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -301,8 +301,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 21638,
-      "sha256": "b52815530258702531d3365eee447c0361abdb2c2d62aac98001b830437e0202",
+      "bytes": 21957,
+      "sha256": "59560b50c77de126f0ba6ecaa1430585f6d98fb6a51e981e709e1d6adcb5931b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -2438,8 +2438,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 217012,
-      "sha256": "28cbca571e59b846b64fba8a42844380219748c0f08e27e092fb10f2c381899b",
+      "bytes": 218654,
+      "sha256": "b8ca4daa566c0211908c048c6822e5f57a59fcc7545422fbc14636204e1c899b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3460,8 +3460,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
-      "bytes": 40723,
-      "sha256": "aa6cce375acde2886b4eb3518b211353fcda701fd82a33a8c969bea264e96b9f",
+      "bytes": 49569,
+      "sha256": "d3b7dc34d2993ecd9b20fea6e02823639a1cefb59446874c6f3a57cd12f9a158",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4644,8 +4644,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 66559,
-      "sha256": "eab57a8fbe4755677f5652e2848d238ef668b1cdd00f873bcb44bce532082402",
+      "bytes": 66813,
+      "sha256": "c6f66f9bcbe34446155de53cd4d70f45e8cc6e3f0d0962d415f0edc624fb9a23",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
