@@ -2158,6 +2158,14 @@ anything."
   the east wall at z -800 with ten pressure plates (`PreviewShopPressurePlates`: Supporter, AdvancedEquipment,
   Tokens4, Tokens20, EmergencyReentry, ExpeditionPack, CosmeticEquipment, SpeedPotion, RouteMarker, EntityDetector);
   seven leaderboards; stage deck x 205..235, z -655..-632; spawn (220, 30.4, -860); the Reach's frame at z -621.
-- **My decision, to tell the owner:** the pictures he approved show THREE pads in a row per shop, so the build has
-  18 pads (three stations a level), not today's 24. Each level can then hold three parties forming at once
-  instead of four.
+- **Queue pads: FOUR a shop, in a row (corrected ten minutes into the build).** The pictures show three, but
+  `LobbyReimaginedPreview.QueueBridge` is built on exactly 24 zones, ids 101..124, four a level
+  (`level = floor((id - 101) / 4) + 1`), each a direct child of a bay Model with a `ChamberFloor` and a
+  `CircularBayDiameter`, with a `QueueRenderOwner` ObjectValue; GameManager keeps all admission. So the build has four
+  pads of radius 6.2 at z = shop centre -21, -7, +7, +21 (x 166 or 274), STATION 1..4. The first Codex run was stopped
+  by its process id and restarted with this.
+- **What "fully functional beside the old lobby" can and cannot mean:** the queue, the spawn and the Reach belong to
+  the ONE model named `LobbyReimaginedPreview` that GameManager, RoundUI and the queue controller look up by name.
+  A second lobby standing beside it can carry the same structure and attributes, ready to take over, and its own
+  lights, signs and furniture; its pads cannot admit players at the same time as the live ones without changing
+  GameManager. The switch-over is one step later, on the owner's word.
