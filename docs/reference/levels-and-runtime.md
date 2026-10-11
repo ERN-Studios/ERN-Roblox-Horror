@@ -1933,3 +1933,35 @@ in `EntityAI.refreshEyes`: red (the hunt colour, with its brighter light) whenev
 0.4, 2.0 and 3.8 s out of LURK, amber after (`artifacts/level1-entity-kill-20261011/live_red_eyes.jpg`). The old
 ground-pin kill is unchanged. Behind each red dot a little amber shows from the side: the eyes painted on the body's
 own texture.
+
+### Fixed 2026-10-11 (afternoon) - Level 2: water in the stair tunnel's ceiling and inside four pit shafts (in Studio, NOT published by this session)
+
+Owner: "I level 2 er der vand i loftet når man går ned af trapperne til sektion 2" and "Water is also clipping in some
+of the pits in sektion 2". The owner's "sektion 2" is A3, the pit hall, the second hall on the route (SPAWN, P0, A1,
+P1, A3, ...); the stair is P1.
+
+- **Cause.** The map's water is nine blocks of Terrain water (`L2NTerrainRegions` on the world model). Two are slabs
+  under a whole hall with only a film showing over the floor: A1 `[69072,224,-4 .. 69440,232,640]` (floor top 231.36,
+  water top 231.80) and A3 `[69468,164,152 .. 69900,176,392]` (floor 171.3). (1) P1 is a closed concrete tunnel that
+  leaves A1 through a stairwell at x 69244..69272 and runs on UNDER A1's floor; the slab had never been cut out of it,
+  so for the first 50 studs of the stair a sheet of water hung across the tunnel's top. (2) Pits 1, 2, 3 and 5 of A3
+  (shaft walls 0.7 stud) had slab water 0.8 to 2.0 studs from their inner faces, and Terrain water bulges about 2: it
+  showed inside the shafts at y 164..170. Pit 4 had 2.4 to 3.9 and was clean.
+- **Fix: `tools/level2_poolrooms/fix_water_20261011.luau`, run once in Edit** (marker attribute `L2WaterFix20261011` on
+  Terrain; one undo point before it). Tunnel: Air for x 69264..69324, y 200..232, z 256..288, and the hall's film put
+  back above the floor as a thin sheet (row 232..236, occupancy 0.06) over x 69272..69332, z 248..296. Pits: Air for
+  each shaft plus 3 studs (3.3 for pit 5) at y 158..180, which stays inside the 4.2-stud curb.
+- **How Terrain water is drawn (measured in Play; this is why a plain cut was not enough):** a water cell is drawn as
+  a sheet centred on the grid plane UNDER it, about 8 x occupancy thick; a full column therefore hangs 4 studs below
+  its lowest cell (the A1 slab's underside is at y 220, not 224); a single full row left over a void still hangs 3.8
+  studs under its plane. So a film that must stay above a floor with nothing below it has to be a thin sheet in the
+  row ABOVE (0.06 gives 231.77..232.23), and it must overlap the ordinary water round it by two cells: without the
+  overlap its edge shows from the hall as a bright dry band four studs wide.
+- **Visual meshes cannot be raycast** (`Visual` parts have CanQuery off): a ray test of "can water be seen" passes
+  through walls and over-reports. It is good for proving water is NOT there; whether something is visible needs a
+  picture.
+- **Checked in a fresh Play session after the fix:** from the stair, no ray up from a player's eyes meets water for
+  the first 90 studs (24 of 40 did before at the worst step) and six pictures along the stair show concrete only; the
+  hall's film over the tunnel shows no edge or patch; no ray from the middle of any of the five shafts meets water
+  before a wall (was 10, 31, 19, 0 and 47 of 384). Pictures: `artifacts/level2-water-20261011/`. NOT checked: the
+  other seven water blocks, a walk of the whole level, a phone.
