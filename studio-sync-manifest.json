@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-11T00:04:01.781512+00:00",
+  "capturedAtUtc": "2026-10-11T08:45:29.763187+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -4123,8 +4123,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Lobby DJ Client.LocalScript.lua",
-      "bytes": 18153,
-      "sha256": "aa1eee7ad6b6424994c0acf83501ef1da48033419a2648f446966a2c567667ee",
+      "bytes": 24745,
+      "sha256": "fa4c866161ed060437a51de920635a7e49429a011f62729fd77f11a2db481485",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

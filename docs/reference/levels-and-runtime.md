@@ -1810,3 +1810,27 @@ Owner, after the UI review (`docs/reference/ui-review-20261011.md`): "Fix alle p
   (its old purchase-caption failure is gone with the new wording), re-entry 37 + 5, friend boost 933, queue 100.
   `test_first_entry_guide.py` fails as before (its fake game has no TweenService). NOT tested: a real phone or
   tablet, a real purchase, two players.
+
+### Added 2026-10-11 (night) - Dancing while the DJ plays (in Studio, NOT published by this session)
+
+Owner: "Kan du tilføje en dance funktion til alle spillere, når DJ musik er i gang? De kan toggle, så en toggle knap
+der kommer op på deres skærm, en knap til mobile og tablet og en knap der viser hvilken tast den er koblet til på
+computer".
+
+- **DANCE_20261011, in `Lobby DJ Client`** (no server part). While `workspace.LobbyDJTrack` names a track, every
+  player in the lobby has a DANCE button: on a computer it reads "DANCE  [H]" and H toggles it (H was the one letter
+  no script in the game used); on touch it reads "DANCE" (`UIDevice.Caption` leaves the key out). On, it turns
+  magenta and reads DANCING, and the player's avatar plays one of Roblox's three stock dances (R15 507771019 /
+  507776043 / 507777268, R6 182435998 / 182436842 / 182436935), the next one each time it is switched on, at the
+  track's tempo (Bpm / 120, held to 0.8 to 1.25). Walking pauses it, standing still picks it up again; switching
+  off, entering a round, DJ mode or the end of the music stops it. The client plays the animation on its own
+  character, which replicates: the server's Animator listed the track in the test.
+- **Where it sits:** on a computer at the bottom centre over the NOW PLAYING line; on touch between the thumbstick
+  and the buttons (`Layout().Corridor`), and where that is too narrow (a 568 px phone) under the PLAY button, clear
+  of the thumbstick's ground. It hides under any window that owns the screen and under the welcome card.
+- **For a test:** `PlayerGui.LobbyDJ` attribute `DanceToggle` (any change presses it); the state is the player
+  attribute `LobbyDancing`; a track is put on from the server with `workspace.LobbyDJTrack` (and `LobbyDJStartedAt`).
+- **Tested in Studio play:** button shown with a track on and gone with it off; on, off and on again (the next
+  dance); paused while walking and resumed; no overlap at 1366 x 768, 1024 x 768, 844 x 390 or 568 x 320. NOT tested:
+  two players watching each other, an R6 avatar, a real phone. The DJ booth itself is still for the team only, so
+  the button only ever shows while one of the team has a track on.
