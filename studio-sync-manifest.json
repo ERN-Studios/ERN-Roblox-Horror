@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-11T11:04:12.484459+00:00",
+  "capturedAtUtc": "2026-10-11T11:10:37.110210+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -549,8 +549,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
-      "bytes": 72012,
-      "sha256": "0819f1e1b22153217e00c69d5559eae86eeb48608a4944cad6375b9a240b3f73",
+      "bytes": 72497,
+      "sha256": "48021fc000d962dafa270ad2af37f93611a031d9683544a830a6c09cb330a237",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

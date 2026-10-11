@@ -1923,3 +1923,13 @@ lyset" (= the victim's screen goes black). The one-off Codex Ultra job he ordere
   R6 or very tall or small avatars (the neck offset is measured per avatar, held to 0.6 to 1.8), a phone, and the
   last change to the narrowing's timing (numbers only). The hand-off into the walk afterwards was not judged by eye.
   The HUD stays on screen during the kill, as it did in the old one.
+
+### Changed 2026-10-11 (afternoon) - The stranglehold: red eyes for the whole kill (in Studio, NOT published by this session)
+
+Owner: "Du skal sørge for at den har røde øjne når den kvæler en". The eyes were already red while it hunts (ALERT,
+CHASE, TRACK, YELL) and amber otherwise, so a catch out of any other state kept them amber. CHOKE_RED_EYES_20261011
+in `EntityAI.refreshEyes`: red (the hunt colour, with its brighter light) whenever `EntityKillActive` is true and
+`EntityKillStyle` is "Choke"; back to the state's own colour when the kill ends. Played once: amber before, red at
+0.4, 2.0 and 3.8 s out of LURK, amber after (`artifacts/level1-entity-kill-20261011/live_red_eyes.jpg`). The old
+ground-pin kill is unchanged. Behind each red dot a little amber shows from the side: the eyes painted on the body's
+own texture.
