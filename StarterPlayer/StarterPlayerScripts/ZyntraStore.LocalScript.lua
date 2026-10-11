@@ -538,6 +538,10 @@ reentryButton.Activated:Connect(function()
 			showStatus("Emergency Re-entry Product ID is not configured yet.", "error")
 			return
 		end
+		-- BUY_IS_REENTER_20261011 (UI review: one offer said BUY CREDIT and the other REVIVE, and a purchase only
+		-- ever banked a credit that then had to be used with a second press, inside the same short window). A
+		-- re-entry bought from a death offer is used the moment it arrives; both offers now say BUY RE-ENTRY.
+		player:SetAttribute("ZyntraReentryBoughtAt", os.clock())
 		MarketplaceService:PromptProductPurchase(player, item.Id)
 	end
 end)
@@ -578,7 +582,14 @@ local function updateReentry()
 	player:SetAttribute("ZyntraFreeReentry", free)
 	reentryButton.Text = free and "YOU HAVE 1 FREE RE-ENTRY  //  USE IT" or credits > 0
 		and ("USE RE-ENTRY CREDIT  //  " .. credits .. " OWNED")
-		or (tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$  //  BUY CREDIT")
+		or ("BUY RE-ENTRY  //  " .. tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$")
+	do
+		local boughtAt = player:GetAttribute("ZyntraReentryBoughtAt")
+		if boughtAt and credits > 0 then                       -- BUY_IS_REENTER_20261011: the bought credit has landed
+			player:SetAttribute("ZyntraReentryBoughtAt", nil)
+			if os.clock() - boughtAt < 120 and shouldShow then actionRemote:FireServer("UseReentry") end
+		end
+	end
 	-- The smallest public surface for the card, which is in another script and
 	-- cannot see this file's `profile`, its live-fetched price or Config. Three
 	-- numbers, written from the one function every profile change, death,
@@ -738,6 +749,12 @@ introBody.TextWrapped = true
 local introGotIt = button(introCard, "GOT IT", UDim2.new(1, -24, 0, 30), UDim2.new(0, 12, 1, -40))
 introGotIt.Name = "GotIt"
 introGotIt.TextSize = 13
+-- TOUCH_TARGETS_20261011 (UI review): the button is 30 px high; on touch a clear 44 px strip over it takes the tap too
+local introGotItHit = Instance.new("TextButton")
+introGotItHit.Name, introGotItHit.Text, introGotItHit.BackgroundTransparency, introGotItHit.AutoButtonColor = "GotItHit", "", 1, false
+introGotItHit.AnchorPoint, introGotItHit.Position, introGotItHit.Size = Vector2.new(0, 1), UDim2.new(0, 12, 1, -6), UDim2.new(1, -24, 0, 44)
+introGotItHit.ZIndex, introGotItHit.Visible = introGotIt.ZIndex + 1, UIDevice.IsTouch()
+introGotItHit.Parent = introCard
 
 local function placeIntro()
 	-- Beside the rail, level with REWARDS, inside this gui's own offsets.
@@ -775,12 +792,14 @@ local function syncRewardsIntro()
 	end
 end
 
-introGotIt.Activated:Connect(function()
+local function introDismiss()
 	introDismissed = true
 	introArmSerial += 1
 	introCard.Visible = false
 	actionRemote:FireServer("MarkRewardsIntroSeen")
-end)
+end
+introGotIt.Activated:Connect(introDismiss)
+introGotItHit.Activated:Connect(introDismiss)
 for _, attribute in ipairs({"InRound", BRIEFING_ATTRIBUTE}) do
 	player:GetAttributeChangedSignal(attribute):Connect(syncRewardsIntro)
 end

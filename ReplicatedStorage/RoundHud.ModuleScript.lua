@@ -575,6 +575,25 @@ local function semantic(state)
 		state.Status and state.Status.Kind or "", statusText, state.Compass and state.Compass.State or "", tostring(state.Done)}, "|")
 end
 
+-- TOUCH_OBJECTIVE_20261011 (owner, after the UI review: "Fix alle phone og tablet issues her"). On a tablet 6% of
+-- players reached a first task against 25% on a computer, and on touch the objective was a pill 192 px wide whose
+-- directions vanished after six seconds. Three things changed for touch:
+--   SIZE: the pill is mounted at 1.3 of its design on a tablet and 1.0 on a phone at least 780 px wide (it was 0.8
+--     everywhere; a smaller phone keeps 0.8).
+--   THE NEXT ACTION STAYS: collapsed, the pill keeps its first guide line (the next thing to do) under the title. Only
+--     when even that does not fit does it fall back to the bare title (`Tight`).
+--   A TABLET DOES NOT COLLAPSE: it has the room, so the count, both lines and the status stay up.
+-- The count sits in the eyebrow on touch ("LEVEL 1 / 0/1" with a dot between): beside a long title in the bar the two ran into each other.
+local function objectiveScale(bundle)
+	if bundle ~= "HUD_Touch" then return 0.8 end
+	local info = UIDevice.Layout()
+	if info.Class == "tablet" then return 1.3 end
+	return (info.Safe.Right - info.Safe.Left) >= 780 and 1.0 or 0.8
+end
+local function staysExpanded()
+	return objective.Bundle == "HUD_Touch" and UIDevice.Layout().Class == "tablet"
+end
+
 local function placeObjective()
 	if not objective.Root then return end
 	local root = objective.Root
@@ -583,14 +602,17 @@ local function placeObjective()
 	local panel = UIDevice.TopRightPanel(width + rightInset, height)
 	-- Imported parts keep their mounted widths and text. If the full expansion cannot fit, the
 	-- compact touch bar stays in its safe corner; no extra fit-driven scale is applied.
-	if objective.Bundle == "HUD_Touch" and objective.Expanded and panel.Height < height then
-		objective.Expanded = false
+	if objective.Bundle == "HUD_Touch" and panel.Height < height and (objective.Expanded or not objective.Tight) then
+		-- TOUCH_OBJECTIVE_20261011: two steps down, not one: expanded -> the title and the next action -> the
+		-- bare title (Tight)
+		if objective.Expanded then objective.Expanded = false else objective.Tight = true end
 		local danger = objective.State.Status and objective.State.Status.Kind == "danger"
 		-- EXIT_COMPASS_20261010: the same collapsed rows renderObjective draws, so a pinned exit
 		-- compass does not blink off until the next render.
 		local pin = pinsExit(objective.State, objective.Parts, root)
 		for name, part in pairs(objective.Parts) do
 			part.Visible = name == "Bar" or (name == "StatusRow" and danger == true) or (name == "Compass" and pin)
+				or (name == "Guide1" and not objective.Tight and objective.State.Lines[1] ~= nil)
 		end
 		task.defer(placeObjective)
 		return
@@ -611,11 +633,13 @@ end
 
 local function expandObjective()
 	objective.Expanded = true
+	objective.Tight = false
 	objective.ExpandUntil = workspace:GetServerTimeNow() + 6
 	objective.Serial += 1
 	local serial = objective.Serial
 	task.delay(6, function()
 		if objective.Serial ~= serial then return end
+		if staysExpanded() then return end                      -- TOUCH_OBJECTIVE_20261011
 		if objective.State and objective.State.Status and objective.State.Status.Kind == "danger" then return end
 		objective.Expanded = false
 		if renderObjective then renderObjective() end
@@ -652,12 +676,13 @@ end
 
 local function mountObjective()
 	local bundle = RoundHud.Bundle()
-	if objective.Root and objective.Bundle ~= bundle then unmountObjective() end
+	local scale = objectiveScale(bundle)
+	if objective.Root and (objective.Bundle ~= bundle or objective.Scale ~= scale) then unmountObjective() end
 	if objective.Root then return true end
-	objective.Bundle = bundle
+	objective.Bundle, objective.Scale = bundle, scale
 	objective.Root, objective.Parts, objective.Attention = RoundHud.Stack(bundle,
 		bundle == "HUD_Touch" and "ObjectivePill" or "ObjectiveCard", RoundHud.Gui(),
-		{Name = "ObjectiveCard", Scale = 0.8, MinHeight = bundle == "HUD_Touch" and 44 or 0, Attention = {Hold = 6, Rest = 1}})
+		{Name = "ObjectiveCard", Scale = scale, MinHeight = bundle == "HUD_Touch" and 44 or 0, Attention = {Hold = 6, Rest = 1}})
 	if not objective.Root then return false end
 	-- Keep the authored padding and text widths, but share the eyebrow's right edge.
 	local header = objective.Parts.Bar or objective.Parts.Head
@@ -898,12 +923,15 @@ renderObjective = function()
 	local who = subject()
 	local viewKey = objective.Key .. ":" .. tostring(who and who.UserId) .. ":" .. tostring(player:GetAttribute("Spectating"))
 	if objective.ViewKey ~= viewKey then objective.ViewKey = viewKey; expandObjective() end
-	local expanded = not touch or objective.Expanded
+	-- (a tablet is expanded whatever the flag says: the flag may have been dropped while the layout was another device's)
+	local expanded = not touch or objective.Expanded or (staysExpanded() and not objective.Tight and objective.Fits ~= false)
+	-- TOUCH_OBJECTIVE_20261011: collapsed on touch, the next action stays under the title while it fits
+	local brief = touch and not expanded and not objective.Tight
 	local counter = type(state.Count) == "number" and type(state.Goal) == "number" and state.Goal > 0
 	for name, part in pairs(parts) do
 		if name == "Head" or name == "Bar" then part.Visible = true
 		elseif name == "Counter" or name == "Progress" then part.Visible = expanded and counter
-		elseif name == "Guide1" then part.Visible = expanded and state.Lines[1] ~= nil
+		elseif name == "Guide1" then part.Visible = (expanded or brief) and state.Lines[1] ~= nil
 		elseif name == "Guide2" then part.Visible = expanded and state.Lines[2] ~= nil
 		elseif name == "StatusRow" then part.Visible = state.Status ~= nil and (expanded or state.Status.Kind == "danger")
 		-- EXIT_COMPASS_20261010: `expanded` is only ever false on touch, where a locked exit keeps
@@ -915,10 +943,12 @@ renderObjective = function()
 	if player:GetAttribute("Spectating") == true and who then
 		eyebrow = "WATCHING " .. string.upper(who.DisplayName or who.Name) .. " \u{B7} LEVEL " .. state.Level
 	end
+	-- TOUCH_OBJECTIVE_20261011: on touch the count rides in the eyebrow; in the bar it ran into a long title
+	if touch and counter then eyebrow = eyebrow .. "  \u{B7}  " .. state.Count .. "/" .. state.Goal end
 	textAt(root, "Eyebrow", eyebrow, player:GetAttribute("Spectating") == true and P.RailTeal or UIStyle.Hud.Accent[state.Level])
 	textAt(root, "Title", state.Title)
 	local doneTint = state.Done and workspace:GetServerTimeNow() - (objective.ChangedAt or 0) < 6
-	textAt(root, "Count", counter and (state.Count .. "/" .. state.Goal) or "", doneTint and P.RailTeal or P.Cream)
+	textAt(root, "Count", counter and not touch and (state.Count .. "/" .. state.Goal) or "", doneTint and P.RailTeal or P.Cream)
 	textAt(root, "CountTag", state.Tag or "")
 	local fill = Binder.at(root, "Progress/Track/Fill")
 	if fill then
@@ -926,7 +956,7 @@ renderObjective = function()
 		if doneTint then fill.BackgroundColor3 = P.RailTeal end
 	end
 	for index = 1, 2 do textAt(root, "Guide" .. index .. "/Line", state.Lines[index]) end
-	if objective.OrderHit then objective.OrderHit.Visible = expanded and type(state.OnOrderActivate) == "function" end
+	if objective.OrderHit then objective.OrderHit.Visible = (expanded or brief) and type(state.OnOrderActivate) == "function" end
 	if state.Status then
 		local color = state.Status.Kind == "danger" and P.Coral or state.Status.Kind == "warning" and P.Amber or P.Sage
 		textAt(root, "StatusRow/Label", state.Status.Text, color)

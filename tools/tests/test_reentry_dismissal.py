@@ -239,7 +239,7 @@ expect(asked[1][2], 'Product', 'as a developer product')
 expect(player:GetAttribute('ZyntraReentryPrice'), 35, 'and publishes the live price for PARTY DOWN')
 profile.ReentryCredits = 0
 updateReentry()
-expect(reentryButton.Text, '35 R$  //  BUY CREDIT', 'the modal shows the live price')
+expect(reentryButton.Text, 'BUY RE-ENTRY  //  35 R$', 'the modal shows the live price')
 print('Re-entry live price: ' .. checks .. ' checks passed')
 '''
 

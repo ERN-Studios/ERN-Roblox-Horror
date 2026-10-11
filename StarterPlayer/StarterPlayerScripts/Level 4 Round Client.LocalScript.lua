@@ -740,8 +740,11 @@ local function placeForDevice()
     for i, key in ipairs(keypadKeys) do if selected == key then selectionIndex = i end end
     if keypad then keypad:Destroy() end
     if noteCard then noteCard:Destroy() end
-    local keypadScale = math.min(touch and 300/330 or 1, (layout.Safe.Height - 16)/330, (layout.Safe.Width - 16)/240)
-    local noteScale = math.min(touch and 340/380 or 1, (layout.Safe.Height - 16)/270, (layout.Safe.Width - 16)/380)
+    -- TOUCH_TARGETS_20261011 (UI review): touch was held to 300/330 of the design whatever the screen, which made the
+    -- keypad's 38 px keys 34.5 px high on a tablet with room to spare. Touch may now draw both cards up to 1.25 times
+    -- the design (keys 47 px), still never larger than the safe screen; a phone is bounded by its height as before.
+    local keypadScale = math.min(touch and 1.25 or 1, (layout.Safe.Height - 16)/330, (layout.Safe.Width - 16)/240)
+    local noteScale = math.min(touch and 1.25 or 1, (layout.Safe.Height - 16)/270, (layout.Safe.Width - 16)/380)
     keypad = RoundHud.Mount("HUD_Screens", "Keypad", gui, {Name = "Keypad", Scale = keypadScale, Touch = touch})
     noteCard = RoundHud.Mount("HUD_Screens", "Level4Note", gui, {Name = "NoteCard", Scale = noteScale, Touch = touch})
     -- Missing imported components disable only these optional interactions; world rendering still starts.

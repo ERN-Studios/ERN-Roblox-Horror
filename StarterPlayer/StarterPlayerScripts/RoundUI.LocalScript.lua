@@ -558,6 +558,28 @@ label.Font = Enum.Font.GothamMedium
 label.TextScaled = false
 label.TextSize = 26
 label.TextWrapped = true
+-- TOUCH_STATUS_FITS_20261011 (phone review: the queue's status lines are 620 and 700 px wide whatever the screen, and
+-- a 568 px phone lost 66 px of them on each side). The label is never wider than the safe screen, and its text
+-- shrinks to fit the box it is given instead of running out of it. Every writer of label.Size and label.TextSize
+-- stays as it is: the limit rides on top.
+do
+	local widest = Instance.new("UISizeConstraint")
+	widest.Name = "FitsTheScreen"
+	widest.Parent = label
+	local smallest = Instance.new("UITextSizeConstraint")
+	smallest.Name = "FitsTheBox"
+	smallest.MinTextSize, smallest.MaxTextSize = 12, label.TextSize
+	smallest.Parent = label
+	label.TextScaled = true
+	label:GetPropertyChangedSignal("TextSize"):Connect(function() smallest.MaxTextSize = math.max(12, label.TextSize) end)
+	label:GetPropertyChangedSignal("TextScaled"):Connect(function() if not label.TextScaled then label.TextScaled = true end end)
+	local function fit()
+		local safe = UIDevice.Layout().Safe
+		widest.MaxSize = Vector2.new(math.max(200, safe.Width - 24), math.huge)
+	end
+	fit()
+	UIDevice.Changed:Connect(fit)
+end
 label.TextYAlignment = Enum.TextYAlignment.Center
 label.TextColor3 = Color3.fromRGB(235, 232, 222)
 label.Text = ""
@@ -654,7 +676,9 @@ local queueTitle = queueText("HostTitle", "CREATE YOUR PARTY", UDim2.new(0.06, 0
 queueTitle.TextXAlignment = Enum.TextXAlignment.Center
 local queueStationLabel = queueText("StationLabel", "STATION", UDim2.new(0.10, 0, 0, 57), UDim2.new(0.80, 0, 0, 24), 18, Color3.fromRGB(151, 171, 155))
 queueStationLabel.TextXAlignment = Enum.TextXAlignment.Center
-local queueSizeCaption = queueText("SizeCaption", "MAXIMUM PLAYERS", UDim2.new(0.08, 0, 0, 94), UDim2.new(0.84, 0, 0, 24), 19, Color3.fromRGB(218, 207, 153))
+-- SOLO_WORDING_20261011 (both reviews): "MAXIMUM PLAYERS 6" read as "you need six". A round starts with whoever is on
+-- the pad, one player included.
+local queueSizeCaption = queueText("SizeCaption", "MAX PLAYERS  \u{B7}  YOU CAN PLAY ALONE", UDim2.new(0.08, 0, 0, 94), UDim2.new(0.84, 0, 0, 24), 19, Color3.fromRGB(218, 207, 153))
 local queueMinus = queueButton("DecreasePlayers", "−", UDim2.new(0.10, 0, 0, 124), UDim2.new(0.20, 0, 0, 52))
 local queueCount = queueText("PlayerCount", "6", UDim2.new(0.37, 0, 0, 122), UDim2.new(0.26, 0, 0, 56), 44, Color3.fromRGB(235, 240, 225))
 queueCount.TextXAlignment = Enum.TextXAlignment.Center
@@ -789,9 +813,16 @@ local function applyQueueDeviceLayout()
   -- expressed in. Written as a raw offset the panel landed a whole topbar high:
   -- measured on a Galaxy A06 the modal resolved to y -50..214 with its Close
   -- button at y -44..0, i.e. entirely underneath the Roblox topbar.
+  -- TABLET_PARTY_20261011 (UI review): a tablet was given the phone's 380 x 280 dialog with 10 to 12 px text in the
+  -- middle of a 1024 px screen. The same arrangement, drawn larger: up to 1.4 times, as far as the area allows.
+  local tabletScale = queueLayout.Class == "tablet" and math.clamp(math.min(area.Width / queueWidth, area.Height / queueHeight), 1, 1.4) or 1
+  do
+   local scaler = queuePanel:FindFirstChild("TabletScale") or Instance.new("UIScale")
+   scaler.Name, scaler.Scale, scaler.Parent = "TabletScale", tabletScale, queuePanel
+  end
   queuePanel.Position = UIDevice.LocalPosition(gui,
-   math.floor(area.Left + (area.Width - queueWidth) * 0.5),
-   math.floor(area.Top + (area.Height - queueHeight) * 0.5))
+   math.floor(area.Left + (area.Width - queueWidth * tabletScale) * 0.5),
+   math.floor(area.Top + (area.Height - queueHeight * tabletScale) * 0.5))
   -- Do not place a full-screen input-catching box over the mobile controls --
   -- and do not let the panel itself sink touches meant for them either. Its
   -- BUTTONS stay Active and tappable; the frame behind them does not.
@@ -897,6 +928,10 @@ local function applyQueueDeviceLayout()
   -- to be drawn into 330 and overlap itself.
   local queueWidth = math.clamp(math.floor(queueLayout.Width * .86), 320, 470)
   local queueHeight = math.clamp(math.floor(queueLayout.Height * .82), 330, 370)
+  do
+   local scaler = queuePanel:FindFirstChild("TabletScale")                  -- TABLET_PARTY_20261011: the touch branch's
+   if scaler then scaler.Scale = 1 end
+  end
   queueConstraint.MinSize = Vector2.new(queueWidth, queueHeight)
   queueConstraint.MaxSize = Vector2.new(queueWidth, queueHeight)
   queuePanel.Size = UDim2.fromOffset(queueWidth, queueHeight)
@@ -4248,6 +4283,12 @@ do
 			and (workspace:GetAttribute("RoundActive") == true or player:GetAttribute("Level6PlaygroundPreview") == true)
 			and player:GetAttribute("ZyntraReentryUsed") ~= true
 		local credits = tonumber(player:GetAttribute("ZyntraReentryCredits")) or 0
+		-- BUY_IS_REENTER_20261011: a re-entry bought from this card is used the moment the credit arrives (it used to
+		-- be banked, to be used with a second press inside the same fifteen seconds)
+		if credits > 0 and pd.waiting and pd.boughtAt and os.clock() - pd.boughtAt < 120 then
+			pd.boughtAt, pd.lastUse = nil, os.clock()
+			dispatchAudio.action:FireServer("UseReentry")
+		end
 		if credits > 0 then pd.waiting = false end
 		pd.reentry.Visible = eligible
 		pd.parts.Reentry.Visible = eligible
@@ -4257,8 +4298,8 @@ do
 		-- The HUD feed is stood down while a death card covers the screen, so the card's own button carries the news.
 		local free = credits > 0 and player:GetAttribute("ZyntraFreeReentry") == true
 		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or free and "YOU HAVE 1 FREE RE-ENTRY \u{B7} USE IT" or credits > 0
-			and ("USE CREDIT \u{B7} " .. credits .. " OWNED")
-			or ("REVIVE \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
+			and ("USE RE-ENTRY \u{B7} " .. credits .. " OWNED")
+			or ("BUY RE-ENTRY \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
 		local colour = credits > 0 and Color3.fromRGB(68,221,196) or Color3.fromRGB(232,160,36)
 		for _, node in ipairs(pd.reentry:GetDescendants()) do
 			if node:IsA("UIStroke") then node.Color = colour end
@@ -4296,6 +4337,7 @@ do
 			return
 		end
 		pd.waiting = true
+		pd.boughtAt = os.clock()
 		pd.refresh()
 		MarketplaceService:PromptProductPurchase(player, productId)
 	end

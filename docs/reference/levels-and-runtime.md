@@ -1773,3 +1773,40 @@ få det til at fade ud og være næsten helt mute når man er i den anden ende v
   was still there. `/tmp/l1batch` had been cleared by the system: it is a link to
   `~/Projects/stayquiet-session-tools/l1batch` now. A backgrounded shell that still holds a `qa.py stop` will stop
   the NEXT play session when it gets there.
+
+### Changed 2026-10-11 (night) - Phone and tablet: a PLAY button in the lobby, an objective that stays, a party dialog and a welcome card that fit (in Studio, NOT published by this session)
+
+Owner, after the UI review (`docs/reference/ui-review-20261011.md`): "Fix alle phone og tablet issues her."
+
+- **PLAY_ROUTE_20261011 (`First Entry Guide`).** The lobby's screen had no way to the game. A PLAY LEVEL 1 button
+  stands at the top of the screen in the lobby on every device (not near a pad, in a round, or under a window);
+  pressing it sets the player on the nearest LEVEL 1 pad nobody stands on, where the party dialog opens as for
+  anyone who walks there. A "START HERE / LEVEL 1" marker hangs over that pad. The welcome card's third page and the
+  Help now say so. For a test: `PlayerGui.PlayRoute` attribute `Go`.
+- **TOUCH_OBJECTIVE_20261011 (`RoundHud`).** The touch objective is mounted at 1.3 of its design on a tablet and 1.0
+  on a phone 780 px wide or more (0.8 before); collapsed, it keeps the first guide line (the next action); a tablet
+  does not collapse; the count rides in the eyebrow ("LEVEL 1 . 0/1"). The module must stay ASCII
+  (`test_round_hud.py`).
+- **Party dialog (`RoundUI`).** TABLET_PARTY: on a tablet the touch dialog is drawn up to 1.4 times larger (a
+  `UIScale` named TabletScale). SOLO_WORDING: "MAX PLAYERS . YOU CAN PLAY ALONE". TOUCH_STATUS_FITS: the queue's
+  status label is never wider than the safe screen and its text shrinks to its box (it was 620 and 700 px fixed).
+- **PHONE_WELCOME_20261011.** On a phone the welcome card is laid out 340 high (452 elsewhere) with the same text
+  sizes, so an 844 x 390 phone shows it at about full size instead of 0.8. The card waits for any window that owns
+  the screen to close, and stands touch movement down while it is up.
+- **TOUCH_TARGETS_20261011.** Help and Badges are 44 px high on touch (30); the first-clear card's GOT IT has a 44 px
+  hit strip; Level 4's keypad and note may draw up to 1.25 times their design on touch (they were held to 0.91, the
+  keys 34.5 px high).
+- **BUY_IS_REENTER_20261011.** Both death offers say BUY RE-ENTRY (one said BUY CREDIT, the other REVIVE), and a
+  re-entry bought from either is used the moment the credit arrives; it used to be banked for a second press.
+- **Help texts:** items on touch are SHIELD and KIT (it said every item has its own button); hold LIGHT to focus;
+  starting a round names PLAY and playing alone; the first re-entry is free.
+- **NOT done, on purpose:** the friend line's "INVITE" label. `test_friend_boost.py` holds the owner's own words for
+  that line (2026-10-07: "very subtle", one short line 104 px wide), so my change was taken back.
+- **Tested in Studio** with `tools/mobile_qa/ui_audit.py` at 568 x 320, 844 x 390 and 1024 x 768: no overlap and
+  nothing off-screen from the new button; PLAY moved the test player 53 studs onto pad 102 and the dialog opened;
+  the round HUD kept "Find a fuse relay under the amber lights." on the phone and both lines on the tablet. The
+  welcome card has to be started AS a phone to be judged (`workspace.ForceTouchUI` and `UIRegressionViewport` set
+  in Edit before play, removed after): it reads its device once, when it opens. Tests: round HUD 185, HUD B8 1228
+  (its old purchase-caption failure is gone with the new wording), re-entry 37 + 5, friend boost 933, queue 100.
+  `test_first_entry_guide.py` fails as before (its fake game has no TweenService). NOT tested: a real phone or
+  tablet, a real purchase, two players.

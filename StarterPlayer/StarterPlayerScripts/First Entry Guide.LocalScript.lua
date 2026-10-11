@@ -95,9 +95,11 @@ local PAGES = {
 			or "F switches it on and off. The battery runs down."},
 		{"3", "FOLLOW THE OBJECTIVE", "The panel on screen says what to do next. If something comes, hide or run."},
 	}},
-	{kicker = "PLAY TOGETHER", title = "BRING A TEAM", rows = {
-		{"1", "WALK TO A LEVEL GATE", "The gates are along the tunnel. Every level is open; LEVEL 1 is the place to start."},
-		{"2", "STEP ON A PAD", "Choose 1 to 6 players and press CREATE PARTY. Friends step on the same pad to join."},
+	-- PLAY_ROUTE_20261011: the page said "bring a team" and "walk to a gate"; a round can be started alone, and PLAY at
+	-- the top of the lobby's screen now takes you to a pad
+	{kicker = "START A ROUND", title = "ALONE OR WITH FRIENDS", rows = {
+		{"1", "PRESS PLAY", "PLAY, at the top of the screen, sets you on a LEVEL 1 pad. Or walk: the gates are along the tunnel, and every level is open."},
+		{"2", "CREATE PARTY", "On the pad, press CREATE PARTY. You can play alone; friends step on the same pad to join you."},
 		{"3", "FRIENDS PAY OFF", "Each Roblox friend in your round gives you +10% tokens. If you go down, you watch your team."},
 	}},
 	{kicker = "RESEARCH TOKENS", title = "EARN THEM, SPEND THEM", accent = AMBER, rows = {
@@ -119,7 +121,11 @@ local function show()
 	shade.Size, shade.BackgroundColor3, shade.BackgroundTransparency, shade.BorderSizePixel = UDim2.fromScale(1, 1), Color3.new(0, 0, 0), 1, 0
 	shade.Active = true
 	shade.Parent = gui
-	local W, H = 620, 452
+	-- PHONE_WELCOME_20261011 (phone review: the card is drawn for 620 x 452 and scaled to the screen's HEIGHT, so on an
+	-- 844 x 390 phone its 15 px lines were 12 px, and under 10 on a small one). A phone gets the same card laid out
+	-- 340 high (tighter rows, the same text sizes), which a landscape phone shows at about full size.
+	local compact = UIDevice.Layout().Class == "phone"
+	local W, H = 620, compact and 340 or 452
 	local card = Instance.new("Frame")
 	card.Name = "Card"
 	card.AnchorPoint, card.Position, card.Size = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5), UDim2.fromOffset(W, H)
@@ -148,23 +154,23 @@ local function show()
 	local function button(name, label, colour, textColour, x, anchor, width)
 		local item = Instance.new("TextButton")
 		item.Name, item.Text, item.TextSize, item.Font, item.TextColor3 = name, label, 18, Enum.Font.GothamBlack, textColour
-		item.AnchorPoint, item.Position, item.Size = Vector2.new(anchor, 1), UDim2.new(anchor, x, 1, -18), UDim2.fromOffset(width, 50)
+		item.AnchorPoint, item.Position, item.Size = Vector2.new(anchor, 1), UDim2.new(anchor, x, 1, compact and -10 or -18), UDim2.fromOffset(width, compact and 46 or 50)
 		item.BackgroundColor3, item.BorderSizePixel, item.AutoButtonColor = colour, 0, true
 		item.Parent = card
 		Instance.new("UICorner", item).CornerRadius = UDim.new(0, 10)
 		return item
 	end
-	local kicker = text(card, "Kicker", "", 13, GREEN, 34, 24, 420, 16, Enum.Font.Code)
-	local title = text(card, "Title", "", 30, PAPER, 34, 44, W - 68, 38, Enum.Font.GothamBlack)
+	local kicker = text(card, "Kicker", "", 13, GREEN, 34, compact and 14 or 24, 420, 16, Enum.Font.Code)
+	local title = text(card, "Title", "", compact and 25 or 30, PAPER, 34, compact and 32 or 44, W - 68, compact and 30 or 38, Enum.Font.GothamBlack)
 	local skip = Instance.new("TextButton")                             -- always there, top right
 	skip.Name, skip.Text, skip.TextSize, skip.Font, skip.TextColor3 = "Skip", touch and "SKIP" or "SKIP  [ESC]", 13, Enum.Font.GothamBold, SOFT
-	skip.AnchorPoint, skip.Position, skip.Size = Vector2.new(1, 0), UDim2.new(1, -18, 0, 16), UDim2.fromOffset(touch and 84 or 112, touch and 40 or 30)
+	skip.AnchorPoint, skip.Position, skip.Size = Vector2.new(1, 0), UDim2.new(1, -18, 0, compact and 8 or 16), UDim2.fromOffset(touch and 84 or 112, touch and 44 or 30)
 	skip.BackgroundColor3, skip.BackgroundTransparency, skip.BorderSizePixel = Color3.fromRGB(30, 40, 36), 0.2, 0
 	skip.Parent = card
 	Instance.new("UICorner", skip).CornerRadius = UDim.new(0, 8)
 	local body = Instance.new("Frame")
 	body.Name, body.BackgroundTransparency = "Body", 1
-	body.Position, body.Size = UDim2.fromOffset(0, 100), UDim2.fromOffset(W, 250)
+	body.Position, body.Size = UDim2.fromOffset(0, compact and 72 or 100), UDim2.fromOffset(W, 250)
 	body.Parent = card
 	local back = button("Back", "BACK", Color3.fromRGB(30, 40, 36), PAPER, 34, 0, 120)
 	local nextButton = button("Next", "NEXT", Color3.fromRGB(42, 150, 100), Color3.new(1, 1, 1), -34, 1, 230)
@@ -173,7 +179,7 @@ local function show()
 		local dot = Instance.new("Frame")
 		dot.Name, dot.BorderSizePixel = "Dot" .. index, 0
 		dot.AnchorPoint, dot.Size = Vector2.new(0.5, 0.5), UDim2.fromOffset(9, 9)
-		dot.Position = UDim2.new(0.5, (index - (#PAGES + 1) / 2) * 20 - 40, 1, -43)
+		dot.Position = UDim2.new(0.5, (index - (#PAGES + 1) / 2) * 20 - 40, 1, compact and -33 or -43)
 		dot.Parent = card
 		Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
 		dots[index] = dot
@@ -187,7 +193,7 @@ local function show()
 		title.Text = data.title
 		stroke.Color = accent
 		for index, row in ipairs(data.rows) do
-			local y = (index - 1) * 72
+			local y = (index - 1) * (compact and 60 or 72)
 			local badge = Instance.new("TextLabel")
 			badge.Name = "Badge" .. index
 			badge.Position, badge.Size = UDim2.fromOffset(34, y), UDim2.fromOffset(44, 44)
@@ -195,10 +201,10 @@ local function show()
 			badge.Text, badge.TextSize, badge.TextColor3, badge.Font = row[1], 24, accent, Enum.Font.GothamBlack
 			badge.Parent = body
 			Instance.new("UICorner", badge).CornerRadius = UDim.new(1, 0)
-			text(body, "Head" .. index, row[2], 19, PAPER, 94, y, W - 128, 22, Enum.Font.GothamBold)
-			text(body, "Text" .. index, row[3], 15, SOFT, 94, y + 24, W - 128, 40)
+			text(body, "Head" .. index, row[2], compact and 17 or 19, PAPER, 94, y, W - 128, 22, Enum.Font.GothamBold)
+			text(body, "Text" .. index, row[3], 15, SOFT, 94, y + (compact and 21 or 24), W - 128, compact and 36 or 40)
 		end
-		if data.foot then text(body, "Foot", data.foot, 13, SOFT, 34, 216, W - 68, 34) end
+		if data.foot then text(body, "Foot", data.foot, 13, SOFT, 34, compact and 180 or 216, W - 68, compact and 30 or 34) end
 		for index, dot in ipairs(dots) do
 			dot.BackgroundColor3 = index == page and accent or Color3.fromRGB(70, 84, 78)
 		end
@@ -208,6 +214,8 @@ local function show()
 	draw()
 	gui.Parent = player:WaitForChild("PlayerGui")
 	player:SetAttribute("WelcomeCardOpen", true)
+	-- WELCOME_OWNS_THE_SCREEN_20261011 (UI review): the thumbstick and RUN stayed live under the card
+	UIDevice.SuppressTouchMovement(true)
 	TweenService:Create(shade, TweenInfo.new(0.3), {BackgroundTransparency = 0.45}):Play()
 
 	local connections = {resized}
@@ -216,6 +224,7 @@ local function show()
 		open = false
 		for _, connection in ipairs(connections) do connection:Disconnect() end
 		player:SetAttribute("WelcomeCardOpen", nil)
+		UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
 		gui:Destroy()
 	end
 	local function step(by)
@@ -255,9 +264,10 @@ local TOPICS = {
 	{"CONTROLS", touch and {
 		{"Move and look", "Left stick to move, drag the screen to look."},
 		{"Sneak and sprint", "Sneak is silent. Sprint is fast, loud, and uses stamina."},
-		{"Flashlight", "The flashlight button switches it on and off."},
-		{"Use things", "Tap the prompt that appears next to an object. Some need you to keep holding."},
-		{"Your items", "Shield, potion, marker and detector have their own buttons once you own them."},
+		{"Flashlight", "LIGHT switches it on and off. With the advanced flashlight, hold LIGHT to focus the beam."},
+		{"Use things", "Hold your finger on the prompt next to an object until the ring is full."},
+		-- TOUCH_HELP_20261011 (UI review): it said every item has its own button; only the shield has
+		{"Your items", "SHIELD has its own button. Potion, markers and the detector open from KIT, once you own them."},
 	} or {
 		{"Move and look", "WASD to move, mouse to look, Space to jump."},
 		{"Sneak and sprint", "Ctrl sneaks without a sound. Shift sprints: fast, loud, and uses stamina."},
@@ -280,7 +290,7 @@ local TOPICS = {
 		{"6  Playground", "Hide and seek. Touch the yellow post in three searches without being seen, then run for the exit."},
 	}},
 	{"PLAYING TOGETHER", {
-		{"Start a party", "Walk to a level gate, step on a pad, choose 1 to 6 players and press CREATE PARTY."},
+		{"Start a round", "Press PLAY in the lobby (or walk to a level gate and step on a pad), then CREATE PARTY. You can play alone."},
 		{"Join one", "Step on a pad that someone else has opened before it launches."},
 		{"Friends", "Each Roblox friend in your round gives you +10% tokens."},
 		{"Leaving", "The LOBBY chip in the top left takes you back to the lobby during a round."},
@@ -288,7 +298,7 @@ local TOPICS = {
 	{"IF YOU DIE", {
 		{"You spectate", "You watch your teammates. They can still finish the level."},
 		{"Party down", "If everyone is down you get 15 seconds to use an Emergency Re-entry before the round ends."},
-		{"Emergency Re-entry", "Puts you back in the round once. It is bought with Robux in the shop."},
+		{"Emergency Re-entry", "Puts you back in the round once. Your first one is free; more are offered for Robux when you go down."},
 	}},
 	{"TOKENS", {
 		{"Earning", ("You start with %d. Clearing a level gives +%d, more with friends."):format(starting, perClear)},
@@ -532,16 +542,18 @@ task.spawn(function()
 					table.insert(rail, item)
 				end
 			end
+			-- TOUCH_TARGETS_20261011 (UI review): 30 px high was under a finger's 44 on a phone and a tablet
+			local tall = UIDevice.IsTouch() and 44 or 30
 			local function free(x, y)
-				if y < 0 or y + 30 > bottom then return false end
+				if y < 0 or y + tall > bottom then return false end
 				for _, item in ipairs(rail) do
 					local p, s = item.AbsolutePosition, item.AbsoluteSize
-					if x < p.X + s.X and x + size.X > p.X and y < p.Y + s.Y and y + 30 > p.Y then return false end
+					if x < p.X + s.X and x + size.X > p.X and y < p.Y + s.Y and y + tall > p.Y then return false end
 				end
 				return true
 			end
-			again.Size = UDim2.fromOffset(size.X, 30)
-			local spots = {{at.X, at.Y + size.Y + 8}, {at.X, at.Y - 38}, {at.X + size.X + 8, at.Y}}
+			again.Size = UDim2.fromOffset(size.X, tall)
+			local spots = {{at.X, at.Y + size.Y + 8}, {at.X, at.Y - tall - 8}, {at.X + size.X + 8, at.Y}}
 			local spot = spots[3]
 			for _, candidate in ipairs(spots) do
 				if free(candidate[1], candidate[2]) then spot = candidate break end
@@ -549,6 +561,123 @@ task.spawn(function()
 			again.Position = UDim2.fromOffset(spot[1], spot[2])
 		end
 		task.wait(0.5)
+	end
+end)
+
+-- PLAY_ROUTE_20261011 (owner, after the UI review: "Fix alle phone og tablet issues her"; both reviews' first
+-- finding). The lobby's screen offered the shop, upgrades, rewards, the wheel and music, and nothing that says where
+-- the GAME is: three players in four left from the lobby, and on a phone 12% ever started a round. This is the missing
+-- way in, on every device:
+--   A PLAY button at the top of the screen for as long as the player stands in the lobby with nothing open. Pressing
+--   it sets them on a free LEVEL 1 pad (the nearest one nobody is standing on), where the party dialog opens as it
+--   does for anyone who walks there; the round still starts from CREATE PARTY.
+--   A marker over that pad ("START HERE"), seen through the tunnel, for those who would rather walk.
+-- It stands down near any pad (the queue's own lines take the top of the screen there), in a round, under the welcome
+-- card, the wheel and every window that owns the screen. For a test: gui attribute `Go` (any change presses it).
+task.spawn(function()
+	local playerGui = player:WaitForChild("PlayerGui")
+	local holder = Instance.new("ScreenGui")
+	holder.Name, holder.ResetOnSpawn, holder.IgnoreGuiInset, holder.DisplayOrder = "PlayRoute", false, true, 6
+	local button = Instance.new("TextButton")
+	button.Name, button.Text, button.AutoButtonColor, button.Visible = "Play", "", true, false
+	button.BackgroundColor3, button.BorderSizePixel = Color3.fromRGB(20, 62, 46), 0
+	button.Parent = holder
+	Instance.new("UICorner", button).CornerRadius = UDim.new(0, 10)
+	local line = Instance.new("UIStroke", button)
+	line.Color, line.Thickness, line.ApplyStrokeMode = GREEN, 2, Enum.ApplyStrokeMode.Border
+	local title = Instance.new("TextLabel")
+	title.Name, title.BackgroundTransparency, title.Font, title.TextColor3 = "Title", 1, Enum.Font.GothamBlack, PAPER
+	title.Text, title.AnchorPoint, title.Position = "\u{25B6}  PLAY LEVEL 1", Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 5)
+	title.Parent = button
+	local under = Instance.new("TextLabel")
+	under.Name, under.BackgroundTransparency, under.Font, under.TextColor3 = "Under", 1, Enum.Font.GothamMedium, Color3.fromRGB(176, 214, 196)
+	under.Text, under.AnchorPoint, under.Position = "ALONE OR WITH FRIENDS", Vector2.new(0.5, 1), UDim2.new(0.5, 0, 1, -5)
+	under.Parent = button
+	holder.Parent = playerGui
+
+	local marker = Instance.new("BillboardGui")
+	marker.Name, marker.ResetOnSpawn, marker.AlwaysOnTop, marker.LightInfluence = "PlayRouteMarker", false, true, 0
+	marker.Size, marker.StudsOffsetWorldSpace, marker.MaxDistance, marker.Enabled = UDim2.fromOffset(190, 54), Vector3.new(0, 10, 0), 700, false
+	local sign = Instance.new("TextLabel")
+	sign.BackgroundColor3, sign.BackgroundTransparency, sign.BorderSizePixel, sign.Size = Color3.fromRGB(12, 30, 24), 0.2, 0, UDim2.fromScale(1, 1)
+	sign.Font, sign.TextSize, sign.TextColor3, sign.Text = Enum.Font.GothamBlack, 18, GREEN, "START HERE\nLEVEL 1"
+	sign.Parent = marker
+	Instance.new("UICorner", sign).CornerRadius = UDim.new(0, 8)
+	marker.Parent = playerGui
+
+	local pads, padsAt = {}, 0
+	local function findPads()
+		if #pads > 0 and pads[1].Parent ~= nil and os.clock() - padsAt < 20 then return end
+		padsAt = os.clock()
+		table.clear(pads)
+		local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
+		for _, item in ipairs(lobby and lobby:GetDescendants() or {}) do
+			if item:IsA("BasePart") and item:GetAttribute("R3QueueId") ~= nil then table.insert(pads, item) end
+		end
+	end
+	local function flat(a, b) return Vector3.new(a.X - b.X, 0, a.Z - b.Z).Magnitude end
+	-- the nearest LEVEL 1 pad nobody else stands on (any LEVEL 1 pad if they are all taken), and how near ANY pad is
+	local function choose(from)
+		local best, bestScore, nearestAny = nil, math.huge, math.huge
+		for _, pad in ipairs(pads) do
+			local away = flat(pad.Position, from)
+			nearestAny = math.min(nearestAny, away)
+			if pad:GetAttribute("LevelNumber") == 1 then
+				local taken = false
+				for _, other in ipairs(Players:GetPlayers()) do
+					local root = other ~= player and other.Character and other.Character:FindFirstChild("HumanoidRootPart")
+					if root and flat(root.Position, pad.Position) < 7 then taken = true end
+				end
+				local score = away + (taken and 10000 or 0)
+				if score < bestScore then best, bestScore = pad, score end
+			end
+		end
+		return best, nearestAny
+	end
+	local target, hush = nil, 0
+	local function go()
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if not target or not root or not button.Visible then return end
+		hush = os.clock() + 3
+		button.Visible = false
+		root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+		character:PivotTo(CFrame.new(target.Position + Vector3.new(0, 4, 0)) * root.CFrame.Rotation)
+	end
+	button.Activated:Connect(go)
+	holder:GetAttributeChangedSignal("Go"):Connect(go)
+	local function place()
+		local device = UIDevice.Layout()
+		local wide, tall = 250, 48
+		if device.Class == "tablet" then wide, tall = 300, 56 elseif not device.IsTouch then wide, tall = 270, 48 end
+		wide = math.max(170, math.min(wide, device.Safe.Width - 340))    -- clear of the rail on the left and the token pill's column on the right
+		button.Size = UDim2.fromOffset(wide, tall)
+		title.Size, title.TextSize = UDim2.new(1, -16, 0, tall * 0.48), device.Class == "tablet" and 22 or 19
+		under.Size, under.TextSize = UDim2.new(1, -16, 0, tall * 0.3), device.Class == "tablet" and 13 or 11
+		button.Position = UIDevice.LocalPosition(holder, device.Safe.Left + (device.Safe.Width - wide) / 2, device.Safe.Top + 6)
+	end
+	place()
+	UIDevice.Changed:Connect(place)
+	local first = false
+	while true do
+		findPads()
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		local inLobby = player:GetAttribute("InRound") ~= true and workspace:GetAttribute("ReservedRoundServer") ~= true
+			and player:GetAttribute("LuckyWheelOpen") ~= true and player:GetAttribute("LobbyLoadingDone") == true
+			and player:GetAttribute("WelcomeCardOpen") ~= true and not UIDevice.ScreenOwningModalOpen()
+		local nearest
+		if root then target, nearest = choose(root.Position) else target, nearest = nil, 0 end
+		local show = inLobby and root ~= nil and target ~= nil and nearest > 9 and os.clock() > hush
+		if button.Visible ~= show then button.Visible = show end
+		marker.Adornee = target
+		marker.Enabled = inLobby and target ~= nil and root ~= nil and flat(root.Position, target.Position) > 9
+		-- a first visit gets a slow pulse on the frame; nobody else needs to be waved at
+		if player:GetAttribute("ZyntraFirstLogin") == true and not first then
+			first = true
+			TweenService:Create(line, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {Thickness = 4}):Play()
+		end
+		task.wait(0.4)
 	end
 end)
 
@@ -563,4 +692,10 @@ local profileDeadline = os.clock() + 20
 while os.clock() < profileDeadline and player:GetAttribute("ZyntraFirstLogin") == nil and not wanted() do task.wait(0.25) end
 if workspace:GetAttribute("ReservedRoundServer") == true or player:GetAttribute("InRound") == true or not wanted() then return end
 task.wait(1.2)                                                      -- let the lobby be seen for a moment first
+-- WELCOME_OWNS_THE_SCREEN_20261011 (UI review): it came up 1.2 s after the lobby whatever was open by then. It waits
+-- for the shop, the party dialog and every other window that owns the screen to be closed (two minutes at most).
+do
+	local patience = os.clock() + 120
+	while os.clock() < patience and UIDevice.ScreenOwningModalOpen() do task.wait(0.5) end
+end
 show()
