@@ -7,7 +7,8 @@ Claude QAs its work before importing anything"). Claude (the main agent) did the
 renders and data, and will then import the data into Roblox Studio and wire the game's functions to it. You build.
 
 Work only in /Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009.
-Two earlier runs of this job were stopped within minutes over the number of queue pads; it is THREE a shop, final;
+Three earlier runs of this job were stopped within minutes (the number of queue pads: it is THREE a shop, final; then
+the owner enlarged the shop: see THE SHOP below);
 anything it left under `tools/lobby_mall/` or `artifacts/lobby-mall-20261011/build/` is yours to keep, change or discard.
 HARD RULES. No Roblox Studio, no MCP server, no computer use, no browser, no network, no other agents. No git commit,
 push, stash or reset. Never print credentials. ONE Blender process at a time, `--threads 2` (this Mac has 8 GB and a
@@ -62,12 +63,55 @@ importer adds an offset to stand it beside the old one. Floor top is y = 30.0 ev
      two blocks standing in the drop; one lamp globe on a thin rod.
    6 PLAY ZONE: padded posts in yellow, red, blue and green on a grid, black netting between them, blue-and-green
      puzzle mats, the round mouth of a tube slide.
-- THE STAND `SHOP & SUPPLIES`, centre x 220, z -770 (W02, W13, `brief_v3_stand.md`): hexagonal island counter
-  (circumradius 9, 3.6 high) with five round stools; hexagonal display tower from its middle (circumradius 3.5, top
-  at y 39.5) with pegboard faces, small boxed goods, potion bottles, one CRT, a rail of five simple hooded suits
-  (yellow, pale blue, cream, black-and-gold, purple); six opal globe lamps on brass arms; a hexagonal sign fascia
-  with the sign on all six faces; a hexagonal carpet (circumradius 15) with a brass edge; a side counter with a till.
-  The gap in the counter faces south (toward the entrance).
+- THE SHOP `SHOP & SUPPLIES`, centre x 220, z -770. BIGGER AND RICHER than W02/W13, on the owner's word while this
+  job was starting (Danish, translated): "Make sure the shop is really cool, and showcase every skin you can buy for
+  tokens and for Robux, so the shop may well be enlarged until its size suits showcasing the skins and the items as
+  the most prominent thing. Make our packs like Advanced Equipment and such clearly and deliciously showcased."
+  Keep W02/W13's character (a hexagonal 1990s Retail Merchandising Unit: oak laminate, beige tops, dull brass, opal
+  globe lamps, pegboard, a CRT, the hexagonal sign fascia) and make it this:
+  * A hexagon of low-pile mustard-and-brown carpet with a brass edge, circumradius 20 (it leaves 20 clear studs of
+    concourse on each side; nothing of the shop may pass x 200 or x 240).
+  * A CLOSED hexagonal ring of six display counters, outer circumradius 15, each counter 4 deep and 3.6 high with a
+    sloping glass top over burgundy velvet and a lit product display behind the glass, no gap (nobody goes inside).
+    Each of the six sides showcases ONE group, with a sign box in the sign style standing on a low brass rail along
+    the back of the counter (the header) and a small price plate (style `plain`) on the counter's front edge for
+    each product, exactly these texts:
+      side 1 (facing south, the entrance): header `ADVANCED EQUIPMENT`, plate `ADVANCED EQUIPMENT - 149 ROBUX`. The
+        flagship: a big focused torch on a stand with a visible long beam cone of pale light, a tall battery, a
+        stamina canister, and a fan of colour swatch cards (the suit colour picker), on a raised velvet tier.
+      side 2: header `ENTITY DETECTOR`, plate `ZYNTRA ENTITY DETECTOR - 149 ROBUX`: a chunky hand-held detector with
+        a large glowing green screen on a tilted stand, a second one in its open box.
+      side 3: header `ITEMS`, plates `ENTITY SHIELD - 5 TOKENS`, `SPEED POTION - 3 TOKENS`,
+        `ROUTE MARKER PACK - 2 TOKENS`: a shield device, a row of small potion bottles, packs of marker cones.
+      side 4 (facing north): header `PACKS`, plates `EXPEDITION PACK - 69 ROBUX`, `EMERGENCY RE-ENTRY`: a boxed kit
+        with its contents laid out (a re-entry key card, a shield, three markers), a single key card on a cushion.
+      side 5: header `RESEARCH TOKENS`, plates `4 TOKENS`, `20 TOKENS`: two heaps of round brass tokens, small and
+        large, in open presentation boxes.
+      side 6: header `SUPPORTER`, plates `ZYNTRA SUPPORTER - 99 ROBUX`, `GLOWSTICK CUSTOMIZER - 99 ROBUX`: a framed
+        supporter badge on an easel, a rack of glowsticks in six colours, softly glowing.
+  * SIX SKIN PLINTHS, one outside each corner of the counter ring (centres on circumradius 17.5): a round oak plinth
+    1 high and 4.6 across carrying a life-size shop mannequin (a player: 5.2 tall) in one of the game's six suits,
+    facing outward, each with its own small can spotlight on a brass arm from the tower's canopy and a price plate
+    (style `plain`) on the plinth's front. The suits are the hooded hazmat suit of
+    `artifacts/promo-20261011-ingame/refs_new/player_suit_model_front.png` / `_back.png`, as simple stand-in
+    geometry in the right colours (the importer will stand the game's real suit models on these plinths):
+      `BASELINE YELLOW - FREE` (mustard yellow), `POOL SERVICE - 25 TOKENS` (pale blue with a wave pattern),
+      `SUBURB SURVEY - 75 TOKENS` (cream with olive map blocks), `BLACKSITE DIRECTOR - 300 TOKENS` (charcoal with
+      gold trim), `STATIC WRAITH - 99 ROBUX` (dark purple, purple lenses, two purple glowing tubes on the backpack),
+      `FALSE SUN - 149 ROBUX` (cream with brown line drawings, amber lenses, an amber disc on the backpack).
+    The skins are the first thing seen from every direction: lit brighter than the counters.
+  * In the middle: the hexagonal display tower (circumradius 4.5, top at y 41) with pegboard faces of small boxed
+    goods and one CRT showing static, a ring of six opal globe lamps on brass arms, and above them the hexagonal
+    sign fascia (circumradius 7, 2.4 high) with `SHOP & SUPPLIES` on all six faces.
+  * On the carpet in front of each product (the middle of each plate's counter, 2.5 out from the counter) the
+    importer needs a BUY SPOT: give them in `anchors.shop_spots` as `{"key", "pos"}` with exactly these ten keys:
+    AdvancedEquipment, EntityDetector, SpeedPotion, RouteMarker, EntityShield, ExpeditionPack, EmergencyReentry,
+    Tokens4, Tokens20, Supporter, CosmeticEquipment (eleven with EntityShield); and the six plinths in
+    `anchors.skin_plinths` as `{"skin": "BaselineYellow|PoolService|SuburbSurvey|BlacksiteDirector|StaticWraith|FalseSun",
+    "pos": [x,y,z] (top centre of the plinth), "facing": [x,0,z]}`.
+  Render views R02 and R13 show THIS shop (R02 from the south-west at eye height, R13 from above); add
+  `R15_shop_skins.png` (eye height, close on two plinths and the counter between them) and
+  `R16_shop_advanced_equipment.png` (close on side 1).
 - ARRIVAL: entrance wall at z -900 with dead dark glass doors; a brown mat; a hanging sign `WELCOME` at z -886; two
   rows of nested trolleys by the side walls. The players' spawn point is x 220, z -860: keep 12 studs clear round it.
 - FURNITURE: a planter with benches at (220, -835) and at (220, -700); a few brown plastic tubs with fake plants by
@@ -113,7 +157,7 @@ importer adds an offset to stand it beside the old one. Floor top is y = 30.0 ev
    `"lights": [{"name", "kind": "panel|globe|showcase|neon", "pos": [x,y,z], "color": [r,g,b], "brightness": n,
      "range": n, "state": "on|dim_flicker"}],`
    `"anchors": {"spawn": [x,y,z], "pads": [{"level": n, "station": k, "pos": [x,y,z], "radius": 7.4}],
-     "shop_stand": {"centre": [x,y,z], "radius": 9}, "boards": [{"key": "directory|level1..level6", "pos", "size":
+     "shop_stand": {"centre": [x,y,z], "radius": 20}, "shop_spots": [{"key", "pos"}], "skin_plinths": [{"skin", "pos", "facing"}], "boards": [{"key": "directory|level1..level6", "pos", "size":
      [w,h], "normal"}], "dj_console": [x,y,z], "stage_deck": {"min": [...], "max": [...]}, "tape_z": -621,
      "dark_wing": {"min": [...], "max": [...]}}}`
    Rules: `pos` is the part's centre; `rot` is degrees for Roblox `CFrame.fromOrientation(rx, ry, rz)` (Roblox

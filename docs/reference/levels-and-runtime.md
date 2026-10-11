@@ -2170,3 +2170,14 @@ anything."
   A second lobby standing beside it can carry the same structure and attributes, ready to take over, and its own
   lights, signs and furniture; its pads cannot admit players at the same time as the live ones without changing
   GameManager. The switch-over is one step later, on the owner's word.
+- **The shop is enlarged (owner, 22:50, while the build was starting):** "Du skal sørge for at shoppen er rigtig fed
+  og du skal showcase hvert skin man kan købe for tokens og for robux, så shoppen må gerne udvides til at det passer i
+  størrelsen til at showcase de skins og items der som det mest tydelige. Gør vores pakker som advanced equipment og
+  sådan noget tydeligt og lækkert showcased i shoppen der." In the brief ("THE SHOP"): carpet hexagon of radius 20,
+  a closed ring of six display counters (Advanced Equipment as the flagship facing the entrance, Entity Detector,
+  Items, Packs, Research Tokens, Supporter and Glowstick Customizer), six skin plinths at the corners with life-size
+  mannequins (Baseline Yellow, Pool Service 25 tokens, Suburb Survey 75, Blacksite Director 300, Static Wraith 99
+  Robux, False Sun 149 Robux) lit brighter than everything else, the tower with the sign in the middle. Data for
+  the importer: `anchors.shop_spots` (eleven buy spots) and `anchors.skin_plinths` (the game's real suit models are
+  to stand there). Prices on the plates are today's config values and must be bound to the config when wired. The
+  build job was stopped and restarted a third time for this.
