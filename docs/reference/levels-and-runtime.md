@@ -2070,3 +2070,17 @@ bottom-left corner of every thumbnail; icons 1024 x 1024 without lettering. Deli
 `artifacts/promo-20261011-ingame/final/`. They are GENERATED from real references, not photographs of the game: the
 Level 2 water is bluer than the game's dark teal, Level 5's blocks and Level 6's galleries are tidier than the real
 ones, the Level 1 Entity's red eyes are small in "it sees you". Nothing was uploaded to Roblox.
+
+### Drawn 2026-10-11 (evening) - The lobby as a dead shopping mall: floor plan and twelve section pictures (a proposal, nothing built)
+
+Owner, after my proposal for the streamers' "the lobby doesn't give off the liminal space vibe": "Efter det kan du
+lave billeder af hvordan lobbyen kan se ud med den idé, billeder af alle sektioner og plantegning." The plan
+(`artifacts/lobby-mall-20261011/plan.png`, drawn with Pillow on the real lobby's measurements read in play: concourse
+x 180..260, z -900..-621, six bays at x 149..172 and 268..291, stage z -655..-632, fence z -621, shop wall z -800)
+keeps every position, so a rebuild changes surfaces, light and furniture only. Twelve concept pictures (Codex Medium,
+image tool, brief in the same folder): arrival, concourse with the dry fountain, the six level stores (1 OFFICE,
+2 POOL & SPA, 3 PARTY WORLD, 4 CINEMA, 5, 6 SOFT PLAY: roll shutters half down, the level's own look glowing inside),
+the SUPPLIES kiosk with vending machines (the shop), the DIRECTORY board (leaderboards), the GRAND OPENING event stage
+(DJ) and the fenced CLOSED FOR RENOVATION wing (the creature's dark). Delivered with captions to
+`~/Desktop/Lobby - forladt indkoebscenter (forslag)`. They are concepts: planters and benches differ from the plan
+from picture to picture. To build: through Blender, as every map; the owner's yes is owed.

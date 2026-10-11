@@ -1,0 +1,624 @@
+{
+  "tool": "built-in image_gen",
+  "status": "complete",
+  "picture_count": 12,
+  "notes": "Concept images visually inspected; remaining deviations recorded per picture. This is visual concept approval material, not proof of exact Roblox dimensions or layout. No git, Studio, computer use, third-party generation or other agents used.",
+  "pictures": [
+    {
+      "name": "S01_arrival",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png",
+        "artifacts/lobby-mall-20261011/refs/today_lobby_own_view.jpg",
+        "artifacts/lobby-mall-20261011/refs/today_lobby_a.jpg",
+        "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Just inside entrance at bottom of plan, camera looking down entire concourse toward dark top. Brown entrance mat in foreground, nested shopping trolleys beside entrance, overhead backlit box sign WELCOME. Dead automatic glass doors behind camera and not reflected anywhere. Storefronts recede both sides. Only WELCOME has letters.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_own_view.jpg",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_a.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S01_arrival_try1.png",
+          "accepted": false,
+          "reason": "Too many storefronts, glossy floor, plants and freestanding kiosk.",
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_own_view.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_a.jpg"
+          ]
+        },
+        {
+          "try": 2,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Just inside entrance at bottom of plan, camera looking down entire concourse toward dark top. Brown entrance mat in foreground, nested shopping trolleys beside entrance, overhead backlit box sign WELCOME. Dead automatic glass doors behind camera and not reflected anywhere. Storefronts recede both sides. Only WELCOME has letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_own_view.jpg",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_a.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S01_arrival_try2.png",
+          "accepted": false,
+          "reason": "The arrival is buildable and empty, but it adds a left service window and extra distant bays beyond the exact plan.",
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_own_view.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_a.jpg"
+          ]
+        },
+        {
+          "try": 3,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Just inside entrance at bottom of plan, camera looking down entire concourse toward dark top. Brown entrance mat in foreground, nested shopping trolleys beside entrance, overhead backlit box sign WELCOME. Dead automatic glass doors behind camera and not reflected anywhere. Storefronts recede both sides. Only WELCOME has letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nArrival third attempt: exactly THREE big shop openings per side and NO service hatch on left. Include distant dry ROUND FOUNTAIN centered along corridor, recessed kiosk on RIGHT wall near arrival, NO freestanding kiosk. Keep WELCOME overhead, mat and nested carts. All objects at plan positions.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_own_view.jpg",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_a.jpg",
+            "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_own_view.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_a.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S01_arrival.png",
+          "accepted": true
+        }
+      ],
+      "off": "The arrival now has three large bays per side and the dry fountain, but the right kiosk is reduced to an unlit service window and the fountain appears closer than on the plan.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Just inside entrance at bottom of plan, camera looking down entire concourse toward dark top. Brown entrance mat in foreground, nested shopping trolleys beside entrance, overhead backlit box sign WELCOME. Dead automatic glass doors behind camera and not reflected anywhere. Storefronts recede both sides. Only WELCOME has letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nArrival third attempt: exactly THREE big shop openings per side and NO service hatch on left. Include distant dry ROUND FOUNTAIN centered along corridor, recessed kiosk on RIGHT wall near arrival, NO freestanding kiosk. Keep WELCOME overhead, mat and nested carts. All objects at plan positions.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_own_view.jpg",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_a.jpg",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S01_arrival.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 3,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    },
+    {
+      "name": "S02_concourse",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png",
+        "artifacts/lobby-mall-20261011/refs/today_lobby_b.jpg"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Middle concourse, symmetrical view down length. Dry round fountain centered, exactly two fixed benches and an empty planter of dry soil. Two rows of ceiling fluorescent panels, one dead and one dim. No lettering anywhere.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_b.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S02_concourse_try1.png",
+          "accepted": false,
+          "reason": "Too many storefronts and glossy floor.",
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_b.jpg"
+          ]
+        },
+        {
+          "try": 2,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Middle concourse, symmetrical view down length. Dry round fountain centered, exactly two fixed benches and an empty planter of dry soil. Two rows of ceiling fluorescent panels, one dead and one dim. No lettering anywhere.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_b.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S02_concourse.png",
+          "accepted": true,
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_b.jpg"
+          ]
+        }
+      ],
+      "off": "The materials and symmetry match, but the planter sits in front of the fountain and a still image cannot prove flickering.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Middle concourse, symmetrical view down length. Dry round fountain centered, exactly two fixed benches and an empty planter of dry soil. Two rows of ceiling fluorescent panels, one dead and one dim. No lettering anywhere.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_b.jpg"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S02_concourse.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 2,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    },
+    {
+      "name": "S03_store_level1",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png",
+        "artifacts/lobby-mall-20261011/refs/today_lobby_e.jpg",
+        "artifacts/promo-20261007/refs/l1_01_elevator_arrival_yellow_maze_red_floor_line.jpg",
+        "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance LEFT storefront, camera faces opening slightly obliquely. Half-down grey shutter, backlit box sign exactly 1 OFFICE. Inside mostly dark, glimpse yellow office wallpaper and beige carpet, circular green glow on floor just inside shutter for player start. No other text.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_e.jpg",
+            "artifacts/promo-20261007/refs/l1_01_elevator_arrival_yellow_maze_red_floor_line.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S03_store_level1_try1.png",
+          "accepted": false,
+          "reason": "Sign omits numeral 1; too many storefronts and glossy floor.",
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_e.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l1_01_elevator_arrival_yellow_maze_red_floor_line.jpg"
+          ]
+        },
+        {
+          "try": 2,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance LEFT storefront, camera faces opening slightly obliquely. Half-down grey shutter, backlit box sign exactly 1 OFFICE. Inside mostly dark, glimpse yellow office wallpaper and beige carpet, circular green glow on floor just inside shutter for player start. No other text.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects. Sign MUST read 1 OFFICE including initial numeral 1.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_e.jpg",
+            "artifacts/promo-20261007/refs/l1_01_elevator_arrival_yellow_maze_red_floor_line.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S03_store_level1_try2.png",
+          "accepted": false,
+          "reason": "The office sign and green start ring are correct, but the interior carpet reads too much like speckled hard flooring and distant bays exceed the plan.",
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_e.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l1_01_elevator_arrival_yellow_maze_red_floor_line.jpg"
+          ]
+        },
+        {
+          "try": 3,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance LEFT storefront, camera faces opening slightly obliquely. Half-down grey shutter, backlit box sign exactly 1 OFFICE. Inside mostly dark, glimpse yellow office wallpaper and beige carpet, circular green glow on floor just inside shutter for player start. No other text.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects. Sign MUST read 1 OFFICE including initial numeral 1.\nThird attempt: CLOSE view of only the LEFT OFFICE storefront, camera faces opening nearly straight on with a little mall floor and ceiling. Interior floor is clearly BEIGE SOFT CARPET with tiny fibers and no terrazzo speckles. Yellow wallpaper in dark, GREEN circle glow just inside. Sign EXACTLY 1 OFFICE. No long corridor view, no extra stores.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_e.jpg",
+            "artifacts/promo-20261007/refs/l1_01_elevator_arrival_yellow_maze_red_floor_line.jpg",
+            "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_e.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l1_01_elevator_arrival_yellow_maze_red_floor_line.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S03_store_level1.png",
+          "accepted": true
+        }
+      ],
+      "off": "The sign, yellow wallpaper and beige carpet now read correctly, but the green start glow is a thin faint outline rather than a softly filled circle.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance LEFT storefront, camera faces opening slightly obliquely. Half-down grey shutter, backlit box sign exactly 1 OFFICE. Inside mostly dark, glimpse yellow office wallpaper and beige carpet, circular green glow on floor just inside shutter for player start. No other text.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects. Sign MUST read 1 OFFICE including initial numeral 1.\nThird attempt: CLOSE view of only the LEFT OFFICE storefront, camera faces opening nearly straight on with a little mall floor and ceiling. Interior floor is clearly BEIGE SOFT CARPET with tiny fibers and no terrazzo speckles. Yellow wallpaper in dark, GREEN circle glow just inside. Sign EXACTLY 1 OFFICE. No long corridor view, no extra stores.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_e.jpg",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l1_01_elevator_arrival_yellow_maze_red_floor_line.jpg",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S03_store_level1.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 3,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    },
+    {
+      "name": "S04_store_level2",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png",
+        "artifacts/promo-20261007/refs/l2new_01_area1_flooded_pillar_hall.jpg",
+        "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance RIGHT storefront, same module. Half-down grey shutter, backlit box sign exactly 2 POOL & SPA. Interior mostly dark, pale tiles and subtle turquoise waterlike illumination on interior ceiling. Dry concourse floor, no visible water in concourse. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/promo-20261007/refs/l2new_01_area1_flooded_pillar_hall.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S04_store_level2_try1.png",
+          "accepted": false,
+          "reason": "The pool storefront matches the mall, but turquoise light is more visible on the interior floor than on the ceiling and distant bays exceed the plan.",
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l2new_01_area1_flooded_pillar_hall.jpg"
+          ]
+        },
+        {
+          "try": 2,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance RIGHT storefront, same module. Half-down grey shutter, backlit box sign exactly 2 POOL & SPA. Interior mostly dark, pale tiles and subtle turquoise waterlike illumination on interior ceiling. Dry concourse floor, no visible water in concourse. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nSecond attempt: CLOSE view of the RIGHT POOL & SPA storefront, camera nearly square to opening, visible mall ceiling/floor and wall stripes frame unit. Show pale tiles inside and gentle turquoise glow on INTERIOR CEILING, not copied into neighboring shops. Sign EXACTLY 2 POOL & SPA. No long corridor view.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/promo-20261007/refs/l2new_01_area1_flooded_pillar_hall.jpg",
+            "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l2new_01_area1_flooded_pillar_hall.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S04_store_level2.png",
+          "accepted": true
+        }
+      ],
+      "off": "The correct sign, tiled interior floor and turquoise ceiling hint are visible, but interior walls repeat the concourse stripe instead of being fully pale tile.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance RIGHT storefront, same module. Half-down grey shutter, backlit box sign exactly 2 POOL & SPA. Interior mostly dark, pale tiles and subtle turquoise waterlike illumination on interior ceiling. Dry concourse floor, no visible water in concourse. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nSecond attempt: CLOSE view of the RIGHT POOL & SPA storefront, camera nearly square to opening, visible mall ceiling/floor and wall stripes frame unit. Show pale tiles inside and gentle turquoise glow on INTERIOR CEILING, not copied into neighboring shops. Sign EXACTLY 2 POOL & SPA. No long corridor view.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l2new_01_area1_flooded_pillar_hall.jpg",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S04_store_level2.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 2,
+      "dimensions": {
+        "width": 2161,
+        "height": 728
+      }
+    },
+    {
+      "name": "S05_store_level3",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png",
+        "artifacts/promo-20261007/refs/l3_04_party_room_road_carpet_cd_on_folding_table_player.jpg",
+        "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Middle LEFT storefront same module, half-down grey shutter, sign exactly 3 PARTY WORLD. Dark inside with a few sagging balloons and road-map play carpet, faint glow on floor just within opening. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/promo-20261007/refs/l3_04_party_room_road_carpet_cd_on_folding_table_player.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S05_store_level3_try1.png",
+          "accepted": false,
+          "reason": "The sign and play carpet are correct, but the balloons remain inflated and the carpet motif repeats in neighboring units.",
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l3_04_party_room_road_carpet_cd_on_folding_table_player.jpg"
+          ]
+        },
+        {
+          "try": 2,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Middle LEFT storefront same module, half-down grey shutter, sign exactly 3 PARTY WORLD. Dark inside with a few sagging balloons and road-map play carpet, faint glow on floor just within opening. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nSecond attempt: CLOSE view of only LEFT PARTY WORLD storefront, camera nearly square to opening. A few visibly sagging partly deflated balloons droop low INSIDE dark unit; clearly visible road-map carpet inside only. Sign EXACTLY 3 PARTY WORLD. No long corridor view, no balloons or play carpet in neighboring stores.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/promo-20261007/refs/l3_04_party_room_road_carpet_cd_on_folding_table_player.jpg",
+            "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l3_04_party_room_road_carpet_cd_on_folding_table_player.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S05_store_level3.png",
+          "accepted": true
+        }
+      ],
+      "off": "The road carpet and exact sign are clear, but the low balloons still look inflated rather than visibly sagging.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Middle LEFT storefront same module, half-down grey shutter, sign exactly 3 PARTY WORLD. Dark inside with a few sagging balloons and road-map play carpet, faint glow on floor just within opening. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nSecond attempt: CLOSE view of only LEFT PARTY WORLD storefront, camera nearly square to opening. A few visibly sagging partly deflated balloons droop low INSIDE dark unit; clearly visible road-map carpet inside only. Sign EXACTLY 3 PARTY WORLD. No long corridor view, no balloons or play carpet in neighboring stores.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l3_04_party_room_road_carpet_cd_on_folding_table_player.jpg",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S05_store_level3.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 2,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    },
+    {
+      "name": "S06_store_level4",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png",
+        "artifacts/promo-20261007/refs/l4_01_round_start_power_off_red_emergency_light_player.jpg"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Middle RIGHT storefront as small cinema entrance, sign exactly 4 CINEMA. Unlit marquee with EMPTY letter rails, ticket window, same half-down grey shutter, faint deep-red glow inside. No posters or other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/promo-20261007/refs/l4_01_round_start_power_off_red_emergency_light_player.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S06_store_level4.png",
+          "accepted": true,
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l4_01_round_start_power_off_red_emergency_light_player.jpg"
+          ]
+        }
+      ],
+      "off": "The cinema has its sign, blank marquee and ticket window, but adds an unrelated service hatch opposite and extra distant bays.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Middle RIGHT storefront as small cinema entrance, sign exactly 4 CINEMA. Unlit marquee with EMPTY letter rails, ticket window, same half-down grey shutter, faint deep-red glow inside. No posters or other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l4_01_round_start_power_off_red_emergency_light_player.jpg"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S06_store_level4.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 1,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    },
+    {
+      "name": "S07_store_level5",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png",
+        "artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg",
+        "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Far LEFT storefront same module, half-down grey shutter. Backlit box sign contains ONLY numeral 5. Completely empty white interior, nothing but soft rose-colored light, no furnishings. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S07_store_level5_try1.png",
+          "accepted": false,
+          "reason": "The empty rose-lit unit is correct, but its glow is brighter than requested and the view adds extra distant storefronts.",
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg"
+          ]
+        },
+        {
+          "try": 2,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Far LEFT storefront same module, half-down grey shutter. Backlit box sign contains ONLY numeral 5. Completely empty white interior, nothing but soft rose-colored light, no furnishings. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nSecond attempt: CLOSE view of only LEFT unit 5 near stage, camera nearly square to opening with mall floor and ceiling in frame. Completely EMPTY WHITE unit inside, soft dim subdued rose glow. No furnishings, extra rooms, columns inside or other stores. Only sign text 5.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg",
+            "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S07_store_level5.png",
+          "accepted": true
+        }
+      ],
+      "off": "The numeral-only sign and empty rose-lit white interior match, but the camera remains a long concourse view and one interior wall return remains.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Far LEFT storefront same module, half-down grey shutter. Backlit box sign contains ONLY numeral 5. Completely empty white interior, nothing but soft rose-colored light, no furnishings. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nSecond attempt: CLOSE view of only LEFT unit 5 near stage, camera nearly square to opening with mall floor and ceiling in frame. Completely EMPTY WHITE unit inside, soft dim subdued rose glow. No furnishings, extra rooms, columns inside or other stores. Only sign text 5.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S07_store_level5.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 2,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    },
+    {
+      "name": "S08_store_level6",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png",
+        "artifacts/promo-20261007/refs/l6_01_spawn_tunnel_padded_vinyl_play_zone_gate.jpg"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Far RIGHT storefront same module, half-down grey shutter, sign exactly 6 SOFT PLAY. Inside primary-colored padded box posts and black netting mostly in dark, faint glow on floor just inside. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/promo-20261007/refs/l6_01_spawn_tunnel_padded_vinyl_play_zone_gate.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S08_store_level6_try1.png",
+          "accepted": false,
+          "reason": "Sign omits numeral 6 and floor is too glossy.",
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l6_01_spawn_tunnel_padded_vinyl_play_zone_gate.jpg"
+          ]
+        },
+        {
+          "try": 2,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Far RIGHT storefront same module, half-down grey shutter, sign exactly 6 SOFT PLAY. Inside primary-colored padded box posts and black netting mostly in dark, faint glow on floor just inside. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nCRITICAL text: sign MUST include numeral SIX as digit 6, then space, then SOFT PLAY: exactly \"6 SOFT PLAY\". Frame closer to storefront so black mesh netting and padded posts can be seen; concourse floor fully matte.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/promo-20261007/refs/l6_01_spawn_tunnel_padded_vinyl_play_zone_gate.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S08_store_level6.png",
+          "accepted": true,
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l6_01_spawn_tunnel_padded_vinyl_play_zone_gate.jpg"
+          ]
+        }
+      ],
+      "off": "The corrected 6 SOFT PLAY sign and dark netted interior match, but the view still adds distant storefront bays beyond the plan.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Far RIGHT storefront same module, half-down grey shutter, sign exactly 6 SOFT PLAY. Inside primary-colored padded box posts and black netting mostly in dark, faint glow on floor just inside. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nCRITICAL text: sign MUST include numeral SIX as digit 6, then space, then SOFT PLAY: exactly \"6 SOFT PLAY\". Frame closer to storefront so black mesh netting and padded posts can be seen; concourse floor fully matte.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/promo-20261007/refs/l6_01_spawn_tunnel_padded_vinyl_play_zone_gate.jpg"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S08_store_level6.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 2,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    },
+    {
+      "name": "S09_kiosk",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png",
+        "artifacts/lobby-mall-20261011/refs/today_lobby_b.jpg"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance on RIGHT wall per plan, kiosk built into wall, simple counter, shutter fully rolled up, lit from inside. Exactly three unbranded vending machines beside kiosk. Sign exactly SUPPLIES, no text on machines, packages, or anything else.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_b.jpg"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S09_kiosk.png",
+          "accepted": true,
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_b.jpg"
+          ]
+        }
+      ],
+      "off": "The recessed kiosk and three blank vending machines are correct, but some sheen remains on the floor border and planter placement differs from the plan.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance on RIGHT wall per plan, kiosk built into wall, simple counter, shutter fully rolled up, lit from inside. Exactly three unbranded vending machines beside kiosk. Sign exactly SUPPLIES, no text on machines, packages, or anything else.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_b.jpg"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S09_kiosk.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 1,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    },
+    {
+      "name": "S10_directory",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance LEFT side per plan, freestanding backlit mall directory board. Plain grid of BLANK horizontal name lines and a single colored you-are-here dot WITHOUT caption. Beside it wall-mounted notice board under glass with blank lines. Only readable text is DIRECTORY heading on freestanding board.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S10_directory.png",
+          "accepted": true,
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png"
+          ]
+        }
+      ],
+      "off": "The blank directory, heading and dot match, but a large planter and extra distant bays are added beyond the plan.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Near entrance LEFT side per plan, freestanding backlit mall directory board. Plain grid of BLANK horizontal name lines and a single colored you-are-here dot WITHOUT caption. Beside it wall-mounted notice board under glass with blank lines. Only readable text is DIRECTORY heading on freestanding board.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S10_directory.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 1,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    },
+    {
+      "name": "S11_event_stage",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png",
+        "artifacts/lobby-mall-20261011/refs/today_lobby_c.jpg",
+        "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Far end toward top of plan, low carpeted event stage. Sagging banner exactly GRAND OPENING. Two speakers on stands, folding table with DJ console, several rows of folding chairs facing it, a few chairs fallen. Behind stage grey temporary mesh fence, with NO sign visible in this framing, and dark unlit continuation. No other lettering.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_c.jpg",
+            "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S11_event_stage_try1.png",
+          "accepted": false,
+          "reason": "Stage too distant to review, fountain contains soil, and unrelated service hatch added.",
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_c.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ]
+        },
+        {
+          "try": 2,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Far end toward top of plan, low carpeted event stage. Sagging banner exactly GRAND OPENING. Two speakers on stands, folding table with DJ console, several rows of folding chairs facing it, a few chairs fallen. Behind stage grey temporary mesh fence, with NO sign visible in this framing, and dark unlit continuation. No other lettering.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nSecond attempt: stand close to far EVENT STAGE, stage and chairs occupy main frame. Only simple LOW carpeted platform, folding table with visible DJ console on it, TWO speakers on stands and three rows of chairs facing it with two fallen. Sagging GRAND OPENING banner above, temporary mesh fence immediately behind stage, dark continuation. NO fountain or planters in foreground, NO service hatch, NO extra shops between stage and fence. Make game camera and geometry plain.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png",
+            "artifacts/lobby-mall-20261011/refs/today_lobby_c.jpg",
+            "artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_c.jpg",
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S11_event_stage.png",
+          "accepted": true
+        }
+      ],
+      "off": "The low stage, exact banner, DJ table, two speakers and fallen chairs are clear, but the chair rows are uneven and the stage area is brighter than the requested far-end mood.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Far end toward top of plan, low carpeted event stage. Sagging banner exactly GRAND OPENING. Two speakers on stands, folding table with DJ console, several rows of folding chairs facing it, a few chairs fallen. Behind stage grey temporary mesh fence, with NO sign visible in this framing, and dark unlit continuation. No other lettering.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.\nSecond attempt: stand close to far EVENT STAGE, stage and chairs occupy main frame. Only simple LOW carpeted platform, folding table with visible DJ console on it, TWO speakers on stands and three rows of chairs facing it with two fallen. Sagging GRAND OPENING banner above, temporary mesh fence immediately behind stage, dark continuation. NO fountain or planters in foreground, NO service hatch, NO extra shops between stage and fence. Make game camera and geometry plain.\nLast reference is accepted S02 mall appearance reference: match its ceiling, matte floor, cream walls, paired stripe and shutters, not its camera or fountain.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/refs/today_lobby_c.jpg",
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/raw/S02_concourse.png"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S11_event_stage.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 2,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    },
+    {
+      "name": "S12_closed_wing",
+      "references": [
+        "artifacts/lobby-mall-20261011/plan.png"
+      ],
+      "tries": [
+        {
+          "try": 1,
+          "prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Beyond far event stage at top of plan, camera faces grey temporary mesh fence panels across entire width. Single sign exactly CLOSED FOR RENOVATION. Past fence same mall continues unlit into COMPLETE DARKNESS, nearest dead ceiling panels only just visible. Nothing in dark. Stage and banner behind camera, not visible. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+          "references": [
+            "artifacts/lobby-mall-20261011/plan.png"
+          ],
+          "output": "artifacts/lobby-mall-20261011/raw/S12_closed_wing.png",
+          "accepted": true,
+          "references_passed": [
+            "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png"
+          ]
+        }
+      ],
+      "off": "The fence sign and empty dark continuation match, but additional planters appear and the foreground is brighter than the far-end brief.",
+      "final_prompt": "Use case: stylized-concept. Create ONE widest landscape image, aspect ratio 3:1 if available, of a buildable Roblox horror GAME LEVEL, high-settings realtime 3D screenshot. NO photo, painting, cinematic rendering or photoreal microdetail. Boxy simple modular geometry, flat modestly textured surfaces, clean edges, simple shadows. All 12 views are of SAME late-1980s/1990s dead shopping mall at night, emptied years ago with power still on. First reference is spatial floor plan ONLY: preserve locations, do not copy diagram/text into image. Today-lobby references specify current proportions/positions ONLY: REMOVE ribbed arches, road stripe, teal light bars, modern signs, HUD and avatars. Level references specify ONLY interior materials/motif; NEVER copy people or UI. One straight concourse 80 studs wide, 280 long, flat suspended square off-white ceiling at 15 studs, camera 5 studs high, wide game-camera lens. Wide and LOW, no atrium, stairs, skylights or arches. Recessed rectangular fluorescent panels in TWO rows mostly flat slight green-yellow white, few dead and one dim. Speckled BEIGE matte terrazzo floor, darker brown border, NO glossy reflections. Yellowed CREAM plaster walls and square cream columns, BROWN tiled skirting, paired faded TEAL and MAUVE horizontal stripe at hand height. Repeated grey ribbed roll-down storefront shutters halfway down, dark interiors with faint floor glow. Clean but tired, dry, still, familiar, ordinary, empty, slightly wrong, sad; not dramatic spooky. Far end unlit. No people, players, creatures, blood, rubbish, graffiti, cobwebs, fog, puddles, glass debris, film grain, haze, rays, flare, overlays, grading, logo, watermark, UI. Only expressly named sign may have letters, plain condensed sans-serif on simple backlit box; every other sign blank.\nVIEW: Beyond far event stage at top of plan, camera faces grey temporary mesh fence panels across entire width. Single sign exactly CLOSED FOR RENOVATION. Past fence same mall continues unlit into COMPLETE DARKNESS, nearest dead ceiling panels only just visible. Nothing in dark. Stage and banner behind camera, not visible. No other letters.\nSTRICT buildability and plan correction: exactly SIX large storefront units total, THREE per side spaced along concourse, NOT dozens of small shops. Primary geometry visibly plain Roblox Parts, square-edged unornamented blocks, modest low-detail textures. Absolutely MATTE floor, no reflected light strips or glossy sheen. Empty planters contain flat brown dry soil ONLY, no plants or branches. Wall kiosk is recessed INTO wall not freestanding. Keep camera 5 studs high and ceiling 15 studs high. No additional objects.",
+      "references_passed": [
+        "/Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009/artifacts/lobby-mall-20261011/plan.png"
+      ],
+      "final_image": "artifacts/lobby-mall-20261011/raw/S12_closed_wing.png",
+      "status": "accepted_with_noted_limitations",
+      "try_count": 1,
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      }
+    }
+  ]
+}
