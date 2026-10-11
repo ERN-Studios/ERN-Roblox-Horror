@@ -2054,3 +2054,19 @@ that? Remove the 'Play level 1 alone or with friends' but keep the visible throu
   rebuild its surfaces as a dead shopping-mall concourse at night (shop = shuttered storefronts, level gates = store
   entrances, leaderboards = mall directory boards, the DJ stage = an abandoned event stage), flat sickly fluorescent
   light with a few dead panels, far fewer signs, a hum instead of music by default. Through Blender, as every map.
+
+### Made 2026-10-11 (evening) - Ten store pictures with the in-game look (delivered to the Desktop, NOT uploaded)
+
+Owner, after the streamers' "too much like AI": "Lav først billederne og du bruger codex 6.1 sol ultra til det."
+One Codex job at ULTRA (his word for this job; 19:19 to 19:46), brief `artifacts/promo-20261011-ingame/brief.md`: the
+image tool, fed the real screenshots of 2026-10-07 and today's captures as content and two sheets of the twelve
+biggest Roblox backrooms games' own pictures as style, told to make pictures that look taken INSIDE a Roblox game
+(plain rooms, game lighting, no haze, grain or poster drama) and never to copy another game's content. Eight
+thumbnails (Level 1 round the corner, Level 1 it sees you, Level 1 caught in red, Levels 2 to 6 one each) and two
+icons, all accepted on the first to third try; `prompts.json` has each prompt and what is still off. Cropped to
+1920 x 1080 and lettered by `tools/promo/finish_ingame.py`: ONE small lock-up, BACKROOMS over STAY QUIET, in the
+bottom-left corner of every thumbnail; icons 1024 x 1024 without lettering. Delivered:
+`~/Desktop/Backrooms Stay Quiet - Store-billeder 2026-10-11` (with logo, without logo, icons, overview); finals in
+`artifacts/promo-20261011-ingame/final/`. They are GENERATED from real references, not photographs of the game: the
+Level 2 water is bluer than the game's dark teal, Level 5's blocks and Level 6's galleries are tidier than the real
+ones, the Level 1 Entity's red eyes are small in "it sees you". Nothing was uploaded to Roblox.
