@@ -193,6 +193,7 @@ def main():
     parser.add_argument('--tag', default='now'); parser.add_argument('--phases', type=int, default=12)
     parser.add_argument('--views', default='side,threequarter'); parser.add_argument('--video', action='store_true')
     parser.add_argument('--size', type=int, default=480)
+    parser.add_argument('--patch-frames', default='',help='rerender listed video-frame indices into an existing Kill_Slam review video')
     parser.add_argument('--out', default=str(OUT))
     parser.add_argument('--dark', action='store_true', help='the Entity black against a lit yellow room, as in Level 1')
     parser.add_argument('--approach', action='store_true', help='video: it runs at the camera from 95 studs to 12 instead of on the spot')
@@ -213,8 +214,8 @@ def main():
     work = Path(tempfile.mkdtemp(prefix='stayquiet-kill-render-',dir='/tmp'))
     frames = data['frames']; seconds = frames / data['fps']; speed = data.get('speed', 0) if data.get('loop') else 0
     tracks={k:np.array(v).reshape(-1,3)/1000 for k,v in data.get('tracks',{}).items()}
-    victim=make_victim(sc) if args.clip=='Kill_Choke' else []
-    eyes=make_eyes(sc) if args.clip=='Kill_Choke' else []
+    victim=make_victim(sc) if args.clip in ['Kill_Choke','Kill_Slam'] else []
+    eyes=make_eyes(sc) if args.clip in ['Kill_Choke','Kill_Slam'] else []
     current_view='side'
     # Sheet labels are outside each 480px render, preserving the contact pixels.
     def labelled(path,text):
@@ -240,17 +241,33 @@ def main():
         if tracks:
             grip,head,eye=[tracks[k][index] for k in ['grip','head','eyes']]
             t=index/(frames-1)*seconds
-            if current_view=='victim':aim_victim(camera,grip,head,eye)
+            if current_view=='victim' and (args.clip!='Kill_Slam' or t<data['marks']['strike']):
+                if args.clip=='Kill_Slam':
+                    from mathutils import Matrix
+                    up,front=tracks['vup'][index],tracks['vfront'][index]
+                    cam=grip+.55*up+.35*front
+                    amount=float(bc.smooth((t-data['marks']['strike']+.25)/.25))
+                    target=bc.mix(eye,tracks['fist'][index],amount)
+                    forward=bc.unit(target-cam);right=bc.unit(np.cross(forward,up));correctup=bc.unit(np.cross(right,forward))
+                    conversion=np.array([[1,0,0],[0,0,-1],[0,1,0]])
+                    camera.data.type='PERSP';camera.data.sensor_fit='VERTICAL';camera.data.angle_y=math.radians(70)
+                    camera.location=to_blender(cam[None,:])[0]
+                    camera.rotation_euler=Matrix((conversion@np.column_stack([right,correctup,-forward])).tolist()).to_euler()
+                else:aim_victim(camera,grip,head,eye)
             if current_view=='grip':
                 from mathutils import Vector
                 target=Vector(to_blender(grip[None,:])[0]);camera.data.type='ORTHO';camera.data.ortho_scale=4.5
                 camera.location=target+Vector((40,6,1))
                 camera.rotation_euler=(target-Vector(camera.location)).to_track_quat('-Z','Y').to_euler()
             hung=grip.copy() if t>=data['marks']['grab'] else np.array([0,-3.9,-3.7])
-            if t>=data['marks']['release']:
+            if t>=data['marks']['release'] and args.clip!='Kill_Slam':
                 j=round(data['marks']['release']/seconds*(frames-1));hung=tracks['grip'][j].copy()
                 hung[1]=max(-3.9,hung[1]-16*(t-data['marks']['release'])**2)
             basis=bc.victim_basis(hung,head)
+            if args.clip=='Kill_Slam':
+                vi=min(index,round(data['marks']['release']/seconds*(frames-1)))
+                basis=bc.slam_basis(tracks['vup'][vi],tracks['vfront'][vi])
+                if t>=data['marks']['release']:hung=tracks['grip'][vi].copy()
             from mathutils import Matrix
             conversion=np.array([[1,0,0],[0,0,-1],[0,1,0]])
             for obj,offset in victim:
@@ -264,7 +281,7 @@ def main():
     def render_at(index,path):
         t=index/(frames-1)*seconds if not data.get('loop') else index/data['fps']
         sc.render.filepath=str(path)
-        if current_view=='victim' and t>=data['marks']['dark']-seconds/(frames-1)*.5:
+        if current_view=='victim' and t>=data['marks'].get('dark',data['marks'].get('strike',seconds))-seconds/(frames-1)*.5:
             im=bpy.data.images.new('black',args.size,args.size,alpha=True)
             px=np.zeros((args.size*args.size,4),np.float32);px[:,3]=1;im.pixels.foreach_set(px.ravel())
             im.filepath_raw=str(path);im.file_format='PNG';im.save();bpy.data.images.remove(im)
@@ -273,6 +290,29 @@ def main():
     for view in args.views.split(','):
         current_view=view
         aim(camera, view)
+        if args.clip=='Kill_Slam' and view in ['side','threequarter']:
+            from mathutils import Vector
+            target=Vector((0,2.8,-FLOOR_UP+4.6))
+            if view=='side':camera.location=target+Vector((40,0,.6))
+            else:camera.location=target+Vector((15,24,.9))
+            camera.rotation_euler=(target-camera.location).to_track_quat('-Z','Y').to_euler()
+        if args.patch_frames:
+            assert args.clip=='Kill_Slam' and not data.get('loop')
+            video=OUT/f'{args.tag}_{args.clip}_{view}.mp4'
+            assert video.exists(),f'Missing source video: {video}'
+            prefix=work/f'patch_{view}_%03d.png'
+            subprocess.run(['ffmpeg','-y','-loglevel','error','-threads','2','-i',str(video),'-threads','2',str(prefix)],check=True)
+            for f in [int(v) for v in args.patch_frames.split(',')]:
+                assert 0<=f<frames
+                index=min(frames-1,round((f/30)/seconds*(frames-1)))
+                pose_at(index,0)
+                render_at(index,work/f'patch_{view}_{f:03d}.png')
+            patched=work/f'patched_{view}.mp4'
+            subprocess.run(['ffmpeg','-y','-loglevel','error','-threads','2','-framerate','30','-i',str(prefix),
+                            '-pix_fmt','yuv420p','-threads','2','-crf','20',str(patched)],check=True)
+            shutil.copyfile(patched,video)
+            print('PATCHED VIDEO',video,args.patch_frames,flush=True)
+            continue
         files = []
         samples=[(round(k*(frames-1)/(args.phases-1)),None) for k in range(args.phases)] if not data.get('loop') else [(round(k*frames/args.phases)%frames,None) for k in range(args.phases)]
         samples += [(round(t/seconds*(frames-1)),mark) for mark,t in data.get('marks',{}).items()]
@@ -285,7 +325,7 @@ def main():
         columns = min(len(samples), 4); rows = math.ceil(len(samples) / columns)
         sheet = OUT / f'{args.tag}_{args.clip}_{view}.jpg'
         sheet.unlink(missing_ok=True)   # a sheet somebody has open cannot be overwritten in place
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', '1', '-i', str(work / f'{args.tag}_{args.clip}_{view}_%02d.png'),
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-threads', '2', '-filter_threads', '2', '-framerate', '1', '-i', str(work / f'{args.tag}_{args.clip}_{view}_%02d.png'),
                         '-vf', f'tile={columns}x{rows}', '-frames:v', '1', '-q:v', '3', str(sheet)], check=True)
         print('SHEET', sheet, flush=True)
         if args.video and view!='grip':
@@ -301,8 +341,8 @@ def main():
                 render_at(index,work / f'{args.tag}_{args.clip}_{view}_v{f:03d}.png')
             video = OUT / f'{args.tag}_{args.clip}_{view}.mp4'
             video.unlink(missing_ok=True)
-            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(fps), '-i',
-                            str(work / f'{args.tag}_{args.clip}_{view}_v%03d.png'), '-pix_fmt', 'yuv420p', '-crf', '20', str(video)], check=True)
+            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-threads', '2', '-filter_threads', '2', '-framerate', str(fps), '-i',
+                            str(work / f'{args.tag}_{args.clip}_{view}_v%03d.png'), '-pix_fmt', 'yuv420p', '-threads', '2', '-crf', '20', str(video)], check=True)
             print('VIDEO', video, flush=True)
     shutil.rmtree(work)
 

@@ -21,15 +21,21 @@ local RunService = game:GetService("RunService")
 -- the clip's `grip` track, in the Entity's root space, and takes its timing from the clip's `marks`. It is used only
 -- while ReplicatedStorage.Level1EntityMotion has the attribute KillStyle = "Choke" AND the clip is there and sound;
 -- otherwise the ground-pin kill below runs exactly as before.
+-- KILL_SLAM_20261011 (owner: "tager fat, smasher ned i jorden og loader haand op og smadrer ind i ansigtet"): a second
+-- data clip, Kill_Slam, chosen with KillStyle = "Slam". It also carries the victim's attitude (`vup` toward the head,
+-- `vfront` out of the chest), because the body ends on its back on the floor; its dark frame is the mark `strike`.
+local KILL_CLIPS = {Choke = "Kill_Choke", Slam = "Kill_Slam"}
 local chokeCache = nil
 local debounceSeconds = KILL_DURATION + 1
 local function chokeClip()
 	local owner = RS:FindFirstChild("Level1EntityMotion")
-	if not owner or owner:GetAttribute("KillStyle") ~= "Choke" then return nil end
+	local style = owner and owner:GetAttribute("KillStyle")
+	local clipName = type(style) == "string" and KILL_CLIPS[style] or nil
+	if not clipName then return nil end
 	local folder = owner:FindFirstChild("Clips")
-	local value = folder and folder:FindFirstChild("Kill_Choke")
+	local value = folder and folder:FindFirstChild(clipName)
 	if not value or not value:IsA("StringValue") then return nil end
-	if chokeCache and chokeCache.source == value.Value then return chokeCache.clip end
+	if chokeCache and chokeCache.source == value.Value and chokeCache.style == style then return chokeCache.clip end
 	local ok, data = pcall(function() return HttpService:JSONDecode(value.Value) end)
 	local clip = nil
 	if ok and type(data) == "table" and type(data.tracks) == "table" and type(data.marks) == "table" then
@@ -45,14 +51,19 @@ local function chokeClip()
 			return out
 		end
 		local grip, head = points(data.tracks.grip), points(data.tracks.head)
+		local dark = style == "Slam" and marks.strike or marks.dark
+		local vup, vfront = nil, nil
+		if style == "Slam" then vup, vfront = points(data.tracks.vup), points(data.tracks.vfront) end
 		if grip and head and frames >= 2 and seconds and seconds >= 3 and seconds <= 8
-			and type(marks.grab) == "number" and type(marks.dark) == "number" and type(marks.release) == "number"
-			and marks.grab >= 0 and marks.grab < marks.dark and marks.dark <= marks.release and marks.release <= seconds then
-			clip = {frames = frames, seconds = seconds, grip = grip, head = head, grab = marks.grab, dark = marks.dark, release = marks.release}
+			and (style ~= "Slam" or (vup and vfront))
+			and type(marks.grab) == "number" and type(dark) == "number" and type(marks.release) == "number"
+			and marks.grab >= 0 and marks.grab < dark and dark <= marks.release and marks.release <= seconds then
+			clip = {style = style, frames = frames, seconds = seconds, grip = grip, head = head, vup = vup, vfront = vfront,
+				grab = marks.grab, dark = dark, release = marks.release}
 		end
 	end
-	if not clip then warn("[EntityKill] Kill_Choke is missing its tracks or marks; the ground-pin kill is used") end
-	chokeCache = {source = value.Value, clip = clip}
+	if not clip then warn("[EntityKill] " .. clipName .. " is missing its tracks or marks; the ground-pin kill is used") end
+	chokeCache = {source = value.Value, style = style, clip = clip}
 	return clip
 end
 local function chokePoint(clip, track, t)
@@ -122,6 +133,7 @@ local function finishCapture(record, cancelled)
 	workspace:SetAttribute("EntityKillActive", false)
 	workspace:SetAttribute("EntityKillCaptureId", nil)
 	workspace:SetAttribute("EntityKillStyle", nil)
+	workspace:SetAttribute("EntityKillVictim", nil)
 	if cancelled and record.Started then
 		local cancelKill = entity:FindFirstChild("CancelKill")
 		if cancelKill and cancelKill:IsA("BindableEvent") then cancelKill:Fire(record.Id) end
@@ -161,7 +173,8 @@ local function runKill(record)
 	local duration, deathAt = choke and choke.seconds or KILL_DURATION, choke and choke.dark or DEATH_AT
 	debounceSeconds = duration + 1
 	-- before EntityKillActive: the motion layer reads all three in the same frame
-	workspace:SetAttribute("EntityKillStyle", choke and "Choke" or nil)
+	workspace:SetAttribute("EntityKillStyle", choke and choke.style or nil)
+	workspace:SetAttribute("EntityKillVictim", player.UserId)        -- the other clients place the blow's sound on it
 	workspace:SetAttribute("EntityKillStartedAt", workspace:GetServerTimeNow())
 	workspace:SetAttribute("EntityKillActive", true)
 	workspace:SetAttribute("EntityKillCaptureId", record.Id)
@@ -188,7 +201,7 @@ local function runKill(record)
 	playerRoot.Anchored, hum.WalkSpeed, hum.JumpPower = true, 0, 0
 	hum.AutoRotate, hum.PlatformStand, hum.BreakJointsOnDeath = false, false, false
 	record.Started = true
-	remote:FireClient(player, "capture", entity, duration, deathAt, record.Id, char, choke and "Choke" or nil)
+	remote:FireClient(player, "capture", entity, duration, deathAt, record.Id, char, choke and choke.style or nil)
 	-- the old clip is an Animator track; the stranglehold is played by the motion layer on every client instead
 	local playKill = entity:FindFirstChild("PlayKill")
 	if not choke and playKill and playKill:IsA("BindableEvent") then playKill:Fire(record.Id) end
@@ -220,10 +233,24 @@ local function runKill(record)
 				hum.PlatformStand = true
 			end
 			local grip = killBaseCFrame:PointToWorldSpace(chokePoint(choke, choke.grip, t))
-			local face = killBaseCFrame:PointToWorldSpace(chokePoint(choke, choke.head, t))
-			local position = grip - Vector3.new(0, neck, 0)
-			local toward = Vector3.new(face.X, position.Y, face.Z)
-			local goal = (toward - position).Magnitude > 0.05 and CFrame.lookAt(position, toward) or CFrame.new(position) * standCF.Rotation
+			local goal
+			if choke.vup then
+				-- the clip gives the body's attitude: tracks are unit vectors x 1000, so the sampled points are them / 1000
+				local up = killBaseCFrame:VectorToWorldSpace(chokePoint(choke, choke.vup, t))
+				local front = killBaseCFrame:VectorToWorldSpace(chokePoint(choke, choke.vfront, t))
+				if up.Magnitude < 0.01 or front.Magnitude < 0.01 or math.abs(up.Unit:Dot(front.Unit)) > 0.95 then
+					up, front = Vector3.yAxis, standCF.LookVector
+				end
+				up = up.Unit
+				local right = front.Unit:Cross(up)
+				right = right.Magnitude > 0.01 and right.Unit or standCF.RightVector
+				goal = CFrame.fromMatrix(grip - up * neck, right, up)
+			else
+				local face = killBaseCFrame:PointToWorldSpace(chokePoint(choke, choke.head, t))
+				local position = grip - Vector3.new(0, neck, 0)
+				local toward = Vector3.new(face.X, position.Y, face.Z)
+				goal = (toward - position).Magnitude > 0.05 and CFrame.lookAt(position, toward) or CFrame.new(position) * standCF.Rotation
+			end
 			playerRoot.CFrame = standCF:Lerp(goal, math.clamp((t - choke.grab) / 0.12, 0, 1))
 			playerRoot.AssemblyLinearVelocity, playerRoot.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
 		end))

@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-11T11:10:37.110210+00:00",
+  "capturedAtUtc": "2026-10-11T14:31:06.550649+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -549,8 +549,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
-      "bytes": 72497,
-      "sha256": "48021fc000d962dafa270ad2af37f93611a031d9683544a830a6c09cb330a237",
+      "bytes": 72493,
+      "sha256": "7cedd8c9d46e1480a5558968dd7f3cf5f63c9c2a5cb2b4df06b5bb779b237d0e",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -591,8 +591,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityKill.Script.lua",
-      "bytes": 16635,
-      "sha256": "0e53046664312e2bc104a6b906278f54f1d17dd5b5c39aa28c6f892cdb37f67b",
+      "bytes": 18295,
+      "sha256": "93305345b2763d0e289a126c1dce1f559b8c06b669f4b3079d74c8ca56257e0f",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3565,8 +3565,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
-      "bytes": 13538,
-      "sha256": "ec9e0e62220b2e899dc10e4f2d21937676b72927f3ae2a8d2158925cf9ca7929",
+      "bytes": 20478,
+      "sha256": "699330a0d17ae9e3d3427adf9333d9090a5aeeff28a1809ff20ea95f576fe3e5",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4921,8 +4921,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 1 Entity Motion.LocalScript.lua",
-      "bytes": 26805,
-      "sha256": "f107427757645f46791fc908779be987481b36ed1d42d2afe4bea2ba8b929801",
+      "bytes": 28210,
+      "sha256": "2112924d8c011c1fbbf6137e62dc1b73dfe82c19f837500711af3527e73a83cf",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

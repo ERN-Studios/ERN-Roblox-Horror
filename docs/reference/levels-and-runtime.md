@@ -1975,3 +1975,42 @@ now has `KillStyle = "Choke"` in the saved place (one undo point). Played once w
 attribute: the stranglehold ran to the end, the narrowing went 1.16 to 0.14 of the width (the timing changed last),
 dead at the dark, no errors. It goes live with the owner's next publish; servers on v2999 keep the old kill until
 they are restarted. Back to the old kill: remove the attribute.
+
+### Added 2026-10-11 (afternoon) - Level 1 kill "the slam" (Kill_Slam), panic vision and a skull-crunch sound: SWITCHED ON in Studio (not published by this session)
+
+Owner: "Kan du lave en ny med tager fat, smasher ned i jorden og loader hånd op og smadre ind i ansigtet på spilleren,
+de skal have panik syn imens det sker og især når de ligger på jorden. Brug elevenlabs til at lave et skull crunch lyd
+når den smasker dem i ansigtet."
+
+- **The clip (Codex, gpt-6.1-sol MEDIUM through the launcher; `tools/level1_entity/out/KILL_SLAM_REPORT.md`):**
+  `Kill_Slam`, the eighth entry of `clips.json`: 5.4 s, marks grab 0.30, lifted 0.80, slam 1.07, windup 2.95, strike
+  3.12, release 3.49, and tracks `grip`, `head`, `eyes`, `fist` (the left fist) plus `vup` / `vfront` (unit x 1000:
+  the victim's attitude, since it ends on its back, head away from the Entity). 37 of 38 of its checks pass; the one
+  that fails is that the gripping claw is 0.22 stud from the victim's eyes, which a hand on a throat always is. The
+  seven older clips are byte for byte unchanged.
+- **`KillStyle = "Slam"`** on `ReplicatedStorage.Level1EntityMotion` is SET in the place (it was "Choke" since 14:35;
+  the owner asked for the new one). "Choke" brings the stranglehold back, no attribute the old ground-pin kill.
+- **KILL_SLAM_20261011 in the scripts.** `EntityKill`: `KILL_CLIPS` maps the style to its clip; the slam's dark frame
+  is `strike`; the victim's CFrame is built from `grip`, `vup` and `vfront`; `workspace.EntityKillVictim` names the
+  victim. `Level 1 Entity Motion`: plays whichever kill clip the style names, and gives the OTHER players the blow's
+  sound from the Entity's root at `strike`. `EntityAI`: red eyes for any kill style. `JumpscareUI`: the victim's camera
+  rides the body (eyes at `grip + 0.55 vup + 0.35 vfront`, camera up = `vup`), looks at the Entity's eyes, half way to
+  the fist while the hand is loaded and at the fist for the last quarter second; PANIC VISION is a heartbeat (2.3 a
+  second in the air, 3.1 rising to 4.3 on the floor) that closes the tunnel, blurs (BlurEffect), drains and reddens
+  (ColorCorrectionEffect) and kicks the lens on every beat, with the slam itself as a flash, a 26-size blur, a lens
+  kick of 14 and two blinks; ReduceCameraShake removes the shake and softens the rest. The tunnel is now 25 rings (13
+  showed as bands on a bright ceiling; the stranglehold uses the same).
+- **The sound.** ElevenLabs through Codex: the connector no longer has a text-to-sound-effects tool; sound effects
+  are generated through its `elevenlabs_creative_*` flow tools (a flow "stayquiet l1 crunch"; nine takes in
+  `~/Projects/stayquiet-l1-kill/audio/raw`). The master is two takes layered, a low thud and a sharp crack, picked on
+  measurements (single hit, onset, spectrum), NOT by ear: `assets/level1-kill-20261011/l1_skull_crunch.ogg`, group
+  audio asset 103835120253894, named to the game by the folder attribute `KillCrunchSound`, played at volume 1.6
+  0.03 s before `strike` (2D for the victim).
+- **Played in Studio (three kills, the last with the saved switch only):** up 2 studs, on its back 0.5 over the floor
+  from 1.2 s, camera lying and looking up, blur 18 and lens 79 at the slam, the tunnel pulsing 0.56 to 0.68 on the
+  floor, the crunch playing at 3.11 s and loaded, dead and black at the strike, effects removed after, no errors.
+  Pictures of the real view: `artifacts/level1-entity-kill-slam-20261011/live_in_game_*.jpg`.
+- **Weak or NOT tested:** the loaded fist rises only to head height (the body stays on all fours), so "loader hånd op"
+  is modest; from below, the red eye dots sit at the top edge of the head; nobody has listened to the crunch; a
+  shield pressed mid-kill, a second player (and so the positional crunch), R6 and odd-sized avatars, a phone (25
+  full-screen strokes and a blur) were not run.

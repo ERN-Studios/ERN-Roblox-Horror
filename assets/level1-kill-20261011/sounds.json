@@ -1,0 +1,9 @@
+{
+ "about": "Level 1 Entity, new kill 'the slam' (owner 2026-10-11): it grabs the player, smashes them into the floor, loads its hand up and smashes it into the player's face. 'Brug elevenlabs til at lave et skull crunch lyd naar den smasker dem i ansigtet.' One short impact sound, heard by the victim at the moment of the blow, the instant the screen goes black.",
+ "rules": {"provider": "ElevenLabs eleven_text_to_sound_v2", "prompt_influence": 0.6, "loop": false, "takes": 3, "max_prompt_characters": 440},
+ "shots": [
+  {"key": "l1_skull_crunch_a", "seconds": 1.5, "prompt": "One single brutal skull crunch: a huge heavy fist smashes into a head, a deep thick punch impact with a sharp wet bone crack and crunch right on the hit, extremely close, dry, no reverb, no echo, no voice, no scream, no music, nothing before the impact and a very short tail."},
+  {"key": "l1_skull_crunch_b", "seconds": 1.5, "prompt": "Horror film foley, one hit only: a massive bone-crushing blow to a skull. Low heavy body thud layered with a loud splintering crack of bone and a short gristly crunch, close microphone, dry studio sound, no room, no voice, no music, starts instantly with the impact."},
+  {"key": "l1_skull_crunch_c", "seconds": 1.2, "prompt": "A single sickening crack: thick bone snapping and crunching under a heavy blunt impact, like a melon and a bundle of celery crushed at once by a sledgehammer, punchy low thump with a sharp crack on top, very close and dry, no reverb, no voice, no music."}
+ ]
+}

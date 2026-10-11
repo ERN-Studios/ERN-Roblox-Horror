@@ -413,7 +413,7 @@ task.spawn(function()
 		local hunting = (st == "ALERT" or st == "CHASE" or st == "TRACK" or st == "YELL")
 		-- CHOKE_RED_EYES_20261011 (owner: "den skal have roede oejne naar den kvaeler en"): red for the whole
 		-- stranglehold, whatever state it was caught in (a kill out of LURK kept them amber)
-		if workspace:GetAttribute("EntityKillActive") == true and workspace:GetAttribute("EntityKillStyle") == "Choke" then hunting = true end
+		if workspace:GetAttribute("EntityKillActive") == true and workspace:GetAttribute("EntityKillStyle") ~= nil then hunting = true end
 		local c = hunting and EYE_COLOR_HUNT or EYE_COLOR_IDLE
 		for _, e in ipairs(eyes) do
 			if e.dot:IsA("GuiObject") then e.dot.BackgroundColor3 = c else e.dot.Color = c end

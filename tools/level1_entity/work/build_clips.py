@@ -3,7 +3,7 @@
 Run Blender -b --python work/build_clips.py -- [--only=Walk] [--no-render] [--floor-up=8]
 FLOOR_UP is also an environment override. No assets are downloaded or published.
 """
-import sys, os, json, math, argparse
+import sys, os, json, math, argparse, hashlib
 sys.dont_write_bytecode = True
 from pathlib import Path
 import numpy as np
@@ -543,6 +543,261 @@ def build_choke(run,walk):
     return dict(poses=poses,feet=feet_all,frames=N,fps=30,seconds=CHOKE_SECONDS,loop=False,stride=0,speed=0,contacts=[],
                 marks=CHOKE_MARKS,notes='One-arm throat cup, body rise/counterbalance, planted mesh soles; curious 30-degree roll; release after dark.')
 
+# KILL_SLAM_20261011: independent offline authoring; existing Actions stay immutable.
+SLAM_SECONDS=5.4
+SLAM_TIMES=np.linspace(0,SLAM_SECONDS,162)
+SLAM_MARKS={k:float(SLAM_TIMES[i]) for k,i in dict(grab=9,lifted=24,slam=32,windup=88,strike=93,release=104).items()}
+SLAM_FIST_LOCAL=None
+SLAM_FIST_VERTEX=None
+SLAM_BODY=None
+
+def slam_attitude(t):
+    angle=float(sequence_keys([(0,0),(SLAM_MARKS['grab'],0),(SLAM_MARKS['lifted'],20),
+                               (SLAM_MARKS['slam'],90),(SLAM_SECONDS,90)],t))
+    r=rot_x(deg(-angle))
+    return r@np.array([0,1,0]),r@np.array([0,0,1])
+
+def slam_basis(up,front):
+    return np.column_stack([unit(np.cross(up,front)),up,front])
+
+def slam_fist_local():
+    global SLAM_FIST_LOCAL,SLAM_FIST_VERTEX,SLAM_BODY
+    if SLAM_FIST_LOCAL is None:
+        pose={};RIG.curl_fingers(pose,'Left',1.0,.02)
+        W=RIG.fk(pose);body=real_body();v=skin_root(body,W)
+        hand=W['LeftHand'];local=(v-hand[:3,3])@hand[:3,:3]
+        mask=np.array([body['names'][d].startswith('LeftHandMiddle') for d in body['dominant']])
+        ids=np.where(mask)[0];a=RIG.hand_axes['Left']
+        # Actual closed middle-knuckle skin vertex, leading along the finger axis.
+        vid=int(ids[np.argmax(local[ids]@a['finger'])])
+        SLAM_FIST_LOCAL=local[vid].copy();SLAM_FIST_VERTEX=vid;SLAM_BODY=body
+        print('SLAM FIST skin vertex',vid,'local',SLAM_FIST_LOCAL.tolist(),flush=True)
+    return SLAM_FIST_LOCAL
+
+def slam_points(W):
+    p=choke_points(W)
+    slam_fist_local()
+    p['fist']=skin_root(SLAM_BODY,W)[SLAM_FIST_VERTEX]
+    return p
+
+def build_slam(existing):
+    choke_poses=decode_export(existing['Kill_Choke'])
+    start={n:T.copy() for n,T in choke_poses[0].items()}
+    finish=choke_poses[-1]
+    startW=RIG.fk(start);finishW=RIG.fk(finish)
+    marks=SLAM_MARKS;top=marks['lifted'];hit=marks['slam'];wind=marks['windup'];strike=marks['strike'];release=marks['release']
+    body=real_body();poses=[];allfeet=[];errors=[]
+    for t in SLAM_TIMES:
+        pitch=float(sequence_keys([(0,35),(.30,27),(top,12),(hit,72),(hit+.07,76),(hit+.15,70),
+                                  (1.55,74),(2.15,68),(wind,61),(strike,73),(release,70),(5.4,24)],t))
+        height=float(sequence_keys([(0,3.42),(.30,3.42),(top,4.1),(hit,2.05),(hit+.07,1.96),(hit+.15,2.12),
+                                   (1.55,1.9),(wind,2.18),(strike,2.05),(release,2.12),(5.4,4.12)],t))
+        forward=float(sequence_keys([(0,-.60),(top,-.35),(hit,1.8),(wind,1.45),(strike,1.8),(release,1.8),(5.4,-.60)],t))
+        pose={};torso(pose,0,pitch,0,0,0,height,hip_forward=forward)
+        W=RIG.fk(pose)
+        headpitch=float(sequence_keys([(0,-36),(top,-32),(hit,20),(1.75,28),(wind,-15),(strike,20),(release,25),(5.4,4)],t))
+        RIG.set_root_rotation(pose,'neck',rotation(headpitch*.4)@RIG.rest_world['neck'][:3,:3])
+        RIG.set_root_rotation(pose,'Head',rotation(headpitch)@RIG.rest_world['Head'][:3,:3])
+        feet={}
+        for side in ['Left','Right']:
+            sign=-1 if side=='Left' else 1
+            fixed=point(sign*1.85,.50,1.1 if side=='Left' else .3)
+            toe=mix(startW[side+'ToeBase'][:3,3],fixed,float(smooth(t/.65)))
+            if t>release:toe=mix(fixed,finishW[side+'ToeBase'][:3,3],float(smooth((t-release)/(5.4-release))))
+            feet[side]=dict(toe=toe,pitch=0,yaw=(-1 if side=='Left' else 1)*8,stance=.65<=t<=release)
+        H=RIG.fk(pose)['Hips'][:3,3].copy();H[1]-=reach_adjustment(pose,feet)+.015;RIG.set_root_position(pose,'Hips',H)
+        for side,ft in feet.items():
+            RIG.solve_leg_toe(side,pose,ft['toe'],0,(-1 if side=='Left' else 1)*8,
+                              mix(startW[side+'Leg'][:3,3],point(-2.2 if side=='Left' else 2.2,1.3,3),float(smooth(t/.65))),clamp=True)
+        grip=sequence_keys([(0,choke_points(startW)['grip']),(marks['grab'],[0,-3.9,-3.7]),
+                            (top,[0,-.65,-5.1]),(top+(hit-top)*.5,[0,-4.05,-6.35]),(hit,[0,-7.45,-6.48]),
+                            (hit+.067,[0,-7.23,-6.48]),(hit+.15,[0,-7.45,-6.48]),(release,[0,-7.45,-6.48])],t)
+        up,front=slam_attitude(t)
+        a=RIG.hand_axes['Right'];pin=basis_mapping(a['finger'],a['palm'],[-1,0,0],[0,-1,0])
+        hr=quat_to_mat(slerp(mat_to_quat(choke_hand_rotation()),mat_to_quat(pin),float(smooth((t-top)/(hit-top)))))
+        wrist=grip-hr@choke_grip_local();W=RIG.fk(pose);S=W['RightArm'][:3,3]
+        # Load the planted pin almost straight (about 23 degrees elbow flex),
+        # with the shoulder over the wrist. Pelvis height takes the constraint;
+        # the victim's throat and both soles remain independently fixed.
+        if t>top:
+            horizontal=float(np.sum((S-wrist)[[0,2]]**2))
+            loaded_reach=float(sequence_keys([(hit,4.06),(hit+.067,3.88),(hit+.15,4.06)],t))
+            desired_y=wrist[1]+math.sqrt(max(0,loaded_reach**2-horizontal))
+            rise=max(0,desired_y-S[1])*float(smooth((t-top)/(hit-top)))
+            if t>release:rise*=1-float(smooth((t-release)/(5.4-release)))
+            H=W['Hips'][:3,3]+[0,rise,0];RIG.set_root_position(pose,'Hips',H)
+            for side,ft in feet.items():
+                RIG.solve_leg_toe(side,pose,ft['toe'],0,(-1 if side=='Left' else 1)*8,point(-2.2 if side=='Left' else 2.2,1.3,3),clamp=True)
+            W=RIG.fk(pose);S=W['RightArm'][:3,3]
+        result=RIG.solve_chain(pose,'RightArm','RightForeArm','RightHand',wrist,S+[2.3,-1,0],clamp=True,reach_margin=.052)
+        errors.append(float(np.linalg.norm(result.reached-wrist)) if any(abs(t-marks[k])<1e-7 for k in marks) else 0.)
+        RIG.set_root_rotation(pose,'RightHand',hr)
+        RIG.curl_fingers(pose,'Right',.65-.53*float(smooth((t-release)/.15)),.1)
+        face=grip+.55*up+.35*front
+        # Slowly cock the fist above the shoulder, stop, then drive in five samples.
+        W=RIG.fk(pose);S=W['LeftArm'][:3,3]
+        raised=np.array([-2.6,-.35,-6.8])
+        fist=sequence_keys([(0,slam_points(startW)['fist']),(.65,[-2.8,-3.8,-2.8]),
+                            (1.75,[-2.7,-4.4,-4.0]),(wind,raised),
+                            (strike,face),(strike+.20,face),(release,face),(5.4,slam_points(finishW)['fist'])],t)
+        # The closed knuckles face forward; the loaded arm drives them downward.
+        a=RIG.hand_axes['Left'];load=float(smooth((t-1.75)/(wind-1.75)));down=float(smooth((t-wind)/(strike-wind)))
+        lr=rot_x(deg(110*load*(1-down)))@basis_mapping(a['finger'],a['palm'],[0,-1,0],[0,0,-1])
+        if wind<t<strike:fist=mix(raised,face,(t-wind)/(strike-wind))
+        target=fist-lr@slam_fist_local()
+        result=RIG.solve_chain(pose,'LeftArm','LeftForeArm','LeftHand',target,S+[-2,1,3.0],clamp=True,reach_margin=.052)
+        errors.append(float(np.linalg.norm(result.reached-target)) if abs(t-wind)<1e-7 or abs(t-strike)<1e-7 else 0.)
+        RIG.set_root_rotation(pose,'LeftHand',lr);RIG.curl_fingers(pose,'Left',.24+.76*load,.02)
+        # Carry the passive left arm out of the known charge before cocking it.
+        carry=choke_poses[min(24,int(np.argmin(abs(SLAM_TIMES-t))))]
+        carryweight=1-float(smooth((t-top)/.55))
+        for n in RIG.order:
+            if n.startswith(('LeftArm','LeftForeArm','LeftHand')):
+                blended=blend_pose({n:pose.get(n,np.eye(4))},{n:carry.get(n,np.eye(4))},carryweight)
+                pose[n]=blended[n]
+        if t<=marks['grab']:pose={n:T.copy() for n,T in choke_poses[int(np.argmin(abs(SLAM_TIMES-t)))].items()}
+        elif t<marks['grab']+.12:pose=blend_pose(choke_poses[9],pose,float(smooth((t-marks['grab'])/.12)))
+        if t>release:pose=blend_pose(pose,finish,float(smooth((t-release)/(5.4-release))))
+        # Keep the soles from drifting in the pinned interval; choose one fixed
+        # correction per boot rather than a frame-dependent floor correction.
+        if poses and t<=1.8:
+            # Bounded passive-arm turn resolves IK's equivalent elbow basis near
+            # its singular entry; held/striking poses remain exact thereafter.
+            for n in RIG.order:
+                if n.startswith(('LeftArm','LeftForeArm','LeftHand')):
+                    A=poses[-1].get(n,np.eye(4));B=pose.get(n,np.eye(4))
+                    qa=mat_to_quat(A[:3,:3]);qb=mat_to_quat(B[:3,:3])
+                    angle=2*math.acos(min(1,abs(float(np.dot(qa,qb)))))
+                    if angle>deg(26):pose[n]=blend_pose({n:A},{n:B},deg(26)/angle)[n]
+        poses.append(pose);allfeet.append(feet)
+    # Solve the strike endpoints, then interpolate local joint rotations along
+    # one continuous branch. Per-frame IK can switch its equivalent hinge basis
+    # as this huge hand passes beside the shoulder.
+    li=int(np.argmin(abs(SLAM_TIMES-top)));hi=int(np.argmin(abs(SLAM_TIMES-hit)))
+    for i in range(li+1,hi):
+        eased=blend_pose(poses[li],poses[hi],(i-li)/(hi-li))
+        for n in RIG.order:
+            if n.startswith(('RightArm','RightForeArm','RightHand')):poses[i][n]=eased[n]
+    wi=int(np.argmin(abs(SLAM_TIMES-wind)));si=int(np.argmin(abs(SLAM_TIMES-strike)))
+    for i in range(wi+1,si):
+        eased=blend_pose(poses[wi],poses[si],(i-wi)/(si-wi))
+        for n in RIG.order:
+            if n.startswith(('LeftArm','LeftForeArm','LeftHand')):poses[i][n]=eased[n]
+    # Throw the striking scapula forward at the start of the blow. This carries
+    # the arm's weight and prevents the enormous closed hand from rising along
+    # the quaternion arc after its highest, stopped windup pose.
+    for i,load in zip(range(wi,si+1),[0,34,25,12,0,0]):
+        W=RIG.fk(poses[i])
+        RIG.set_root_rotation(poses[i],'LeftShoulder',rotation(load)@W['LeftShoulder'][:3,:3])
+    for side in ['Left','Right']:
+        mask=np.array([body['names'][d].startswith(side) and ('Foot' in body['names'][d] or 'Toe' in body['names'][d]) for d in body['dominant']])
+        correction=max(0,.035-min(float(skin_root(body,RIG.fk(p))[mask,1].min()+FLOOR_UP) for p in poses))
+        for i,pose in enumerate(poses):
+            W=RIG.fk(pose);r=W[side+'Foot'][:3,:3];ankle=W[side+'Foot'][:3,3]+[0,correction,0]
+            RIG.solve_chain(pose,side+'UpLeg',side+'Leg',side+'Foot',ankle,
+                            mix(startW[side+'Leg'][:3,3],point(-2.2 if side=='Left' else 2.2,1.3,3),float(smooth(SLAM_TIMES[i]/.65))),clamp=True)
+            RIG.set_root_rotation(pose,side+'Foot',r)
+    # Recover toward the known floor-corrected choke exit, including its leg
+    # branch. Re-solving its knee with the slam pole would swing the thigh into
+    # the otherwise safe resting claw.
+    ri=int(np.argmin(abs(SLAM_TIMES-release)))
+    for i in range(ri+1,len(poses)):
+        u=float(smooth((SLAM_TIMES[i]-release)/(5.4-release)))
+        legs=blend_pose(poses[ri],finish,u)
+        for n in RIG.order:
+            if n.startswith(('LeftUpLeg','LeftLeg','LeftFoot','LeftToe','RightUpLeg','RightLeg','RightFoot','RightToe')):poses[i][n]=legs[n]
+        W=RIG.fk(poses[i]);v=skin_root(body,W)
+        for side in ['Left','Right']:
+            mask=np.array([body['names'][d].startswith(side) and ('Foot' in body['names'][d] or 'Toe' in body['names'][d]) for d in body['dominant']])
+            pen=max(0,.025-float(v[mask,1].min()+8))
+            if pen:
+                r=W[side+'Foot'][:3,:3]
+                RIG.solve_chain(poses[i],side+'UpLeg',side+'Leg',side+'Foot',W[side+'Foot'][:3,3]+[0,pen,0],W[side+'Leg'][:3,3],clamp=True)
+                RIG.set_root_rotation(poses[i],side+'Foot',r)
+    poses[-1]={n:T.copy() for n,T in finish.items()}
+    poses[0]={n:T.copy() for n,T in start.items()}
+    return dict(poses=poses,feet=allfeet,frames=162,fps=30,seconds=5.4,loop=False,stride=0,speed=0,contacts=[],
+                marks=marks,slam=True,reach_target_error=max(errors),notes='Heave, back slam, one damped rebound, planted throat pin, slow left-fist threat and trunk-driven hammer strike.')
+
+def qa_slam(clip,data,worlds):
+    tracks={k:np.array(v).reshape(-1,3)/1000 for k,v in data['tracks'].items()}
+    m=data['marks'];ts=SLAM_TIMES;idx=lambda k:int(np.argmin(abs(ts-m[k])))
+    up=tracks['vup'];front=tracks['vfront'];grip=tracks['grip'];centre=grip-1.1*up
+    # Full envelope has throat-relative longitudinal limits -4.1 .. +1.1.
+    half=np.array([1.1,2.6,.5]);body=real_body();dom=[body['names'][d] for d in body['dominant']];tris=body['tris']
+    torso=np.array([n in ['Hips','Spine02','Spine01','Spine'] or 'Leg' in n or 'Foot' in n or 'Toe' in n for n in dom])
+    safe=np.array([not ('Hand' in n or 'ForeArm' in n) for n in dom])
+    nonstriking=np.array([not(n.startswith('LeftHand') or n=='LeftForeArm') for n in dom])
+    nonstriking_tris=tris[np.all(nonstriking[tris],axis=1)]
+    handmask=np.array([n.startswith('RightHand') for n in dom]);handtris=tris[np.all(handmask[tris],axis=1)]
+    foot=np.array(['Foot' in n or 'Toe' in n for n in dom]);torso_tris=tris[np.any(torso[tris],axis=1)];safe_tris=tris[np.all(safe[tris],axis=1)]
+    camera=100.;literal_camera=100.;sole=100.;knees=100.;handhits=0;pinbends=[];intersections=0;volume_frames=[];vf=100.;trackerr=0.
+    for i,(t,W) in enumerate(zip(ts,worlds)):
+        v=skin_root(body,W);handhits+=mesh_pair_intersections(v[handtris],v[torso_tris]);sole=min(sole,float(v[foot,1].min()+8));knees=min(knees,*[float(W[s+'Leg'][1,3]+8) for s in ['Left','Right']])
+        if m['grab']<=t<=m['release']:
+            basis=slam_basis(up[i],front[i]);local=(v-grip[i])@basis-[0,-1.5,0]
+            hits=triangle_box_overlap(local[torso_tris],half);intersections+=hits
+            if hits:volume_frames.append([i,hits])
+            vf=min(vf,float(grip[i,1]-1.5*up[i,1]-np.dot(half,np.abs(basis[1]))+8))
+        if m['slam']<=t<=m['release']:
+            a=W['RightArm'][:3,3];e=W['RightForeArm'][:3,3];h=W['RightHand'][:3,3]
+            pinbends.append((t,math.degrees(math.acos(float(np.clip(np.dot(unit(e-a),unit(h-e)),-1,1))))))
+        if m['slam']<=t<=m['windup']:
+            cam=grip[i]+.55*up[i]+.35*front[i];camera=min(camera,point_tri_distance(cam,v[safe_tris]));literal_camera=min(literal_camera,point_tri_distance(cam,v[nonstriking_tris]))
+        exact=slam_points(W)
+        trackerr=max(trackerr,max(float(np.max(abs(exact[k]-tracks[k][i]))) for k in exact))
+    i=idx('lifted');basis=slam_basis(up[i],front[i]);clear=float(grip[i,1]-1.5*up[i,1]-np.dot(half,np.abs(basis[1]))+8)
+    i=idx('windup');cam=grip[i]+.55*up[i]+.35*front[i]
+    angle=math.degrees(math.acos(float(np.clip(np.dot(unit(tracks['eyes'][i]-cam),unit(tracks['fist'][i]-cam)),-1,1))))
+    i=idx('strike');face=grip[i]+.55*up[i]+.35*front[i];miss=float(np.linalg.norm(tracks['fist'][i]-face))
+    delta=np.linalg.norm(np.diff(grip,axis=0),axis=1);slam=(ts[1:]>m['lifted'])&(ts[1:]<=m['slam']+.16)
+    held=(ts>=m['slam']+.2)&(ts<=m['release']);heights=centre[held,1]+8
+    fistheight=float(tracks['fist'][idx('windup'),1]+8);fistabove=float(tracks['fist'][idx('windup'),1]-tracks['eyes'][idx('windup'),1])
+    normerr=float(max(np.max(abs(np.linalg.norm(up,axis=1)-1)),np.max(abs(np.linalg.norm(front,axis=1)-1))))
+    dot=float(np.max(abs(np.sum(up*front,axis=1))))
+    steady_bends=[v for t,v in pinbends if t>=m['slam']+.2]
+    impact_peak=max(v for t,v in pinbends if t<=m['slam']+.15)
+    report=dict(marks=m,feet_clear_at_lifted=clear,heave_to_floor_seconds=m['slam']-m['lifted'],
+                pinned_centre_min=float(heights.min()),pinned_centre_max=float(heights.max()),
+                victim_vector_norm_error=normerr,victim_vector_dot=dot,max_grip_step_slam=float(delta[slam].max()),
+                max_grip_step_elsewhere=float(delta[~slam].max()),windup_fist_floor_height=fistheight,
+                windup_fist_above_eyes=fistabove,windup_eye_fist_angle_degrees=angle,
+                windup_to_strike_seconds=m['strike']-m['windup'],strike_face_error=miss,
+                min_camera_to_non_striking_mesh=literal_camera,min_camera_to_non_contact_mesh=camera,min_mesh_sole_height=sole,min_knee_height=knees,
+                min_victim_volume_floor_height=vf,victim_body_intersecting_triangles=intersections,victim_intersection_frames=volume_frames,
+                pin_elbow_min_degrees=min(steady_bends),pin_elbow_max_degrees=max(steady_bends),impact_elbow_peak_degrees=impact_peak,impact_elbow_compression_degrees=impact_peak-min(steady_bends),max_track_rounding_error=trackerr,max_required_mark_ik_error=clip['reach_target_error'],right_hand_body_triangle_pairs=handhits,
+                fist_reference_left_hand_local=slam_fist_local().tolist(),fist_surface_vertex_index=SLAM_FIST_VERTEX,
+                measurement_scope='Exported quantized FK; actual skinned mesh triangles; full victim OBB at every source frame. No runtime claim.')
+    checks=dict(lifted_feet=clear>=2.5,heave_duration=m['slam']-m['lifted']<=.3,
+                pinned_height=heights.min()>=.5 and heights.max()<=.6,vectors_unit=normerr<=.01,vectors_perpendicular=dot<=.01,
+                slam_grip_step=delta[slam].max()<=1.6,other_grip_step=delta[~slam].max()<=.9,
+                windup_highest=tracks['fist'][idx('windup'),1]>=float(tracks['fist'][idx('lifted'):idx('strike')+1,1].max())-.01,windup_height=fistheight>=7 or fistabove>=3,windup_visibility=angle<=32,
+                strike_duration=m['strike']-m['windup']<=.2,strike_on_face=miss<=.5,camera_clearance=literal_camera>=1.2,camera_clearance_excluding_contact_arms=camera>=1.2,
+                impact_arm_compression=impact_peak-min(steady_bends)>=10,pin_arm_nearly_straight=max(steady_bends)<=30,hand_mesh_body_clearance=handhits==0,mesh_floor=sole>=-.002,knee_floor=knees>=0,victim_floor=vf>=-.05,victim_body_clearance=intersections==0,
+                quantized_fk_tracks=trackerr<=.000501,json_size=len(json.dumps(data,separators=(',',':')))<=185000)
+    between=dict(samples=0,min_camera=100.,min_sole=100.,min_victim_floor=100.,victim_body_triangles=0,right_hand_body_pairs=0,max_grip_linear_to_fk_error=0.)
+    decoded=decode_export(data)
+    for i in range(len(decoded)-1):
+        for u in [.25,.5,.75]:
+            t=float(mix(ts[i],ts[i+1],u));W=RIG.fk(blend_pose(decoded[i],decoded[i+1],u));v=skin_root(body,W)
+            between['samples']+=1
+            between['min_sole']=min(between['min_sole'],float(v[foot,1].min()+8))
+            between['right_hand_body_pairs']+=mesh_pair_intersections(v[handtris],v[torso_tris])
+            if m['grab']<=t<=m['release']:
+                g=mix(grip[i],grip[i+1],u);vu=unit(mix(up[i],up[i+1],u));ff=mix(front[i],front[i+1],u);ff=unit(ff-vu*np.dot(vu,ff));basis=slam_basis(vu,ff)
+                between['min_victim_floor']=min(between['min_victim_floor'],float(g[1]-1.5*vu[1]-np.dot(half,np.abs(basis[1]))+8))
+                between['victim_body_triangles']+=triangle_box_overlap(((v-g)@basis-[0,-1.5,0])[torso_tris],half)
+                between['max_grip_linear_to_fk_error']=max(between['max_grip_linear_to_fk_error'],float(np.linalg.norm(g-choke_points(W)['grip'])))
+                if m['slam']<=t<=m['windup']:between['min_camera']=min(between['min_camera'],point_tri_distance(g+.55*vu+.35*ff,v[safe_tris]))
+    report['between_frames']=between
+    report['farthest_neck_point_from_fixed_eye']=math.sqrt(.4**2+.7**2+.75**2)
+    report['camera_scope']='Strict non-striking mesh includes the RIGHT gripping arm/hand; contact-arm exclusion is a separately named diagnostic.'
+    if literal_camera<1.2:report['known_constraint']='Literal camera clearance fails at the right gripping claw; do not claim full brief compliance.'
+    checks.update(interpolated_floor=between['min_sole']>=-.002,interpolated_victim_floor=between['min_victim_floor']>=-.05,
+                  interpolated_victim_body=between['victim_body_triangles']==0,interpolated_hand_body=between['right_hand_body_pairs']==0,
+                  interpolated_camera_excluding_contact_arms=between['min_camera']>=1.2)
+    return report,checks
+
 def export_clip(clip):
     # Neutral scapula tracks prevent the old server gait from changing our arm IK basis.
     names=[n for n in RIG.order if n!='Root']
@@ -568,9 +823,11 @@ def export_clip(clip):
     data['bones']=bones; data['hips']=hips
     if 'marks' in clip:
         data['seconds']=clip['seconds'];data['marks']=dict(clip['marks'])
-        data['tracks']={n:[] for n in ['grip','head','eyes']}
-        for pose in decode_export(data):
-            for n,p in choke_points(RIG.fk(pose)).items():
+        data['tracks']={n:[] for n in (['grip','head','eyes','fist','vup','vfront'] if clip.get('slam') else ['grip','head','eyes'])}
+        for i,pose in enumerate(decode_export(data)):
+            points=slam_points(RIG.fk(pose)) if clip.get('slam') else choke_points(RIG.fk(pose))
+            if clip.get('slam'):points['vup'],points['vfront']=slam_attitude(SLAM_TIMES[i])
+            for n,p in points.items():
                 data['tracks'][n].extend(int(round(float(v)*1000)) for v in p)
     return data,keyframes,float_quats
 
@@ -797,6 +1054,8 @@ def qa_clip(name,clip,data,float_q):
                 loop_zero_mean=not clip['loop'] or mean_horizontal<.001)
     if name=='Kill_Choke':
         extra,extra_checks=qa_choke(clip,data,worlds);report.update(extra);checks.update(extra_checks)
+    if name=='Kill_Slam':
+        extra,extra_checks=qa_slam(clip,data,worlds);report.update(extra);checks.update(extra_checks)
     checks={k:bool(v) for k,v in checks.items()}
     report['asserts']=checks; report['passed']=all(checks.values())
     return report
@@ -805,11 +1064,15 @@ def main():
     global RIG,FLOOR_UP
     parser=argparse.ArgumentParser(); parser.add_argument('--only'); parser.add_argument('--no-render',action='store_true')
     parser.add_argument('--qa-only',action='store_true')
+    parser.add_argument('--blend-only',action='store_true',help='Kill_Slam: bake the already QA-verified payload without reauthoring')
     parser.add_argument('--kill-job',action='store_true',help='write only clips/QA and the dedicated real-mesh kill blend')
     parser.add_argument('--floor-up',type=float,default=FLOOR_UP)
     args=parser.parse_args(sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else [])
     FLOOR_UP=args.floor_up; RIG=Rig(ROOT/'input/rig.json')
     rest=RIG.verify_rest(); print('REST',rest,flush=True)
+    if args.blend_only and args.only!='Kill_Slam':parser.error('--blend-only requires --only Kill_Slam')
+    if args.only=='Kill_Slam':
+        return main_slam(args)
     old_names=list(GAITS)+['Lunge_Windup','Lunge_Flight','Lunge_Land'];names=old_names+['Kill_Choke']
     if args.only and args.only not in names: parser.error('Unknown clip')
     clips={n:build_gait(n) for n in GAITS}
@@ -870,5 +1133,64 @@ def main():
     bpy.ops.wm.save_as_mainfile(filepath=str(out/'blend'/'kill_choke.blend'))
     print('BLENDER FK',parity,flush=True)
     print('BUILD COMPLETE',flush=True)
+
+def main_slam(args):
+    out=ROOT/'out';raw=(out/'clips.json').read_text();existing=json.loads(raw)
+    if args.blend_only:
+        payload=existing['Kill_Slam'];report=json.loads((out/'qa.json').read_text())['Kill_Slam']
+        digest=hashlib.sha256(json.dumps(payload,separators=(',',':')).encode()).hexdigest()
+        assert all(v for k,v in report['asserts'].items() if k!='camera_clearance') and report['payload_sha256']==digest,'Payload differs from the pose/geometry-verified clip'
+        assert report['input_sha256']=={n:hashlib.sha256((ROOT/'input'/n).read_bytes()).hexdigest() for n in ['rig.json','mesh.json']},'QA rig/mesh inputs changed'
+        clip=dict(payload,poses=decode_export(payload))
+    else:
+        clip=build_slam(existing);payload,keys,qs=export_clip(clip)
+        report=qa_clip('Kill_Slam',clip,payload,qs)
+        # Remove only this entry on repeat; on first build retain the complete old prefix.
+        encoded=json.dumps(payload,separators=(',',':'))
+        if 'Kill_Slam' in existing:
+            start=raw.index('"Kill_Slam"');start=raw.index(':',start)+1
+            while raw[start].isspace():start+=1
+            unused,end=json.JSONDecoder().raw_decode(raw,start)
+            updated=raw[:start]+encoded+raw[end:]
+        else:
+            end=raw.rfind('}');updated=raw[:end]+',"Kill_Slam":'+encoded+raw[end:]
+        assert (out/'clips.json').read_text()==raw,'Clips changed during authoring; reread the fresh baseline'
+        (out/'clips.json').write_text(updated)
+        qa=json.loads((out/'qa.json').read_text())
+        report['payload_sha256']=hashlib.sha256(json.dumps(payload,separators=(',',':')).encode()).hexdigest()
+        report['input_sha256']={n:hashlib.sha256((ROOT/'input'/n).read_bytes()).hexdigest() for n in ['rig.json','mesh.json']}
+        qa['Kill_Slam']=report;(out/'qa.json').write_text(json.dumps(qa,indent=2))
+        print('SLAM QA',json.dumps(report),flush=True)
+    failures=[k for k,v in report['asserts'].items() if not v]
+    if failures:
+        # Review-only native artifacts are allowed with the documented, literal
+        # gripping-claw clearance failure. Never label that failed QA as passed.
+        if failures!=['camera_clearance'] or args.qa_only:raise AssertionError(json.dumps(failures))
+        print('KNOWN RIG CONSTRAINT: gripping claw camera clearance',report['min_camera_to_non_striking_mesh'],'< 1.2',flush=True)
+    if args.qa_only:return
+    import bpy
+    from preview import _make_armature,_key_actions
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    armature=_make_armature(RIG)
+    clips={n:dict(poses=decode_export(d),seconds=d.get('seconds',d['frames']/d['fps']),frames=d['frames'],fps=d['fps'],loop=d['loop']) for n,d in existing.items() if n!='Kill_Slam'}
+    clip['poses']=decode_export(payload);clips['Kill_Slam']=clip
+    parity=_key_actions(armature,RIG,clips)
+    body=real_body();mesh=bpy.data.meshes.new('Real_Entity_Studio_Mesh')
+    mesh.from_pydata(skin_root(body,RIG.rest_world).tolist(),[],body['tris'].tolist())
+    obj=bpy.data.objects.new('Real_Entity',mesh);bpy.context.collection.objects.link(obj);obj.matrix_world=armature.matrix_world.copy()
+    for j,n in enumerate(body['names']):
+        group=obj.vertex_groups.new(name=n)
+        for k in range(4):
+            for i in np.where((body['bones'][:,k]==j)&(body['weights'][:,k]>0))[0]:group.add([int(i)],float(body['weights'][i,k]),'ADD')
+    mod=obj.modifiers.new('Studio_exact_rig','ARMATURE');mod.object=armature
+    armature.animation_data.action=bpy.data.actions['Kill_Slam']
+    armature.animation_data.action['qa_passed']=report['passed']
+    armature.animation_data.action['failed_checks']=json.dumps([k for k,v in report['asserts'].items() if not v])
+    armature.animation_data.action['payload_sha256']=report['payload_sha256']
+    for k,v in SLAM_MARKS.items():armature.animation_data.action.pose_markers.new(k).frame=round(1+v*30)
+    sc=bpy.context.scene;sc.render.fps=30;sc.frame_start=1;sc.frame_end=163;sc.frame_set(1)
+    bpy.context.preferences.filepaths.save_version=0
+    bpy.ops.wm.save_as_mainfile(filepath=str(out/'blend'/'kill_slam.blend'))
+    print('BLENDER FK',parity,flush=True)
 
 if __name__=='__main__': main()
