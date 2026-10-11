@@ -2027,3 +2027,30 @@ hood came out white and the camera sits on the shoulder. Proposed, NOT built: a 
 bought, given and taken back from the developers' menu beside GIVE RESEARCH TOKENS (a player on the server or a
 UserId; a saved list so it also reaches someone offline at their next join), with the menu showing whether the
 player owns Supporter. Open: which idea, and whether Supporter is a hard requirement.
+
+### Streamers' feedback, 2026-10-11 (evening): the PLAY button is gone; store pictures and the lobby are open work
+
+Owner, passing on streamers: "Our pictures look too much like AI, so we have to create pictures inspired by other semi
+big and big backrooms games but made for our game. The lobby doesn't give off the liminal space vibe. How can we fix
+that? Remove the 'Play level 1 alone or with friends' but keep the visible through walls 'Start level 1 here'."
+
+- **Done (in Studio, not published): PLAY_BUTTON_REMOVED_20261011** in `First Entry Guide`: the top-of-screen PLAY
+  button and its teleport are removed; the through-walls marker stays and now reads "START LEVEL 1 / HERE"; welcome
+  page 3 and Help name the marker instead of the button. Checked in play: no `PlayRoute` gui, marker enabled on a
+  free Level 1 pad.
+- **Store pictures (research done, pictures NOT made).** The twelve biggest backrooms games on Roblox by players
+  online (public search and thumbnail APIs, read 2026-10-11: Unseen Liminality 8.8k, M.E.G. Endless Reality 5.2k,
+  Backrooms Company 4.8k, Backrooms 4.2k, The Backrooms 1.9k, Apeirophobia 0.9k, The Shadow Network, The Exit 8, The
+  Complex, The Backrooms [REDACTED], Survive the Backrooms, Backrooms Motion) all use IN-ENGINE scenes: the game's
+  own rooms and models, a posed player in the foreground and the entity behind or round a corner, or an empty room
+  alone; the fluorescent yellow palette with one red variant; and ONE small logo lock-up in the same corner of every
+  picture. None is painted or generated. So ours are to be staged and photographed inside the game (HUD off,
+  scripted camera, the Entity frozen in a clip pose with `L1EntityMotionDebug`), then lettered. First raw captures of
+  Level 2's pillared hall are in `artifacts/mobile-qa-20261011/th2_l2_*.jpg`; two HUD chips (the item slots) survive
+  disabling every ScreenGui under PlayerGui and still have to be found. A level's own lighting needs about a minute
+  after arrival before a capture.
+- **Lobby (a question, answered with a proposal, nothing built):** it reads as a clean sci-fi transit hub (black
+  ribbed arches, teal light strips, a road line, many signs, a DJ stage), which is the opposite of liminal. Proposed:
+  rebuild its surfaces as a dead shopping-mall concourse at night (shop = shuttered storefronts, level gates = store
+  entrances, leaderboards = mall directory boards, the DJ stage = an abandoned event stage), flat sickly fluorescent
+  light with a few dead panels, far fewer signs, a hum instead of music by default. Through Blender, as every map.
