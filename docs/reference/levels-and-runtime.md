@@ -2158,12 +2158,13 @@ anything."
   the east wall at z -800 with ten pressure plates (`PreviewShopPressurePlates`: Supporter, AdvancedEquipment,
   Tokens4, Tokens20, EmergencyReentry, ExpeditionPack, CosmeticEquipment, SpeedPotion, RouteMarker, EntityDetector);
   seven leaderboards; stage deck x 205..235, z -655..-632; spawn (220, 30.4, -860); the Reach's frame at z -621.
-- **Queue pads: FOUR a shop, in a row (corrected ten minutes into the build).** The pictures show three, but
+- **Queue pads: THREE a shop, the owner's decision.** I had changed the build to four because
   `LobbyReimaginedPreview.QueueBridge` is built on exactly 24 zones, ids 101..124, four a level
   (`level = floor((id - 101) / 4) + 1`), each a direct child of a bay Model with a `ChamberFloor` and a
-  `CircularBayDiameter`, with a `QueueRenderOwner` ObjectValue; GameManager keeps all admission. So the build has four
-  pads of radius 6.2 at z = shop centre -21, -7, +7, +21 (x 166 or 274), STATION 1..4. The first Codex run was stopped
-  by its process id and restarted with this.
+  `CircularBayDiameter`, with a `QueueRenderOwner` ObjectValue. Told so, the owner answered: "fuck that lav 3 plader,
+  det passer bedre til dette map". So: three pads of radius 7.4 at z = shop centre -19, 0, +19 (x 166 or 274),
+  STATION 1..3, as in the pictures, and the queue bridge (and whatever in GameManager counts four) is to be changed
+  to three stations a level when the new lobby takes over. Two Codex runs were stopped by process id over this.
 - **What "fully functional beside the old lobby" can and cannot mean:** the queue, the spawn and the Reach belong to
   the ONE model named `LobbyReimaginedPreview` that GameManager, RoundUI and the queue controller look up by name.
   A second lobby standing beside it can carry the same structure and attributes, ready to take over, and its own

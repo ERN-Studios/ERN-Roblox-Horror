@@ -7,7 +7,7 @@ Claude QAs its work before importing anything"). Claude (the main agent) did the
 renders and data, and will then import the data into Roblox Studio and wire the game's functions to it. You build.
 
 Work only in /Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009.
-A first run of this job was stopped after ten minutes to correct the number of queue pads (four a shop, not three);
+Two earlier runs of this job were stopped within minutes over the number of queue pads; it is THREE a shop, final;
 anything it left under `tools/lobby_mall/` or `artifacts/lobby-mall-20261011/build/` is yours to keep, change or discard.
 HARD RULES. No Roblox Studio, no MCP server, no computer use, no browser, no network, no other agents. No git commit,
 push, stash or reset. Never print credentials. ONE Blender process at a time, `--threads 2` (this Mac has 8 GB and a
@@ -43,13 +43,12 @@ importer adds an offset to stand it beside the old one. Floor top is y = 30.0 ev
   West side, x 127..180: Level 1 z -869..-811, Level 3 z -789..-731, Level 5 z -709..-651.
   East side, x 260..313: Level 2 z -869..-811, Level 4 z -789..-731, Level 6 z -709..-651.
   Signs: `1 OFFICE`, `2 POOLROOMS`, `3 MALL PARTY`, `4 CINEMA`, `5 THE VOID`, `6 PLAY ZONE`.
-  Front zone of each shop (27 deep, nearest the concourse): the QUEUE BAY: FOUR round pads in a row parallel to the
-  front (the pictures show three; the game's queue system is built on exactly four stations a level, so four it is,
-  a little smaller), radius 6.2, 0.6 high, dark green with a paler ring inlay, centres at x = 166 (west) or 274
-  (east) and z = shop centre -21, -7, +7, +21; a sign post beside each on the concourse side (post 4 high, plate
-  3.2 x 1.3): `STATION 1`, `STATION 2`, `STATION 3`, `STATION 4` (station 1 nearest the entrance, lowest z). A clear
-  cylinder of radius 6.2 and 9 high over every pad: nothing may stand in it. The two end pads may sit partly behind
-  the 3-stud piers; that is fine.
+  Front zone of each shop (27 deep, nearest the concourse): the QUEUE BAY: THREE round pads in a row parallel to
+  the front, exactly as the pictures show (the owner: "lav 3 plader, det passer bedre til dette map"), radius 7.4,
+  0.6 high, dark green with a paler ring inlay, centres at x = 166 (west) or 274 (east) and z = shop centre -19, 0,
+  +19; a sign post beside each on the concourse side (post 4 high, plate 3.2 x 1.3): `STATION 1`, `STATION 2`,
+  `STATION 3` (station 1 nearest the entrance, lowest z). A clear cylinder of radius 7.4 and 9 high over every pad:
+  nothing may stand in it.
   Back zone (26 deep): the level's SHOWCASE, as in W03..W08, built of plain geometry:
    1 OFFICE: mustard damask wallpaper, beige carpet, its own low tile ceiling with one fluorescent panel, a square
      pillar, a grey wall cabinet.
@@ -113,7 +112,7 @@ importer adds an offset to stand it beside the old one. Floor top is y = 30.0 ev
      "normal": [x,y,z], "part": "<name of the part it sits on>"}],`
    `"lights": [{"name", "kind": "panel|globe|showcase|neon", "pos": [x,y,z], "color": [r,g,b], "brightness": n,
      "range": n, "state": "on|dim_flicker"}],`
-   `"anchors": {"spawn": [x,y,z], "pads": [{"level": n, "station": k, "pos": [x,y,z], "radius": 6.2}],
+   `"anchors": {"spawn": [x,y,z], "pads": [{"level": n, "station": k, "pos": [x,y,z], "radius": 7.4}],
      "shop_stand": {"centre": [x,y,z], "radius": 9}, "boards": [{"key": "directory|level1..level6", "pos", "size":
      [w,h], "normal"}], "dj_console": [x,y,z], "stage_deck": {"min": [...], "max": [...]}, "tape_z": -621,
      "dark_wing": {"min": [...], "max": [...]}}}`
@@ -125,7 +124,7 @@ importer adds an offset to stand it beside the old one. Floor top is y = 30.0 ev
    part the players can touch has `collide` true; decoration smaller than a fist, netting and lamp globes false.
    Signs are DATA (the importer draws the text in Roblox); in Blender show them with real text in that style.
 3. `tools/lobby_mall/check_mall.py` (plain Python, `/usr/local/bin/python3`): reads `mall.json` and asserts the
-   contract and the measurements above: every anchor present; 24 pads at the stated centres with their clear
+   contract and the measurements above: every anchor present; 18 pads at the stated centres with their clear
    cylinders empty; the spawn's clear circle; the dark wing's floor clear; each shop opening at least 52 x 12; the
    concourse free for a 5-stud-tall player along a 20-stud-wide path from the spawn to the tape that passes the
    stand; every sign's text exactly as written here; part count; nothing outside `bounds`; no two large solid parts
