@@ -1868,3 +1868,15 @@ and, to a proposal of 10, "Hvad med bare 5?".
   text fits at 844 x 390 touch and 1366 x 768 computer (`artifacts/ui-review-20261011/screen_tokencard_*`). NOT
   tested: a real first login against the live DataStore (Studio does not use it), a real phone, and the last two
   small edits after the pictures (the card is 10 px taller on a computer, "the SHOP").
+
+### Read 2026-10-11 (11:40 local) - What is live and what waits in Studio
+
+Owner: "Fortæl mig lige alle ændringer ved publicering her, fordi tidligere ting du har lavet i studio har jeg heller
+ikke publiceret endnu". Read from the place's saved versions and from Studio's own log on the Mac:
+
+- **Live is v2985** (saved 2026-10-10 23:10:47 UTC, published 23:51:07 UTC = 01:51 local on 2026-10-11, from Studio on
+  this Mac while this session stood interrupted; before it v2980 at 22:00 UTC and v2979 at 20:52 UTC). So the
+  sections above that say "in Studio, NOT published" for the Level 5 side walls, the Level 1 run and spring, the
+  Level 4 reels and the lobby creature's hearing are out of date: all four are live.
+- **Waiting in Studio (v2986 to v2992):** the phone and tablet fixes (commit c1c81957, written 23:54 to 00:04 UTC),
+  the DANCE switch (53b6f628) and the new players' 5 tokens with their card (f8193124).
