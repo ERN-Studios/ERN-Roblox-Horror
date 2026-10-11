@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "parts": 1798,
+  "max_vertex_error_studs": 3.05798868112106e-05,
+  "json_equal": true,
+  "font": "DIN Condensed Bold",
+  "eevee_samples": 16,
+  "render_engine": "BLENDER_EEVEE",
+  "threads": 2,
+  "world_strength": 0,
+  "part_color_mode": "white tint for absolute colour maps",
+  "standing_eye_y": 34.5,
+  "shader_checks": {
+    "PriceAdvancedEquipment_Face": "ShaderNodeEmission",
+    "Shop1_Station1_Face": "ShaderNodeEmission",
+    "StandCRTScreen": "ShaderNodeEmission",
+    "PartyTable": "ShaderNodeBsdfPrincipled",
+    "Counter0_Body": "ShaderNodeBsdfPrincipled",
+    "Product1_Glass": "BLENDED",
+    "Product2_Glass": "BLENDED",
+    "Product3_Glass": "BLENDED",
+    "Product4_Glass": "BLENDED",
+    "Product5_Glass": "BLENDED",
+    "Product6_Glass": "BLENDED"
+  },
+  "box_cap_height_max_error": 5.529960978023496e-08
+}

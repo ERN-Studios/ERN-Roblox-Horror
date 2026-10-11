@@ -1,0 +1,132 @@
+{
+ "_sha256": {
+  "beige_carpet_colour": "09894254bc4a720127bdfd2640539899520c16c28783c07eb2ccfab4daec10d5",
+  "beige_carpet_normal": "bee2fe3f6b913bb67959d62b5868927ff7fa782c74b1f4842469ab85feda3ce9",
+  "beige_carpet_roughness": "a434347db9603409b7edd0bed13a402f125f481c5ff0a145da06392c41ca4d81",
+  "black_ceiling_colour": "f9a90822931571c6cd422173ad7c31077ffd8694b2b7bed4037a643e55568fc5",
+  "black_ceiling_normal": "5115c6582449323a2dff6e6561036cb0c336e531308d4ac4b253fa8ce00e595a",
+  "black_ceiling_roughness": "ea396b762a137d1ffebcca7b724031a87bafefa6f3085f7f54738b0112bc1918",
+  "brass_colour": "997ec24f1c35c4df7c5fe7062930ee8d8b013b3529642b00b841a4ccd51e3a3e",
+  "brass_normal": "35ce130fd769a083859d27832ca3d4ab34682c3bbbb7e8c8f383ce39ccb1fac6",
+  "brass_roughness": "446fdfc41fd8621cb92f45ff47878f333da072843f9d2c502c296dc54092c0ad",
+  "ceiling_colour": "ab0bc2e952d124f077c6181d62119aefb138f343842b09c4a652089b69338ee8",
+  "ceiling_normal": "ef41669e1b412a99828c97477448d6580a4e7b15a0ad2ec67e250821d13b1363",
+  "ceiling_roughness": "69a51b6ee00a0f72bcf4477a8d59ccde62aad4472ca05bfc5a79f92db4866817",
+  "damask_colour": "18b2fcaaf1c95dafcd60328ebd8993f9d5155ff66b2f0844cd4e4027208e6201",
+  "damask_normal": "468b39d13a8af4d3a6f26487084c152beec2a9c79b4da3d0408c04f1c3c9f1f8",
+  "damask_roughness": "7607d95f55f4ab1355b86c3a4b7a1145621f8c231f035f6ccc4237df270392db",
+  "hazard_colour": "80bc39fb9dca23877085beab432042ab1c674c8bfe5b2dc903c520f2d085bd62",
+  "hazard_normal": "63a0f94b1f109beb8279a0dfa4944e849342b341b5642a958c68f8944fcf908a",
+  "hazard_roughness": "b732e585a3edfdc20ae3328fcce04b9af570a61f408ea2dcc63a348b90a32a8b",
+  "oak_colour": "9f0000e4d42f0859d6a58ef30c7618226052500b28c0084eb783e61c7ef05080",
+  "oak_normal": "5b23a0ef10835e33cb257cbe2961f0999512d2de2532f185fd23490a24a34a08",
+  "oak_roughness": "7326d5998d11c16b98587cc34fcd3625871253357f473a2026333c6f6f6f5f69",
+  "pegboard_colour": "a2a1959c62694747feb9d5dedc9bd5cb4602c812fa8feaa92c20872225982166",
+  "pegboard_normal": "a66a72d850a0761f9c35d03b6e66f50de7ac3178aaaaff7152f017b938a86371",
+  "pegboard_roughness": "8e12c7db37180fc54dc56b875f1a024a841e30487da6c51716f7ded58568b081",
+  "plaster_colour": "6d2c40ba7288b9b2e2de04f77a6d419677569350f1eb9f158d09e4e01d03ede5",
+  "plaster_normal": "8f21002e4927b429e9771e0d9cdf48cfa4f429632da9960a265c4df2607aadf9",
+  "plaster_roughness": "267ce22ebd36d00fb282d6cf94bf5f0e6c494639121d687873a92e121b65c6a3",
+  "puzzle_mat_colour": "e2b1843f23d9076e0c65eaab9788bcc11309d51820fdb5f5a505c92e33fddbcc",
+  "puzzle_mat_normal": "a8aad73ff65c9319e3e8859be0ebc09f6c46ebc510b2f221cef84f4fd4e38389",
+  "puzzle_mat_roughness": "81216be18ddd3218dad283eff3aaa9e23ce1f906afbdba876d5e1835ad8b2316",
+  "road_carpet_colour": "6818783b77041c2912eb1939dcef957326377099a44c1a50f25e35c21e0734e7",
+  "road_carpet_normal": "8b9433dd56f95b81a361e29dd68de49f42a34787965534add0065f3ea476deb0",
+  "road_carpet_roughness": "30229e750842abfbf84b9dec42adfe7549c4d506e67c2b9b415fc06587f6e203",
+  "small_tile_colour": "fa4a1119679208b7737488b2227170c0d74a74274f1d6d7689e8ea3fbae6d717",
+  "small_tile_normal": "2c007cb82f51d14c21318216cb0987dcc518b1121f44a592666d812485504304",
+  "small_tile_roughness": "d5a6e16baaf5e6c10c629ac5a6962e1940ea28c62f0936ee6619176d44d1e671",
+  "stage_carpet_colour": "7e3c65f9a17b49e899595ee8fe2629049e505ec9a3c28e3b5eb5e6e6e53316ba",
+  "stage_carpet_normal": "6f5164eaa853e3c49cee772034d2c6f43af04552e5e8c79640c3c97017f1e4e7",
+  "stage_carpet_roughness": "f227ad35b7fb43ab992aa4bc2f620142df9547968b8a4b82c39e9c0cdaa3767d",
+  "stand_carpet_colour": "0ec1638d985d2ff7695480f1d78c3ade1b1bb86b99b607f56da88c8d18a39ddd",
+  "stand_carpet_normal": "c50078ceb95868f76c898060ae117f5555b939b4c2bfd07f857e60648968e67e",
+  "stand_carpet_roughness": "b4056e59af70928d4ec34d14cc095e73f886b340a6997f4ed70dccfdb2152eb1",
+  "terrazzo_colour": "73e07b42d48e79666ec09f1deae9da1beb4b17c8fec64d84a7c6e5888ad58994",
+  "terrazzo_normal": "5d43fb98c8f934d1015102ad5eae8d1d318a7f618486479ae614c141dfd5e5a5",
+  "terrazzo_roughness": "423bae0d5644a5703beb31ac59da0843ff56f351ed1f4b5bc5a11af5634b67d4",
+  "triangle_carpet_colour": "2b2458ee0d8fbb878fa5e4a23a072461826ab9220d353b4f2756d47e8c8882c1",
+  "triangle_carpet_normal": "0d6667793dba6f742c93bd308cbb4bfe0062b6cf77708e7310f0efc6dbfadb54",
+  "triangle_carpet_roughness": "b47e28ea1e7afb07d55d9cde20840a3099106303c966fd211060397a350dccc3"
+ },
+ "beige_carpet": {
+  "colour": 73224556312562,
+  "normal": 83795805599849,
+  "roughness": 77826637530360
+ },
+ "black_ceiling": {
+  "colour": 115575872798484,
+  "normal": 90691915224462,
+  "roughness": 74549528611015
+ },
+ "brass": {
+  "colour": 105823231245313,
+  "normal": 131687407381688,
+  "roughness": 73942590317996
+ },
+ "ceiling": {
+  "colour": 125110992127796,
+  "normal": 99678171371377,
+  "roughness": 121584585045485
+ },
+ "damask": {
+  "colour": 118872243433309,
+  "normal": 114210578379518,
+  "roughness": 106223322182700
+ },
+ "hazard": {
+  "colour": 127922287741035,
+  "normal": 129633645586007,
+  "roughness": 127189655057844
+ },
+ "oak": {
+  "colour": 115310223960061,
+  "normal": 86906485740202,
+  "roughness": 88360657758511
+ },
+ "pegboard": {
+  "colour": 74465505860189,
+  "normal": 107660298387661,
+  "roughness": 104922186057280
+ },
+ "plaster": {
+  "colour": 74942286051997,
+  "normal": 129693755034438,
+  "roughness": 74555483120788
+ },
+ "puzzle_mat": {
+  "colour": 137634639841536,
+  "normal": 107008997969699,
+  "roughness": 91248391373949
+ },
+ "road_carpet": {
+  "colour": 109226722956729,
+  "normal": 73155792266968,
+  "roughness": 132624109646859
+ },
+ "small_tile": {
+  "colour": 129508222020952,
+  "normal": 105096545074321,
+  "roughness": 135478128530034
+ },
+ "stage_carpet": {
+  "colour": 71579347541344,
+  "normal": 84627291913951,
+  "roughness": 87418255401545
+ },
+ "stand_carpet": {
+  "colour": 132057975445393,
+  "normal": 116497883808014,
+  "roughness": 82642193060819
+ },
+ "terrazzo": {
+  "colour": 79300689737715,
+  "normal": 103273604428427,
+  "roughness": 126695237639190
+ },
+ "triangle_carpet": {
+  "colour": 110958820294066,
+  "normal": 125607338246536,
+  "roughness": 127043142744194
+ }
+}

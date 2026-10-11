@@ -353,6 +353,15 @@ revisedLobbyLighting.values = {
 }
 function revisedLobbyLighting.contains(inMaze)
  if inMaze or player:GetAttribute("Level6InRound") == true then return false end
+ -- MALL_LOBBY_20261012: the mall lobby standing beside this one is an enclosed interior too. Outside this pass its
+ -- ceiling panels sat in the old lobby's 14:00 daylight ambient and the dark wing was not dark.
+ local mall = workspace:FindFirstChild("LobbyMallPreview")
+ local low, high = mall and mall:GetAttribute("BoundsMin"), mall and mall:GetAttribute("BoundsMax")
+ local body = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+ if typeof(low) == "Vector3" and typeof(high) == "Vector3" and body and body:IsA("BasePart") then
+  local at = body.Position
+  if at.X >= low.X and at.X <= high.X and at.Y >= low.Y and at.Y <= high.Y and at.Z >= low.Z and at.Z <= high.Z then return true end
+ end
  local model = workspace:FindFirstChild("LobbyReimaginedPreview")
  if not model or not model:IsA("Model") or model.Parent ~= workspace
   or model:GetAttribute("LobbyReimaginedOwned") ~= true or model:GetAttribute("Ready") ~= true

@@ -1,0 +1,8 @@
+PASS: 1798 parts / 57 signs / 50 lights
+18 pad cylinders, radius12 spawn, six 52x12 openings, clear dark floor, exact signs/lights, bounds, shape contract.
+Continuous 20-wide x5-high corridor: 515 centreline nodes; minimum sampled obstacle clearance 10.005344; whole-edge proof: 0.01-stud samples, 0.005-stud Lipschitz bound.
+Full-width terminal strip verified from [245.5, 30, -632.5] to tape-base south tangent z=-622.1; 20 wide, 10.4 long, 5 high. No 20-wide passage through poles 12 apart.
+Opposed coplanar joining faces >1 sq.stud: 1372 (flagged in qa.json; internal contact surfaces, not overlapping visible faces).
+Same-facing submerged base contacts >1 sq.stud: 5 (flagged in qa.json; full coverage by the opaque basin floor verified).
+Large solid overlaps: 0; same-facing coplanar face overlaps >1: 0.
+Axis test maximum error: 0.000e+00

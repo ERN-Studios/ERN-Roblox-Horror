@@ -1,0 +1,308 @@
+[
+  {
+    "view": "R01_arrival",
+    "roblox_camera": [
+      220,
+      34.5,
+      -899.2
+    ],
+    "target": [
+      220,
+      37.5,
+      -795
+    ],
+    "horizontal_fov": 116,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R02_shop_and_supplies",
+    "roblox_camera": [
+      202,
+      34.5,
+      -811
+    ],
+    "target": [
+      220,
+      36.7,
+      -770
+    ],
+    "horizontal_fov": 98,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R03_shop_level1",
+    "roblox_camera": [
+      206,
+      34.5,
+      -840
+    ],
+    "target": [
+      151,
+      36.8,
+      -840
+    ],
+    "horizontal_fov": 90,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R13_stand_from_above",
+    "roblox_camera": [
+      193,
+      65,
+      -804
+    ],
+    "target": [
+      220,
+      33.4,
+      -770
+    ],
+    "horizontal_fov": 65,
+    "type": "PERSP",
+    "ceiling_hidden": true,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R00_plan",
+    "roblox_camera": [
+      220,
+      365,
+      -660
+    ],
+    "target": [
+      220,
+      30,
+      -660
+    ],
+    "horizontal_fov": 50,
+    "type": "ORTHO",
+    "ceiling_hidden": true,
+    "work_lights": 0,
+    "exposure": 1.0
+  },
+  {
+    "view": "R04_shop_level2",
+    "roblox_camera": [
+      234,
+      34.5,
+      -840
+    ],
+    "target": [
+      289,
+      36.8,
+      -840
+    ],
+    "horizontal_fov": 90,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R05_shop_level3",
+    "roblox_camera": [
+      206,
+      34.5,
+      -760
+    ],
+    "target": [
+      151,
+      36.8,
+      -760
+    ],
+    "horizontal_fov": 90,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R06_shop_level4",
+    "roblox_camera": [
+      234,
+      34.5,
+      -760
+    ],
+    "target": [
+      289,
+      36.8,
+      -760
+    ],
+    "horizontal_fov": 90,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R07_shop_level5",
+    "roblox_camera": [
+      206,
+      34.5,
+      -680
+    ],
+    "target": [
+      151,
+      36.8,
+      -680
+    ],
+    "horizontal_fov": 90,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R08_shop_level6",
+    "roblox_camera": [
+      234,
+      34.5,
+      -680
+    ],
+    "target": [
+      289,
+      36.8,
+      -680
+    ],
+    "horizontal_fov": 90,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R09_queue_bay",
+    "roblox_camera": [
+      186,
+      34.5,
+      -863
+    ],
+    "target": [
+      155,
+      35.7,
+      -837
+    ],
+    "horizontal_fov": 104,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R10_the_tape",
+    "roblox_camera": [
+      245,
+      34.5,
+      -650
+    ],
+    "target": [
+      233.3,
+      33.2,
+      -621
+    ],
+    "horizontal_fov": 96,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R11_in_the_dark",
+    "roblox_camera": [
+      220,
+      34.5,
+      -598
+    ],
+    "target": [
+      220,
+      35,
+      -511
+    ],
+    "horizontal_fov": 90,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R12_event_stage",
+    "roblox_camera": [
+      220,
+      34.5,
+      -696.5
+    ],
+    "target": [
+      220,
+      36.6,
+      -641
+    ],
+    "horizontal_fov": 67,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R14_dark_wing_lit_for_review",
+    "roblox_camera": [
+      220,
+      40,
+      -617
+    ],
+    "target": [
+      220,
+      36,
+      -500
+    ],
+    "horizontal_fov": 78,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 4,
+    "exposure": 0.0
+  },
+  {
+    "view": "R15_shop_skins",
+    "roblox_camera": [
+      220,
+      34.5,
+      -798
+    ],
+    "target": [
+      220,
+      34.0,
+      -784
+    ],
+    "horizontal_fov": 91,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  },
+  {
+    "view": "R16_shop_advanced_equipment",
+    "roblox_camera": [
+      220,
+      34.5,
+      -791
+    ],
+    "target": [
+      220,
+      33.1,
+      -781.2
+    ],
+    "horizontal_fov": 78,
+    "type": "PERSP",
+    "ceiling_hidden": false,
+    "work_lights": 0,
+    "exposure": 0.0
+  }
+]

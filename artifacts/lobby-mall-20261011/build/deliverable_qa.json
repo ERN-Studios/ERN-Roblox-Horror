@@ -1,0 +1,189 @@
+{
+  "passed": true,
+  "renders": [
+    {
+      "view": "R00_plan",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "7b36e00826a4f8f70d2a9dbfde9b344f09a4a4777fcb0a24235da2e30c7c6a37"
+    },
+    {
+      "view": "R01_arrival",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "2dfa0a1faf22f1bc829bfc7b958a97afe7dd1627b07652b6d56535ecdfe7e127"
+    },
+    {
+      "view": "R02_shop_and_supplies",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "d613be439d7e86059e770ed24d2bb7d3c9ceb7778f6765f517486d1beeccb7c6"
+    },
+    {
+      "view": "R03_shop_level1",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "8c71f2b37b36329d1a0a3584f0d47d83d0baf8d40a35cae66c73feb6e87b3cdd"
+    },
+    {
+      "view": "R04_shop_level2",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "18a358f516f7435ccb9528f78c682fd59f0988bc984d461385c31b33e44da1de"
+    },
+    {
+      "view": "R05_shop_level3",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "634fa093ea3becdf978b16e1da0823b4ccec2485ffe0490cad46e13a8c20e61b"
+    },
+    {
+      "view": "R06_shop_level4",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "391c61bd6b1196c5b7053688473362537221c050377905ee8ddd27e22448d2f1"
+    },
+    {
+      "view": "R07_shop_level5",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "56951ca214d0b3185a49f91a66ef0dfb9ee57f8faf502e9a1b4afac3b11b34b0"
+    },
+    {
+      "view": "R08_shop_level6",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "c871fe951ff7472117306fb9328285efa2c8bf3fa721b597c79e32d82a3f8165"
+    },
+    {
+      "view": "R09_queue_bay",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "d28ccdfb1bc0b0b3d7793c1259387ff1dd64a8a98cfa5c4c783c57d12c6b9c66"
+    },
+    {
+      "view": "R10_the_tape",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "a85356981f24df884b2bc402525cc824d0e06ea26880e9d9bf8af78eb8e76310"
+    },
+    {
+      "view": "R11_in_the_dark",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "689af41f1aa81b3cf516696c7a7ed012c652bca447e6505518a0572483ea3e03"
+    },
+    {
+      "view": "R12_event_stage",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "bfd88f8b0177e1a263b6097f3b3feeb2e1315c408cbb045a8572399329fdc5fc"
+    },
+    {
+      "view": "R13_stand_from_above",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "19dc13675192d6b61fb854d4ffc678804dd4fd7388d119b99945c0ceb0da9ef0"
+    },
+    {
+      "view": "R14_dark_wing_lit_for_review",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "ef161c77d2a4915b0c7d4049548db4cd061cc44fa9d9d8ca8cd0d4738f75ef56"
+    },
+    {
+      "view": "R15_shop_skins",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "0aea661987ac139f5673fa5ad4fb60c04e401cddfaa2e8a3db69b03b0e4d990f"
+    },
+    {
+      "view": "R16_shop_advanced_equipment",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "89e22c0907997aa2f4dd00781be8bffc0199d687748f6ec53f813113c581afea"
+    }
+  ],
+  "textures": 66,
+  "parts": 1798,
+  "json_blend_parity": {
+    "passed": true,
+    "parts": 1798,
+    "max_vertex_error_studs": 3.05798868112106e-05,
+    "json_equal": true,
+    "font": "DIN Condensed Bold",
+    "eevee_samples": 16,
+    "render_engine": "BLENDER_EEVEE",
+    "threads": 2,
+    "world_strength": 0,
+    "part_color_mode": "white tint for absolute colour maps",
+    "standing_eye_y": 34.5,
+    "shader_checks": {
+      "PriceAdvancedEquipment_Face": "ShaderNodeEmission",
+      "Shop1_Station1_Face": "ShaderNodeEmission",
+      "StandCRTScreen": "ShaderNodeEmission",
+      "PartyTable": "ShaderNodeBsdfPrincipled",
+      "Counter0_Body": "ShaderNodeBsdfPrincipled",
+      "Product1_Glass": "BLENDED",
+      "Product2_Glass": "BLENDED",
+      "Product3_Glass": "BLENDED",
+      "Product4_Glass": "BLENDED",
+      "Product5_Glass": "BLENDED",
+      "Product6_Glass": "BLENDED"
+    },
+    "box_cap_height_max_error": 5.529960978023496e-08
+  },
+  "comparisons": [
+    "comparisons/compare_00.jpg",
+    "comparisons/compare_01.jpg",
+    "comparisons/compare_02.jpg",
+    "comparisons/compare_03.jpg",
+    "comparisons/compare_04.jpg",
+    "comparisons/compare_05.jpg",
+    "comparisons/compare_06.jpg",
+    "comparisons/compare_07.jpg",
+    "comparisons/compare_08.jpg",
+    "comparisons/compare_09.jpg",
+    "comparisons/compare_10.jpg",
+    "comparisons/compare_11.jpg",
+    "comparisons/compare_12.jpg",
+    "comparisons/compare_13.jpg",
+    "comparisons/compare_14.jpg",
+    "comparisons/compare_15.jpg",
+    "comparisons/compare_16.jpg"
+  ]
+}
