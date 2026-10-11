@@ -2084,3 +2084,24 @@ the SUPPLIES kiosk with vending machines (the shop), the DIRECTORY board (leader
 (DJ) and the fenced CLOSED FOR RENOVATION wing (the creature's dark). Delivered with captions to
 `~/Desktop/Lobby - forladt indkoebscenter (forslag)`. They are concepts: planters and benches differ from the plan
 from picture to picture. To build: through Blender, as every map; the owner's yes is owed.
+
+### Drawn 2026-10-11 (late evening) - The mall lobby, second round: open shops with level showcases and queue bays, the Zyntra stand, tape and the dark wing
+
+Owner on round one: "Stabilt koncept med det der mall. Butikkerne skal dog være mere åbne så det ikke er en rulledør
+der næsten er nede, og rigtig fint hvis det showcaser hvordan levelet nogenlunde ser ud, og så skal der være queue up
+bays ligesom i vores. Elsker slutningen der hvor der er mørkt, der må du meget gerne lave noget crime scene tape med
+nogle pæle som skal signalere at her stopper lobbyen, og efter det, hvis man så fortsætter ind i den mørke og
+fortsættende lobbygang, så bliver lobby-monsteret vækket og kommer stille og roligt tættere på og griber en med dens
+arme, som allerede er i den nuværende lobby, men åbn facaden. Lad der være en lille mall shop i midten ... det kan
+være Zyntra-shoppen med alle vores ting. Kom med nye konceptbilleder."
+
+Plan v2 (`artifacts/lobby-mall-20261011/plan_v2.png`) and twelve pictures (`raw_v2/`, brief `brief_v2.md`, Codex
+Medium): each level shop is a fully open front with the level's look as a showcase in the back two thirds and three
+round queue pads with STATION posts in front; a freestanding ZYNTRA kiosk island stands where the fountain was and is
+the shop (the wall kiosk is gone); the fence is replaced by CRIME SCENE DO NOT CROSS tape on striped poles that a
+player can walk under; beyond it the same concourse runs on unlit, and the Reach (two eyes, four long arms, as it
+exists today) wakes for whoever goes in. Delivered with captions to
+`~/Desktop/Lobby - forladt indkoebscenter (forslag)/v2`. Off in the pictures: the cinema's seats are oversized, the
+overview shows the tape too near, one distant shutter is down in the stand's picture. What this means for the game's
+rules when built: the Reach's trigger changes from "over the fence" to "past the tape", and the way out is simply to
+walk back. Still a proposal; nothing built.
