@@ -1880,3 +1880,11 @@ ikke publiceret endnu". Read from the place's saved versions and from Studio's o
   Level 4 reels and the lobby creature's hearing are out of date: all four are live.
 - **Waiting in Studio (v2986 to v2992):** the phone and tablet fixes (commit c1c81957, written 23:54 to 00:04 UTC),
   the DANCE switch (53b6f628) and the new players' 5 tokens with their card (f8193124).
+
+### Changed 2026-10-11 (midday) - Level 1: the loud sound at the grab is removed (in Studio, NOT published by this session)
+
+Owner: "Fjern den høje lyd som spiller når man er blevet fanget af entity". It was `JUMPSCARE_SOUND`
+(rbxassetid://140233243543479, volume 0.82) in `SoundController`, played 2D to the caught player the instant the
+Entity's capture fired. The id is now empty (CAPTURE_SOUND_REMOVED_20261011), which the existing guard treats as "play
+nothing". Left as they were: the scream the OTHER living players hear at the place of a death (`DEATH_SOUND`, 0.5) and
+the Entity's own howls. Not played in a round after the change; the guard was read, not exercised.

@@ -29,7 +29,9 @@ local ELEVATOR_SOUND  = "rbxassetid://72303878759145" -- the elevator ride, play
 local FLASHLIGHT_SOUND = "rbxassetid://79013410316837" -- click when YOU toggle the flashlight on/off (2D, only you hear it)
 local ENTITY_SOUND    = "rbxassetid://103206085469231" -- looping growl/drone emitted BY the Entity (positional)
 local DEATH_SOUND     = "rbxassetid://113822157484898" -- the scream ALIVE players hear when someone dies (positional at the kill)
-local JUMPSCARE_SOUND = "rbxassetid://140233243543479" -- the DYING player's OWN jumpscare sound (2D, only they hear it)
+-- CAPTURE_SOUND_REMOVED_20261011 (owner: "Fjern den høje lyd som spiller når man er blevet fanget af entity"). It was
+-- rbxassetid://140233243543479, played 2D to the caught player at the grab; an empty id plays nothing.
+local JUMPSCARE_SOUND = "" -- the DYING player's OWN jumpscare sound (2D, only they hear it)
 local YELL_SOUND      = "rbxassetid://92808749593079" -- the Entity's roar when it shoves you off a pit beam (positional)
 local SPOT_SOUND      = "rbxassetid://82272419363488" -- the "spotted you!" scream when it first sees someone (positional)
 local LUNGE_SOUND     = "" -- plays as it winds up a lunge (telegraph, positional)
