@@ -2105,3 +2105,28 @@ exists today) wakes for whoever goes in. Delivered with captions to
 overview shows the tape too near, one distant shutter is down in the stand's picture. What this means for the game's
 rules when built: the Reach's trigger changes from "over the fence" to "past the tape", and the way out is simply to
 walk back. Still a proposal; nothing built.
+
+### Drawn 2026-10-11 (night) - The mall lobby, third round: 1990s Backrooms look, the hexagonal Shop & Supplies unit, the levels' names, the danger tape
+
+Owner on round two: "Okay bedre, men det ser for moderne ud. Behold 90 backrooms stilen hele vejen igennem i mallets
+udseende. Den der Zyntra shop ligner noget fra Dubai Mall. Det skal være ... sådan hexagon-formet lille shop ligesom
+de der 90s jewelry shops der er i midten af sådan en gang, men med 90 stil, og kald den Shop & Supplies. De
+forskellige levels skal hedde: 1. Office 2. Poolrooms 3. Mall Party 4. Cinema 5. The Void 6. Play Zone. Drop det der
+med crime scene tekst og skriv i stedet for på det tape 'DANGER: DO NO GO PAST THIS POINT' hele vejen hen." (The
+tape says DO NOT GO: his "NO" read as a slip, and he was told.) Then, with a reference picture
+(`artifacts/lobby-mall-20261011/refs/owner_rmu_reference.png`): "For the shop like this but 90s liminal backrooms
+style and a hexagon. They are called Retail Merchandising Units."
+
+- **These names are now the levels' names for the lobby:** 1 OFFICE, 2 POOLROOMS, 3 MALL PARTY, 4 CINEMA, 5 THE VOID,
+  6 PLAY ZONE. The shop is SHOP & SUPPLIES.
+- **The look that was accepted as direction ("THE LOOK" in `brief_v3.md`):** flat warm green-yellow light from old
+  fluorescent troffers, a yellow cast over everything, stained 2x2 ceiling tiles, MATTE worn floor, yellowed plaster
+  or damask wallpaper with the teal-and-mauve stripe, oak-effect laminate fascias, dull brass, cream backlit plastic
+  sign boxes with chunky dark-red 1990s capitals. Nothing glossy, no black fascias with white type, no LED look.
+- **The stand:** a hexagonal island counter in oak laminate with round stools, a hexagonal display tower rising from
+  its middle (pegboard, small cabinets, a CRT, a rail of suits), a ring of opal globe lamps, a hexagonal sign box, and
+  a short side counter with a till: the reference's arrangement in 1990s finishes.
+- Thirteen pictures in `raw_v3/` (twelve sections, the stand also from above; the round-three kiosk and a misspelt
+  overview are kept beside them), plan `plan_v3.png` from `tools/lobby_reach/mall_plan.py`, delivered with captions to
+  `~/Desktop/Lobby - forladt indkoebscenter (forslag)/v3`. Off: a slight floor sheen in three pictures, the stand
+  from above has four stools and its side counter on the other side. Still a proposal; nothing built.
