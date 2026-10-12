@@ -2738,3 +2738,32 @@ was missing.
   game's place was not opened beside it. To do when the place is open: push `PuzzleManager`, `EntityAI`,
   `PuzzleUI`, `RoundHud`; check `Master.GetOverride("L1_EntityChaseSpeed")` is nil (a stored override would beat the
   new default); play a Level 1 round and photograph the card on a computer and at a phone's size.
+
+## 2026-10-13 (after the owner's restart) - the Level 1 changes are in Studio and played
+
+- Pushed: `PuzzleManager`, `EntityAI`, `PuzzleUI`, `RoundHud`. No stored override of `L1_EntityChaseSpeed` (or of the
+  four other Level 1 keys read), so the new defaults are what runs.
+- **A push that wrote the old text back.** The restart wiped the temp folder, and with it `mac_merge_push.py`'s
+  record of what this checkout last wrote into Studio; the tool then took `git HEAD` as the merge base. Because the
+  edits had been COMMITTED before they could be pushed (the place was closed), mine == base, Studio's older text
+  looked like "another session's edit", was written back unchanged and replaced the four working files. Nothing was
+  lost (HEAD had them): `git checkout HEAD -- <files>` and a second push wrote them ("studio == base"). After a
+  restart, or whenever a commit came before the push: check `git status` after pushing; a file that turns "modified"
+  was reverted by the merge.
+- Played solo from the mall's Level 1 pad, twice. Round start: `EntityDormant` true, the Entity parked at y 600,
+  the card "RESTORE THE POWER 0/1 ... Follow the compass to a fuse relay. ... 57 m". One relay emptied (1/3): the
+  Entity STILL out of the maze (the old rule would have woken it), the card "Follow the compass to the fuse box. /
+  Insert the fuse to power the box. 39 m". Box full: `Level1AllBoxesFull` true, `LightMode` ALERT, the Entity in the
+  maze and walking, the card "PULL THE LEVERS 0/1 ... Follow the compass to the lever. / It is awake now. Stay
+  quiet. 135 m". Lever pulled: ESCAPE, `EntitySpeedMul` 1.15, "GET OUT ... EXIT 117 m".
+- Phone sizes (844x390 and 667x375): the first pass lost the compass row when the pill collapsed, because
+  `RoundHud.SetObjective` copies the compass and dropped `Pin`; fixed there, and both sizes now keep title, next
+  action and "35 m" under the bar. `test_round_hud` 185, `test_round_hud_local` 497, `test_objective_receivers` 205
+  pass.
+- In the first test round the server lost its only player a few seconds after a teleport to the box (cause not
+  found; swap was 9.7 of 10.2 GB and Roblox Player was running beside Studio). The second and third rounds ran clean.
+- Not tested: a chase (the speed is read from the code, not timed), two players, a real phone. Not published.
+- Unrelated fix on the way: the app polled `git diff --numstat HEAD` on the stale main checkout every few seconds,
+  and since its `artifacts/` and `assets/` were deleted that listed 4,865 files each time (0.3 GB a run). The deleted
+  files are now marked skip-worktree there (`git update-index --skip-worktree`); the scan lists 4.
+

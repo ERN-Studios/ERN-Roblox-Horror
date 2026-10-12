@@ -1003,7 +1003,8 @@ function RoundHud.SetObjective(state)
 	if type(state.Status) == "table" and type(state.Status.Text) == "string" then
 		copy.Status = {Text = state.Status.Text, Kind = state.Status.Kind}
 	end
-	if type(state.Compass) == "table" then copy.Compass = {State = state.Compass.State, Target = state.Compass.Target} end
+	-- L1_COMPASS_20261013: Pin rides along (pinsExit); the first version dropped it here and a phone lost the row
+	if type(state.Compass) == "table" then copy.Compass = {State = state.Compass.State, Target = state.Compass.Target, Pin = state.Compass.Pin == true or nil} end
 	if type(copy.Count) == "number" and type(copy.Goal) == "number" and copy.Goal > 0 then
 		copy.Counter = {Label = copy.Tag, Current = copy.Count, Max = copy.Goal}
 	end

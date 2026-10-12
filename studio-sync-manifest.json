@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-12T17:03:40.782342+00:00",
+  "capturedAtUtc": "2026-10-12T20:25:02.899245+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -193,8 +193,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
-      "bytes": 79580,
-      "sha256": "6688ccd1674a63a4da9832b92e9ab941076c174324c99b225bc282276a5d53c2",
+      "bytes": 80105,
+      "sha256": "1bfff951471d743c3917e1ac4e61df267e47186e5109c3da34f5a350b32a62c1",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -549,8 +549,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
-      "bytes": 72493,
-      "sha256": "7cedd8c9d46e1480a5558968dd7f3cf5f63c9c2a5cb2b4df06b5bb779b237d0e",
+      "bytes": 73686,
+      "sha256": "ec7400ab909cf3dcaff37846249e0001932e18aae7c69d32fd746930fefa18c6",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -633,8 +633,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
-      "bytes": 115391,
-      "sha256": "9cdc5ea50c1666cd04e95e4154e7bea70bf973a95c4e7ff7781e2d28dc35bc40",
+      "bytes": 118706,
+      "sha256": "110805ddb285ec7a9b8bb30835ae15a999a67d53c6f5f49215bc052a38037a66",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4343,8 +4343,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
-      "bytes": 8315,
-      "sha256": "50c517b7f8664471a0ff4934d7e737a65f7a0a4c7a747c3d23d11a47f8640271",
+      "bytes": 9709,
+      "sha256": "991e78d66c7878c58c8128138307e546e975827f62dc604e622aa772db03cf45",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
