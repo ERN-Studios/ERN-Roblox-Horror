@@ -413,16 +413,6 @@ for _, d in ipairs(model.Parts.Tape:GetChildren()) do
 end
 local blocker = marker(anchors, "TapeBlocker", Vector3.new(a.spawn[1] + offset.X, a.spawn[2] + 1.75, a.tape_z), Vector3.new(80, 3.5, 0.6))
 blocker.CanCollide = true
--- MALL_FINISH_20261013 (owner: signs seen through walls saying LEVEL 1, LEVEL 2 ... "så folk ikke er i tvivl om hvor
--- de andre levels er"). One host over each shop front; Lobby Mall Client hangs the sign on it in the game's UI style.
-local markers = folder("LevelMarkers")
-local LEVEL_NAMES = {"OFFICE", "POOLROOMS", "MALL PARTY", "CINEMA", "THE VOID", "PLAY ZONE"}
-for level = 1, 6 do
-	local west = level %% 2 == 1
-	local host = marker(markers, "Level" .. level, Vector3.new((west and 181.2 or 258.8) + offset.X, 47.3, -840 + 80 * math.floor((level - 1) / 2)))
-	host:SetAttribute("LevelNumber", level)
-	host:SetAttribute("LevelName", LEVEL_NAMES[level])
-end
 -- the six skins: the game's own suit model on each plinth when its template is in the place
 local plinths, placed, standIns = folder("SkinPlinths"), 0, 0
 local ServerStorage = game:GetService("ServerStorage")

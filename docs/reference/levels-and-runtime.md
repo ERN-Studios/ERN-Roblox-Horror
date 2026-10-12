@@ -2407,3 +2407,8 @@ is now Studio's text plus the mall change.
 Checkout gotcha: `git sparse-checkout add <dir>` reapplies the cone and REMOVES tracked files that were added with
 `git add --sparse` outside it (they stay in git; add their folders to the cone to get them back), and deletes
 ignored folders inside them (`textures_pbr`: rerun `make_pbr.py`).
+
+**2026-10-13, later: the level signs seen through walls are REMOVED** (owner: "Fjern: Level-skilte gennem vægge").
+`Lobby Mall Client` no longer draws them and the importer no longer makes `Anchors.LevelMarkers`; the crates' bob,
+the dying lamps and the tape's blocker stay. The shops' own name signs ("1 OFFICE" ...) are what says where a level is.
+

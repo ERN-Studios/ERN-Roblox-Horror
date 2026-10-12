@@ -1,8 +1,6 @@
 -- Lobby Mall Client (2026-10-13, owner requests). MALL_FINISH_20261013.
 --   What a player's own client adds to the mall lobby (Workspace.LobbyMallPreview), none of it replicated:
---   LEVEL SIGNS  a sign over every shop front, seen through walls ("LEVEL 1 / OFFICE" ...), in the game's UI style
---                (ShopBinder's palette: tile, line, rail teal, cream; Montserrat and Roboto Mono). They stand down
---                in a round and outside the mall.
+--   (The level signs seen through walls that this script first drew were removed on the owner's word, 2026-10-13.)
 --   CRATES       the product crates over the shop's buy rings bob gently, each out of step with the next
 --                (LobbyShopDisplay gives every crate its resting pose and phase).
 --   DYING LAMPS  the ceiling panels the importer marked `Flicker` stutter like a fluorescent tube on its way out.
@@ -12,54 +10,14 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 
-local TILE, LINE, TEAL, CREAM = Color3.fromRGB(22, 29, 32), Color3.fromRGB(38, 49, 52), Color3.fromRGB(68, 221, 196), Color3.fromRGB(242, 235, 219)
-local TITLE = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Heavy)
-local MONO = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Bold)
 local LENS_ON, LENS_OFF = Color3.fromRGB(246, 240, 214), Color3.fromRGB(120, 118, 108)
 
-local function levelSign(host)
-	local stale = host:FindFirstChild("MallLevelSign")
-	if stale then stale:Destroy() end
-	local gui = Instance.new("BillboardGui")
-	gui.Name = "MallLevelSign"
-	gui.Adornee, gui.AlwaysOnTop, gui.LightInfluence, gui.ResetOnSpawn = host, true, 0, false
-	gui.Size, gui.MaxDistance, gui.ClipsDescendants = UDim2.fromOffset(150, 50), 420, false
-	local plate = Instance.new("Frame")
-	plate.Size, plate.BackgroundColor3, plate.BackgroundTransparency, plate.BorderSizePixel = UDim2.fromScale(1, 1), TILE, 0.08, 0
-	Instance.new("UICorner", plate).CornerRadius = UDim.new(0, 10)
-	local stroke = Instance.new("UIStroke")
-	stroke.Color, stroke.Thickness = LINE, 2
-	stroke.Parent = plate
-	local bar = Instance.new("Frame")
-	bar.Position, bar.Size, bar.BackgroundColor3, bar.BorderSizePixel = UDim2.fromOffset(10, 10), UDim2.new(0, 4, 1, -20), TEAL, 0
-	Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
-	bar.Parent = plate
-	local function line(text, y, size, font, colour)
-		local label = Instance.new("TextLabel")
-		label.BackgroundTransparency, label.Position, label.Size = 1, UDim2.fromOffset(22, y), UDim2.new(1, -30, 0, size + 4)
-		label.FontFace, label.TextSize, label.TextColor3, label.Text = font, size, colour, text
-		label.TextXAlignment = Enum.TextXAlignment.Left
-		label.Parent = plate
-	end
-	line("LEVEL " .. tostring(host:GetAttribute("LevelNumber")), 6, 21, TITLE, CREAM)
-	line(tostring(host:GetAttribute("LevelName") or ""), 30, 11, MONO, TEAL)
-	plate.Parent = gui
-	gui.Parent = host                   -- on the host itself (this client's copy of it): nothing is replicated
-	return gui
-end
-
-local mall, crates, lamps, made = nil, {}, {}, {}
+local mall, crates, lamps = nil, {}, {}
 local function bind(model)
 	mall = model
 	table.clear(crates); table.clear(lamps)
-	for _, gui in pairs(made) do gui:Destroy() end
-	table.clear(made)
 	if not mall then return end
 	local anchors = mall:FindFirstChild("Anchors")
-	local markers = anchors and anchors:FindFirstChild("LevelMarkers")
-	for _, host in ipairs(markers and markers:GetChildren() or {}) do
-		if host:IsA("BasePart") then made[host] = levelSign(host) end
-	end
 	local box = anchors and anchors:FindFirstChild("ShopCrates")
 	for _, crate in ipairs(box and box:GetChildren() or {}) do
 		if crate:IsA("BasePart") and typeof(crate:GetAttribute("MallCrateOrigin")) == "CFrame" then
@@ -95,7 +53,6 @@ RunService.Heartbeat:Connect(function(dt)
 		-- the model streams in piece by piece: bind again while what it should hold is still arriving
 		local anchors = now and now:FindFirstChild("Anchors")
 		local count = anchors and (#(anchors:FindFirstChild("ShopCrates") and anchors.ShopCrates:GetChildren() or {})
-			+ #(anchors:FindFirstChild("LevelMarkers") and anchors.LevelMarkers:GetChildren() or {})
 			+ #(now:FindFirstChild("Lights") and now.Lights:GetChildren() or {})) or 0
 		if now ~= mall or count ~= (mall and mall:GetAttribute("ClientBound")) then
 			bind(now)
@@ -108,9 +65,6 @@ RunService.Heartbeat:Connect(function(dt)
 	local here = root ~= nil and player:GetAttribute("InRound") ~= true and typeof(low) == "Vector3" and typeof(high) == "Vector3"
 		and root.Position.X > low.X - 40 and root.Position.X < high.X + 40 and root.Position.Z > low.Z - 40 and root.Position.Z < high.Z + 40
 		and root.Position.Y > low.Y - 20 and root.Position.Y < high.Y + 20
-	for _, gui in pairs(made) do
-		if gui.Enabled ~= here then gui.Enabled = here end
-	end
 	if not here then return end
 	local calm = player:GetAttribute("ReduceFlashing") ~= false
 	if calm ~= still then
