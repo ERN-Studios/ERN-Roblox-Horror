@@ -1,0 +1,197 @@
+{
+ "1982715834": {
+  "kind": "pass",
+  "name": "Zyntra Entity Detector",
+  "ours": "Zyntra Entity Detector",
+  "forSale": true,
+  "price": 149,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true
+ },
+ "1941938256": {
+  "kind": "pass",
+  "name": "Zyntra Supporter",
+  "ours": "Zyntra Supporter",
+  "forSale": true,
+  "price": 99,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true
+ },
+ "1945402536": {
+  "kind": "pass",
+  "name": "Advanced Equipment",
+  "ours": "Advanced Equipment",
+  "forSale": true,
+  "price": 149,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true
+ },
+ "1946086261": {
+  "kind": "pass",
+  "name": "Glowstick Customizer",
+  "ours": "Glowstick Customizer",
+  "forSale": true,
+  "price": 99,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true
+ },
+ "1995218405": {
+  "kind": "pass",
+  "name": "Token Earner 2x",
+  "ours": "Token Earner 2x",
+  "forSale": true,
+  "price": 149,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true
+ },
+ "1995716395": {
+  "kind": "pass",
+  "name": "Token Earner 3x",
+  "ours": "Token Earner 3x",
+  "forSale": true,
+  "price": 299,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true
+ },
+ "1994654411": {
+  "kind": "pass",
+  "name": "Token Earner 5x",
+  "ours": "Token Earner 5x",
+  "forSale": true,
+  "price": 399,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true
+ },
+ "1994666374": {
+  "kind": "pass",
+  "name": "Static Wraith",
+  "ours": "Skin Static Wraith",
+  "forSale": true,
+  "price": 99,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true
+ },
+ "1994816385": {
+  "kind": "pass",
+  "name": "False Sun",
+  "ours": "Skin False Sun",
+  "forSale": true,
+  "price": 149,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true
+ },
+ "3713829859": {
+  "kind": "product",
+  "name": "Zyntra Expedition Pack",
+  "ours": "Expedition Pack",
+  "forSale": true,
+  "price": 69,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true,
+  "raw_keys": [
+   "createdTimestamp",
+   "description",
+   "iconImageAssetId",
+   "isForSale",
+   "isImmutable",
+   "isManagedPricingEnabled",
+   "name",
+   "priceInformation",
+   "productId",
+   "universeId",
+   "updatedTimestamp"
+  ]
+ },
+ "3707755089": {
+  "kind": "product",
+  "name": "4 Research Tokens",
+  "ours": "4 Research Tokens",
+  "forSale": true,
+  "price": 49,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true,
+  "raw_keys": [
+   "createdTimestamp",
+   "description",
+   "iconImageAssetId",
+   "isForSale",
+   "isImmutable",
+   "isManagedPricingEnabled",
+   "name",
+   "priceInformation",
+   "productId",
+   "universeId",
+   "updatedTimestamp"
+  ]
+ },
+ "3707755233": {
+  "kind": "product",
+  "name": "20 Research Tokens",
+  "ours": "20 Research Tokens",
+  "forSale": true,
+  "price": 149,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true,
+  "raw_keys": [
+   "createdTimestamp",
+   "description",
+   "iconImageAssetId",
+   "isForSale",
+   "isImmutable",
+   "isManagedPricingEnabled",
+   "name",
+   "priceInformation",
+   "productId",
+   "universeId",
+   "updatedTimestamp"
+  ]
+ },
+ "3707755318": {
+  "kind": "product",
+  "name": "Emergency Re-entry",
+  "ours": "Emergency Re-entry",
+  "forSale": true,
+  "price": 29,
+  "features": [
+   "RegionalPricing"
+  ],
+  "managed": true,
+  "raw_keys": [
+   "createdTimestamp",
+   "description",
+   "iconImageAssetId",
+   "isForSale",
+   "isImmutable",
+   "isManagedPricingEnabled",
+   "name",
+   "priceInformation",
+   "productId",
+   "universeId",
+   "updatedTimestamp"
+  ]
+ }
+}

@@ -69,11 +69,11 @@ task.spawn(function()
 			local now, was
 			if skin then
 				if skin.Kind == "Tokens" then now, was = skin.TokenCost, skin.RegularTokenCost
-				elseif skin.PassId then now, was = robux(skin.PassId, Enum.InfoType.GamePass), skin.RobuxPrice end
+				elseif skin.PassId then now, was = robux(skin.PassId, Enum.InfoType.GamePass), skin.RegularRobuxPrice or skin.RobuxPrice end
 			elseif key == "EntityShield" then now, was = Config.ProtectionItem.TokenCost, Config.ProtectionItem.RegularTokenCost
 			elseif Config.Items[key] then now, was = Config.Items[key].TokenCost, Config.Items[key].RegularTokenCost
-			elseif Config.Passes[key] then now, was = robux(Config.Passes[key].Id, Enum.InfoType.GamePass), Config.Passes[key].Price
-			elseif Config.Products[key] and unit == "ROBUX" then now, was = robux(Config.Products[key].Id, Enum.InfoType.Product), Config.Products[key].Price end
+			elseif Config.Passes[key] then now, was = robux(Config.Passes[key].Id, Enum.InfoType.GamePass), Config.Passes[key].RegularPrice or Config.Passes[key].Price
+			elseif Config.Products[key] and unit == "ROBUX" then now, was = robux(Config.Products[key].Id, Enum.InfoType.Product), Config.Products[key].RegularPrice or Config.Products[key].Price end
 			if now then
 				local text = name .. " - " .. now .. " " .. ((now == 1 and unit == "TOKENS") and "TOKEN" or unit) .. ((was and was > now) and (" (WAS " .. was .. ")") or "")
 				label.Text = (text:gsub(" ", NBSP))

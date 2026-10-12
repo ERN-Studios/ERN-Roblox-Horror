@@ -429,7 +429,12 @@ local Config = {
 --   * every Research Token price is cut by 66.6 % and rounded to a whole token, never under 1 (Entity Shield 5 -> 2,
 --     Speed Potion 3 -> 1, Route Marker Pack 2 -> 1, an upgrade level to a third; ZyntraSkins cuts the token skins);
 --   * one Emergency Re-entry purchase banks THREE credits for the price of one.
--- Robux prices are NOT here: they live on Roblox (Creator Dashboard) and the shop shows whatever Roblox charges.
+-- Robux prices live on Roblox (Creator Dashboard) and the shop shows whatever Roblox charges. The owner had them cut
+-- there on 2026-10-13 ("66,6% på alt ... undtagen [donationer]": 149 -> 50, 99 -> 33, 69 -> 23, 49 -> 16, 29 -> 10,
+-- 299 -> 100, 399 -> 133; ~/Projects/stayquiet-session-tools/live/halloween_prices.py, `--restore` puts them back).
+-- The Price fields below follow, because the server credits a newly seen pass to the supporters' board at its
+-- listed Price. Donations and the three upgrade passes that are off sale keep their prices.
+-- WHEN THE SALE ENDS the prices on Roblox must be restored by hand (the script above): this switch cannot do that.
 -- The sale ends by itself at EndsAt (2026-11-02 00:00 UTC), read when a server or a client starts; Enabled = false
 -- ends it at once. A description that quotes a price is rewritten with it, so the wording stays what the server takes.
 Config.HalloweenSale = {Enabled = true, EndsAt = 1793577600, PercentOff = 66.6, ReentryGrant = 3}
@@ -467,6 +472,11 @@ if Config.HalloweenSaleActive() then
 	local regularUpgrade = Config.UpgradeCost
 	Config.RegularUpgradeCost = regularUpgrade
 	Config.UpgradeCost = function(level) return Config.SaleTokens(regularUpgrade(level)) end
+	for _, pass in ipairs({Config.Passes.EntityDetector, Config.Passes.Supporter, Config.Passes.AdvancedEquipment, Config.Passes.CosmeticEquipment,
+		Config.TokenEarner.Passes.TokenEarner2x, Config.TokenEarner.Passes.TokenEarner3x, Config.TokenEarner.Passes.TokenEarner5x,
+		Config.Products.ExpeditionPack, Config.Products.Tokens4, Config.Products.Tokens20, Config.Products.EmergencyReentry}) do
+		pass.RegularPrice, pass.Price = pass.Price, Config.SaleTokens(pass.Price)
+	end
 	local reentry = Config.Products.EmergencyReentry
 	reentry.RegularReentryGrant, reentry.ReentryGrant = reentry.ReentryGrant, Config.HalloweenSale.ReentryGrant
 	reentry.Name = "Emergency Re-entry x" .. reentry.ReentryGrant

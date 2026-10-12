@@ -2585,3 +2585,30 @@ H05 planter, H06 dark wing, H07 prop sheet). The build follows them.
   go), "66.6% off everything" is true for token prices only.
 - Not tested: a real re-entry purchase (Studio cannot take Robux), the end of the sale on a live server (a server
   that started before EndsAt keeps sale prices until it closes), phones, two players. Nothing is published.
+
+## 2026-10-13 - Halloween sale: the Robux prices cut on Roblox (the owner's go)
+
+Owner: "66,6% på alt så gå ind og ændre prisen på aaalt i vores butik undtagen domstol selvfølgelig" ("domstol" read
+as "donationer": the donations keep their prices). Done with `tools/promo/halloween_prices.py --apply`, from the
+owner's signed-in Creator Dashboard tab (one Chrome window opened for it and closed again, no keys or clicks); every
+price read back. Records: `artifacts/store-prices-halloween-20261013/before.json` and `after.json`.
+
+| item | regular | sale |
+|---|---|---|
+| Entity Detector, Advanced Equipment, False Sun (passes), 20 Research Tokens, Token Earner 2x | 149 | 50 |
+| Zyntra Supporter, Glowstick Customizer, Static Wraith | 99 | 33 |
+| Token Earner 3x / 5x | 299 / 399 | 100 / 133 |
+| Expedition Pack | 69 | 23 |
+| 4 Research Tokens | 49 | 16 |
+| Emergency Re-entry | 29 | 10 |
+
+- LIVE AT ONCE, publish or not: the published game charges these prices from this moment. Until the Halloween build
+  is published it has no sale signs, still grants ONE re-entry a purchase and still shows regular token prices.
+- Not touched: the nine donation entries (eight products and the 20K pass) and the three Token Earner upgrade passes,
+  which have been off sale since 2026-10-08.
+- In the build waiting in Studio the listed `Price` fields follow while the sale runs (`RegularPrice` keeps the old
+  one; `ZyntraSkins` does the same for the two Robux suits), because the server credits a newly seen pass to the
+  supporters' board at its listed price. The stand's plates read "50 ROBUX (WAS 149)" from Roblox itself.
+- **To end the sale:** `python3 tools/promo/halloween_prices.py --restore` (needs a signed-in Creator Dashboard tab in
+  Chrome) puts the regular prices back from `before.json`. The switch in `ZyntraConfig` ends the token prices and the
+  3-for-1 by itself on 2026-11-02 00:00 UTC; it cannot restore prices on Roblox.
