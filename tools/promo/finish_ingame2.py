@@ -35,8 +35,16 @@ FOLDERS = {'T': '1 Thumbnails med logo (1920x1080)', 'Tplain': '2 Thumbnails ude
            'G': '4 Galleri (1920x1080)', 'C': '5 Covers med titel (1920x1080)', 'Cplain': '6 Covers uden titel (1920x1080)'}
 
 
+LIFT_TO = 0.09
+
+
 def pop(im):
     a = np.asarray(im).astype(np.float32) / 255
+    # a picture that is nearly all black does not read as a small tile on a phone: lift the shadows of the darkest ones
+    # (toward a mean of about 9 %, never more than gamma 0.70); pictures that already read are left alone
+    mean = float((a @ np.array([0.299, 0.587, 0.114], np.float32)).mean())
+    if 0 < mean < LIFT_TO:
+        a = a ** max(0.70, float(np.log(LIFT_TO) / np.log(mean)))
     a = np.clip(0.5 + (a - 0.5) * 1.09 - 0.012, 0, 1)                      # contrast about the middle, blacks a touch deeper
     h, w = a.shape[:2]
     yy, xx = np.mgrid[:h, :w]
