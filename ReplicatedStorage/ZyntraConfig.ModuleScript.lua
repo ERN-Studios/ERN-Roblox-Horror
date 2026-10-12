@@ -190,11 +190,11 @@ local Config = {
 			Id = 3713829859,
 			IconId = 134334664606741,
 			Name = "Expedition Pack",
-			PreviewDescription = "CONSUMABLE · 1 re-entry after death (10s protection), 1 shield charge (5s), 3 route markers. Stored until used. Repeatable purchase.",
+			PreviewDescription = "CONSUMABLE · 1 revive after death (10s protection), 1 shield charge (5s), 3 route markers. Stored until used. Repeatable purchase.",
 			IconText = "PACK",
 			Price = 69,
 			BundleGrant = {Reentry = 1, Shield = 1, RouteMarkers = 3},
-			Description = "Consumable pack: 1 stored Emergency Re-entry, 1 Entity Shield charge and 3 Route Markers. Use re-entry after dying; activate shield and markers from Equipment during a run. Repeatable purchase, not a permanent pass.",
+			Description = "Consumable pack: 1 stored Revive, 1 Entity Shield charge and 3 Route Markers. Use the revive after dying; activate shield and markers from Equipment during a run. Repeatable purchase, not a permanent pass.",
 		},
 		Tokens4 = {
 			Id = 3707755089,
@@ -215,10 +215,10 @@ local Config = {
 		EmergencyReentry = {
 			Id = 3707755318,
 			IconId = 92866750717809,
-			Name = "Emergency Re-entry",
+			Name = "Revive",
 			Price = 29,
 			ReentryGrant = 1,
-			Description = "Adds 1 stored Emergency Re-entry credit. Return to your death location with 10 seconds invisible to monsters. Unsafe locations use nearby safe ground. Once per round.",
+			Description = "Adds 1 stored Revive. Return to your death location with 10 seconds invisible to monsters. Unsafe locations use nearby safe ground. Once per round.",
 		},
 	},
 
@@ -479,9 +479,9 @@ if Config.HalloweenSaleActive() then
 	end
 	local reentry = Config.Products.EmergencyReentry
 	reentry.RegularReentryGrant, reentry.ReentryGrant = reentry.ReentryGrant, Config.HalloweenSale.ReentryGrant
-	reentry.Name = "Emergency Re-entry x" .. reentry.ReentryGrant
-	reentry.Description = (reentry.Description:gsub("^Adds 1 stored Emergency Re%-entry credit%.",
-		"HALLOWEEN 3 FOR 1: adds " .. reentry.ReentryGrant .. " stored Emergency Re-entry credits for the price of one."))
+	reentry.Name = "Revive x" .. reentry.ReentryGrant
+	reentry.Description = (reentry.Description:gsub("^Adds 1 stored Revive%.",
+		"HALLOWEEN 3 FOR 1: adds " .. reentry.ReentryGrant .. " stored Revives for the price of one."))
 end
 
 return Config

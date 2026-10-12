@@ -393,9 +393,9 @@ def design():
         part(f'CarpetEdge{i}','Stand',C+N*(carpet_ap-.045)+[0,30.13,0],(19.9,.08,.09),'brass',rot=(0,yaw,0))
     # SHOP_FRONT_20261013 (owner): the re-entry stands at the FRONT of the shop, facing the spawn, and Advanced Equipment took
     # its old place beside the Expedition Pack; the torch-with-beam demo on the counter is gone
-    headers=['EMERGENCY RE-ENTRY','ENTITY DETECTOR','ITEMS','EQUIPMENT & PACKS','RESEARCH TOKENS','SUPPORTER']
+    headers=['REVIVE','ENTITY DETECTOR','ITEMS','EQUIPMENT & PACKS','RESEARCH TOKENS','SUPPORTER']
     offers=[
-      [('EmergencyReentry','EMERGENCY RE-ENTRY - 29 ROBUX',0)],
+      [('EmergencyReentry','REVIVE - 29 ROBUX',0)],          # REVIVE_20261013 (owner): "Ændre den til REVIVE alle steder"
       [('EntityDetector','ZYNTRA ENTITY DETECTOR - 149 ROBUX',0)],
       [('EntityShield','ENTITY SHIELD - 5 TOKENS',-4.1),('SpeedPotion','SPEED POTION - 3 TOKENS',0),('RouteMarker','ROUTE MARKER PACK - 2 TOKENS',4.1)],
       [('ExpeditionPack','EXPEDITION PACK - 69 ROBUX',-3.1),('AdvancedEquipment','ADVANCED EQUIPMENT - 149 ROBUX',3.1)],

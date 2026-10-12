@@ -2783,3 +2783,27 @@ respawn and tell them they got 2 extra for free".
   attributes: the line appears. Not tested: a real purchase (Studio cannot take Robux). Not published.
 - Left as ordered earlier: the shop's own signs ("RE-ENTRY 3 FOR 1") and the product's shop name "Emergency
   Re-entry x3".
+
+## 2026-10-13 - the re-entry is called REVIVE everywhere (`REVIVE_20261013`)
+
+Owner: "Måske skulle den bare hedde REVIVE, det kan alle forstå", then "Ændre den til REVIVE alle steder".
+
+- **Texts in the game** (30 distinct ones in `ZyntraMonetization`, `ZyntraConfig`, `ZyntraStore`, `RoundUI`, `First
+  Entry Guide`): the product is `Revive` (`Revive x3` while the sale runs), the buttons `BUY REVIVE`, `USE REVIVE`,
+  `YOU HAVE 1 FREE REVIVE`, the messages "Revive activated.", "You do not have a Revive.", "Revive bought. Halloween
+  gift: 2 extra revives for free.", the Expedition Pack's "1 revive". Only what a player reads changed: keys, remotes,
+  attributes, DataStore fields (`ReentryCredits`, `EmergencyReentry`, `UseReentry`, `ZyntraReentry*`) and log lines
+  keep their names.
+- **The mall** (`build_mall.py`, `check_mall.py`, `build_halloween.py`, rebuilt and imported): the front counter's
+  header is `REVIVE`, its plate `REVIVE - 29 ROBUX` (shown as "REVIVE - 10 ROBUX (WAS 29)"), the carton's sign
+  `REVIVE X3`, the standee `REVIVE / 3 FOR 1 / HALLOWEEN ONLY`.
+- **On Roblox, live at once:** developer product 3707755318 is named `Revive` (it was `Emergency Re-entry`), with the
+  description "Adds 1 stored Revive. After dying during an active run, use it to get back into that round once."; the
+  Expedition Pack's description says "1 stored Revive" and "Use the revive". Price and sale state untouched. Before
+  and after: `artifacts/store-prices-halloween-20261013/names-*-revive.json`.
+- Checked in play: config name, counter, plate, carton sign and standee all read REVIVE; no RE-ENTRY left on a sign.
+  `test_dev_free_respawn_offer` and `test_death_advice` pass; `test_first_entry_guide` fails on a missing
+  TweenService mock before and after this change. Not published.
+- Found on the way: `artifacts/store-prices-halloween-20261013` (and the concept pictures of the Halloween lobby)
+  were no longer on disk: they are tracked but outside the sparse checkout, and git takes such files off the disk
+  again. `halloween_prices.py --restore` now fetches `before.json` from git when it is missing.

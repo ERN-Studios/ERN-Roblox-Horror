@@ -3206,12 +3206,12 @@ local function useReentry(player)
 	-- would then decline to pay back.
 	if reentryAttempts[player] then return false end
 	if session.data.ReentryCredits < 1 then
-		pushProfile(player, "You do not have an Emergency Re-entry credit.", "error")
+		pushProfile(player, "You do not have a Revive.", "error")
 		return false
 	end
 	local reentry = ServerStorage:FindFirstChild("ZyntraReentry")
 	if not reentry or not reentry:IsA("BindableFunction") then
-		pushProfile(player, "Re-entry is not available right now.", "error")
+		pushProfile(player, "Revive is not available right now.", "error")
 		return false
 	end
 
@@ -3220,7 +3220,7 @@ local function useReentry(player)
 	local spentWelcome = false   -- WELCOME_REENTRY_20261010: a refused respawn hands the free one back as free
 	local reserved = mutate(player, function(data)
 		if data.ReentryCredits < 1 then
-			return false, "You do not have an Emergency Re-entry credit.", "error"
+			return false, "You do not have a Revive.", "error"
 		end
 		data.ReentryCredits -= 1
 		if data.WelcomeReentry == "granted" then
@@ -3245,7 +3245,7 @@ local function useReentry(player)
 	if ok and accepted == true then
 		markRunAided(player)
 		if Analytics then Analytics.ItemUse(player, "Reentry") end
-		pushProfile(player, "Emergency Re-entry activated.", "success")
+		pushProfile(player, "Revive activated.", "success")
 		return true
 	end
 
@@ -3258,7 +3258,7 @@ local function useReentry(player)
 	local function refund(data)
 		data.ReentryCredits += 1
 		if spentWelcome and data.WelcomeReentry == "used" then data.WelcomeReentry = "granted" end
-		return true, "Re-entry is only available after death during an active round.", "error"
+		return true, "Revive is only available after death during an active round.", "error"
 	end
 	for attempt = 1, 3 do
 		if mutate(player, refund) then return false end
@@ -4577,7 +4577,7 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			data.ReentryCredits += bundle.Reentry
 			shield.Charges += bundle.Shield
 			data.Items.RouteMarker += bundle.RouteMarkers
-			return true, "Expedition Pack stored: 1 re-entry, 1 shield, 3 markers.", "success"
+			return true, "Expedition Pack stored: 1 revive, 1 shield, 3 markers.", "success"
 		end
 		if entry.Product.TokenGrant then
 			data.Tokens += entry.Product.TokenGrant
@@ -4589,9 +4589,9 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			-- for free"): the player buys ONE; the others are a gift they hear about after the purchase.
 			local extra = entry.Product.ReentryGrant - 1
 			if extra > 0 then
-				return true, ("Re-entry bought. Halloween gift: %d extra re-entr%s for free."):format(extra, extra == 1 and "y" or "ies"), "success"
+				return true, ("Revive bought. Halloween gift: %d extra revive%s for free."):format(extra, extra == 1 and "" or "s"), "success"
 			end
-			return true, "+1 Emergency Re-entry credit", "success"
+			return true, "+1 Revive", "success"
 		end
 		return true, "Purchase recorded.", "success"
 	end)

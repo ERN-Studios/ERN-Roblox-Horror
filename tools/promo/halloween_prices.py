@@ -74,6 +74,10 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     now = read()
     if '--restore' in sys.argv:
+        if not (OUT / 'before.json').exists():       # the folder is outside the sparse checkout: git may have taken it off the disk
+            import subprocess
+            (OUT / 'before.json').write_text(subprocess.run(['git', 'show', 'HEAD:artifacts/store-prices-halloween-20261013/before.json'],
+                                                            cwd=OUT.parents[1], capture_output=True, text=True, check=True).stdout)
         before = json.loads((OUT / 'before.json').read_text())
         target = {pid: before[pid]['price'] for pid in now}
     else:

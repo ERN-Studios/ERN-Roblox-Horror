@@ -4121,7 +4121,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 				completion.freeReentryTold = true
 				task.delay(3, function()
 					if dead and player:GetAttribute("ZyntraFreeReentry") == true and player:GetAttribute("ZyntraReentryUsed") ~= true then
-						completion.Hud.Feed({Kind = "SYSTEM", Detail = "You have 1 FREE Emergency Re-entry. Use it to get back in.", Key = "freereentry"})
+						completion.Hud.Feed({Kind = "SYSTEM", Detail = "You have 1 FREE Revive. Use it to get back in.", Key = "freereentry"})
 					end
 				end)
 			end
@@ -4327,10 +4327,10 @@ do
 		-- WELCOME_REENTRY_20261010 (owner: "informer dem om ved første død at de har 1 gratis reentry de kan bruge").
 		-- The HUD feed is stood down while a death card covers the screen, so the card's own button carries the news.
 		local free = credits > 0 and player:GetAttribute("ZyntraFreeReentry") == true
-		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or free and "YOU HAVE 1 FREE RE-ENTRY \u{B7} USE IT" or credits > 0
-			and ("USE RE-ENTRY \u{B7} " .. credits .. " OWNED")
+		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or free and "YOU HAVE 1 FREE REVIVE \u{B7} USE IT" or credits > 0
+			and ("USE REVIVE \u{B7} " .. credits .. " OWNED")
 			-- REENTRY_BONUS_20261013 (owner: "just have that say buy 1 reentry"): one re-entry, sale or not
-			or ("BUY RE-ENTRY \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
+			or ("BUY REVIVE \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
 		local colour = credits > 0 and Color3.fromRGB(68,221,196) or Color3.fromRGB(232,160,36)
 		for _, node in ipairs(pd.reentry:GetDescendants()) do
 			if node:IsA("UIStroke") then node.Color = colour end
@@ -4364,7 +4364,7 @@ do
 		end
 		local productId = tonumber(player:GetAttribute("ZyntraReentryProductId")) or 0
 		if productId <= 0 then
-			completion.Hud.Feed({Kind = "SYSTEM", Detail = "Emergency Re-entry is not configured yet.", Key = "reentryerror"})
+			completion.Hud.Feed({Kind = "SYSTEM", Detail = "Revive is not configured yet.", Key = "reentryerror"})
 			return
 		end
 		pd.waiting = true
@@ -4539,7 +4539,7 @@ do
 			end
 			task.wait(2)
 			if player:GetAttribute("ZyntraReentryBonusAt") == stamp and completion.Hud then
-				completion.Hud.Feed({Kind = "SYSTEM", Detail = ("HALLOWEEN GIFT: %d extra re-entr%s for free."):format(extra, extra == 1 and "y" or "ies"), Key = "reentrybonus"})
+				completion.Hud.Feed({Kind = "SYSTEM", Detail = ("HALLOWEEN GIFT: %d extra revive%s for free."):format(extra, extra == 1 and "" or "s"), Key = "reentrybonus"})
 			end
 		end)
 	end)

@@ -437,8 +437,8 @@ local TOPICS = {
 	}},
 	{"IF YOU DIE", {
 		{"You spectate", "You watch your teammates. They can still finish the level."},
-		{"Party down", "If everyone is down you get 15 seconds to use an Emergency Re-entry before the round ends."},
-		{"Emergency Re-entry", "Puts you back in the round once. Your first one is free; more are offered for Robux when you go down."},
+		{"Party down", "If everyone is down you get 15 seconds to use a Revive before the round ends."},
+		{"Revive", "Puts you back in the round once. Your first one is free; more are offered for Robux when you go down."},
 	}},
 	{"TOKENS", {
 		{"Earning", ((starting > 0 and ("New players are given %d. "):format(starting) or "") .. "Clearing a level gives +%d, more with friends."):format(perClear)},

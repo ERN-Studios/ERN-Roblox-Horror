@@ -1,0 +1,10 @@
+{
+ "3707755318": {
+  "name": "Emergency Re-entry",
+  "description": "Adds 1 stored Emergency Re-entry credit. After dying during an active run, use it to rejoin once that round."
+ },
+ "3713829859": {
+  "name": "Zyntra Expedition Pack",
+  "description": "One repeatable supply pack: 1 stored Emergency Re-entry credit, 1 Entity Shield charge, and 3 Route Markers. These are consumables, not a permanent pass. Use re-entry after dying in an active round; activate the shield and place markers from your equipment HUD."
+ }
+}

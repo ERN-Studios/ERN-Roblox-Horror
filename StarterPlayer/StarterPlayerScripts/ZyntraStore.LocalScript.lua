@@ -515,13 +515,13 @@ reentryConstraint.MaxSize = Vector2.new(480, 216)
 reentryConstraint.Parent = reentry
 corner(reentry, 10)
 outline(reentry, COLORS.error, 0.15, 1.5)
-local reentryTitle = label(reentry, "EMERGENCY RE-ENTRY", UDim2.new(1, -32, 0, 28), UDim2.fromOffset(16, 10), 19, COLORS.text, Enum.Font.GothamBold)
+local reentryTitle = label(reentry, "REVIVE", UDim2.new(1, -32, 0, 28), UDim2.fromOffset(16, 10), 19, COLORS.text, Enum.Font.GothamBold)
 reentryTitle.ZIndex = 3
 local reentryInfo = label(reentry, "Use a credit to rejoin the run, or spectate your teammates.", UDim2.new(1, -32, 0, 40), UDim2.fromOffset(16, 44), 13, COLORS.muted)
 reentryInfo.TextWrapped = true
 reentryInfo.TextYAlignment = Enum.TextYAlignment.Top
 reentryInfo.ZIndex = 3
-local reentryButton = button(reentry, "USE RE-ENTRY", UDim2.new(1, -32, 0, 48), UDim2.fromOffset(16, 100))
+local reentryButton = button(reentry, "USE REVIVE", UDim2.new(1, -32, 0, 48), UDim2.fromOffset(16, 100))
 reentryButton.TextColor3 = COLORS.error
 reentryButton.TextScaled = true
 reentryButton.ZIndex = 3
@@ -535,7 +535,7 @@ reentryButton.Activated:Connect(function()
 	else
 		local item = Config.Products.EmergencyReentry
 		if item.Id <= 0 then
-			showStatus("Emergency Re-entry Product ID is not configured yet.", "error")
+			showStatus("Revive Product ID is not configured yet.", "error")
 			return
 		end
 		-- BUY_IS_REENTER_20261011 (UI review: one offer said BUY CREDIT and the other REVIVE, and a purchase only
@@ -580,11 +580,11 @@ local function updateReentry()
 	-- WELCOME_REENTRY_20261010: a new player's one free credit is called what it is, here and on RoundUI's card.
 	local free = credits > 0 and profile ~= nil and profile.FreeReentry == true
 	player:SetAttribute("ZyntraFreeReentry", free)
-	reentryButton.Text = free and "YOU HAVE 1 FREE RE-ENTRY  //  USE IT" or credits > 0
-		and ("USE RE-ENTRY CREDIT  //  " .. credits .. " OWNED")
+	reentryButton.Text = free and "YOU HAVE 1 FREE REVIVE  //  USE IT" or credits > 0
+		and ("USE REVIVE  //  " .. credits .. " OWNED")
 		-- REENTRY_BONUS_20261013 (owner: "just have that say buy 1 reentry"): the button sells ONE re-entry, sale or
 		-- not; the Halloween extras are told after the purchase (it read "BUY 3 RE-ENTRIES" for a day)
-		or ("BUY RE-ENTRY  //  " .. tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$")
+		or ("BUY REVIVE  //  " .. tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$")
 	do
 		local boughtAt = player:GetAttribute("ZyntraReentryBoughtAt")
 		if boughtAt and credits > 0 then                       -- BUY_IS_REENTER_20261011: the bought credit has landed

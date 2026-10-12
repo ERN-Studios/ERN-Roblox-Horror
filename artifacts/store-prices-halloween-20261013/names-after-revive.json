@@ -1,0 +1,10 @@
+{
+ "3707755318": {
+  "name": "Revive",
+  "description": "Adds 1 stored Revive. After dying during an active run, use it to get back into that round once."
+ },
+ "3713829859": {
+  "name": "Zyntra Expedition Pack",
+  "description": "One repeatable supply pack: 1 stored Revive, 1 Entity Shield charge, and 3 Route Markers. These are consumables, not a permanent pass. Use the revive after dying in an active round; activate the shield and place markers from your equipment HUD."
+ }
+}

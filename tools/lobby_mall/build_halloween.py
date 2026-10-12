@@ -32,7 +32,7 @@ STRAW, TWINE, STALK, HUSK = (214, 182, 96), (150, 112, 52), (198, 172, 98), (168
 WHITE, BONE, SHEET = (245, 245, 245), (238, 234, 220), (236, 236, 228)
 SALE_ORANGE, SALE_YELLOW, SALE_RED = (240, 112, 20), (250, 214, 40), (214, 52, 36)
 FLOOR, CEIL, WING_CEIL, TAPE_Z = 30.0, 57.04, 46.0, -621.0
-SALE, OFF, REENTRY, THREE = 'HALLOWEEN SALE', '66.6% OFF EVERYTHING', 'RE-ENTRY', '3 FOR 1'
+SALE, OFF, REENTRY, THREE = 'HALLOWEEN SALE', '66.6% OFF EVERYTHING', 'REVIVE', '3 FOR 1'    # REVIVE_20261013: the re-entry is called Revive everywhere
 # the owner, 2026-10-13: "der er gået lidt for meget salg i den": the sale's lettering stays at the shop stand only;
 # the banners in the hall keep hanging but wish a happy Halloween
 HAPPY = 'HAPPY HALLOWEEN'

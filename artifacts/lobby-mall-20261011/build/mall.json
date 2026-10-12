@@ -56964,7 +56964,7 @@
     },
     {
       "name": "CounterHeader0",
-      "text": "EMERGENCY RE-ENTRY",
+      "text": "REVIVE",
       "style": "box",
       "pos": [
         220.0,
@@ -56984,7 +56984,7 @@
     },
     {
       "name": "PriceEmergencyReentry",
-      "text": "EMERGENCY RE-ENTRY - 29 ROBUX",
+      "text": "REVIVE - 29 ROBUX",
       "style": "plain",
       "pos": [
         220.0,
