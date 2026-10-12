@@ -1434,9 +1434,18 @@ end)
 -- on its start mark and it screams once, from there. `workspace.EntityDormant` says which of the two it is.
 local DORMANT_HEIGHT = 600
 local dormantParked = false
+-- ENTITY_AFTER_FUSES_20261013 (owner, three days later: "Level 1 is too hard ... Make sure that the entity only spawns
+-- when all necessary fuses are in"). The first relay woke it at the very moment a new player had done the first thing
+-- right, in a maze that also gets darker with every fuse taken, against a chase speed (27.2) above the player's sprint
+-- (26). It now stays out until every fuse box is full (PuzzleManager: workspace.Level1AllBoxesFull, set as the red
+-- alert begins), so the search for relays and boxes is a quiet first half and the levers and the exit are the hunt.
+-- `workspace.Level1EntityWakeOnFirstRelay = true` brings the rule of 2026-10-10 back.
 local function dormantNow()
-	return workspace:GetAttribute("RoundActive") == true and workspace:GetAttribute("SelectedLevel") == 1
-		and workspace:GetAttribute("Level1RelaysExtracted") == 0
+	if not (workspace:GetAttribute("RoundActive") == true and workspace:GetAttribute("SelectedLevel") == 1) then return false end
+	if workspace:GetAttribute("Level1EntityWakeOnFirstRelay") == true then
+		return workspace:GetAttribute("Level1RelaysExtracted") == 0
+	end
+	return workspace:GetAttribute("Level1AllBoxesFull") == false
 end
 local function standOnStart()
 	local es = workspace:FindFirstChild("EntityStart")

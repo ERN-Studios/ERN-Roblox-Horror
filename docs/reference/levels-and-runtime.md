@@ -2679,3 +2679,29 @@ the box to buy it. The advanced equipment flashlight demo remove that".
   only on the sign over the carton.
 - Halloween (`build_halloween.py`): no pumpkins, pails or balloons at the stand's corners; the re-entry standee
   stands at the front only (183 props, 301 parts, 27 lantern lights).
+
+## 2026-10-13 - Level 1 "too hard": the Entity waits for the last fuse (`ENTITY_AFTER_FUSES_20261013`) - NOT IN STUDIO YET
+
+Owner: "Level 1 is too hard. How can we make it easier and obvious on what to do. Make sure that the entity only
+spawns when all necessary fuses are in. Or maybe move the level down to the end instead? Kowalski analysis!"
+
+What the level asks, from its own scripts: a 32 x 32 maze of 24-stud cells (768 studs a side) with a quarter of its
+lamps dead and pits to fall into; per pair of players two relays to find and empty, one fuse box to find and fill, a
+lever to find and pull, then the exit: four kinds of thing, in order, with no map. Since 2026-10-10 the Entity sleeps
+until the FIRST relay is emptied. From then on it runs at 27.2 against the player's sprint of 26, lunges from 28
+studs, comes to the noise of an extraction and is moved near every filled box, and the room's light drops a stage
+with each third of the relays taken. So the level turned against a new player at the moment they did the first
+thing right.
+
+Numbers (all levels together, 6-12 Oct, Roblox custom events; the query would not split them by level:
+`artifacts/promo-20261007/round-events-20261013.json`): 7,103 rounds started, 2,320 sessions reached a first
+objective, 3,591 sessions had a first death, 2,502 relaunches.
+
+Changed in the mirror: `PuzzleManager` publishes `workspace.Level1AllBoxesFull` (false at round start, true in
+`onAllBoxes`, as the red alert begins) and `EntityAI.dormantNow()` keeps the Entity out of the maze until it is true.
+`workspace.Level1EntityWakeOnFirstRelay = true` brings the 2026-10-10 rule back. Both files compile.
+**They could not be pushed: Studio had another place open ("Hamster Power Tycoon") and the game's place was closed.**
+Push with `tools/mac_merge_push.py` and test a Level 1 round when the place is open again.
+Recommended against: moving Level 1 to the end (it is the game's face in the icon, the ads and the name, and the
+difficulty would still be there). Proposed, waiting for a yes: a standing objective line with a count, a light at
+every relay and box that shows down a corridor, a chase speed under the sprint on this level.

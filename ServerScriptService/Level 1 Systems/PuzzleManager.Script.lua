@@ -1444,6 +1444,7 @@ end
 -- ── round lifecycle ───────────────────────────────────────
 local function clearPuzzle()
 	workspace:SetAttribute("Level1RelaysExtracted", nil)
+	workspace:SetAttribute("Level1AllBoxesFull", nil)
 	surfaceLightCache = nil -- the maze (and its lights) is rebuilt every round
 	if not session then
 		workspace:SetAttribute("Level1ActiveCircuitCount", nil)
@@ -1489,6 +1490,8 @@ local function startPuzzle()
 	-- so spectators and players who join later cannot advertise nonexistent cables.
 	workspace:SetAttribute("Level1ActiveCircuitCount", boxCount)
 	workspace:SetAttribute("Level1RelaysExtracted", 0)
+	-- ENTITY_AFTER_FUSES_20261013: EntityAI keeps the Entity out of the maze until this is true (onAllBoxes below)
+	workspace:SetAttribute("Level1AllBoxesFull", false)
 	local fusesNeeded = boxCount * FUSES_PER_BOX
 	local fuseCount = fusesNeeded * SPAWN_MULT
 	-- SMALL_PARTY_RELAYS_20260922 (Trello JYiwjBxw): a party of 1-3 gets half
@@ -2617,6 +2620,10 @@ local function startPuzzle()
 		-- LEVER_PATH_20261010 (puzzle-server): cue tasks belong to this round and must not follow a replacement session.
 		local owningSession = session
 		session.stage = "levers"
+		-- ENTITY_AFTER_FUSES_20261013 (owner: "Level 1 is too hard ... Make sure that the entity only spawns when all
+		-- necessary fuses are in"): the last fuse is what wakes it. Finding the relays and the boxes is the quiet half
+		-- of the level; the levers and the exit are the hunted half, and they start with the red alert below.
+		workspace:SetAttribute("Level1AllBoxesFull", true)
 		updateEntityObjectiveTarget()
 
 		-- All distribution boxes are live: the building enters a continuous

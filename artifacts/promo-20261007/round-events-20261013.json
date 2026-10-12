@@ -1,0 +1,21 @@
+{
+ "start": "2026-10-06T00:00:00.000Z",
+ "end": "2026-10-13T00:00:00.000Z",
+ "data": {
+  "zq_round_start": {
+   "RAQI_RESERVED_DIMENSION_VALUES_NO_VALUE": 7103
+  },
+  "zq_objective_first": {
+   "RAQI_RESERVED_DIMENSION_VALUES_NO_VALUE": 2320
+  },
+  "zq_first_death": {
+   "RAQI_RESERVED_DIMENSION_VALUES_NO_VALUE": 3591
+  },
+  "zq_round_outcome": {
+   "RAQI_RESERVED_DIMENSION_VALUES_NO_VALUE": 7091
+  },
+  "zq_round_relaunch": {
+   "RAQI_RESERVED_DIMENSION_VALUES_NO_VALUE": 2502
+  }
+ }
+}
