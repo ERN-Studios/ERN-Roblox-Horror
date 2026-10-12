@@ -28,11 +28,20 @@ def textures():
     n=512;yy,xx=np.mgrid[:n,:n];rng=np.random.default_rng(611)
     def save(name,base,noise=3):
         a=np.empty((n,n,3),float);a[:]=base;a+=rng.normal(0,noise,(n,n,1));return Image.fromarray(np.uint8(np.clip(a,0,255)))
-    for key,base in [('terrazzo',(174,158,124)),('plaster',(195,185,146)),('oak',(122,91,51)),('ceiling',(183,181,157)),('damask',(174,154,65)),('beige_carpet',(152,137,98)),('stand_carpet',(120,91,47)),('triangle_carpet',(67,48,61)),('road_carpet',(66,78,59)),('small_tile',(179,199,185)),('pegboard',(180,168,120)),('puzzle_mat',(30,96,112)),('black_ceiling',(31,32,30)),('pad',(26,61,47)),('brass',(136,111,62)),('sign_face',(236,226,160)),('static',(113,115,103)),('stage_carpet',(44,75,68)),('hazard',(230,190,36)),('pool_suit',(160,200,204)),('survey_suit',(222,211,164)),('false_suit',(231,212,162))]:
+    for key,base in [('floor_tile',(229,223,209)),('plaster',(195,185,146)),('oak',(122,91,51)),('ceiling',(183,181,157)),('damask',(174,154,65)),('beige_carpet',(152,137,98)),('stand_carpet',(120,91,47)),('triangle_carpet',(67,48,61)),('road_carpet',(66,78,59)),('small_tile',(179,199,185)),('pegboard',(180,168,120)),('puzzle_mat',(30,96,112)),('black_ceiling',(31,32,30)),('pad',(26,61,47)),('brass',(136,111,62)),('sign_face',(236,226,160)),('static',(113,115,103)),('stage_carpet',(44,75,68)),('hazard',(230,190,36)),('pool_suit',(160,200,204)),('survey_suit',(222,211,164)),('false_suit',(231,212,162))]:
         im=save(key,base,2.5 if key not in ['static','beige_carpet','stand_carpet'] else 8);d=ImageDraw.Draw(im)
-        if key=='terrazzo':
-            for i in range(6200):
-                x,y=rng.integers(0,n,2);r=int(rng.integers(1,3));c=[(120,110,89),(201,187,151),(92,81,62),(158,141,105)][i%4];d.polygon([(int(x),int(y-r)),(int(x+r),int(y)),(int(x),int(y+r))],fill=c)
+        if key=='floor_tile':
+            # 2026-10-12 (owner, with three photographs of dead malls: "gulvet skal laves om ... med tiles og de skal
+            # være glossy, og brug bump map til at give perspektiv til fugerne"). Big pale square tiles with dark
+            # joints: four by four on the sheet, 128 px a tile, a 5 px joint centred on every boundary. It was
+            # speckled terrazzo. The gloss and the depth of the joints are make_pbr.py's maps.
+            for i in range(6200):rng.integers(0,n,2);rng.integers(1,3)   # the terrazzo's draws, kept so every later texture comes out the same
+            tone=np.random.default_rng(1012).normal(0,2.4,(4,4))
+            a=np.asarray(im).astype(float)+np.kron(tone,np.ones((128,128)))[...,None]
+            edge=np.minimum(np.minimum(xx%128,127-xx%128),np.minimum(yy%128,127-yy%128))     # px to the nearest tile boundary
+            a[edge<=3]=a[edge<=3]*.55+np.array([62,58,52])*.45
+            a[edge<=2]=(62,58,52)
+            im=Image.fromarray(np.uint8(np.clip(a,0,255)));d=ImageDraw.Draw(im)
         elif key=='static':
             a=np.repeat(np.clip(119+rng.normal(0,34,(n,n,1))-((yy%4)==0)[...,None]*22,20,230),3,axis=2)
             im=Image.fromarray(a.astype(np.uint8))
@@ -69,8 +78,11 @@ def textures():
         elif key=='puzzle_mat':
             for x in range(0,n,128):
                 for y in range(0,n,128):
-                    d.rectangle((x,y,x+127,y+127),fill=(36,82,135) if (x+y)//128%2 else (56,112,68));d.rectangle((x+1,y+1,x+126,y+126),outline=(20,49,53),width=2)
-                    d.ellipse((x+49,y-12,x+79,y+12),fill=(36,82,135) if (x+y)//128%2 else (56,112,68),outline=(20,49,53),width=2)
+                    # 2026-10-12 (owner: the Play Zone "looks nothing like the v3 ref picture"): red, blue, yellow and green
+                    # squares, as on W08 and in Level 6 itself; it was blue and green only
+                    tone=[(178,52,44),(38,82,156),(212,168,42),(50,124,68)][(x//128+2*((y//128)%2))%4]
+                    d.rectangle((x,y,x+127,y+127),fill=tone);d.rectangle((x+1,y+1,x+126,y+126),outline=(24,26,24),width=2)
+                    d.ellipse((x+49,y-12,x+79,y+12),fill=tone,outline=(24,26,24),width=2)
         elif key=='pool_suit':
             for y in range(0,n,70):
                 pts=[(x,y+int(8*math.sin(x*math.tau/128))) for x in range(n)]
@@ -104,10 +116,11 @@ def textures():
 def design():
     D={'version':1,'units':'studs','bounds':{'min':[125,15,-902],'max':[315,50,-419]},'materials':{},'parts':[],'signs':[],'lights':[],'anchors':{}}
     palette={
-      'terrazzo':('Concrete',(174,158,124),16),'border':('Concrete',(94,71,45),8),'plaster':('Plaster',(195,185,146),8),'oak':('WoodPlanks',(122,91,51),8),'ceiling':('Concrete',(183,181,157),4),'damask':('Fabric',(174,154,65),6),'beige_carpet':('Carpet',(152,137,98),6),'stand_carpet':('Carpet',(120,91,47),6),'triangle_carpet':('Carpet',(67,48,61),8),'road_carpet':('Carpet',(66,78,59),16),'small_tile':('Concrete',(179,199,185),4),'pegboard':('Wood',(180,168,120),4),'puzzle_mat':('Fabric',(30,96,112),8),'black_ceiling':('Concrete',(31,32,30),4),'pad':('SmoothPlastic',(26,61,47),14.8),'brass':('Metal',(136,111,62),4),'sign_face':('SmoothPlastic',(236,226,160),40),'static':('SmoothPlastic',(113,115,103),3),
+      'floor_tile':('SmoothPlastic',(229,223,209),8),'border':('Concrete',(94,71,45),8),'plaster':('Plaster',(195,185,146),8),'oak':('WoodPlanks',(122,91,51),8),'ceiling':('Concrete',(183,181,157),4),'damask':('Fabric',(174,154,65),6),'beige_carpet':('Carpet',(152,137,98),6),'stand_carpet':('Carpet',(120,91,47),6),'triangle_carpet':('Carpet',(67,48,61),8),'road_carpet':('Carpet',(66,78,59),16),'small_tile':('Concrete',(179,199,185),4),'pegboard':('Wood',(180,168,120),4),'puzzle_mat':('Fabric',(30,96,112),12),'black_ceiling':('Concrete',(31,32,30),4),'pad':('SmoothPlastic',(26,61,47),14.8),'brass':('Metal',(136,111,62),4),'sign_face':('SmoothPlastic',(236,226,160),40),'static':('SmoothPlastic',(113,115,103),3),
       'frame':('Metal',(62,58,46),4),'text':('SmoothPlastic',(72,66,54),4),'teal':('Plaster',(93,129,121),4),'mauve':('Plaster',(137,106,109),4),'skirt':('Concrete',(98,76,49),4),'cream':('SmoothPlastic',(188,174,124),4),'black':('SmoothPlastic',(18,20,18),4),'glass':('Glass',(58,64,56),4),'water':('Glass',(18,69,68),4),'orange':('Plaster',(165,82,35),4),'navy':('Plaster',(23,32,58),4),'red':('Fabric',(137,30,34),4),'rose':('SmoothPlastic',(175,119,146),4),'yellow':('Fabric',(200,160,34),4),'blue':('Fabric',(47,103,163),4),'green':('Fabric',(55,118,66),4),'purple':('Fabric',(109,52,135),4),'pale_blue':('Fabric',(122,175,186),4),'cloth':('Fabric',(211,196,144),8),'vinyl':('SmoothPlastic',(76,48,30),4),'metal':('Metal',(111,108,86),4),'light':('Neon',(238,225,155),4),'cyan':('Neon',(44,183,209),4),'magenta':('Neon',(206,44,151),4),'grey':('Metal',(125,123,107),4),'stage_carpet':('Carpet',(44,75,68),6),'hazard':('SmoothPlastic',(230,190,36),1.1)}
     palette.update({'detector_green':('Neon',(80,210,77),4),'velvet':('Fabric',(96,27,40),4),'case_glass':('Glass',(184,178,139),4),'amber':('Neon',(220,155,52),4),'gold':('Metal',(159,131,61),4),'olive':('Fabric',(133,143,90),4),'charcoal':('Fabric',(36,38,35),4),'wraith':('Fabric',(62,35,78),4),'pool_suit':('Fabric',(160,200,204),3),'survey_suit':('Fabric',(222,211,164),3),'false_suit':('Fabric',(231,212,162),3)})
-    textured=set(['terrazzo','plaster','oak','ceiling','damask','beige_carpet','stand_carpet','triangle_carpet','road_carpet','small_tile','pegboard','puzzle_mat','black_ceiling','pad','brass','sign_face','static','stage_carpet','hazard','pool_suit','survey_suit','false_suit'])
+    palette.update({'cardboard':('Cardboard',(150,118,78),4),'net':('Fabric',(14,14,13),4)})
+    textured=set(['floor_tile','plaster','oak','ceiling','damask','beige_carpet','stand_carpet','triangle_carpet','road_carpet','small_tile','pegboard','puzzle_mat','black_ceiling','pad','brass','sign_face','static','stage_carpet','hazard','pool_suit','survey_suit','false_suit'])
     for k,(base,c,tile) in palette.items():D['materials'][k]={'base':base,'colour_map':f'textures/{k}.png' if k in textured else None,'normal_map':f'textures/{k}_normal.png' if k in textured else None,'roughness_map':f'textures/{k}_roughness.png' if k in textured else None,'studs_per_tile':tile}
     names=set()
     def part(n,g,pos,size,m='plaster',rot=(0,0,0),shape='Block',col=None,collide=True,transparency=0,glow=False):
@@ -154,8 +167,9 @@ def design():
             for j,dx in enumerate((-5,5)):box(f'{n}_Leg{k}_{j}','Furniture',x+dx,31,z+dz,.4,1.75,1.5,'frame')
     # Floor slabs meet at edges; concourse has a continuous brown border.
     for g,z0,z1 in [('Concourse',-900,-621),('DarkWing',-621,-421)]:
-        box(g+'_Floor',g,220,29.5,(z0+z1)/2,72,1,z1-z0,'terrazzo')
-        for x in (182,258):box(f'{g}_Border{x}',g,x,29.5,(z0+z1)/2,4,1,z1-z0,'border')
+        box(g+'_Floor',g,220,29.5,(z0+z1)/2,72,1,z1-z0,'floor_tile')
+        # the band along each wall: the same tile in the warm tan of the third photograph (it was a plain brown strip)
+        for x in (182,258):box(f'{g}_Border{x}',g,x,29.5,(z0+z1)/2,4,1,z1-z0,'floor_tile',col=(208,164,128))
     # Entrance and end wall.
     wall('EntranceWest','Arrival',190,38,-900.5,20,16,1)
     wall('EntranceEast','Arrival',250,38,-900.5,20,16,1)
@@ -174,15 +188,22 @@ def design():
     for level,west,z,name,mat in shops:
         g=f'Shop{level}';a,b=(127,180) if west else (260,313);front=b if west else a;back=a if west else b;show=(a+13 if west else b-13);padx=166 if west else 274
         # Floor 26-stud showcase + 27-stud queue. Void has a real recessed pit.
-        box(g+'_QueueFloor',g,(a+b)/2+(13 if west else -13),29.5,z,27,1,58,'terrazzo')
+        # x at depth d into the showcase: 0 is its front edge (where the queue zone ends), 26 the back wall
+        dep=(lambda d:153-d) if west else (lambda d:287+d)
+        # The Void is one flat rose from the concourse edge to the back wall (W07), queue zone included
+        box(g+'_QueueFloor',g,(a+b)/2+(13 if west else -13),29.5,z,27,1,58,'rose' if level==5 else 'floor_tile')
         floor={'OFFICE':'beige_carpet','POOLROOMS':'small_tile','MALL PARTY':'road_carpet','CINEMA':'triangle_carpet','THE VOID':'rose','PLAY ZONE':'puzzle_mat'}[name]
         if level==5:
-            box(g+'_Ledge',g,149,29.5,z,8,1,58,'rose');box(g+'_Pit',g,136,24.25,z,18,.5,56,'black')
-        elif level==2:box(g+'_BasinFloor',g,show,28.55,z,26,.5,58,'small_tile');box(g+'_Water',g,show,29.4,z,26,1.2,56,'water',transparency=.25,collide=True)
+            # The void is a flush black strip, not a pit: the first build's pit was five studs deep with nothing to
+            # climb out on, in a room players walk into. Rose floor, the black strip, rose floor.
+            box(g+'_Ledge',g,151,29.5,z,4,1,58,'rose');box(g+'_Pit',g,145,29.5,z,8,1,58,'black');box(g+'_BackFloor',g,134,29.5,z,14,1,58,'rose')
+        elif level==2:box(g+'_BasinFloor',g,show,28.55,z,26,.5,58,'small_tile',col=(52,86,90));box(g+'_Water',g,show,29.4,z,26,1.2,56,'water',transparency=.12,collide=True)
         else:box(g+'_ShowFloor',g,show,29.5,z,26,1,58,floor)
-        box(g+'_BackWall',g,back+(-.5 if west else .5),37,z,1,14,58,mat)
+        # W04: the pool hall is dark, its tile only pale on the columns
+        tint={2:(84,124,126)}.get(level)
+        box(g+'_BackWall',g,back+(-.5 if west else .5),37,z,1,14,58,mat,col=tint)
         for k,zz in enumerate((z-29.5,z+29.5)):
-            box(f'{g}_Side{k}',g,(a+b)/2,37,zz,53,14,1,mat)
+            box(f'{g}_Side{k}',g,(a+b)/2,37,zz,53,14,1,mat,col=tint)
             wall(f'{g}_Pier{k}',g,front+(-1 if west else 1),36,z+(-27.5 if k==0 else 27.5),2,12,3)
             # Full 4x4 pier column sits on the concourse side. Its inner edge
             # remains at +/-26, preserving the 52-stud opening behind it.
@@ -190,7 +211,7 @@ def design():
         box(g+'_Fascia',g,front+(-1 if west else 1),44,z,2,4,52,'oak')
         normal=(1,0,0) if west else (-1,0,0)
         sign(g+'_Sign',f'{level} {name}','box',(front+(.31 if west else -.31),43.9,z),(40,3.2),normal,g)
-        box(g+'_Ceiling',g,(a+b)/2+(-1 if west else 1),44.25,z,51,.5,58,'black_ceiling' if level==3 else ('rose' if level==5 else 'ceiling'))
+        box(g+'_Ceiling',g,(a+b)/2+(-1 if west else 1),44.25,z,51,.5,58,'rose' if level==5 else 'ceiling',col=(104,128,126) if level==2 else None)
         for k,dz in enumerate((-19,0,19),1):
             zz=z+dz;cyl(f'{g}_Pad{k}',g,padx,30.3,zz,7.4,.6,'pad')
             # Texture is an inlay, no extra overlapping discs.
@@ -200,16 +221,20 @@ def design():
             pads.append({'level':level,'station':k,'pos':[padx,30.6,zz],'radius':7.4})
         # One recessed fluorescent in each back zone; cool Poolrooms only.
         if level!=5:
-            box(g+'_Panel',g,show,43.92,z,8,.12,4,'light',glow=True)
-            light(g+'_ShowLight','showcase',(show,43.7,z),(164,208,204) if level==2 else (240,222,143),3.2 if level==4 else 7.0,45)
+            lamp=dep(8.5) if level==6 else show          # between the play frame's rows of posts, which reach the ceiling
+            box(g+'_Panel',g,lamp,43.92,z,8,.12,4,'light',glow=True)
+            if level in (3,6):
+                for dz in (-19,19):box(f'{g}_Panel{dz}',g,lamp,43.92,z+dz,8,.12,4,'light',glow=True)
+            light(g+'_ShowLight','showcase',(lamp,43.7,z),(164,208,204) if level==2 else (240,222,143),{2:2.6,4:3.2}.get(level,7.0),45)
         if level==1:
             box('OfficePillar',g,show+3,37,z-10,3,14,3,'damask');box('OfficeCabinet',g,128.51,35.2,z+15,3,5.6,8,'grey')
             for dz in (-2,2):box(f'OfficeCabinetHandle{dz}',g,130.1,35.2,z+15+dz,.15,1.4,.15,'frame')
         elif level==2:
-            for k,(dx,dz) in enumerate([(-7,-20),(7,-10),(-7,0),(7,10),(-7,20)]):
-                cyl(f'PoolColumn{k}',g,show+dx,35.85,z+dz,1.6,14.1,'small_tile')
-                for j,r in enumerate((1.9,2.2,2.5)):
-                    cyl(f'PoolCapital{k}_{j}',g,show+dx,42.9+(j+.5)*1.1/3,z+dz,r,1.1/3,'small_tile')
+            # W04: rows of white-tiled round columns with flared tops standing in dark water, going back into the dim
+            for k,(d,dz) in enumerate([(d,dz) for d in (5,13,21) for dz in (-21,-7,7,21)]):
+                xx=dep(d);cyl(f'PoolColumn{k}',g,xx,35.85,z+dz,1.5,14.1,'small_tile')
+                for j,r in enumerate((1.8,2.15,2.5)):
+                    cyl(f'PoolCapital{k}_{j}',g,xx,42.9+(j+.5)*1.1/3,z+dz,r,1.1/3,'small_tile')
         elif level==3:
             # Black lower wall is adjacent, not embedded in the orange back wall.
             box('PartyBand',g,127.10,31.3,z,.18,2.6,58,'black')
@@ -226,30 +251,60 @@ def design():
                     xx=131+(k%2)*1.7;yy=38.5+(k//2)*1.6;zz=z+dz+(k%2)*.8
                     ball(f'Balloon{bunch}_{k}',g,xx,yy,zz,.8,['yellow','blue','green','red','purple'][k],collide=True)
                     beam(f'BalloonString{bunch}_{k}',g,(131,33,z+dz),(xx,yy-.8,zz),.05,'cream',collide=False)
+            # W05: the staff door in the back wall and the boxes somebody left
+            box('PartyDoor',g,127.3,34.6,z+12,.2,9.2,4.6,'black');box('PartyDoorKnob',g,127.52,34.2,z+10.3,.24,.34,.34,'brass',collide=False)
+            for k,(d,dz,yy,sz) in enumerate([(20.5,-14,31.1,2.2),(18.2,-16.4,30.8,1.6),(20.4,-14.1,32.9,1.4)]):
+                box(f'PartyBox{k}',g,dep(d),yy,z+dz,sz,sz,sz,'cardboard')
         elif level==4:
-            # Screen on the back wall; chairs look east towards it.
-            box('CinemaScreen',g,312.35,38,z,.18,6,18,'light',glow=True);light('CinemaScreenLight','showcase',(311.8,38,z),(218,213,177),3.0,38)
-            for k,(yy,matn,dz) in enumerate(((39.2,'magenta',-28.85),(39.2,'cyan',28.85))):
-                box(f'CinemaNeon{k}',g,300,yy,z+dz,25,.1,.1,matn,glow=True);light(f'CinemaNeonLight{k}','neon',(289,yy,z+dz*.96),palette[matn][1],2.2,40)
+            # W06: the pale screen in a black frame, a pink line over a cyan line round the navy walls, two short rows of seats
+            box('CinemaScreenFrame',g,312.75,38,z,.2,7.2,19.4,'black');box('CinemaScreen',g,312.5,38,z,.18,6,18,'light',glow=True);light('CinemaScreenLight','showcase',(311.8,38,z),(218,213,177),3.0,38)
+            for k,(yy,matn) in enumerate(((39.9,'magenta'),(38.9,'cyan'))):
+                for side,dz in enumerate((-28.85,28.85)):box(f'CinemaNeon{k}_{side}',g,300,yy,z+dz,25,.12,.12,matn,glow=True,collide=False)
+                for side,dz in enumerate((-19.4,19.4)):box(f'CinemaNeonBack{k}_{side}',g,312.9,yy,z+dz,.12,.12,18.6,matn,glow=True,collide=False)
+            light('CinemaNeonLight0','neon',(300,39.4,z-27.6),palette['magenta'][1],2.2,40);light('CinemaNeonLight1','neon',(300,39.4,z+27.6),palette['cyan'][1],2.2,40)
             for row,xx in enumerate((294,303)):
                 for k,zz in enumerate((z-9,z-3,z+3,z+9)):
                     box(f'CinemaSeat{row}_{k}',g,xx,32,zz,2.8,.55,3.4,'red');box(f'CinemaBack{row}_{k}',g,xx-1.65,33.8,zz,.5,3.6,3.4,'red')
                     box(f'CinemaBase{row}_{k}',g,xx,30.85,zz,1.5,1.15,2,'black')
         elif level==5:
-            for k,zz in enumerate((z-12,z+12)):box(f'VoidBlock{k}',g,134+k*3,28.5,zz,5,8,5,'rose')
-            box('VoidRod',g,148,33.525,z,.12,7.05,.12,'rose');ball('VoidGlobe',g,148,37.6,z,.55,'light',collide=False,glow=True);light('VoidLamp','globe',(148,37.6,z),(234,208,170),12,42)
+            # W07: beyond the black strip a long low wall with two blocks before it and one globe lamp on a stem
+            # a shade deeper than the room: under the hall's even light one flat rose swallowed them
+            deep=tuple(int(v*.84) for v in palette['rose'][1])
+            box('VoidWall',g,137,31.25,z,3,2.5,34,'rose',col=deep)
+            for k,dz in enumerate((-9,9)):box(f'VoidBlock{k}',g,141,32.5,z+dz,4,5,5,'rose',col=deep)
+            box('VoidRod',g,137,34.5,z,.12,4,.12,'rose');ball('VoidGlobe',g,137,37.05,z,.55,'light',collide=False,glow=True);light('VoidLamp','globe',(137,37.05,z),(234,208,170),12,42)
         elif level==6:
-            for ix,xx in enumerate((290,300,310)):
-                for iz,zz in enumerate((z-20,z,z+20)):
-                    cyl(f'PlayPost{ix}_{iz}',g,xx,36.5,zz,.7,13,['yellow','red','blue','green'][(ix+iz)%4])
-            # Netting uses long intersecting noncolliding lines, all larger panels remain open.
-            for side,xx in enumerate((290,310)):
-                for yy in range(32,43,2):box(f'NetH{side}_{yy}',g,xx,yy,z,.05,.05,40,'black',collide=False)
-                for zz in range(z-18,z+20,2):box(f'NetV{side}_{zz}',g,xx,36.5,zz,.05,11,.05,'black',collide=False)
-            # Tube mouth: polygon ring, wall-facing circular opening and dark throat.
-            for k in range(16):
-                t=k*math.tau/16;part(f'SlideRim{k}',g,(291,34.1+3.5*math.cos(t),z+15+3.5*math.sin(t)),(1.7,.56,1.28),'yellow',rot=(math.degrees(t),0,0))
-            part('SlideThroat',g,(292.1,34.1,z+15),(.25,6.1,6.1),'black',shape='Cylinder')
+            # W08 and Level 6 itself: a soft-play frame. Padded posts in four colours on a grid, bars at two heights,
+            # padded decks in some bays, black netting on the front, a red tube slide, a cube with holes, hanging rollers.
+            tones=['yellow','red','blue','green'];rows=(4,13,22);across=(-26,-17.33,-8.67,0,8.67,17.33,26);levels=(34.6,39.2)
+            # bars run from post to post, never through one (check_mall.py refuses solid overlaps)
+            for i,d in enumerate(rows):
+                for j,dz in enumerate(across):
+                    cyl(f'PlayPost{i}_{j}',g,dep(d),37,z+dz,.45,14,tones[(i+j)%4])
+                    for h,yy in enumerate(levels):
+                        if j<6 and (i,j,h)!=(0,0,0):beam(f'PlayBarAcross{i}_{j}_{h}',g,(dep(d),yy,z+dz+.45),(dep(d),yy,z+across[j+1]-.45),.5,tones[(i+j+h+1)%4])
+                        if i<2:beam(f'PlayBarDeep{i}_{j}_{h}',g,(dep(d+.45),yy,z+dz),(dep(rows[i+1]-.45),yy,z+dz),.5,tones[(i+j+h+2)%4])
+            for k,(i,j,h) in enumerate([(0,1,0),(1,2,0),(0,4,0),(1,5,0),(1,0,0),(0,2,1),(1,4,1)]):
+                box(f'PlayDeck{k}',g,(dep(rows[i])+dep(rows[i+1]))/2,levels[h]+.4,z+(across[j]+across[j+1])/2,8.0,.3,7.6,tones[(k+1)%4])
+            for j in range(6):
+                zz=z+(across[j]+across[j+1])/2
+                box(f'PlayNetUpper{j}',g,dep(4),41.75,zz,.06,4.5,7.77,'net',transparency=.8,collide=False)
+                for c,dz in enumerate((-1.45,1.45)):box(f'PlayCordV{j}_{c}',g,dep(4)-.08,39.45,zz+dz,.07,9.1,.07,'net',collide=False)
+                if j in (1,2,4):box(f'PlayNetLower{j}',g,dep(4),37,zz,.06,4.2,7.77,'net',transparency=.8,collide=False)
+            for h,yy in enumerate((36.2,37.8,40.9,42.6)):box(f'PlayCordH{h}',g,dep(4)-.08,yy,z,.07,.07,51.1,'net',collide=False)
+            for side,dz in enumerate((-26,26)):box(f'PlayNetSide{side}',g,dep(13),41.75,z+dz,17.1,4.5,.06,'net',transparency=.8,collide=False)
+            def tube(n,p0,p1,r,m,**kw):
+                p0,p1=np.array(p0,float),np.array(p1,float);X=(p1-p0)/np.linalg.norm(p1-p0);Y=np.cross([0,0,1],X);Y/=np.linalg.norm(Y);Z=np.cross(X,Y)
+                return part(n,g,(p0+p1)/2,(np.linalg.norm(p1-p0),2*r,2*r),m,angles(np.column_stack([X,Y,Z])),shape='Cylinder',**kw)
+            # one tube in four lengths end to end: red, a blue band, red, the yellow rim, then the dark mouth
+            top,mouth=np.array([dep(11.5),36.3,z-21.7]),np.array([dep(1.2),33.0,z-21.7]);run=(mouth-top)/np.linalg.norm(mouth-top)
+            tube('SlideTube0',top,mouth-run*3.2,2.3,'red');tube('SlideRingBlue',mouth-run*3.2,mouth-run*2.5,2.65,'blue')
+            tube('SlideTube1',mouth-run*2.5,mouth-run*.7,2.3,'red');tube('SlideRingYellow',mouth-run*.7,mouth,2.65,'yellow')
+            tube('SlideThroat',mouth,mouth+run*.08,1.95,'black',collide=False)
+            box('PlayCube',g,dep(1.5),32,z+12.8,3,4,4,'green')
+            for k,(dy,dz) in enumerate([(-.95,-.95),(-.95,.95),(.95,-.95),(.95,.95)]):
+                part(f'PlayCubeHole{k}',g,(dep(0)+(.04 if west else -.04),32+dy,z+12.8+dz),(.08,1.15,1.15),'black',shape='Cylinder',collide=False)
+            for k,tone in enumerate(('red','blue','yellow')):cyl(f'PlayRoller{k}',g,dep(6.5+k*2.1),37.15,z+21.6,.55,3.6,tone)
     # Continuous concourse wall segments between open shopfronts; repeated dead modules north.
     spans=[(-900,-870),(-810,-790),(-730,-710),(-650,-621)]
     for side,x in enumerate((179,261)):
@@ -258,7 +313,7 @@ def design():
         a,b=(127,180) if west else (260,313);front=b if west else a;back=a if west else b
         for k,(z0,z1) in enumerate([(-609,-551),(-529,-471),(-449,-421)]):
             z=(z0+z1)/2;length=z1-z0
-            box(f'DeadShop{side}_{k}_Floor','DarkWing',(a+b)/2,29.5,z,53,1,length,'terrazzo')
+            box(f'DeadShop{side}_{k}_Floor','DarkWing',(a+b)/2,29.5,z,53,1,length,'floor_tile')
             box(f'DeadShop{side}_{k}_Back','DarkWing',back+(-.5 if west else .5),37,z,1,14,length,'plaster')
             for j,zz in enumerate((z0-0.5,z1+0.5)):
                 box(f'DeadShop{side}_{k}_Side{j}','DarkWing',(a+b)/2,37,zz,53,14,1,'plaster')
@@ -477,19 +532,19 @@ def design():
     planter('PlanterArrival',220,-835);planter('PlanterNorth',220,-700)
     # Blank, flat leaderboard faces (no pretend scores or UI).
     boards=[]
-    for key,x,z,w,h,norm in [('directory',185,-795,18,12,(1,0,0)),('level1',195,-825,8,10,(1,0,0)),('level2',245,-855,8,10,(-1,0,0)),('level3',195,-745,8,10,(1,0,0)),('level4',245,-745,8,10,(-1,0,0)),('level5',195,-665,8,10,(1,0,0)),('level6',245,-695,8,10,(-1,0,0))]:
-        # Suspend the two boards beside the enlarged stand. No board height was
-        # specified; bottom35.4 leaves >5 studs of walkable clearance underneath.
-        y=(40.4 if key in ('level3','level4') else 31+h/2);yaw=90 if norm[0]>0 else -90
+    # 2026-10-12 (owner: "move the Fastest escapes leaderboard more to the side of the entry to the level"): each
+    # level's board stands against the pier right beside its own shop's opening, flat to the wall. They stood out in
+    # the hall in front of the openings, and two hung from the ceiling to clear the stand.
+    for key,x,z,w,h,norm in [('directory',185,-795,18,12,(1,0,0)),('level1',184.6,-871.2,8,10,(1,0,0)),('level2',255.4,-871.2,8,10,(-1,0,0)),('level3',184.6,-728.8,8,10,(1,0,0)),('level4',255.4,-728.8,8,10,(-1,0,0)),('level5',184.6,-711.2,8,10,(1,0,0)),('level6',255.4,-711.2,8,10,(-1,0,0))]:
+        y=31+h/2;yaw=90 if norm[0]>0 else -90
         part(key+'_BoardFrame','Furniture',(x,y,z),(w+.4,h+.4,.35),'oak',rot=(0,yaw,0))
         pos=[x+norm[0]*.205,y,z];part(key+'_BoardFace','Furniture',pos,(w,h,.06),'black',rot=(0,yaw,0))
         for dz in (-w*.35,w*.35):
-            if key in ('level3','level4'):box(key+f'_BoardHanger{dz}','Furniture',x,45.8,z+dz,.12,.4,.12,'brass')
-            else:box(key+f'_BoardLeg{dz}','Furniture',x,30.5,z+dz,.3,1,.3,'brass')
+            box(key+f'_BoardLeg{dz}','Furniture',x,30.5,z+dz,.3,1,.3,'brass')
         boards.append({'key':key,'pos':pos,'size':[w,h],'normal':list(norm)})
     sign('DirectoryHeader','DIRECTORY','box',(185.30,44.12,-795),(18,1.6),(1,0,0),'Furniture')
     # Small fake plants next to closed bays, away from pad and path clearances.
-    for i,(x,z) in enumerate([(186,-807),(256,-805),(184,-725),(256,-725),(182,-645),(258,-645)]):
+    for i,(x,z) in enumerate([(186,-807),(256,-805),(186,-720),(254,-720),(182,-645),(258,-645)]):
         cyl(f'PlantTub{i}','Furniture',x,31.2,z,1.8,2.4,'vinyl')
         for k in range(5):part(f'PlantLeaf{i}_{k}','Furniture',(x+math.cos(k*1.5)*.6,34.0,z+math.sin(k*1.5)*.6),(.25,2.3,1.0),'green',rot=(12,k*72,12),collide=True)
     # Two nested trolley trains, plain wire-frame 1990s carts.

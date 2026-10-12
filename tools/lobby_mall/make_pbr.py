@@ -17,7 +17,7 @@ BUILD = Path(__file__).resolve().parents[2] / 'artifacts' / 'lobby-mall-20261011
 OUT = BUILD / 'textures_pbr'
 #        pattern depth, noise depth, noise size (px), roughness base, roughness swing with brightness
 RULES = {
-    'terrazzo':        (0.35, 0.10, 1, 0.30, -0.10),   # waxed stone: the chips are a touch duller than the matrix
+    'floor_tile':      (3.40, 0.015, 2, 0.12, -1.50),   # glossy glazed tile, matt joints sunk between them (owner, 2026-10-12)
     'plaster':         (0.20, 0.55, 2, 0.86,  0.00),
     'oak':             (1.30, 0.25, 1, 0.50, -0.18),
     'ceiling':         (2.20, 0.50, 1, 0.94,  0.00),
@@ -52,6 +52,14 @@ def main():
     for at in ((0, 0), (w // 2, 0), (0, h // 2), (w // 2, h // 2)):
         clean.paste(quarter, at)
     clean.save(OUT / 'ceiling_colour.png')
+    # The sheen of a ceiling panel on the polished floor: a soft white blob with its own alpha. Roblox draws no
+    # reflection of a lamp in a floor here, however smooth the roughness map makes it (seen in play 2026-10-12), so
+    # the importer lays this under every lit panel.
+    yy, xx = np.mgrid[:128, :128]
+    falloff = np.exp(-(((xx - 63.5) / 44) ** 2 + ((yy - 63.5) / 44) ** 2) * 2.2)
+    falloff[np.hypot(xx - 63.5, yy - 63.5) > 63] = 0
+    blob = np.dstack([np.full((128, 128, 3), 255.0), falloff * 255])
+    Image.fromarray(np.uint8(blob + 0.5), 'RGBA').save(OUT / 'sheen.png')
     materials = json.loads((BUILD / 'mall.json').read_text())['materials']
     rng = np.random.default_rng(611)
     for key, (pattern, grain, size, base, swing) in RULES.items():

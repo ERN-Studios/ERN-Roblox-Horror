@@ -15,6 +15,9 @@
   "damask_colour": "18b2fcaaf1c95dafcd60328ebd8993f9d5155ff66b2f0844cd4e4027208e6201",
   "damask_normal": "468b39d13a8af4d3a6f26487084c152beec2a9c79b4da3d0408c04f1c3c9f1f8",
   "damask_roughness": "7607d95f55f4ab1355b86c3a4b7a1145621f8c231f035f6ccc4237df270392db",
+  "floor_tile_colour": "2ba0ee935bb6c2d413f57237ac0a33a9fef8a42758b26b076781842e049a3eee",
+  "floor_tile_normal": "2cbda6bdf7086f3f57d1f6d664241df8eb40309a9cff350eaa6aaacbc1f29e17",
+  "floor_tile_roughness": "db2610d48d520120394702393d4582e130321f31aa6c9c2194c126d4e288b57f",
   "hazard_colour": "80bc39fb9dca23877085beab432042ab1c674c8bfe5b2dc903c520f2d085bd62",
   "hazard_normal": "63a0f94b1f109beb8279a0dfa4944e849342b341b5642a958c68f8944fcf908a",
   "hazard_roughness": "b732e585a3edfdc20ae3328fcce04b9af570a61f408ea2dcc63a348b90a32a8b",
@@ -27,12 +30,13 @@
   "plaster_colour": "6d2c40ba7288b9b2e2de04f77a6d419677569350f1eb9f158d09e4e01d03ede5",
   "plaster_normal": "8f21002e4927b429e9771e0d9cdf48cfa4f429632da9960a265c4df2607aadf9",
   "plaster_roughness": "267ce22ebd36d00fb282d6cf94bf5f0e6c494639121d687873a92e121b65c6a3",
-  "puzzle_mat_colour": "e2b1843f23d9076e0c65eaab9788bcc11309d51820fdb5f5a505c92e33fddbcc",
-  "puzzle_mat_normal": "a8aad73ff65c9319e3e8859be0ebc09f6c46ebc510b2f221cef84f4fd4e38389",
+  "puzzle_mat_colour": "9d4399e737e621e895caab647fe070a3433f6d318255cfb941c3119fe60dcef1",
+  "puzzle_mat_normal": "5ba572f5454f237a56d1061ad311eaff2c5391aa2a79f56db4e94dd768d5eec2",
   "puzzle_mat_roughness": "81216be18ddd3218dad283eff3aaa9e23ce1f906afbdba876d5e1835ad8b2316",
   "road_carpet_colour": "6818783b77041c2912eb1939dcef957326377099a44c1a50f25e35c21e0734e7",
   "road_carpet_normal": "8b9433dd56f95b81a361e29dd68de49f42a34787965534add0065f3ea476deb0",
   "road_carpet_roughness": "30229e750842abfbf84b9dec42adfe7549c4d506e67c2b9b415fc06587f6e203",
+  "sheen_colour": "f8c4c56ba9b814a615aa622ab99fd458c24a234e9beb47f0328682494e8b5acf",
   "small_tile_colour": "fa4a1119679208b7737488b2227170c0d74a74274f1d6d7689e8ea3fbae6d717",
   "small_tile_normal": "2c007cb82f51d14c21318216cb0987dcc518b1121f44a592666d812485504304",
   "small_tile_roughness": "d5a6e16baaf5e6c10c629ac5a6962e1940ea28c62f0936ee6619176d44d1e671",
@@ -42,9 +46,6 @@
   "stand_carpet_colour": "0ec1638d985d2ff7695480f1d78c3ade1b1bb86b99b607f56da88c8d18a39ddd",
   "stand_carpet_normal": "c50078ceb95868f76c898060ae117f5555b939b4c2bfd07f857e60648968e67e",
   "stand_carpet_roughness": "b4056e59af70928d4ec34d14cc095e73f886b340a6997f4ed70dccfdb2152eb1",
-  "terrazzo_colour": "73e07b42d48e79666ec09f1deae9da1beb4b17c8fec64d84a7c6e5888ad58994",
-  "terrazzo_normal": "5d43fb98c8f934d1015102ad5eae8d1d318a7f618486479ae614c141dfd5e5a5",
-  "terrazzo_roughness": "423bae0d5644a5703beb31ac59da0843ff56f351ed1f4b5bc5a11af5634b67d4",
   "triangle_carpet_colour": "2b2458ee0d8fbb878fa5e4a23a072461826ab9220d353b4f2756d47e8c8882c1",
   "triangle_carpet_normal": "0d6667793dba6f742c93bd308cbb4bfe0062b6cf77708e7310f0efc6dbfadb54",
   "triangle_carpet_roughness": "b47e28ea1e7afb07d55d9cde20840a3099106303c966fd211060397a350dccc3"
@@ -74,6 +75,11 @@
   "normal": 114210578379518,
   "roughness": 106223322182700
  },
+ "floor_tile": {
+  "colour": 110770653626913,
+  "normal": 140255728893280,
+  "roughness": 76807765693649
+ },
  "hazard": {
   "colour": 127922287741035,
   "normal": 129633645586007,
@@ -95,14 +101,17 @@
   "roughness": 74555483120788
  },
  "puzzle_mat": {
-  "colour": 137634639841536,
-  "normal": 107008997969699,
+  "colour": 108626940604722,
+  "normal": 104534033300631,
   "roughness": 91248391373949
  },
  "road_carpet": {
   "colour": 109226722956729,
   "normal": 73155792266968,
   "roughness": 132624109646859
+ },
+ "sheen": {
+  "colour": 71825726978586
  },
  "small_tile": {
   "colour": 129508222020952,
@@ -118,11 +127,6 @@
   "colour": 132057975445393,
   "normal": 116497883808014,
   "roughness": 82642193060819
- },
- "terrazzo": {
-  "colour": 79300689737715,
-  "normal": 103273604428427,
-  "roughness": 126695237639190
  },
  "triangle_carpet": {
   "colour": 110958820294066,

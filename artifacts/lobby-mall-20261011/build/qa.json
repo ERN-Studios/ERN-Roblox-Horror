@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "parts": 1798,
+  "parts": 1899,
   "counts": {
     "Arrival": 168,
     "Ceiling": 90,
@@ -8,21 +8,21 @@
     "DarkWing": 225,
     "Furniture": 138,
     "Shop1": 53,
-    "Shop2": 70,
-    "Shop3": 88,
-    "Shop4": 76,
-    "Shop5": 53,
-    "Shop6": 125,
+    "Shop2": 98,
+    "Shop3": 95,
+    "Shop4": 83,
+    "Shop5": 55,
+    "Shop6": 182,
     "Stage": 83,
     "Stand": 539,
     "Tape": 15
   },
   "errors": [],
   "notes": [
-    "Continuous 20-wide x5-high corridor: 515 centreline nodes; minimum sampled obstacle clearance 10.005344; whole-edge proof: 0.01-stud samples, 0.005-stud Lipschitz bound.",
+    "Continuous 20-wide x5-high corridor: 459 centreline nodes; minimum sampled obstacle clearance 10.005344; whole-edge proof: 0.01-stud samples, 0.005-stud Lipschitz bound.",
     "Full-width terminal strip verified from [245.5, 30, -632.5] to tape-base south tangent z=-622.1; 20 wide, 10.4 long, 5 high. No 20-wide passage through poles 12 apart.",
-    "Opposed coplanar joining faces >1 sq.stud: 1372 (flagged in qa.json; internal contact surfaces, not overlapping visible faces).",
-    "Same-facing submerged base contacts >1 sq.stud: 5 (flagged in qa.json; full coverage by the opaque basin floor verified)."
+    "Opposed coplanar joining faces >1 sq.stud: 1415 (flagged in qa.json; internal contact surfaces, not overlapping visible faces).",
+    "Same-facing submerged base contacts >1 sq.stud: 12 (flagged in qa.json; full coverage by the opaque basin floor verified)."
   ],
   "axis_proof": [
     {
@@ -486,6 +486,16 @@
     ],
     [
       "Shop3_ShowFloor",
+      "PartyBox0",
+      4.84
+    ],
+    [
+      "Shop3_ShowFloor",
+      "PartyBox1",
+      2.56
+    ],
+    [
+      "Shop3_ShowFloor",
       "Shop3_QueueFloor",
       58.0
     ],
@@ -625,14 +635,24 @@
       26.0
     ],
     [
-      "Shop5_Pit",
-      "VoidBlock0",
-      25.0
+      "Shop5_BackFloor",
+      "VoidWall",
+      102.0
     ],
     [
-      "Shop5_Pit",
+      "Shop5_BackFloor",
+      "VoidBlock0",
+      10.0
+    ],
+    [
+      "Shop5_BackFloor",
       "VoidBlock1",
-      25.0
+      10.0
+    ],
+    [
+      "Shop5_BackFloor",
+      "Shop5_Pit",
+      58.0
     ],
     [
       "Shop5_Side0",
@@ -1118,6 +1138,26 @@
       "DeadShop0_2_Ceiling",
       "DeadShop0_2_Fascia",
       11.0
+    ],
+    [
+      "PartyBox0",
+      "PartyBox2",
+      1.96
+    ],
+    [
+      "VoidBlock0",
+      "Shop5_Pit",
+      10.0
+    ],
+    [
+      "VoidBlock1",
+      "Shop5_Pit",
+      10.0
+    ],
+    [
+      "Shop5_Pit",
+      "Shop5_Ledge",
+      58.0
     ],
     [
       "Shop5_Ledge",
@@ -2191,11 +2231,6 @@
     ],
     [
       "Concourse_Border182",
-      "PlantTub2",
-      5.0314
-    ],
-    [
-      "Concourse_Border182",
       "Concourse_Floor",
       279.0
     ],
@@ -2975,11 +3010,6 @@
       16.0
     ],
     [
-      "PlantTub2",
-      "Concourse_Floor",
-      5.0314
-    ],
-    [
       "Concourse_Floor",
       "DarkWing_Floor",
       72.0
@@ -2987,6 +3017,11 @@
     [
       "Concourse_Floor",
       "PlantTub0",
+      10.0629
+    ],
+    [
+      "Concourse_Floor",
+      "PlantTub2",
       10.0629
     ],
     [
@@ -3111,12 +3146,12 @@
     ],
     [
       "Concourse_Floor",
-      "PlantTub1",
-      5.0314
+      "PlantTub3",
+      10.0629
     ],
     [
       "Concourse_Floor",
-      "PlantTub3",
+      "PlantTub1",
       5.0314
     ],
     [
@@ -3155,16 +3190,6 @@
       200.0
     ],
     [
-      "directory_BoardFrame",
-      "DirectoryHeader_Frame",
-      3.192
-    ],
-    [
-      "directory_BoardFrame",
-      "directory_BoardFace",
-      216.0
-    ],
-    [
       "level1_BoardFrame",
       "level1_BoardFace",
       80.0
@@ -3178,6 +3203,16 @@
       "level5_BoardFrame",
       "level5_BoardFace",
       80.0
+    ],
+    [
+      "directory_BoardFrame",
+      "DirectoryHeader_Frame",
+      3.192
+    ],
+    [
+      "directory_BoardFrame",
+      "directory_BoardFace",
+      216.0
     ],
     [
       "CeilingGap200_-890",
@@ -4780,6 +4815,11 @@
       16.0
     ],
     [
+      "PlantTub1",
+      "Concourse_Border258",
+      5.0314
+    ],
+    [
       "level2_BoardFace",
       "level2_BoardFrame",
       80.0
@@ -4793,16 +4833,6 @@
       "level6_BoardFace",
       "level6_BoardFrame",
       80.0
-    ],
-    [
-      "PlantTub1",
-      "Concourse_Border258",
-      5.0314
-    ],
-    [
-      "PlantTub3",
-      "Concourse_Border258",
-      5.0314
     ],
     [
       "Concourse_Border258",
@@ -7011,7 +7041,17 @@
     ],
     [
       "Shop2_Ceiling",
+      "PoolCapital1_2",
+      19.4114
+    ],
+    [
+      "Shop2_Ceiling",
       "PoolCapital2_2",
+      19.4114
+    ],
+    [
+      "Shop2_Ceiling",
+      "PoolCapital3_2",
       19.4114
     ],
     [
@@ -7021,13 +7061,68 @@
     ],
     [
       "Shop2_Ceiling",
-      "PoolCapital1_2",
+      "PoolCapital5_2",
       19.4114
     ],
     [
       "Shop2_Ceiling",
-      "PoolCapital3_2",
+      "PoolCapital6_2",
       19.4114
+    ],
+    [
+      "Shop2_Ceiling",
+      "PoolCapital7_2",
+      19.4114
+    ],
+    [
+      "Shop2_Ceiling",
+      "PoolCapital8_2",
+      19.4114
+    ],
+    [
+      "Shop2_Ceiling",
+      "PoolCapital9_2",
+      19.4114
+    ],
+    [
+      "Shop2_Ceiling",
+      "PoolCapital10_2",
+      19.4114
+    ],
+    [
+      "Shop2_Ceiling",
+      "PoolCapital11_2",
+      19.4114
+    ],
+    [
+      "Shop6_Ceiling",
+      "PlayNetSide0",
+      1.026
+    ],
+    [
+      "Shop6_Ceiling",
+      "PlayNetSide1",
+      1.026
+    ],
+    [
+      "PlayCubeHole0",
+      "PlayCube",
+      1.0269
+    ],
+    [
+      "PlayCubeHole1",
+      "PlayCube",
+      1.0269
+    ],
+    [
+      "PlayCubeHole2",
+      "PlayCube",
+      1.0269
+    ],
+    [
+      "PlayCubeHole3",
+      "PlayCube",
+      1.0269
     ],
     [
       "Shop2_BasinFloor",
@@ -7037,147 +7132,267 @@
     [
       "Shop2_BasinFloor",
       "PoolColumn0",
-      7.9509
-    ],
-    [
-      "Shop2_BasinFloor",
-      "PoolColumn2",
-      7.9509
-    ],
-    [
-      "Shop2_BasinFloor",
-      "PoolColumn4",
-      7.9509
+      6.9881
     ],
     [
       "Shop2_BasinFloor",
       "PoolColumn1",
-      7.9509
+      6.9881
+    ],
+    [
+      "Shop2_BasinFloor",
+      "PoolColumn2",
+      6.9881
     ],
     [
       "Shop2_BasinFloor",
       "PoolColumn3",
-      7.9509
+      6.9881
+    ],
+    [
+      "Shop2_BasinFloor",
+      "PoolColumn4",
+      6.9881
+    ],
+    [
+      "Shop2_BasinFloor",
+      "PoolColumn5",
+      6.9881
+    ],
+    [
+      "Shop2_BasinFloor",
+      "PoolColumn6",
+      6.9881
+    ],
+    [
+      "Shop2_BasinFloor",
+      "PoolColumn7",
+      6.9881
+    ],
+    [
+      "Shop2_BasinFloor",
+      "PoolColumn8",
+      6.9881
+    ],
+    [
+      "Shop2_BasinFloor",
+      "PoolColumn9",
+      6.9881
+    ],
+    [
+      "Shop2_BasinFloor",
+      "PoolColumn10",
+      6.9881
+    ],
+    [
+      "Shop2_BasinFloor",
+      "PoolColumn11",
+      6.9881
     ],
     [
       "Shop6_ShowFloor",
-      "PlayPost0_0",
-      1.5219
+      "PlayCube",
+      12.0
     ],
     [
-      "Shop6_ShowFloor",
-      "PlayPost0_1",
-      1.5219
+      "SlideRingYellow",
+      "SlideThroat",
+      11.8099
     ],
     [
-      "Shop6_ShowFloor",
-      "PlayPost0_2",
-      1.5219
+      "SlideRingYellow",
+      "SlideTube1",
+      16.4298
     ],
     [
-      "Shop6_ShowFloor",
-      "PlayPost1_0",
-      1.5219
-    ],
-    [
-      "Shop6_ShowFloor",
-      "PlayPost1_1",
-      1.5219
-    ],
-    [
-      "Shop6_ShowFloor",
-      "PlayPost1_2",
-      1.5219
-    ],
-    [
-      "Shop6_ShowFloor",
-      "PlayPost2_0",
-      1.5219
-    ],
-    [
-      "Shop6_ShowFloor",
-      "PlayPost2_1",
-      1.5219
-    ],
-    [
-      "Shop6_ShowFloor",
-      "PlayPost2_2",
-      1.5219
+      "SlideTube1",
+      "SlideRingBlue",
+      16.4298
     ],
     [
       "PoolCapital0_2",
       "PoolCapital0_1",
-      15.0322
-    ],
-    [
-      "PoolCapital2_2",
-      "PoolCapital2_1",
-      15.0322
-    ],
-    [
-      "PoolCapital4_2",
-      "PoolCapital4_1",
-      15.0322
-    ],
-    [
-      "PoolCapital0_1",
-      "PoolCapital0_0",
-      11.212
-    ],
-    [
-      "PoolCapital2_1",
-      "PoolCapital2_0",
-      11.212
-    ],
-    [
-      "PoolCapital4_1",
-      "PoolCapital4_0",
-      11.212
-    ],
-    [
-      "PoolCapital0_0",
-      "PoolColumn0",
-      7.9509
-    ],
-    [
-      "PoolCapital2_0",
-      "PoolColumn2",
-      7.9509
-    ],
-    [
-      "PoolCapital4_0",
-      "PoolColumn4",
-      7.9509
+      14.3567
     ],
     [
       "PoolCapital1_2",
       "PoolCapital1_1",
-      15.0322
+      14.3567
+    ],
+    [
+      "PoolCapital2_2",
+      "PoolCapital2_1",
+      14.3567
     ],
     [
       "PoolCapital3_2",
       "PoolCapital3_1",
-      15.0322
+      14.3567
+    ],
+    [
+      "SlideRingBlue",
+      "SlideTube0",
+      16.4298
+    ],
+    [
+      "PoolCapital0_1",
+      "PoolCapital0_0",
+      10.0629
     ],
     [
       "PoolCapital1_1",
       "PoolCapital1_0",
-      11.212
+      10.0629
+    ],
+    [
+      "PoolCapital2_1",
+      "PoolCapital2_0",
+      10.0629
     ],
     [
       "PoolCapital3_1",
       "PoolCapital3_0",
-      11.212
+      10.0629
+    ],
+    [
+      "PoolCapital0_0",
+      "PoolColumn0",
+      6.9881
     ],
     [
       "PoolCapital1_0",
       "PoolColumn1",
-      7.9509
+      6.9881
+    ],
+    [
+      "PoolCapital2_0",
+      "PoolColumn2",
+      6.9881
     ],
     [
       "PoolCapital3_0",
       "PoolColumn3",
-      7.9509
+      6.9881
+    ],
+    [
+      "PoolCapital4_2",
+      "PoolCapital4_1",
+      14.3567
+    ],
+    [
+      "PoolCapital5_2",
+      "PoolCapital5_1",
+      14.3567
+    ],
+    [
+      "PoolCapital6_2",
+      "PoolCapital6_1",
+      14.3567
+    ],
+    [
+      "PoolCapital7_2",
+      "PoolCapital7_1",
+      14.3567
+    ],
+    [
+      "PoolCapital4_1",
+      "PoolCapital4_0",
+      10.0629
+    ],
+    [
+      "PoolCapital5_1",
+      "PoolCapital5_0",
+      10.0629
+    ],
+    [
+      "PoolCapital6_1",
+      "PoolCapital6_0",
+      10.0629
+    ],
+    [
+      "PoolCapital7_1",
+      "PoolCapital7_0",
+      10.0629
+    ],
+    [
+      "PoolCapital4_0",
+      "PoolColumn4",
+      6.9881
+    ],
+    [
+      "PoolCapital5_0",
+      "PoolColumn5",
+      6.9881
+    ],
+    [
+      "PoolCapital6_0",
+      "PoolColumn6",
+      6.9881
+    ],
+    [
+      "PoolCapital7_0",
+      "PoolColumn7",
+      6.9881
+    ],
+    [
+      "PoolCapital8_2",
+      "PoolCapital8_1",
+      14.3567
+    ],
+    [
+      "PoolCapital9_2",
+      "PoolCapital9_1",
+      14.3567
+    ],
+    [
+      "PoolCapital10_2",
+      "PoolCapital10_1",
+      14.3567
+    ],
+    [
+      "PoolCapital11_2",
+      "PoolCapital11_1",
+      14.3567
+    ],
+    [
+      "PoolCapital8_1",
+      "PoolCapital8_0",
+      10.0629
+    ],
+    [
+      "PoolCapital9_1",
+      "PoolCapital9_0",
+      10.0629
+    ],
+    [
+      "PoolCapital10_1",
+      "PoolCapital10_0",
+      10.0629
+    ],
+    [
+      "PoolCapital11_1",
+      "PoolCapital11_0",
+      10.0629
+    ],
+    [
+      "PoolCapital8_0",
+      "PoolColumn8",
+      6.9881
+    ],
+    [
+      "PoolCapital9_0",
+      "PoolColumn9",
+      6.9881
+    ],
+    [
+      "PoolCapital10_0",
+      "PoolColumn10",
+      6.9881
+    ],
+    [
+      "PoolCapital11_0",
+      "PoolColumn11",
+      6.9881
     ]
   ],
   "hidden_coplanar_contacts": [
@@ -7186,25 +7401,7 @@
         "PoolColumn0",
         "Shop2_Water"
       ],
-      "area": 7.9509,
-      "plane_y": 28.8,
-      "covered_by": "Shop2_BasinFloor"
-    },
-    {
-      "parts": [
-        "PoolColumn2",
-        "Shop2_Water"
-      ],
-      "area": 7.9509,
-      "plane_y": 28.8,
-      "covered_by": "Shop2_BasinFloor"
-    },
-    {
-      "parts": [
-        "PoolColumn4",
-        "Shop2_Water"
-      ],
-      "area": 7.9509,
+      "area": 6.9881,
       "plane_y": 28.8,
       "covered_by": "Shop2_BasinFloor"
     },
@@ -7213,7 +7410,16 @@
         "PoolColumn1",
         "Shop2_Water"
       ],
-      "area": 7.9509,
+      "area": 6.9881,
+      "plane_y": 28.8,
+      "covered_by": "Shop2_BasinFloor"
+    },
+    {
+      "parts": [
+        "PoolColumn2",
+        "Shop2_Water"
+      ],
+      "area": 6.9881,
       "plane_y": 28.8,
       "covered_by": "Shop2_BasinFloor"
     },
@@ -7222,7 +7428,79 @@
         "PoolColumn3",
         "Shop2_Water"
       ],
-      "area": 7.9509,
+      "area": 6.9881,
+      "plane_y": 28.8,
+      "covered_by": "Shop2_BasinFloor"
+    },
+    {
+      "parts": [
+        "PoolColumn4",
+        "Shop2_Water"
+      ],
+      "area": 6.9881,
+      "plane_y": 28.8,
+      "covered_by": "Shop2_BasinFloor"
+    },
+    {
+      "parts": [
+        "PoolColumn5",
+        "Shop2_Water"
+      ],
+      "area": 6.9881,
+      "plane_y": 28.8,
+      "covered_by": "Shop2_BasinFloor"
+    },
+    {
+      "parts": [
+        "PoolColumn6",
+        "Shop2_Water"
+      ],
+      "area": 6.9881,
+      "plane_y": 28.8,
+      "covered_by": "Shop2_BasinFloor"
+    },
+    {
+      "parts": [
+        "PoolColumn7",
+        "Shop2_Water"
+      ],
+      "area": 6.9881,
+      "plane_y": 28.8,
+      "covered_by": "Shop2_BasinFloor"
+    },
+    {
+      "parts": [
+        "PoolColumn8",
+        "Shop2_Water"
+      ],
+      "area": 6.9881,
+      "plane_y": 28.8,
+      "covered_by": "Shop2_BasinFloor"
+    },
+    {
+      "parts": [
+        "PoolColumn9",
+        "Shop2_Water"
+      ],
+      "area": 6.9881,
+      "plane_y": 28.8,
+      "covered_by": "Shop2_BasinFloor"
+    },
+    {
+      "parts": [
+        "PoolColumn10",
+        "Shop2_Water"
+      ],
+      "area": 6.9881,
+      "plane_y": 28.8,
+      "covered_by": "Shop2_BasinFloor"
+    },
+    {
+      "parts": [
+        "PoolColumn11",
+        "Shop2_Water"
+      ],
+      "area": 6.9881,
       "plane_y": 28.8,
       "covered_by": "Shop2_BasinFloor"
     }
@@ -8286,1047 +8564,767 @@
       -756.5
     ],
     [
-      249.5,
+      250.0,
       30,
       -756.0
     ],
     [
-      249.0,
+      250.0,
       30,
       -755.5
     ],
     [
-      248.5,
+      250.0,
       30,
       -755.0
     ],
     [
-      248.0,
+      250.0,
       30,
       -754.5
     ],
     [
-      247.5,
+      250.0,
       30,
       -754.0
     ],
     [
-      247.0,
+      250.0,
       30,
       -753.5
     ],
     [
-      246.5,
+      250.0,
       30,
       -753.0
     ],
     [
-      246.0,
+      250.0,
       30,
       -752.5
     ],
     [
-      245.5,
+      250.0,
       30,
       -752.0
     ],
     [
-      245.0,
+      250.0,
       30,
       -751.5
     ],
     [
-      244.5,
+      250.0,
       30,
       -751.0
     ],
     [
-      244.0,
+      250.0,
       30,
       -750.5
     ],
     [
-      243.5,
+      250.0,
       30,
       -750.0
     ],
     [
-      243.0,
+      250.0,
       30,
       -749.5
     ],
     [
-      242.5,
+      250.0,
       30,
       -749.0
     ],
     [
-      242.0,
+      250.0,
       30,
       -748.5
     ],
     [
-      241.5,
+      250.0,
       30,
       -748.0
     ],
     [
-      241.0,
+      250.0,
       30,
       -747.5
     ],
     [
-      240.5,
+      250.0,
       30,
       -747.0
     ],
     [
-      240.0,
+      250.0,
       30,
       -746.5
     ],
     [
-      239.5,
+      250.0,
       30,
       -746.0
     ],
     [
-      239.0,
+      250.0,
       30,
       -745.5
     ],
     [
-      238.5,
+      250.0,
       30,
       -745.0
     ],
     [
-      238.0,
+      250.0,
       30,
       -744.5
     ],
     [
-      237.5,
+      250.0,
       30,
       -744.0
     ],
     [
-      237.0,
+      250.0,
       30,
       -743.5
     ],
     [
-      236.5,
+      250.0,
       30,
       -743.0
     ],
     [
-      236.0,
+      250.0,
       30,
       -742.5
     ],
     [
-      235.5,
+      249.5,
       30,
       -742.0
     ],
     [
-      235.0,
+      249.0,
       30,
       -741.5
     ],
     [
-      234.5,
+      248.5,
       30,
       -741.0
     ],
     [
-      234.0,
+      248.0,
       30,
       -740.5
     ],
     [
-      233.5,
+      247.5,
       30,
       -740.0
     ],
     [
-      233.0,
+      247.5,
       30,
       -739.5
     ],
     [
-      232.5,
+      247.0,
       30,
       -739.0
     ],
     [
-      232.0,
+      246.5,
       30,
       -738.5
     ],
     [
-      231.5,
+      246.5,
       30,
       -738.0
     ],
     [
-      231.0,
+      246.0,
       30,
       -737.5
     ],
     [
-      230.5,
+      246.0,
       30,
       -737.0
     ],
     [
-      230.0,
+      245.5,
       30,
       -736.5
     ],
     [
-      229.5,
+      245.5,
       30,
       -736.0
     ],
     [
-      229.0,
+      245.5,
       30,
       -735.5
     ],
     [
-      228.5,
+      245.0,
       30,
       -735.0
     ],
     [
-      228.0,
+      245.0,
       30,
       -734.5
     ],
     [
-      227.5,
+      245.0,
       30,
       -734.0
     ],
     [
-      227.0,
+      245.0,
       30,
       -733.5
     ],
     [
-      226.5,
+      245.0,
       30,
       -733.0
     ],
     [
-      226.0,
+      245.0,
       30,
       -732.5
     ],
     [
-      225.5,
+      245.0,
       30,
       -732.0
     ],
     [
-      225.0,
+      245.0,
       30,
       -731.5
     ],
     [
-      224.5,
+      245.0,
       30,
       -731.0
     ],
     [
-      224.0,
+      245.0,
       30,
       -730.5
     ],
     [
-      223.5,
+      245.0,
       30,
       -730.0
     ],
     [
-      223.0,
+      245.0,
       30,
       -729.5
     ],
     [
-      222.5,
+      245.0,
       30,
       -729.0
     ],
     [
-      222.0,
+      245.0,
       30,
       -728.5
     ],
     [
-      221.5,
+      245.0,
       30,
       -728.0
     ],
     [
-      221.0,
+      244.5,
       30,
       -727.5
     ],
     [
-      220.5,
+      244.0,
       30,
       -727.0
     ],
     [
-      220.0,
+      244.0,
       30,
       -726.5
     ],
     [
-      219.5,
+      243.5,
       30,
       -726.0
     ],
     [
-      219.0,
+      243.5,
       30,
       -725.5
     ],
     [
-      218.5,
+      243.0,
       30,
       -725.0
     ],
     [
-      218.0,
+      243.0,
       30,
       -724.5
     ],
     [
-      217.5,
+      242.5,
       30,
       -724.0
     ],
     [
-      217.0,
+      242.5,
       30,
       -723.5
     ],
     [
-      216.5,
+      242.5,
       30,
       -723.0
     ],
     [
-      216.0,
+      242.0,
       30,
       -722.5
     ],
     [
-      215.5,
+      242.0,
       30,
       -722.0
     ],
     [
-      215.0,
+      242.0,
       30,
       -721.5
     ],
     [
-      214.5,
+      242.0,
       30,
       -721.0
     ],
     [
-      214.0,
+      242.0,
       30,
       -720.5
     ],
     [
-      213.5,
+      242.0,
       30,
       -720.0
     ],
     [
-      213.0,
+      242.0,
       30,
       -719.5
     ],
     [
-      212.5,
+      242.0,
       30,
       -719.0
     ],
     [
-      212.0,
+      242.0,
       30,
       -718.5
     ],
     [
-      211.5,
+      242.0,
       30,
       -718.0
     ],
     [
-      211.0,
+      242.0,
       30,
       -717.5
     ],
     [
-      210.5,
+      242.0,
       30,
       -717.0
     ],
     [
-      210.0,
+      242.0,
       30,
       -716.5
     ],
     [
-      209.5,
+      242.0,
       30,
       -716.0
     ],
     [
-      209.0,
+      242.0,
       30,
       -715.5
     ],
     [
-      208.5,
+      242.0,
       30,
       -715.0
     ],
     [
-      208.0,
+      242.0,
       30,
       -714.5
     ],
     [
-      207.5,
+      242.0,
       30,
       -714.0
     ],
     [
-      207.0,
+      242.0,
       30,
       -713.5
     ],
     [
-      206.5,
+      242.0,
       30,
       -713.0
     ],
     [
-      206.0,
+      242.0,
       30,
       -712.5
     ],
     [
-      205.5,
+      242.0,
       30,
       -712.0
     ],
     [
-      205.5,
+      242.0,
       30,
       -711.5
     ],
     [
-      205.0,
+      242.0,
       30,
       -711.0
     ],
     [
-      205.0,
+      242.0,
       30,
       -710.5
     ],
     [
-      204.5,
+      242.0,
       30,
       -710.0
     ],
     [
-      204.5,
+      242.0,
       30,
       -709.5
     ],
     [
-      204.0,
+      242.0,
       30,
       -709.0
     ],
     [
-      204.0,
+      242.0,
       30,
       -708.5
     ],
     [
-      204.0,
+      242.0,
       30,
       -708.0
     ],
     [
-      204.0,
+      242.0,
       30,
       -707.5
     ],
     [
-      204.0,
+      242.0,
       30,
       -707.0
     ],
     [
-      204.0,
+      242.0,
       30,
       -706.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -706.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -705.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -705.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -704.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -704.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -703.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -703.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -702.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -702.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -701.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -701.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -700.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -700.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -699.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -699.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -698.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -698.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -697.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -697.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -696.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -696.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -695.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -695.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -694.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -694.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -693.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -693.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -692.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -692.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -691.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -691.0
     ],
     [
-      203.5,
+      242.0,
       30,
       -690.5
     ],
     [
-      203.5,
+      242.0,
       30,
       -690.0
     ],
     [
-      204.0,
+      242.0,
       30,
       -689.5
     ],
     [
-      204.5,
+      242.0,
       30,
       -689.0
     ],
     [
-      205.0,
+      242.0,
       30,
       -688.5
     ],
     [
-      205.5,
+      242.0,
       30,
       -688.0
     ],
     [
-      206.0,
+      242.0,
       30,
       -687.5
     ],
     [
-      206.5,
+      242.0,
       30,
       -687.0
     ],
     [
-      207.0,
+      242.0,
       30,
       -686.5
     ],
     [
-      207.5,
+      242.0,
       30,
       -686.0
     ],
     [
-      208.0,
+      242.0,
       30,
       -685.5
     ],
     [
-      208.5,
+      242.0,
       30,
       -685.0
     ],
     [
-      209.0,
+      242.0,
       30,
       -684.5
     ],
     [
-      209.5,
+      242.0,
       30,
       -684.0
     ],
     [
-      210.0,
+      242.0,
       30,
       -683.5
     ],
     [
-      210.5,
+      242.0,
       30,
       -683.0
     ],
     [
-      211.0,
+      242.0,
       30,
       -682.5
     ],
     [
-      211.5,
+      242.0,
       30,
       -682.0
     ],
     [
-      212.0,
+      242.0,
       30,
       -681.5
     ],
     [
-      212.5,
-      30,
-      -681.5
-    ],
-    [
-      213.0,
-      30,
-      -681.5
-    ],
-    [
-      213.5,
-      30,
-      -682.0
-    ],
-    [
-      214.0,
-      30,
-      -682.0
-    ],
-    [
-      214.5,
-      30,
-      -682.0
-    ],
-    [
-      215.0,
-      30,
-      -682.5
-    ],
-    [
-      215.5,
-      30,
-      -682.5
-    ],
-    [
-      216.0,
-      30,
-      -682.5
-    ],
-    [
-      216.5,
-      30,
-      -682.5
-    ],
-    [
-      217.0,
-      30,
-      -683.0
-    ],
-    [
-      217.5,
-      30,
-      -683.0
-    ],
-    [
-      218.0,
-      30,
-      -683.5
-    ],
-    [
-      218.5,
-      30,
-      -683.5
-    ],
-    [
-      219.0,
-      30,
-      -683.5
-    ],
-    [
-      219.5,
-      30,
-      -683.5
-    ],
-    [
-      220.0,
-      30,
-      -683.5
-    ],
-    [
-      220.5,
-      30,
-      -683.5
-    ],
-    [
-      221.0,
-      30,
-      -683.5
-    ],
-    [
-      221.5,
-      30,
-      -683.5
-    ],
-    [
-      222.0,
-      30,
-      -683.5
-    ],
-    [
-      222.5,
-      30,
-      -683.5
-    ],
-    [
-      223.0,
-      30,
-      -683.5
-    ],
-    [
-      223.5,
-      30,
-      -683.5
-    ],
-    [
-      224.0,
-      30,
-      -683.5
-    ],
-    [
-      224.5,
-      30,
-      -683.5
-    ],
-    [
-      225.0,
-      30,
-      -683.5
-    ],
-    [
-      225.5,
-      30,
-      -683.5
-    ],
-    [
-      226.0,
-      30,
-      -683.5
-    ],
-    [
-      226.5,
-      30,
-      -683.5
-    ],
-    [
-      227.0,
-      30,
-      -683.5
-    ],
-    [
-      227.5,
-      30,
-      -683.5
-    ],
-    [
-      228.0,
-      30,
-      -683.5
-    ],
-    [
-      228.5,
-      30,
-      -683.5
-    ],
-    [
-      229.0,
-      30,
-      -683.5
-    ],
-    [
-      229.5,
-      30,
-      -683.5
-    ],
-    [
-      230.0,
-      30,
-      -683.5
-    ],
-    [
-      230.5,
-      30,
-      -683.5
-    ],
-    [
-      231.0,
-      30,
-      -683.5
-    ],
-    [
-      231.5,
-      30,
-      -683.5
-    ],
-    [
-      232.0,
-      30,
-      -683.5
-    ],
-    [
-      232.5,
-      30,
-      -683.5
-    ],
-    [
-      233.0,
-      30,
-      -683.5
-    ],
-    [
-      233.5,
-      30,
-      -683.5
-    ],
-    [
-      234.0,
-      30,
-      -683.5
-    ],
-    [
-      234.5,
-      30,
-      -683.0
-    ],
-    [
-      235.0,
-      30,
-      -683.0
-    ],
-    [
-      235.5,
-      30,
-      -682.5
-    ],
-    [
-      236.0,
-      30,
-      -682.5
-    ],
-    [
-      236.5,
-      30,
-      -682.5
-    ],
-    [
-      237.0,
-      30,
-      -682.5
-    ],
-    [
-      237.5,
-      30,
-      -682.0
-    ],
-    [
-      238.0,
-      30,
-      -682.0
-    ],
-    [
-      238.5,
-      30,
-      -682.0
-    ],
-    [
-      239.0,
-      30,
-      -681.5
-    ],
-    [
-      239.5,
-      30,
-      -681.5
-    ],
-    [
-      240.0,
+      242.0,
       30,
       -681.0
     ],
     [
-      240.5,
-      30,
-      -681.0
-    ],
-    [
-      241.0,
+      242.0,
       30,
       -680.5
     ],
     [
-      241.5,
+      242.0,
       30,
       -680.0
     ],
@@ -9821,7 +9819,7 @@
   },
   "route_min_clearance": 10.005343572311752,
   "route_edge_margin": 0.001,
-  "json_sha256": "71cefe0c7982bf6a69430d09ce4fd1c377e1b0f1d462e7a69ede7e1ed613d0e9",
+  "json_sha256": "8363695cf995baf9786dc4bcdbbd09d8f0909234de77b480e8c4795d6256531a",
   "limitations": [
     "Static offline geometry checks; Roblox runtime, lighting parity, gameplay and multiplayer require main agent QA.",
     "The verified radius10 centreline joins a full-width flat-ended terminal strip to the tape bases; seven poles 12 apart prevent a 20-wide corridor through the tape line."

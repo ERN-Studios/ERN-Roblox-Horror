@@ -436,6 +436,73 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		local plate = addPlate(stand, entry.Key, z)
 		table.insert(plates, {Key = entry.Key, Plate = plate.Position})
 	end
+	-- MALL_CRATES_20261012 (owner: in the mall lobby's shop the items "are not that visible, make a crate with the
+	-- item, just like in the first version of the lobby, shrink it a little down and have them hover over the
+	-- circles where the item is sold and a sign over it"). One copy of each box above its buy spot in
+	-- LobbyMallPreview.Anchors.ShopSpots, smaller, standing still (no client bob), without its lamp and its top
+	-- and bottom pictures, with the item's name on a cream sign over it. Made before ShopItemCount is set, which
+	-- is what GameManager waits for before it removes the first lobby and this wall with it. The mall model may
+	-- be parked in ServerStorage (Lobby Mall Preview).
+	do
+		local mall = workspace:FindFirstChild("LobbyMallPreview") or game:GetService("ServerStorage"):FindFirstChild("LobbyMallPreview")
+		local anchors = mall and mall:FindFirstChild("Anchors")
+		local spots = anchors and anchors:FindFirstChild("ShopSpots")
+		if spots then
+			local MALL_CRATE, MALL_CRATE_UP = 2.5, 5.74     -- owner, 2026-10-12: "kasserne skal hænge 30% længere nede" (it was 8.2)
+			local stale = anchors:FindFirstChild("ShopCrates")
+			if stale then stale:Destroy() end
+			local crates = Instance.new("Folder")
+			crates.Name = "ShopCrates"
+			local middle = anchors:FindFirstChild("ShopStand")
+			for _, spot in ipairs(spots:GetChildren()) do
+				local key = spot:GetAttribute("ShopItemKey")
+				local stand = model:FindFirstChild("ShopStand_" .. tostring(key))
+				local source = stand and stand:FindFirstChild("ShopHologramBox")
+				local ring = spot:FindFirstChild("SpotRing")
+				if ring and (ring:IsA("SurfaceGui") or ring:IsA("Decal")) then
+					-- a ring with nothing for sale on it (Entity Shield is a reward, not an item) is a promise the shop breaks
+					if ring:IsA("SurfaceGui") then ring.Enabled = source ~= nil else ring.Transparency = source and 0.25 or 1 end
+				end
+				if source and spot:IsA("BasePart") then
+					local name = source:FindFirstChild("ShopHologramName", true)
+					local box = source:Clone()
+					for _, d in ipairs(box:GetChildren()) do
+						local flat = d:IsA("SurfaceGui") and (d.Face == Enum.NormalId.Top or d.Face == Enum.NormalId.Bottom)
+						if flat or d:IsA("BillboardGui") or d:IsA("Light") then d:Destroy()
+						elseif d:IsA("SurfaceGui") then d.MaxDistance = 70 end
+					end
+					box:SetAttribute("ShopBobOrigin", nil)
+					box:SetAttribute("ShopBobPhase", nil)
+					box.Name = "MallCrate_" .. key
+					box.Size = Vector3.one * MALL_CRATE
+					local at = spot.Position + Vector3.new(0, MALL_CRATE_UP, 0)
+					local outward = middle and (spot.Position - middle.Position) * Vector3.new(1, 0, 1) or Vector3.zAxis
+					box.CFrame = CFrame.lookAt(at, at + (outward.Magnitude > 0.1 and outward.Unit or Vector3.zAxis))
+					box.Parent = crates
+					local sign = Instance.new("BillboardGui")
+					sign.Name = "MallCrateSign"
+					sign.Adornee = box
+					sign.Size = UDim2.fromScale(5.6, 1.15)
+					sign.StudsOffset = Vector3.new(0, MALL_CRATE * 0.5 + 0.95, 0)
+					sign.MaxDistance, sign.AlwaysOnTop, sign.LightInfluence, sign.ResetOnSpawn = 110, false, 0, false
+					local face = Instance.new("Frame")
+					face.Size, face.BorderSizePixel, face.BackgroundColor3 = UDim2.fromScale(1, 1), 0, Color3.fromRGB(236, 226, 160)
+					face.Parent = sign
+					local rim = Instance.new("UIStroke")
+					rim.Color, rim.Thickness = Color3.fromRGB(62, 58, 46), 2
+					rim.Parent = face
+					local text = Instance.new("TextLabel")
+					text.BackgroundTransparency, text.Size, text.Position = 1, UDim2.fromScale(0.94, 1.25), UDim2.fromScale(0.03, -0.125)
+					text.FontFace = Font.new("rbxasset://fonts/families/Oswald.json", Enum.FontWeight.Bold)
+					text.TextColor3, text.TextScaled = Color3.fromRGB(72, 66, 54), true
+					text.Text = (string.gsub(name and name.Text or string.upper(tostring(key)), " ", utf8.char(160)))
+					text.Parent = face
+					sign.Parent = box
+				end
+			end
+			crates.Parent = anchors
+		end
+	end
 	model:SetAttribute("ShopItemCount", count)
 
 	-- ── focus ────────────────────────────────────────────────────────────────
@@ -459,6 +526,8 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		-- longer touch at all, but the order still decides the answer inside the
 		-- slack, and an order that depends on how the row was built is a bug
 		-- waiting for the next reshuffle of DISPLAY_ORDER.
+		-- FIRST_LOBBY_REMOVED_20261012: this wall goes with the first lobby; its plates are then nowhere
+		if not model.Parent then return nil end
 		for _, record in ipairs(plates) do
 			if record.Key == current then
 				local delta = position - record.Plate
@@ -538,7 +607,14 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 	end
 
 	task.spawn(function()
-		while model.Parent do
+		-- FIRST_LOBBY_REMOVED_20261012: this one pass also answers for the revised lobby's wall and the mall's
+		-- shop, and the first lobby (this `model` with it) is removed at startup. It runs for as long as any of
+		-- the three stands; it used to end with `model`, which would now close every shop card in the game.
+		local function anyShop()
+			return model.Parent ~= nil or workspace:FindFirstChild("LobbyReimaginedPreview") ~= nil
+				or workspace:FindFirstChild("LobbyMallPreview") ~= nil
+		end
+		while anyShop() do
 			for _, player in ipairs(Players:GetPlayers()) do
 				local focus = focusFor(player)
 				if player:GetAttribute(FOCUS_ATTRIBUTE) ~= focus then

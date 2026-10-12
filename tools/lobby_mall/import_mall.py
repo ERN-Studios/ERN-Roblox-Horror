@@ -30,7 +30,7 @@ data = json.loads((BUILD / 'mall.json').read_text())
 ids_file = Path(__file__).parent / 'texture_ids.json'
 TEXTURES = json.loads(ids_file.read_text()) if ids_file.exists() else {}
 
-TILE = {'terrazzo': 10}        # the build's 16 studs a tile gave chips the size of a hand
+TILE = {}                      # studs a texture sheet, where the build's own number is not wanted
 materials = {}
 for key, m in data['materials'].items():
     mean = None
@@ -93,7 +93,10 @@ for _, p in ipairs(HttpService:JSONDecode([==[%s]==])) do
 	-- character walked into the pole and stopped. The round base still collides.
 	local thin = p.name:find("StationPost", 1, true) or p.name:match("_Station%%d+_") ~= nil
 	part.Anchored, part.CanCollide, part.CanTouch = true, p.collide == true and not thin, false
-	part.CastShadow = p.size[1] * p.size[2] * p.size[3] > 2
+	-- MALL_LIGHT_20261012: nothing in here throws a shadow (no lamp has Shadows on and there is no sun indoors),
+	-- so no part is a shadow caster; and a part nobody collides with is not in the way of any raycast either
+	part.CastShadow = false
+	if not part.CanCollide then part.CanQuery = false end
 	part.TopSurface, part.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
 	part.Size = Vector3.new(p.size[1], p.size[2], p.size[3])
 	part.CFrame = CFrame.new(Vector3.new(p.pos[1], p.pos[2], p.pos[3]) + offset)
@@ -103,6 +106,9 @@ for _, p in ipairs(HttpService:JSONDecode([==[%s]==])) do
 	local c = p.color
 	if m.mean and not (m.ids and m.ids.colour) and c[1] > 250 and c[2] > 250 and c[3] > 250 then c = m.mean end
 	part.Color = Color3.fromRGB(c[1], c[2], c[3])
+	-- the hall is lit by ambient light now (see the lights below), which a wall cannot switch off: the wing past
+	-- the tape is dark because its own surfaces are
+	if p.group == "DarkWing" or p.name:sub(1, 4) == "Dark" then part.Color = part.Color:Lerp(Color3.new(0, 0, 0), 0.86) end
 	if m.ids and m.ids.colour and not p.glow then part.MaterialVariant = "Mall " .. p.material end
 	part.Transparency = p.transparency or 0
 	part:SetAttribute("MallMaterial", p.material)
@@ -139,11 +145,15 @@ local function gui(part, face, sign)
 	local tall = TALL[sign.style] or 1.1
 	-- TextScaled stops at 100 px: keep the label near 145 px high so the lettering really fills the sign
 	local pps = math.clamp(math.floor(145 / (tall * h)), 12, 220)
+	-- the tape is 71 studs long: at the 220 px a stud its 0.46 height asks for, each face was a 15,840 px canvas
+	if sign.style == "tape" then pps = 70 end
 	local g = Instance.new("SurfaceGui")
 	g.Name, g.Face, g.SizingMode, g.PixelsPerStud = "MallSign", face, Enum.SurfaceGuiSizingMode.PixelsPerStud, pps
 	g.ClipsDescendants = true
 	local lit = sign.style == "box" or sign.style == "station"
 	g.LightInfluence = lit and 0 or sign.style == "plain" and 0.35 or 1
+	-- a sign is not drawn from further than it can be read
+	g.MaxDistance = ({box = 260, station = 110, plain = 45, banner = 160, tape = 130})[sign.style] or 120
 	if sign.style ~= "tape" and sign.style ~= "banner" then
 		-- the face itself: a backlit cream box, brighter toward the middle (the owner's sign reference)
 		local back = Instance.new("Frame")
@@ -187,6 +197,7 @@ for _, d in ipairs(model.Parts:GetDescendants()) do
 	if d:IsA("BasePart") and d:GetAttribute("MallMaterial") == "pad" then
 		local g = Instance.new("SurfaceGui")
 		g.Name, g.Face, g.SizingMode, g.PixelsPerStud = "PadRing", faceFor(d, Vector3.yAxis), Enum.SurfaceGuiSizingMode.PixelsPerStud, 24
+		g.MaxDistance = 120
 		g.LightInfluence = 1
 		local ring = Instance.new("Frame")
 		ring.AnchorPoint, ring.Position, ring.Size = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5), UDim2.fromScale(0.9, 0.9)
@@ -204,6 +215,7 @@ return "signs " .. n .. ", pad rings " .. rings .. (#missing > 0 and (" MISSING 
 print(s.luau('''
 local model = workspace:FindFirstChild("%s")
 local offset = Vector3.new(%s)
+local FLOOR_Y, SHEEN = %s, %s
 local n = 0
 for _, l in ipairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do
 	local host = Instance.new("Part")
@@ -213,35 +225,60 @@ for _, l in ipairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do
 	-- the build's lamp colours are pictures' colours; as light on yellow walls they turned the hall into mustard
 	local colour = Color3.fromRGB(l.color[1], l.color[2], l.color[3]):Lerp(Color3.fromRGB(255, 246, 224), l.kind == "neon" and 0 or 0.6)
 	-- the data's brightness is Blender's: the square root keeps the build's order (product lamp < skin spot < shop wash)
-	local strength = 0.42 * math.sqrt(l.brightness)
+	-- MALL_LIGHT_20261012 (owner: "make sure that it doesnt fuck with load speed, client FPS"). The hall's light
+	-- is AMBIENT now (RoundUI raises Lighting.Ambient inside the mall), which costs nothing and looks the same on a
+	-- phone at graphics level 1, where the engine drops most local lamps: at a lower level the first version's
+	-- ceiling went black. Lamps are only pools on top of that: ONE PointLight a lit panel (it lights the floor and
+	-- the ceiling round it; it was a SpotLight down plus a PointLight up), one a shop, the cinema's, the Void's and
+	-- a spot on each suit. The counters' product lamps and the stand's globes have none: the globes are Neon.
+	local skip = l.name:sub(1, 12) == "ProductLight" or l.name:sub(1, 9) == "StandLamp"
+	local strength = 0.3 * math.sqrt(l.brightness)
 	local light
-	if l.kind == "panel" then
-		light = Instance.new("SpotLight")
-		light.Face, light.Angle = Enum.NormalId.Front, 150
-		light.Brightness, light.Range = l.state == "on" and 1.0 or 0.3, 40
+	if skip then
+		light = nil
+	elseif l.kind == "panel" then
+		light = Instance.new("PointLight")
+		light.Brightness, light.Range = l.state == "on" and 0.4 or 0.12, 34
+		host.CFrame = host.CFrame - Vector3.new(0, 1.6, 0)
 	elseif l.name:sub(1, 8) == "SkinSpot" then
 		light = Instance.new("SpotLight")
 		light.Face, light.Angle = Enum.NormalId.Front, 70
-		light.Brightness, light.Range = 2.2, l.range
+		light.Brightness, light.Range = 1.4, l.range
 	else
 		light = Instance.new("PointLight")
-		light.Brightness, light.Range = strength, math.min(l.range, 60)
+		light.Brightness, light.Range = strength, math.min(l.range, 40)
 	end
-	light.Color, light.Shadows = colour, false
-	light.Parent = host
-	if l.kind == "panel" and l.state == "on" then
-		-- a panel only throws down; real tiles are lit by what comes back off the floor
-		local wash = Instance.new("PointLight")
-		wash.Name, wash.Color, wash.Shadows, wash.Brightness, wash.Range = "CeilingWash", colour, false, 0.3, 26
-		wash.Parent = host
+	if light then
+		light.Color, light.Shadows = colour, false
+		light.Parent = host
+	end
+	-- FLOOR_GLOSS_20261012 (owner: the floor tiles "skal være glossy"). The tile's roughness map is glossy, but
+	-- the engine draws no reflection of a lamp in a floor here. So every lit panel lays a soft sheen on the tiles
+	-- under it: one small picture on an unseen plate, stretched down the hall as a lamp's streak is.
+	if l.kind == "panel" and l.state == "on" and SHEEN then
+		local plate = Instance.new("Part")
+		plate.Name, plate.Anchored, plate.CanCollide, plate.CanTouch, plate.CanQuery, plate.CastShadow = "PanelSheen", true, false, false, false, false
+		plate.Transparency, plate.Size = 1, Vector3.new(7, 0.04, 15)
+		plate.CFrame = CFrame.new(l.pos[1] + offset.X, FLOOR_Y + 0.03, l.pos[3] + offset.Z)
+		local g = Instance.new("SurfaceGui")
+		g.Name, g.Face, g.SizingMode, g.CanvasSize = "Sheen", Enum.NormalId.Top, Enum.SurfaceGuiSizingMode.FixedSize, Vector2.new(64, 64)
+		g.LightInfluence, g.Brightness, g.MaxDistance, g.Active = 0, 1, 170, false
+		local picture = Instance.new("ImageLabel")
+		picture.BackgroundTransparency, picture.Size, picture.Image = 1, UDim2.fromScale(1, 1), SHEEN
+		picture.ImageColor3, picture.ImageTransparency = Color3.fromRGB(255, 252, 240), 0.2
+		picture.Parent = g
+		g.Parent = plate
+		plate.Parent = model.Lights
 	end
 	host:SetAttribute("MallLight", l.kind)
 	if l.state ~= "on" then host:SetAttribute("Flicker", true) end
-	host.Parent = model.Lights
-	n += 1
+	if light then
+		host.Parent = model.Lights
+		n += 1
+	end
 end
 return "lights " .. n
-''' % (NAME, ', '.join(map(str, OFFSET)), J(data['lights']))))
+''' % (NAME, ', '.join(map(str, OFFSET)), data['anchors']['spawn'][1], ('"rbxassetid://%d"' % TEXTURES['sheen']['colour']) if TEXTURES.get('sheen') else 'nil', J(data['lights']))))
 
 print(s.luau('''
 local model = workspace:FindFirstChild("%s")
@@ -297,6 +334,7 @@ for _, pad in ipairs(a.pads) do
 	end
 	local g = Instance.new("SurfaceGui")
 	g.Name, g.Face, g.SizingMode, g.PixelsPerStud, g.LightInfluence, g.Brightness = "QueueDisplay", Enum.NormalId.Front, Enum.SurfaceGuiSizingMode.PixelsPerStud, 50, 0, 1.4
+	g.MaxDistance = 130
 	local function line(name, y, h, text)
 		local l = Instance.new("TextLabel")
 		l.Name, l.BackgroundTransparency, l.FontFace, l.TextColor3 = name, 1, MONO, AMBER
@@ -320,6 +358,7 @@ for _, spot in ipairs(a.shop_spots) do
 	m:SetAttribute("ShopItemKey", spot.key)
 	local g = Instance.new("SurfaceGui")
 	g.Name, g.Face, g.SizingMode, g.PixelsPerStud, g.LightInfluence = "SpotRing", Enum.NormalId.Top, Enum.SurfaceGuiSizingMode.PixelsPerStud, 30, 1
+	g.MaxDistance = 70
 	local ring = Instance.new("Frame")
 	ring.AnchorPoint, ring.Position, ring.Size, ring.BackgroundTransparency = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5), UDim2.fromScale(0.86, 0.86), 1
 	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0.5, 0); corner.Parent = ring
@@ -384,12 +423,12 @@ for _, pl in ipairs(a.skin_plinths) do
 		suit:PivotTo(suit:GetPivot() + Vector3.new(at.X - now.Position.X, 0, at.Z - now.Position.Z))
 		placed += 1
 		for _, d in ipairs(model.Parts.Stand:GetChildren()) do
-			if d.Name:sub(1, #pl.skin + 1) == pl.skin .. "_" then d.Transparency = 1; d.CanCollide = false; d:SetAttribute("StandIn", true); standIns += 1 end
+			if d.Name:sub(1, #pl.skin + 1) == pl.skin .. "_" then d:Destroy(); standIns += 1 end   -- the build's stand-in mannequin
 		end
 	end
 end
 local total = 0
 for _, d in ipairs(model:GetDescendants()) do if d:IsA("BasePart") then total += 1 end end
 model:SetAttribute("MallQueuesReady", true)
-return string.format("anchors: %%d pads in %%d bays, %%d shop spots, %%d boards, %%d real suits on plinths (%%d stand-in parts hidden); model has %%d parts", #a.pads, #bays:GetChildren(), #a.shop_spots, #a.boards, placed, standIns, total)
+return string.format("anchors: %%d pads in %%d bays, %%d shop spots, %%d boards, %%d real suits on plinths (%%d stand-in parts removed); model has %%d parts", #a.pads, #bays:GetChildren(), #a.shop_spots, #a.boards, placed, standIns, total)
 ''' % (NAME, ', '.join(map(str, OFFSET)), J(data['anchors']))))

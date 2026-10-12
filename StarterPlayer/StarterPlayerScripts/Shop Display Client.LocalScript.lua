@@ -43,6 +43,19 @@ game:GetService("ProximityPromptService").PromptTriggered:Connect(function(promp
 	local open = player:WaitForChild("PlayerScripts"):FindFirstChild("ZyntraShopUIOpen")
 	if open and open:IsA("BindableFunction") then pcall(open.Invoke, open, "Skins", prompt:GetAttribute("SkinId")) end
 end)
+-- MALL_PREVIEW_20261012: the way into the mall lobby is a prompt beside the lobby's spawn, for three accounts
+-- (DevAccess.IsMallPreviewAllowed; the server checks again). Nobody else is shown it, as with the DJ booth's.
+if not require(ReplicatedStorage:WaitForChild("DevAccess")).IsMallPreviewAllowed(player) then
+	local function hide(instance)
+		if not instance:IsA("ProximityPrompt") or (instance.Name ~= "MallPreviewPrompt" and instance.Name ~= "MallReturnPrompt") then return end
+		instance.Enabled = false
+		instance:GetPropertyChangedSignal("Enabled"):Connect(function()
+			if instance.Enabled then instance.Enabled = false end
+		end)
+	end
+	workspace.DescendantAdded:Connect(hide)
+	for _, d in ipairs(workspace:GetDescendants()) do hide(d) end
+end
 
 -- ANALYTICS_20260921. The server cannot see a card open or a demo start, so
 -- the client reports those two facts and nothing else, fire-and-forget, on

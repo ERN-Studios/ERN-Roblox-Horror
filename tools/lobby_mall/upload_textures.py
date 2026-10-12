@@ -72,37 +72,40 @@ def main():
     ids = json.loads(IDS.read_text()) if IDS.exists() else {}
     hashes = ids.setdefault('_sha256', {})
     studio = Studio()
-    for key, m in materials.items():
-        if not m.get('colour_map') or key in SKIP or (only and key not in only):
+    # one picture that is not a surface: the lamps' sheen on the floor (make_pbr.py), key `sheen`
+    jobs = [(key, kind, BUILD / m[field]) for key, m in materials.items()
+            if m.get('colour_map') and key not in SKIP
+            for kind, field in (('colour', 'colour_map'), ('normal', 'normal_map'), ('roughness', 'roughness_map'))]
+    jobs.append(('sheen', 'colour', BUILD / 'textures_pbr' / 'sheen.png'))
+    for key, kind, path in jobs:
+        if only and key not in only:
             continue
-        for kind, field in (('colour', 'colour_map'), ('normal', 'normal_map'), ('roughness', 'roughness_map')):
-            path = BUILD / m[field]
-            better = BUILD / 'textures_pbr' / f'{key}_{kind}.png'     # make_pbr.py (the build's own are flat) and corrected colour maps
-            if better.exists():
-                path = better
-            name = f'{key}_{kind}'
-            digest = hashlib.sha256(path.read_bytes()).hexdigest()
-            if ids.get(key, {}).get(kind) and hashes.get(name) == digest:
-                continue
-            im = Image.open(path).convert('RGBA')
-            assert im.size[0] == im.size[1], path.name
-            # from a FILE, not a pipe: only then does zstd write the content size that DecompressBuffer insists on
-            with tempfile.NamedTemporaryFile(suffix='.rgba') as raw:
-                raw.write(im.tobytes())
-                raw.flush()
-                packed = subprocess.run(['zstd', '-19', '--no-check', '-q', '-c', raw.name], capture_output=True, check=True).stdout
-            text = base64.b64encode(packed).decode()
-            pieces = [text[i:i + PIECE] for i in range(0, len(text), PIECE)]
-            for start in range(0, len(pieces), PER_CALL):
-                body = ', '.join(f'[==[{p}]==]' for p in pieces[start:start + PER_CALL])
-                studio.luau(STASH % (json.dumps(name), 'true' if start == 0 else 'false', body, start))
-            answer = studio.luau(MAKE % (json.dumps(name), im.size[0], len(pieces)))
-            print(f'{name:28s} {len(packed) // 1024:4d} KB -> {answer}', flush=True)
-            if not answer.startswith('OK '):
-                raise SystemExit('stopped: ' + answer)
-            ids.setdefault(key, {})[kind] = int(answer.split()[1])
-            hashes[name] = digest
-            IDS.write_text(json.dumps(ids, indent=1, sort_keys=True) + '\n')
+        better = BUILD / 'textures_pbr' / f'{key}_{kind}.png'     # make_pbr.py (the build's own are flat) and corrected colour maps
+        if better.exists():
+            path = better
+        name = f'{key}_{kind}'
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if ids.get(key, {}).get(kind) and hashes.get(name) == digest:
+            continue
+        im = Image.open(path).convert('RGBA')
+        assert im.size[0] == im.size[1], path.name
+        # from a FILE, not a pipe: only then does zstd write the content size that DecompressBuffer insists on
+        with tempfile.NamedTemporaryFile(suffix='.rgba') as raw:
+            raw.write(im.tobytes())
+            raw.flush()
+            packed = subprocess.run(['zstd', '-19', '--no-check', '-q', '-c', raw.name], capture_output=True, check=True).stdout
+        text = base64.b64encode(packed).decode()
+        pieces = [text[i:i + PIECE] for i in range(0, len(text), PIECE)]
+        for start in range(0, len(pieces), PER_CALL):
+            body = ', '.join(f'[==[{p}]==]' for p in pieces[start:start + PER_CALL])
+            studio.luau(STASH % (json.dumps(name), 'true' if start == 0 else 'false', body, start))
+        answer = studio.luau(MAKE % (json.dumps(name), im.size[0], len(pieces)))
+        print(f'{name:28s} {len(packed) // 1024:4d} KB -> {answer}', flush=True)
+        if not answer.startswith('OK '):
+            raise SystemExit('stopped: ' + answer)
+        ids.setdefault(key, {})[kind] = int(answer.split()[1])
+        hashes[name] = digest
+        IDS.write_text(json.dumps(ids, indent=1, sort_keys=True) + '\n')
     print('texture_ids.json written; next: import_mall.py')
 
 

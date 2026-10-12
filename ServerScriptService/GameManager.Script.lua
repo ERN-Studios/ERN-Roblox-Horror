@@ -731,6 +731,27 @@ local function buildLobby()
   spawn:SetAttribute("LobbySpawnRevision", nil)
   workspace:SetAttribute("LobbySpawnMigrationError", tostring(problem))
   warn("[GameManager] Revised lobby startup failed; retaining safe original spawn: " .. tostring(problem))
+ elseif workspace:GetAttribute("KeepFirstLobby") ~= true then
+  -- FIRST_LOBBY_REMOVED_20261012 (owner: three lobbies were loading; "the very first lobby that is not made in
+  -- blender, make sure to remove that one"). Players have stood in the revised lobby since the spawn moved there,
+  -- but the first one was still standing beside it and sent to every client: about 2,600 parts nobody could reach.
+  -- It is still BUILT, because the revised lobby takes its shop boxes and the supporters board from it (both are
+  -- taken by now), and it still EXISTS as a Model named ServerLobby holding LobbySpawn, because a dozen scripts
+  -- read "this server has a lobby" and the spawn from exactly that. Everything else in it goes here, before any
+  -- character is loaded; its queue pads go with it, so it has no stations. If the revised lobby failed above, the
+  -- first one is the fallback and is kept whole. workspace.KeepFirstLobby = true keeps it for a look in Studio.
+  local removed = 0
+  for _, child in ipairs(lobby:GetChildren()) do
+   if child ~= spawn then
+    removed += (child:IsA("BasePart") and 1 or 0)
+    for _, d in ipairs(child:GetDescendants()) do
+     if d:IsA("BasePart") then removed += 1 end
+    end
+    child:Destroy()
+   end
+  end
+  lobby:SetAttribute("FirstLobbyRemovedParts", removed)
+  stations = {}
  end
  return lobby, spawn, stations
 end

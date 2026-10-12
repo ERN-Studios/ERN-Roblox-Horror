@@ -124,7 +124,7 @@ def main():
         check(np.all(q['lo']>=np.array(D['bounds']['min'])-EPS) and np.all(q['hi']<=np.array(D['bounds']['max'])+EPS),p['name']+' outside bounds')
     for k,m in D['materials'].items():
         check(set(m)=={'base','colour_map','normal_map','roughness_map','studs_per_tile'},k+' material fields')
-        check(m['base'] in {'Concrete','Plaster','Carpet','WoodPlanks','Wood','Metal','Glass','Fabric','SmoothPlastic','Neon'},k+' Roblox base material')
+        check(m['base'] in {'Concrete','Plaster','Carpet','WoodPlanks','Wood','Metal','Glass','Fabric','SmoothPlastic','Neon','Cardboard'},k+' Roblox base material')
         check(math.isfinite(m['studs_per_tile']) and m['studs_per_tile']>0,k+' tile scale')
         for field in ('colour_map','normal_map','roughness_map'):
             if m[field]:check(m[field].startswith('textures/') and (OUT/m[field]).is_file(),k+' missing '+field)
@@ -221,14 +221,15 @@ def main():
     for theta in np.linspace(0,math.tau,721):
         pt=np.array([220,-770])+r*np.array([math.cos(theta),math.sin(theta)])
         check(any(distance(pt,q['poly'])<EPS for q in ring),'closed counter ring gap')
-    check(sum(p['name'].startswith('PoolColumn') for p in D['parts'])==5,'five pool columns')
+    check(sum(p['name'].startswith('PoolColumn') for p in D['parts'])==12,'twelve pool columns (three rows of four, 2026-10-12)')
     for i in range(5):
         q=geometry(byname[f'PoolColumn{i}']);check(abs(q['lo'][1]-28.8)<EPS,f'pool column{i} on basin floor')
         q=geometry(byname[f'PoolCapital{i}_2']);check(abs(q['hi'][1]-44)<EPS,f'pool capital{i} meets ceiling')
-    expected_boards={'directory':(185,-795,18,12,1),'level1':(195,-825,8,10,1),'level2':(245,-855,8,10,-1),'level3':(195,-745,8,10,1),'level4':(245,-745,8,10,-1),'level5':(195,-665,8,10,1),'level6':(245,-695,8,10,-1)}
+    # 2026-10-12 (owner): each level's board against the pier beside its own shop's opening
+    expected_boards={'directory':(185,-795,18,12,1),'level1':(184.6,-871.2,8,10,1),'level2':(255.4,-871.2,8,10,-1),'level3':(184.6,-728.8,8,10,1),'level4':(255.4,-728.8,8,10,-1),'level5':(184.6,-711.2,8,10,1),'level6':(255.4,-711.2,8,10,-1)}
     for board in A['boards']:
         x,z,w,h,n=expected_boards[board['key']]
-        check(board['pos']==[x+n*.205,40.4 if board['key'] in ('level3','level4') else 31+h/2,z] and board['size']==[w,h] and board['normal']==[n,0,0],board['key']+' board location')
+        check(board['pos']==[x+n*.205,31+h/2,z] and board['size']==[w,h] and board['normal']==[n,0,0],board['key']+' board location')
         check(not any(s['part']==board['key']+'_BoardFace' for s in D['signs']),board['key']+' blank face')
     check(len(A['boards'])==7 and {b['key'] for b in A['boards']}=={'directory'}|{f'level{i}' for i in range(1,7)},'7 boards')
     signtexts=[s['text'] for s in D['signs']]

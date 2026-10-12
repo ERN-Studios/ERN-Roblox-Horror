@@ -2241,3 +2241,67 @@ real data (Studio shows the demo rows).
 black slabs, Mall Party a table and balloons), the suits stand in a T-pose, the dark wing is dim rather than black,
 and there is no flicker on the one dim panel (its `Flicker` attribute is set, nothing reads it yet). Tests
 `test_lobby_shop_display` and `test_spectator_count` fail, and failed the same way on the commit before this work.
+
+## 2026-10-12 (later) - the first lobby is removed, the mall is parked and previewed by E, ESP shows players
+
+Owner's batch after seeing the mall. All of it is in Studio and unpublished.
+
+**THE FIRST LOBBY IS GONE AT RUNTIME (`FIRST_LOBBY_REMOVED_20261012`, GameManager `buildLobby`).** Three lobbies
+were loading: `ServerLobby` (TunnelLobbyBuilder's, the very first, 2,593 parts), `LobbyReimaginedPreview` (the
+tunnel lobby players stand in) and the mall. `ServerLobby` is still BUILT at startup, because the tunnel lobby takes
+its shop boxes and the supporters board from it, and it still EXISTS as a Model holding only `LobbySpawn`, because
+about a dozen scripts read "this server has a lobby" and the spawn from exactly that name. Everything else in it is
+destroyed before any character loads (attribute `FirstLobbyRemovedParts`, 2,592 in Studio), and it returns no queue
+stations. If the tunnel lobby fails to build, the first lobby is the fallback and is kept whole.
+`workspace.KeepFirstLobby = true` keeps it. What went with it and is not replaced: the first lobby's own pads, its
+party button and ceiling sweeps, the Level 5/6 sealed doors (`LevelDoorways`), its shop wall. `LobbyShopDisplay`'s
+focus pass used to end when that wall was destroyed; it now runs while any of the three shops stands.
+Tested in play: spawn, the tunnel lobby's shop card, pad 101's dialog, a Level 1 round from pad 101, seven boards,
+the DJ prompt, the creature ready. Workspace went from about 7,100 parts to 2,590 with the mall parked.
+
+**THE MALL IS PARKED (`MALL_PREVIEW_20261012`, new script `ServerScriptService/Lobby Mall Preview`).** At server
+start the mall model is moved to ServerStorage (a round server deletes it): no client receives it and its 18 queue
+stations do not run. `MallPreviewPrompt` (E, "MALL PREVIEW (DEV) / SEE THE NEW LOBBY") stands six studs in front of
+the lobby's spawn pad and follows the pad; it is for `DevAccess.IsMallPreviewAllowed` only (LaverSneglen,
+ZenMeister02, mikkelczar; everybody else's client disables the prompt in Shop Display Client, and the server checks
+again). Pressing it brings the mall into Workspace, HOLDS the visitor anchored at the mall's spawn while their client
+streams the hall (a stream request with a time limit alone let them fall out of the world once), then lets go.
+`MallReturnPrompt` by the mall's dead doors goes back. With nobody within 60 studs for 45 s it is parked again
+(`workspace.MallPreviewStay = true` keeps it out). GameManager binds stations 201-218 when it comes out and retires
+them when it goes; the leaderboard sheets and shop crates live in the model and are built wherever it is.
+Two engine facts met here: a part's `CFrame` raises no property-changed signal (the prompt polls the pad), and the
+game's prompt plate (Found Footage HUD) is a BillboardGui with MaxDistance = MaxActivationDistance + 8 measured from
+the CAMERA, which rides 12 studs behind the body, so a prompt further than about 8 studs ahead shows no plate. The
+plates do not appear on `qa.py shot` pictures at all (the DJ booth's neither).
+
+**MALL CHANGES.**
+- Boards: each level's "Fastest escapes" board stands flat against the pier beside its own shop's opening
+  (levels 1/2 south of it, 3/4 north, 5/6 south, so the passage past the stage stays 20 wide).
+- Showcases rebuilt after the v3 pictures (`build_mall.py`): Poolrooms dark teal with twelve white columns in dark
+  water; Mall Party with the staff door and boxes; Cinema with a pink line over a cyan line round three walls and a
+  framed screen; The Void rose from the hall's edge to the back wall with a flush black strip (the first build's
+  five-stud pit had no way out), a low wall, two blocks and one globe; Play Zone a soft-play frame (21 posts, bars
+  post to post, decks, netting, a red tube slide, a cube, rollers) on a four-colour mat. `check_mall.py` refuses
+  solid overlaps, so bars and the slide are built in lengths end to end.
+- Shop crates (`MALL_CRATES_20261012`, LobbyShopDisplay): one copy of each product box hovers 5.74 studs above its
+  buy ring (the owner lowered it 30 % from 8.2), 2.5 studs, no lamp, no bob, with the item's name on a cream sign.
+  A ring with nothing for sale (Entity Shield) is switched off.
+- Floor (owner, with three photographs): big pale glazed tiles with dark joints (`floor_tile`, four by four on the
+  sheet, 2 studs a tile; it was terrazzo), the wall band the same tile in tan. `make_pbr.py` sinks the joints in the
+  normal map and makes tile glossy, joint matt. The engine draws no reflection of a lamp in a floor here whatever
+  the roughness, so every lit panel lays a soft sheen on the tiles under it (`PanelSheen`, picture `sheen`).
+  Codex's REPORT.md still describes the terrazzo and the first showcases.
+- Light and load (`MALL_LIGHT_20261012`): the hall is lit by AMBIENT light (RoundUI, `mallLight`: Ambient 196,187,154
+  in the hall, fading to the lobby pass's dark over 30 studs at the tape), because Studio's graphics level is
+  Automatic and at a low level the engine drops local lamps: the lamp-lit first version went black-ceilinged. Lamps
+  went from 73 to 38 (one PointLight a panel, none for product lamps or globes). No part casts a shadow or answers a
+  query unless it collides; the stand-in mannequins are deleted, not hidden; signs have a MaxDistance; the tape's
+  gui is 70 px a stud (it was a 15,840 px canvas a face); the dark wing is dark by its own colour (x 0.14).
+  Model: 1,935 parts, 38 lights, 127 guis. In Studio on this Mac: 12 fps at the lobby spawn with the mall parked,
+  14 fps standing in the mall (the machine was swapping; these compare the two places, nothing more).
+
+**ESP (`PLAYER_ESP_GLOBAL_20261012`, DevCheats).** On every map the ESP switch (B, or the DEV terminal) now also
+shows every other player: a blue outline through walls where the client has their body, and a label with the name
+and the distance in studs from server positions (so it works beyond streaming range). It was a separate switch,
+off by default. Level 6 Dev ESP no longer draws players for an account that has this. NOT tested with a second
+player: Studio had one.

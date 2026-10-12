@@ -317,7 +317,7 @@ end
 -- Boards, `level1`..`level6`, front face toward the concourse). The same list is pinned to it as a printed sheet and
 -- redrawn with the lobby's own.
 local function buildMallSheet(level)
-	local mall = workspace:FindFirstChild("LobbyMallPreview")
+	local mall = workspace:FindFirstChild("LobbyMallPreview") or ServerStorage:FindFirstChild("LobbyMallPreview")   -- parked by Lobby Mall Preview
 	local anchors = mall and mall:FindFirstChild("Anchors")
 	local folder = anchors and anchors:FindFirstChild("Boards")
 	local board = folder and folder:FindFirstChild("level" .. level)
@@ -349,7 +349,7 @@ workspace:SetAttribute("LevelLeaderboards", "LEVEL_LEADERBOARDS_20261008")
 -- TunnelLobbyBuilder on this server (the SurfaceGui `DonationLeaderboardDisplay`); this pins a paper copy of it to
 -- the mall's board and keeps the copy's text in step. Nothing about the ranking itself is touched.
 task.spawn(function()
-	local mall = workspace:FindFirstChild("LobbyMallPreview")
+	local mall = workspace:FindFirstChild("LobbyMallPreview") or ServerStorage:FindFirstChild("LobbyMallPreview")   -- parked by Lobby Mall Preview
 	local anchors = mall and mall:FindFirstChild("Anchors")
 	local folder = anchors and anchors:FindFirstChild("Boards")
 	local board = folder and folder:FindFirstChild("directory")

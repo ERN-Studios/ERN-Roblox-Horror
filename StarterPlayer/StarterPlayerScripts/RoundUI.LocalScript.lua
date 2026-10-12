@@ -360,8 +360,16 @@ function revisedLobbyLighting.contains(inMaze)
  local body = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
  if typeof(low) == "Vector3" and typeof(high) == "Vector3" and body and body:IsA("BasePart") then
   local at = body.Position
-  if at.X >= low.X and at.X <= high.X and at.Y >= low.Y and at.Y <= high.Y and at.Z >= low.Z and at.Z <= high.Z then return true end
+  if at.X >= low.X and at.X <= high.X and at.Y >= low.Y and at.Y <= high.Y and at.Z >= low.Z and at.Z <= high.Z then
+   -- MALL_LIGHT_20261012: the mall's hall is lit by ambient light (free, and the same at every graphics level;
+   -- its lamps are only pools on top). 1 in the hall, falling to 0 over the 30 studs round the tape, so the wing
+   -- past it is as dark as this pass makes the tunnel.
+   local reach = mall:GetAttribute("ReachFrame")
+   revisedLobbyLighting.mallLight = typeof(reach) == "CFrame" and math.clamp((reach.Position.Z + 6 - at.Z) / 30, 0, 1) or 1
+   return true
+  end
  end
+ revisedLobbyLighting.mallLight = nil
  local model = workspace:FindFirstChild("LobbyReimaginedPreview")
  if not model or not model:IsA("Model") or model.Parent ~= workspace
   or model:GetAttribute("LobbyReimaginedOwned") ~= true or model:GetAttribute("Ready") ~= true
@@ -434,6 +442,9 @@ function revisedLobbyLighting.apply(mazeGrade)
   atmosphere.Density=0
  end
  for property, value in pairs(revisedLobbyLighting.values) do
+  if property == "Ambient" and revisedLobbyLighting.mallLight then
+   value = value:Lerp(Color3.fromRGB(196, 187, 154), revisedLobbyLighting.mallLight)   -- MALL_LIGHT_20261012
+  end
   Lighting[property]=value
   -- Record engine-normalized readback (e.g. Float32 brightness .600000023).
   revisedLobbyLighting.applied[property]=Lighting[property]

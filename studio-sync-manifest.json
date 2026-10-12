@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-11T23:30:04.879658+00:00",
+  "capturedAtUtc": "2026-10-12T00:54:42.786804+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -67,8 +67,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/DevAccess.ModuleScript.lua",
-      "bytes": 2835,
-      "sha256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+      "bytes": 3338,
+      "sha256": "3b4c2fbdf8e400877d586bab25feccadfcd1158de1e85e6cb78f2c10a4b89952",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -489,8 +489,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 197161,
-      "sha256": "833d31b91b6e80fd199fc2197648f7adf2884cffed4d05e0adeba61f01ed5832",
+      "bytes": 198490,
+      "sha256": "1296e8492f15d048db81036ce11edecfe6c3543fa2d99805fc0c8ab68025b9f0",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1729,8 +1729,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level Leaderboards.Script.lua",
-      "bytes": 20609,
-      "sha256": "042312f5b8f2407a4086f1a78ebea4f3cb517d37e9cdd0323e799f34103d85e7",
+      "bytes": 20781,
+      "sha256": "62c3084c40d0e98217f3d2a1fd8cf37cb08e0d089aba2ce65df9de71534b7205",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -2126,8 +2126,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/LobbyShopDisplay.ModuleScript.lua",
-      "bytes": 25565,
-      "sha256": "7d4940948ec0b42b90cb72e1869c0b97a9756a739cb3a93f6e0b9a7afe8d34d5",
+      "bytes": 30177,
+      "sha256": "a9b687c233dd9a68c80cf00103d2222955ac125bb18bc81e55403899f947f70a",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3418,8 +3418,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
-      "bytes": 27789,
-      "sha256": "b45d19ac83cb15ecc4a97274e58efda7a14a38cd789d913066e7f12f89e54ffa",
+      "bytes": 29939,
+      "sha256": "556d44f3515f68731d24697c7b65cd57ab92080d6ddbaa33deebbaa8016d10b0",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3946,8 +3946,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 6 Dev ESP.LocalScript.lua",
-      "bytes": 5003,
-      "sha256": "4195aac0219e5abaca0324a03c2005603bb695cb87b4cb2659e36e419b27db30",
+      "bytes": 5260,
+      "sha256": "3307e419f21decf934f8bcdce4086ad974ce4759adf3314dcda0bbd1effd31c8",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4453,8 +4453,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 249187,
-      "sha256": "a0621ad3b7c3fb8e78f6aff8d894acb2d8e4a7c130efa99c1e9356cf43305803",
+      "bytes": 249868,
+      "sha256": "533ab53bf2ce2d47d25dd48033ad15b21a9ad56a6c21a9317333d7419a96e88d",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4476,8 +4476,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
-      "bytes": 33875,
-      "sha256": "6c2c1a4f8dcd0156723b2d7dd568f21b6bf04d2619771a4a06a2098736c949fb",
+      "bytes": 34631,
+      "sha256": "e659af1c02658bc7ef3e783aed805609f7522168ad868a5f26bf129efd72a54b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4984,6 +4984,26 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Shade Client.LocalScript.lua",
       "bytes": 39698,
       "sha256": "b4b28318798d0f7cdfe15c336c0e16f58b25fafd14e0aaae3f2e41aef6ad8b26",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Lobby Mall Preview",
+      "segments": [
+        "ServerScriptService",
+        "Lobby Mall Preview"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Lobby Mall Preview.Script.lua",
+      "bytes": 7285,
+      "sha256": "ec47a6d953d8f0320ff5485eba746ee9a8366c062e7519fd6a8a52dcfda38d3b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
