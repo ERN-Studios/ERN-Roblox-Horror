@@ -2423,3 +2423,24 @@ Owner's three points, all in Studio (unpublished):
 - Every notice board is exactly the shape of what is pinned to it (level list 4.24 x 10, supporters 17.14 x 12) with
   the 0.2-stud oak frame round it; `Level Leaderboards` fills the board (no margin). It was a narrow sheet on a wide
   black board. The Level 3 and 4 boards moved 0.4 along the wall (z -728.4) for `check_mall.py`'s 20-wide corridor proof.
+
+## 2026-10-13 - mall: the tunnel lobby's DJ booth, a hall 27 studs high, a wing that fades to dark
+
+Owner's three points, in Studio (unpublished).
+- `BOOTH_FROM_TUNNEL_20261013`: the mall's own deck, steps, folding table, console and speakers are no longer put in
+  the place (`REPLACED` in import_mall.py; the banner and chairs stay; `mall.blend` still holds them). In their place
+  stands the tunnel lobby's booth: stage deck with six steps, rear rail, DJ console, two speaker towers, two
+  subwoofers and the two records, on the spot it had in the tunnel (the mall was laid out on the same centre).
+  `tools/lobby_mall/install_booth.py` made it permanent: the booth only existed as numbers in
+  `ServerStorage.LobbyReimaginedBlenderSource20261001R4` that RuntimeBake turned into session content; the script
+  reads them in Edit and uploads the 1024 atlas and seven meshes as group assets (`booth_ids.json`). The console is
+  `Anchors.DJConsole` (the desk Lobby DJ uses); deck, steps and rail collide through unseen blocks in `Anchors`;
+  `Lobby Mall Client` turns the records. Tested in play: up the steps (y 37.7 on the deck), DJ mode behind the desk.
+  The speaker towers stand beside the deck at x 499 and 541 and are 22 studs tall.
+- The hall is 27.04 studs high (`CEIL = 57.04`; it was 20.8, and 16 before that). I read "30% higher to the
+  ceiling" as the hall again; the shops' own ceilings are still 14 studs.
+- `DARK_FADE_20261013`: the importer cuts the wing's long parts into lengths of 20 studs or less and shades each by
+  its depth past the tape ((1 - depth/150)^1.5: two thirds at 40 studs, a third at 80, black from 150); five
+  surface-mounted panels over the first 80 studs all flicker (lamp 1.3); RoundUI's ambient for a player walking in
+  falls to the dark pass over 140 studs (it was 30). The glossy tile floor mirrors what is ahead, so from the tape
+  the wing's floor reads dark at once while its walls and ceiling fade.

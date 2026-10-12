@@ -1,9 +1,9 @@
 {
   "passed": true,
-  "parts": 1959,
+  "parts": 1969,
   "counts": {
     "Arrival": 168,
-    "Ceiling": 90,
+    "Ceiling": 100,
     "Concourse": 93,
     "DarkWing": 231,
     "Furniture": 138,
@@ -21,7 +21,7 @@
   "notes": [
     "Continuous 20-wide x5-high corridor: 459 centreline nodes; minimum sampled obstacle clearance 10.005344; whole-edge proof: 0.01-stud samples, 0.005-stud Lipschitz bound.",
     "Full-width terminal strip verified from [245.5, 30, -632.5] to tape-base south tangent z=-622.1; 20 wide, 10.4 long, 5 high. No 20-wide passage through poles 12 apart.",
-    "Opposed coplanar joining faces >1 sq.stud: 1509 (flagged in qa.json; internal contact surfaces, not overlapping visible faces).",
+    "Opposed coplanar joining faces >1 sq.stud: 1519 (flagged in qa.json; internal contact surfaces, not overlapping visible faces).",
     "Same-facing submerged base contacts >1 sq.stud: 12 (flagged in qa.json; full coverage by the opaque basin floor verified)."
   ],
   "axis_proof": [
@@ -1692,7 +1692,7 @@
     [
       "ConcourseWall0_0_5",
       "Column0_-890_5",
-      62.4
+      87.36
     ],
     [
       "ConcourseWall0_1_0",
@@ -1812,12 +1812,12 @@
     [
       "ConcourseWall0_3_5",
       "DeadWall0_0_5",
-      31.2
+      43.68
     ],
     [
       "ConcourseWall0_3_5",
       "Column0_-630_5",
-      62.4
+      87.36
     ],
     [
       "DeadShop0_0_Pier0_0",
@@ -1937,12 +1937,12 @@
     [
       "DeadShop0_0_Bulkhead",
       "DeadShop0_0_PierColumn0_5",
-      4.8
+      11.04
     ],
     [
       "DeadShop0_0_Bulkhead",
       "DeadShop0_0_PierColumn1_5",
-      4.8
+      11.04
     ],
     [
       "DeadShop0_1_Pier0_0",
@@ -2062,12 +2062,12 @@
     [
       "DeadShop0_1_Bulkhead",
       "DeadShop0_1_PierColumn0_5",
-      4.8
+      11.04
     ],
     [
       "DeadShop0_1_Bulkhead",
       "DeadShop0_1_PierColumn1_5",
-      4.8
+      11.04
     ],
     [
       "DeadShop0_2_Pier0_0",
@@ -2187,12 +2187,12 @@
     [
       "DeadShop0_2_Bulkhead",
       "DeadShop0_2_PierColumn0_5",
-      4.8
+      11.04
     ],
     [
       "DeadShop0_2_Bulkhead",
       "DeadShop0_2_PierColumn1_5",
-      4.8
+      11.04
     ],
     [
       "DeadWall0_0_0",
@@ -2447,7 +2447,7 @@
     [
       "EntranceWest_5",
       "EntranceLintel",
-      9.8
+      16.04
     ],
     [
       "DarkEnd_0",
@@ -2527,12 +2527,12 @@
     [
       "DarkEnd_5",
       "DeadShop0_2_PierColumn1_5",
-      62.4
+      87.36
     ],
     [
       "DarkEnd_5",
       "DeadShop1_2_PierColumn1_5",
-      62.4
+      87.36
     ],
     [
       "DarkEnd_5",
@@ -3116,6 +3116,21 @@
     ],
     [
       "DarkCeiling",
+      "WingPanelHousing200_-601",
+      32.0
+    ],
+    [
+      "DarkCeiling",
+      "WingPanelHousing200_-581",
+      32.0
+    ],
+    [
+      "DarkCeiling",
+      "WingPanelHousing200_-541",
+      32.0
+    ],
+    [
+      "DarkCeiling",
       "CeilingStrip204",
       16.0
     ],
@@ -3123,6 +3138,16 @@
       "DarkCeiling",
       "CeilingEnd240",
       4.0
+    ],
+    [
+      "DarkCeiling",
+      "WingPanelHousing240_-601",
+      32.0
+    ],
+    [
+      "DarkCeiling",
+      "WingPanelHousing240_-561",
+      32.0
     ],
     [
       "DarkCeiling",
@@ -3925,6 +3950,21 @@
       3.5
     ],
     [
+      "WingPanelHousing200_-601",
+      "PanelLensWing200_-601",
+      27.36
+    ],
+    [
+      "WingPanelHousing200_-581",
+      "PanelLensWing200_-581",
+      27.36
+    ],
+    [
+      "WingPanelHousing200_-541",
+      "PanelLensWing200_-541",
+      27.36
+    ],
+    [
       "EntranceLintel",
       "Door0",
       3.9
@@ -3937,7 +3977,7 @@
     [
       "EntranceLintel",
       "EntranceEast_5",
-      9.8
+      16.04
     ],
     [
       "StandCarpet_2_1",
@@ -5115,6 +5155,16 @@
       3.5
     ],
     [
+      "WingPanelHousing240_-601",
+      "PanelLensWing240_-601",
+      27.36
+    ],
+    [
+      "WingPanelHousing240_-561",
+      "PanelLensWing240_-561",
+      27.36
+    ],
+    [
       "EntranceEast_0",
       "EntranceEast_1",
       20.0
@@ -5772,7 +5822,7 @@
     [
       "DeadShop1_0_PierColumn0_5",
       "DeadShop1_0_Bulkhead",
-      4.8
+      11.04
     ],
     [
       "DeadShop1_0_PierColumn1_0",
@@ -5832,7 +5882,7 @@
     [
       "DeadShop1_0_PierColumn1_5",
       "DeadShop1_0_Bulkhead",
-      4.8
+      11.04
     ],
     [
       "DeadShop1_1_PierColumn0_0",
@@ -5892,7 +5942,7 @@
     [
       "DeadShop1_1_PierColumn0_5",
       "DeadShop1_1_Bulkhead",
-      4.8
+      11.04
     ],
     [
       "DeadShop1_1_PierColumn1_0",
@@ -5952,7 +6002,7 @@
     [
       "DeadShop1_1_PierColumn1_5",
       "DeadShop1_1_Bulkhead",
-      4.8
+      11.04
     ],
     [
       "DeadShop1_2_PierColumn0_0",
@@ -6012,7 +6062,7 @@
     [
       "DeadShop1_2_PierColumn0_5",
       "DeadShop1_2_Bulkhead",
-      4.8
+      11.04
     ],
     [
       "DeadShop1_2_PierColumn1_0",
@@ -6072,7 +6122,7 @@
     [
       "DeadShop1_2_PierColumn1_5",
       "DeadShop1_2_Bulkhead",
-      4.8
+      11.04
     ],
     [
       "Column1_-890_0",
@@ -6122,7 +6172,7 @@
     [
       "Column1_-890_5",
       "ConcourseWall1_0_5",
-      62.4
+      87.36
     ],
     [
       "Column1_-630_0",
@@ -6172,7 +6222,7 @@
     [
       "Column1_-630_5",
       "ConcourseWall1_3_5",
-      62.4
+      87.36
     ],
     [
       "Shop2_QueueFloor",
@@ -6942,7 +6992,7 @@
     [
       "ConcourseWall1_3_5",
       "DeadWall1_0_5",
-      31.2
+      43.68
     ],
     [
       "DeadShop1_0_Floor",
@@ -10289,7 +10339,7 @@
   },
   "route_min_clearance": 10.005343572311752,
   "route_edge_margin": 0.001,
-  "json_sha256": "1243a95d34138da834dcc22e8c80a01f527302cb0cd6e6a73bde9c6f598c21ef",
+  "json_sha256": "be4b2dca96a142da4fd382b4ed7baab9422241ad8e3f97c0b4fa615c5f01a44d",
   "limitations": [
     "Static offline geometry checks; Roblox runtime, lighting parity, gameplay and multiplayer require main agent QA.",
     "The verified radius10 centreline joins a full-width flat-ended terminal strip to the tape bases; seven poles 12 apart prevent a 20-wide corridor through the tape line."

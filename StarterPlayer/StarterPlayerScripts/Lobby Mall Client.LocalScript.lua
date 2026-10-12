@@ -3,6 +3,7 @@
 --   (The level signs seen through walls that this script first drew were removed on the owner's word, 2026-10-13.)
 --   CRATES       the product crates over the shop's buy rings bob gently, each out of step with the next
 --                (LobbyShopDisplay gives every crate its resting pose and phase).
+--   RECORDS      the two discs on the DJ console turn.
 --   DYING LAMPS  the ceiling panels the importer marked `Flicker` stutter like a fluorescent tube on its way out.
 --   A player who asked for less flashing (ReduceFlashing, on until they switch it off) gets steady dim lamps and
 --   still crates. Nothing here runs while the player is in a round or away from the mall.
@@ -12,16 +13,23 @@ local player = Players.LocalPlayer
 
 local LENS_ON, LENS_OFF = Color3.fromRGB(246, 240, 214), Color3.fromRGB(120, 118, 108)
 
-local mall, crates, lamps = nil, {}, {}
+local mall, crates, lamps, discs = nil, {}, {}, {}
 local function bind(model)
 	mall = model
-	table.clear(crates); table.clear(lamps)
+	table.clear(crates); table.clear(lamps); table.clear(discs)
 	if not mall then return end
 	local anchors = mall:FindFirstChild("Anchors")
 	local box = anchors and anchors:FindFirstChild("ShopCrates")
 	for _, crate in ipairs(box and box:GetChildren() or {}) do
 		if crate:IsA("BasePart") and typeof(crate:GetAttribute("MallCrateOrigin")) == "CFrame" then
 			table.insert(crates, {part = crate, origin = crate:GetAttribute("MallCrateOrigin"), phase = tonumber(crate:GetAttribute("MallCratePhase")) or 0})
+		end
+	end
+	-- BOOTH_FROM_TUNNEL_20261013: the two records on the DJ console turn, as they did in the tunnel lobby
+	local stage = mall:FindFirstChild("Parts") and mall.Parts:FindFirstChild("Stage")
+	for _, disc in ipairs(stage and stage:GetChildren() or {}) do
+		if typeof(disc:GetAttribute("RecordPivot")) == "CFrame" then
+			table.insert(discs, {part = disc, pivot = disc:GetAttribute("RecordPivot"), offset = disc:GetAttribute("RecordMeshOffset")})
 		end
 	end
 	local lights, ceiling = mall:FindFirstChild("Lights"), mall:FindFirstChild("Parts") and mall.Parts:FindFirstChild("Ceiling")
@@ -53,7 +61,8 @@ RunService.Heartbeat:Connect(function(dt)
 		-- the model streams in piece by piece: bind again while what it should hold is still arriving
 		local anchors = now and now:FindFirstChild("Anchors")
 		local count = anchors and (#(anchors:FindFirstChild("ShopCrates") and anchors.ShopCrates:GetChildren() or {})
-			+ #(now:FindFirstChild("Lights") and now.Lights:GetChildren() or {})) or 0
+			+ #(now:FindFirstChild("Lights") and now.Lights:GetChildren() or {})
+			+ #(now:FindFirstChild("Parts") and now.Parts:FindFirstChild("Stage") and now.Parts.Stage:GetChildren() or {})) or 0
 		if now ~= mall or count ~= (mall and mall:GetAttribute("ClientBound")) then
 			bind(now)
 			if now then now:SetAttribute("ClientBound", count) end
@@ -77,6 +86,9 @@ RunService.Heartbeat:Connect(function(dt)
 		if crate.part.Parent then
 			crate.part.CFrame = crate.origin + Vector3.new(0, 0.32 * math.sin(elapsed * 1.7 + crate.phase), 0)
 		end
+	end
+	for _, disc in ipairs(discs) do
+		if disc.part.Parent then disc.part.CFrame = disc.pivot * CFrame.Angles(0, elapsed * math.rad(12), 0) * disc.offset end
 	end
 	-- a dying tube: mostly lit and a little weak, then a burst of quick stutters, now and then out for a second or two
 	for _, lamp in ipairs(lamps) do

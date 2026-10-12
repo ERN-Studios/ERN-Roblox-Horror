@@ -145,7 +145,7 @@ def main():
         else:
             p=byname[g+'_Floor'];check(p['pos']==[220,29.5,(z0+z1)/2] and p['size']==[72,1,z1-z0],g+' floor top/bounds')
     for p in D['parts']:
-        if p['group']=='Ceiling' and p['material']=='ceiling':check(abs(p['pos'][1]-p['size'][1]/2-50.8)<EPS,p['name']+' ceiling underside (20.8 above the floor since 2026-10-12)')
+        if p['group']=='Ceiling' and p['material']=='ceiling':check(abs(p['pos'][1]-p['size'][1]/2-57.04)<EPS,p['name']+' ceiling underside (27.04 above the floor since 2026-10-13)')
         if p['name'].startswith('PanelFrame'):check(p['size']==[8,.5,4],p['name']+' recessed panel size')
     for i in range(1,7):
         z=-840+80*((i-1)//2)
@@ -163,7 +163,7 @@ def main():
         for k in range(2):
             col=[q for q in geom if q['p']['name'].startswith(f'Shop{i}_PierColumn{k}_')]
             if col:
-                lo=np.min([q['lo'] for q in col],axis=0);hi=np.max([q['hi'] for q in col],axis=0);check(np.allclose(hi-lo,[4,20.8,4]),f'Shop{i} pier column{k} 4x4')
+                lo=np.min([q['lo'] for q in col],axis=0);hi=np.max([q['hi'] for q in col],axis=0);check(np.allclose(hi-lo,[4,27.04,4]),f'Shop{i} pier column{k} 4x4')
             else:check(False,f'Shop{i} pier column{k} absent')
         ceiling=byname[f'Shop{i}_Ceiling'];check(ceiling['pos'][1]-ceiling['size'][1]/2==44,f'Shop{i} 14-high interior')
         sign=next(s for s in D['signs'] if s['name']==f'Shop{i}_Sign');check(sign['size']==[40,3.2],f'Shop{i} sign box')
@@ -183,15 +183,16 @@ def main():
         # Boundary tape is exempt; no props or fixtures past it.
         if q['p']['group']!='Tape' and q['lo'][1]<39 and q['hi'][1]>30+EPS and q['hi'][2]>-620.99 and q['lo'][2]<-421:
             if intersection_area(q['poly'],np.array([[184,-621],[256,-621],[256,-421],[184,-421]]))>EPS:errors.append('dark floor: '+q['p']['name'])
-    check(not any(l['pos'][2]>-621 for l in D['lights']),'light in dark wing')
+    # 2026-10-13 (owner: the wing fades into darkness "with flickering lights"): only the five dying panels, none deeper than 80 studs
+    check(all(l['kind']=='panel' and l['state']=='dim_flicker' and l['pos'][2]<=-541 for l in D['lights'] if l['pos'][2]>-621),'only dying panels in the dark wing')
     dead={(240,-830),(200,-750),(240,-690),(200,-650),(240,-650)}
     for l in D['lights']:
         check(set(l)=={'name','kind','pos','color','brightness','range','state'},l['name']+' light fields')
         check(l['kind'] in {'panel','globe','showcase','neon'} and l['state'] in {'on','dim_flicker'},l['name']+' light enums')
         check(len(l['pos'])==3 and all(math.isfinite(v) for v in l['pos']) and l['brightness']>0 and l['range']>0,l['name']+' light vectors/power')
-    panels=[l for l in D['lights'] if l['kind']=='panel'];expected={(x,z) for x in (200,240) for z in range(-890,-629,20)}-dead
+    panels=[l for l in D['lights'] if l['kind']=='panel'];wing=[(200,-601),(240,-601),(200,-581),(240,-561),(200,-541)];expected=({(x,z) for x in (200,240) for z in range(-890,-629,20)}-dead)|set(wing)       # 2026-10-13: five dying panels in the dark wing
     check({(l['pos'][0],l['pos'][2]) for l in panels}==expected,'panel lattice / dead panels')
-    check([(l['pos'][0],l['pos'][2]) for l in panels if l['state']=='dim_flicker']==[(200,-810)],'flicker panel')
+    check(sorted((l['pos'][0],l['pos'][2]) for l in panels if l['state']=='dim_flicker')==sorted([(200,-810)]+wing),'flicker panels')
     check(len([p for p in D['parts'] if p['name'].startswith('TapePole')])==7,'7 tape poles')
     check(A['shop_stand']=={'centre':[220,30,-770],'radius':20},'stand anchor')
     check(A['stage_deck']=={'min':[205,30,-655],'max':[235,32,-632]},'stage extents')

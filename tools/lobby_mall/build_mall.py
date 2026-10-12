@@ -110,9 +110,11 @@ def textures():
 
 # 2026-10-12 (owner: "Der skal også være højere til loftet. 30% højere"): the hall was 16 studs from floor to ceiling
 # and is 20.8. The shops keep their own 14-stud ceilings behind a bulkhead over each front, as shops in a mall do.
-CEIL=50.8;WALL_Y=(30+CEIL)/2;WALL_H=CEIL-30
+# 2026-10-13 (owner, again: "30% higher to the ceiling"): 20.8 becomes 27.04.
+CEIL=57.04;WALL_Y=(30+CEIL)/2;WALL_H=CEIL-30
+WING_PANELS=[(200,-601),(240,-601),(200,-581),(240,-561),(200,-541)]
 def design():
-    D={'version':1,'units':'studs','bounds':{'min':[110,15,-902],'max':[330,56,-419]},'materials':{},'parts':[],'signs':[],'lights':[],'anchors':{}}
+    D={'version':1,'units':'studs','bounds':{'min':[110,15,-902],'max':[330,64,-419]},'materials':{},'parts':[],'signs':[],'lights':[],'anchors':{}}
     palette={
       'floor_tile':('SmoothPlastic',(229,223,209),16),'floor_checker':('SmoothPlastic',(130,128,124),16),'floor_redgrey':('SmoothPlastic',(150,112,118),16),'floor_bands':('SmoothPlastic',(190,184,176),16),'floor_inlay':('SmoothPlastic',(192,128,112),16),'floor_harlequin':('SmoothPlastic',(132,138,132),32),'border':('Concrete',(94,71,45),8),'plaster':('Plaster',(195,185,146),8),'oak':('WoodPlanks',(122,91,51),8),'ceiling':('Concrete',(183,181,157),4),'damask':('Fabric',(174,154,65),6),'beige_carpet':('Carpet',(152,137,98),6),'stand_carpet':('Carpet',(120,91,47),6),'triangle_carpet':('Carpet',(67,48,61),8),'road_carpet':('Carpet',(66,78,59),16),'small_tile':('Concrete',(179,199,185),4),'pegboard':('Wood',(180,168,120),4),'puzzle_mat':('Fabric',(30,96,112),12),'black_ceiling':('Concrete',(31,32,30),4),'pad':('SmoothPlastic',(26,61,47),14.8),'brass':('Metal',(136,111,62),4),'sign_face':('SmoothPlastic',(236,226,160),40),'static':('SmoothPlastic',(113,115,103),3),
       'frame':('Metal',(62,58,46),4),'text':('SmoothPlastic',(72,66,54),4),'teal':('Plaster',(93,129,121),4),'mauve':('Plaster',(137,106,109),4),'skirt':('Concrete',(98,76,49),4),'cream':('SmoothPlastic',(188,174,124),4),'black':('SmoothPlastic',(18,20,18),4),'glass':('Glass',(58,64,56),4),'water':('Glass',(18,69,68),4),'orange':('Plaster',(165,82,35),4),'navy':('Plaster',(23,32,58),4),'red':('Fabric',(137,30,34),4),'rose':('SmoothPlastic',(175,119,146),4),'yellow':('Fabric',(200,160,34),4),'blue':('Fabric',(47,103,163),4),'green':('Fabric',(55,118,66),4),'purple':('Fabric',(109,52,135),4),'pale_blue':('Fabric',(122,175,186),4),'cloth':('Fabric',(211,196,144),8),'vinyl':('SmoothPlastic',(76,48,30),4),'metal':('Metal',(111,108,86),4),'light':('Neon',(238,225,155),4),'cyan':('Neon',(44,183,209),4),'magenta':('Neon',(206,44,151),4),'grey':('Metal',(125,123,107),4),'stage_carpet':('Carpet',(44,75,68),6),'hazard':('SmoothPlastic',(230,190,36),1.1)}
@@ -368,6 +370,13 @@ def design():
             last=z+2
         box(f'CeilingEnd{x}','Ceiling',x,CEIL+.25,(last-621)/2,8,.5,-621-last,'ceiling')
     box('DarkCeiling','Ceiling',220,CEIL+.25,-521,80,.5,200,'ceiling')
+    # 2026-10-13 (owner: the end of the mall "fading into darkness, so some of the start is visible and with flickering
+    # lights"): five surface-mounted panels over the first eighty studs past the tape, fewer the deeper it goes, every
+    # one of them a dying tube. The importer darkens the wing's own surfaces by how far in they stand.
+    for x,z in WING_PANELS:
+        box(f'WingPanelHousing{x}_{z}','Ceiling',x,CEIL-.1,z,8,.2,4,'frame')
+        box(f'PanelLensWing{x}_{z}','Ceiling',x,CEIL-.23,z,7.6,.06,3.6,'light',glow=True)
+        light(f'PanelLightWing{x}_{z}','panel',(x,CEIL-.5,z),b=3.8,r=39,state='dim_flicker')
     # Enlarged 1990s RMU. Six counter trapezoids tile an exact closed ring.
     # Side 1 is south; subsequent sides go counter-clockwise in plan.
     C=np.array([220.,0.,-770.]);outer_r=15.;ap=outer_r*math.sqrt(3)/2

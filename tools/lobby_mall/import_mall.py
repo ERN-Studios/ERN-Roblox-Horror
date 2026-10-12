@@ -50,6 +50,29 @@ pick = random.Random(20261013).sample(steady, 11)
 for l in pick[:6]: l['state'] = 'dead'
 for l in pick[6:] + [l for l in panels if l['state'] == 'dim_flicker']: l['state'] = 'flicker'
 by_name = {p['name']: p for p in data['parts']}
+for l in panels: l['wing'] = l['pos'][2] > data['anchors']['tape_z']
+
+# BOOTH_FROM_TUNNEL_20261013 (owner: "Replace the new DJ booth in the mall lobby with the DJ booth from the live tunnel
+# lobby as it's much better"). The build's own deck, steps, folding table, console and speakers are not put in the
+# place; the tunnel lobby's booth (install_booth.py made it permanent assets) stands where they stood, and it stood on
+# the same spot in the tunnel. The banner and the chairs stay. The .blend still holds the build's own booth.
+BOOTH = json.loads((Path(__file__).parent / 'booth_ids.json').read_text())
+REPLACED = ('StageDeck', 'StageStep', 'DJTable', 'DJConsole', 'DJTurntable', 'Speaker')
+data['parts'] = [p for p in data['parts'] if not (p['group'] == 'Stage' and p['name'].startswith(REPLACED))]
+
+# DARK_FADE_20261013 (owner: the end "fading into darkness, so some of the start is visible ... but like it fades down
+# to darkness"). A part's colour is one colour, so the wing's long floors, walls and ceilings are cut across into
+# lengths of twenty studs or less; the importer then darkens each by how far past the tape it stands. A material's
+# sheet is laid from the world's origin, so a cut shows no seam.
+def slices(p):
+    wing = p['group'] == 'DarkWing' or p['name'].startswith('Dark')
+    if not (wing and p['shape'] == 'Block' and p['rot'] == [0.0, 0.0, 0.0] and p['size'][2] > 24):
+        return [p]
+    n = int(-(-p['size'][2] // 20))
+    step, start = p['size'][2] / n, p['pos'][2] - p['size'][2] / 2
+    return [dict(p, name=f"{p['name']}_s{k}", pos=[p['pos'][0], p['pos'][1], start + step * (k + 0.5)],
+                 size=[p['size'][0], p['size'][1], step]) for k in range(n)]
+data['parts'] = [piece for p in data['parts'] for piece in slices(p)]
 dark = next(p for p in data['parts'] if p['name'].startswith('PanelLens') and not p['glow'])
 for l in panels:
     lens = by_name[l['name'].replace('PanelLight', 'PanelLens')]
@@ -128,7 +151,12 @@ for _, p in ipairs(HttpService:JSONDecode([==[%s]==])) do
 	part.Color = Color3.fromRGB(c[1], c[2], c[3])
 	-- the hall is lit by ambient light now (see the lights below), which a wall cannot switch off: the wing past
 	-- the tape is dark because its own surfaces are
-	if p.group == "DarkWing" or p.name:sub(1, 4) == "Dark" then part.Color = part.Color:Lerp(Color3.new(0, 0, 0), 0.86) end
+	-- DARK_FADE_20261013: full colour at the tape, two thirds of it forty studs in, a third at eighty, black from a
+	-- hundred and fifty (the wing is two hundred long)
+	if p.group == "DarkWing" or p.name:sub(1, 4) == "Dark" then
+		local shade = math.max(0.02, (1 - math.clamp((p.pos[3] - TAPE_Z) / 150, 0, 1)) ^ 1.5)
+		part.Color = Color3.new(part.Color.R * shade, part.Color.G * shade, part.Color.B * shade)
+	end
 	if m.ids and m.ids.colour and not p.glow then part.MaterialVariant = "Mall " .. p.material end
 	part.Transparency = p.transparency or 0
 	part:SetAttribute("MallMaterial", p.material)
@@ -137,6 +165,7 @@ for _, p in ipairs(HttpService:JSONDecode([==[%s]==])) do
 end
 return n
 '''
+PARTS = PARTS.replace('TAPE_Z', str(data['anchors']['tape_z']))
 parts = data['parts']
 done = 0
 for i in range(0, len(parts), 180):
@@ -258,7 +287,8 @@ for _, l in ipairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do
 		light = nil
 	elseif l.kind == "panel" then
 		light = Instance.new("PointLight")
-		light.Brightness, light.Range = 0.4, 40
+		light.Brightness, light.Range = 0.5, 50                    -- the ceiling is 27 studs up
+		if l.wing then light.Brightness = 1.3 end              -- past the tape a lamp is most of the light there is
 		host.CFrame = host.CFrame - Vector3.new(0, 1.6, 0)
 	elseif l.name:sub(1, 8) == "SkinSpot" then
 		light = Instance.new("SpotLight")
@@ -394,9 +424,48 @@ for _, b in ipairs(a.boards) do
 	p:SetAttribute("BoardKey", b.key)
 end
 marker(anchors, "Spawn", v3(a.spawn))
--- Lobby DJ stands its DJ at this part's foot, 2.9 studs behind it: the part reaches down to the stage deck
-local deckTop = a.stage_deck.max[2]
-marker(anchors, "DJConsole", v3(a.dj_console), Vector3.new(4, math.max(0.5, (a.dj_console[2] - deckTop) * 2), 2))
+-- BOOTH_FROM_TUNNEL_20261013: the tunnel lobby's DJ booth, on the spot it had there (measured from the same centre the
+-- tunnel lobby used). The console is `Anchors.DJConsole`, the desk Lobby DJ stands its DJ behind; the deck and its
+-- six steps are walked on through unseen blocks, as in the tunnel. Lobby Mall Client turns the two discs.
+do
+	local AssetService = game:GetService("AssetService")
+	local booth = game:GetService("HttpService"):JSONDecode([==[%s]==])
+	local centre = Vector3.new(a.spawn[1], a.spawn[2], a.spawn[3] + 100) + offset
+	local visuals = model.Parts:FindFirstChild("Stage")
+	local function piece(family, at, yaw, parent, solid)
+		local spec = booth[family]
+		local part = AssetService:CreateMeshPartAsync(Content.fromAssetId(spec.id), {CollisionFidelity = Enum.CollisionFidelity.Box, RenderFidelity = Enum.RenderFidelity.Precise})
+		local cf = CFrame.new(centre + at) * CFrame.Angles(0, yaw, 0)
+		part.Name, part.Size = family, Vector3.new(spec.size[1], spec.size[2], spec.size[3])
+		part.CFrame = cf * CFrame.new(spec.centre[1], spec.centre[2], spec.centre[3])
+		part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery, part.CastShadow = true, solid, false, solid, false
+		part.Material, part.Color, part.DoubleSided = Enum.Material.SmoothPlastic, Color3.new(1, 1, 1), true
+		part.TextureID = "rbxassetid://" .. booth.atlas
+		part.Parent = parent
+		return part, cf
+	end
+	piece("StageDeck", Vector3.new(0, 0, 120), 0, visuals, false)
+	piece("StageRearRail", Vector3.new(0, 0, 120), 0, visuals, false)
+	piece("DJConsole", Vector3.new(0, 4.5, 121), math.pi, anchors, true)
+	for _, side in ipairs({-21, 21}) do
+		piece("SpeakerTower", Vector3.new(side, 0, 120), math.pi, visuals, true)
+		piece("Subwoofer", Vector3.new(side, 0, 114), math.pi, visuals, true)
+	end
+	for family, at in pairs({VinylDiscAmber = Vector3.new(2.96, 8.273, 120.79), VinylDiscCyan = Vector3.new(-2.64, 8.273, 120.79)}) do
+		local disc, cf = piece(family, at, math.pi, visuals, false)
+		disc:SetAttribute("RecordPivot", cf)
+		disc:SetAttribute("RecordMeshOffset", CFrame.new(booth[family].centre[1], booth[family].centre[2], booth[family].centre[3]))
+	end
+	local function block(name, size, at)
+		local part = marker(anchors, name, centre + at, size)
+		part.CanCollide, part.CanQuery = true, true
+	end
+	block("StageDeckCollision", Vector3.new(30, 4.5, 17), Vector3.new(0, 2.25, 120))
+	block("StageRearGuard", Vector3.new(28.2, 3.1, 0.18), Vector3.new(0, 6.05, 128.4))
+	for step = 1, 6 do
+		block("StageStepCollision" .. step, Vector3.new(30, 0.75 * step, step == 6 and 2.02 or 1.02), Vector3.new(0, 0.375 * step, step == 6 and 110.5 or 104.5 + step))
+	end
+end
 marker(anchors, "ShopStand", v3(a.shop_stand.centre)):SetAttribute("Radius", a.shop_stand.radius)
 local deck = marker(anchors, "StageDeck", (v3(a.stage_deck.min) + v3(a.stage_deck.max)) / 2, Vector3.new(a.stage_deck.max[1] - a.stage_deck.min[1], math.max(a.stage_deck.max[2] - a.stage_deck.min[2], 0.2), a.stage_deck.max[3] - a.stage_deck.min[3]))
 local wing = marker(anchors, "DarkWing", (v3(a.dark_wing.min) + v3(a.dark_wing.max)) / 2, Vector3.new(a.dark_wing.max[1] - a.dark_wing.min[1], a.dark_wing.max[2] - a.dark_wing.min[2], a.dark_wing.max[3] - a.dark_wing.min[3]))
@@ -455,4 +524,4 @@ local total = 0
 for _, d in ipairs(model:GetDescendants()) do if d:IsA("BasePart") then total += 1 end end
 model:SetAttribute("MallQueuesReady", true)
 return string.format("anchors: %%d pads in %%d bays, %%d shop spots, %%d boards, %%d real suits on plinths (%%d stand-in parts removed); model has %%d parts", #a.pads, #bays:GetChildren(), #a.shop_spots, #a.boards, placed, standIns, total)
-''' % (NAME, ', '.join(map(str, OFFSET)), J(data['anchors']))))
+''' % (NAME, ', '.join(map(str, OFFSET)), J(data['anchors']), J(BOOTH))))

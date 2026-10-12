@@ -362,10 +362,11 @@ function revisedLobbyLighting.contains(inMaze)
   local at = body.Position
   if at.X >= low.X and at.X <= high.X and at.Y >= low.Y and at.Y <= high.Y and at.Z >= low.Z and at.Z <= high.Z then
    -- MALL_LIGHT_20261012: the mall's hall is lit by ambient light (free, and the same at every graphics level;
-   -- its lamps are only pools on top). 1 in the hall, falling to 0 over the 30 studs round the tape, so the wing
-   -- past it is as dark as this pass makes the tunnel.
+   -- its lamps are only pools on top). 1 in the hall; past the tape it falls to 0 over 140 studs (DARK_FADE_20261013,
+   -- owner: the end "fades down to darkness": it used to drop within 30 studs of the tape), so the deep wing is as
+   -- dark as this pass makes the tunnel.
    local reach = mall:GetAttribute("ReachFrame")
-   revisedLobbyLighting.mallLight = typeof(reach) == "CFrame" and math.clamp((reach.Position.Z + 6 - at.Z) / 30, 0, 1) or 1
+   revisedLobbyLighting.mallLight = typeof(reach) == "CFrame" and math.clamp(1 - (at.Z - reach.Position.Z) / 140, 0, 1) or 1
    return true
   end
  end
