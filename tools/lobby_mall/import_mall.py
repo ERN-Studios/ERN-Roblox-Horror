@@ -553,6 +553,38 @@ for _, pl in ipairs(a.skin_plinths) do
 			if d:IsA("BasePart") then d.Anchored, d.CanCollide, d.CanTouch, d.CanQuery = true, false, false, false
 			elseif d:IsA("LuaSourceContainer") then d:Destroy() end
 		end
+		-- SKINS_AT_EASE_20261013 (owner: the suits "ikke står i t pose men med armene naturligt nede"). The template
+		-- is the worn suit's rig in its bind pose, arms straight out. Each upper arm is turned about its shoulder
+		-- until it hangs a little out from the body, and the forearm a touch further in, as a standing person's does.
+		for _, side in ipairs({"Left", "Right"}) do
+			local arm, fore, hand = suit:FindFirstChild(side .. "Arm", true), suit:FindFirstChild(side .. "ForeArm", true), suit:FindFirstChild(side .. "Hand", true)
+			if arm and fore and arm:IsA("Bone") and fore:IsA("Bone") then
+				local function hang(bone, tip, outDegrees)
+					local from = (tip.WorldPosition - bone.WorldPosition).Unit
+					local out = Vector3.new(from.X, 0, from.Z)
+					out = out.Magnitude > 0.05 and out.Unit or Vector3.xAxis
+					local to = (-Vector3.yAxis * math.cos(math.rad(outDegrees)) + out * math.sin(math.rad(outDegrees))).Unit
+					local axis = from:Cross(to)
+					if axis.Magnitude < 1e-4 then return end
+					local turn = CFrame.fromAxisAngle(axis.Unit, math.acos(math.clamp(from:Dot(to), -1, 1)))
+					local at = bone.WorldPosition
+					bone.WorldCFrame = (turn * (bone.WorldCFrame - at)) + at
+				end
+				local outward = Vector3.new((fore.WorldPosition - arm.WorldPosition).X, 0, (fore.WorldPosition - arm.WorldPosition).Z)
+				hang(arm, fore, 13)
+				if hand and hand:IsA("Bone") then
+					-- the forearm: nearly straight down, so the hand ends beside the thigh and not out in the air
+					local from = (hand.WorldPosition - fore.WorldPosition).Unit
+					local out = outward.Magnitude > 0.05 and outward.Unit or Vector3.xAxis
+					local to = (-Vector3.yAxis * math.cos(math.rad(5)) + out * math.sin(math.rad(5))).Unit
+					local axis = from:Cross(to)
+					if axis.Magnitude > 1e-4 then
+						local at = fore.WorldPosition
+						fore.WorldCFrame = (CFrame.fromAxisAngle(axis.Unit, math.acos(math.clamp(from:Dot(to), -1, 1))) * (fore.WorldCFrame - at)) + at
+					end
+				end
+			end
+		end
 		suit.Parent = plinths
 		local _, size = suit:GetBoundingBox()
 		if size.Y > 0.5 then suit:ScaleTo(5.4 / size.Y * suit:GetScale()) end
@@ -561,6 +593,10 @@ for _, pl in ipairs(a.skin_plinths) do
 		suit:PivotTo(CFrame.lookAt(suit:GetPivot().Position, suit:GetPivot().Position + facing))
 		local now = suit:GetBoundingBox()
 		suit:PivotTo(suit:GetPivot() + Vector3.new(at.X - now.Position.X, 0, at.Z - now.Position.Z))
+		-- SKINS_AT_EASE_20261013 (owner: they "spinner stille og roligt på den runde plade de står på"): Lobby Mall
+		-- Client turns each suit about its plinth's middle from this pose; the server's copy stands still
+		suit:SetAttribute("MallSkinOrigin", suit:GetPivot())
+		suit:SetAttribute("MallSkinAxis", at)
 		placed += 1
 		for _, d in ipairs(model.Parts.Stand:GetChildren()) do
 			if d.Name:sub(1, #pl.skin + 1) == pl.skin .. "_" then d:Destroy(); standIns += 1 end   -- the build's stand-in mannequin

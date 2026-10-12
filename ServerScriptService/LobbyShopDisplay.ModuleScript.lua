@@ -465,14 +465,58 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 				end
 				if source and spot:IsA("BasePart") then
 					local name = source:FindFirstChild("ShopHologramName", true)
-					local box = source:Clone()
-					for _, d in ipairs(box:GetChildren()) do
-						local flat = d:IsA("SurfaceGui") and (d.Face == Enum.NormalId.Top or d.Face == Enum.NormalId.Bottom)
-						if flat or d:IsA("BillboardGui") or d:IsA("Light") then d:Destroy()
-						elseif d:IsA("SurfaceGui") then d.MaxDistance = 70 end
+					-- MALL_CARTON_20261013 (owner: "Kasserne med items passer ikke længere til vores nye lobby stil"). The
+					-- crate was a copy of the first lobby's hologram: a see-through glowing cube with a lit edge. In the
+					-- mall it is a shipping carton (ServerStorage.MallShopCarton, tools/lobby_mall/build_carton.py: kraft
+					-- cardboard, packing tape) with a printed label on its four sides: the mall's stripe band, the
+					-- product's own picture, its name. Without the mesh a plain cardboard block wears the same label.
+					local art = source:FindFirstChildWhichIsA("Decal")
+					local carton = game:GetService("ServerStorage"):FindFirstChild("MallShopCarton")
+					local box = (carton and carton:IsA("MeshPart")) and carton:Clone() or Instance.new("Part")
+					box.Anchored, box.CanCollide, box.CanTouch, box.CanQuery, box.CastShadow = true, false, false, false, false
+					box.Material, box.Transparency = Enum.Material.SmoothPlastic, 0
+					box.Color = box:IsA("MeshPart") and Color3.new(1, 1, 1) or Color3.fromRGB(214, 190, 142)
+					box:SetAttribute("ShopItemKey", key)
+					box:SetAttribute("Build", "MALL_CARTON_20261013")
+					local title = (string.gsub(name and name.Text or string.upper(tostring(key)), "%s+", " "))
+					for _, side in ipairs({Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right}) do
+						local gui = Instance.new("SurfaceGui")
+						gui.Name, gui.Face = "CartonLabel_" .. side.Name, side
+						gui.SizingMode, gui.CanvasSize = Enum.SurfaceGuiSizingMode.FixedSize, Vector2.new(256, 256)
+						-- print on cardboard, not a screen: mostly the room's light, with enough of its own to read in a dim hall
+						gui.LightInfluence, gui.Brightness, gui.MaxDistance, gui.Active = 0.45, 1, 70, false
+						local label = Instance.new("Frame")
+						label.Name, label.BorderSizePixel = "Label", 0
+						label.Position, label.Size = UDim2.fromScale(0.09, 0.17), UDim2.fromScale(0.82, 0.75)
+						label.BackgroundColor3 = Color3.fromRGB(240, 232, 204)
+						local rim = Instance.new("UIStroke")
+						rim.Color, rim.Thickness = Color3.fromRGB(62, 58, 46), 2
+						rim.Parent = label
+						for i, colour in ipairs({Color3.fromRGB(52, 140, 128), Color3.fromRGB(222, 142, 156), Color3.fromRGB(118, 96, 160)}) do
+							local stripe = Instance.new("Frame")      -- the mall's own stripe band, as on its walls
+							stripe.Name, stripe.BorderSizePixel, stripe.BackgroundColor3 = "Stripe" .. i, 0, colour
+							stripe.Position, stripe.Size = UDim2.fromScale(0, 0.03 + (i - 1) * 0.045), UDim2.fromScale(1, 0.036)
+							stripe.Parent = label
+						end
+						local picture = Instance.new("ImageLabel")
+						picture.Name, picture.BorderSizePixel = "Picture", 0
+						picture.AnchorPoint, picture.Position, picture.Size = Vector2.new(0.5, 0), UDim2.fromScale(0.5, 0.2), UDim2.fromScale(0.56, 0.56 * 0.82 / 0.75)
+						picture.BackgroundColor3 = Color3.fromRGB(28, 30, 30)
+						picture.Image = art and art.Texture or ""
+						local frame = Instance.new("UIStroke")
+						frame.Color, frame.Thickness = Color3.fromRGB(62, 58, 46), 2
+						frame.Parent = picture
+						picture.Parent = label
+						local text = Instance.new("TextLabel")
+						text.Name, text.BackgroundTransparency = "Name", 1
+						text.Position, text.Size = UDim2.fromScale(0.04, 0.825), UDim2.fromScale(0.92, 0.17)
+						text.FontFace = Font.new("rbxasset://fonts/families/Oswald.json", Enum.FontWeight.Bold)
+						text.TextColor3, text.TextScaled = Color3.fromRGB(72, 66, 54), true
+						text.Text = (string.gsub(title, " ", utf8.char(160)))
+						text.Parent = label
+						label.Parent = gui
+						gui.Parent = box
 					end
-					box:SetAttribute("ShopBobOrigin", nil)
-					box:SetAttribute("ShopBobPhase", nil)
 					box.Name = "MallCrate_" .. key
 					box.Size = Vector3.one * MALL_CRATE
 					local at = spot.Position + Vector3.new(0, MALL_CRATE_UP, 0)

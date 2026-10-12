@@ -2636,3 +2636,26 @@ pop". Only while `LobbyMallPreview.Halloween` exists, and only on the client (no
   blocks the shop". The arrival planter with its two benches is out of the mall itself (`build_mall.py`: only
   `PlanterNorth` is built; 1933 parts, check 0 errors, imported: the model has 2424 parts) and its Halloween display
   is out of `build_halloween.py` (201 props, 333 parts, 33 lantern lights). From the spawn the stand is in plain view.
+
+## 2026-10-13 - less sale in the hall, cartons at the shop, suits at ease and turning
+
+Owner: "Der er gået lidt for meget salg i den med de der banner over det hele med halloween 66,6% off. bare lad de
+skilte være ved shoppen og lad banner være men der skal bare stå Happy Halloween i stedet for. Kasserne med items
+passer ikke længere til vores nye lobby stil ... Kan du også gøre sådan at de der skins ... ikke står i t pose men
+med armene naturligt nede og så sørge for at de spinner stille og roligt på den runde [plade] de står på".
+
+- **Banners** (`build_halloween.py`): the hall banner, the three wall banners and the one over the stage read
+  `HAPPY HALLOWEEN`. The sale's lettering is left at the stand only (its band, danglers, counter bursts, four
+  standees); `check_halloween()` now fails a sale sign further than 26 studs from the stand's middle.
+- **Cartons** (`MALL_CARTON_20261013`): the crates over the buy spots were copies of the first lobby's holograms (a
+  glowing see-through cube with a lit edge). Now each is a shipping carton: `tools/lobby_mall/build_carton.py`
+  (Blender: kraft cardboard, packing tape over the top and a hand's width down two sides, 120 triangles),
+  `install_carton.py` (group mesh, `ServerStorage.MallShopCarton`, id in `carton_ids.json`), and
+  `LobbyShopDisplay` prints a label on its four sides: cream paper, the mall's teal/pink/purple stripe band, the
+  product's own picture in a dark frame, its name in the sign font. Same size, place, bob and name sign as before;
+  without the mesh a plain cardboard block wears the label.
+- **Suits** (`SKINS_AT_EASE_20261013`, `import_mall.py`): each suit on a plinth has its upper arms turned about the
+  shoulder bones until they hang 13 degrees out from the body, forearms 5 (the rig's bind pose is a T). `Lobby Mall
+  Client` turns each suit about its plinth's middle, one turn in 26 seconds, for everybody (a slow turn is no
+  flashing); the VIEW SKIN prompt stays on the plinth. Checked in play: arms down on all six, front then back seven
+  seconds apart, no console errors. Not published.

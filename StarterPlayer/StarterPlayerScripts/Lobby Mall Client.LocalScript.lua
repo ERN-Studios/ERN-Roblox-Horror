@@ -17,16 +17,24 @@ local LENS_ON, LENS_OFF = Color3.fromRGB(246, 240, 214), Color3.fromRGB(120, 118
 local DUSK_PANEL, DUSK_SHEEN = 0.3, 0.25
 local DUSK_LIGHT, DUSK_LENS = Color3.fromRGB(196, 200, 236), Color3.fromRGB(150, 152, 178)
 
-local mall, crates, lamps, discs = nil, {}, {}, {}
+local mall, crates, lamps, discs, suits = nil, {}, {}, {}, {}
+local SUIT_TURN = math.rad(360 / 26)             -- one turn in 26 seconds
 local function bind(model)
 	mall = model
-	table.clear(crates); table.clear(lamps); table.clear(discs)
+	table.clear(crates); table.clear(lamps); table.clear(discs); table.clear(suits)
 	if not mall then return end
 	local anchors = mall:FindFirstChild("Anchors")
 	local box = anchors and anchors:FindFirstChild("ShopCrates")
 	for _, crate in ipairs(box and box:GetChildren() or {}) do
 		if crate:IsA("BasePart") and typeof(crate:GetAttribute("MallCrateOrigin")) == "CFrame" then
 			table.insert(crates, {part = crate, origin = crate:GetAttribute("MallCrateOrigin"), phase = tonumber(crate:GetAttribute("MallCratePhase")) or 0})
+		end
+	end
+	-- SKINS_AT_EASE_20261013 (owner: the suits on show "spinner stille og roligt på den runde plade de står på")
+	local plinths = anchors and anchors:FindFirstChild("SkinPlinths")
+	for _, suit in ipairs(plinths and plinths:GetChildren() or {}) do
+		if suit:IsA("Model") and typeof(suit:GetAttribute("MallSkinOrigin")) == "CFrame" and typeof(suit:GetAttribute("MallSkinAxis")) == "Vector3" then
+			table.insert(suits, {model = suit, origin = suit:GetAttribute("MallSkinOrigin"), axis = suit:GetAttribute("MallSkinAxis")})
 		end
 	end
 	-- BOOTH_FROM_TUNNEL_20261013: the two records on the DJ console turn, as they did in the tunnel lobby
@@ -87,6 +95,7 @@ RunService.Heartbeat:Connect(function(dt)
 		local anchors = now and now:FindFirstChild("Anchors")
 		local count = anchors and (#(anchors:FindFirstChild("ShopCrates") and anchors.ShopCrates:GetChildren() or {})
 			+ #(now:FindFirstChild("Lights") and now.Lights:GetChildren() or {})
+			+ #(anchors:FindFirstChild("SkinPlinths") and anchors.SkinPlinths:GetChildren() or {})
 			+ #(now:FindFirstChild("Parts") and now.Parts:FindFirstChild("Stage") and now.Parts.Stage:GetChildren() or {})) or 0
 		if now ~= mall or count ~= (mall and mall:GetAttribute("ClientBound")) then
 			bind(now)
@@ -100,6 +109,12 @@ RunService.Heartbeat:Connect(function(dt)
 		and root.Position.X > low.X - 40 and root.Position.X < high.X + 40 and root.Position.Z > low.Z - 40 and root.Position.Z < high.Z + 40
 		and root.Position.Y > low.Y - 20 and root.Position.Y < high.Y + 20
 	if not here then return end
+	-- a slow turn is no flashing: the suits turn for everybody
+	for _, suit in ipairs(suits) do
+		if suit.model.Parent then
+			suit.model:PivotTo(CFrame.new(suit.axis) * CFrame.Angles(0, elapsed * SUIT_TURN, 0) * CFrame.new(-suit.axis) * suit.origin)
+		end
+	end
 	local calm = player:GetAttribute("ReduceFlashing") ~= false
 	if calm ~= still then
 		still = calm

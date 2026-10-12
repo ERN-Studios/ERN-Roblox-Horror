@@ -33,6 +33,9 @@ WHITE, BONE, SHEET = (245, 245, 245), (238, 234, 220), (236, 236, 228)
 SALE_ORANGE, SALE_YELLOW, SALE_RED = (240, 112, 20), (250, 214, 40), (214, 52, 36)
 FLOOR, CEIL, WING_CEIL, TAPE_Z = 30.0, 57.04, 46.0, -621.0
 SALE, OFF, REENTRY, THREE = 'HALLOWEEN SALE', '66.6% OFF EVERYTHING', 'RE-ENTRY', '3 FOR 1'
+# the owner, 2026-10-13: "der er gået lidt for meget salg i den": the sale's lettering stays at the shop stand only;
+# the banners in the hall keep hanging but wish a happy Halloween
+HAPPY = 'HAPPY HALLOWEEN'
 
 
 def turn_y(deg):
@@ -544,11 +547,11 @@ def layout():
     a_frame('StandeeSaleNorth', 212.2, -748.6, (0, 1), [SALE, '66.6% OFF', 'EVERYTHING'])
 
     # --- the big banner the arriving player sees, and banners on the free walls
-    banner('HallBanner', (220, 49.4, -822), (24, 5.6), (0, -1), [SALE, OFF], two=True, line=CEIL)
-    banner('WallBannerEast', (259.92, 40.6, -800), (18, 4.2), (-1, 0), [SALE, OFF])
-    banner('WallBannerSouthWest', (180.08, 41.5, -886), (18, 4.2), (1, 0), [SALE, OFF])
-    banner('WallBannerSouthEast', (259.92, 41.5, -886), (18, 4.2), (-1, 0), [SALE, OFF])
-    banner('StageBannerSale', (220, 42.2, -632.35), (27, 2.6), (0, -1), [OFF])
+    banner('HallBanner', (220, 49.4, -822), (26, 4.6), (0, -1), [HAPPY], two=True, line=CEIL)
+    banner('WallBannerEast', (259.92, 40.6, -800), (18, 3.4), (-1, 0), [HAPPY])
+    banner('WallBannerSouthWest', (180.08, 41.5, -886), (18, 3.4), (1, 0), [HAPPY])
+    banner('WallBannerSouthEast', (259.92, 41.5, -886), (18, 3.4), (-1, 0), [HAPPY])
+    banner('StageBannerSale', (220, 42.2, -632.35), (27, 2.6), (0, -1), [HAPPY])
 
     # --- the two planters become the mall's seasonal display
     for pz in (-700,):                               # the planter by the spawn is gone (owner, 2026-10-13: "it blocks the shop")
@@ -613,8 +616,10 @@ def check_halloween(items, signs, sizes):
             for sx, sz in spots:
                 if math.hypot(x - sx, z - sz) < 4.2: errors.append('%s too near a shop spot' % sign['name'])
         for line in sign['lines']:
-            if line not in (SALE, OFF, REENTRY, THREE, '66.6%', 'OFF', '66.6% OFF', 'EVERYTHING', 'HALLOWEEN', 'SALE', 'HALLOWEEN ONLY'):
+            if line not in (HAPPY, SALE, OFF, REENTRY, THREE, '66.6%', 'OFF', '66.6% OFF', 'EVERYTHING', 'HALLOWEEN', 'SALE', 'HALLOWEEN ONLY'):
                 errors.append('%s carries unexpected lettering: %s' % (sign['name'], line))
+            if line != HAPPY and math.hypot(sign['pos'][0] - 220, sign['pos'][2] + 770) > 26:
+                errors.append('%s sells away from the shop stand: %s' % (sign['name'], line))
     return errors
 
 
