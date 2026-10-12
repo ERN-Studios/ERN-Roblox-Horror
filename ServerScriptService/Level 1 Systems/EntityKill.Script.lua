@@ -13,6 +13,64 @@ local entityRoot = entity:WaitForChild("HumanoidRootPart")
 local KILL_DURATION = 5.0
 local DEATH_AT = 124 / 30
 local CAPTURE_DISTANCE = 3.7
+local RunService = game:GetService("RunService")
+
+-- KILL_CHOKE_20261011 (owner picked "Kvaelertaget": lifted by the throat with one arm, feet off the floor, the head
+-- tilts like a curious animal, then black). The body's motion is the data clip Kill_Choke of the Level 1 motion layer
+-- (tools/level1_entity, authored by Codex); every client plays it on the bones. This script carries the victim from
+-- the clip's `grip` track, in the Entity's root space, and takes its timing from the clip's `marks`. It is used only
+-- while ReplicatedStorage.Level1EntityMotion has the attribute KillStyle = "Choke" AND the clip is there and sound;
+-- otherwise the ground-pin kill below runs exactly as before.
+-- KILL_SLAM_20261011 (owner: "tager fat, smasher ned i jorden og loader haand op og smadrer ind i ansigtet"): a second
+-- data clip, Kill_Slam, chosen with KillStyle = "Slam". It also carries the victim's attitude (`vup` toward the head,
+-- `vfront` out of the chest), because the body ends on its back on the floor; its dark frame is the mark `strike`.
+local KILL_CLIPS = {Choke = "Kill_Choke", Slam = "Kill_Slam"}
+local chokeCache = nil
+local debounceSeconds = KILL_DURATION + 1
+local function chokeClip()
+	local owner = RS:FindFirstChild("Level1EntityMotion")
+	local style = owner and owner:GetAttribute("KillStyle")
+	local clipName = type(style) == "string" and KILL_CLIPS[style] or nil
+	if not clipName then return nil end
+	local folder = owner:FindFirstChild("Clips")
+	local value = folder and folder:FindFirstChild(clipName)
+	if not value or not value:IsA("StringValue") then return nil end
+	if chokeCache and chokeCache.source == value.Value and chokeCache.style == style then return chokeCache.clip end
+	local ok, data = pcall(function() return HttpService:JSONDecode(value.Value) end)
+	local clip = nil
+	if ok and type(data) == "table" and type(data.tracks) == "table" and type(data.marks) == "table" then
+		local frames, seconds, marks = tonumber(data.frames), tonumber(data.seconds), data.marks
+		local function points(flat)
+			if type(flat) ~= "table" or not frames or #flat ~= frames * 3 then return nil end
+			local out = table.create(frames)
+			for f = 0, frames - 1 do
+				local x, y, z = flat[f * 3 + 1], flat[f * 3 + 2], flat[f * 3 + 3]
+				if type(x) ~= "number" or type(y) ~= "number" or type(z) ~= "number" or x ~= x or y ~= y or z ~= z then return nil end
+				out[f + 1] = Vector3.new(x, y, z) / 1000
+			end
+			return out
+		end
+		local grip, head = points(data.tracks.grip), points(data.tracks.head)
+		local dark = style == "Slam" and marks.strike or marks.dark
+		local vup, vfront = nil, nil
+		if style == "Slam" then vup, vfront = points(data.tracks.vup), points(data.tracks.vfront) end
+		if grip and head and frames >= 2 and seconds and seconds >= 3 and seconds <= 8
+			and (style ~= "Slam" or (vup and vfront))
+			and type(marks.grab) == "number" and type(dark) == "number" and type(marks.release) == "number"
+			and marks.grab >= 0 and marks.grab < dark and dark <= marks.release and marks.release <= seconds then
+			clip = {style = style, frames = frames, seconds = seconds, grip = grip, head = head, vup = vup, vfront = vfront,
+				grab = marks.grab, dark = dark, release = marks.release}
+		end
+	end
+	if not clip then warn("[EntityKill] " .. clipName .. " is missing its tracks or marks; the ground-pin kill is used") end
+	chokeCache = {source = value.Value, style = style, clip = clip}
+	return clip
+end
+local function chokePoint(clip, track, t)
+	local f = math.clamp(t / clip.seconds, 0, 1) * (clip.frames - 1)
+	local i = math.floor(f)
+	return track[i + 1]:Lerp(track[math.min(i + 2, clip.frames)], f - i)
+end
 local playerDebounce = {}
 local captureEpoch, captureSerial = 0, 0
 local captureGeneration = HttpService:GenerateGUID(false)
@@ -74,6 +132,8 @@ local function finishCapture(record, cancelled)
 	end
 	workspace:SetAttribute("EntityKillActive", false)
 	workspace:SetAttribute("EntityKillCaptureId", nil)
+	workspace:SetAttribute("EntityKillStyle", nil)
+	workspace:SetAttribute("EntityKillVictim", nil)
 	if cancelled and record.Started then
 		local cancelKill = entity:FindFirstChild("CancelKill")
 		if cancelKill and cancelKill:IsA("BindableEvent") then cancelKill:Fire(record.Id) end
@@ -109,6 +169,13 @@ local function runKill(record)
 	local playerRoot = char:FindFirstChild("HumanoidRootPart")
 	record.Humanoid, record.Root = hum, playerRoot
 	playerDebounce[player] = os.clock()
+	local choke = chokeClip()
+	local duration, deathAt = choke and choke.seconds or KILL_DURATION, choke and choke.dark or DEATH_AT
+	debounceSeconds = duration + 1
+	-- before EntityKillActive: the motion layer reads all three in the same frame
+	workspace:SetAttribute("EntityKillStyle", choke and choke.style or nil)
+	workspace:SetAttribute("EntityKillVictim", player.UserId)        -- the other clients place the blow's sound on it
+	workspace:SetAttribute("EntityKillStartedAt", workspace:GetServerTimeNow())
 	workspace:SetAttribute("EntityKillActive", true)
 	workspace:SetAttribute("EntityKillCaptureId", record.Id)
 	workspace:SetAttribute("EntityIsLunging", false)
@@ -134,9 +201,10 @@ local function runKill(record)
 	playerRoot.Anchored, hum.WalkSpeed, hum.JumpPower = true, 0, 0
 	hum.AutoRotate, hum.PlatformStand, hum.BreakJointsOnDeath = false, false, false
 	record.Started = true
-	remote:FireClient(player, "capture", entity, KILL_DURATION, DEATH_AT, record.Id, char)
+	remote:FireClient(player, "capture", entity, duration, deathAt, record.Id, char, choke and choke.style or nil)
+	-- the old clip is an Animator track; the stranglehold is played by the motion layer on every client instead
 	local playKill = entity:FindFirstChild("PlayKill")
-	if playKill and playKill:IsA("BindableEvent") then playKill:Fire(record.Id) end
+	if not choke and playKill and playKill:IsA("BindableEvent") then playKill:Fire(record.Id) end
 	local function cancelInvalid()
 		if not record.Fatal and activeCapture == record and not eligible(player, char) then finishCapture(record, true) end
 	end
@@ -148,6 +216,50 @@ local function runKill(record)
 	end))
 	table.insert(record.Connections, hum.Died:Connect(cancelInvalid))
 
+	if choke then
+		-- The victim stands where it was caught until the hand closes, then hangs from the grip: upright, its throat in
+		-- the hand, turned toward the Entity's head. The Entity's root does not move.
+		local started = os.clock()
+		local head = char:FindFirstChild("Head")
+		local neck = head and head:IsA("BasePart") and (head.Position.Y - head.Size.Y * 0.5 - playerRoot.Position.Y) or 1.1
+		neck = math.clamp(neck, 0.6, 1.8)
+		local standCF = playerRoot.CFrame
+		table.insert(record.Connections, RunService.Heartbeat:Connect(function()
+			if activeCapture ~= record or record.Dropped or not playerRoot.Parent then return end
+			local t = os.clock() - started
+			if t < choke.grab then return end
+			if not record.Hung then
+				record.Hung = true
+				hum.PlatformStand = true
+			end
+			local grip = killBaseCFrame:PointToWorldSpace(chokePoint(choke, choke.grip, t))
+			local goal
+			if choke.vup then
+				-- the clip gives the body's attitude: tracks are unit vectors x 1000, so the sampled points are them / 1000
+				local up = killBaseCFrame:VectorToWorldSpace(chokePoint(choke, choke.vup, t))
+				local front = killBaseCFrame:VectorToWorldSpace(chokePoint(choke, choke.vfront, t))
+				if up.Magnitude < 0.01 or front.Magnitude < 0.01 or math.abs(up.Unit:Dot(front.Unit)) > 0.95 then
+					up, front = Vector3.yAxis, standCF.LookVector
+				end
+				up = up.Unit
+				local right = front.Unit:Cross(up)
+				right = right.Magnitude > 0.01 and right.Unit or standCF.RightVector
+				goal = CFrame.fromMatrix(grip - up * neck, right, up)
+			else
+				local face = killBaseCFrame:PointToWorldSpace(chokePoint(choke, choke.head, t))
+				local position = grip - Vector3.new(0, neck, 0)
+				local toward = Vector3.new(face.X, position.Y, face.Z)
+				goal = (toward - position).Magnitude > 0.05 and CFrame.lookAt(position, toward) or CFrame.new(position) * standCF.Rotation
+			end
+			playerRoot.CFrame = standCF:Lerp(goal, math.clamp((t - choke.grab) / 0.12, 0, 1))
+			playerRoot.AssemblyLinearVelocity, playerRoot.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+		end))
+		task.delay(choke.release, function()
+			if activeCapture ~= record or not record.Fatal then return end
+			record.Dropped = true                       -- the hand opens: the body falls
+			if playerRoot.Parent then playerRoot.Anchored = false end
+		end)
+	else
 	task.delay(1.05, function()
 		if not captureStep(record) then return end
 		local crouchCF = killBaseCFrame + killBaseCFrame.LookVector * 0.25 - Vector3.new(0, 1.45, 0)
@@ -185,7 +297,8 @@ local function runKill(record)
 		playerRoot.AssemblyLinearVelocity, playerRoot.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
 		playTween(record, playerRoot, TweenInfo.new(0.72, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {CFrame = groundCF})
 	end)
-	task.wait(DEATH_AT)
+	end
+	task.wait(deathAt)
 	if not captureStep(record) then return end
 	-- Final private guard precedes both death feedback and the irreversible hit.
 	if PlayerProtection.IsActive(player, char) then finishCapture(record, true); return end
@@ -193,7 +306,7 @@ local function runKill(record)
 	remote:FireClient(player, "death", nil, nil, nil, record.Id, char)
 	DeathAdvice.Mark(player, "L1Entity")
 	hum.Health = 0
-	task.wait(math.max(0, KILL_DURATION - DEATH_AT))
+	task.wait(math.max(0, duration - deathAt))
 	finishCapture(record, false)
 end
 
@@ -202,7 +315,7 @@ local function onTouched(hit)
 	local player, char = findPlayer(hit)
 	if not eligible(player, char) then return end
 	local last = playerDebounce[player]
-	if last and os.clock() - last < KILL_DURATION + 1 then return end
+	if last and os.clock() - last < debounceSeconds then return end
 	captureSerial += 1
 	local record = {Player = player, Character = char, Epoch = captureEpoch,
 		Id = captureGeneration .. ":" .. tostring(captureSerial), Tweens = {}, Connections = {}}

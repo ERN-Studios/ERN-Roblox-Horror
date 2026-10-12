@@ -217,6 +217,12 @@ end
 local pending, nextUse = {}, {}
 local hooked = setmetatable({}, {__mode = "k"})
 
+-- MALL_IS_LOBBY_20261013: the model whose floor a body returning to the lobby lands on (the spawn pad says which)
+local function lobbyFloorModel(spawn)
+	local named = spawn:GetAttribute("LobbySpawnFloorModelName")
+	return if named == "LobbyReimaginedPreview" or named == "LobbyMallPreview" then named else "ServerLobby"
+end
+
 local function lobbyPart(name)
 	local lobby = workspace:FindFirstChild("ServerLobby")
 	if not lobby then return nil end
@@ -423,7 +429,7 @@ onReturn = function(player, prompt)
 	nextUse[player] = math.huge
 	local ok, err = pcall(function()
 		local landing = spawn.Position + Vector3.new(0, 4, 0)
-		local floorModelName = if spawn:GetAttribute("LobbySpawnFloorModelName") == "LobbyReimaginedPreview" then "LobbyReimaginedPreview" else "ServerLobby"
+		local floorModelName = lobbyFloorModel(spawn)
 		if not streamReady(player, landing, floorModelName) then error("Lobby streaming confirmation timed out") end
 		local currentCharacter, currentRoot = playerReady(player)
 		if currentCharacter ~= character or not exit.Parent or not validReturnPrompt(prompt, exit)
@@ -445,7 +451,7 @@ Playground.SetReturnHandler(function(player)
 	if not root or not spawn then return end
 	local ok, err = pcall(function()
 		local landing = spawn.Position + Vector3.new(0, 4, 0)
-		local floorModelName = if spawn:GetAttribute("LobbySpawnFloorModelName") == "LobbyReimaginedPreview" then "LobbyReimaginedPreview" else "ServerLobby"
+		local floorModelName = lobbyFloorModel(spawn)
 		streamReady(player, landing, floorModelName)
 		if player.Character ~= character or not root.Parent then return end
 		root.AssemblyLinearVelocity = Vector3.zero; root.AssemblyAngularVelocity = Vector3.zero

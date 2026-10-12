@@ -663,7 +663,9 @@ end
 local function newProfile()
 	return {
 		Version = 4,
-		Tokens = RunService:IsStudio() and Config.Studio.StartingTokens or 0,
+		-- NEW_PLAYER_TOKENS_20261011: a simulated first login in Studio starts where a live new player does
+		Tokens = RunService:IsStudio() and workspace:GetAttribute("DevSimulateFirstLogin") ~= true
+			and Config.Studio.StartingTokens or 0,
 		StaminaLevel = 0,
 		BatteryLevel = 0,
 		CompletedLevels = 0,
@@ -715,6 +717,8 @@ local function newProfile()
 			-- REWARDS_INTRO_20260922 (Trello MsEn2mya): the one-time Rewards/Wheel
 			-- note shown after the first real level completion.
 			RewardsIntroSeen = false,
+			-- NEW_PLAYER_TOKENS_20261011: the one-time card about a new player's first tokens
+			TokenGuideSeen = false,
 		},
 		Colors = {
 			Hazmat = colorData(Config.Colors.HazmatDefault),
@@ -793,6 +797,9 @@ local function normalizeProfile(data)
 	data.Records = Challenges.NormalizeRecords(data.Records, Config.Challenges)
 	data.Challenges = Challenges.NormalizeDone(data.Challenges, Config.Challenges)
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
+	-- WELCOME_REENTRY_20261010: "granted" while a new player's one free credit is unspent, "used" after. Nil = an
+	-- account from before this existed, which gets nothing.
+	data.WelcomeReentry = (data.WelcomeReentry == "granted" or data.WelcomeReentry == "used") and data.WelcomeReentry or nil
 	data.Items = normalizeItems(data.Items)
 	data.Skins = Skins.Normalize(data.Skins)
 	data.Daily = normalizeDaily(data.Daily)
@@ -882,6 +889,7 @@ local function normalizeProfile(data)
 	data.Settings.LobbyBriefingClaimId = data.Settings.LobbyBriefingPlayed == true
 		and type(claimId) == "string" and #claimId <= 128 and claimId or nil
 	data.Settings.RewardsIntroSeen = data.Settings.RewardsIntroSeen == true
+	data.Settings.TokenGuideSeen = data.Settings.TokenGuideSeen == true
 	-- Accessibility switches are a fixed, config-driven key set: a hand-edited
 	-- save can neither add keys nor push a non-boolean into a player attribute,
 	-- and an untouched switch lands on its documented default.
@@ -896,6 +904,11 @@ local function normalizeProfile(data)
 	data.Grants = type(data.Grants) == "table" and data.Grants or {}
 	data.Grants.Supporter = data.Grants.Supporter == true
 	data.Grants.AdvancedEquipment = data.Grants.AdvancedEquipment == true
+	data.Grants.WelcomeTokens = data.Grants.WelcomeTokens == true or nil
+	-- CREATOR_GIFT_LIST_20261013: the one-time marker of a listed Creator suit (ZyntraSkins.CreatorGifts)
+	for key, value in pairs(data.Grants) do
+		if type(key) == "string" and string.sub(key, 1, 12) == "CreatorGift_" then data.Grants[key] = value == true or nil end
+	end
 	-- Receipt acknowledgement must be permanent. Roblox can retry any unresolved
 	-- PurchaseId long after the original purchase; pruning old IDs would allow a
 	-- delayed retry to grant the product and donation total a second time.
@@ -1024,6 +1037,7 @@ local function publicProfile(data, player)
 		Records = data.Records,
 		Challenges = data.Challenges,
 		ReentryCredits = data.ReentryCredits,
+		FreeReentry = data.WelcomeReentry == "granted" and data.ReentryCredits > 0,
 		ProtectionCharges = protectionState(data) and data.Protection.Charges or 0,
 		ProtectionRevision = protectionState(data) and data.Protection.Revision or 0,
 		ProtectionLastResult = protectionResult(data.Protection),
@@ -1148,6 +1162,8 @@ local function applyAttributes(player, data)
 	-- draws a slot; the profile packet carries the same numbers for the terminal.
 	player:SetAttribute("ZyntraSpeedPotions", data.Items.SpeedPotion)
 	player:SetAttribute("ZyntraRouteMarkers", data.Items.RouteMarker)
+	-- NEW_PLAYER_TOKENS_20261011: true while the first-tokens card is still owed to a player who was given them
+	player:SetAttribute("ZyntraTokenGuide", data.Grants.WelcomeTokens == true and data.Settings.TokenGuideSeen ~= true)
 	-- Accessibility switches are published under their own bare names because
 	-- that is what the client readers already ask for (ReduceCameraShake,
 	-- ReduceFlashing, CaptionsEnabled, DisableCaptions) -- do not prefix them.
@@ -1473,6 +1489,66 @@ do
 			return result(false, "Gift was not confirmed. Have the recipient rejoin and check their balance before repeating.")
 		end
 	end
+
+	-- CREATOR_SKIN_20261012 (owner: the creator skin is "sådan vi DEVs kan give dem det"). The same gate, cooldown
+	-- and serialized profile write as the token gift above: a developer gives the Creator Gold suit to a player on
+	-- this server, or takes it back. It is saved in the recipient's profile (Skins.Owned), so they keep it.
+	local creatorRemote = ensureRemote("RemoteFunction", "ZyntraGrantCreatorSkin")
+	local CREATOR_SKIN = "CreatorGold"
+	creatorRemote.OnServerInvoke = function(issuer, targetUserId, give)
+		if not DevAccess.IsAllowed(issuer) or issuer.Parent ~= Players then
+			return result(false, "Developer access is required.")
+		end
+		if serverClosing then return result(false, "Server is closing. Nothing was changed.") end
+		local state = grantStates[issuer]
+		if state and (state.busy or os.clock() - state.finishedAt < COOLDOWN) then
+			return result(false, "Please wait for the previous gift and 3 seconds before trying again.")
+		end
+		if type(targetUserId) ~= "number" or targetUserId ~= targetUserId
+			or targetUserId < 1 or targetUserId > 9007199254740991 or targetUserId % 1 ~= 0 or type(give) ~= "boolean" then
+			return result(false, "Choose a player in this server.")
+		end
+		local target = Players:GetPlayerByUserId(targetUserId)
+		if not target or target.Parent ~= Players then
+			return result(false, "That player has left this server. Choose another player.")
+		end
+		local session = sessions[target]
+		if not session or session.closing then
+			return result(false, "That player's profile is still loading or closing. Try again shortly.")
+		end
+		if not RunService:IsStudio() and not session.persistent then
+			return result(false, "That player's saved data is unavailable. Nothing was changed.")
+		end
+		if Skins.IsOwned(session.data.Skins, CREATOR_SKIN) == give then
+			return result(false, give and ("@" .. target.Name .. " already has the Creator Gold skin.")
+				or ("@" .. target.Name .. " does not have the Creator Gold skin."))
+		end
+		state = { busy = true, finishedAt = 0 }
+		grantStates[issuer] = state
+		local changed, reason = mutate(target, function(data)
+			if serverClosing or issuer.Parent ~= Players or target.Parent ~= Players then
+				return false, "Cancelled because a player or server is leaving.", "error"
+			end
+			if not Skins.SetCreator(data.Skins, CREATOR_SKIN, give) then
+				return false, "Nothing to change.", "error"
+			end
+			if give then
+				return true, "A developer gave you the CREATOR GOLD skin. Equip it under SHOP > SKINS.", "success"
+			end
+			return true, "The Creator Gold skin was taken back by a developer.", "success"
+		end)
+		state.busy = false
+		state.finishedAt = os.clock()
+		if changed then
+			local message = (give and "Gave the Creator Gold skin to @" or "Took the Creator Gold skin from @") .. target.Name .. "."
+			if RunService:IsStudio() then message ..= " Studio test only; not saved." end
+			print(string.format("[Zyntra] Creator skin: issuer=%d target=%d give=%s studio=%s",
+				issuer.UserId, target.UserId, tostring(give), tostring(RunService:IsStudio())))
+			return result(true, message)
+		end
+		warn("[Zyntra] Creator skin change unconfirmed:", issuer.UserId, target.UserId, reason)
+		return result(false, "The change was not confirmed. Have the player rejoin and look under SKINS before repeating.")
+	end
 end
 
 local supportNameCache = {}
@@ -1744,7 +1820,7 @@ local function protectionResponse(player, command, status, reason)
 	response.Reason = reason
 	protectionResponses[player] = response
 	local refusals = {
-		NeedFiveTokens = "You need 5 Research Tokens.",
+		NeedFiveTokens = ("You need %d Research Tokens."):format(Config.ProtectionItem.TokenCost),   -- HALLOWEEN_SALE_20261013: the price moves
 		NoCharges = "Buy an Entity Shield charge in Upgrades first.",
 		AlreadyActive = "Entity Shield is already active.",
 		RetryLater = "Please wait a moment and try again.",
@@ -2288,6 +2364,38 @@ local function loadProfile(player, loadState)
 		end
 	end)
 	if Analytics then Analytics.ProfileLoaded(player, firstLogin) end
+	-- WELCOME_REENTRY_20261010 (owner: "giv alle nye spillere 1 gratis banked reentry og informer dem om ved første
+	-- død at de har 1 gratis reentry de kan bruge"). A first login banks one Emergency Re-entry credit, once: the
+	-- WelcomeReentry field is written in the same save, so a second join can never bank another. Three tries, because
+	-- a first join is also when the DataStore is busiest for this key.
+	if firstLogin then
+		task.spawn(function()
+			for attempt = 1, 3 do
+				if not player.Parent or sessions[player] == nil then return end
+				-- NEW_PLAYER_TOKENS_20261011: the first tokens are banked in the same save, behind their own marker
+				local gift = math.max(0, math.floor(tonumber(Config.NewPlayerTokens) or 0))
+				local banked = mutate(player, function(data)
+					local changed = false
+					if data.WelcomeReentry == nil then
+						data.WelcomeReentry = "granted"
+						data.ReentryCredits += 1
+						changed = true
+					end
+					if gift > 0 and data.Grants.WelcomeTokens ~= true then
+						data.Grants.WelcomeTokens = true
+						data.Tokens += gift
+						changed = true
+					end
+					return changed
+				end)
+				local loaded = sessions[player]
+				if banked or (loaded and loaded.data.WelcomeReentry ~= nil
+					and (gift == 0 or loaded.data.Grants.WelcomeTokens == true)) then return end
+				task.wait(1.5 * attempt)
+			end
+			warn("[Zyntra] Welcome re-entry could not be banked for userId", player.UserId)
+		end)
+	end
 	local pendingSnapshot = pendingDispatchSnapshots[player.UserId]
 	if pendingSnapshot then
 		pendingDispatchSnapshots[player.UserId] = nil
@@ -2484,6 +2592,34 @@ local function refreshPasses(player)
 		end
 		warn("[Zyntra] Developer suit sync still unsaved after retries for userId", player.UserId)
 	end)
+
+	-- CREATOR_GIFT_LIST_20261013 (owner: a named creator "has the new skin" and wears it "as default"). An account on
+	-- ZyntraSkins.CreatorGifts gets its Creator suit once, equipped, on its first load after this ships; the marker is
+	-- saved in the same write, so the suit is never put back on after they switch away or a developer takes it. The
+	-- same retries as the developer suit above; a profile that is already marked costs no write.
+	local giftSkin = Skins.CreatorGifts and Skins.CreatorGifts[player.UserId]
+	if giftSkin and Skins.Get(giftSkin) then
+		local marker = "CreatorGift_" .. giftSkin
+		task.spawn(function()
+			for _, delaySeconds in ipairs({0, 5, 20, 60}) do
+				if delaySeconds > 0 then task.wait(delaySeconds) end
+				local giftSession = sessions[player]
+				if not giftSession or giftSession.closing or not player.Parent then return end
+				if giftSession.data.Grants[marker] == true then return end
+				local saved = mutateIdempotent(player, function(data)
+					if data.Grants[marker] == true then return false end
+					if not Skins.ApplyCreatorGift(data.Skins, giftSkin) then return false end
+					data.Grants[marker] = true
+					return true, "The CREATOR GOLD skin is yours and you are wearing it. Change suits under SHOP > SKINS.", "success"
+				end)
+				if saved then
+					print(string.format("[Zyntra] Creator gift: userId=%d skin=%s", player.UserId, giftSkin))
+					return
+				end
+			end
+			warn("[Zyntra] Creator gift still unsaved after retries for userId", player.UserId)
+		end)
+	end
 
 	-- TOKEN_EARNER_20260924: six passes, one tier. Each ownership is published
 	-- like any other pass; earning code reads only the resolved tier.
@@ -3081,11 +3217,16 @@ local function useReentry(player)
 
 	local token = {}
 	reentryAttempts[player] = token
+	local spentWelcome = false   -- WELCOME_REENTRY_20261010: a refused respawn hands the free one back as free
 	local reserved = mutate(player, function(data)
 		if data.ReentryCredits < 1 then
 			return false, "You do not have an Emergency Re-entry credit.", "error"
 		end
 		data.ReentryCredits -= 1
+		if data.WelcomeReentry == "granted" then
+			data.WelcomeReentry = "used"
+			spentWelcome = true
+		end
 		-- Deliberately no message: the credit is only RESERVED here. Announcing
 		-- success now is how a player would read "activated" one frame before
 		-- being told the respawn was refused. The push still carries the new
@@ -3116,6 +3257,7 @@ local function useReentry(player)
 	-- left, so it names the userId to make the credit reconcilable by hand.
 	local function refund(data)
 		data.ReentryCredits += 1
+		if spentWelcome and data.WelcomeReentry == "used" then data.WelcomeReentry = "granted" end
 		return true, "Re-entry is only available after death during an active round.", "error"
 	end
 	for attempt = 1, 3 do
@@ -3802,6 +3944,18 @@ local function markRewardsIntroSeen(player)
 	end)
 end
 
+-- NEW_PLAYER_TOKENS_20261011. The same target-state write for the first-tokens card.
+local function markTokenGuideSeen(player)
+	local session = sessions[player]
+	if not session or session.closing then return end
+	if session.data.Settings.TokenGuideSeen == true then return end
+	mutateIdempotent(player, function(data)
+		if data.Settings.TokenGuideSeen == true then return false end
+		data.Settings.TokenGuideSeen = true
+		return true
+	end)
+end
+
 local function claimWheelPrize(player)
 	local session = sessions[player]
 	if not session or session.closing then return end
@@ -3940,6 +4094,7 @@ local WRITE_BEARING_ACTIONS = {
 	SpinDailyWheel = true,
 	ClaimWheelPrize = true,
 	MarkRewardsIntroSeen = true,
+	MarkTokenGuideSeen = true,
 	BuyItem = true,
 	BuySkin = true,
 	EquipSkin = true,
@@ -4109,6 +4264,8 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		claimWheelPrize(player)
 	elseif action == "MarkRewardsIntroSeen" then
 		markRewardsIntroSeen(player)
+	elseif action == "MarkTokenGuideSeen" then
+		markTokenGuideSeen(player)
 	elseif action == "BuyItem" then
 		buyItem(player, payload)
 	elseif action == "BuySkin" then
@@ -4427,7 +4584,8 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			return true, "+" .. entry.Product.TokenGrant .. " Zyntra Research Tokens", "success"
 		elseif entry.Product.ReentryGrant then
 			data.ReentryCredits += entry.Product.ReentryGrant
-			return true, "+1 Emergency Re-entry credit", "success"
+			-- HALLOWEEN_SALE_20261013: three for the price of one while the sale runs (ZyntraConfig.HalloweenSale)
+			return true, ("+%d Emergency Re-entry credit%s"):format(entry.Product.ReentryGrant, entry.Product.ReentryGrant == 1 and "" or "s"), "success"
 		end
 		return true, "Purchase recorded.", "success"
 	end)

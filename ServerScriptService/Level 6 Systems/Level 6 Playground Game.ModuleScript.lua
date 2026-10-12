@@ -66,7 +66,14 @@ local CONFIG = {
 	StillSpeed = 2,
 	FinaleSeconds = 60,         -- from the third touch to the post going down (owner, 2026-10-06)
 	FinaleChaseSpeed = 22,
-	ArrivalWait = 25,           -- after the first player is through the gate, how long it waits for the rest
+	-- ARRIVAL_ALL_20261010 (owner: "når alle har passeret skiltet ved starten 'Play Zone' så går entity i gang"):
+	-- it waits for EVERYBODY to be past the sign. The wait is only a guard against one player standing in the
+	-- tunnel for good (it was 25 s, and the welcome began with people still walking in).
+	ArrivalWait = 90,
+	-- CHASE_LETGO_20261010 (owner: "hvis man bliver chased og kommer langt nok væk, så stopper den med at chase en og
+	-- begynder igen at pathfinde stille og roligt til nærmeste spiller"). This far away (straight line) for this long
+	-- and it lets go; the player it let go of is not spotted again for the grace time.
+	ChaseLetGoDistance = 60, ChaseLetGoSeconds = 1.5, ChaseLetGoGrace = 6,
 	ExitDrop = 9,               -- how far under the floor the exit is, at least
 	ArenaExitRadius = 6,        -- the exit's mark is in the passage behind the green door: you are out when you step through
 	-- HUNT_20261006 (owner): each search it walks calmly toward whoever is nearest, and it is quicker, in its
@@ -706,8 +713,9 @@ function Session:routeTo(target, approach)
 	navExpand(nav, list, points, tags)
 	if approach then
 		local node = nav.nodes[goal]
-		if math.abs(target.Y - node.Y) < 4.5 and flat(target - node).Magnitude < 16 then
-			points[#points + 1] = Vector3.new(target.X, node.Y, target.Z)
+		local point = Vector3.new(target.X, node.Y, target.Z)
+		if math.abs(target.Y - node.Y) < 4.5 and flat(target - node).Magnitude < 16 and self:floored(node, point) then
+			points[#points + 1] = point
 			tags[#points] = "off"
 		end
 	end
@@ -782,6 +790,26 @@ function Session:walkTo(pos, speed, phase)
 	return self:follow(points, speed, phase)
 end
 
+-- AIR_WALK_20261010: is there something to stand on all the way from a to b (same height)? The last few studs to a
+-- target leave the graph in a straight line, and a straight line can cross a stairwell, an aisle or the court's edge.
+function Session:floored(a, b)
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	local ignore = {self.child}
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player.Character then table.insert(ignore, player.Character) end
+	end
+	params.FilterDescendantsInstances = ignore
+	local length = (b - a).Magnitude
+	local steps = math.max(1, math.ceil(length / 3))
+	for i = 1, steps do
+		local at = a:Lerp(b, i / steps)
+		local hit = workspace:Raycast(at + Vector3.new(0, 3, 0), Vector3.new(0, -6, 0), params)
+		if not hit or hit.Normal.Y < 0.5 then return false end
+	end
+	return true
+end
+
 -- The visible surface under a point. Home base is a raised disc, so the hall's floor height put the
 -- doll's feet inside it while it counted.
 function Session:surface(pos)
@@ -817,9 +845,24 @@ end
 function Session:goHome(phase)
 	local home = self.info.home
 	local stand = home + Vector3.new(0, 0.35 - 3, 4)
-	self:walkTo(stand, self:walkSpeed() * 1.4, phase)
+	-- AIR_WALK_20261010 (owner: "entity kan gå i luften ved runde 2 og efter"). A search ends with `interrupt` set
+	-- and its replan timers still pending, and travel() will not take a step while it is: the walk home returned at
+	-- once, the doll was simply stood at the post, and it kept the node and the points it had last passed, up on
+	-- some floor. The next search then began with a straight line from the post to those points, through the air.
+	-- So: really walk home (a late timer only costs one more plan), and whatever happens, forget the old way.
+	local started = clock()
+	while self.active and self.phase == phase and clock() - started < 45 do
+		self.interrupt = false
+		if self:walkTo(stand, self:walkSpeed() * 1.4, phase) then break end
+		if not self.nav then break end
+		task.wait(0.1)
+	end
 	stand = self:surface(stand)
 	self:place(stand, home - stand)
+	if self.nav then
+		self.navLast, self.navBehind, self.navLoose = self.nav.home, {}, false
+		self.navRoute, self.navIndex = nil, 1
+	end
 	self:pose("Idle")
 end
 
@@ -904,6 +947,7 @@ function Session:perceive()
 		end
 		if root and not state.caught and clock() >= (state.graceUntil or 0) then
 			local seen, dist = self:sees(root, params, self.chase == player)
+			if seen and clock() < (state.letGoUntil or 0) then seen = false end   -- CHASE_LETGO_20261010: just let go of
 			if seen and dist < bestDist then best, bestDist = player, dist end
 			local speed = flat(root.AssemblyLinearVelocity).Magnitude
 			if not seen and speed >= CONFIG.NoiseSpeed and dist <= CONFIG.NoiseRange and not self.chase then
@@ -1195,7 +1239,7 @@ function Session:arrivalPhase()
 			if state.entered then anyone = true elseif root then everyone = false end
 		end
 		if anyone and not firstIn then firstIn = clock() end
-		if (anyone and everyone) or (firstIn and clock() - firstIn > CONFIG.ArrivalWait) or clock() - started > 120 then break end
+		if (anyone and everyone) or (firstIn and clock() - firstIn > CONFIG.ArrivalWait) or clock() - started > 240 then break end
 		task.wait(0.2)
 	end
 end
@@ -1435,6 +1479,27 @@ function Session:seekPhase()
 			if root then self.noise = root.Position end
 			if lost.Parent == Players then event:FireClient(lost, "chase", false); achieve(lost, "L6Escaped") end
 			self:say(pick("lost"), true)
+		end
+		-- CHASE_LETGO_20261010: far enough away for long enough and it lets go, seen or not, and goes back to walking
+		-- calmly toward whoever is nearest (no last-seen spot to run to: that would be the chase by another name).
+		if self.chase then
+			local root = rootOf(self.chase)
+			if root and (root.Position - self:feet()).Magnitude >= CONFIG.ChaseLetGoDistance then
+				self.farSince = self.farSince or clock()
+				if clock() - self.farSince >= CONFIG.ChaseLetGoSeconds then
+					local lost = self.chase
+					self.chase, self.farSince, self.noise = nil, nil, nil
+					self.interrupt = true
+					local state = self.players[lost]
+					if state then state.letGoUntil = clock() + CONFIG.ChaseLetGoGrace end
+					if lost.Parent == Players then event:FireClient(lost, "chase", false); achieve(lost, "L6Escaped") end
+					self:say(pick("lost"), true)
+				end
+			else
+				self.farSince = nil
+			end
+		else
+			self.farSince = nil
 		end
 		-- dunks
 		local feet = self:feet()

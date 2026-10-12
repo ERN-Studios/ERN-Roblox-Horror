@@ -51,6 +51,17 @@ local function lobbyReady()
 			and model:GetAttribute("Ready") == true and workspace:GetAttribute("LobbySpawnMigrationReady") == true then
 			return model, model:GetAttribute("PreviewCenter")
 		end
+		-- MALL_IS_LOBBY_20261013: the mall lobby is the lobby when GameManager has stood the spawn pad in it. Luna
+		-- lives there then: her bed against the east wall between Poolrooms and Cinema, her strolls in the hall
+		-- (all measured from the middle of Shop & Supplies; the layout below is switched to MALL_LAYOUT).
+		local first = workspace:FindFirstChild("ServerLobby")
+		local pad = first and first:FindFirstChild("LobbySpawn")
+		local mall = workspace:FindFirstChild("LobbyMallPreview")
+		local stand = mall and mall:FindFirstChild("Anchors") and mall.Anchors:FindFirstChild("ShopStand")
+		if workspace:GetAttribute("LobbySpawnMigrationReady") == true and pad
+			and pad:GetAttribute("LobbySpawnFloorModelName") == "LobbyMallPreview" and stand and stand:IsA("BasePart") then
+			return mall, stand.Position, true
+		end
 		if workspace:GetAttribute("LobbySpawnMigrationError") then return nil end
 		task.wait(0.5)
 	until os.clock() >= deadline
@@ -66,7 +77,15 @@ local function load(id)
 	end
 end
 
-local lobby, center = lobbyReady()
+local lobby, center, inMall = lobbyReady()
+if inMall then
+	BED_OFFSET, BED_YAW = Vector3.new(37, 0, -27), math.pi / 2
+	table.clear(WANDER)
+	for _, at in ipairs({{-30, -25}, {30, -25}, {-30, 28}, {30, 28}, {-28, -55}, {28, -58}, {-20, -80}, {22, -82},
+		{-28, 45}, {28, 70}, {-26, 82}, {0, -42}, {0, 40}}) do
+		table.insert(WANDER, Vector3.new(at[1], 0, at[2]))
+	end
+end
 if not lobby or DOG_ASSET == 0 then
 	warn("[Luna] lobby not ready or rig not configured; Luna stays away this server")
 	return

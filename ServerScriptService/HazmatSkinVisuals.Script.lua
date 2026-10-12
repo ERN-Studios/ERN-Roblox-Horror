@@ -25,7 +25,17 @@ local PREMIUM_TOPPERS = {
 	-- Imported model pivot is normalized to its bounds center in ServerStorage.
 	SignalArchitect = {Template = "HazmatSignalArchitectTopper_20260925",
 		Scale = 2.6, Y = 1.1, Z = 1.35},
+	-- CREATOR_SKIN_20261012: the camcorder on its pole (the wearer's right) and the aerial (their left), one mesh
+	-- modelled in studs about the UpperTorso (tools/creator_skin/build_creator_skin.py).
+	CreatorGold = {Template = "HazmatCreatorGoldTopper_20261012", Scale = 1, Y = 2.4, Z = 0.4},   -- (the template's Centre wins)
 }
+-- CREATOR_SKIN_20261012: a topper modelled about the UpperTorso carries where its middle sits (attribute `Centre`,
+-- written by tools/creator_skin/install_creator_skin.py); the older ones are placed by the numbers above.
+local function topperOffset(config, template)
+	local centre = template:GetAttribute("Centre")
+	if typeof(centre) == "Vector3" then return centre end
+	return Vector3.new(config.X or 0, config.Y, config.Z)
+end
 local active = {}
 local playerConnections = {}
 local warned = {}
@@ -188,7 +198,7 @@ local function publishPreviews()
 			end
 			topper:ScaleTo(topperConfig.Scale)
 			topper:PivotTo(upperTorso.CFrame
-				* CFrame.new(0, topperConfig.Y, topperConfig.Z))
+				* CFrame.new(topperOffset(topperConfig, topperTemplate)))
 			topper.Parent = preview
 		end
 		preview.Parent = folder
@@ -315,7 +325,7 @@ local function buildVisual(player, character, skinId)
 		end
 		topper:ScaleTo(topperConfig.Scale)
 		topper:PivotTo(upperTorso.CFrame
-			* CFrame.new(0, topperConfig.Y, topperConfig.Z))
+			* CFrame.new(topperOffset(topperConfig, topperTemplate)))
 		topper.Parent = visual
 		local topperWeld = Instance.new("WeldConstraint")
 		topperWeld.Name = "ZyntraPremiumTopperWeld"

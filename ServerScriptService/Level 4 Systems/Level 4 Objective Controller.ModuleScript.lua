@@ -191,6 +191,49 @@ local function glint(part)
 	return emitter
 end
 
+-- a small warm pool of light at offset (part space) that makes the note's sheet or a reel read from across a dark room;
+-- no L4Zone on its holder, so the Light Director never switches it. Dies with its model.
+local function glow(part, offset, config)
+	local mount = Instance.new("Attachment")
+	mount.Name = "L4GlowMount"
+	mount.Position = offset
+	mount.Parent = part
+	local light = Instance.new("PointLight")
+	light.Name = "L4Glow"
+	light.Color = config.Color
+	light.Range = config.Range
+	light.Brightness = config.Brightness
+	light.Shadows = false
+	light.Parent = mount
+	return light
+end
+
+-- REEL_GLOW_20261011 (owner: the reels must light up far more and be obvious when spotted): the reel's light breathes
+-- up to Glow.Peak, the reel wears an outline where it is in view (Occluded: nothing shows through a wall), and its
+-- glint is larger and thicker than the note's.
+local function reelShine(model, light, emitter)
+	local config = Configuration.Reels.Glow
+	if light and config.Peak then
+		TweenService:Create(light, TweenInfo.new(config.Period or 1.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+			{ Brightness = config.Peak }):Play()
+	end
+	if config.Outline then
+		local outline = Instance.new("Highlight")
+		outline.Name = "L4ReelOutline"
+		outline.DepthMode = Enum.HighlightDepthMode.Occluded
+		outline.FillColor, outline.FillTransparency = config.Color, config.Fill or 0.4
+		outline.OutlineColor, outline.OutlineTransparency = config.Outline, 0
+		outline.Adornee = model
+		outline.Parent = model
+	end
+	if emitter then
+		emitter.Rate = 20
+		emitter.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(0.4, 1.4),
+			NumberSequenceKeypoint.new(1, 0) })
+		emitter.Brightness = 4
+	end
+end
+
 -- sets a model's lowest point on a surface height (its bounding box measured in world terms, any orientation)
 local function seatOn(model, surfaceY)
 	local cf, size = model:GetBoundingBox()
@@ -314,23 +357,9 @@ local function placeNote(text, order)
 	seatOn(note, spot.Position.Y + spot.Size.Y / 2)
 	if paper then
 		glint(paper)
-		-- the note is needed while the cinema is dark: a small warm pool of light makes the sheet read from across the
-		-- room (no L4Zone on its holder, so the Light Director never switches it)
-		local glowConfig = Configuration.Sequence.NoteGlow
-		if glowConfig then
-			-- a little in front of the written face (the sheet's +Y), so the sheet itself is lit, not only its surroundings
-			local mount = Instance.new("Attachment")
-			mount.Name = "L4NoteGlowMount"
-			mount.Position = Vector3.new(0, glowConfig.Lift or 1.2, 0)
-			mount.Parent = paper
-			local glow = Instance.new("PointLight")
-			glow.Name = "L4NoteGlow"
-			glow.Color = glowConfig.Color or Color3.fromRGB(255, 226, 170)
-			glow.Range = glowConfig.Range or 8
-			glow.Brightness = glowConfig.Brightness or 1
-			glow.Shadows = false
-			glow.Parent = mount
-		end
+		-- a little in front of the written face (the sheet's +Y), so the sheet itself is lit, not only its surroundings
+		local noteGlow = Configuration.Sequence.NoteGlow
+		glow(paper, Vector3.new(0, noteGlow.Lift, 0), noteGlow)
 		local prompt = makePrompt(paper, "Read", "Note", 0, Configuration.Sequence.NotePromptDistance)
 		prompt.Exclusivity = Enum.ProximityPromptExclusivity.AlwaysShow   -- a reel can lie right next to the note
 		connect(prompt.Triggered, function(player)
@@ -485,7 +514,9 @@ local function publishReelRooms()
 				if d < best then spot, best = candidate, d end
 			end
 		end
-		if spot then rooms[#rooms + 1] = names[spot.Name] or spot.Name end
+		-- REEL_HINTS_20261011: a reel still at its spot is named by where in the room it lies
+		local hints = Configuration.Reels.SpotHints or {}
+		if spot then rooms[#rooms + 1] = (r.State == "WORLD" and hints[spot.Name]) or names[spot.Name] or spot.Name end
 	end
 	setState("Level4_ReelRooms", table.concat(rooms, "|"))
 end
@@ -551,7 +582,10 @@ local function placeReelInWorld(record, surface)
 	own(model)
 	record.Model = model
 	local part = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart", true)
-	glint(part)
+	local sparkle = glint(part)
+	-- straight above the can, whichever way the part lies
+	local reelGlow = Configuration.Reels.Glow
+	reelShine(model, glow(part, part.CFrame:VectorToObjectSpace(Vector3.new(0, reelGlow.Lift, 0)), reelGlow), sparkle)
 	record.Prompt = makePrompt(part, "Pick up", "Film reel", 0.4, Configuration.Reels.PromptDistance)
 	record.Prompt.Enabled = not record.Locked
 	connect(record.Prompt.Triggered, function(player) Objectives.PickUp(player, record) end)

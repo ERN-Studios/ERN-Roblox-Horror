@@ -15,6 +15,9 @@ local startedAt = os.clock()
 
 local REVISED_LOBBY = "LobbyReimaginedPreview"
 local ORIGINAL_LOBBY = "ServerLobby"
+-- MALL_IS_LOBBY_20261013: the mall lobby is the public lobby (GameManager stands the spawn pad in it and says so with
+-- the pad's LobbySpawnFloorModelName); the tunnel lobby is then not built, and this screen must not wait for it.
+local MALL_LOBBY = "LobbyMallPreview"
 local STALL_SECONDS = 15          -- no progress at all for this long -> offer recovery
 local SETTLE_SECONDS = 0.75       -- lobby must stop receiving new instances for this long
 local SETTLE_CAP_SECONDS = 10     -- a lobby that never stops changing does not hold the door
@@ -293,7 +296,12 @@ end
 
 local function census(roots, ids, carriers, instances)
 	local total, checked = 0, 0
+	-- LOBBY_HALLOWEEN_20261013: the mall's seasonal dressing (LobbyMallPreview.Halloween, twenty small meshes) never
+	-- holds the door. With it in the census the lobby took 16.2 s instead of 10.9 s to open; it may pop in a moment late.
+	local mallRoot = workspace:FindFirstChild(MALL_LOBBY)
+	local dressing = mallRoot and mallRoot:FindFirstChild("Halloween")
 	local function consider(instance)
+		if dressing and instance:IsDescendantOf(dressing) then return end
 		total += collectAsset(instance, ids, carriers)
 		checked += 1
 		if checked % 200 == 0 then task.wait() end
@@ -430,7 +438,7 @@ end
 ---------------------------------------------------------------------------
 local function lobbyRoots()
 	local roots = {}
-	for _, name in ipairs({ REVISED_LOBBY, ORIGINAL_LOBBY }) do
+	for _, name in ipairs({ MALL_LOBBY, REVISED_LOBBY, ORIGINAL_LOBBY }) do
 		local model = workspace:FindFirstChild(name)
 		if model then table.insert(roots, model) end
 	end
@@ -486,9 +494,11 @@ local function run()
 			pcall(function() player:RequestStreamAroundAsync(spawnPart.Position, 10) end)
 		end)
 	end
+	local inMall = spawnPart ~= nil and spawnPart:GetAttribute("LobbySpawnFloorModelName") == MALL_LOBBY
+	if inMall then wantedName = MALL_LOBBY end
 	waitUntil(function()
 		local model = workspace:FindFirstChild(wantedName)
-		return model ~= nil and (not revised or model:GetAttribute("Ready") == true)
+		return model ~= nil and (inMall or not revised or model:GetAttribute("Ready") == true)
 	end)
 	touch()
 

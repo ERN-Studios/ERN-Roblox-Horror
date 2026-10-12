@@ -22,6 +22,12 @@ local ServerStorage = game:GetService("ServerStorage")
 local RunService = game:GetService("RunService")
 
 local ServerKind = require(script.Parent:WaitForChild("ServerKind"))
+-- BOARD_NO_DEVS_20261010 (owner: "Begge DEVs: Mikkelczar og LaverSneglen skal begge ekskluderes fra leaderboards for
+-- level completion tid"). DevAccess.IsAllowed is exactly those two accounts. Their times are never saved, never shown,
+-- and a row of theirs that a read meets is removed from the store (a time is only ever lowered, so a row that is
+-- there stays there until it is taken out).
+local DevAccess = require(game:GetService("ReplicatedStorage"):WaitForChild("DevAccess"))
+local DEVELOPERS = 2
 
 local LEVELS, TOP = 6, 10
 local STORE_PREFIX = "LevelBestTimes_v1_L"
@@ -45,6 +51,7 @@ local function submit(player, level, seconds)
 	if level < 1 or level > LEVELS or not seconds or seconds ~= seconds
 		or seconds < MIN_SECONDS or seconds > MAX_SECONDS then return end
 	if typeof(player) ~= "Instance" or not player:IsA("Player") or player.UserId <= 0 or IS_STUDIO then return end
+	if DevAccess.IsAllowed(player) then return end
 	local ms, key, better = math.floor(seconds * 1000 + 0.5), tostring(player.UserId), false
 	for attempt = 1, 3 do
 		local ok, problem = pcall(function()
@@ -94,11 +101,21 @@ end
 ---------------------------------------------------------------------------------------------------------------
 if ServerKind.IsRoundServer() then return end       -- a round server has no lobby to hang boards in
 
-local lobby = workspace:WaitForChild("LobbyReimaginedPreview", 180)
-if not lobby then return end
+-- MALL_IS_LOBBY_20261013: when the mall is the lobby there is no tunnel lobby to wait for (GameManager says which
+-- by the spawn pad's LobbySpawnFloorModelName once LobbySpawnMigrationReady is set); the lists then hang only on the
+-- mall's notice boards (buildMallSheet below).
+local lobby
 do
 	local began = os.clock()
-	while lobby:GetAttribute("Ready") ~= true and os.clock() - began < 120 do task.wait(0.5) end
+	while workspace:GetAttribute("LobbySpawnMigrationReady") ~= true and workspace:GetAttribute("LobbySpawnMigrationError") == nil
+		and os.clock() - began < 180 do task.wait(0.5) end
+	local first = workspace:FindFirstChild("ServerLobby")
+	local pad = first and first:FindFirstChild("LobbySpawn")
+	if not (pad and pad:GetAttribute("LobbySpawnFloorModelName") == "LobbyMallPreview") then
+		lobby = workspace:WaitForChild("LobbyReimaginedPreview", 180)
+		if not lobby then return end
+		while lobby:GetAttribute("Ready") ~= true and os.clock() - began < 300 do task.wait(0.5) end
+	end
 end
 
 -- The lobby's own signage: pale mint lettering, Gotham, dark teal metal.
@@ -145,11 +162,19 @@ end
 
 local boards = {}               -- level -> {faces = {{podium = {...}, rows = {...}}, ...}}
 
-local function buildFace(panel, face, level)
+-- MALL_LOBBY_20261012: `look` is how a face is printed. The lobby's own boards are lit screens (LIT); the mall lobby's
+-- are sheets of paper pinned to its notice boards (PAPER, below), the same layout scaled to the sheet.
+local LIT = {ink = INK, card = CARD, accent = MINT, pale = PALE, muted = MUTED, pps = PPS, light = 0}
+local PAPER = {ink = Color3.fromRGB(232, 226, 204), card = Color3.fromRGB(212, 204, 178), accent = Color3.fromRGB(104, 62, 40),
+	pale = Color3.fromRGB(50, 44, 36), muted = Color3.fromRGB(118, 106, 86), light = 0.75,
+	podium = {Color3.fromRGB(150, 102, 16), Color3.fromRGB(84, 94, 104), Color3.fromRGB(142, 78, 36)}}
+local function buildFace(panel, face, level, look)
+	look = look or LIT
+	local INK, CARD, MINT, PALE, MUTED = look.ink, look.card, look.accent, look.pale, look.muted
 	local gui = Instance.new("SurfaceGui")
 	gui.Name, gui.Face = "Leaderboard", face
-	gui.SizingMode, gui.PixelsPerStud = Enum.SurfaceGuiSizingMode.PixelsPerStud, PPS
-	gui.LightInfluence, gui.Brightness, gui.ClipsDescendants, gui.MaxDistance = 0, 1, true, 160
+	gui.SizingMode, gui.PixelsPerStud = Enum.SurfaceGuiSizingMode.PixelsPerStud, look.pps
+	gui.LightInfluence, gui.Brightness, gui.ClipsDescendants, gui.MaxDistance = look.light, 1, true, 160
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	local function box(class, x, y, w, h, parent)             -- in studs from the face's top left
 		local item = Instance.new(class)
@@ -175,7 +200,8 @@ local function buildFace(panel, face, level)
 	local rule = box("Frame", 0.4, 2.42, W - 0.8, 0.04)
 	rule.BackgroundColor3 = MINT
 	local parts = {podium = {}, rows = {}}
-	for place, style in ipairs(PODIUM) do
+	for place, plain in ipairs(PODIUM) do
+		local style = look.podium and setmetatable({colour = look.podium[place]}, {__index = plain}) or plain
 		local card = box("Frame", 0.25, style.top, W - 0.5, style.height)
 		card.BackgroundColor3 = CARD
 		local bar = box("Frame", 0.25, style.top, 0.12, style.height)
@@ -184,7 +210,7 @@ local function buildFace(panel, face, level)
 		local name = line("", 1.38, style.top + style.height * 0.1, W - 1.75, style.height * 0.42, style.name, style.colour,
 			Enum.Font.GothamBold, Enum.TextXAlignment.Left)
 		local time = line("", 1.38, style.top + style.height * 0.5, W - 1.75, style.height * 0.44, style.time,
-			style.colour:Lerp(Color3.new(1, 1, 1), 0.45), Enum.Font.GothamBlack, Enum.TextXAlignment.Left)
+			style.colour:Lerp(look.podium and Color3.new(0, 0, 0) or Color3.new(1, 1, 1), 0.45), Enum.Font.GothamBlack, Enum.TextXAlignment.Left)
 		parts.podium[place] = {rank = rank, name = name, time = time}
 	end
 	for index = 1, TOP - #PODIUM do
@@ -205,6 +231,7 @@ local function buildFace(panel, face, level)
 end
 
 local function buildBoard(level)
+	if not lobby then return nil end
 	local signs, pads = lobby:FindFirstChild("LevelGateSigns"), lobby:FindFirstChild("PreviewQueuePads")
 	local header = signs and signs:FindFirstChild("LEVEL " .. level .. " Door Header")
 	local bay = pads and pads:FindFirstChild("QueueBay_Level" .. level)
@@ -277,7 +304,7 @@ local function read(level)
 	end
 	-- Studio has no access to the data stores here, and the engine prints every refused call: do not ask.
 	if IS_STUDIO then return {} end
-	local ok, pages = pcall(function() return store(level):GetSortedAsync(true, TOP, MIN_SECONDS * 1000) end)
+	local ok, pages = pcall(function() return store(level):GetSortedAsync(true, TOP + DEVELOPERS, MIN_SECONDS * 1000) end)
 	if not ok then
 		warn("[LevelLeaderboards] could not read Level " .. level .. ": " .. tostring(pages))
 		return nil
@@ -285,17 +312,99 @@ local function read(level)
 	local rows = {}
 	for _, entry in ipairs(pages:GetCurrentPage()) do
 		local id = tonumber(entry.key)
-		if id and type(entry.value) == "number" then table.insert(rows, {id = id, ms = entry.value}) end
+		if id and DevAccess.IsAllowed(id) then
+			task.spawn(function()
+				local removed, problem = pcall(function() store(level):RemoveAsync(entry.key) end)
+				if not removed then warn("[LevelLeaderboards] could not remove a developer row from Level " .. level .. ": " .. tostring(problem)) end
+			end)
+		elseif id and type(entry.value) == "number" and #rows < TOP then
+			table.insert(rows, {id = id, ms = entry.value})
+		end
 	end
 	return rows
 end
 
+-- MALL_LOBBY_20261012: the mall lobby beside this one has a notice board by each shop (LobbyMallPreview.Anchors.
+-- Boards, `level1`..`level6`, front face toward the concourse). The same list is pinned to it as a printed sheet and
+-- redrawn with the lobby's own.
+local function buildMallSheet(level)
+	local mall = workspace:FindFirstChild("LobbyMallPreview") or ServerStorage:FindFirstChild("LobbyMallPreview")   -- parked by Lobby Mall Preview
+	local anchors = mall and mall:FindFirstChild("Anchors")
+	local folder = anchors and anchors:FindFirstChild("Boards")
+	local board = folder and folder:FindFirstChild("level" .. level)
+	if not (board and board:IsA("BasePart")) then return nil end
+	local scale = math.min(board.Size.Y / H, board.Size.X / W)         -- the board is the sheet's own shape: no margin (owner, 2026-10-13)
+	local sheet = Instance.new("Part")
+	sheet.Name = "Level " .. level .. " Leaderboard Sheet"
+	sheet.Size, sheet.Color, sheet.Material = Vector3.new(W * scale, H * scale, 0.04), PAPER.ink, Enum.Material.SmoothPlastic
+	sheet.CFrame = board.CFrame * CFrame.new(0, 0, -0.1)
+	sheet.Anchored, sheet.CanCollide, sheet.CanTouch, sheet.CanQuery, sheet.CastShadow = true, false, false, false, false
+	sheet.Parent = board
+	local look = setmetatable({pps = PPS / scale}, {__index = PAPER})
+	return buildFace(sheet, Enum.NormalId.Front, level, look)
+end
+
 for level = 1, LEVELS do
 	boards[level] = buildBoard(level)
+	local sheet = buildMallSheet(level)
+	if sheet then
+		boards[level] = boards[level] or {faces = {}}
+		table.insert(boards[level].faces, sheet)
+	end
 	shown[level] = {}
 	redraw(level)
 end
 workspace:SetAttribute("LevelLeaderboards", "LEVEL_LEADERBOARDS_20261008")
+
+-- MALL_LOBBY_20261012: the mall's big DIRECTORY board carries TOP SUPPORTERS. That board is drawn by
+-- TunnelLobbyBuilder on this server (the SurfaceGui `DonationLeaderboardDisplay`); this pins a paper copy of it to
+-- the mall's board and keeps the copy's text in step. Nothing about the ranking itself is touched.
+task.spawn(function()
+	local mall = workspace:FindFirstChild("LobbyMallPreview") or ServerStorage:FindFirstChild("LobbyMallPreview")   -- parked by Lobby Mall Preview
+	local anchors = mall and mall:FindFirstChild("Anchors")
+	local folder = anchors and anchors:FindFirstChild("Boards")
+	local board = folder and folder:FindFirstChild("directory")
+	if not (board and board:IsA("BasePart")) then return end
+	local source
+	for _ = 1, 90 do
+		-- the live board: in the tunnel lobby, or (MALL_IS_LOBBY_20261013) kept out of sight under the mall
+		local kept = (lobby or anchors):FindFirstChild("ZyntraDonationLeaderboardBoard", true)
+		source = kept and kept:FindFirstChild("DonationLeaderboardDisplay", true)
+		if source and source:IsA("SurfaceGui") then break end
+		source = nil
+		task.wait(2)
+	end
+	if not source then return end
+	local canvas = source.CanvasSize
+	local width = math.min(board.Size.X, board.Size.Y * canvas.X / canvas.Y)
+	local sheet = Instance.new("Part")
+	sheet.Name = "Top Supporters Sheet"
+	sheet.Size, sheet.Color, sheet.Material = Vector3.new(width, width * canvas.Y / canvas.X, 0.04), PAPER.ink, Enum.Material.SmoothPlastic
+	sheet.CFrame = board.CFrame * CFrame.new(0, 0, -0.1)
+	sheet.Anchored, sheet.CanCollide, sheet.CanTouch, sheet.CanQuery, sheet.CastShadow = true, false, false, false, false
+	sheet.Parent = board
+	local copy = source:Clone()
+	copy.Face, copy.Adornee, copy.LightInfluence, copy.Brightness = Enum.NormalId.Front, nil, PAPER.light, 1
+	for _, d in ipairs(copy:GetDescendants()) do
+		if d:IsA("Frame") then
+			local _, _, value = d.BackgroundColor3:ToHSV()
+			d.BackgroundColor3 = if value < 0.35 then (if d.Parent == copy then PAPER.ink else PAPER.card) else PAPER.accent
+		elseif d:IsA("TextLabel") then
+			d.TextColor3 = PAPER.pale
+		elseif d:IsA("UIStroke") then
+			d.Color = PAPER.accent
+		end
+	end
+	copy.Parent = sheet
+	local from, to = source:GetDescendants(), copy:GetDescendants()
+	while sheet.Parent and source.Parent do
+		for index, d in ipairs(from) do
+			local twin = to[index]
+			if d:IsA("TextLabel") and twin and twin:IsA("TextLabel") and twin.Text ~= d.Text then twin.Text = d.Text end
+		end
+		task.wait(5)
+	end
+end)
 
 local step = 0
 while true do

@@ -34,7 +34,7 @@ task.spawn(function()
 			if character.Parent == nil or player:GetAttribute("InRound") == true then return end
 			local lobby = workspace:FindFirstChild("ServerLobby")
 			local spawn = lobby and lobby:FindFirstChild("LobbySpawn")
-			local stage = workspace:FindFirstChild("LobbyReimaginedPreview")
+			local stage = workspace:FindFirstChild("LobbyReimaginedPreview") or workspace:FindFirstChild("LobbyMallPreview")   -- MALL_IS_LOBBY_20261013
 			local camera = workspace.CurrentCamera
 			if spawn and spawn:IsA("BasePart") and stage and camera and camera.CameraType == Enum.CameraType.Custom
 				and (root.Position - spawn.Position).Magnitude <= 30 then
@@ -59,15 +59,6 @@ local AMBER = Color3.fromRGB(255, 203, 79)
 -- prices and rewards straight from the config
 local config = nil
 pcall(function() config = require(game:GetService("ReplicatedStorage"):WaitForChild("ZyntraConfig", 10)) end)
-local function find(root, key, depth)                               -- the first table that carries `key`, a few levels down
-	if type(root) ~= "table" or depth > 4 then return nil end
-	if root[key] ~= nil then return root end
-	for _, value in pairs(root) do
-		local found = find(value, key, depth + 1)
-		if found then return found end
-	end
-	return nil
-end
 local function costOf(name, fallback)
 	local found = nil
 	local function walk(node, depth)
@@ -79,7 +70,9 @@ local function costOf(name, fallback)
 	return found or fallback
 end
 local perClear = config and tonumber(config.LevelCompletionTokens) or 2
-local starting = (find(config, "StartingTokens", 0) or {}).StartingTokens or 25
+-- NEW_PLAYER_TOKENS_20261011: the card said "You start with 25", which was Studio's test balance; a live new player
+-- started with none. They are now given Config.NewPlayerTokens at a first login, and that is the number shown.
+local starting = math.max(0, math.floor(config and tonumber(config.NewPlayerTokens) or 0))
 local shield, potion, markers = costOf("Entity Shield", 5), costOf("Speed Potion", 3), costOf("Route Marker Pack", 2)
 
 local PAGES = {
@@ -95,14 +88,16 @@ local PAGES = {
 			or "F switches it on and off. The battery runs down."},
 		{"3", "FOLLOW THE OBJECTIVE", "The panel on screen says what to do next. If something comes, hide or run."},
 	}},
-	{kicker = "PLAY TOGETHER", title = "BRING A TEAM", rows = {
-		{"1", "WALK TO A LEVEL GATE", "The gates are along the tunnel. Every level is open; LEVEL 1 is the place to start."},
-		{"2", "STEP ON A PAD", "Choose 1 to 6 players and press CREATE PARTY. Friends step on the same pad to join."},
+	-- PLAY_ROUTE_20261011: the page said "bring a team" and "walk to a gate"; a round can be started alone
+	-- (START_MARKER_REMOVED_20261013: it no longer names the marker, which is gone)
+	{kicker = "START A ROUND", title = "ALONE OR WITH FRIENDS", rows = {
+		{"1", "PICK A LEVEL", "Each level has its own entrance with pads inside. Walk in and step on a free pad. Every level is open."},
+		{"2", "CREATE PARTY", "On the pad, press CREATE PARTY. You can play alone; friends step on the same pad to join you."},
 		{"3", "FRIENDS PAY OFF", "Each Roblox friend in your round gives you +10% tokens. If you go down, you watch your team."},
 	}},
 	{kicker = "RESEARCH TOKENS", title = "EARN THEM, SPEND THEM", accent = AMBER, rows = {
-		{"+", "EARN", ("You start with %d. Clear a level: +%d. More from DAILY REWARDS and the LUCKY WHEEL on the left."):format(starting, perClear)},
-		{"-", "SPEND IN THE SHOP", ("Entity Shield %d  ·  Speed Potion %d  ·  Route Markers %d. Open SHOPS on the left."):format(shield, potion, markers)},
+		{"+", "EARN", ((starting > 0 and ("You start with %d. "):format(starting) or "") .. "Clear a level: +%d. More from DAILY REWARDS and the LUCKY WHEEL on the left."):format(perClear)},
+		{"-", "SPEND IN THE SHOP", ("Entity Shield %d  ·  Speed Potion %d  ·  Route Markers %d. Open SHOP on the left."):format(shield, potion, markers)},
 		{"^", "UPGRADE FOR GOOD", "UPGRADES makes your stamina and your flashlight battery last longer, permanently."},
 	}, foot = "We are a team of only 2 people making this game. A like, a favourite or a note in our Discord goes a long way."},
 }
@@ -119,7 +114,11 @@ local function show()
 	shade.Size, shade.BackgroundColor3, shade.BackgroundTransparency, shade.BorderSizePixel = UDim2.fromScale(1, 1), Color3.new(0, 0, 0), 1, 0
 	shade.Active = true
 	shade.Parent = gui
-	local W, H = 620, 452
+	-- PHONE_WELCOME_20261011 (phone review: the card is drawn for 620 x 452 and scaled to the screen's HEIGHT, so on an
+	-- 844 x 390 phone its 15 px lines were 12 px, and under 10 on a small one). A phone gets the same card laid out
+	-- 340 high (tighter rows, the same text sizes), which a landscape phone shows at about full size.
+	local compact = UIDevice.Layout().Class == "phone"
+	local W, H = 620, compact and 340 or 452
 	local card = Instance.new("Frame")
 	card.Name = "Card"
 	card.AnchorPoint, card.Position, card.Size = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5), UDim2.fromOffset(W, H)
@@ -148,23 +147,23 @@ local function show()
 	local function button(name, label, colour, textColour, x, anchor, width)
 		local item = Instance.new("TextButton")
 		item.Name, item.Text, item.TextSize, item.Font, item.TextColor3 = name, label, 18, Enum.Font.GothamBlack, textColour
-		item.AnchorPoint, item.Position, item.Size = Vector2.new(anchor, 1), UDim2.new(anchor, x, 1, -18), UDim2.fromOffset(width, 50)
+		item.AnchorPoint, item.Position, item.Size = Vector2.new(anchor, 1), UDim2.new(anchor, x, 1, compact and -10 or -18), UDim2.fromOffset(width, compact and 46 or 50)
 		item.BackgroundColor3, item.BorderSizePixel, item.AutoButtonColor = colour, 0, true
 		item.Parent = card
 		Instance.new("UICorner", item).CornerRadius = UDim.new(0, 10)
 		return item
 	end
-	local kicker = text(card, "Kicker", "", 13, GREEN, 34, 24, 420, 16, Enum.Font.Code)
-	local title = text(card, "Title", "", 30, PAPER, 34, 44, W - 68, 38, Enum.Font.GothamBlack)
+	local kicker = text(card, "Kicker", "", 13, GREEN, 34, compact and 14 or 24, 420, 16, Enum.Font.Code)
+	local title = text(card, "Title", "", compact and 25 or 30, PAPER, 34, compact and 32 or 44, W - 68, compact and 30 or 38, Enum.Font.GothamBlack)
 	local skip = Instance.new("TextButton")                             -- always there, top right
 	skip.Name, skip.Text, skip.TextSize, skip.Font, skip.TextColor3 = "Skip", touch and "SKIP" or "SKIP  [ESC]", 13, Enum.Font.GothamBold, SOFT
-	skip.AnchorPoint, skip.Position, skip.Size = Vector2.new(1, 0), UDim2.new(1, -18, 0, 16), UDim2.fromOffset(touch and 84 or 112, touch and 40 or 30)
+	skip.AnchorPoint, skip.Position, skip.Size = Vector2.new(1, 0), UDim2.new(1, -18, 0, compact and 8 or 16), UDim2.fromOffset(touch and 84 or 112, touch and 44 or 30)
 	skip.BackgroundColor3, skip.BackgroundTransparency, skip.BorderSizePixel = Color3.fromRGB(30, 40, 36), 0.2, 0
 	skip.Parent = card
 	Instance.new("UICorner", skip).CornerRadius = UDim.new(0, 8)
 	local body = Instance.new("Frame")
 	body.Name, body.BackgroundTransparency = "Body", 1
-	body.Position, body.Size = UDim2.fromOffset(0, 100), UDim2.fromOffset(W, 250)
+	body.Position, body.Size = UDim2.fromOffset(0, compact and 72 or 100), UDim2.fromOffset(W, 250)
 	body.Parent = card
 	local back = button("Back", "BACK", Color3.fromRGB(30, 40, 36), PAPER, 34, 0, 120)
 	local nextButton = button("Next", "NEXT", Color3.fromRGB(42, 150, 100), Color3.new(1, 1, 1), -34, 1, 230)
@@ -173,7 +172,7 @@ local function show()
 		local dot = Instance.new("Frame")
 		dot.Name, dot.BorderSizePixel = "Dot" .. index, 0
 		dot.AnchorPoint, dot.Size = Vector2.new(0.5, 0.5), UDim2.fromOffset(9, 9)
-		dot.Position = UDim2.new(0.5, (index - (#PAGES + 1) / 2) * 20 - 40, 1, -43)
+		dot.Position = UDim2.new(0.5, (index - (#PAGES + 1) / 2) * 20 - 40, 1, compact and -33 or -43)
 		dot.Parent = card
 		Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
 		dots[index] = dot
@@ -187,7 +186,7 @@ local function show()
 		title.Text = data.title
 		stroke.Color = accent
 		for index, row in ipairs(data.rows) do
-			local y = (index - 1) * 72
+			local y = (index - 1) * (compact and 60 or 72)
 			local badge = Instance.new("TextLabel")
 			badge.Name = "Badge" .. index
 			badge.Position, badge.Size = UDim2.fromOffset(34, y), UDim2.fromOffset(44, 44)
@@ -195,10 +194,10 @@ local function show()
 			badge.Text, badge.TextSize, badge.TextColor3, badge.Font = row[1], 24, accent, Enum.Font.GothamBlack
 			badge.Parent = body
 			Instance.new("UICorner", badge).CornerRadius = UDim.new(1, 0)
-			text(body, "Head" .. index, row[2], 19, PAPER, 94, y, W - 128, 22, Enum.Font.GothamBold)
-			text(body, "Text" .. index, row[3], 15, SOFT, 94, y + 24, W - 128, 40)
+			text(body, "Head" .. index, row[2], compact and 17 or 19, PAPER, 94, y, W - 128, 22, Enum.Font.GothamBold)
+			text(body, "Text" .. index, row[3], 15, SOFT, 94, y + (compact and 21 or 24), W - 128, compact and 36 or 40)
 		end
-		if data.foot then text(body, "Foot", data.foot, 13, SOFT, 34, 216, W - 68, 34) end
+		if data.foot then text(body, "Foot", data.foot, 13, SOFT, 34, compact and 180 or 216, W - 68, compact and 30 or 34) end
 		for index, dot in ipairs(dots) do
 			dot.BackgroundColor3 = index == page and accent or Color3.fromRGB(70, 84, 78)
 		end
@@ -208,6 +207,8 @@ local function show()
 	draw()
 	gui.Parent = player:WaitForChild("PlayerGui")
 	player:SetAttribute("WelcomeCardOpen", true)
+	-- WELCOME_OWNS_THE_SCREEN_20261011 (UI review): the thumbstick and RUN stayed live under the card
+	UIDevice.SuppressTouchMovement(true)
 	TweenService:Create(shade, TweenInfo.new(0.3), {BackgroundTransparency = 0.45}):Play()
 
 	local connections = {resized}
@@ -216,6 +217,7 @@ local function show()
 		open = false
 		for _, connection in ipairs(connections) do connection:Disconnect() end
 		player:SetAttribute("WelcomeCardOpen", nil)
+		UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
 		gui:Destroy()
 	end
 	local function step(by)
@@ -243,6 +245,153 @@ local function show()
 	end))
 end
 
+-- TOKEN_CARD_20261011 (owner: "nye spillere starter med et par tokens, og en pop up guide til hvordan man bruger dem
+-- og til hvad"). ZyntraMonetization banks Config.NewPlayerTokens at a first login and publishes ZyntraTokenGuide for
+-- as long as this card is owed. It comes once, at a quiet moment in the lobby: after the player's first round, or on
+-- arrival at a later visit, and never on top of the welcome card. OPEN SHOP and LATER both mark it seen
+-- (MarkTokenGuideSeen); a round that starts under it closes it unanswered, so it comes back afterwards.
+-- `workspace.DevShowTokenCard = true` (Studio) shows it regardless; the gui's attribute Press = "shop" / "later"
+-- answers it without an input device.
+local TOKEN_CARD_QUIET = 3
+local tokenCardOpen, tokenCardAnswered = false, false
+local function showTokens()
+	if tokenCardOpen or open or player:GetAttribute("InRound") == true or workspace:GetAttribute("ReservedRoundServer") == true then return end
+	tokenCardOpen = true
+	local items = type(config) == "table" and type(config.Items) == "table" and config.Items or {}
+	local shieldSeconds = type(config) == "table" and type(config.ProtectionItem) == "table" and tonumber(config.ProtectionItem.DurationSeconds) or 5
+	local potionItem, markerItem = items.SpeedPotion or {}, items.RouteMarker or {}
+	local ROWS = {
+		{shield, UIDevice.Caption("ENTITY SHIELD", "[Q]", "[D-PAD DOWN]"), ("%d tokens. The entity cannot take you for %d seconds."):format(shield, shieldSeconds)},
+		{potion, UIDevice.Caption("SPEED POTION", "[T]", "[D-PAD RIGHT]"), ("%d tokens. %d%% faster for %d seconds. Once per round."):format(
+			potion, math.floor(((tonumber(potionItem.SpeedMultiplier) or 1.3) - 1) * 100 + 0.5), tonumber(potionItem.DurationSeconds) or 6)},
+		{markers, UIDevice.Caption("ROUTE MARKERS", "[X]", "[RT]"), ("%d tokens. %d markers that show your team the way."):format(markers, tonumber(markerItem.PackSize) or 3)},
+	}
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "TokenCard"
+	gui.ResetOnSpawn, gui.IgnoreGuiInset, gui.DisplayOrder = false, true, 60
+	local shade = Instance.new("Frame")
+	shade.Name = "Shade"
+	shade.Size, shade.BackgroundColor3, shade.BackgroundTransparency, shade.BorderSizePixel = UDim2.fromScale(1, 1), Color3.new(0, 0, 0), 1, 0
+	shade.Active = true
+	shade.Parent = gui
+	local compact = UIDevice.Layout().Class == "phone"                  -- the welcome card's two layouts
+	local W, H = 580, compact and 336 or 414
+	local card = Instance.new("Frame")
+	card.Name = "Card"
+	card.AnchorPoint, card.Position, card.Size = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5), UDim2.fromOffset(W, H)
+	card.BackgroundColor3, card.BackgroundTransparency, card.BorderSizePixel = INK, 0.03, 0
+	card.Parent = shade
+	Instance.new("UICorner", card).CornerRadius = UDim.new(0, 16)
+	local stroke = Instance.new("UIStroke", card)
+	stroke.Color, stroke.Thickness, stroke.Transparency = AMBER, 2, 0.25
+	local scale = Instance.new("UIScale", card)
+	local function fit()
+		local view = UIDevice.Layout().Viewport
+		scale.Scale = math.clamp(math.min((view.X - 28) / W, (view.Y - 28) / H), 0.5, 1.3)
+	end
+	fit()
+	local connections = {UIDevice.Changed:Connect(fit)}
+	local function text(name, content, size, colour, x, y, w, h, font)
+		local item = Instance.new("TextLabel")
+		item.Name, item.Text, item.TextSize, item.TextColor3 = name, content, size, colour
+		item.Font = font or Enum.Font.GothamMedium
+		item.BackgroundTransparency, item.TextWrapped = 1, true
+		item.TextXAlignment, item.TextYAlignment = Enum.TextXAlignment.Left, Enum.TextYAlignment.Top
+		item.Position, item.Size = UDim2.fromOffset(x, y), UDim2.fromOffset(w, h)
+		item.Parent = card
+		return item
+	end
+	local function button(name, label, colour, textColour, x, anchor, width)
+		local item = Instance.new("TextButton")
+		item.Name, item.Text, item.TextSize, item.Font, item.TextColor3 = name, label, 18, Enum.Font.GothamBlack, textColour
+		item.AnchorPoint, item.Position, item.Size = Vector2.new(anchor, 1), UDim2.new(anchor, x, 1, compact and -10 or -18), UDim2.fromOffset(width, compact and 46 or 50)
+		item.BackgroundColor3, item.BorderSizePixel, item.AutoButtonColor = colour, 0, true
+		item.Parent = card
+		Instance.new("UICorner", item).CornerRadius = UDim.new(0, 10)
+		return item
+	end
+	text("Kicker", "ZYNTRA  //  A GIFT FOR NEW PLAYERS", 13, AMBER, 34, compact and 14 or 24, W - 68, 16, Enum.Font.Code)
+	text("Title", ("YOUR FIRST %d RESEARCH TOKENS"):format(starting), compact and 24 or 28, PAPER, 34, compact and 31 or 44, W - 68, compact and 28 or 36, Enum.Font.GothamBlack)
+	text("Lead", touch and "Spend them in the SHOP, on the left, before a round. In a round, tap an item on your screen to use it."
+		or "Spend them in the SHOP, on the left, before a round. In a round, press the item's key to use it.",
+		15, SOFT, 34, compact and 61 or 86, W - 68, 36)
+	local top, pitch = compact and 100 or 134, compact and 49 or 60
+	for index, row in ipairs(ROWS) do
+		local y = top + (index - 1) * pitch
+		local badge = Instance.new("TextLabel")
+		badge.Name = "Price" .. index
+		badge.Position, badge.Size = UDim2.fromOffset(34, y), UDim2.fromOffset(44, 44)
+		badge.BackgroundColor3, badge.BackgroundTransparency, badge.BorderSizePixel = AMBER, 0.82, 0
+		badge.Text, badge.TextSize, badge.TextColor3, badge.Font = tostring(row[1]), 24, AMBER, Enum.Font.GothamBlack
+		badge.Parent = card
+		Instance.new("UICorner", badge).CornerRadius = UDim.new(1, 0)
+		text("Head" .. index, row[2], compact and 17 or 19, PAPER, 94, y + (compact and 1 or 0), W - 128, 22, Enum.Font.GothamBold)
+		text("Text" .. index, row[3], 15, SOFT, 94, y + (compact and 22 or 24), W - 128, 20)
+	end
+	text("Foot", ("Clear a level: +%d tokens. REWARDS and WHEEL, on the left, give more."):format(perClear),
+		13, SOFT, 34, top + #ROWS * pitch + 2, W - 68, 18)
+	local later = button("Later", "LATER", Color3.fromRGB(30, 40, 36), PAPER, 34, 0, 120)
+	local shop = button("Shop", "OPEN SHOP", Color3.fromRGB(42, 150, 100), Color3.new(1, 1, 1), -34, 1, 230)
+	gui.Parent = player:WaitForChild("PlayerGui")
+	player:SetAttribute("WelcomeCardOpen", true)                        -- the lobby's own buttons stand down as for the welcome card
+	UIDevice.SuppressTouchMovement(true)
+	TweenService:Create(shade, TweenInfo.new(0.3), {BackgroundTransparency = 0.45}):Play()
+
+	local function close(answer)
+		if not tokenCardOpen then return end
+		tokenCardOpen = false
+		for _, connection in ipairs(connections) do connection:Disconnect() end
+		player:SetAttribute("WelcomeCardOpen", nil)
+		UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
+		gui:Destroy()
+		if not answer then return end
+		tokenCardAnswered = true
+		local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
+		local action = remotes and remotes:FindFirstChild("ZyntraAction")
+		if action and action:IsA("RemoteEvent") then action:FireServer("MarkTokenGuideSeen") end
+		if answer == "shop" then
+			local opener = player:WaitForChild("PlayerScripts"):FindFirstChild("ZyntraOpenTerminal")
+			if opener and opener:IsA("BindableEvent") then opener:Fire("Shop") end
+		end
+	end
+	later.Activated:Connect(function() close("later") end)
+	shop.Activated:Connect(function() close("shop") end)
+	table.insert(connections, gui:GetAttributeChangedSignal("Press"):Connect(function()
+		local press = gui:GetAttribute("Press")
+		if press == "shop" or press == "later" then close(press) end
+	end))
+	table.insert(connections, UserInputService.InputBegan:Connect(function(event)
+		local key = event.KeyCode
+		if key == Enum.KeyCode.Escape or key == Enum.KeyCode.ButtonB then close("later")
+		elseif key == Enum.KeyCode.Return or key == Enum.KeyCode.KeypadEnter or key == Enum.KeyCode.ButtonA then close("shop") end
+	end))
+	table.insert(connections, player:GetAttributeChangedSignal("InRound"):Connect(function()
+		if player:GetAttribute("InRound") == true then close(nil) end
+	end))
+end
+task.spawn(function()
+	local played, quietSince = false, nil
+	while not tokenCardAnswered do
+		task.wait(0.5)
+		local inRound = player:GetAttribute("InRound") == true
+		if inRound then played = true end
+		local owed = (RunService:IsStudio() and workspace:GetAttribute("DevShowTokenCard") == true)
+			or (starting > 0 and player:GetAttribute("ZyntraTokenGuide") == true
+				and (played or player:GetAttribute("ZyntraFirstLogin") == false))
+		local quiet = owed and not inRound and not tokenCardOpen and workspace:GetAttribute("ReservedRoundServer") ~= true
+			and player:GetAttribute("LobbyLoadingDone") == true and player:GetAttribute("WelcomeCardOpen") ~= true
+			and player:GetAttribute("DispatchBriefingOpen") ~= true and not UIDevice.ScreenOwningModalOpen()
+		if not quiet then
+			quietSince = nil
+		elseif not quietSince then
+			quietSince = os.clock()
+		elseif os.clock() - quietSince >= TOKEN_CARD_QUIET then
+			quietSince = nil
+			showTokens()
+		end
+	end
+end)
+
 -- HELP: every important part of the game, a few plain lines each ------------------------------------------------
 local KEYS = touch and {sneak = "the sneak button", sprint = "the sprint button", light = "the flashlight button", use = "Tap the prompt"}
 	or {sneak = "Hold Ctrl", sprint = "Hold Shift", light = "F", use = "Hold E"}
@@ -255,9 +404,10 @@ local TOPICS = {
 	{"CONTROLS", touch and {
 		{"Move and look", "Left stick to move, drag the screen to look."},
 		{"Sneak and sprint", "Sneak is silent. Sprint is fast, loud, and uses stamina."},
-		{"Flashlight", "The flashlight button switches it on and off."},
-		{"Use things", "Tap the prompt that appears next to an object. Some need you to keep holding."},
-		{"Your items", "Shield, potion, marker and detector have their own buttons once you own them."},
+		{"Flashlight", "LIGHT switches it on and off. With the advanced flashlight, hold LIGHT to focus the beam."},
+		{"Use things", "Hold your finger on the prompt next to an object until the ring is full."},
+		-- TOUCH_HELP_20261011 (UI review): it said every item has its own button; only the shield has
+		{"Your items", "SHIELD has its own button. Potion, markers and the detector open from KIT, once you own them."},
 	} or {
 		{"Move and look", "WASD to move, mouse to look, Space to jump."},
 		{"Sneak and sprint", "Ctrl sneaks without a sound. Shift sprints: fast, loud, and uses stamina."},
@@ -276,11 +426,11 @@ local TOPICS = {
 		{"2  Poolrooms", "Start the pumps to open the exit. Keep an eye on what is in the water."},
 		{"3  Mall", "Find the CDs. Hide under tables, but the Manager checks them."},
 		{"4  Cinema", "The power is out. Find the breaker order and stay away from the Usher."},
-		{"5  Void rooms", "Jump the ledges. Doors open when the whole team stands on the plate. A fall is death."},
+		{"5  Void rooms", "Cross the gaps. Doors open when the whole team stands on the plate. A fall sets you back a few steps."},
 		{"6  Playground", "Hide and seek. Touch the yellow post in three searches without being seen, then run for the exit."},
 	}},
 	{"PLAYING TOGETHER", {
-		{"Start a party", "Walk to a level gate, step on a pad, choose 1 to 6 players and press CREATE PARTY."},
+		{"Start a round", "Walk into a level's entrance and step on a free pad, then CREATE PARTY. You can play alone."},
 		{"Join one", "Step on a pad that someone else has opened before it launches."},
 		{"Friends", "Each Roblox friend in your round gives you +10% tokens."},
 		{"Leaving", "The LOBBY chip in the top left takes you back to the lobby during a round."},
@@ -288,12 +438,12 @@ local TOPICS = {
 	{"IF YOU DIE", {
 		{"You spectate", "You watch your teammates. They can still finish the level."},
 		{"Party down", "If everyone is down you get 15 seconds to use an Emergency Re-entry before the round ends."},
-		{"Emergency Re-entry", "Puts you back in the round once. It is bought with Robux in the shop."},
+		{"Emergency Re-entry", "Puts you back in the round once. Your first one is free; more are offered for Robux when you go down."},
 	}},
 	{"TOKENS", {
-		{"Earning", ("You start with %d. Clearing a level gives +%d, more with friends."):format(starting, perClear)},
+		{"Earning", ((starting > 0 and ("New players are given %d. "):format(starting) or "") .. "Clearing a level gives +%d, more with friends."):format(perClear)},
 		{"Free tokens", "DAILY REWARDS and the LUCKY WHEEL on the left rail give tokens and items."},
-		{"Spending", "SHOPS for items, UPGRADES for permanent stamina and battery."},
+		{"Spending", "SHOP for items, UPGRADES for permanent stamina and battery."},
 	}},
 	{"ITEMS", {
 		{"Entity Shield", ("%d tokens. Saves you from one attack."):format(shield)},
@@ -532,16 +682,18 @@ task.spawn(function()
 					table.insert(rail, item)
 				end
 			end
+			-- TOUCH_TARGETS_20261011 (UI review): 30 px high was under a finger's 44 on a phone and a tablet
+			local tall = UIDevice.IsTouch() and 44 or 30
 			local function free(x, y)
-				if y < 0 or y + 30 > bottom then return false end
+				if y < 0 or y + tall > bottom then return false end
 				for _, item in ipairs(rail) do
 					local p, s = item.AbsolutePosition, item.AbsoluteSize
-					if x < p.X + s.X and x + size.X > p.X and y < p.Y + s.Y and y + 30 > p.Y then return false end
+					if x < p.X + s.X and x + size.X > p.X and y < p.Y + s.Y and y + tall > p.Y then return false end
 				end
 				return true
 			end
-			again.Size = UDim2.fromOffset(size.X, 30)
-			local spots = {{at.X, at.Y + size.Y + 8}, {at.X, at.Y - 38}, {at.X + size.X + 8, at.Y}}
+			again.Size = UDim2.fromOffset(size.X, tall)
+			local spots = {{at.X, at.Y + size.Y + 8}, {at.X, at.Y - tall - 8}, {at.X + size.X + 8, at.Y}}
 			local spot = spots[3]
 			for _, candidate in ipairs(spots) do
 				if free(candidate[1], candidate[2]) then spot = candidate break end
@@ -551,6 +703,10 @@ task.spawn(function()
 		task.wait(0.5)
 	end
 end)
+
+-- START_MARKER_REMOVED_20261013 (owner, lobby feedback: "Remove start level 1 here should be removed"). The marker
+-- that stood over a free LEVEL 1 pad and was seen through walls ("START LEVEL 1 HERE", PLAY_ROUTE_20261011) is gone,
+-- as the PLAY button before it; the shops' own signs say where each level is.
 
 local function wanted()
 	if RunService:IsStudio() and workspace:GetAttribute("DevShowWelcome") == true then return true end
@@ -563,4 +719,10 @@ local profileDeadline = os.clock() + 20
 while os.clock() < profileDeadline and player:GetAttribute("ZyntraFirstLogin") == nil and not wanted() do task.wait(0.25) end
 if workspace:GetAttribute("ReservedRoundServer") == true or player:GetAttribute("InRound") == true or not wanted() then return end
 task.wait(1.2)                                                      -- let the lobby be seen for a moment first
+-- WELCOME_OWNS_THE_SCREEN_20261011 (UI review): it came up 1.2 s after the lobby whatever was open by then. It waits
+-- for the shop, the party dialog and every other window that owns the screen to be closed (two minutes at most).
+do
+	local patience = os.clock() + 120
+	while os.clock() < patience and UIDevice.ScreenOwningModalOpen() do task.wait(0.5) end
+end
 show()

@@ -411,6 +411,9 @@ task.spawn(function()
 	local function refreshEyes()
 		local st = workspace:GetAttribute("EntityState")
 		local hunting = (st == "ALERT" or st == "CHASE" or st == "TRACK" or st == "YELL")
+		-- CHOKE_RED_EYES_20261011 (owner: "den skal have roede oejne naar den kvaeler en"): red for the whole
+		-- stranglehold, whatever state it was caught in (a kill out of LURK kept them amber)
+		if workspace:GetAttribute("EntityKillActive") == true and workspace:GetAttribute("EntityKillStyle") ~= nil then hunting = true end
 		local c = hunting and EYE_COLOR_HUNT or EYE_COLOR_IDLE
 		for _, e in ipairs(eyes) do
 			if e.dot:IsA("GuiObject") then e.dot.BackgroundColor3 = c else e.dot.Color = c end
@@ -420,6 +423,8 @@ task.spawn(function()
 		end
 	end
 	workspace:GetAttributeChangedSignal("EntityState"):Connect(refreshEyes)
+	workspace:GetAttributeChangedSignal("EntityKillActive"):Connect(refreshEyes)
+	workspace:GetAttributeChangedSignal("EntityKillStyle"):Connect(refreshEyes)
 	refreshEyes()
 end)
 
@@ -460,6 +465,8 @@ local lungeWindupUntil = 0      -- end of the freeze/telegraph
 local lungeUntil = 0            -- safety timeout for the current dash
 local lungeLaunchAt = 0
 local lungeDirection = Vector3.zero
+local lungeSpeed = 0            -- this spring's horizontal speed (set at the launch)
+local lungeGroundY = 0          -- the root's height when it left the floor
 local lungeCooldownUntil = 0
 local lungeRecoverUntil = 0     -- brief post-lunge dead stop
 local lungeRollArmed = true     -- one chance roll each time the target enters range
@@ -1033,7 +1040,14 @@ local function launchBallisticLunge(targetPosition, now, player, character)
 	-- FloorMaterial stale for several frames. Freefall + explicit velocity gives
 	-- the same deterministic arc in Studio and live servers.
 	humanoid:ChangeState(Enum.HumanoidStateType.Freefall)
-	root.AssemblyLinearVelocity = lungeDirection * LUNGE_SPEED + Vector3.new(0, LUNGE_UP_SPEED, 0)
+	-- LUNGE_GATHER_20261011: the spring now leaves from a running stride, so from nearer than the old standing
+	-- start (18 to 22 studs, not 22 to 28). At the full LUNGE_SPEED it reached the player at the top of its arc,
+	-- and a catch up there held the Entity in the air (seen in Studio: it killed from 2.7 studs above the floor).
+	-- The horizontal speed is what brings the arc DOWN at the player: distance over the arc's own flight time.
+	local flight = 2 * LUNGE_UP_SPEED / workspace.Gravity
+	lungeSpeed = math.clamp(launch.Magnitude / flight, 30, LUNGE_SPEED)
+	lungeGroundY = root.Position.Y
+	root.AssemblyLinearVelocity = lungeDirection * lungeSpeed + Vector3.new(0, LUNGE_UP_SPEED, 0)
 end
 
 RunService.Heartbeat:Connect(function()
@@ -1079,8 +1093,11 @@ RunService.Heartbeat:Connect(function()
 	if lungePhase == 2 then
 		local toTarget = Vector3.new(lungeTarget.X - root.Position.X, 0, lungeTarget.Z - root.Position.Z)
 		local flightAge = now - lungeLaunchAt
+		-- LUNGE_GATHER_20261011: "landed" used to trust FloorMaterial, which stays stale in the air: every spring
+		-- was called landed at 0.28 s, two studs above the floor and seven short of the player, and dropped there.
+		-- Landed is being back at the height it left from, coming down.
 		local landed = flightAge > 0.28
-			and humanoid.FloorMaterial ~= Enum.Material.Air
+			and root.Position.Y <= lungeGroundY + 0.6
 			and root.AssemblyLinearVelocity.Y <= 0
 		-- ENTITY_UNSTUCK_20261010 (entity): stop forcing dash velocity before the collider reaches a wall.
 		local walls = wallQuery()
@@ -1101,9 +1118,9 @@ RunService.Heartbeat:Connect(function()
 		end
 		humanoid.WalkSpeed = 0
 		root.AssemblyLinearVelocity = Vector3.new(
-			lungeDirection.X * LUNGE_SPEED,
+			lungeDirection.X * lungeSpeed,
 			root.AssemblyLinearVelocity.Y,
-			lungeDirection.Z * LUNGE_SPEED
+			lungeDirection.Z * lungeSpeed
 		)
 		return
 	end
@@ -1127,12 +1144,24 @@ RunService.Heartbeat:Connect(function()
 		lungeRollArmed = true
 	end
 
-	-- phase 1: WIND-UP — freeze + face you (telegraph)
+	-- phase 1: WIND-UP — the gather (telegraph)
+	-- LUNGE_GATHER_20261011 (owner's film of a live chase, and "Du skal seriøst fikse entity run/chase animation"):
+	-- the wind-up used to FREEZE the body for LUNGE_WINDUP seconds, and on the player's screen the Entity stood up
+	-- and stopped coming just before it sprang. It now keeps running at the chase's speed, straight at the player,
+	-- and the wind-up clip is the last stride of that run (sinking, arms swept back). The telegraph is the sink.
+	-- It still stops dead, as before, if a pit or a wall comes between them during that stride.
 	if lungePhase == 1 then
-		humanoid.WalkSpeed = 0
-		root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
-		humanoid:MoveTo(root.Position)
-		faceFlat(hrp.Position)
+		if wallBetween(hrp.Position) or crossesPitZone(root.Position, hrp.Position) then
+			humanoid.WalkSpeed = 0
+			root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
+			humanoid:MoveTo(root.Position)
+			faceFlat(hrp.Position)
+		else
+			-- (no faceFlat while it runs: writing the root's CFrame every frame braked it from 26 to 12 studs/s
+			-- within the stride, measured 2026-10-11; running at the player turns it toward the player anyway)
+			humanoid.WalkSpeed = SPEED_CHASE * speedMul()
+			humanoid:MoveTo(hrp.Position)
+		end
 		if now >= lungeWindupUntil then
 			-- ENTITY_UNSTUCK_20261010 (entity): the player can move behind cover during the wind-up.
 			if wallBetween(hrp.Position) or crossesPitZone(root.Position, hrp.Position) then
@@ -1162,15 +1191,15 @@ RunService.Heartbeat:Connect(function()
 		and not crossesPitZone(root.Position, hrp.Position)
 		and not wallBetween(hrp.Position) then
 		lungeRollArmed = false
-		if math.random() <= LUNGE_CHANCE then
+		-- (Studio only: workspace.TestLungeAlways makes the roll certain, to watch the gather and the spring)
+		if math.random() <= LUNGE_CHANCE or (RunService:IsStudio() and workspace:GetAttribute("TestLungeAlways") == true) then
 			lungePlayer, lungeCharacter = chasePlayer, char
 			lungePhase = 1
 			lungeWindupUntil = now + LUNGE_WINDUP
 			lungeCooldownUntil = now + LUNGE_COOLDOWN
 			workspace:SetAttribute("EntityLunge", (workspace:GetAttribute("EntityLunge") or 0) + 1)
 			workspace:SetAttribute("EntityIsLunging", false)
-			root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
-			humanoid:MoveTo(root.Position)
+			-- (LUNGE_GATHER_20261011: no stop here any more; phase 1 keeps it running)
 		end
 	end
 	-- otherwise: nothing — the grid-walk (main loop) is doing the moving
@@ -1390,6 +1419,7 @@ task.spawn(function()
 		if humanoid.Health <= 0 then break end
 		if workspace:GetAttribute("RoundActive") ~= true then continue end
 		if not root.Parent then continue end
+		if workspace:GetAttribute("EntityDormant") == true then continue end   -- nothing screams before it exists
 		local st = workspace:GetAttribute("EntityState")
 		if st == "ALERT" or st == "CHASE" or st == "YELL" or st == "TRACK" then continue end
 		workspace:SetAttribute("EntityScreamIndex", math.random(1, SCREAM_TAKES))
@@ -1397,9 +1427,59 @@ task.spawn(function()
 	end
 end)
 
+-- SPAWN_AFTER_RELAY_20261010 (owner: "sørge for at entity i level 1 først spawner efter den første fuse relay er taget
+-- ud"). From the start of a Level 1 round until the first relay has given up its fuse the Entity is not in the maze at
+-- all: it is held, anchored, far above the ceiling, where nobody sees, hears or touches it. PuzzleManager counts the
+-- extractions in workspace.Level1RelaysExtracted (0 at round start, nil with no round); the first one puts the Entity
+-- on its start mark and it screams once, from there. `workspace.EntityDormant` says which of the two it is.
+local DORMANT_HEIGHT = 600
+local dormantParked = false
+local function dormantNow()
+	return workspace:GetAttribute("RoundActive") == true and workspace:GetAttribute("SelectedLevel") == 1
+		and workspace:GetAttribute("Level1RelaysExtracted") == 0
+end
+local function standOnStart()
+	local es = workspace:FindFirstChild("EntityStart")
+	local bbox, size = entity:GetBoundingBox()
+	local pivot = entity:GetPivot()
+	local x, z = es and es.CFrame.X or pivot.X, es and es.CFrame.Z or pivot.Z
+	entity:PivotTo(CFrame.new(x, 0.5 + (pivot.Y - (bbox.Y - size.Y / 2)), z))
+	root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+	root.Anchored = false
+	pcall(function() root:SetNetworkOwner(nil) end)
+end
+
 task.spawn(function()
 	while task.wait(0.1) do
 		if humanoid.Health <= 0 then break end
+		if dormantNow() then
+			if not dormantParked or root.Position.Y < DORMANT_HEIGHT - 100 then
+				dormantParked = true
+				root.Anchored = true
+				root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+				local pivot = entity:GetPivot()
+				entity:PivotTo(CFrame.new(pivot.X, DORMANT_HEIGHT, pivot.Z))
+				workspace:SetAttribute("EntityDormant", true)
+				chasePlayer = nil
+				setChaseMarker(nil)
+				resetNav()
+				current = State.LURK
+				workspace:SetAttribute("EntityState", "LURK")
+			end
+			humanoid.WalkSpeed = 0
+			watch.pos, watch.last, watch.since, watch.level = root.Position, root.Position, os.clock(), 0
+			continue
+		elseif dormantParked then
+			dormantParked = false
+			standOnStart()
+			workspace:SetAttribute("EntityDormant", false)
+			watch.pos, watch.last, watch.since, watch.level = root.Position, root.Position, os.clock(), 0
+			if workspace:GetAttribute("RoundActive") == true then
+				-- the fuse came out: it wakes, and says so
+				workspace:SetAttribute("EntityScreamIndex", math.random(1, SCREAM_TAKES))
+				workspace:SetAttribute("EntityScream", (workspace:GetAttribute("EntityScream") or 0) + 1)
+			end
+		end
 		if isPaused() then
 			humanoid.WalkSpeed = 0
 			humanoid:MoveTo(root.Position)

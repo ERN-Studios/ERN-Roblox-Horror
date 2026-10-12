@@ -1,0 +1,695 @@
+{
+  "schema": "studio-code-sync-native-summary-v1",
+  "task": "studio-code-sync-20261012",
+  "captureId": "71820964-698e-4c70-9e3f-030a2765e24e",
+  "capturedAt": "2026-10-12T19:23:41Z",
+  "captureStartUnixMillis": 1791833021912,
+  "captureFinishedUnixMillis": 1791833025497,
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "creatorId": 1039373905,
+  "placeVersion": 3053,
+  "studioVersion": "0.742.0.7421053",
+  "backupDirectory": "_local/studio-code-sync-20261012/native-backup/before",
+  "localOnlyNativeBlobs": true,
+  "captureMethod": "SerializationService.SerializeInstancesAsync(all place-service children); native properties and cross-references retained.",
+  "nativePlaceMethod": "Offline Lune reconstruction from the fresh jointly serialized native forest and captured service metadata; not an actual Studio Save-to-File backup.",
+  "nativeForestVerifiedAfterLocalReopen": true,
+  "nativeSHA256": "5d0314d9b604db9d1ef5b20e2987c89735c51bd67dcc35d5edb9b55baa328910",
+  "nativeBytes": 68816602,
+  "nativePlaceSHA256": "e37ef28b2662bb48cc827408ef9f1cab3292ae9d31b85369158198931055fbbc",
+  "nativePlaceBytes": 68824777,
+  "canonicalNativeForestSHA256": "a332c6d6af43f6c944b4147e3223b09ebf2704078b49deba43e632c1e38ca32b",
+  "canonicalReopenedForestSHA256": "a332c6d6af43f6c944b4147e3223b09ebf2704078b49deba43e632c1e38ca32b",
+  "rootCount": 218,
+  "serializedNativeContentInstances": 417891,
+  "liveCapturedRootContentInstances": 417892,
+  "reopenedPlaceDescendantsIncludingServices": 417915,
+  "sourceCount": 217,
+  "sourceClasses": {
+    "LocalScript": 73,
+    "ModuleScript": 115,
+    "Script": 29
+  },
+  "sourceEditorConflicts": 0,
+  "sourceErrors": 0,
+  "rootErrors": 0,
+  "sourceCatalogSHA256": "f98cd279235af5d44f1dc6dfa4fc06c866871067038e1698aa06a0a5bb4b5cb8",
+  "serviceCount": 24,
+  "serviceClasses": [
+    "Chat",
+    "CollectionService",
+    "HttpService",
+    "JointsService",
+    "Lighting",
+    "LocalizationService",
+    "MaterialService",
+    "PathfindingService",
+    "PhysicsService",
+    "Players",
+    "ProximityPromptService",
+    "ReplicatedFirst",
+    "ReplicatedStorage",
+    "ServerScriptService",
+    "ServerStorage",
+    "SoundService",
+    "StarterGui",
+    "StarterPack",
+    "StarterPlayer",
+    "Teams",
+    "TestService",
+    "TextChatService",
+    "VoiceChatService",
+    "Workspace"
+  ],
+  "readableServicePropertyCount": 151,
+  "serviceReconstructionPropertyErrorCount": 29,
+  "serviceReconstructionErrors": [
+    {
+      "service": "Chat",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "CollectionService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "HttpService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "JointsService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "Lighting",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "Lighting",
+      "kind": "attribute",
+      "name": "RBX_OriginalTechnologyOnFileLoad",
+      "reason": "Reserved RBX attribute name cannot be assigned by Lune",
+      "capturedValue": {
+        "value": 3,
+        "type": "number"
+      }
+    },
+    {
+      "service": "Lighting",
+      "kind": "attribute",
+      "name": "RBX_LightingTechnologyUnifiedMigration",
+      "reason": "Reserved RBX attribute name cannot be assigned by Lune",
+      "capturedValue": {
+        "value": true,
+        "type": "boolean"
+      }
+    },
+    {
+      "service": "LocalizationService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "MaterialService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "PathfindingService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "PhysicsService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "Players",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "ProximityPromptService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "ReplicatedFirst",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "ReplicatedStorage",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "ServerScriptService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "ServerStorage",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "SoundService",
+      "kind": "property",
+      "name": "ListenerObject",
+      "reason": "Lune rejects nil reference assignment",
+      "capturedValue": {
+        "type": "nil"
+      }
+    },
+    {
+      "service": "SoundService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "StarterGui",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "StarterPack",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "StarterPlayer",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "Teams",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "TestService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "TextChatService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "VoiceChatService",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "Workspace",
+      "kind": "property",
+      "name": "StreamingAdaptiveRadius",
+      "reason": "Lune reflection lacks current Studio property",
+      "capturedValue": {
+        "value": false,
+        "type": "boolean"
+      }
+    },
+    {
+      "service": "Workspace",
+      "kind": "property",
+      "name": "Capabilities",
+      "reason": "Unsupported captured SecurityCapabilities type",
+      "capturedValue": {
+        "display": "",
+        "type": "unsupported",
+        "originalType": "SecurityCapabilities"
+      }
+    },
+    {
+      "service": "Workspace",
+      "kind": "property",
+      "name": "PrimaryPart",
+      "reason": "Lune rejects nil reference assignment",
+      "capturedValue": {
+        "type": "nil"
+      }
+    }
+  ],
+  "unreadableServicePropertyCount": 129,
+  "unreadableServicePropertyReasonCounts": {
+    "current-thread capability restriction": 46,
+    "schema member unavailable in current Studio": 83
+  },
+  "unreadableServiceProperties": {
+    "Chat": [
+      "IsAutoMigrated",
+      "SourceAssetId"
+    ],
+    "CollectionService": [
+      "SourceAssetId"
+    ],
+    "HttpService": [
+      "SourceAssetId"
+    ],
+    "JointsService": [
+      "SourceAssetId"
+    ],
+    "Lighting": [
+      "ExtendLightRangeTo120",
+      "SourceAssetId",
+      "Technology"
+    ],
+    "LocalizationService": [
+      "SourceAssetId"
+    ],
+    "MaterialService": [
+      "AsphaltName",
+      "BasaltName",
+      "BrickName",
+      "CardboardName",
+      "CarpetName",
+      "CeramicTilesName",
+      "ClayRoofTilesName",
+      "CobblestoneName",
+      "ConcreteName",
+      "CorrodedMetalName",
+      "CrackedLavaName",
+      "DiamondPlateName",
+      "FabricName",
+      "FoilName",
+      "GlacierName",
+      "GraniteName",
+      "GrassName",
+      "GroundName",
+      "IceName",
+      "LeafyGrassName",
+      "LeatherName",
+      "LimestoneName",
+      "MarbleName",
+      "MetalName",
+      "MudName",
+      "PavementName",
+      "PebbleName",
+      "PlasterName",
+      "PlasticName",
+      "RockName",
+      "RoofShinglesName",
+      "RubberName",
+      "SaltName",
+      "SandName",
+      "SandstoneName",
+      "SlateName",
+      "SmoothPlasticName",
+      "SnowName",
+      "SourceAssetId",
+      "WoodName",
+      "WoodPlanksName"
+    ],
+    "PathfindingService": [
+      "SourceAssetId"
+    ],
+    "PhysicsService": [
+      "SourceAssetId"
+    ],
+    "Players": [
+      "BanningEnabled",
+      "SourceAssetId",
+      "UseStrafingAnimations"
+    ],
+    "ProximityPromptService": [
+      "SourceAssetId"
+    ],
+    "ReplicatedFirst": [
+      "SourceAssetId"
+    ],
+    "ReplicatedStorage": [
+      "SourceAssetId"
+    ],
+    "ServerScriptService": [
+      "LoadStringEnabled",
+      "SourceAssetId"
+    ],
+    "ServerStorage": [
+      "SourceAssetId"
+    ],
+    "SoundService": [
+      "AudioApiByDefault",
+      "IsNewExpForAudioApiByDefault",
+      "SourceAssetId",
+      "VolumetricAudio"
+    ],
+    "StarterGui": [
+      "ClipsDescendantsSupportsRotation",
+      "RtlTextSupport",
+      "SourceAssetId",
+      "StudioDefaultStyleSheet",
+      "StudioInsertWidgetLayerCollectorAutoLinkStyleSheet",
+      "VirtualCursorMode"
+    ],
+    "StarterPack": [
+      "SourceAssetId"
+    ],
+    "StarterPlayer": [
+      "CreateDefaultPlayerModule",
+      "EnableDynamicHeads",
+      "GameSettingsAvatar",
+      "GameSettingsR15Collision",
+      "PlaceAvatarRules",
+      "PlayerModuleStatus",
+      "SourceAssetId"
+    ],
+    "Teams": [
+      "SourceAssetId"
+    ],
+    "TestService": [
+      "SourceAssetId"
+    ],
+    "TextChatService": [
+      "ChatTranslationFTUXShown",
+      "ChatTranslationToggleEnabled",
+      "HasSeenDeprecationDialog",
+      "IsLegacyChatDisabled",
+      "PlatformIntegratedChat",
+      "SourceAssetId"
+    ],
+    "VoiceChatService": [
+      "EnableVoiceVolumeControls",
+      "SourceAssetId"
+    ],
+    "Workspace": [
+      "AuthorityMode",
+      "AutoSimulate",
+      "AvatarUnificationMode",
+      "EnableSLIMAvatars",
+      "ExpandedTerrain",
+      "FluidForces",
+      "GravityDirection",
+      "IKControlConstraintSupport",
+      "ImprovedAnimationConstraint",
+      "ImprovedPhysicsReplication",
+      "LayeredClothingCacheOptimizations",
+      "MapTVRemoteToGamepadKeycodes",
+      "MeshPartHeadsAndAccessories",
+      "MeshStreamingAndImprovedLods",
+      "ModelStreamingBehavior",
+      "NextGenerationReplication",
+      "PathfindingUseImprovedSearch",
+      "PhysicsSteppingMethod",
+      "PlayerCharacterDestroyBehavior",
+      "PlayerScriptsUseInputActionSystem",
+      "PredictiveStreamingMode",
+      "PrimalPhysicsSolver",
+      "RejectCharacterDeletions",
+      "RenderingCacheOptimizations",
+      "ReplicateInstanceDestroySetting",
+      "SandboxedInstanceMode",
+      "SimulationRate",
+      "SourceAssetId",
+      "StreamOutBehavior",
+      "StreamingIntegrityMode",
+      "StreamingMinRadius",
+      "StreamingTargetRadius",
+      "TouchEventsUseCollisionGroups",
+      "TouchesUseCollisionGroups",
+      "UseFixedSimulation",
+      "UseInputSink",
+      "UseNewLuauTypeSolver",
+      "ValidateEnabledProximityPrompt",
+      "Wind",
+      "WindDirection"
+    ]
+  },
+  "skippedRoots": [],
+  "measuredNativeOmissions": [
+    {
+      "rootPath": "Workspace.StarterCharacter",
+      "capturedLiveDescendants": 438,
+      "serializedDescendants": 437,
+      "omittedDescendants": 1,
+      "exactInstanceIdentityVerified": true,
+      "instancePath": "Workspace.StarterCharacter.Humanoid.Status",
+      "class": "Status",
+      "archivable": false,
+      "children": 0,
+      "liveReadEvidence": "Root agent separately read the exact current live instance and found no other nonarchivable or Status descendants under Workspace.StarterCharacter."
+    }
+  ],
+  "materialVariantRootCount": 57,
+  "materialOverrideCount": 40,
+  "materialOverrides": {
+    "Wood": "Wood",
+    "Basalt": "Basalt",
+    "ClayRoofTiles": "ClayRoofTiles",
+    "CeramicTiles": "CeramicTiles",
+    "Sandstone": "Sandstone",
+    "DiamondPlate": "DiamondPlate",
+    "Cobblestone": "Cobblestone",
+    "Plaster": "Plaster",
+    "Slate": "Slate",
+    "WoodPlanks": "WoodPlanks",
+    "Plastic": "Plastic",
+    "Salt": "Salt",
+    "CrackedLava": "CrackedLava",
+    "Grass": "Grass",
+    "Rock": "Rock",
+    "Sand": "Sand",
+    "Carpet": "Carpet",
+    "Rubber": "Rubber",
+    "Marble": "Marble",
+    "CorrodedMetal": "CorrodedMetal",
+    "Glacier": "Glacier",
+    "LeafyGrass": "LeafyGrass",
+    "Ground": "Ground",
+    "Snow": "Snow",
+    "RoofShingles": "RoofShingles",
+    "Cardboard": "Cardboard",
+    "Ice": "Ice",
+    "Asphalt": "Asphalt",
+    "Brick": "Brick",
+    "Mud": "Mud",
+    "Limestone": "Limestone",
+    "Fabric": "Fabric",
+    "Leather": "Leather",
+    "Granite": "Granite",
+    "SmoothPlastic": "SmoothPlastic",
+    "Foil": "Foil",
+    "Concrete": "Concrete",
+    "Pebble": "Pebble",
+    "Pavement": "Pavement",
+    "Metal": "Metal"
+  },
+  "collisionGroups": [
+    {
+      "name": "Default",
+      "mask": -1
+    }
+  ],
+  "collisionMatrix": [
+    [
+      "Default",
+      "Default",
+      true
+    ]
+  ],
+  "proofFiles": [
+    {
+      "file": "metadata.received.json",
+      "bytes": 62774,
+      "sha256": "5ec0cb9cd9737c6ad9c6354e498aaa5b3aae2bca6d3f627b12f62a58d89f6145"
+    },
+    {
+      "file": "metadata.json",
+      "bytes": 88320,
+      "sha256": "486ece81d77260ea7afbf044b824e5af7f4b32ce7ccfc796b091710c59c1c33d"
+    },
+    {
+      "file": "scripts.json",
+      "bytes": 8914882,
+      "sha256": "f98cd279235af5d44f1dc6dfa4fc06c866871067038e1698aa06a0a5bb4b5cb8"
+    },
+    {
+      "file": "source-inventory.json",
+      "bytes": 76801,
+      "sha256": "3692f1f51305cdb819a0635ab48263826d8eb797e269b319ec620a0542400126"
+    },
+    {
+      "file": "source-transfer-receipt.json",
+      "bytes": 124,
+      "sha256": "65894da1269393d197e6c8724ee578ca7c7ec66fe948fc41a194fc79051038b9"
+    },
+    {
+      "file": "all-service-children.rbxm",
+      "bytes": 68816602,
+      "sha256": "5d0314d9b604db9d1ef5b20e2987c89735c51bd67dcc35d5edb9b55baa328910"
+    },
+    {
+      "file": "AuthoritativeStudio-CapturedForest.rbxl",
+      "bytes": 68824777,
+      "sha256": "e37ef28b2662bb48cc827408ef9f1cab3292ae9d31b85369158198931055fbbc"
+    },
+    {
+      "file": "native-place-verification.json",
+      "bytes": 36753,
+      "sha256": "cd62f29cee2e0ef7740acb2c76cf69eaae002338b417294cc96ee0006d0e68ae"
+    },
+    {
+      "file": "native-recovery-reopen-verification.json",
+      "bytes": 84668,
+      "sha256": "423e2c1ca0ac316d35fed45aedd553e42d39ad4d8baceb67448d0cdeb00b042f"
+    }
+  ],
+  "limits": [
+    "All 217 captured exact Sources and editor Sources match the captured native forest and locally reopened reconstructed place.",
+    "Canonical equality proves every captured service-child native forest survives Lune round-trip. It does not prove completeness of engine/session objects or unsupported/unreadable top-level service properties.",
+    "Capture enumerates 24 schema-listed services and their archivable children; editor-session Players children are excluded.",
+    "One engine-created nonarchivable instance is intentionally omitted: Workspace.StarterCharacter.Humanoid.Status (Status, Archivable=false, no children). Root agent verified this exact live instance. Historical helper text also names Workspace.Dummy, which is absent from this capture; no Dummy omission is claimed.",
+    "Service metadata remains in the local sidecar, including captured unsupported values, inaccessible-property error records, collision groups and material overrides. Service settings/attributes after reconstruction were not exhaustively compared.",
+    "Referenced external meshes, textures, audio and animation assets remain asset references/native properties. This task did not independently download or verify Roblox-hosted asset payloads.",
+    "No gameplay, multiplayer, streaming, performance, Studio Save-to-File or publication check is implied by this backup."
+  ],
+  "persistentStudioWrites": false,
+  "publicationPerformed": false
+}

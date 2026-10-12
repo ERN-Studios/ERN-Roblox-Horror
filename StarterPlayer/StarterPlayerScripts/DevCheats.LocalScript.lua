@@ -168,8 +168,19 @@ do
 	gui.Parent = playerGui
 	local remote = devControl or remotes:WaitForChild("DevControl")
 
+	-- PLAYER_ESP_GLOBAL_20261012 (owner: "en global rule ... når vi toggler ESP, så skal vi altid kunne se andre
+	-- spillere med blå highlight og stud afstand counter over dem", on every map). This switch now follows the ESP
+	-- switch (setEsp below), every other player's body wears a blue outline through walls where this client has
+	-- it, and the label over each carries the distance in studs. Positions still come from the server, so a player
+	-- outside this client's streaming range has the label and the distance, only no outline.
+	local BLUE = Color3.fromRGB(70, 150, 255)
+	local marks = Instance.new("Folder")
+	marks.Name = "DevPlayerESPMarks"
 	local function clear()
-		for _, record in pairs(records) do record.Label:Destroy() end
+		for _, record in pairs(records) do
+			record.Label:Destroy()
+			if record.Highlight then record.Highlight:Destroy() end
+		end
 		table.clear(records)
 	end
 
@@ -191,7 +202,7 @@ do
 			if type(entry) ~= "table" or type(entry.UserId) ~= "number"
 				or not finiteVector(entry.Position) then continue end
 			local subject = Players:GetPlayerByUserId(entry.UserId)
-			if not subject or seen[subject] then continue end
+			if not subject or subject == player or seen[subject] then continue end
 			seen[subject] = true
 			local record = records[subject]
 			if not record then
@@ -212,13 +223,37 @@ do
 				records[subject] = record
 			end
 			record.Position = entry.Position
-			record.Label.Text = "@" .. subject.Name
-				.. (entry.Alive == true and "" or "\nDEAD")
-			record.Label.TextColor3 = entry.Alive == true
-				and Color3.fromRGB(95, 255, 185) or Color3.fromRGB(185, 190, 195)
+			record.Alive = entry.Alive == true
+			local own = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			local from = own and own.Position or (workspace.CurrentCamera and workspace.CurrentCamera.CFrame.Position) or entry.Position
+			record.Label.Text = string.format("@%s\n%d studs%s", subject.Name, (entry.Position - from).Magnitude,
+				record.Alive and "" or "  DEAD")
+			record.Label.TextColor3 = record.Alive and BLUE:Lerp(Color3.new(1, 1, 1), 0.35) or Color3.fromRGB(185, 190, 195)
+			-- the outline, on the body this client holds for them
+			local character = subject.Character
+			if character and character:IsDescendantOf(workspace) and record.Alive then
+				if not record.Highlight then
+					local highlight = Instance.new("Highlight")
+					highlight.Name = "DevPlayerESP"
+					highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+					highlight.FillColor, highlight.OutlineColor = BLUE, BLUE
+					highlight.FillTransparency, highlight.OutlineTransparency = 0.7, 0
+					highlight.Parent = marks
+					record.Highlight = highlight
+				end
+				record.Highlight.Adornee = character
+			elseif record.Highlight then
+				record.Highlight:Destroy()
+				record.Highlight = nil
+			end
 		end
+		marks.Parent = workspace.CurrentCamera
 		for subject, record in pairs(records) do
-			if not seen[subject] then record.Label:Destroy(); records[subject] = nil end
+			if not seen[subject] then
+				record.Label:Destroy()
+				if record.Highlight then record.Highlight:Destroy() end
+				records[subject] = nil
+			end
 		end
 	end
 
@@ -262,17 +297,23 @@ do
 	end)
 	connections[#connections + 1] = Players.PlayerRemoving:Connect(function(subject)
 		local record = records[subject]
-		if record then record.Label:Destroy(); records[subject] = nil end
+		if record then
+			record.Label:Destroy()
+			if record.Highlight then record.Highlight:Destroy() end
+			records[subject] = nil
+		end
 	end)
 	connections[#connections + 1] = script.Destroying:Connect(function()
 		stopped = true
 		for _, connection in ipairs(connections) do connection:Disconnect() end
 		clear()
 		gui:Destroy()
+		marks:Destroy()
 		publishState("DevCheatPlayerEsp", false)
 	end)
 end
 -- END_DEV_PLAYER_ESP_20260910
+setPlayerEsp(espOn)          -- PLAYER_ESP_GLOBAL_20261012: ESP starts on, and the players come with it
 
 local function setEsp(requested)
 	local enabled = requestedState(espOn, requested)
@@ -285,6 +326,7 @@ local function setEsp(requested)
 	end
 	player:SetAttribute("DevEspEnabled", enabled)
 	publishState("DevCheatEsp", enabled)
+	setPlayerEsp(enabled)        -- PLAYER_ESP_GLOBAL_20261012: on every map, ESP shows the other players too
 	print("[DevCheats] ESP " .. (enabled and "ON" or "OFF"))
 end
 

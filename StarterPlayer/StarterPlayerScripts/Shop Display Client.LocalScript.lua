@@ -35,6 +35,28 @@ local FOCUS_ATTRIBUTE = "ZyntraShopFocus"
 local BUY_EVENT_NAME = "ZyntraShopBuy"
 local TOUCH_TAP = 44
 
+-- MALL_LOBBY_20261012 (owner: the mall lobby's Shop & Supplies must showcase every skin). Each skin stands on a
+-- plinth there with a prompt (`MallSkinPrompt`, attribute SkinId, made by tools/lobby_mall/import_mall.py): it opens
+-- the shop window's own Skins page at that skin's card, where the price, BUY and EQUIP already are.
+game:GetService("ProximityPromptService").PromptTriggered:Connect(function(prompt, who)
+	if who ~= player or prompt.Name ~= "MallSkinPrompt" or player:GetAttribute("InRound") == true then return end
+	local open = player:WaitForChild("PlayerScripts"):FindFirstChild("ZyntraShopUIOpen")
+	if open and open:IsA("BindableFunction") then pcall(open.Invoke, open, "Skins", prompt:GetAttribute("SkinId")) end
+end)
+-- MALL_PREVIEW_20261012: the way into the mall lobby is a prompt beside the lobby's spawn, for three accounts
+-- (DevAccess.IsMallPreviewAllowed; the server checks again). Nobody else is shown it, as with the DJ booth's.
+if not require(ReplicatedStorage:WaitForChild("DevAccess")).IsMallPreviewAllowed(player) then
+	local function hide(instance)
+		if not instance:IsA("ProximityPrompt") or (instance.Name ~= "MallPreviewPrompt" and instance.Name ~= "MallReturnPrompt") then return end
+		instance.Enabled = false
+		instance:GetPropertyChangedSignal("Enabled"):Connect(function()
+			if instance.Enabled then instance.Enabled = false end
+		end)
+	end
+	workspace.DescendantAdded:Connect(hide)
+	for _, d in ipairs(workspace:GetDescendants()) do hide(d) end
+end
+
 -- ANALYTICS_20260921. The server cannot see a card open or a demo start, so
 -- the client reports those two facts and nothing else, fire-and-forget, on
 -- the existing ZyntraAction remote. The server validates the key against the

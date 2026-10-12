@@ -103,6 +103,133 @@ for _, name in ipairs({"LobbyDJTrack", "LobbyDJStartedAt", "LobbyDJTracks"}) do 
 for _, name in ipairs({"InRound", "LobbyMusicEnabled"}) do player:GetAttributeChangedSignal(name):Connect(applyTrack) end
 task.defer(applyTrack)
 
+-- dancing ---------------------------------------------------------------------------------------------------------
+-- DANCE_20261011 (owner: "tilføje en dance funktion til alle spillere, når DJ musik er i gang? De kan toggle, så en
+-- toggle knap der kommer op på deres skærm, en knap til mobile og tablet og en knap der viser hvilken tast den er
+-- koblet til på computer"). While the booth has a track on, every player in the lobby gets a DANCE button: a tap on
+-- touch, and on a computer the same button with its key on it (H, the one letter nothing else in the game uses).
+-- It is a switch: on, the player's own avatar dances (Roblox's three stock dances, R15 or R6, a different one each
+-- time it is switched on, at the track's tempo); walking pauses it and standing still picks it up again; off, a
+-- round, the DJ's own pose or the end of the music stops it. The animation is played by this client on its own
+-- character, which is what every other player sees. For a test: gui attribute `DanceToggle` (any change presses it);
+-- the state is the player attribute `LobbyDancing`.
+do
+	local RunService = game:GetService("RunService")
+	local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
+	local KEY = Enum.KeyCode.H
+	local DANCES = {
+		[Enum.HumanoidRigType.R15] = {507771019, 507776043, 507777268},
+		[Enum.HumanoidRigType.R6] = {182435998, 182436842, 182436935},
+	}
+	local wanted, turn, track, trackFor, trackId = false, 0, nil, nil, nil
+	local button = Instance.new("TextButton")
+	button.Name, button.Visible, button.AutoButtonColor = "Dance", false, true
+	button.Font, button.TextSize, button.TextColor3 = Enum.Font.GothamBlack, 16, PAPER
+	button.BackgroundColor3, button.BorderSizePixel = INK, 0
+	button.Parent = gui
+	Instance.new("UICorner", button).CornerRadius = UDim.new(0, 10)
+	local frame = Instance.new("UIStroke", button)
+	frame.Color, frame.Thickness, frame.ApplyStrokeMode = MAGENTA, 2, Enum.ApplyStrokeMode.Border
+
+	local function playing()
+		local entry = tracks()[workspace:GetAttribute("LobbyDJTrack") or 0]
+		return entry ~= nil and entry.Id ~= 0 and entry or nil
+	end
+	local function body()
+		local character = player.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		if humanoid and humanoid.Health > 0 then return character, humanoid end
+		return nil, nil
+	end
+	local function available()
+		return playing() ~= nil and workspace:GetAttribute("ReservedRoundServer") ~= true
+			and player:GetAttribute("InRound") ~= true and player:GetAttribute("LobbyLoadingDone") == true
+			and player:GetAttribute("LobbyDJMode") ~= true and body() ~= nil
+	end
+	local function stop()
+		if track then track:Stop(0.25) end
+	end
+	local function paint()
+		button.Text = UIDevice.Caption(wanted and "DANCING" or "DANCE", "[H]")       -- no key on touch: Caption leaves it out
+		button.BackgroundColor3 = wanted and MAGENTA or INK
+		button.TextColor3 = wanted and INK or PAPER
+		player:SetAttribute("LobbyDancing", wanted or nil)
+	end
+	local function place()
+		local device = UIDevice.Layout()
+		local wide, tall = 150, 40
+		local x, y
+		if device.IsTouch then
+			wide, tall = device.Class == "tablet" and 150 or 124, device.Class == "tablet" and 56 or 48
+			local corridor = device.Corridor
+			if corridor and corridor.Width >= wide + 16 then
+				-- between the thumbstick and the buttons, over the stamina line that lives at the corridor's foot
+				x, y = corridor.Left + (corridor.Width - wide) / 2, device.Safe.Bottom - 46 - tall
+			else
+				x, y = device.Safe.Left + (device.Safe.Width - wide) / 2, device.Safe.Top + 70       -- under PLAY
+				local stick = device.Zones and device.Zones.Thumbstick
+				if stick and y + tall > stick.Top then x = math.max(x, stick.Right + 6) end         -- not on the thumbstick's ground
+			end
+		else
+			x, y = device.Safe.Left + (device.Safe.Width - wide) / 2, device.Safe.Bottom - 56 - tall  -- over NOW PLAYING
+		end
+		button.Size = UDim2.fromOffset(wide, tall)
+		button.Position = UIDevice.LocalPosition(gui, x, y)
+		button.TextSize = device.Class == "tablet" and 18 or 16
+	end
+	local function toggle()
+		if not button.Visible then return end
+		wanted = not wanted
+		if wanted then turn += 1 end
+		paint()
+	end
+	button.Activated:Connect(toggle)
+	gui:GetAttributeChangedSignal("DanceToggle"):Connect(toggle)
+	UserInputService.InputBegan:Connect(function(input, processed)
+		if processed or input.KeyCode ~= KEY or UserInputService:GetFocusedTextBox() then return end
+		toggle()
+	end)
+	UIDevice.Changed:Connect(function() place() paint() end)
+	place()
+	paint()
+	local elapsed = 0
+	RunService.Heartbeat:Connect(function(dt)
+		elapsed += dt
+		if elapsed < 0.1 then return end
+		elapsed = 0
+		local can = available()
+		local show = can and not UIDevice.ScreenOwningModalOpen() and player:GetAttribute("WelcomeCardOpen") ~= true
+		if button.Visible ~= show then button.Visible = show end
+		if not can and wanted then wanted = false paint() end
+		local character, humanoid = body()
+		local entry = playing()
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		local speed = root and Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z).Magnitude or 0
+		-- (the speed as well as the stick: a body walked by MoveTo has no MoveDirection)
+		local dance = wanted and can and humanoid ~= nil and humanoid.MoveDirection.Magnitude < 0.1 and speed < 1.5
+			and humanoid.FloorMaterial ~= Enum.Material.Air
+		if not dance then
+			if track and track.IsPlaying then stop() end
+			return
+		end
+		local list = DANCES[humanoid.RigType] or DANCES[Enum.HumanoidRigType.R15]
+		local id = list[(turn - 1) % #list + 1]
+		if trackFor ~= humanoid or trackId ~= id then
+			if track then track:Stop(0.1) track:Destroy() end
+			local animator = humanoid:FindFirstChildOfClass("Animator") or humanoid:WaitForChild("Animator", 2)
+			if not animator then return end
+			local animation = Instance.new("Animation")
+			animation.AnimationId = "rbxassetid://" .. id
+			local ok, loaded = pcall(function() return animator:LoadAnimation(animation) end)
+			if not ok or not loaded then return end
+			track, trackFor, trackId = loaded, humanoid, id
+			track.Priority, track.Looped = Enum.AnimationPriority.Action, true
+		end
+		if not track.IsPlaying then track:Play(0.25) end
+		track:AdjustSpeed(math.clamp((tonumber(entry and entry.Bpm) or 120) / 120, 0.8, 1.25))
+	end)
+end
+
 -- party lights ------------------------------------------------------------------------------------------------
 -- PARTY_LIGHTS_20261004 (owner): while a track is on, the lobby's own lamps go to party mode, in time with it.
 -- Every Light in the lobby model takes a colour from the track's palette (synthwave: magenta, cyan, violet;
@@ -120,7 +247,10 @@ do
 	local lamps, lampsFor = nil, nil
 	local function collect()
 		local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
-		if not lobby or lobby:GetAttribute("Ready") ~= true then return nil end
+		if not lobby or lobby:GetAttribute("Ready") ~= true then
+			lobby = workspace:FindFirstChild("LobbyMallPreview")          -- MALL_IS_LOBBY_20261013: the mall's own lamps
+			if not lobby then return nil end
+		end
 		if lamps and lampsFor == lobby then return lamps end
 		lamps, lampsFor = {}, lobby
 		for _, d in ipairs(lobby:GetDescendants()) do

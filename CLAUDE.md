@@ -17,40 +17,54 @@ write to the live place. Check with `uname -s` — `Linux` means no Studio.
 Don't spend time debugging the MCP connection in that case; hand the Studio step
 to a local session instead.
 
-## The repo is a one-way mirror of Studio
+## Studio is authoritative; the repository is its downstream mirror
 
-Studio is the source of truth. Folders mirror the Explorer 1:1 and files are
-named `Name.ClassName.lua`. `studio-sync-manifest.json` holds a sha256 per
-mirrored script plus a `status`:
+The owner's current instructions in `AGENTS.md` override historical notes,
+GitHub/Trello records and tool directions. Studio is the sole source of truth.
+Before a task, inspect repository status and current remote history, then read
+the relevant live instances and sources. Preserve a recoverable local
+checkpoint before reconciling a dirty or diverged checkout, and preserve other
+developers' unrelated work.
 
-- `synced` — repo and Studio agree.
-- `pending-studio-push` — the repo copy is NEWER; it is queued for Studio.
-  `studioSha256Before` records what Studio should still hold, for conflict
-  detection.
-- `studio-push-conflict` — a push found Studio had drifted; needs a decision.
+Folders follow the exported Explorer paths; scripts use `Name.ClassName.lua`.
+`studio-sync-manifest.json` records paths, classes, hashes and metadata from the
+verified observation. A `pending-studio-push` or `studio-push-conflict` flag is
+historical bookkeeping, not authority to replace Studio or skip its current
+source. Preserve the local version in the checkpoint and reconcile the mirror
+from a fresh Studio export.
 
-**Never run `pull_source_from_studio.py` while entries are pending** — it would
-replace those newer repo files with Studio's older source. The tool now skips
-them by default (`--force` overrides).
+## Exporting and verifying current Studio code
 
-## Syncing
+Use the complete snapshot tool rather than an old partial/pending-filtered pull:
 
 ```
-python tools/pull_source_from_studio.py --audit   # Studio -> repo: what drifted
-python tools/pull_source_from_studio.py           # pull it
-
-python tools/record_pending_push.py               # repo -> Studio: queue edits
-python tools/push_repo_to_studio.py --audit       # classify against live Studio
-python tools/push_repo_to_studio.py               # apply (two-phase, verified)
+python tools/capture_studio_snapshot.py capture --help
+python tools/capture_studio_snapshot.py apply --help
+python tools/capture_studio_snapshot.py verify --help
 ```
 
-Writes into Studio must go through `ScriptEditorService:UpdateSourceAsync` —
-raw `.Source` writes leave LocalScripts running stale bytecode. Reads must go
-through `execute_luau` reading `.Source`, because `script_read` can serve a
-stale editor buffer after a programmatic write.
+`capture` reads all live scripts and RemoteEvents, their exact paths/classes,
+`.Source`, `ScriptEditorService:GetEditorSource` and recorded metadata into a
+local snapshot. Resolve source/editor conflicts before claiming parity. Check
+that the live catalog and baseline remained stable through the capture, then
+`apply` the snapshot to the local repository and `verify` it against a fresh
+Studio read. Keep a full native place backup for geometry, assets and other
+non-script data. The exact command arguments and final verification receipt
+are in [the current sync record](docs/STUDIO_CODE_SYNC_2026-10-12.md).
 
-`tools/tests/test_push_repo_to_studio.py` verifies the push tool against a fake
-Studio without touching anything real (needs a `luau` binary; see the file).
+This workflow writes the local mirror only. Do not bulk-push repository
+scripts, restore an old place, or treat historical pending flags as permission
+for a Studio write. Retained push/payload tools and their offline tests are
+historical tooling; they do not authorize a game change.
+
+For a separately requested Studio edit, verify the exact instance and compare
+its current Source and editor source immediately before editing. Use
+`ScriptEditorService:UpdateSourceAsync` for the scoped change and recheck the
+fresh baseline inside the callback. If concurrent work changed it, reread and
+reconcile the live Studio change. Follow `AGENTS.md` for fresh empty ModuleScript
+probes, original-source guards, resource cleanup and publishing requirements.
+Commit only task-owned changes after inspecting the exact staged diff; record
+local commits separately from a GitHub push or Roblox publication.
 
 ## There is a code knowledge graph — use it before grepping
 

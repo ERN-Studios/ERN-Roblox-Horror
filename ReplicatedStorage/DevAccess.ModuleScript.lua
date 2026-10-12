@@ -59,6 +59,17 @@ function DevAccess.IsLevel5Allowed(subject)
 	return DevAccess.Level5Public == true or DevAccess.IsLevel6PreviewAllowed(subject)
 end
 
+-- MALL_PREVIEW_20261012 (owner): the mall lobby preview, E at the lobby spawn, is for exactly these three accounts.
+local MALL_PREVIEW_USER_IDS = {
+	[9488575949] = true,  -- LaverSneglen
+	[11374988579] = true, -- ZenMeister02
+	[40920547] = true,    -- mikkelczar
+}
+function DevAccess.IsMallPreviewAllowed(subject)
+	local userId = if typeof(subject) == "Instance" and subject:IsA("Player") then subject.UserId else subject
+	return type(userId) == "number" and MALL_PREVIEW_USER_IDS[userId] == true
+end
+
 function DevAccess.IsLevel3TimelineOwner(subject)
 	local userId
 	if typeof(subject) == "Instance" and subject:IsA("Player") then

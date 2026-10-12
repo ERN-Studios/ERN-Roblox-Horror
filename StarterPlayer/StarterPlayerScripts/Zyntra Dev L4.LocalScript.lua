@@ -9,6 +9,7 @@
 --   toggles and actions  PlayerScripts.DevCheatCommand:Fire(<command>)  (one arg;
 --                        DevCheats toggles and fires Remotes.DevControl)
 --   GIVE RESEARCH TOKENS Remotes.ZyntraGrantTokens:InvokeServer(userId, amount)
+--   GIVE / TAKE CREATOR SKIN (CREATOR_SKIN_20261012) Remotes.ZyntraGrantCreatorSkin:InvokeServer(userId, give)
 -- Everything else only READS attributes the game already publishes. The client
 -- gates are cosmetic: GameManager / ZyntraMonetization re-check DevAccess on
 -- every remote. Non-developers return on line one: no gui, no bridge.
@@ -406,7 +407,64 @@ do
 		end
 		ui.onPress(g.Give.Hit, g.give)
 		Binder.press(g.Give.Hit, g.Give.Face, g.Give.Shadow)
+		g.creatorButtons(row)
 		g.rebuild()
+	end
+
+	-- CREATOR_SKIN_20261012 (owner: the creator skin is "sådan vi DEVs kan give dem det"). Two buttons in the free
+	-- right half of this row's header, for the player chosen in the picker below: GIVE CREATOR SKIN and TAKE
+	-- CREATOR SKIN. They are not in the Figma import, so they are made here; the server
+	-- (Remotes.ZyntraGrantCreatorSkin) checks DevAccess and the recipient again and saves the suit in their profile.
+	function g.creatorButtons(row)
+		local info = Binder.find(row, "Info")
+		if not info or info:FindFirstChild("CreatorSkin") then return end
+		local holder = Instance.new("Frame")
+		holder.Name, holder.BackgroundTransparency = "CreatorSkin", 1
+		holder.AnchorPoint, holder.Position, holder.Size = Vector2.new(1, 0), UDim2.fromScale(1, 0.04), UDim2.fromScale(0.5, 0.42)
+		holder.Parent = info
+		local desc = Binder.text(Binder.find(info, "Desc"))
+		for index, spec in ipairs({{"GIVE CREATOR SKIN", true, P.RailTeal}, {"TAKE CREATOR SKIN", false, P.Coral}}) do
+			local button = Instance.new("TextButton")
+			button.Name = spec[2] and "GiveCreatorSkin" or "TakeCreatorSkin"
+			button.Position, button.Size = UDim2.fromScale((index - 1) * 0.52, 0), UDim2.fromScale(0.48, 1)
+			button.BackgroundColor3, button.BorderSizePixel, button.AutoButtonColor = spec[3], 0, true
+			button.Text, button.TextColor3, button.TextScaled = spec[1], Color3.fromRGB(8, 14, 12), true
+			if desc then button.FontFace = desc.FontFace end
+			local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 8); corner.Parent = button
+			local pad = Instance.new("UIPadding")
+			pad.PaddingLeft, pad.PaddingRight, pad.PaddingTop, pad.PaddingBottom = UDim.new(0.06, 0), UDim.new(0.06, 0), UDim.new(0.22, 0), UDim.new(0.22, 0)
+			pad.Parent = button
+			button.Parent = holder
+			button.Activated:Connect(function() g.creator(spec[2]) end)
+		end
+	end
+
+	function g.creator(give)
+		if not ready() then return end
+		if not selected or not table.find(Players:GetPlayers(), selected) then
+			selected = nil
+			g.render()
+			return result("Choose a player who is on this server.", "error")
+		end
+		local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+		local remote = remotes and remotes:FindFirstChild("ZyntraGrantCreatorSkin")
+		if not remote or not remote:IsA("RemoteFunction") then
+			return result("The creator skin is unavailable on this server. Rejoin an updated server.", "error")
+		end
+		local target = selected
+		pending = true
+		g.render()
+		result((give and "Giving the Creator Gold skin to @%s..." or "Taking the Creator Gold skin from @%s..."):format(target.Name))
+		local ok, response = pcall(function() return remote:InvokeServer(target.UserId, give) end)
+		pending, cooldownUntil = false, os.clock() + 3
+		if ok and type(response) == "table" and type(response.Success) == "boolean"
+			and type(response.Message) == "string" and response.Message ~= "" then
+			result(response.Message, response.Success and "success" or "error")
+		else
+			result("Result unknown. Ask @" .. target.Name .. " to look under SHOP > SKINS before trying again.", "error")
+		end
+		g.render()
+		for second = 1, 3 do task.delay(second, g.render) end
 	end
 
 	local function nameOf(who) return "@" .. who.Name .. (who == player and " (you)" or "") end

@@ -41,42 +41,66 @@ local function allowed(player)
 	return ok and result == true and workspace:GetAttribute("ReservedRoundServer") ~= true
 end
 
-local function console()
+-- MALL_LOBBY_20261012: the mall lobby standing beside this one has a console on its own stage, so there are two
+-- desks. Each is {desk, centre}: the DJ stands behind the desk on the side away from that lobby's middle.
+local function consoles()
+	local found = {}
 	local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
 	local visuals = lobby and lobby:FindFirstChild("BlenderVisuals", true)
-	local found = visuals and visuals:FindFirstChild("DJConsole")
-	if found and not found:IsA("BasePart") then found = found:FindFirstChildWhichIsA("BasePart", true) end
-	return found, lobby
+	local desk = visuals and visuals:FindFirstChild("DJConsole")
+	if desk and not desk:IsA("BasePart") then desk = desk:FindFirstChildWhichIsA("BasePart", true) end
+	if desk then table.insert(found, {desk = desk, centre = lobby:GetPivot().Position}) end
+	local mall = workspace:FindFirstChild("LobbyMallPreview")
+	local anchors = mall and mall:FindFirstChild("Anchors")
+	local mallDesk, mallSpawn = anchors and anchors:FindFirstChild("DJConsole"), anchors and anchors:FindFirstChild("Spawn")
+	if mallDesk and mallDesk:IsA("BasePart") and mallSpawn and mallSpawn:IsA("BasePart") then
+		table.insert(found, {desk = mallDesk, centre = mallSpawn.Position})
+	end
+	return found
+end
+
+-- the desk nearest this player
+local function console(player)
+	local character = player and player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	local best, bestDistance
+	for _, entry in ipairs(consoles()) do
+		local distance = root and (root.Position - entry.desk.Position).Magnitude or 0
+		if not best or distance < bestDistance then best, bestDistance = entry, distance end
+	end
+	return best, bestDistance
 end
 
 -- where the DJ stands: behind the console, on the side away from the lobby's middle, facing the room
-local function booth()
-	local desk, lobby = console()
-	if not desk then return nil end
-	local away = (desk.Position - lobby:GetPivot().Position) * Vector3.new(1, 0, 1)
+local function booth(player)
+	local entry = console(player)
+	if not entry then return nil end
+	local desk = entry.desk
+	local away = (desk.Position - entry.centre) * Vector3.new(1, 0, 1)
 	away = away.Magnitude > 1 and away.Unit or Vector3.zAxis
 	local feet = desk.Position + away * 2.9 - Vector3.new(0, desk.Size.Y / 2, 0)
 	return desk, feet, -away
 end
 
 local function nearBooth(player)
-	local desk = console()
-	local character = player.Character
-	local root = character and character:FindFirstChild("HumanoidRootPart")
-	return desk ~= nil and root ~= nil and (root.Position - desk.Position).Magnitude <= REACH
+	local entry, distance = console(player)
+	return entry ~= nil and player.Character ~= nil and player.Character:FindFirstChild("HumanoidRootPart") ~= nil and distance <= REACH
 end
 
 local function ensurePrompt()
-	local desk = console()
-	if not desk or desk:FindFirstChild(PROMPT_NAME) then return end
-	local prompt = Instance.new("ProximityPrompt")
-	prompt.Name = PROMPT_NAME
-	prompt.ActionText, prompt.ObjectText = "OPEN", "DJ BOOTH"
-	prompt.HoldDuration, prompt.MaxActivationDistance, prompt.RequiresLineOfSight = 0, 11, false
-	prompt.Parent = desk
-	prompt.Triggered:Connect(function(player)
-		if allowed(player) then remote:FireClient(player, "open") end
-	end)
+	for _, entry in ipairs(consoles()) do
+		local desk = entry.desk
+		if not desk:FindFirstChild(PROMPT_NAME) then
+			local prompt = Instance.new("ProximityPrompt")
+			prompt.Name = PROMPT_NAME
+			prompt.ActionText, prompt.ObjectText = "OPEN", "DJ BOOTH"
+			prompt.HoldDuration, prompt.MaxActivationDistance, prompt.RequiresLineOfSight = 0, 11, false
+			prompt.Parent = desk
+			prompt.Triggered:Connect(function(player)
+				if allowed(player) then remote:FireClient(player, "open") end
+			end)
+		end
+	end
 end
 
 -- DJ mode ------------------------------------------------------------------------------------------------
@@ -125,7 +149,7 @@ local function startDJ(player)
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	local root = humanoid and humanoid.RootPart
-	local desk, feet, facing = booth()
+	local desk, feet, facing = booth(player)
 	if not root or not desk or humanoid.Health <= 0 or player:GetAttribute("InRound") == true then return end
 	for other in pairs(djs) do stopDJ(other) end                       -- one DJ at the decks
 	local state = {character = character, speed = humanoid.WalkSpeed, jump = humanoid.JumpPower}

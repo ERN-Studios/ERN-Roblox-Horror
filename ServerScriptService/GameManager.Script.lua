@@ -685,6 +685,7 @@ local function buildLobby()
  workspace:SetAttribute("LobbySpawnMigrationReady", false)
  workspace:SetAttribute("LobbySpawnMigrationError", nil)
  local originalSpawn = spawn.CFrame
+ local usedMall = false
  local ok, problem = pcall(function()
   local folder = script.Parent:FindFirstChild("LobbyReimaginedPreview")
   local builder = folder and folder:FindFirstChild("Builder")
@@ -700,6 +701,49 @@ local function buildLobby()
   until os.clock() >= deadline
   assert(shop and shop:IsA("Model") and (tonumber(shop:GetAttribute("ShopItemCount")) or 0) > 0,
    "Original lobby shop did not finish before revised lobby startup")
+  -- MALL_IS_LOBBY_20261013 (owner: "Lav fuld replacement til den nye lobby"). The mall lobby (Workspace.
+  -- LobbyMallPreview, a static model saved in the place) IS the lobby: players spawn on its spawn point and the
+  -- tunnel lobby is not built at all, so its mesh bake no longer runs at server start. The first lobby above is
+  -- still built for its shop boxes, the supporters board and the spawn pad. If the mall is missing or not ready,
+  -- the tunnel lobby is built as before; workspace.LobbyUseTunnel = true asks for that on purpose (the mall is
+  -- then parked and previewed by Lobby Mall Preview).
+  local mall = workspace:FindFirstChild("LobbyMallPreview")
+  local mallAnchors = mall and mall:IsA("Model") and mall:FindFirstChild("Anchors")
+  local mallSpawn = mallAnchors and mallAnchors:FindFirstChild("Spawn")
+  if workspace:GetAttribute("LobbyUseTunnel") ~= true and mallSpawn and mallSpawn:IsA("BasePart")
+   and mall:GetAttribute("MallQueuesReady") == true then
+   local position = mallSpawn.Position + Vector3.new(0, .4, 0)
+   local params = RaycastParams.new()
+   params.FilterType = Enum.RaycastFilterType.Include
+   params.FilterDescendantsInstances = {mall}
+   params.RespectCanCollide = true
+   for _, dx in ipairs({-2, 0, 2}) do
+    for _, dz in ipairs({-2, 0, 2}) do
+     local hit = workspace:Raycast(position + Vector3.new(dx, 12, dz), Vector3.new(0, -18, 0), params)
+     assert(hit and hit.Instance.CanCollide and hit.Normal.Y > .7
+      and math.abs(hit.Position.Y - position.Y) < 2, "Mall lobby spawn floor is incomplete")
+    end
+   end
+   assert(spawn.Parent == lobby and lobby.Parent == workspace, "Canonical lobby spawn changed during startup")
+   spawn.CFrame = CFrame.lookAt(position, position + Vector3.zAxis)          -- looking down the concourse
+   spawn:SetAttribute("LobbySpawnFloorModelName", "LobbyMallPreview")
+   spawn:SetAttribute("LobbySpawnRevision", 4)
+   workspace:SetAttribute("LobbySpawnMigrationReady", true)
+   -- the supporters board's live renderer is the first lobby's; it is kept, out of sight under the mall's floor,
+   -- and Level Leaderboards pins a paper copy of it to the mall's directory board
+   for _, descendant in ipairs(lobby:GetDescendants()) do
+    if descendant.Name == "ZyntraDonationLeaderboardBoard" and descendant:IsA("Model") then
+     for _, part in ipairs(descendant:GetDescendants()) do
+      if part:IsA("BasePart") then part.Transparency = 1; part.CanCollide = false; part.CanQuery = false; part.CanTouch = false end
+     end
+     descendant:PivotTo(CFrame.new(mallSpawn.Position.X, mallSpawn.Position.Y - 22, mallSpawn.Position.Z + 100))
+     descendant.Parent = mallAnchors
+     break
+    end
+   end
+   usedMall = true
+   return
+  end
   local revised = require(builder).Build()
   assert(revised and revised:IsA("Model") and revised.Parent == workspace
    and revised.Name == "LobbyReimaginedPreview" and revised:GetAttribute("LobbyReimaginedOwned") == true
@@ -731,6 +775,27 @@ local function buildLobby()
   spawn:SetAttribute("LobbySpawnRevision", nil)
   workspace:SetAttribute("LobbySpawnMigrationError", tostring(problem))
   warn("[GameManager] Revised lobby startup failed; retaining safe original spawn: " .. tostring(problem))
+ elseif workspace:GetAttribute("KeepFirstLobby") ~= true then
+  -- FIRST_LOBBY_REMOVED_20261012 (owner: three lobbies were loading; "the very first lobby that is not made in
+  -- blender, make sure to remove that one"). Players have stood in the revised lobby since the spawn moved there,
+  -- but the first one was still standing beside it and sent to every client: about 2,600 parts nobody could reach.
+  -- It is still BUILT, because the revised lobby takes its shop boxes and the supporters board from it (both are
+  -- taken by now), and it still EXISTS as a Model named ServerLobby holding LobbySpawn, because a dozen scripts
+  -- read "this server has a lobby" and the spawn from exactly that. Everything else in it goes here, before any
+  -- character is loaded; its queue pads go with it, so it has no stations. If the revised lobby failed above, the
+  -- first one is the fallback and is kept whole. workspace.KeepFirstLobby = true keeps it for a look in Studio.
+  local removed = 0
+  for _, child in ipairs(lobby:GetChildren()) do
+   if child ~= spawn then
+    removed += (child:IsA("BasePart") and 1 or 0)
+    for _, d in ipairs(child:GetDescendants()) do
+     if d:IsA("BasePart") then removed += 1 end
+    end
+    child:Destroy()
+   end
+  end
+  lobby:SetAttribute("FirstLobbyRemovedParts", removed)
+  stations = {}
  end
  return lobby, spawn, stations
 end
@@ -4090,15 +4155,20 @@ end
 if not IS_RESERVED_ROUND_SERVER then
  local r3Models = setmetatable({}, {__mode = "k"})
  local function bindR3(model)
-  if model.Name ~= "LobbyReimaginedPreview" or not model:IsA("Model") or model.Parent ~= workspace
-   or model:GetAttribute("LobbyReimaginedOwned") ~= true then return end
+  -- MALL_LOBBY_20261012 (owner: a mall lobby beside this one, "fully functional like our current lobby", three
+  -- pads a level): its pads (24 since 2026-10-12, four a level) are stations of this same engine under their own ids (201-224, QueueBridge.BuildMall).
+  local mall = model.Name == "LobbyMallPreview"
+  if not model:IsA("Model") or model.Parent ~= workspace then return end
+  if not mall and (model.Name ~= "LobbyReimaginedPreview" or model:GetAttribute("LobbyReimaginedOwned") ~= true) then return end
   if r3Models[model] then return end
   local ownerFolder = script.Parent:FindFirstChild("LobbyReimaginedPreview")
   local module = ownerFolder and ownerFolder:FindFirstChild("QueueBridge")
   if not module or not module:IsA("ModuleScript") then return end
   local bridge = require(module)
-  if not bridge.IsLobby(model) then return end
-  local ok, specs = pcall(bridge.Build, model)
+  if mall then
+   if not (bridge.IsMall and bridge.IsMall(model)) then return end
+  elseif not bridge.IsLobby(model) then return end
+  local ok, specs = pcall(if mall then bridge.BuildMall else bridge.Build, model)
   if not ok then warn("[R3 Queue Bridge] " .. tostring(specs)); return end
   local registered = {}
   for _, station in ipairs(specs) do
@@ -4142,9 +4212,9 @@ if not IS_RESERVED_ROUND_SERVER then
  end
  local watched = setmetatable({}, {__mode = "k"})
  local function watchR3(model)
-  if model.Name ~= "LobbyReimaginedPreview" or not model:IsA("Model") or watched[model] then return end
+  if (model.Name ~= "LobbyReimaginedPreview" and model.Name ~= "LobbyMallPreview") or not model:IsA("Model") or watched[model] then return end
   watched[model] = true
-  local readyConnection = model:GetAttributeChangedSignal("Ready"):Connect(function() bindR3(model) end)
+  local readyConnection = model:GetAttributeChangedSignal(if model.Name == "LobbyMallPreview" then "MallQueuesReady" else "Ready"):Connect(function() bindR3(model) end)
   local ancestryConnection = model.AncestryChanged:Connect(function()
    if model.Parent == workspace then task.defer(bindR3, model) end
   end)

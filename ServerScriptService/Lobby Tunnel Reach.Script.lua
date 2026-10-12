@@ -129,11 +129,37 @@ local function place()
 	local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
 	local set = lobby and lobby:GetAttribute("Ready") == true and lobby:FindFirstChild("InfiniteTunnelEnd")
 	local cf = set and set:GetAttribute("ReachFrame")
-	if typeof(cf) ~= "CFrame" then return false end
+	if typeof(cf) ~= "CFrame" then
+		-- MALL_IS_LOBBY_20261013: no tunnel lobby on this server: the creature lives past the mall's tape
+		local mall = workspace:FindFirstChild("LobbyMallPreview")
+		set = mall and workspace:GetAttribute("LobbySpawnMigrationReady") == true and mall
+		cf = set and set:GetAttribute("ReachFrame")
+		if typeof(cf) ~= "CFrame" then return false end
+	end
 	frame, FENCE, GROUND = cf, set:GetAttribute("ReachFence"), set:GetAttribute("ReachGround")
 	root:SetAttribute("Frame", frame)
 	root:SetAttribute("Fence", FENCE)
 	return true
+end
+
+-- MALL_LOBBY_20261012 (owner: past the DANGER tape at the dark end of the mall lobby "bliver lobby monster vækket
+-- og stille og roligt kommer tættere på"). There is ONE creature and two dark ends: the present lobby's tunnel and
+-- the mall's dark wing (LobbyMallPreview's ReachFrame / ReachFence / ReachGround, set by tools/lobby_mall/
+-- import_mall.py; its "fence" is the tape). Asleep, with every hand home, it moves to whichever end somebody has
+-- walked into; `Frame` and `Fence` are republished and the client follows them.
+local function otherPlaces()
+	local found = {}
+	local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
+	local set = lobby and lobby:GetAttribute("Ready") == true and lobby:FindFirstChild("InfiniteTunnelEnd")
+	if set and typeof(set:GetAttribute("ReachFrame")) == "CFrame" then
+		table.insert(found, {frame = set:GetAttribute("ReachFrame"), fence = set:GetAttribute("ReachFence"), ground = set:GetAttribute("ReachGround")})
+	end
+	local mall = workspace:FindFirstChild("LobbyMallPreview")
+	if mall and typeof(mall:GetAttribute("ReachFrame")) == "CFrame" and type(mall:GetAttribute("ReachFence")) == "number"
+		and type(mall:GetAttribute("ReachGround")) == "number" then
+		table.insert(found, {frame = mall:GetAttribute("ReachFrame"), fence = mall:GetAttribute("ReachFence"), ground = mall:GetAttribute("ReachGround")})
+	end
+	return found
 end
 
 -- ---- the creature --------------------------------------------------------------------------------------------------
@@ -214,6 +240,29 @@ local gaze = Vector3.new(0, 4, 0)
 local function step(dt)
 	local t = now()
 	local prey = over()
+	if #prey == 0 and not awake then
+		-- MALL_LOBBY_20261012: nobody here and it sleeps: is somebody at the other dark end?
+		local home = true
+		for _, arm in ipairs(arms) do
+			if arm.state ~= "rest" then home = false end
+		end
+		if home then
+			for _, other in ipairs(otherPlaces()) do
+				if other.frame ~= frame then
+					local keepFrame, keepFence, keepGround = frame, FENCE, GROUND
+					frame, FENCE, GROUND = other.frame, other.fence, other.ground
+					local there = over()
+					if #there > 0 then
+						root:SetAttribute("Frame", frame)
+						root:SetAttribute("Fence", FENCE)
+						prey = there
+						break
+					end
+					frame, FENCE, GROUND = keepFrame, keepFence, keepGround
+				end
+			end
+		end
+	end
 	if #prey > 0 then
 		if not awake then
 			awake, awakeAt = true, t

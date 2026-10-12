@@ -224,6 +224,11 @@ local function lobbyBounds()
 		if revised and revised:IsA("Model") and revised:GetAttribute("LobbyReimaginedOwned") == true
 			and revised:GetAttribute("Ready") == true then lobby = revised end
 	end
+	-- MALL_IS_LOBBY_20261013: the mall lobby is the lobby when the spawn pad stands in it
+	if spawn and spawn:IsA("SpawnLocation") and spawn:GetAttribute("LobbySpawnFloorModelName") == "LobbyMallPreview" then
+		local mall = workspace:FindFirstChild("LobbyMallPreview")
+		if mall and mall:IsA("Model") then lobby = mall end
+	end
 	if not lobby or not lobby:IsA("Model") then
 		lobbyBox = nil
 		return nil

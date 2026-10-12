@@ -5,13 +5,17 @@
 local TokenPercentPerLevel = 0.05
 local PCT = ("+%d%%"):format(math.floor(TokenPercentPerLevel * 100 + 0.5))
 
-return {
+local Config = {
 	DataStoreName = "ZyntraPlayerData_v1",
 	SupportLeaderboardDataStoreName = "ZyntraDonationLeaderboard_v2",
 	SupportLeaderboardSize = 10,
 	SupportLeaderboardRefreshSeconds = 90,
 	TokenPercentPerLevel = TokenPercentPerLevel,
 	LevelCompletionTokens = 2,
+	-- NEW_PLAYER_TOKENS_20261011 (owner: "nye spillere starter med et par tokens ... hvad med bare 5?"). Banked once,
+	-- at a first login, by ZyntraMonetization; the welcome card and the token card read the number from here. 5 buys
+	-- one Entity Shield, or a Speed Potion and a Route Marker Pack.
+	NewPlayerTokens = 5,
 	-- UPGRADE_COST_20260924 (Trello KF7FDmP1): each Stamina/Battery level costs
 	-- one token more than the last -- level 1 costs 1, level 10 costs 10. The
 	-- argument is the level the player holds NOW. Server and shop both read it.
@@ -418,3 +422,66 @@ return {
 		GlowstickDefault = Color3.fromRGB(65, 145, 255),
 	},
 }
+
+-- HALLOWEEN_SALE_20261013 (owner: "halloween sale signs around the lobby and at the shop saying 66,6 halloween
+-- discount on everything. Og en reentry package med 3 reentry til ens pris"). The lobby's sale signs
+-- (tools/lobby_mall/build_halloween.py) promise this, so while the sale runs:
+--   * every Research Token price is cut by 66.6 % and rounded to a whole token, never under 1 (Entity Shield 5 -> 2,
+--     Speed Potion 3 -> 1, Route Marker Pack 2 -> 1, an upgrade level to a third; ZyntraSkins cuts the token skins);
+--   * one Emergency Re-entry purchase banks THREE credits for the price of one.
+-- Robux prices live on Roblox (Creator Dashboard) and the shop shows whatever Roblox charges. The owner had them cut
+-- there on 2026-10-13 ("66,6% på alt ... undtagen [donationer]": 149 -> 50, 99 -> 33, 69 -> 23, 49 -> 16, 29 -> 10,
+-- 299 -> 100, 399 -> 133; ~/Projects/stayquiet-session-tools/live/halloween_prices.py, `--restore` puts them back).
+-- The Price fields below follow, because the server credits a newly seen pass to the supporters' board at its
+-- listed Price. Donations and the three upgrade passes that are off sale keep their prices.
+-- WHEN THE SALE ENDS the prices on Roblox must be restored by hand (the script above): this switch cannot do that.
+-- The sale ends by itself at EndsAt (2026-11-02 00:00 UTC), read when a server or a client starts; Enabled = false
+-- ends it at once. A description that quotes a price is rewritten with it, so the wording stays what the server takes.
+Config.HalloweenSale = {Enabled = true, EndsAt = 1793577600, PercentOff = 66.6, ReentryGrant = 3}
+
+function Config.HalloweenSaleActive()
+	local sale = Config.HalloweenSale
+	return sale.Enabled == true and os.time() < sale.EndsAt
+end
+
+-- The token price a regular price becomes while the sale runs (the regular price otherwise).
+function Config.SaleTokens(regular)
+	regular = math.max(0, math.floor(tonumber(regular) or 0))
+	if regular == 0 or not Config.HalloweenSaleActive() then return regular end
+	return math.max(1, math.floor(regular * (1 - Config.HalloweenSale.PercentOff / 100) + 0.5))
+end
+
+if Config.HalloweenSaleActive() then
+	local function tokens(n) return n .. (n == 1 and " Research Token" or " Research Tokens") end
+	local function cut(item)
+		local regular = item.TokenCost
+		item.RegularTokenCost, item.TokenCost = regular, Config.SaleTokens(regular)
+		if item.Description then
+			item.Description = (item.Description:gsub("Costs " .. regular .. " Research Tokens",
+				"Halloween sale: costs " .. tokens(item.TokenCost) .. " (was " .. regular .. ")"))
+		end
+	end
+	local shieldWas = Config.ProtectionItem.TokenCost
+	cut(Config.ProtectionItem)
+	for _, item in pairs(Config.Items) do cut(item) end
+	for _, product in pairs(Config.Products) do
+		if product.Description then
+			product.Description = (product.Description:gsub("for " .. shieldWas .. " tokens", "for " .. Config.ProtectionItem.TokenCost .. " tokens"))
+		end
+	end
+	local regularUpgrade = Config.UpgradeCost
+	Config.RegularUpgradeCost = regularUpgrade
+	Config.UpgradeCost = function(level) return Config.SaleTokens(regularUpgrade(level)) end
+	for _, pass in ipairs({Config.Passes.EntityDetector, Config.Passes.Supporter, Config.Passes.AdvancedEquipment, Config.Passes.CosmeticEquipment,
+		Config.TokenEarner.Passes.TokenEarner2x, Config.TokenEarner.Passes.TokenEarner3x, Config.TokenEarner.Passes.TokenEarner5x,
+		Config.Products.ExpeditionPack, Config.Products.Tokens4, Config.Products.Tokens20, Config.Products.EmergencyReentry}) do
+		pass.RegularPrice, pass.Price = pass.Price, Config.SaleTokens(pass.Price)
+	end
+	local reentry = Config.Products.EmergencyReentry
+	reentry.RegularReentryGrant, reentry.ReentryGrant = reentry.ReentryGrant, Config.HalloweenSale.ReentryGrant
+	reentry.Name = "Emergency Re-entry x" .. reentry.ReentryGrant
+	reentry.Description = (reentry.Description:gsub("^Adds 1 stored Emergency Re%-entry credit%.",
+		"HALLOWEEN 3 FOR 1: adds " .. reentry.ReentryGrant .. " stored Emergency Re-entry credits for the price of one."))
+end
+
+return Config

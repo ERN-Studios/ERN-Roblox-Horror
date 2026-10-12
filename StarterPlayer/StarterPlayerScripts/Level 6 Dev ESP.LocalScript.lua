@@ -93,7 +93,10 @@ RunService.Heartbeat:Connect(function(dt)
 		for _, other in ipairs(Players:GetPlayers()) do
 			local character = other.Character
 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-			if other ~= player and humanoid and humanoid.Health > 0 and inLevel(other) then
+			-- PLAYER_ESP_GLOBAL_20261012: DevCheats now draws every other player on every map (blue, with the
+			-- distance) for the accounts that have it; this script only does it for the one that does not
+			if other ~= player and humanoid and humanoid.Health > 0 and inLevel(other)
+				and player:GetAttribute("DevCheatPlayerEsp") ~= true then
 				show(character, other.DisplayName, PLAYER_COLOUR)
 			end
 		end

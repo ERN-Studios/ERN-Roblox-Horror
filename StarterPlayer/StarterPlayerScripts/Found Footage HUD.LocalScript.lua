@@ -135,9 +135,12 @@ local function acquire(bundle)
 		Ring = Binder.at(root, "RingSlot") and Hud.Ring(Binder.at(root, "RingSlot")) or nil}
 end
 
+-- HOLD_RING_20261013 (owner: the hold ring "skal være meget mere tydelig ... en lysere farve"): a pale mint, far
+-- lighter than the rail teal it was, which sank into the dark plate. RoundHud.Ring draws it twice as thick.
+local HOLD_RING = Color3.fromRGB(170, 255, 240)
 local function setPromptFill(state, fraction)
 	if state.Fill then state.Fill.Size = UDim2.fromScale(fraction, 1) end
-	if state.Ring then state.Ring(fraction, P.RailTeal) end
+	if state.Ring then state.Ring(fraction, HOLD_RING) end
 end
 
 local function build(prompt)

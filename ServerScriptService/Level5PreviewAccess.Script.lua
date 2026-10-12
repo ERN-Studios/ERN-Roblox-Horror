@@ -432,6 +432,8 @@ watchR3Lobby(workspace:FindFirstChild("LobbyReimaginedPreview"))
 --   NO CHECKPOINTS (owner, 2026-10-04): A FALL IS A DEATH. A body that drops well below the stretch it was on is
 --   killed, and any death (a Reset too) ends that player's run: back to the lobby. The `Checkpoints` list is
 --   still read, but only to know which room a player has reached (the plates and the room names need it).
+--   EASY_PHONE_20261010 replaces that: a fall stands the body on the last checkpoint it reached, alive (see
+--   FALL_BACK below), and the rebuilt map has a checkpoint every few jumps inside each room.
 --   PLATES: the door out of a room goes down when every member of a party who has not passed it yet stands on
 --   the room's plate, and it STAYS down (owner, 2026-10-05: "it stays down permanently and does not go up
 --   again"). It comes back up only when nobody is left in the level, so the next party finds every door shut.
@@ -452,7 +454,8 @@ do
 	local BALL_RETURN = 35
 	-- the corridor: the walls take CLOSE_SECONDS to come within SHUT_GAP of each other, then shut; a body between
 	-- them is dead from KILL_GAP. Walking the 198 studs from the gate takes 12.4 s, a sprint 7.6 s.
-	local CLOSE_SECONDS, SHUT_GAP, KILL_GAP = 15.5, 5.0, 3.0
+	-- EASY_PHONE_20261010: 21 s (it was 15.5). On a thumb stick the walk is slower and less straight than 12.4 s.
+	local CLOSE_SECONDS, SHUT_GAP, KILL_GAP = 21.0, 5.0, 3.0
 	local REENTRY_WINDOW, CHOICE_SECONDS, NEXT_LEVEL = 15, 15, 6
 	-- DEATH_PARITY_20261008 (owner: "no kill cam like all the other maps, you just die and are thrown back to the
 	-- lobby; there has to be spectating, buying a re-entry or using a banked one, and you spawn at the start of
@@ -463,6 +466,13 @@ do
 	-- SECTION they had reached. A fall is shown before it is a death: the client's camera lets go and watches
 	-- the body drop for FALL_CAM seconds.
 	local FALL_CAM = 2.4
+	-- EASY_PHONE_20261010 (owner: "Jeg ved at level 5 er fuldkommen umuligt på telefon" ... "Bare fix og lave hele
+	-- level 5 om. Gør det nemmere på telefon og tablet"). A FALL IS NO LONGER A DEATH: the body drops for
+	-- FALL_BACK seconds (the same fall camera, shorter) and stands on the LAST CHECKPOINT it had reached, which the
+	-- rebuilt map now has every few jumps inside each room. This replaces "a fall is a death" of 2026-10-04 and
+	-- the fall half of DEATH_PARITY_20261008; the corridor still kills, and a death is still handled as there.
+	-- The old rule is one attribute away: ReplicatedStorage.Level5Void `FallKills` = true.
+	local FALL_BACK, FALL_GRACE = 0.8, 1.2
 	local SECTION = {rose = 1, blue = 2, amber = 3, mint = 4, violet = 5, coral = 6, orange = 7, crimson = 8, teal = 9, ivory = 10}
 	local SOUND_IDS = {
 		-- filled by tools/level5_void/install_sounds.py (ReplicatedStorage.Level5Void.Sounds carries the same)
@@ -541,7 +551,13 @@ do
 	end
 	local function checkpointFrame(model, row)
 		local origin = model:GetAttribute("Origin")
-		return upright(origin + Vector3.new(row.x, row.y + 3.5, row.z), Vector3.xAxis)
+		-- EASY_PHONE_20261010: facing along the route there (`yaw`, the build's heading), not always east: on a
+		-- stair round a column east is the drop
+		local look = Vector3.xAxis
+		if type(row.yaw) == "number" then
+			look = Vector3.new(math.cos(math.rad(row.yaw)), 0, math.sin(math.rad(row.yaw)))
+		end
+		return upright(origin + Vector3.new(row.x, row.y + 3.5, row.z), look)
 	end
 	local function sound(parent, name, volume, looped)
 		local template = folder:FindFirstChild("Sounds") and folder.Sounds:FindFirstChild(name)
@@ -1223,7 +1239,10 @@ do
 				end
 				for index = record.cp + 1, #list do
 					local row = list[index]
-					if math.abs(at.X - row.x) < 11 and math.abs(at.Z - row.z) < 13 and math.abs(at.Y - 3 - row.y) < 7 then
+					-- EASY_PHONE_20261010: 8 x 8 (it was 11 x 13). The rebuilt map has 161 checkpoints and lanes ten
+					-- studs apart (Orange): the wide box reached a later lane's checkpoint from an earlier lane. One
+					-- that is walked past on a wide landing is made up for by the next.
+					if math.abs(at.X - row.x) < 8 and math.abs(at.Z - row.z) < 8 and math.abs(at.Y - 3 - row.y) < 7 then
 						reach(index)
 					end
 				end
@@ -1241,6 +1260,10 @@ do
 						if reached > record.cp then reach(reached) end
 						row = list[record.cp]
 						below = at.Y < row.low - FALL_MARGIN
+					elseif route and routeAhead(route, 1, at) then
+						-- EASY_PHONE_20261010: on the route BEHIND its checkpoint (walked back into a lower room): a body
+						-- standing on the route is never falling. Its checkpoint stays where it was.
+						below = false
 					end
 				end
 				local section = SECTION[row.sec]
@@ -1250,6 +1273,8 @@ do
 				-- (a developer who is noclipping flies: GameManager's setServerNoclip puts the body in this group)
 				local dropping = below and root.CollisionGroup ~= "DevNoclip"
 					and (record.fallingAt ~= nil or root.AssemblyLinearVelocity.Y < -25)
+					and os.clock() - (record.returnedAt or 0) > FALL_GRACE
+				local kills = folder:GetAttribute("FallKills") == true
 				if record.fallingAt and not dropping then
 					record.fallingAt = nil
 					event:FireClient(player, "fallover")
@@ -1259,8 +1284,17 @@ do
 					if not record.fallingAt then
 						-- DEATH_PARITY_20261008: the fall is shown first (the client's fall camera), then it is a death
 						record.fallingAt = os.clock()
-						event:FireClient(player, "falling", FALL_CAM)
-					elseif os.clock() - record.fallingAt >= FALL_CAM then
+						event:FireClient(player, "falling", kills and FALL_CAM or FALL_BACK, not kills)
+					elseif not kills and os.clock() - record.fallingAt >= FALL_BACK then
+						-- EASY_PHONE_20261010: back on the last checkpoint, alive. The client moves its own body too
+						-- (it owns it: a server move alone arrives late and still carrying the fall's speed).
+						local frame = checkpointFrame(model, row)
+						record.fallingAt, record.returnedAt = nil, os.clock()
+						record.falls = (record.falls or 0) + 1
+						root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+						character:PivotTo(frame)
+						event:FireClient(player, "returned", frame, record.falls)
+					elseif kills and os.clock() - record.fallingAt >= FALL_CAM then
 						record.fellNow = true
 						local humanoid = character:FindFirstChildOfClass("Humanoid")
 						if humanoid then humanoid.Health = 0 end   -- the Died hook keeps them in the level, dead

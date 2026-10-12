@@ -1,8 +1,19 @@
-# Current repository state — 9 October 2026
+# Current repository state - 12 October 2026
 
-Roblox Studio is authoritative. The verified source mirror and its hashes are recorded in studio-sync-manifest.json.
+Roblox Studio is authoritative. The repository is a downstream source mirror;
+`studio-sync-manifest.json` records the exported paths, classes, hashes and metadata.
 
-See docs/STUDIO_CODE_SYNC_2026-10-09.md for source verification and docs/GITHUB_CLEANUP_2026-10-09.md for the GitHub delivery and removal of obsolete captures. Runtime descriptions in the dated notes below reflect their recorded releases; read the current Studio sources for current behavior.
+The verified export on 12 October contains **217 scripts and 15 RemoteEvents**.
+All script Source/editor comparisons and independent source parity passed.
+The native backup observed place version **3053**; its reconstruction limits
+and the exact source verification are recorded in
+[the current sync record](docs/STUDIO_CODE_SYNC_2026-10-12.md).
+
+The gameplay overview, dated releases, test results and tooling notes below
+are historical records. Read the current Studio sources and current sync
+record for present behavior. Earlier delivery history remains in
+[the 9 October sync record](docs/STUDIO_CODE_SYNC_2026-10-09.md) and
+[GitHub cleanup record](docs/GITHUB_CLEANUP_2026-10-09.md).
 
 # BACKROOMS: STAY QUIET [CO-OP HORROR]
 
@@ -15,19 +26,18 @@ somebody spends a Zyntra **Emergency Re-entry**, which puts you back on your
 feet in the SAME round. Solve the level's objective while something hunts you —
 escape together, or watch your friends try.
 
-**Current repository snapshot: Studio place version 1933, captured 20 September 2026.**
-The source mirror now contains all 145 Studio scripts, including the hologram
-shop, Daily Rewards, Lucky Wheel, Friend Boost, Level 2 entity
-audio, and 5K/10K/20K donation options. A complete native place backup accompanies
-the source inventory. This audit did not publish the experience or change Studio.
+**Historical release snapshot: Studio place version 1933, captured 20 September 2026.**
+That audit recorded 145 scripts, including the hologram shop, Daily Rewards,
+Lucky Wheel, Friend Boost, Level 2 entity audio and donation options, with a
+complete native place backup. It did not publish the experience or change Studio.
 
-Read [the current audit and Trello implementation ranking](docs/STUDIO-AUDIT-2026-09-20.md)
+Read [the historical audit and Trello implementation ranking](docs/STUDIO-AUDIT-2026-09-20.md)
 for scope, validation, feature-branch history and remaining checks. Studio remains
 authoritative. The detailed sections below are historical documentation: their
 dated observations and old verification results are not a current gameplay guarantee.
 In particular, older descriptions of Pool Slide being removed are superseded by
-the current Pool Slide controller/navigation and audio scripts. Level 4 remains
-planned work; the current campaign ends at Level 3.
+the current Pool Slide controller/navigation and audio scripts. That release described Level 4 as
+planned work and the campaign as ending at Level 3; those statements are historical.
 
 ### Finishing a level
 
@@ -465,19 +475,19 @@ readers already assume.
 
 ## 🗂️ Repository layout
 
-**Roblox Studio is the release source of truth.** The repo and the place are
-kept in an **audited two-way sync**: edits are made in whichever place is
-convenient, pushed the other way byte-for-byte, and then *proved* equal — every
-push is verified on landing, and `tools/verify_studio_parity.py` re-derives the
-comparison from a fresh fingerprint of the live place rather than trusting the
-manifest it is checking. What ships is what is in Studio; the repo is the
-reviewable copy of it, not a write-only mirror. Folders mirror the Studio
-Explorer 1:1, and `studio-sync-manifest.json` records the canonical sha256 of
-every mirrored file. Its `counts` field — not a number copied into this
-README — is authoritative for how many scripts and RemoteEvents the place
-holds, and `studioTrailingNewline` is transport-derived and can change after an
-exact landing. A count written into prose here goes stale the first time a
-script is added, and has done so repeatedly.
+**Roblox Studio is the source of truth.** Export verified live Studio code into
+this repository after preserving a recoverable checkpoint of local changes.
+Repository history and pending flags never authorize overwriting Studio.
+Compare `.Source` with `ScriptEditorService:GetEditorSource` for every script;
+resolve conflicts before claiming parity. Verify the live catalog again after
+capture and before applying the snapshot locally so concurrent edits are caught.
+
+Folders mirror exported Studio instance paths, and files use
+`Name.ClassName.lua`. The manifest records the observation; it is not a
+replacement for a fresh Studio read. Full native place backups preserve
+geometry, assets and other instance data that source files cannot represent.
+The layout below illustrates older releases; the current manifest and sync
+record give the exact exported population.
 
 ```
 ServerScriptService/
@@ -505,8 +515,8 @@ ServerStorage/                      active asset/source kits and authoring
                                     and `Project Mirror` pending its own gate.
                                     The two old Codex folders are absent in
                                     Studio; their sources are archived off-mirror.
-Workspace/                          one marker file for the `Entity` rig; the rig
-                                    itself is model data, not mirrored source
+Workspace/                          geometry and rig data live in the full native
+                                    place backup; scripts are exported if present
 StarterPlayer/
   StarterCharacter/                 hazmat gameplay rig (+ Animate)
   StarterCharacterScripts/          run anim, muted default steps, dance emote
@@ -523,8 +533,6 @@ ReplicatedStorage/Remotes/          the eight shared RemoteEvents (.txt markers)
 ReplicatedStorage/UIDevice          form factor + safe-area layout for the HUD
                                     (`Safe`, `ModalViewport`, `TopRightPanel`)
 ReplicatedStorage/UIRegression      the HUD regression matrix (see Testing)
-RobloxReplicatedStorage/            four Roblox-engine-owned LocalizationService
-                                    remotes, mirrored as a record only
 assets/                             source assets: textures · sounds · models ·
                                     banners · animations (FBX + keyframes) · blender
 tools/                              Studio/Blender MCP pipeline (see below), plus
@@ -541,8 +549,8 @@ plugin/                             Studio dock plugin
 ```
 
 At the repo root, `CLAUDE.md` is the working brief for anyone (or anything)
-editing this place — the sync rules, the current state and the house rules live
-there, not here. The dated `HANDOVER-*.md` files are per-session records of what
+editing this place. `AGENTS.md` contains the owner's current instructions;
+these override older working notes and tool directions. The dated `HANDOVER-*.md` files are per-session records of what
 shipped and how it was verified.
 
 Level 1's five runtime scripts were gathered into `Level 1 Systems` on
@@ -554,84 +562,45 @@ server-side. `NoiseRegistry` deliberately stayed in the root as a shared
 service, so the moved scripts reach it through `ServerScriptService`, never
 `script.Parent`.
 
-## 🔧 Tooling (MCP pipeline)
+## Studio source export and retained tooling
 
-Everything below drives **live Roblox Studio and Blender** over MCP:
+The full snapshot workflow is **Studio -> local capture -> repository**. It
+reads Studio and writes the requested local mirror; it does not write scripts
+back into Studio. Preserve local changes before applying a capture.
 
-- `pull_source_from_studio.py` — audits every mirrored script against Studio's
-  live `.Source` (hash comparison) and pulls whatever drifted. This is the
-  primary sync path.
-- `sync_from_studio.py` — the original full Studio → repo mirror. **Caveat:**
-  its `script_read` calls can serve a stale editor buffer after programmatic
-  source writes; prefer the pull tool above.
-- **Repo → Studio pushes**: `record_pending_push.py` marks repo-edited scripts
-  as `pending-studio-push` in the manifest (remembering the hash Studio should
-  still hold), and `push_repo_to_studio.py` applies exactly those entries
-  through `ScriptEditorService:UpdateSourceAsync` — raw `.Source` writes leave
-  LocalScripts running stale bytecode. The push is two-phase and refuses to
-  half-apply a batch:
+```
+python tools/capture_studio_snapshot.py capture --help
+python tools/capture_studio_snapshot.py apply --help
+python tools/capture_studio_snapshot.py verify --help
+```
 
-  ```
-  python tools/push_repo_to_studio.py --list    # offline: what is queued
-  python tools/push_repo_to_studio.py --audit   # read live Studio, classify, write nothing
-  python tools/push_repo_to_studio.py           # phase 1 check, then phase 2 write
-  ```
+`capture` reads all live scripts and RemoteEvents, source/editor pairs and
+metadata into a local snapshot. `apply` lands that capture in the repository;
+`verify` checks it against a fresh live read. Use the exact command arguments
+and receipts in [the current sync record](docs/STUDIO_CODE_SYNC_2026-10-12.md).
+A source/editor disagreement or changed capture baseline must be resolved
+before the mirror is declared current. Preserve a full native place backup
+alongside the script snapshot.
 
-  Phase 1 reads every queued script's live source and classifies it
-  (already-applied / ready / conflict); **any** conflict aborts before a single
-  byte is written (`--skip-conflicts` pushes the clean ones,
-  `--overwrite-conflicts` accepts Studio's copy as the baseline). Phase 2 stages
-  each source in a ServerStorage buffer, verifies its length, then swaps it in
-  through a callback that re-checks the baseline *inside* Studio — so a script
-  edited between the check and the write is never clobbered. Every pre-push
-  source is saved under `.studio-push-backups/<timestamp>/`, and the manifest is
-  rewritten atomically after each file.
+Older `pull_source_from_studio.py`, `sync_from_studio.py`, pending-push,
+`push_repo_to_studio.py`, staging and parity tools remain as retained tooling.
+Their historical flags and tests do not authorize a bulk Studio push or make
+a repository version authoritative. Read-only diagnostics may help investigate
+an export, but do not substitute for the full fresh source/editor verification.
 
-  **A script that does not exist in Studio yet cannot be pushed by these tools.**
-  Create it in Studio first (`execute_luau` + `UpdateSourceAsync`), then add its
-  manifest item with `sha256_of` / `canonical_bytes` from
-  `tools/studio_source_contract.py`.
+For a separately requested game change, inspect the exact live instance and
+both sources, apply only the scoped change against that fresh baseline, and
+recheck the baseline inside `ScriptEditorService:UpdateSourceAsync`. If it
+changed, reread and reconcile the current Studio edit. Follow `AGENTS.md` for
+isolated probes: stage in a fresh empty ModuleScript, verify original sources,
+and clean up owned resources. Do not require full modules against Edit services
+just to prove compilation.
 
-  While a push is queued, `pull_source_from_studio.py` **skips** those files
-  (their repo copies are newer than Studio); pass `--force` to discard the
-  unpushed edits instead. (`push_level1_to_studio.py` and
-  `push_level2_poolrooms_to_studio.py` predated this path and were removed on
-  2026-09-02; they are still in git history if the old behaviour is ever
-  wanted.)
-- **When the MCP proxy is out of date**, every tool above fails with
-  `Client proxy is out of date, restart to update` and cannot reach the place at
-  all. The fallback transport keeps the one property that matters — the bytes
-  are never retyped through a tool call:
+### Retained sync tooling tests
 
-  ```
-  python tools/stage_push_payload.py <repo-relative file> [...]   # write an .rbxmx under rbxasset://
-  # then in Studio: game:GetObjects("rbxasset://MongoTVPush/payload.rbxmx")
-  #                 -> ScriptEditorService:UpdateSourceAsync per target, verified
-  python tools/stage_push_payload.py --clean                      # remove the staged file
-  ```
-
-  Two things about it are load-bearing. Studio's XML reader hands the source
-  back with **CRLF** line endings, so the apply step normalises before writing —
-  without that every file lands one byte per line too long. And a raw `.Source`
-  write refuses any string of **200,000 characters or more**, which Level 2
-  World Builder is far past; `UpdateSourceAsync` does not.
-
-  Afterwards, `tools/record_synced_source.py <dump> <file> ...` writes the
-  manifest entry — and refuses unless the parity dump below already shows Studio
-  holding that content.
-- **Independent parity check.** `tools/studio_parity_probe.luau` prints a
-  fingerprint (byte length + FNV-1a-32 + djb2) of every `LuaSourceContainer` in
-  the open place; `tools/verify_studio_parity.py <dump>` recomputes the same
-  fingerprint from the mirrored files and buckets every entry as
-  exact / permitted-newline / drift / missing / extra. It deliberately does
-  **not** reuse the manifest's sha256: a check that reads the record it is
-  checking only proves the record is self-consistent.
-- **Compile check.** `tools/studio_compile_probe.luau` compiles every script in
-  the place without running any of them, by wrapping each source as
-  `return function() ... end` and `require`ing the wrapper — the body is
-  compiled, and the function is never called.
-
-### Sync tooling tests
+These offline contract tests describe the retained tools. Running a fixture
+or passing an old push test gives no authorization to write Studio. Their
+recorded historical pass counts are not a current release result.
 
 ```
 python tools/tests/test_studio_source_contract.py     # offline, no Studio, no luau

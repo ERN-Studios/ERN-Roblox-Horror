@@ -344,6 +344,20 @@ task.spawn(function()
 			fallCam.start(a)
 		elseif what == "fallover" then
 			fallCam.open()                             -- FALL_TRUTH_20261008: the server took the fall back
+		elseif what == "returned" then
+			-- EASY_PHONE_20261010: a fall is not a death any more. The server has stood the body on the last
+			-- checkpoint it reached (`a`); this client owns the body, so it moves it too and takes the fall's
+			-- speed out of it, and the view comes back looking along the route.
+			if fall then fall:Stop() end
+			local character = player.Character
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			if root and typeof(a) == "CFrame" then
+				root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+				character:PivotTo(a)
+				if fallCam.on then fallCam.back = a.Rotation end
+			end
+			fallCam.open()
+			say("BACK AT THE LAST LANDING", 2.2)
 		elseif what == "died" then
 			-- DEATH_PARITY_20261008: a death keeps the player in the level (it used to be black until the lobby):
 			-- black for a moment, and the death screen, the spectating and the re-entry are RoundUI's.
@@ -361,7 +375,18 @@ task.spawn(function()
 				say(NAMES[c] or "", 3.2)
 			end
 		elseif what == "arrive" then
-			say("ROSE   ·   STAY ON THE LEDGES", 4)
+			-- EASY_PHONE_20261010: on touch the body jumps the gaps by itself (the jump assist at the end of this
+			-- script); a phone player is told so once, on arrival
+			local touch = workspace:GetAttribute("Level5AutoJumpAll")
+			if touch == nil then
+				local ok, device = pcall(function() return require(game:GetService("ReplicatedStorage"):WaitForChild("UIDevice", 5)) end)
+				touch = ok and type(device) == "table" and device.IsTouch() == true
+			end
+			if touch == true then
+				say("ROSE   ·   WALK AT A GAP AND YOU JUMP BY YOURSELF", 6)
+			else
+				say("ROSE   ·   STAY ON THE LEDGES", 4)
+			end
 		elseif what == "finish" then
 			oneShot("l5_finish", 0.5)
 			flash(Color3.new(1, 1, 1), 0.7)             -- short: the LEVEL 5 CLEARED screen comes up behind it
@@ -893,10 +918,160 @@ task.spawn(function()
 			nextCreak = os.clock() + 7 + math.random() * 9
 			down.FilterDescendantsInstances = {model}
 			local hit = workspace:Raycast(root.Position, Vector3.new(0, -6, 0), down)
-			if hit and hit.Instance.Name == "Walk" and hit.Instance.Size.Z <= 3.7
+			if hit and hit.Instance.Name == "Walk" and hit.Instance.Size.Z <= 4.7      -- (Mint's beams are 4.4 wide since 2026-10-10)
 				and Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z).Magnitude > 4 then
 				oneShot("l5_edge_creak", 0.3)
 			end
 		end
 	end
+end)
+
+-- EASY_PHONE_20261010: JUMP ASSIST, in Level 5 only (owner: "Jeg ved at level 5 er fuldkommen umuligt på telefon").
+--   LATE: a jump asked for up to COYOTE seconds after the feet walked off an edge is still a jump (never after a
+--   jump: `canCoyote` is taken away by the Jumping state, so this is no second jump).
+--   EARLY: a jump asked for in the air is kept for BUFFER seconds and made on landing.
+--   AUTO, on touch only: a body walking at a gap jumps by itself at the edge when there is a landing ahead within
+--   its reach, and hops onto a block up to 4.6 studs high that it walks into. A step down (a surface within 4.5
+--   studs under the edge and nothing level ahead) is walked off, not jumped. `workspace.Level5AutoJumpAll` (true or
+--   false) overrides the device test for a check in Studio.
+-- NoiseReporter's touch JUMP button fires PlayerScripts.Level5JumpTap on every tap, the ones it refuses too.
+-- Read-outs for a test: player attributes Level5AssistLast ("late", "early", "auto", "hop") and Level5AssistCount.
+task.spawn(function()
+	local UserInputService = game:GetService("UserInputService")
+	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+	local COYOTE, BUFFER, AGAIN = 0.2, 0.2, 0.35
+	local okDevice, UIDevice = pcall(function() return require(ReplicatedStorage:WaitForChild("UIDevice", 15)) end)
+	local scripts = player:WaitForChild("PlayerScripts")
+	local tap = scripts:FindFirstChild("Level5JumpTap")
+	if not tap then
+		tap = Instance.new("BindableEvent")
+		tap.Name = "Level5JumpTap"
+		tap.Parent = scripts
+	end
+	local GROUND = {
+		[Enum.HumanoidStateType.Running] = true, [Enum.HumanoidStateType.RunningNoPhysics] = true,
+		[Enum.HumanoidStateType.Landed] = true,
+	}
+	local canCoyote, groundedAt, lockUntil, wantAt, count = false, 0, 0, 0, 0
+	local hooked = nil
+	local rays = RaycastParams.new()
+	rays.FilterType = Enum.RaycastFilterType.Include
+	rays.RespectCanCollide = true
+	local function active()
+		return player:GetAttribute("Level5VoidRound") == true and player:GetAttribute("InRound") == true
+	end
+	local function body()
+		local character = player.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if humanoid and root and humanoid.Health > 0 then return humanoid, root end
+		return nil, nil
+	end
+	local function jump(humanoid, why)
+		lockUntil, canCoyote, wantAt = os.clock() + AGAIN, false, 0
+		count += 1
+		player:SetAttribute("Level5AssistLast", why)
+		player:SetAttribute("Level5AssistCount", count)
+		humanoid.Jump = true
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+	end
+	local function pressed()
+		if not active() then return end
+		local humanoid = body()
+		if not humanoid then return end
+		local state = humanoid:GetState()
+		if GROUND[state] and humanoid.FloorMaterial ~= Enum.Material.Air then return end   -- the game's own jump
+		if os.clock() < lockUntil then return end
+		-- (measured 2026-10-10: the floor is lost when the body's middle is 0.8 past the edge, and the state stays
+		-- Running for another tenth of a second before it is Freefall, so the state is not asked)
+		if canCoyote and os.clock() - groundedAt <= COYOTE then
+			jump(humanoid, "late")
+		else
+			wantAt = os.clock()
+		end
+	end
+	UserInputService.JumpRequest:Connect(pressed)
+	tap.Event:Connect(pressed)
+	local function autoWanted()
+		local forced = workspace:GetAttribute("Level5AutoJumpAll")
+		if forced ~= nil then return forced == true end
+		return okDevice and type(UIDevice) == "table" and UIDevice.IsTouch() == true
+	end
+	-- "auto" / "hop" when a body walking along `dir` should jump now, or nil
+	local function ahead(humanoid, root, dir)
+		local model = workspace:FindFirstChild(MODEL_NAME)
+		local geometry = model and model:FindFirstChild("Geometry")
+		if not geometry then return nil end
+		rays.FilterDescendantsInstances = {geometry}
+		-- the walking surface `distance` ahead, looked for from `top` over the body's middle to `depth` under it
+		local function floorAt(distance, top, depth)
+			local from = root.Position + dir * distance + Vector3.new(0, top, 0)
+			local hit = workspace:Raycast(from, Vector3.new(0, -(top + depth), 0), rays)
+			if hit and hit.Normal.Y > 0.7 then return hit.Position.Y end
+			return nil
+		end
+		local feet = floorAt(0, 0, 5)
+		if not feet then return nil end
+		-- a block in the way: its top is over a step's height and under a jump's, and it is a top, not a sliver
+		-- (and it is a FACE: the rise comes within 0.8 studs of run. The tower's steep stair, 0.9 up every 1.2,
+		-- read as a block before this was asked, and the body hopped up every flight.)
+		local up = floorAt(1.7, 5.5, 2.5)
+		if up and up > feet + 1.3 and up <= feet + 4.6 then
+			local before = floorAt(0.9, 5.5, 5)
+			local further = floorAt(2.9, 5.5, 2.5)
+			if further and math.abs(further - up) < 1.2 and (not before or up - before > 1.6) then return "hop" end
+		end
+		local near = floorAt(1.1, 0, 7.5)
+		if near and near >= feet - 1.2 then return nil end           -- the floor goes on (a stair's next step too)
+		local reach = humanoid.WalkSpeed * 0.5 * 0.92
+		local function landing(lowest)
+			local distance = 2.0
+			while distance <= math.min(reach, 12) do
+				local y = floorAt(distance, 4, 6.8)
+				if y and y >= feet + lowest and y <= feet + 2.2 then
+					local beyond = floorAt(distance + 1.0, 4, 6.8)
+					if beyond and math.abs(beyond - y) < 1.2 then return true end
+				end
+				distance += 0.5
+			end
+			return false
+		end
+		if landing(-1.2) then return "auto" end                      -- a gap with the far side at this height
+		if near then return nil end                                  -- a step down: walk off it
+		if landing(-3.6) then return "auto" end                      -- a gap to a lower piece
+		return nil
+	end
+	RunService.Heartbeat:Connect(function()
+		if not active() then return end
+		local humanoid, root = body()
+		if not humanoid then return end
+		if hooked ~= humanoid then
+			hooked = humanoid
+			humanoid.StateChanged:Connect(function(_, new)
+				if new == Enum.HumanoidStateType.Jumping then
+					canCoyote = false
+					lockUntil = math.max(lockUntil, os.clock() + AGAIN)
+				end
+			end)
+		end
+		local now = os.clock()
+		if not (GROUND[humanoid:GetState()] and humanoid.FloorMaterial ~= Enum.Material.Air) then return end
+		if now < lockUntil then return end
+		canCoyote, groundedAt = true, now
+		if wantAt > 0 and now - wantAt <= BUFFER then
+			jump(humanoid, "early")
+			return
+		end
+		if not autoWanted() then return end
+		local move = humanoid.MoveDirection
+		local flat = Vector3.new(move.X, 0, move.Z)
+		if flat.Magnitude < 0.6 and workspace:GetAttribute("Level5AutoJumpAll") == true then
+			-- a test walks the body with MoveTo, which leaves MoveDirection at zero: go by where it is moving
+			local velocity = root.AssemblyLinearVelocity
+			flat = Vector3.new(velocity.X, 0, velocity.Z) / math.max(humanoid.WalkSpeed, 1)
+		end
+		if flat.Magnitude < 0.6 or humanoid.WalkSpeed < 12 then return end
+		local why = ahead(humanoid, root, flat.Unit)
+		if why then jump(humanoid, why) end
+	end)
 end)

@@ -259,11 +259,13 @@ local function place()
 	-- (a phone's rail runs to the bottom edge). All in this ScreenGui's own space, which is the safe area's.
 	local bottom = UIDevice.Layout().Safe.Bottom - 6
 	local below = lowest.AbsolutePosition.Y + lowest.AbsoluteSize.Y + 8
-	open.Size = UDim2.fromOffset(lowest.AbsoluteSize.X, 30)
-	if below + 30 <= bottom then
+	-- TOUCH_TARGETS_20261011 (UI review): 30 px high was under a finger's 44 on a phone and a tablet
+	local tall = UIDevice.IsTouch() and 44 or 30
+	open.Size = UDim2.fromOffset(lowest.AbsoluteSize.X, tall)
+	if below + tall <= bottom then
 		open.Position = UDim2.fromOffset(lowest.AbsolutePosition.X, below)
 	else
-		open.Position = UDim2.fromOffset(right + 8, math.min(lowest.AbsolutePosition.Y + lowest.AbsoluteSize.Y, bottom) - 30)
+		open.Position = UDim2.fromOffset(right + 8, math.min(lowest.AbsolutePosition.Y + lowest.AbsoluteSize.Y, bottom) - tall)
 	end
 	if not inLobby and panel.Visible then setOpen(false) end
 end

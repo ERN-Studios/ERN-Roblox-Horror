@@ -353,6 +353,27 @@ revisedLobbyLighting.values = {
 }
 function revisedLobbyLighting.contains(inMaze)
  if inMaze or player:GetAttribute("Level6InRound") == true then return false end
+ -- MALL_LOBBY_20261012: the mall lobby standing beside this one is an enclosed interior too. Outside this pass its
+ -- ceiling panels sat in the old lobby's 14:00 daylight ambient and the dark wing was not dark.
+ local mall = workspace:FindFirstChild("LobbyMallPreview")
+ local low, high = mall and mall:GetAttribute("BoundsMin"), mall and mall:GetAttribute("BoundsMax")
+ local body = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+ if typeof(low) == "Vector3" and typeof(high) == "Vector3" and body and body:IsA("BasePart") then
+  local at = body.Position
+  if at.X >= low.X and at.X <= high.X and at.Y >= low.Y and at.Y <= high.Y and at.Z >= low.Z and at.Z <= high.Z then
+   -- MALL_LIGHT_20261012: the mall's hall is lit by ambient light (free, and the same at every graphics level;
+   -- its lamps are only pools on top). 1 in the hall; past the tape it falls to 0 over 140 studs (DARK_FADE_20261013,
+   -- owner: the end "fades down to darkness": it used to drop within 30 studs of the tape), so the deep wing is as
+   -- dark as this pass makes the tunnel.
+   local reach = mall:GetAttribute("ReachFrame")
+   revisedLobbyLighting.mallLight = typeof(reach) == "CFrame" and math.clamp(1 - (at.Z - reach.Position.Z) / 140, 0, 1) or 1
+   -- HALLOWEEN_DUSK_20261013 (owner: "a bit darker in the lobby to give it that spooky, cozy halloween vibe so the
+   -- jack o lanterns pop"): while the Halloween dressing stands in the mall the hall's ambient light is a dusk.
+   revisedLobbyLighting.mallDusk = mall:FindFirstChild("Halloween") ~= nil
+   return true
+  end
+ end
+ revisedLobbyLighting.mallLight = nil
  local model = workspace:FindFirstChild("LobbyReimaginedPreview")
  if not model or not model:IsA("Model") or model.Parent ~= workspace
   or model:GetAttribute("LobbyReimaginedOwned") ~= true or model:GetAttribute("Ready") ~= true
@@ -425,6 +446,10 @@ function revisedLobbyLighting.apply(mazeGrade)
   atmosphere.Density=0
  end
  for property, value in pairs(revisedLobbyLighting.values) do
+  if property == "Ambient" and revisedLobbyLighting.mallLight then
+   value = value:Lerp(revisedLobbyLighting.mallDusk and Color3.fromRGB(76, 68, 94) or Color3.fromRGB(150, 143, 118),
+    revisedLobbyLighting.mallLight)   -- MALL_LIGHT_20261012; DIMMER_20261013: it was 196,187,154; HALLOWEEN_DUSK_20261013
+  end
   Lighting[property]=value
   -- Record engine-normalized readback (e.g. Float32 brightness .600000023).
   revisedLobbyLighting.applied[property]=Lighting[property]
@@ -558,6 +583,28 @@ label.Font = Enum.Font.GothamMedium
 label.TextScaled = false
 label.TextSize = 26
 label.TextWrapped = true
+-- TOUCH_STATUS_FITS_20261011 (phone review: the queue's status lines are 620 and 700 px wide whatever the screen, and
+-- a 568 px phone lost 66 px of them on each side). The label is never wider than the safe screen, and its text
+-- shrinks to fit the box it is given instead of running out of it. Every writer of label.Size and label.TextSize
+-- stays as it is: the limit rides on top.
+do
+	local widest = Instance.new("UISizeConstraint")
+	widest.Name = "FitsTheScreen"
+	widest.Parent = label
+	local smallest = Instance.new("UITextSizeConstraint")
+	smallest.Name = "FitsTheBox"
+	smallest.MinTextSize, smallest.MaxTextSize = 12, label.TextSize
+	smallest.Parent = label
+	label.TextScaled = true
+	label:GetPropertyChangedSignal("TextSize"):Connect(function() smallest.MaxTextSize = math.max(12, label.TextSize) end)
+	label:GetPropertyChangedSignal("TextScaled"):Connect(function() if not label.TextScaled then label.TextScaled = true end end)
+	local function fit()
+		local safe = UIDevice.Layout().Safe
+		widest.MaxSize = Vector2.new(math.max(200, safe.Width - 24), math.huge)
+	end
+	fit()
+	UIDevice.Changed:Connect(fit)
+end
 label.TextYAlignment = Enum.TextYAlignment.Center
 label.TextColor3 = Color3.fromRGB(235, 232, 222)
 label.Text = ""
@@ -654,7 +701,9 @@ local queueTitle = queueText("HostTitle", "CREATE YOUR PARTY", UDim2.new(0.06, 0
 queueTitle.TextXAlignment = Enum.TextXAlignment.Center
 local queueStationLabel = queueText("StationLabel", "STATION", UDim2.new(0.10, 0, 0, 57), UDim2.new(0.80, 0, 0, 24), 18, Color3.fromRGB(151, 171, 155))
 queueStationLabel.TextXAlignment = Enum.TextXAlignment.Center
-local queueSizeCaption = queueText("SizeCaption", "MAXIMUM PLAYERS", UDim2.new(0.08, 0, 0, 94), UDim2.new(0.84, 0, 0, 24), 19, Color3.fromRGB(218, 207, 153))
+-- SOLO_WORDING_20261011 (both reviews): "MAXIMUM PLAYERS 6" read as "you need six". A round starts with whoever is on
+-- the pad, one player included.
+local queueSizeCaption = queueText("SizeCaption", "MAX PLAYERS  \u{B7}  YOU CAN PLAY ALONE", UDim2.new(0.08, 0, 0, 94), UDim2.new(0.84, 0, 0, 24), 19, Color3.fromRGB(218, 207, 153))
 local queueMinus = queueButton("DecreasePlayers", "−", UDim2.new(0.10, 0, 0, 124), UDim2.new(0.20, 0, 0, 52))
 local queueCount = queueText("PlayerCount", "6", UDim2.new(0.37, 0, 0, 122), UDim2.new(0.26, 0, 0, 56), 44, Color3.fromRGB(235, 240, 225))
 queueCount.TextXAlignment = Enum.TextXAlignment.Center
@@ -789,9 +838,16 @@ local function applyQueueDeviceLayout()
   -- expressed in. Written as a raw offset the panel landed a whole topbar high:
   -- measured on a Galaxy A06 the modal resolved to y -50..214 with its Close
   -- button at y -44..0, i.e. entirely underneath the Roblox topbar.
+  -- TABLET_PARTY_20261011 (UI review): a tablet was given the phone's 380 x 280 dialog with 10 to 12 px text in the
+  -- middle of a 1024 px screen. The same arrangement, drawn larger: up to 1.4 times, as far as the area allows.
+  local tabletScale = queueLayout.Class == "tablet" and math.clamp(math.min(area.Width / queueWidth, area.Height / queueHeight), 1, 1.4) or 1
+  do
+   local scaler = queuePanel:FindFirstChild("TabletScale") or Instance.new("UIScale")
+   scaler.Name, scaler.Scale, scaler.Parent = "TabletScale", tabletScale, queuePanel
+  end
   queuePanel.Position = UIDevice.LocalPosition(gui,
-   math.floor(area.Left + (area.Width - queueWidth) * 0.5),
-   math.floor(area.Top + (area.Height - queueHeight) * 0.5))
+   math.floor(area.Left + (area.Width - queueWidth * tabletScale) * 0.5),
+   math.floor(area.Top + (area.Height - queueHeight * tabletScale) * 0.5))
   -- Do not place a full-screen input-catching box over the mobile controls --
   -- and do not let the panel itself sink touches meant for them either. Its
   -- BUTTONS stay Active and tappable; the frame behind them does not.
@@ -897,6 +953,10 @@ local function applyQueueDeviceLayout()
   -- to be drawn into 330 and overlap itself.
   local queueWidth = math.clamp(math.floor(queueLayout.Width * .86), 320, 470)
   local queueHeight = math.clamp(math.floor(queueLayout.Height * .82), 330, 370)
+  do
+   local scaler = queuePanel:FindFirstChild("TabletScale")                  -- TABLET_PARTY_20261011: the touch branch's
+   if scaler then scaler.Scale = 1 end
+  end
   queueConstraint.MinSize = Vector2.new(queueWidth, queueHeight)
   queueConstraint.MaxSize = Vector2.new(queueWidth, queueHeight)
   queuePanel.Size = UDim2.fromOffset(queueWidth, queueHeight)
@@ -986,6 +1046,11 @@ applyQueueDeviceLayout()
 UIDevice.Changed:Connect(applyQueueDeviceLayout)
 
 local queueStation = nil
+-- MALL_LOBBY_20261012: the mall lobby's pads are stations 201-224 of the same engine; a player reads the pad's own 1-4
+local function stationLabel(n)
+ n = tonumber(n)
+ return if n and n >= 201 and n <= 224 then (n - 201) % 4 + 1 else n
+end
 local queueSizeValue = 6
 local queuePrivacyValue = "public"
 local queueSubmitting = false
@@ -996,7 +1061,7 @@ local function refreshQueuePanel()
  queuePrivacyButton.Text = friendsOnly and "FRIENDS ONLY" or "PUBLIC  •  EVERYONE"
  queuePrivacyButton.TextColor3 = friendsOnly and Color3.fromRGB(255, 218, 125) or Color3.fromRGB(125, 255, 178)
  queuePrivacyStroke.Color = friendsOnly and Color3.fromRGB(255, 202, 95) or Color3.fromRGB(120, 255, 175)
- queueStationLabel.Text = queueStation and ("STATION " .. queueStation .. "  •  YOU ARE THE HOST") or "YOU ARE THE HOST"
+ queueStationLabel.Text = queueStation and ("STATION " .. stationLabel(queueStation) .. "  •  YOU ARE THE HOST") or "YOU ARE THE HOST"
  local modes = queueShade:GetAttribute("QueueLaunchModes")
  local trial = modes == "trial,preview"   -- "trial" alone is a public host: the ordinary CREATE PARTY
  queueSubmit.Text = queueSubmitting and (trial and "STARTING..." or "CREATING PARTY...") or (trial and "TRIAL ROUND" or "CREATE PARTY")
@@ -3854,7 +3919,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		local maximum = math.clamp(math.floor(tonumber(a) or 6), 1, 6)
 		local privacyText = b == "friends" and "FRIENDS ONLY" or "PUBLIC"
 		local stationNumber = tonumber(c)
-		local stationText = stationNumber and ("STATION " .. stationNumber .. "  •  ") or ""
+		local stationText = stationNumber and ("STATION " .. stationLabel(stationNumber) .. "  •  ") or ""
 		setMsg(stationText .. "PARTY OPEN  •  MAX " .. maximum .. "  •  " .. privacyText, Color3.fromRGB(120, 255, 175))
 		label.Size = UDim2.new(0, 700, 0, 68)
 
@@ -3867,7 +3932,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	elseif ev == "queuewaitinghost" then
 		queueShade.Visible = false
 		local stationNumber = tonumber(a)
-		setMsg((stationNumber and ("STATION " .. stationNumber .. "  •  ") or "") .. "HOST CHOOSING PARTY SETTINGS", Color3.fromRGB(220, 210, 155))
+		setMsg((stationNumber and ("STATION " .. stationLabel(stationNumber) .. "  •  ") or "") .. "HOST CHOOSING PARTY SETTINGS", Color3.fromRGB(220, 210, 155))
 		label.Size = UDim2.new(0, 700, 0, 68)
 
 	elseif ev == "queueaccessdenied" then
@@ -3881,14 +3946,14 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		queueShade.Visible = false
 		local stationNumber = tonumber(a)
 		local hostName = tostring(b or "HOST")
-		setMsg((stationNumber and ("STATION " .. stationNumber .. "  •  ") or "") .. "FRIENDS ONLY" .. string.char(10) .. "ONLY FRIENDS OF " .. string.upper(hostName) .. " CAN JOIN", Color3.fromRGB(255, 205, 110))
+		setMsg((stationNumber and ("STATION " .. stationLabel(stationNumber) .. "  •  ") or "") .. "FRIENDS ONLY" .. string.char(10) .. "ONLY FRIENDS OF " .. string.upper(hostName) .. " CAN JOIN", Color3.fromRGB(255, 205, 110))
 		label.Size = UDim2.new(0, 700, 0, 92)
 
 	elseif ev == "queuefull" then
 		queueShade.Visible = false
 		local stationNumber = tonumber(a)
 		local maximum = math.clamp(math.floor(tonumber(b) or 6), 1, 6)
-		setMsg((stationNumber and ("STATION " .. stationNumber .. "  •  ") or "") .. "PARTY FULL  •  " .. maximum .. "/" .. maximum, Color3.fromRGB(255, 205, 110))
+		setMsg((stationNumber and ("STATION " .. stationLabel(stationNumber) .. "  •  ") or "") .. "PARTY FULL  •  " .. maximum .. "/" .. maximum, Color3.fromRGB(255, 205, 110))
 		label.Size = UDim2.new(0, 700, 0, 68)
 
 	elseif ev == "lobbycountdown" then
@@ -3897,7 +3962,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		local stationNumber = tonumber(c)
 		local maximum = math.clamp(math.floor(tonumber(d) or 6), 1, 6)
 		local privacyText = e == "friends" and "FRIENDS ONLY" or "PUBLIC"
-		local stationText = stationNumber and ("STATION " .. stationNumber .. "  •  ") or ""
+		local stationText = stationNumber and ("STATION " .. stationLabel(stationNumber) .. "  •  ") or ""
 		local modeText = f == "trial" and "  •  TRIAL ROUND" or (f == "preview" and "  •  MAP PREVIEW" or "")
 		setMsg(stationText .. "GAME BEGINS IN " .. tostring(a) .. string.char(10)
 			.. count .. "/" .. maximum .. " READY  •  " .. privacyText .. modeText, Color3.fromRGB(120, 255, 175))
@@ -4050,6 +4115,16 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			task.delay(0.85, function()
 				if dead and player:GetAttribute("InRound") == true then startSpectating() end
 			end)
+			-- WELCOME_REENTRY_20261010 (owner: "informer dem om ved første død at de har 1 gratis reentry de kan bruge"):
+			-- said once, when the kill is over and the re-entry button is on screen, on whichever death screen that is.
+			if not completion.freeReentryTold and player:GetAttribute("ZyntraFreeReentry") == true then
+				completion.freeReentryTold = true
+				task.delay(3, function()
+					if dead and player:GetAttribute("ZyntraFreeReentry") == true and player:GetAttribute("ZyntraReentryUsed") ~= true then
+						completion.Hud.Feed({Kind = "SYSTEM", Detail = "You have 1 FREE Emergency Re-entry. Use it to get back in.", Key = "freereentry"})
+					end
+				end)
+			end
 		end
 		-- A teammate dying used to drop this file's own spectate target so the
 		-- ticker would re-pick. There is no target here any more:
@@ -4238,14 +4313,25 @@ do
 			and (workspace:GetAttribute("RoundActive") == true or player:GetAttribute("Level6PlaygroundPreview") == true)
 			and player:GetAttribute("ZyntraReentryUsed") ~= true
 		local credits = tonumber(player:GetAttribute("ZyntraReentryCredits")) or 0
+		-- BUY_IS_REENTER_20261011: a re-entry bought from this card is used the moment the credit arrives (it used to
+		-- be banked, to be used with a second press inside the same fifteen seconds)
+		if credits > 0 and pd.waiting and pd.boughtAt and os.clock() - pd.boughtAt < 120 then
+			pd.boughtAt, pd.lastUse = nil, os.clock()
+			dispatchAudio.action:FireServer("UseReentry")
+		end
 		if credits > 0 then pd.waiting = false end
 		pd.reentry.Visible = eligible
 		pd.parts.Reentry.Visible = eligible
 		pd.reentry.Active = eligible and pd.armed and not pd.waiting
 		pd.reentry.Selectable = pd.reentry.Active
-		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or credits > 0
-			and ("USE CREDIT \u{B7} " .. credits .. " OWNED")
-			or ("REVIVE \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
+		-- WELCOME_REENTRY_20261010 (owner: "informer dem om ved første død at de har 1 gratis reentry de kan bruge").
+		-- The HUD feed is stood down while a death card covers the screen, so the card's own button carries the news.
+		local free = credits > 0 and player:GetAttribute("ZyntraFreeReentry") == true
+		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or free and "YOU HAVE 1 FREE RE-ENTRY \u{B7} USE IT" or credits > 0
+			and ("USE RE-ENTRY \u{B7} " .. credits .. " OWNED")
+			-- HALLOWEEN_SALE_20261013: three for the price of one (ZyntraStore publishes the number a purchase banks)
+			or (((tonumber(player:GetAttribute("ZyntraReentryGrant")) or 1) > 1 and ("BUY " .. player:GetAttribute("ZyntraReentryGrant") .. " RE-ENTRIES \u{B7} R$ ") or "BUY RE-ENTRY \u{B7} R$ ")
+				.. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
 		local colour = credits > 0 and Color3.fromRGB(68,221,196) or Color3.fromRGB(232,160,36)
 		for _, node in ipairs(pd.reentry:GetDescendants()) do
 			if node:IsA("UIStroke") then node.Color = colour end
@@ -4283,6 +4369,7 @@ do
 			return
 		end
 		pd.waiting = true
+		pd.boughtAt = os.clock()
 		pd.refresh()
 		MarketplaceService:PromptProductPurchase(player, productId)
 	end
@@ -4438,7 +4525,7 @@ do
 		if pd.card then pd.applyLayout() end
 	end)
 	player:GetAttributeChangedSignal("InRound"):Connect(function() if player:GetAttribute("InRound") ~= true then pd.hide() end end)
-	for _, attr in ipairs({"ZyntraReentryUsed", "ZyntraReentryCredits", "ZyntraReentryPrice", "DevRespawnBusy"}) do
+	for _, attr in ipairs({"ZyntraReentryUsed", "ZyntraReentryCredits", "ZyntraFreeReentry", "ZyntraReentryPrice", "DevRespawnBusy"}) do
 		player:GetAttributeChangedSignal(attr):Connect(pd.refresh)
 	end
 	workspace:GetAttributeChangedSignal("RoundActive"):Connect(pd.refresh)

@@ -39,6 +39,12 @@ for _, name in ipairs(PIECES) do
 	if not kit:WaitForChild(name, 60) then return end
 end
 local frame = root:GetAttribute("Frame")
+-- MALL_LOBBY_20261012: the creature has two dark ends now (the mall lobby's dark wing is the second) and the server
+-- moves this frame to whichever one somebody has walked into, while it is asleep.
+root:GetAttributeChangedSignal("Frame"):Connect(function()
+	local moved = root:GetAttribute("Frame")
+	if typeof(moved) == "CFrame" then frame = moved end
+end)
 local hand = HttpService:JSONDecode(root:GetAttribute("Hand"))
 local ARMS = root:GetAttribute("Arms")
 local POSES = hand.poses
@@ -311,7 +317,7 @@ local function stepTaken(dt)
 			camera.CameraType = Enum.CameraType.Custom
 			if humanoid then camera.CameraSubject = humanoid end
 			camera.FieldOfView = taken.fov
-			local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
+			local lobby = workspace:FindFirstChild("LobbyReimaginedPreview") or workspace:FindFirstChild("LobbyMallPreview")   -- MALL_IS_LOBBY_20261013
 			local toward = body and lobby and (lobby:GetPivot().Position - body.Position) * Vector3.new(1, 0, 1)
 			if toward and toward.Magnitude > 1 then
 				toward = toward.Unit
@@ -512,10 +518,11 @@ end
 --   at each hand:  a wet CRAWL that is louder and quicker the faster the hand goes, WINDUP when it rears, SLAM when
 --     it comes down on nothing, GRAB when it closes on somebody, DRAG all the way into the dark
 -- Everything is a local Sound on a local part, driven by the same replicated attributes the arms are drawn from, so
--- every player near the fence hears the same thing at the same moment. Distances: somebody just over the fence is
--- about 145 studs from the eyes, the middle of the lobby 290, the spawn 430. The deep emitter is whole to 120 studs
--- and gone at 400 (a faint breath from the stage, nothing at the spawn); a hand is whole at 16 and gone at 150 to
--- 190, so it is heard coming for the last hundred studs of its way. The lobby's music plays at 0.12.
+-- every player near the fence hears the same thing at the same moment. Distances (measured 2026-10-11): somebody just
+-- over the fence is about 145 studs from the eyes, the middle of the lobby about 270, the spawn 386. The deep emitter
+-- is whole to 120 studs and gone at 400; a hand is whole at 16 and gone at 150 to 190, so it is heard coming for the
+-- last hundred studs of its way. How loud the whole of it is for a listener is REACH_HEARING below. The lobby's music
+-- plays at 0.12.
 do
 	-- REACH_SOUND_IDS_BEGIN (written by tools/lobby_reach/install_sounds.py from sound_ids.json)
 	local IDS = {
@@ -534,6 +541,18 @@ do
 	stage.Name = "LobbyTunnelReachSound"
 	stage.Parent = workspace
 	local all = {}
+	-- REACH_HEARING_20261011 (owner: "når den bliver vækket kan alle i lobby høre dens lyde, få det til at fade ud og
+	-- være næsten helt mute når man er i den anden ende ved spawn, og så selvfølgelig højere jo tættere man kommer
+	-- på"). The distances written above were wrong: measured in play, the spawn is 238 studs from the end wall and
+	-- 386 from the eyes, INSIDE the deep emitter's 400, and the middle of the lobby got it at four tenths. The
+	-- emitters keep their roll-off (it gives the direction); on top of it every sound of the creature is in one
+	-- group whose volume is the LISTENER'S distance into the lobby from the fence: whole within HEAR_FULL studs of
+	-- it and beyond it, about a quarter in the middle of the lobby, HEAR_FLOOR at the spawn.
+	local HEAR_FULL, HEAR_GONE, HEAR_FLOOR, HEAR_CURVE = 20, 225, 0.03, 2.2
+	local hearing = Instance.new("SoundGroup")
+	hearing.Name = "LobbyTunnelReachHearing"
+	hearing.Volume = HEAR_FLOOR
+	hearing.Parent = game:GetService("SoundService")
 	local function emitter(name)
 		local part = Instance.new("Part")
 		part.Name, part.Anchored, part.CanCollide, part.CanQuery, part.CanTouch = name, true, false, false, false
@@ -546,6 +565,8 @@ do
 		local item = Instance.new("Sound")
 		item.Name, item.SoundId, item.Volume, item.Looped = name, "rbxassetid://" .. string.format("%.0f", id), volume, looped == true
 		item.RollOffMode, item.RollOffMinDistance, item.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, near, far
+		-- (not the kill the taken player hears: that one is whole wherever the lobby stands them up)
+		if parent ~= stage then item.SoundGroup = hearing end
 		item.Parent = parent
 		table.insert(all, item)
 		return item
@@ -611,6 +632,14 @@ do
 		local near = camera ~= nil and (camera.CFrame.Position - frame.Position).Magnitude < 620
 		local awake = near and root:GetAttribute("Awake") == true
 		deep.CFrame = CFrame.new(frame:PointToWorldSpace(Vector3.new(0, 21, eyeOut)))
+		-- REACH_HEARING_20261011: how far into the lobby the listener stands from the fence (the frame's z runs
+		-- from the end wall into the tunnel, so the lobby is negative)
+		if camera then
+			local into = -frame:PointToObjectSpace(camera.CFrame.Position).Z - (root:GetAttribute("Fence") or 0)
+			local want = math.max(HEAR_FLOOR, math.clamp(1 - (into - HEAR_FULL) / (HEAR_GONE - HEAR_FULL), 0, 1) ^ HEAR_CURVE)
+			hearing.Volume += (want - hearing.Volume) * math.min(1, dt * 4)
+			hearing:SetAttribute("Want", want)             -- for a test: a muted play session holds the volume itself at 0
+		end
 		if awake and not wasAwake then playOne(wake) end
 		-- (not after a taking: what is heard then is the kill, and a groan of giving up would be the wrong end)
 		if wasAwake and not awake and near and os.clock() - lastKill > 9 then playOne(retreat) end

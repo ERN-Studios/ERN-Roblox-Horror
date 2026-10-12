@@ -62,11 +62,27 @@ Configuration.Reels = {
 	-- level, behind a seat back, at the far end of the gallery, or locked in the prize case)
 	HardSpots = { "Reel_Cinema1", "Reel_Gallery", "Reel_Popcorn", "Reel_ServiceShelf", "Reel_Prize" },
 	MaxHard = 1,
+	-- REEL_GLOW_20261010 (owner: the reels glow like the note): the note's warm light, straight above each loose reel.
+	-- Stronger than the note's: reels are hunted under the Failing lights, where 1.3 over 9 studs did not show on a dark
+	-- can on a dark floor; 2.5 over 12 reads as a warm pool from 15 studs without whiting out (Studio QA 2026-10-10)
+	-- REEL_GLOW_20261011 (owner, a day later: "De der filmruller man skal finde skal lyse langt mere op, så være tydelig
+	-- når man spotter dem"): much stronger and wider, breathing between Brightness and Peak every Period seconds, and
+	-- an outline (Fill, Outline) that is drawn only where the reel itself is in view, never through a wall.
+	Glow = { Range = 22, Brightness = 3.5, Peak = 6.0, Period = 1.6, Lift = 1.2, Color = Color3.fromRGB(255, 220, 140),
+		Fill = 0.4, Outline = Color3.fromRGB(255, 244, 200) },
 	-- REEL_ROOMS_20261008: the room each reel spot is shown as in the objective panel ("Reels: Cafe, Arcade")
 	RoomNames = {
 		Reel_BackCounter = "Concessions", Reel_Popcorn = "Concessions", Reel_TicketBooth = "Ticket booth",
 		Reel_Cafe = "Cafe", Reel_Cinema1 = "Cinema 1", Reel_Gallery = "Gallery", Reel_Prize = "Arcade",
 		Reel_ServiceShelf = "Service room", Reel_Men = "Men's room", Reel_Women = "Women's room",
+	},
+	-- REEL_HINTS_20261011 (owner: "Der skal også være et hint til hvor de befinder sig i guide teksten"): where in the
+	-- room, for a reel still lying at its spot. Short: a guide line is one unwrapped line of about 44 characters.
+	SpotHints = {
+		Reel_BackCounter = "Concessions counter", Reel_Popcorn = "Popcorn machine", Reel_TicketBooth = "Ticket booth",
+		Reel_Cafe = "Cafe", Reel_Cinema1 = "Cinema 1 seats", Reel_Gallery = "Gallery, far end",
+		Reel_Prize = "Arcade prize case", Reel_ServiceShelf = "Service room shelf", Reel_Men = "Men's room",
+		Reel_Women = "Women's room",
 	},
 }
 
