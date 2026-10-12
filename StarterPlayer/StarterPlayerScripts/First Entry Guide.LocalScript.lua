@@ -88,10 +88,10 @@ local PAGES = {
 			or "F switches it on and off. The battery runs down."},
 		{"3", "FOLLOW THE OBJECTIVE", "The panel on screen says what to do next. If something comes, hide or run."},
 	}},
-	-- PLAY_ROUTE_20261011: the page said "bring a team" and "walk to a gate"; a round can be started alone, and a marker
-	-- seen through the walls stands over a free LEVEL 1 pad (the PLAY button it once named is gone)
+	-- PLAY_ROUTE_20261011: the page said "bring a team" and "walk to a gate"; a round can be started alone
+	-- (START_MARKER_REMOVED_20261013: it no longer names the marker, which is gone)
 	{kicker = "START A ROUND", title = "ALONE OR WITH FRIENDS", rows = {
-		{"1", "FIND A GATE", "The START LEVEL 1 HERE marker shows a free LEVEL 1 pad through the walls. The other gates are along the tunnel, and every level is open."},
+		{"1", "PICK A LEVEL", "Each level has its own entrance with pads inside. Walk in and step on a free pad. Every level is open."},
 		{"2", "CREATE PARTY", "On the pad, press CREATE PARTY. You can play alone; friends step on the same pad to join you."},
 		{"3", "FRIENDS PAY OFF", "Each Roblox friend in your round gives you +10% tokens. If you go down, you watch your team."},
 	}},
@@ -430,7 +430,7 @@ local TOPICS = {
 		{"6  Playground", "Hide and seek. Touch the yellow post in three searches without being seen, then run for the exit."},
 	}},
 	{"PLAYING TOGETHER", {
-		{"Start a round", "Walk to a level gate and step on a pad (START LEVEL 1 HERE marks a free one), then CREATE PARTY. You can play alone."},
+		{"Start a round", "Walk into a level's entrance and step on a free pad, then CREATE PARTY. You can play alone."},
 		{"Join one", "Step on a pad that someone else has opened before it launches."},
 		{"Friends", "Each Roblox friend in your round gives you +10% tokens."},
 		{"Leaving", "The LOBBY chip in the top left takes you back to the lobby during a round."},
@@ -704,71 +704,9 @@ task.spawn(function()
 	end
 end)
 
--- PLAY_ROUTE_20261011 / PLAY_BUTTON_REMOVED_20261011. The lobby said nothing about where the GAME is, so a marker
--- stands over a free LEVEL 1 pad ("START LEVEL 1 HERE"), seen through the tunnel's walls. The PLAY button that set a
--- player on that pad was at the top of the screen for half a day; the owner had it removed after streamers' feedback
--- ("Remove the 'Play level 1 alone or with friends' but keep the visible through walls 'Start level 1 here'").
--- The marker stands down near the pad itself, in a round, under the welcome card, the wheel and every window that owns
--- the screen.
-task.spawn(function()
-	local playerGui = player:WaitForChild("PlayerGui")
-	local marker = Instance.new("BillboardGui")
-	marker.Name, marker.ResetOnSpawn, marker.AlwaysOnTop, marker.LightInfluence = "PlayRouteMarker", false, true, 0
-	marker.Size, marker.StudsOffsetWorldSpace, marker.MaxDistance, marker.Enabled = UDim2.fromOffset(190, 54), Vector3.new(0, 10, 0), 700, false
-	local sign = Instance.new("TextLabel")
-	sign.BackgroundColor3, sign.BackgroundTransparency, sign.BorderSizePixel, sign.Size = Color3.fromRGB(12, 30, 24), 0.2, 0, UDim2.fromScale(1, 1)
-	sign.Font, sign.TextSize, sign.TextColor3, sign.Text = Enum.Font.GothamBlack, 18, GREEN, "START LEVEL 1\nHERE"
-	sign.Parent = marker
-	Instance.new("UICorner", sign).CornerRadius = UDim.new(0, 8)
-	marker.Parent = playerGui
-
-	local pads, padsAt = {}, 0
-	local function findPads()
-		if #pads > 0 and pads[1].Parent ~= nil and os.clock() - padsAt < 20 then return end
-		padsAt = os.clock()
-		table.clear(pads)
-		local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
-		for _, item in ipairs(lobby and lobby:GetDescendants() or {}) do
-			if item:IsA("BasePart") and item:GetAttribute("R3QueueId") ~= nil then table.insert(pads, item) end
-		end
-		-- MALL_IS_LOBBY_20261013: the mall lobby's pads (its queue zones carry MallQueueId)
-		local mall = workspace:FindFirstChild("LobbyMallPreview")
-		local bays = mall and mall:FindFirstChild("Anchors") and mall.Anchors:FindFirstChild("QueueBays")
-		for _, item in ipairs(bays and bays:GetDescendants() or {}) do
-			if item:IsA("BasePart") and item:GetAttribute("MallQueueId") ~= nil then table.insert(pads, item) end
-		end
-	end
-	local function flat(a, b) return Vector3.new(a.X - b.X, 0, a.Z - b.Z).Magnitude end
-	-- the nearest LEVEL 1 pad nobody else stands on (any LEVEL 1 pad if they are all taken)
-	local function choose(from)
-		local best, bestScore = nil, math.huge
-		for _, pad in ipairs(pads) do
-			if pad:GetAttribute("LevelNumber") == 1 then
-				local away = flat(pad.Position, from)
-				local taken = false
-				for _, other in ipairs(Players:GetPlayers()) do
-					local root = other ~= player and other.Character and other.Character:FindFirstChild("HumanoidRootPart")
-					if root and flat(root.Position, pad.Position) < 7 then taken = true end
-				end
-				local score = away + (taken and 10000 or 0)
-				if score < bestScore then best, bestScore = pad, score end
-			end
-		end
-		return best
-	end
-	while true do
-		findPads()
-		local character = player.Character
-		local root = character and character:FindFirstChild("HumanoidRootPart")
-		local inLobby = player:GetAttribute("InRound") ~= true and workspace:GetAttribute("ReservedRoundServer") ~= true
-			and player:GetAttribute("LuckyWheelOpen") ~= true and player:GetAttribute("LobbyLoadingDone") == true
-			and player:GetAttribute("WelcomeCardOpen") ~= true and not UIDevice.ScreenOwningModalOpen()
-		local target = root and choose(root.Position) or nil
-		marker.Adornee = target
-		marker.Enabled = inLobby and target ~= nil and root ~= nil and flat(root.Position, target.Position) > 9
-		task.wait(0.4)
-	end
-end)
+-- START_MARKER_REMOVED_20261013 (owner, lobby feedback: "Remove start level 1 here should be removed"). The marker
+-- that stood over a free LEVEL 1 pad and was seen through walls ("START LEVEL 1 HERE", PLAY_ROUTE_20261011) is gone,
+-- as the PLAY button before it; the shops' own signs say where each level is.
 
 local function wanted()
 	if RunService:IsStudio() and workspace:GetAttribute("DevShowWelcome") == true then return true end

@@ -237,17 +237,18 @@ def main():
         q=geometry(byname[f'PoolColumn{i}']);check(abs(q['lo'][1]-28.8)<EPS,f'pool column{i} on basin floor')
         q=geometry(byname[f'PoolCapital{i}_2']);check(abs(q['hi'][1]-44)<EPS,f'pool capital{i} meets ceiling')
     # 2026-10-12 (owner): each level's board against the pier beside its own shop's opening
-    expected_boards={'directory':(185,-795,18,12,1),'level1':(184.6,-871.2,8,10,1),'level2':(255.4,-871.2,8,10,-1),'level3':(184.6,-728.8,8,10,1),'level4':(255.4,-728.8,8,10,-1),'level5':(184.6,-711.2,8,10,1),'level6':(255.4,-711.2,8,10,-1)}
+    LW,DW=round(10*5.6/13.2,2),round(12*560/392,2)      # 2026-10-13: each board is the shape of the sheet pinned to it
+    expected_boards={'directory':(185,-795,DW,12,1),'level1':(184.6,-871.2,LW,10,1),'level2':(255.4,-871.2,LW,10,-1),'level3':(184.6,-728.4,LW,10,1),'level4':(255.4,-728.4,LW,10,-1),'level5':(184.6,-711.2,LW,10,1),'level6':(255.4,-711.2,LW,10,-1)}
     for board in A['boards']:
         x,z,w,h,n=expected_boards[board['key']]
         check(board['pos']==[x+n*.205,31+h/2,z] and board['size']==[w,h] and board['normal']==[n,0,0],board['key']+' board location')
         check(not any(s['part']==board['key']+'_BoardFace' for s in D['signs']),board['key']+' blank face')
     check(len(A['boards'])==7 and {b['key'] for b in A['boards']}=={'directory'}|{f'level{i}' for i in range(1,7)},'7 boards')
     signtexts=[s['text'] for s in D['signs']]
-    for txt in ('1 OFFICE','2 POOLROOMS','3 MALL PARTY','4 CINEMA','5 THE VOID','6 PLAY ZONE','WELCOME','GRAND OPENING','DIRECTORY'):check(signtexts.count(txt)==1,'sign '+txt)
+    for txt in ('OFFICE','POOLROOMS','MALL PARTY','CINEMA','THE VOID','PLAY ZONE','WELCOME','GRAND OPENING','DIRECTORY'):check(signtexts.count(txt)==1,'sign '+txt)
     check(signtexts.count('SHOP & SUPPLIES')==6,'six stand signs')
     for k in range(1,5):check(signtexts.count(f'STATION {k}')==6,f'station{k} signs')
-    allowed={'1 OFFICE','2 POOLROOMS','3 MALL PARTY','4 CINEMA','5 THE VOID','6 PLAY ZONE','WELCOME','GRAND OPENING','SHOP & SUPPLIES','DIRECTORY'}|{f'STATION {k}' for k in range(1,5)}
+    allowed={'OFFICE','POOLROOMS','MALL PARTY','CINEMA','THE VOID','PLAY ZONE','WELCOME','GRAND OPENING','SHOP & SUPPLIES','DIRECTORY'}|{f'STATION {k}' for k in range(1,5)}
     product_texts=['ADVANCED EQUIPMENT','ENTITY DETECTOR','ITEMS','PACKS','RESEARCH TOKENS','SUPPORTER',
       'ADVANCED EQUIPMENT - 149 ROBUX','ZYNTRA ENTITY DETECTOR - 149 ROBUX','ENTITY SHIELD - 5 TOKENS','SPEED POTION - 3 TOKENS','ROUTE MARKER PACK - 2 TOKENS','EXPEDITION PACK - 69 ROBUX','EMERGENCY RE-ENTRY','4 TOKENS','20 TOKENS','ZYNTRA SUPPORTER - 99 ROBUX','GLOWSTICK CUSTOMIZER - 99 ROBUX',
       'BASELINE YELLOW - FREE','POOL SERVICE - 25 TOKENS','SUBURB SURVEY - 75 TOKENS','BLACKSITE DIRECTOR - 300 TOKENS','STATIC WRAITH - 99 ROBUX','FALSE SUN - 149 ROBUX']

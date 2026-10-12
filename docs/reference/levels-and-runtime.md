@@ -2412,3 +2412,14 @@ ignored folders inside them (`textures_pbr`: rerun `make_pbr.py`).
 `Lobby Mall Client` no longer draws them and the importer no longer makes `Anchors.LevelMarkers`; the crates' bob,
 the dying lamps and the tape's blocker stay. The shops' own name signs ("1 OFFICE" ...) are what says where a level is.
 
+
+## 2026-10-13 - lobby feedback: no numbers on the shop signs, no START LEVEL 1 HERE, boards the shape of their sheets
+
+Owner's three points, all in Studio (unpublished):
+- The shop signs read `OFFICE`, `POOLROOMS`, `MALL PARTY`, `CINEMA`, `THE VOID`, `PLAY ZONE` (they were "1 OFFICE" ...).
+  The pads' STATION 1-4 plates keep their numbers: they are how a pad is told from its neighbour.
+- `START_MARKER_REMOVED_20261013`: the "START LEVEL 1 HERE" marker seen through walls is gone from First Entry Guide.
+  The welcome card's row is now "PICK A LEVEL" and the Help text no longer names the marker.
+- Every notice board is exactly the shape of what is pinned to it (level list 4.24 x 10, supporters 17.14 x 12) with
+  the 0.2-stud oak frame round it; `Level Leaderboards` fills the board (no margin). It was a narrow sheet on a wide
+  black board. The Level 3 and 4 boards moved 0.4 along the wall (z -728.4) for `check_mall.py`'s 20-wide corridor proof.

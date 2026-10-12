@@ -333,7 +333,7 @@ local function buildMallSheet(level)
 	local folder = anchors and anchors:FindFirstChild("Boards")
 	local board = folder and folder:FindFirstChild("level" .. level)
 	if not (board and board:IsA("BasePart")) then return nil end
-	local scale = math.min((board.Size.Y - 0.5) / H, (board.Size.X - 0.5) / W)
+	local scale = math.min(board.Size.Y / H, board.Size.X / W)         -- the board is the sheet's own shape: no margin (owner, 2026-10-13)
 	local sheet = Instance.new("Part")
 	sheet.Name = "Level " .. level .. " Leaderboard Sheet"
 	sheet.Size, sheet.Color, sheet.Material = Vector3.new(W * scale, H * scale, 0.04), PAPER.ink, Enum.Material.SmoothPlastic
@@ -376,7 +376,7 @@ task.spawn(function()
 	end
 	if not source then return end
 	local canvas = source.CanvasSize
-	local width = math.min(board.Size.X - 1, (board.Size.Y - 1) * canvas.X / canvas.Y)
+	local width = math.min(board.Size.X, board.Size.Y * canvas.X / canvas.Y)
 	local sheet = Instance.new("Part")
 	sheet.Name = "Top Supporters Sheet"
 	sheet.Size, sheet.Color, sheet.Material = Vector3.new(width, width * canvas.Y / canvas.X, 0.04), PAPER.ink, Enum.Material.SmoothPlastic

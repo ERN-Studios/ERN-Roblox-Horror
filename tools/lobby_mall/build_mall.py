@@ -232,7 +232,7 @@ def design():
         box(g+'_Fascia',g,front+(-1 if west else 1),44,z,2,4,52,'oak')
         box(g+'_Bulkhead',g,front+(-1 if west else 1),(46+CEIL)/2,z,2,CEIL-46,52)          # the hall's wall over the shop front
         normal=(1,0,0) if west else (-1,0,0)
-        sign(g+'_Sign',f'{level} {name}','box',(front+(.31 if west else -.31),43.9,z),(40,3.2),normal,g)
+        sign(g+'_Sign',name,'box',(front+(.31 if west else -.31),43.9,z),(40,3.2),normal,g)
         box(g+'_Ceiling',g,(a+b)/2+(-1 if west else 1),44.25,z,b-a-2,.5,58,'rose' if level==5 else 'ceiling',col=(104,128,126) if level==2 else None)
         # Four pads, two by two, as in the present lobby: rows 10 and 32 studs in from the shop front, 12 either side of
         # the shop's middle. That leaves a cross of floor to walk on between them: 9.2 studs wide down the middle and
@@ -563,7 +563,12 @@ def design():
     # 2026-10-12 (owner: "move the Fastest escapes leaderboard more to the side of the entry to the level"): each
     # level's board stands against the pier right beside its own shop's opening, flat to the wall. They stood out in
     # the hall in front of the openings, and two hung from the ceiling to clear the stand.
-    for key,x,z,w,h,norm in [('directory',185,-795,18,12,(1,0,0)),('level1',184.6,-871.2,8,10,(1,0,0)),('level2',255.4,-871.2,8,10,(-1,0,0)),('level3',184.6,-728.8,8,10,(1,0,0)),('level4',255.4,-728.8,8,10,(-1,0,0)),('level5',184.6,-711.2,8,10,(1,0,0)),('level6',255.4,-711.2,8,10,(-1,0,0))]:
+    # 2026-10-13 (owner, with a screenshot: the list was a narrow sheet in the middle of a wide black board; "more narrow,
+    # so there is no black padding on the signs, maybe a little wooden frame"): every board's face is exactly the
+    # shape of what is pinned to it (the level list is 5.6 x 13.2, the supporters' sheet 560 x 392), so the sheet
+    # fills it and the 0.2-stud oak frame is all that shows round it.
+    LW,DW=round(10*5.6/13.2,2),round(12*560/392,2)
+    for key,x,z,w,h,norm in [('directory',185,-795,DW,12,(1,0,0)),('level1',184.6,-871.2,LW,10,(1,0,0)),('level2',255.4,-871.2,LW,10,(-1,0,0)),('level3',184.6,-728.4,LW,10,(1,0,0)),('level4',255.4,-728.4,LW,10,(-1,0,0)),('level5',184.6,-711.2,LW,10,(1,0,0)),('level6',255.4,-711.2,LW,10,(-1,0,0))]:
         y=31+h/2;yaw=90 if norm[0]>0 else -90
         part(key+'_BoardFrame','Furniture',(x,y,z),(w+.4,h+.4,.35),'oak',rot=(0,yaw,0))
         pos=[x+norm[0]*.205,y,z];part(key+'_BoardFace','Furniture',pos,(w,h,.06),'black',rot=(0,yaw,0))

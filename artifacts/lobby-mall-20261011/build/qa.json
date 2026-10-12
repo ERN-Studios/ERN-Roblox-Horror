@@ -3477,27 +3477,27 @@
     [
       "level1_BoardFrame",
       "level1_BoardFace",
-      80.0
+      42.4
     ],
     [
       "level3_BoardFrame",
       "level3_BoardFace",
-      80.0
+      42.4
     ],
     [
       "level5_BoardFrame",
       "level5_BoardFace",
-      80.0
+      42.4
     ],
     [
       "directory_BoardFrame",
       "DirectoryHeader_Frame",
-      3.192
+      3.0695
     ],
     [
       "directory_BoardFrame",
       "directory_BoardFace",
-      216.0
+      205.68
     ],
     [
       "Concourse_Floor5_1",
@@ -5202,17 +5202,17 @@
     [
       "level2_BoardFace",
       "level2_BoardFrame",
-      80.0
+      42.4
     ],
     [
       "level4_BoardFace",
       "level4_BoardFrame",
-      80.0
+      42.4
     ],
     [
       "level6_BoardFace",
       "level6_BoardFrame",
-      80.0
+      42.4
     ],
     [
       "Concourse_Border258",
@@ -9209,7 +9209,7 @@
       -739.0
     ],
     [
-      246.5,
+      247.0,
       30,
       -738.5
     ],
@@ -9219,7 +9219,7 @@
       -738.0
     ],
     [
-      246.0,
+      246.5,
       30,
       -737.5
     ],
@@ -9229,37 +9229,37 @@
       -737.0
     ],
     [
-      245.5,
+      246.0,
       30,
       -736.5
     ],
     [
-      245.5,
+      246.0,
       30,
       -736.0
     ],
     [
-      245.5,
+      246.0,
       30,
       -735.5
     ],
     [
-      245.0,
+      246.0,
       30,
       -735.0
     ],
     [
-      245.0,
+      245.5,
       30,
       -734.5
     ],
     [
-      245.0,
+      245.5,
       30,
       -734.0
     ],
     [
-      245.0,
+      245.5,
       30,
       -733.5
     ],
@@ -10289,7 +10289,7 @@
   },
   "route_min_clearance": 10.005343572311752,
   "route_edge_margin": 0.001,
-  "json_sha256": "588463921fdc91be511ceb92bab1e712fd6b6b52570a1c66f56a4fb48ac8459a",
+  "json_sha256": "1243a95d34138da834dcc22e8c80a01f527302cb0cd6e6a73bde9c6f598c21ef",
   "limitations": [
     "Static offline geometry checks; Roblox runtime, lighting parity, gameplay and multiplayer require main agent QA.",
     "The verified radius10 centreline joins a full-width flat-ended terminal strip to the tape bases; seven poles 12 apart prevent a 20-wide corridor through the tape line."

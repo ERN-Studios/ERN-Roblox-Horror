@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-12T09:48:46.833389+00:00",
+  "capturedAtUtc": "2026-10-12T10:48:08.631432+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -1729,8 +1729,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level Leaderboards.Script.lua",
-      "bytes": 21658,
-      "sha256": "c557b0809f36b494a91858de6e8b65d0c213792f2275b747d27b33cdb97a7c96",
+      "bytes": 21709,
+      "sha256": "7b8a47916d1d8810ac01632052870ba96144533b275b7577bb6f8a408eaa0657",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3460,8 +3460,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
-      "bytes": 46512,
-      "sha256": "8a6591bdea1b09087801a7b914a672d5df8974f027930048a1b28cb1d0cd9e55",
+      "bytes": 43054,
+      "sha256": "a2c03ad40f6e8b6707fb6abe17c627b51cfc65f75395f0f5b175f0d3c7283e50",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

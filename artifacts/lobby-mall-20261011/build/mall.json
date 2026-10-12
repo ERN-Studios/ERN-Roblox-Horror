@@ -48346,7 +48346,7 @@
         -795.0
       ],
       "size": [
-        18.4,
+        17.54,
         12.4,
         0.35
       ],
@@ -48375,7 +48375,7 @@
         -795.0
       ],
       "size": [
-        18.0,
+        17.14,
         12.0,
         0.06
       ],
@@ -48395,13 +48395,13 @@
       "glow": false
     },
     {
-      "name": "directory_BoardLeg-6.3",
+      "name": "directory_BoardLeg-5.999",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         185.0,
         30.5,
-        -801.3
+        -800.999
       ],
       "size": [
         0.3,
@@ -48424,13 +48424,13 @@
       "glow": false
     },
     {
-      "name": "directory_BoardLeg6.3",
+      "name": "directory_BoardLeg5.999",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         185.0,
         30.5,
-        -788.7
+        -789.001
       ],
       "size": [
         0.3,
@@ -48462,7 +48462,7 @@
         -871.2
       ],
       "size": [
-        8.4,
+        4.640000000000001,
         10.4,
         0.35
       ],
@@ -48491,7 +48491,7 @@
         -871.2
       ],
       "size": [
-        8.0,
+        4.24,
         10.0,
         0.06
       ],
@@ -48511,13 +48511,13 @@
       "glow": false
     },
     {
-      "name": "level1_BoardLeg-2.8",
+      "name": "level1_BoardLeg-1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         184.6,
         30.5,
-        -874.0
+        -872.6840000000001
       ],
       "size": [
         0.3,
@@ -48540,13 +48540,13 @@
       "glow": false
     },
     {
-      "name": "level1_BoardLeg2.8",
+      "name": "level1_BoardLeg1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         184.6,
         30.5,
-        -868.4000000000001
+        -869.716
       ],
       "size": [
         0.3,
@@ -48578,7 +48578,7 @@
         -871.2
       ],
       "size": [
-        8.4,
+        4.640000000000001,
         10.4,
         0.35
       ],
@@ -48607,7 +48607,7 @@
         -871.2
       ],
       "size": [
-        8.0,
+        4.24,
         10.0,
         0.06
       ],
@@ -48627,13 +48627,13 @@
       "glow": false
     },
     {
-      "name": "level2_BoardLeg-2.8",
+      "name": "level2_BoardLeg-1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         255.4,
         30.5,
-        -874.0
+        -872.6840000000001
       ],
       "size": [
         0.3,
@@ -48656,13 +48656,13 @@
       "glow": false
     },
     {
-      "name": "level2_BoardLeg2.8",
+      "name": "level2_BoardLeg1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         255.4,
         30.5,
-        -868.4000000000001
+        -869.716
       ],
       "size": [
         0.3,
@@ -48691,10 +48691,10 @@
       "pos": [
         184.6,
         36.0,
-        -728.8
+        -728.4
       ],
       "size": [
-        8.4,
+        4.640000000000001,
         10.4,
         0.35
       ],
@@ -48720,10 +48720,10 @@
       "pos": [
         184.805,
         36.0,
-        -728.8
+        -728.4
       ],
       "size": [
-        8.0,
+        4.24,
         10.0,
         0.06
       ],
@@ -48743,13 +48743,13 @@
       "glow": false
     },
     {
-      "name": "level3_BoardLeg-2.8",
+      "name": "level3_BoardLeg-1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         184.6,
         30.5,
-        -731.5999999999999
+        -729.884
       ],
       "size": [
         0.3,
@@ -48772,13 +48772,13 @@
       "glow": false
     },
     {
-      "name": "level3_BoardLeg2.8",
+      "name": "level3_BoardLeg1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         184.6,
         30.5,
-        -726.0
+        -726.9159999999999
       ],
       "size": [
         0.3,
@@ -48807,10 +48807,10 @@
       "pos": [
         255.4,
         36.0,
-        -728.8
+        -728.4
       ],
       "size": [
-        8.4,
+        4.640000000000001,
         10.4,
         0.35
       ],
@@ -48836,10 +48836,10 @@
       "pos": [
         255.195,
         36.0,
-        -728.8
+        -728.4
       ],
       "size": [
-        8.0,
+        4.24,
         10.0,
         0.06
       ],
@@ -48859,13 +48859,13 @@
       "glow": false
     },
     {
-      "name": "level4_BoardLeg-2.8",
+      "name": "level4_BoardLeg-1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         255.4,
         30.5,
-        -731.5999999999999
+        -729.884
       ],
       "size": [
         0.3,
@@ -48888,13 +48888,13 @@
       "glow": false
     },
     {
-      "name": "level4_BoardLeg2.8",
+      "name": "level4_BoardLeg1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         255.4,
         30.5,
-        -726.0
+        -726.9159999999999
       ],
       "size": [
         0.3,
@@ -48926,7 +48926,7 @@
         -711.2
       ],
       "size": [
-        8.4,
+        4.640000000000001,
         10.4,
         0.35
       ],
@@ -48955,7 +48955,7 @@
         -711.2
       ],
       "size": [
-        8.0,
+        4.24,
         10.0,
         0.06
       ],
@@ -48975,13 +48975,13 @@
       "glow": false
     },
     {
-      "name": "level5_BoardLeg-2.8",
+      "name": "level5_BoardLeg-1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         184.6,
         30.5,
-        -714.0
+        -712.6840000000001
       ],
       "size": [
         0.3,
@@ -49004,13 +49004,13 @@
       "glow": false
     },
     {
-      "name": "level5_BoardLeg2.8",
+      "name": "level5_BoardLeg1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         184.6,
         30.5,
-        -708.4000000000001
+        -709.716
       ],
       "size": [
         0.3,
@@ -49042,7 +49042,7 @@
         -711.2
       ],
       "size": [
-        8.4,
+        4.640000000000001,
         10.4,
         0.35
       ],
@@ -49071,7 +49071,7 @@
         -711.2
       ],
       "size": [
-        8.0,
+        4.24,
         10.0,
         0.06
       ],
@@ -49091,13 +49091,13 @@
       "glow": false
     },
     {
-      "name": "level6_BoardLeg-2.8",
+      "name": "level6_BoardLeg-1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         255.4,
         30.5,
-        -714.0
+        -712.6840000000001
       ],
       "size": [
         0.3,
@@ -49120,13 +49120,13 @@
       "glow": false
     },
     {
-      "name": "level6_BoardLeg2.8",
+      "name": "level6_BoardLeg1.484",
       "group": "Furniture",
       "shape": "Block",
       "pos": [
         255.4,
         30.5,
-        -708.4000000000001
+        -709.716
       ],
       "size": [
         0.3,
@@ -57292,7 +57292,7 @@
     },
     {
       "name": "Shop1_Sign",
-      "text": "1 OFFICE",
+      "text": "OFFICE",
       "style": "box",
       "pos": [
         180.31,
@@ -57392,7 +57392,7 @@
     },
     {
       "name": "Shop2_Sign",
-      "text": "2 POOLROOMS",
+      "text": "POOLROOMS",
       "style": "box",
       "pos": [
         259.69,
@@ -57492,7 +57492,7 @@
     },
     {
       "name": "Shop3_Sign",
-      "text": "3 MALL PARTY",
+      "text": "MALL PARTY",
       "style": "box",
       "pos": [
         180.31,
@@ -57592,7 +57592,7 @@
     },
     {
       "name": "Shop4_Sign",
-      "text": "4 CINEMA",
+      "text": "CINEMA",
       "style": "box",
       "pos": [
         259.69,
@@ -57692,7 +57692,7 @@
     },
     {
       "name": "Shop5_Sign",
-      "text": "5 THE VOID",
+      "text": "THE VOID",
       "style": "box",
       "pos": [
         180.31,
@@ -57792,7 +57792,7 @@
     },
     {
       "name": "Shop6_Sign",
-      "text": "6 PLAY ZONE",
+      "text": "PLAY ZONE",
       "style": "box",
       "pos": [
         259.69,
@@ -59818,7 +59818,7 @@
           -795
         ],
         "size": [
-          18,
+          17.14,
           12
         ],
         "normal": [
@@ -59835,7 +59835,7 @@
           -871.2
         ],
         "size": [
-          8,
+          4.24,
           10
         ],
         "normal": [
@@ -59852,7 +59852,7 @@
           -871.2
         ],
         "size": [
-          8,
+          4.24,
           10
         ],
         "normal": [
@@ -59866,10 +59866,10 @@
         "pos": [
           184.805,
           36.0,
-          -728.8
+          -728.4
         ],
         "size": [
-          8,
+          4.24,
           10
         ],
         "normal": [
@@ -59883,10 +59883,10 @@
         "pos": [
           255.195,
           36.0,
-          -728.8
+          -728.4
         ],
         "size": [
-          8,
+          4.24,
           10
         ],
         "normal": [
@@ -59903,7 +59903,7 @@
           -711.2
         ],
         "size": [
-          8,
+          4.24,
           10
         ],
         "normal": [
@@ -59920,7 +59920,7 @@
           -711.2
         ],
         "size": [
-          8,
+          4.24,
           10
         ],
         "normal": [
