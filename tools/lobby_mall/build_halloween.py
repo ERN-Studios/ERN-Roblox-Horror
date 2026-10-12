@@ -552,7 +552,7 @@ def layout():
 
     # --- the two planters become the mall's seasonal display
     for pz in (-835, -700):
-        put('scarecrow', 220, 32.85, pz, (0, -1) if pz < -770 else (0, 1), 1.0)
+        if pz != -835: put('scarecrow', 220, 32.85, pz, (0, 1), 1.0)       # the owner had the one at the spawn removed (2026-10-13)
         for sx, kind in ((-4.4, 'mums_orange'), (4.4, 'mums_yellow'), (-2.4, 'mums_yellow'), (2.4, 'mums_orange')):
             put(kind, 220 + sx, 32.85, pz + (0.8 if abs(sx) < 3 else 0), (0, -1), 1.0)
         for sx in (-1, 1):

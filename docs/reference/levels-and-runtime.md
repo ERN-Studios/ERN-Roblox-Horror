@@ -2630,3 +2630,5 @@ pop". Only while `LobbyMallPreview.Halloween` exists, and only on the client (no
   be cool for the orange to pop.
 - Frame rate, compared inside one session by switching the dressing and its lights off and on: 14.8 / 15.0 / 14.5 /
   13.7 with, 15.0 / 13.2 / 14.5 / 15.1 without: no difference this Mac can show. Not measured on a phone.
+- Later the same day the owner had the scarecrow at the spawn removed ("remove the scarecrow at spawn"): the arrival
+  planter keeps its mums, hay bales, pumpkins and pails; the north planter keeps its scarecrow (215 props, 353 parts).
