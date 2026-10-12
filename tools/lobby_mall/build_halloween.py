@@ -551,7 +551,7 @@ def layout():
     banner('StageBannerSale', (220, 42.2, -632.35), (27, 2.6), (0, -1), [OFF])
 
     # --- the two planters become the mall's seasonal display
-    for pz in (-835, -700):
+    for pz in (-700,):                               # the planter by the spawn is gone (owner, 2026-10-13: "it blocks the shop")
         if pz != -835: put('scarecrow', 220, 32.85, pz, (0, 1), 1.0)       # the owner had the one at the spawn removed (2026-10-13)
         for sx, kind in ((-4.4, 'mums_orange'), (4.4, 'mums_yellow'), (-2.4, 'mums_yellow'), (2.4, 'mums_orange')):
             put(kind, 220 + sx, 32.85, pz + (0.8 if abs(sx) < 3 else 0), (0, -1), 1.0)

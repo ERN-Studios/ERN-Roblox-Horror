@@ -570,7 +570,8 @@ def design():
         cyl('SkinLampCan'+skin,'Stand',arm1[0],41.03,arm1[2],.30,.54,'brass')
         cyl('SkinLampLens'+skin,'Stand',arm1[0],40.72,arm1[2],.25,.08,'light',collide=False,glow=True)
         light('SkinSpot'+skin,'showcase',[float(arm1[0]),40.65,float(arm1[2])],(247,225,174),.75,13)
-    planter('PlanterArrival',220,-835);planter('PlanterNorth',220,-700)
+    # the owner had the planter and benches by the spawn removed (2026-10-13: "it blocks the shop"); the north one stays
+    planter('PlanterNorth',220,-700)
     # Blank, flat leaderboard faces (no pretend scores or UI).
     boards=[]
     # 2026-10-12 (owner: "move the Fastest escapes leaderboard more to the side of the entry to the level"): each

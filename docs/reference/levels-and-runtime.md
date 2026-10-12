@@ -2632,3 +2632,7 @@ pop". Only while `LobbyMallPreview.Halloween` exists, and only on the client (no
   13.7 with, 15.0 / 13.2 / 14.5 / 15.1 without: no difference this Mac can show. Not measured on a phone.
 - Later the same day the owner had the scarecrow at the spawn removed ("remove the scarecrow at spawn"): the arrival
   planter keeps its mums, hay bales, pumpkins and pails; the north planter keeps its scarecrow (215 props, 353 parts).
+- Then, from the live game (owner, with a screenshot from the spawn): "remove this bench and flower bed here it
+  blocks the shop". The arrival planter with its two benches is out of the mall itself (`build_mall.py`: only
+  `PlanterNorth` is built; 1933 parts, check 0 errors, imported: the model has 2424 parts) and its Halloween display
+  is out of `build_halloween.py` (201 props, 333 parts, 33 lantern lights). From the spawn the stand is in plain view.
