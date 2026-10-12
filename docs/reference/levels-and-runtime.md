@@ -2807,3 +2807,15 @@ Owner: "Måske skulle den bare hedde REVIVE, det kan alle forstå", then "Ændre
 - Found on the way: `artifacts/store-prices-halloween-20261013` (and the concept pictures of the Halloween lobby)
   were no longer on disk: they are tracked but outside the sparse checkout, and git takes such files off the disk
   again. `halloween_prices.py --restore` now fetches `before.json` from git when it is missing.
+
+## 2026-10-13 - the Halloween signs glow: dark boards, self-lit deep orange lettering (`GLOWING_SIGNS_20261013`)
+
+Owner, with a screenshot from the live game: "Make all discount signs text glow a nice halloween deep orange so its
+visible the text". The signs were orange boards with near-black lettering that took 40 % of the room's light; in the
+Halloween dusk board and words both went dark red.
+
+`install_halloween.py`: every sign's lettering and frame are deep orange (255,118,20) on a SurfaceGui with
+LightInfluence 0 and Brightness 2.2, on a near-black board (26,17,12); the price bursts' stars are tinted dark so
+their words carry. This covers the sale signs at the stand (band, danglers, counter bursts, standees) and the HAPPY
+HALLOWEEN banners, which had the same problem. Checked in play from the spawn, in front of the stand and behind it:
+every line reads. Not published.

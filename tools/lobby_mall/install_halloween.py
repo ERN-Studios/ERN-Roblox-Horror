@@ -163,7 +163,12 @@ local model = workspace["%s"]["%s"]
 local OFFSET = Vector3.new(%s)
 local star = HttpService:JSONDecode([==[%s]==])
 local FACE = Font.new("rbxasset://fonts/families/Oswald.json", Enum.FontWeight.Bold)
-local INK = Color3.fromRGB(22, 16, 12)
+-- GLOWING_SIGNS_20261013 (owner, from the live game: "Make all discount signs text glow a nice halloween deep orange so
+-- its visible the text"). The signs were orange boards with near-black lettering, lit by the room; in the Halloween
+-- dusk both went dark red and the words could not be read. Now every sign is a dark board whose lettering and
+-- frame are self-lit deep orange (LightInfluence 0, a brightness over 1 so the bloom catches it).
+local INK = Color3.fromRGB(255, 118, 20)
+local BOARD = Color3.fromRGB(26, 17, 12)
 local function plain(name, size, cf, colour)
 	local part = Instance.new("Part")
 	part.Name, part.Size, part.CFrame = name, size, cf
@@ -181,7 +186,7 @@ local function write(part, face, lines, w, h, inset, far, weights, border)
 	local g = Instance.new("SurfaceGui")
 	g.Name, g.Face, g.SizingMode = "SaleSign", face, Enum.SurfaceGuiSizingMode.PixelsPerStud
 	g.PixelsPerStud = math.clamp(math.floor(110 / tallest), 10, 160)      -- TextScaled stops at 100 px
-	g.LightInfluence, g.MaxDistance, g.ClipsDescendants = 0.4, far, true      -- HALLOWEEN_DUSK_20261013: the hall is dim; a sale sign must still read
+	g.LightInfluence, g.Brightness, g.MaxDistance, g.ClipsDescendants = 0, 2.2, far, true
 	if border then
 		local edge = Instance.new("Frame")
 		edge.Name, edge.BackgroundTransparency, edge.Size, edge.Position = "Edge", 1, UDim2.fromScale(0.94, 0.94), UDim2.fromScale(0.03, 0.03)
@@ -215,10 +220,10 @@ for _, sign in ipairs(HttpService:JSONDecode([==[%s]==])) do
 	local w, h = sign.size[1], sign.size[2]
 	if sign.kind == "banner" then
 		local colour = Color3.fromRGB(sign.colour[1], sign.colour[2], sign.colour[3])
-		local part = plain(sign.name, Vector3.new(w, h, 0.1), cf, colour)
+		local part = plain(sign.name, Vector3.new(w, h, 0.1), cf, BOARD)
 		local weights = #sign.lines == 2 and {1.25, 0.85} or {1}
-		write(part, Enum.NormalId.Front, sign.lines, w, h, 0.84, w > 20 and 260 or 150, weights, #sign.lines == 2)
-		if sign.two then write(part, Enum.NormalId.Back, sign.lines, w, h, 0.84, w > 20 and 260 or 150, weights, #sign.lines == 2) end
+		write(part, Enum.NormalId.Front, sign.lines, w, h, 0.84, w > 20 and 260 or 150, weights, true)
+		if sign.two then write(part, Enum.NormalId.Back, sign.lines, w, h, 0.84, w > 20 and 260 or 150, weights, true) end
 		if sign.line then
 			for _, side in ipairs({-1, 1}) do
 				cord(sign.name .. "_Line", (cf * CFrame.new(side * (w / 2 - 0.4), h / 2, 0)).Position, sign.line)
@@ -231,7 +236,7 @@ for _, sign in ipairs(HttpService:JSONDecode([==[%s]==])) do
 		for _, side in ipairs({1, -1}) do
 			local turn = cf * CFrame.Angles(0, side == 1 and 0 or math.pi, 0)
 			local board = plain(sign.name .. (side == 1 and "_Front" or "_Back"), Vector3.new(w, h, 0.12),
-				turn * CFrame.new(0, h / 2 * math.cos(math.rad(11)), -0.46) * CFrame.Angles(math.rad(11), 0, 0), Color3.fromRGB(sign.colour[1], sign.colour[2], sign.colour[3]))
+				turn * CFrame.new(0, h / 2 * math.cos(math.rad(11)), -0.46) * CFrame.Angles(math.rad(11), 0, 0), BOARD)
 			write(board, Enum.NormalId.Front, sign.lines, w, h, 0.8, 95, {0.9, 1.5, 0.6}, true)
 			n += 1
 		end
@@ -244,6 +249,7 @@ for _, sign in ipairs(HttpService:JSONDecode([==[%s]==])) do
 			part.Size = part:GetAttribute("BaseSize") * Vector3.new(r, r, 1)
 			part:SetAttribute("BaseSize", nil)
 			part.CFrame = turn * CFrame.new(Vector3.new(star.centre[1] * r, star.centre[2] * r, star.centre[3]))
+			part.Color = Color3.fromRGB(70, 44, 36)          -- the star itself goes dark red-brown; its words are the light
 			part.Parent = model.Signs
 			write(part, Enum.NormalId.Front, sign.lines, 2 * r, 2 * r, 0.56, r > 1.5 and 150 or 60, {1.2, 0.8}, false)
 			n += 1
