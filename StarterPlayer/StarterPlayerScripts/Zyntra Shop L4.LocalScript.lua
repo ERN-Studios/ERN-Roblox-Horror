@@ -391,6 +391,8 @@ do
 			local text, style, enabled = robuxCaption(skinId, ShopData.owns(skinId))
 			return text, style, enabled, "PREMIUM SUIT"
 		end
+		-- CREATOR_SKIN_20261012: given by a developer, never bought (its card is only shown to who has it)
+		if item.Kind == "Creator" then return "CREATOR ONLY", "off", false, "CREATOR EXCLUSIVE" end
 		return "UNAVAILABLE", "off", false, "DEVELOPER ONLY"
 	end
 
@@ -417,8 +419,11 @@ do
 	-- cloned from the last card into one more grid row. Skins.SyncDeveloper owns
 	-- the grant and ZyntraMonetization refuses EquipSkin for it without
 	-- DevAccess, so the card adds no power. Returns whether the card exists.
-	local DEV_SUIT = "SignalArchitect"
-	local function addDevCard(page, fromId)
+	-- CREATOR_SKIN_20261012: the creator skin gets a card the same way, for everybody, but the card is only SHOWN
+	-- to a player who owns the suit or is a developer (render below), so a gift made mid-session appears at once.
+	local DEV_SUIT, CREATOR_SUIT = "SignalArchitect", "CreatorGold"
+	local function addDevCard(page, fromId, suitId)
+		suitId = suitId or DEV_SUIT
 		local source = Binder.find(page, "SkinCard_" .. fromId)
 		if not source then return false end -- bind's need() reports it
 		local cells = source.Parent
@@ -447,11 +452,11 @@ do
 			if child:IsA("GuiObject") then child.Size = grid.CellSize end
 		end
 		local card = source:Clone()
-		card.Name = "SkinCard_" .. DEV_SUIT
+		card.Name = "SkinCard_" .. suitId
 		card.LayoutOrder = source.LayoutOrder + 1
 		card.Size = grid.CellSize
 		card.Parent = cells
-		Binder.text(Binder.find(card, "Name")).Text = Skins.ById[DEV_SUIT].Name
+		Binder.text(Binder.find(card, "Name")).Text = Skins.ById[suitId].Name
 		return true
 	end
 
@@ -459,13 +464,14 @@ do
 		bind = function(page, need, needControl)
 			local ids = table.clone(ShopData.SKINS)
 			if DevAccess.IsAllowed(player) and addDevCard(page, ids[#ids]) then table.insert(ids, DEV_SUIT) end
+			if addDevCard(page, ids[#ids], CREATOR_SUIT) then table.insert(ids, CREATOR_SUIT) end
 			for _, skinId in ipairs(ids) do
 				local card = need(page, "SkinCard_" .. skinId, "Page_Skins")
 				local buy = card and needControl(card, "Buy", "Page_Skins/SkinCard_" .. skinId)
 				local item = Skins.ById[skinId]
 				if buy and item then
 					cards[skinId] = {Buy = buy, Meta = Binder.text(Binder.find(card, "Meta")),
-						Badge = Binder.find(card, "EquippedBadge")}
+						Badge = Binder.find(card, "EquippedBadge"), Card = card}
 					local art = Binder.find(card, "SkinArt")
 					if art then Binder.image(art).Image = "rbxassetid://" .. tostring(item.PreviewImageId) end
 					wire(buy, "Skins", skinId, "Buy", function()
@@ -492,6 +498,10 @@ do
 				if entry.Badge then
 					local state = ShopData.skinState(skinId)
 					entry.Badge.Visible = state ~= nil and state.Equipped
+				end
+				if skinId == CREATOR_SUIT and entry.Card then
+					local state = ShopData.skinState(skinId)
+					entry.Card.Visible = DevAccess.IsAllowed(player) or (state ~= nil and state.Owned == true)
 				end
 			end
 			renderPreview()

@@ -2338,3 +2338,31 @@ afstand i midten"; "placer 2 af de skins der koster robux i fronten"; "højere t
   the hall's ceiling; the shops' own were not asked for.
 - Shop & Supplies: Static Wraith and False Sun stand on the two corners that face the entrance; the other four
   round the back as before.
+
+## 2026-10-12 (night) - the creator skin, "Creator Gold" (`CREATOR_SKIN_20261012`)
+
+Owner: "Lav det her skin som vi DEVs kan give til streamers" (their pick "7 GOLD + CAMCORDER": black suit, gold sash,
+gold lenses, a 1990s camcorder on a pole pointing forward, an aerial). In Studio, unpublished.
+- ART, no Meshy and nothing generated (`tools/creator_skin`): `build_creator_skin.py` (Blender) loads the game's one
+  suit from git (`assets/hazmat/baseline-rigged.glb`), `paint_creator.py` recolours its baseline map BY POSITION ON
+  THE BODY read through the UVs (the baseline's yellow is the fabric mask; sash = a band about the line from the left
+  shoulder to the right hip, front and back; lenses by position), and the topper is modelled from plain solids in
+  studs about the wearer's UpperTorso (x right, y up, z behind). Output `artifacts/creator-skin-20261012/` (map,
+  `topper.json`, previews, `card.png`, `.blend`). `install_creator_skin.py` uploads map, card and MESH
+  (`AssetService:CreateAssetAsync` with an EditableMesh worked on 2026-10-12) and makes
+  `ServerStorage.HazmatSkin_CreatorGold_20260924` (a copy of a suit template with the new ColorMap) and
+  `HazmatCreatorGoldTopper_20261012` (one MeshPart, RenderFidelity Precise: at Automatic the aerial's rod was not
+  drawn at eight studs; attribute `Centre` = where its middle sits). Ids: `tools/creator_skin/creator_skin_ids.json`.
+- GAME: `ZyntraSkins.CreatorGold` (Kind "Creator", `Skins.SetCreator`); `HazmatSkinVisuals` (topper entry;
+  `topperOffset` reads the template's `Centre`); `ZyntraMonetization` RemoteFunction `ZyntraGrantCreatorSkin`
+  (userId, give): DevAccess, the token gift's cooldown and serialized profile write; the recipient must be on the
+  same server and it is saved in their profile. `Zyntra Shop L4`: a Creator Gold card for whoever owns it (and for
+  developers), "CREATOR EXCLUSIVE" otherwise hidden. `Zyntra Dev L4`: GIVE CREATOR SKIN / TAKE CREATOR SKIN in the
+  ECONOMY page's header, for the player chosen in the picker (desktop only, like token gifts).
+- NO Supporter requirement is enforced: the owner never answered whether "og er supporter" is a hard rule, so a
+  developer decides who gets it.
+- Tested in Studio play with one account: given to myself, equipped, shown on the shop's skin page, worn in a
+  Level 1 round (third-person camera, front and back). Not tested: giving to ANOTHER player, taking back, a real
+  server (Studio does not save), phones, how it looks on other clients.
+- Tool quirk: `mac_merge_push.py` with LUAU_COMPILE_BIN set fails on `Zyntra Dev L4` (luau-compile's output is not
+  UTF-8 for that file); push that file with the variable unset after compiling it by hand.

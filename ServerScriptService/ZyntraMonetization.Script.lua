@@ -1485,6 +1485,66 @@ do
 			return result(false, "Gift was not confirmed. Have the recipient rejoin and check their balance before repeating.")
 		end
 	end
+
+	-- CREATOR_SKIN_20261012 (owner: the creator skin is "sådan vi DEVs kan give dem det"). The same gate, cooldown
+	-- and serialized profile write as the token gift above: a developer gives the Creator Gold suit to a player on
+	-- this server, or takes it back. It is saved in the recipient's profile (Skins.Owned), so they keep it.
+	local creatorRemote = ensureRemote("RemoteFunction", "ZyntraGrantCreatorSkin")
+	local CREATOR_SKIN = "CreatorGold"
+	creatorRemote.OnServerInvoke = function(issuer, targetUserId, give)
+		if not DevAccess.IsAllowed(issuer) or issuer.Parent ~= Players then
+			return result(false, "Developer access is required.")
+		end
+		if serverClosing then return result(false, "Server is closing. Nothing was changed.") end
+		local state = grantStates[issuer]
+		if state and (state.busy or os.clock() - state.finishedAt < COOLDOWN) then
+			return result(false, "Please wait for the previous gift and 3 seconds before trying again.")
+		end
+		if type(targetUserId) ~= "number" or targetUserId ~= targetUserId
+			or targetUserId < 1 or targetUserId > 9007199254740991 or targetUserId % 1 ~= 0 or type(give) ~= "boolean" then
+			return result(false, "Choose a player in this server.")
+		end
+		local target = Players:GetPlayerByUserId(targetUserId)
+		if not target or target.Parent ~= Players then
+			return result(false, "That player has left this server. Choose another player.")
+		end
+		local session = sessions[target]
+		if not session or session.closing then
+			return result(false, "That player's profile is still loading or closing. Try again shortly.")
+		end
+		if not RunService:IsStudio() and not session.persistent then
+			return result(false, "That player's saved data is unavailable. Nothing was changed.")
+		end
+		if Skins.IsOwned(session.data.Skins, CREATOR_SKIN) == give then
+			return result(false, give and ("@" .. target.Name .. " already has the Creator Gold skin.")
+				or ("@" .. target.Name .. " does not have the Creator Gold skin."))
+		end
+		state = { busy = true, finishedAt = 0 }
+		grantStates[issuer] = state
+		local changed, reason = mutate(target, function(data)
+			if serverClosing or issuer.Parent ~= Players or target.Parent ~= Players then
+				return false, "Cancelled because a player or server is leaving.", "error"
+			end
+			if not Skins.SetCreator(data.Skins, CREATOR_SKIN, give) then
+				return false, "Nothing to change.", "error"
+			end
+			if give then
+				return true, "A developer gave you the CREATOR GOLD skin. Equip it under SHOP > SKINS.", "success"
+			end
+			return true, "The Creator Gold skin was taken back by a developer.", "success"
+		end)
+		state.busy = false
+		state.finishedAt = os.clock()
+		if changed then
+			local message = (give and "Gave the Creator Gold skin to @" or "Took the Creator Gold skin from @") .. target.Name .. "."
+			if RunService:IsStudio() then message ..= " Studio test only; not saved." end
+			print(string.format("[Zyntra] Creator skin: issuer=%d target=%d give=%s studio=%s",
+				issuer.UserId, target.UserId, tostring(give), tostring(RunService:IsStudio())))
+			return result(true, message)
+		end
+		warn("[Zyntra] Creator skin change unconfirmed:", issuer.UserId, target.UserId, reason)
+		return result(false, "The change was not confirmed. Have the player rejoin and look under SKINS before repeating.")
+	end
 end
 
 local supportNameCache = {}

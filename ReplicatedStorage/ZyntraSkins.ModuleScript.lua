@@ -14,6 +14,7 @@ Skins.Order = {
 	"StaticWraith",
 	"FalseSun",
 	"SignalArchitect",
+	"CreatorGold",
 }
 
 -- STANDING_PORTRAITS_20260924 (x4kKwPZx): PreviewImageId is the standing card
@@ -61,6 +62,14 @@ Skins.ById = {
 		Name = "Signal Architect Ascendant", Kind = "Developer",
 		ImageId = 115045548138657, PreviewImageId = 110021662787844,
 		Description = "Developer-only obsidian suit with cyan signal channels and an antenna halo.",
+	},
+	-- CREATOR_SKIN_20261012 (owner: an exclusive skin for content creators, "sådan vi DEVs kan give dem det").
+	-- Kind "Creator": owned only by a developer's gift (ZyntraMonetization, Remotes.ZyntraGrantCreatorSkin) and
+	-- taken back the same way. No Token, wheel, Robux or client path grants it. Art: tools/creator_skin.
+	CreatorGold = {
+		Name = "Creator Gold", Kind = "Creator",
+		ImageId = 96092012484745, PreviewImageId = 129389876813926,
+		Description = "Content-creator exclusive: black suit, gold sash, a 1990s camcorder on a pole and an aerial.",
 	},
 }
 
@@ -143,6 +152,17 @@ function Skins.SyncDeveloper(state, isDeveloper)
 		end
 	end
 	return changed
+end
+
+-- CREATOR_SKIN_20261012. A developer's gift or its taking back; call only inside a server-owned, durable mutation.
+-- Returns whether anything changed. A suit that is taken back while worn falls back to the default suit.
+function Skins.SetCreator(state, skinId, owned)
+	local item = Skins.Get(skinId)
+	if not item or item.Kind ~= "Creator" or type(state) ~= "table" or type(state.Owned) ~= "table" then return false end
+	if (state.Owned[skinId] == true) == (owned == true) then return false end
+	state.Owned[skinId] = owned == true or nil
+	if not owned and state.Equipped == skinId then state.Equipped = Skins.DefaultId end
+	return true
 end
 
 function Skins.Public(state)

@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-12T01:57:53.738147+00:00",
+  "capturedAtUtc": "2026-10-12T02:16:07.112638+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -393,8 +393,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraSkins.ModuleScript.lua",
-      "bytes": 5823,
-      "sha256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "bytes": 7043,
+      "sha256": "c3f2d3e58b7c20860aac835ae9f1261ebbf64915e8c2dd63521bb344720c8826",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -509,8 +509,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/HazmatSkinVisuals.Script.lua",
-      "bytes": 16903,
-      "sha256": "f279e4816d991f37b336c381a25feccc0b6dfc829d683a9a97841f70d615e156",
+      "bytes": 17678,
+      "sha256": "dd6ee3bd787e3e744a0ee284b4528d56a0f453ec9c0a54ce2d715c693d3c0654",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -2438,8 +2438,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 218654,
-      "sha256": "b8ca4daa566c0211908c048c6822e5f57a59fcc7545422fbc14636204e1c899b",
+      "bytes": 221960,
+      "sha256": "e3a3550d80d0142a38c252ee6bb06805275a906b2e28a40afe6b8812028c03ab",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4581,8 +4581,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Zyntra Dev L4.LocalScript.lua",
-      "bytes": 47822,
-      "sha256": "4a0c96c62010ba65d3a6953f4888e3714754f0a17e6d0df72deb62adb58fe476",
+      "bytes": 51105,
+      "sha256": "16e61991d0b419e908522b861bbf3ac1e9589cc44369b5c2f71fd20eb75a80c8",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4602,8 +4602,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Zyntra Shop L4.LocalScript.lua",
-      "bytes": 84795,
-      "sha256": "36840bc50c391816388d98ace74548610e90ca386380fd43ee0e41fa9f8da364",
+      "bytes": 85580,
+      "sha256": "a479814ec688355b637b4db01eb83163e2f8ec061cc291d45d426fa5e43cb595",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
