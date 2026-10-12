@@ -30,6 +30,57 @@ if ServerKind.IsRoundServer() then
 	mall:Destroy()
 	return
 end
+
+-- HALLOWEEN_SALE_20261013. The mall's stand has a printed price plate under every product (import_mall.py writes
+-- them from the build: "ENTITY SHIELD - 5 TOKENS", "FALSE SUN - 149 ROBUX"). A printed number goes stale, and during
+-- the Halloween sale it would contradict the sale signs beside it, so every lobby server rewrites the plates once
+-- from what is true: token prices from ZyntraConfig / ZyntraSkins, Robux prices from Roblox itself. A price that is
+-- lower than the regular one says what it was. When the sale is over the sale signs of the Halloween dressing
+-- (LobbyMallPreview.Halloween.Signs, tools/lobby_mall/install_halloween.py) are taken down; the pumpkins may stay.
+task.spawn(function()
+	local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
+	local Skins = require(ReplicatedStorage:WaitForChild("ZyntraSkins"))
+	local MarketplaceService = game:GetService("MarketplaceService")
+	local dressing = mall:FindFirstChild("Halloween")
+	if dressing and not Config.HalloweenSaleActive() then
+		local signs = dressing:FindFirstChild("Signs")
+		if signs then signs:Destroy() end
+	end
+	local stand = mall:FindFirstChild("Parts") and mall.Parts:FindFirstChild("Stand")
+	if not stand then return end
+	local NBSP = utf8.char(160)
+	local function robux(id, kind)
+		for _ = 1, 3 do
+			local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, id, kind)
+			local price = ok and type(info) == "table" and tonumber(info.PriceInRobux) or nil
+			if price then return math.floor(price) end
+			task.wait(2)
+		end
+		return nil
+	end
+	for _, plate in ipairs(stand:GetChildren()) do
+		local key = plate.Name:match("^SkinPrice(.+)_Face$")
+		local skin = key and Skins.ById[key]
+		key = key or plate.Name:match("^Price(.+)_Face$")
+		local label = plate:FindFirstChild("MallSign") and plate.MallSign:FindFirstChildOfClass("TextLabel")
+		local name, unit = nil, nil
+		if label then name, unit = (label.Text:gsub(NBSP, " ")):match("^(.-) %- %d+ (%u+)$") end
+		if key and name then
+			local now, was
+			if skin then
+				if skin.Kind == "Tokens" then now, was = skin.TokenCost, skin.RegularTokenCost
+				elseif skin.PassId then now, was = robux(skin.PassId, Enum.InfoType.GamePass), skin.RobuxPrice end
+			elseif key == "EntityShield" then now, was = Config.ProtectionItem.TokenCost, Config.ProtectionItem.RegularTokenCost
+			elseif Config.Items[key] then now, was = Config.Items[key].TokenCost, Config.Items[key].RegularTokenCost
+			elseif Config.Passes[key] then now, was = robux(Config.Passes[key].Id, Enum.InfoType.GamePass), Config.Passes[key].Price
+			elseif Config.Products[key] and unit == "ROBUX" then now, was = robux(Config.Products[key].Id, Enum.InfoType.Product), Config.Products[key].Price end
+			if now then
+				local text = name .. " - " .. now .. " " .. ((now == 1 and unit == "TOKENS") and "TOKEN" or unit) .. ((was and was > now) and (" (WAS " .. was .. ")") or "")
+				label.Text = (text:gsub(" ", NBSP))
+			end
+		end
+	end
+end)
 if workspace:GetAttribute("LobbyUseTunnel") ~= true then return end
 mall.Parent = ServerStorage                 -- first, before anything that can wait
 workspace:SetAttribute("MallPreview", "MALL_PREVIEW_20261012")

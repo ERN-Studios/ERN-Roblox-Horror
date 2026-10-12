@@ -189,4 +189,22 @@ function Skins.Public(state)
 	return {Owned = state.Owned, Equipped = state.Equipped}
 end
 
+-- HALLOWEEN_SALE_20261013: the token suits are on sale with everything else (ZyntraConfig.HalloweenSale). The Robux
+-- suits are priced on Roblox. Cut once, here, so the shop, the plinths and the server's purchase read one number.
+do
+	local module = script.Parent and script.Parent:FindFirstChild("ZyntraConfig")
+	local ok, Config = pcall(function() return module and require(module) end)
+	if ok and type(Config) == "table" and Config.HalloweenSaleActive and Config.HalloweenSaleActive() then
+		for _, item in pairs(Skins.ById) do
+			if item.Kind == "Tokens" and type(item.TokenCost) == "number" then
+				local regular = item.TokenCost
+				item.RegularTokenCost, item.TokenCost = regular, Config.SaleTokens(regular)
+				if item.Description then
+					item.Description = (item.Description:gsub(regular .. " Research Tokens", item.TokenCost .. " Research Tokens (Halloween sale, was " .. regular .. ")"))
+				end
+			end
+		end
+	end
+end
+
 return Skins

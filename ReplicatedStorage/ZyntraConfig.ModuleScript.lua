@@ -5,7 +5,7 @@
 local TokenPercentPerLevel = 0.05
 local PCT = ("+%d%%"):format(math.floor(TokenPercentPerLevel * 100 + 0.5))
 
-return {
+local Config = {
 	DataStoreName = "ZyntraPlayerData_v1",
 	SupportLeaderboardDataStoreName = "ZyntraDonationLeaderboard_v2",
 	SupportLeaderboardSize = 10,
@@ -422,3 +422,56 @@ return {
 		GlowstickDefault = Color3.fromRGB(65, 145, 255),
 	},
 }
+
+-- HALLOWEEN_SALE_20261013 (owner: "halloween sale signs around the lobby and at the shop saying 66,6 halloween
+-- discount on everything. Og en reentry package med 3 reentry til ens pris"). The lobby's sale signs
+-- (tools/lobby_mall/build_halloween.py) promise this, so while the sale runs:
+--   * every Research Token price is cut by 66.6 % and rounded to a whole token, never under 1 (Entity Shield 5 -> 2,
+--     Speed Potion 3 -> 1, Route Marker Pack 2 -> 1, an upgrade level to a third; ZyntraSkins cuts the token skins);
+--   * one Emergency Re-entry purchase banks THREE credits for the price of one.
+-- Robux prices are NOT here: they live on Roblox (Creator Dashboard) and the shop shows whatever Roblox charges.
+-- The sale ends by itself at EndsAt (2026-11-02 00:00 UTC), read when a server or a client starts; Enabled = false
+-- ends it at once. A description that quotes a price is rewritten with it, so the wording stays what the server takes.
+Config.HalloweenSale = {Enabled = true, EndsAt = 1793577600, PercentOff = 66.6, ReentryGrant = 3}
+
+function Config.HalloweenSaleActive()
+	local sale = Config.HalloweenSale
+	return sale.Enabled == true and os.time() < sale.EndsAt
+end
+
+-- The token price a regular price becomes while the sale runs (the regular price otherwise).
+function Config.SaleTokens(regular)
+	regular = math.max(0, math.floor(tonumber(regular) or 0))
+	if regular == 0 or not Config.HalloweenSaleActive() then return regular end
+	return math.max(1, math.floor(regular * (1 - Config.HalloweenSale.PercentOff / 100) + 0.5))
+end
+
+if Config.HalloweenSaleActive() then
+	local function tokens(n) return n .. (n == 1 and " Research Token" or " Research Tokens") end
+	local function cut(item)
+		local regular = item.TokenCost
+		item.RegularTokenCost, item.TokenCost = regular, Config.SaleTokens(regular)
+		if item.Description then
+			item.Description = (item.Description:gsub("Costs " .. regular .. " Research Tokens",
+				"Halloween sale: costs " .. tokens(item.TokenCost) .. " (was " .. regular .. ")"))
+		end
+	end
+	local shieldWas = Config.ProtectionItem.TokenCost
+	cut(Config.ProtectionItem)
+	for _, item in pairs(Config.Items) do cut(item) end
+	for _, product in pairs(Config.Products) do
+		if product.Description then
+			product.Description = (product.Description:gsub("for " .. shieldWas .. " tokens", "for " .. Config.ProtectionItem.TokenCost .. " tokens"))
+		end
+	end
+	local regularUpgrade = Config.UpgradeCost
+	Config.RegularUpgradeCost = regularUpgrade
+	Config.UpgradeCost = function(level) return Config.SaleTokens(regularUpgrade(level)) end
+	local reentry = Config.Products.EmergencyReentry
+	reentry.RegularReentryGrant, reentry.ReentryGrant = reentry.ReentryGrant, Config.HalloweenSale.ReentryGrant
+	reentry.Name = "Emergency Re-entry x" .. reentry.ReentryGrant
+	reentry.Description = (reentry.Description:gsub("^Adds 1 stored Emergency Re%-entry credit%.",
+		"HALLOWEEN 3 FOR 1: adds " .. reentry.ReentryGrant .. " stored Emergency Re-entry credits for the price of one."))
+end
+
+return Config

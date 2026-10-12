@@ -2534,3 +2534,54 @@ setting or with the lights off; Level 3 with the Mall Manager and Level 6 with t
 - Delivered to `~/Desktop/Backrooms Stay Quiet - Nye billeder 2026-10-13` (48 files, two overview sheets). Nothing
   uploaded to Roblox. Weakest: the Level 2 hall (reads as a render more than as the game), the red-eyes icon (two dots
   and a patch of carpet at small size).
+
+## 2026-10-13 - the mall lobby dressed for Halloween, with a sale (`LOBBY_HALLOWEEN_20261013`, `HALLOWEEN_SALE_20261013`)
+
+Owner: "Via blender I want you to make the lobby be halloween decorated 90s middle class mall style, with jack o
+lanterns, and such, before you do it make some pictures on how the lobby can have that halloween vibe, and also make
+halloween sale signs around the lobby and at the shop saying 66,6 halloween discount on everything. Og en reentry
+package med 3 reentry til ens pris."
+
+**Pictures first.** `artifacts/lobby-halloween-20261013/`: `brief.md`, nine real screenshots in `refs/`, seven concept
+pictures in `concepts/` (Codex, gpt-6.1-sol Medium, built-in image tool; H01 hall, H02 stand, H03 entry, H04 stage,
+H05 planter, H06 dark wing, H07 prop sheet). The build follows them.
+
+**The dressing** (`tools/lobby_mall/build_halloween.py`, Blender; `install_halloween.py`, Studio in Edit).
+- A kit of 20 low-polygon meshes with a colour per vertex, modelled from plain solids: jack-o'-lantern (212
+  triangles) and its glowing face (a second Neon mesh a hair outside the painted one), hay bale, corn stalks, two
+  pots of mums, scarecrow, bedsheet ghost, bat, pail, balloon and balloon bunch, crepe swag (orange one side, black
+  the other), two pennant strings, cardboard skeleton / cat / bat, corner cobweb, price burst.
+- 216 props in the hall: corn stalks or a skeleton on every pier with pumpkins at its foot (never in front of a
+  board or a planter), swags pier to pier, a pennant string under each shop sign and seven across the hall, ghosts and
+  bats on lines, both planters as a seasonal display with a scarecrow, pumpkins on the stage edge, a row of lanterns
+  on the tape and five alone in the dark wing. 27 signs: a banner over the hall, on three walls, over the stage and
+  round the stand's top; six danglers and six counter bursts at the stand; four A-frame standees (two
+  `HALLOWEEN SALE / 66.6% OFF EVERYTHING`, two `RE-ENTRY / 3 FOR 1 / HALLOWEEN ONLY`).
+- `check_halloween()` stops the build if a prop stands on a queue pad, a shop spot, the spawn or in the walking
+  lane, hangs into head height, or a sign carries other lettering than the sale's.
+- In Studio: `Workspace.LobbyMallPreview.Halloween` (354 parts, 22 PointLights without shadows, 38 sign faces). It
+  lives inside the mall's model, so a round server drops it with the mall, and `import_mall.py` now carries it over
+  when the mall is rebuilt. Mesh ids: `tools/lobby_mall/halloween_ids.json`. Remove it after Halloween with
+  `install_halloween.py --remove`.
+- Cost, measured at the spawn in one sitting: draw calls 175 -> 219, triangles 131,000 -> 163,000, parts 2,113 ->
+  2,467, lights 41 -> 63; frames a second unchanged (13.9 without, 14.7 with: this Mac's ceiling). The loading screen
+  does not wait for the dressing (`Lobby Loading Screen`: the census skips `Halloween`), so the gate is 24 assets with
+  or without it; the time to open was 19.4 s without and 14.8 s with in back-to-back runs, i.e. the Mac's own noise.
+- Walked on foot (a 24-point route through both sides, the stand, the stage and the tape): no prop blocks a path.
+
+**The sale** (takes effect when published; the lobby's signs promise it).
+- `ZyntraConfig.HalloweenSale = {Enabled = true, EndsAt = 1793577600 (2026-11-02 00:00 UTC), PercentOff = 66.6,
+  ReentryGrant = 3}`, `HalloweenSaleActive()`, `SaleTokens(n)`. While it runs, at module load: every token price is
+  cut and rounded, never under 1 (Entity Shield 5 -> 2, Speed Potion 3 -> 1, Route Marker Pack 2 -> 1; upgrade levels
+  1,1,1,1,2,2,2,3,3,3 instead of 1..10; `ZyntraSkins` cuts the token suits 25/75/300 -> 8/25/100), descriptions that
+  quote a price are rewritten, and one Emergency Re-entry purchase banks THREE credits (product name
+  "Emergency Re-entry x3", the store button and the death card say "BUY 3 RE-ENTRIES"; `ZyntraReentryGrant` attribute).
+- `Lobby Mall Preview` (server) rewrites the stand's printed price plates once per lobby server from what is true
+  (token prices from the config, Robux prices from `MarketplaceService:GetProductInfo`), adding "(WAS n)" when lower,
+  and takes the sale SIGNS down when the sale is over (the pumpkins stay until removed).
+- **Robux prices are not touched.** They live on Roblox; the game shows whatever Roblox charges. Regular prices read
+  2026-10-13: passes 149 (Entity Detector, Advanced Equipment), 99 (Supporter, Glowstick Customizer), skins 149 / 99,
+  products 149 / 49 (tokens), 69 (Expedition Pack), 29 (Emergency Re-entry). Until the owner lowers them (or says
+  go), "66.6% off everything" is true for token prices only.
+- Not tested: a real re-entry purchase (Studio cannot take Robux), the end of the sale on a live server (a server
+  that started before EndsAt keeps sale prices until it closes), phones, two players. Nothing is published.

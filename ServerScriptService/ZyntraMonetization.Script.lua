@@ -1820,7 +1820,7 @@ local function protectionResponse(player, command, status, reason)
 	response.Reason = reason
 	protectionResponses[player] = response
 	local refusals = {
-		NeedFiveTokens = "You need 5 Research Tokens.",
+		NeedFiveTokens = ("You need %d Research Tokens."):format(Config.ProtectionItem.TokenCost),   -- HALLOWEEN_SALE_20261013: the price moves
 		NoCharges = "Buy an Entity Shield charge in Upgrades first.",
 		AlreadyActive = "Entity Shield is already active.",
 		RetryLater = "Please wait a moment and try again.",
@@ -4584,7 +4584,8 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			return true, "+" .. entry.Product.TokenGrant .. " Zyntra Research Tokens", "success"
 		elseif entry.Product.ReentryGrant then
 			data.ReentryCredits += entry.Product.ReentryGrant
-			return true, "+1 Emergency Re-entry credit", "success"
+			-- HALLOWEEN_SALE_20261013: three for the price of one while the sale runs (ZyntraConfig.HalloweenSale)
+			return true, ("+%d Emergency Re-entry credit%s"):format(entry.Product.ReentryGrant, entry.Product.ReentryGrant == 1 and "" or "s"), "success"
 		end
 		return true, "Purchase recorded.", "success"
 	end)

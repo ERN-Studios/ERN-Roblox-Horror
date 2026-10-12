@@ -582,7 +582,9 @@ local function updateReentry()
 	player:SetAttribute("ZyntraFreeReentry", free)
 	reentryButton.Text = free and "YOU HAVE 1 FREE RE-ENTRY  //  USE IT" or credits > 0
 		and ("USE RE-ENTRY CREDIT  //  " .. credits .. " OWNED")
-		or ("BUY RE-ENTRY  //  " .. tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$")
+		-- HALLOWEEN_SALE_20261013: one purchase banks three while the sale runs, and the button says so
+		or ((Config.Products.EmergencyReentry.ReentryGrant > 1 and ("BUY " .. Config.Products.EmergencyReentry.ReentryGrant .. " RE-ENTRIES  //  ") or "BUY RE-ENTRY  //  ")
+			.. tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$")
 	do
 		local boughtAt = player:GetAttribute("ZyntraReentryBoughtAt")
 		if boughtAt and credits > 0 then                       -- BUY_IS_REENTER_20261011: the bought credit has landed
@@ -601,6 +603,7 @@ local function updateReentry()
 	player:SetAttribute("ZyntraReentryPrice",
 		displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price)
 	player:SetAttribute("ZyntraReentryProductId", Config.Products.EmergencyReentry.Id)
+	player:SetAttribute("ZyntraReentryGrant", Config.Products.EmergencyReentry.ReentryGrant)
 end
 player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(updateReentry)
 player:GetAttributeChangedSignal("PartyDownWindowOpen"):Connect(updateReentry)

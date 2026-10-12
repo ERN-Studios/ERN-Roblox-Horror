@@ -108,6 +108,9 @@ J = lambda v: json.dumps(v, separators=(',', ':'))
 print(s.luau('''
 assert(not game:GetService("RunService"):IsRunning(), "Edit mode only")
 local old = workspace:FindFirstChild("%s")
+-- LOBBY_HALLOWEEN_20261013: the seasonal dressing is install_halloween.py's work; it rides along to the new model
+local dressing = old and old:FindFirstChild("Halloween")
+if dressing then dressing.Parent = nil end
 if old then old:Destroy() end
 local model = Instance.new("Model")
 model.Name = "%s"
@@ -119,6 +122,7 @@ for _, name in ipairs({"Parts", "Lights", "Anchors"}) do
 	local f = Instance.new("Folder"); f.Name = name; f.Parent = model
 end
 model.Parent = workspace
+if dressing then dressing.Parent = model end
 local MaterialService = game:GetService("MaterialService")
 local made = 0
 for key, m in pairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do

@@ -296,7 +296,12 @@ end
 
 local function census(roots, ids, carriers, instances)
 	local total, checked = 0, 0
+	-- LOBBY_HALLOWEEN_20261013: the mall's seasonal dressing (LobbyMallPreview.Halloween, twenty small meshes) never
+	-- holds the door. With it in the census the lobby took 16.2 s instead of 10.9 s to open; it may pop in a moment late.
+	local mallRoot = workspace:FindFirstChild(MALL_LOBBY)
+	local dressing = mallRoot and mallRoot:FindFirstChild("Halloween")
 	local function consider(instance)
+		if dressing and instance:IsDescendantOf(dressing) then return end
 		total += collectAsset(instance, ids, carriers)
 		checked += 1
 		if checked % 200 == 0 then task.wait() end
