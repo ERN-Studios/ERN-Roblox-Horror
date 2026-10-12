@@ -7,6 +7,7 @@ maps have zero variation), which is plastic with a picture on it. This writes re
 `artifacts/lobby-mall-20261011/build/textures_pbr/<key>_{normal,roughness}.png` (its own folder, so a rebuild does not
 overwrite them; not in git, this script rewrites them exactly, seed 611); upload_textures.py prefers them. Height is the colour map's own pattern (grout, grain, holes, seams
 sit lower where they are darker) plus a fibre or grain noise; everything wraps, so the maps tile.
+The tile floors are not here: floor_tiles.py draws their three maps together and build_mall.py writes them.
 """
 import json
 from pathlib import Path
@@ -17,7 +18,6 @@ BUILD = Path(__file__).resolve().parents[2] / 'artifacts' / 'lobby-mall-20261011
 OUT = BUILD / 'textures_pbr'
 #        pattern depth, noise depth, noise size (px), roughness base, roughness swing with brightness
 RULES = {
-    'floor_tile':      (3.40, 0.015, 2, 0.12, -1.50),   # glossy glazed tile, matt joints sunk between them (owner, 2026-10-12)
     'plaster':         (0.20, 0.55, 2, 0.86,  0.00),
     'oak':             (1.30, 0.25, 1, 0.50, -0.18),
     'ceiling':         (2.20, 0.50, 1, 0.94,  0.00),

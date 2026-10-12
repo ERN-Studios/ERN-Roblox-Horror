@@ -87,6 +87,14 @@ def main():
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         if ids.get(key, {}).get(kind) and hashes.get(name) == digest:
             continue
+        # the same picture under another name (the plain and the checkered floors share their bump and gloss maps)
+        twin = next((n for n, d in hashes.items() if d == digest and n != name and ids.get(n.rsplit('_', 1)[0], {}).get(n.rsplit('_', 1)[1])), None)
+        if twin:
+            ids.setdefault(key, {})[kind] = ids[twin.rsplit('_', 1)[0]][twin.rsplit('_', 1)[1]]
+            hashes[name] = digest
+            IDS.write_text(json.dumps(ids, indent=1, sort_keys=True) + '\n')
+            print(f'{name:28s} same picture as {twin}', flush=True)
+            continue
         im = Image.open(path).convert('RGBA')
         assert im.size[0] == im.size[1], path.name
         # from a FILE, not a pipe: only then does zstd write the content size that DecompressBuffer insists on

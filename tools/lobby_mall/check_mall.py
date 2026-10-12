@@ -133,7 +133,17 @@ def main():
     for g,z0,z1 in [('Concourse',-900,-621),('DarkWing',-621,-421)]:
         for x in (182,258):
             border=byname[f'{g}_Border{x}'];check(border['pos']==[x,29.5,(z0+z1)/2] and border['size']==[4,1,z1-z0],g+' continuous brown floor border')
-        p=byname[g+'_Floor'];check(p['pos']==[220,29.5,(z0+z1)/2] and p['size']==[72,1,z1-z0],g+' floor top/bounds')
+        if g=='Concourse':
+            # 2026-10-12: the lit hall's floor is rows of tile patterns; together they are the whole 72 x 279, each
+            # on the tile grid (overlaps are refused further down)
+            cells=[p for p in D['parts'] if p['name'].startswith('Concourse_Floor')]
+            check(abs(sum(p['size'][0]*p['size'][2] for p in cells)-72*(z1-z0))<EPS,'hall floor rows cover 72 x 279')
+            for p in cells:
+                lo=[p['pos'][0]-p['size'][0]/2,p['pos'][2]-p['size'][2]/2];hi=[p['pos'][0]+p['size'][0]/2,p['pos'][2]+p['size'][2]/2]
+                check(p['pos'][1]==29.5 and p['size'][1]==1 and lo[0]>=184 and hi[0]<=256 and lo[1]>=z0 and hi[1]<=z1 and p['material'].startswith('floor_'),p['name']+' floor top/bounds')
+                check(all(v%4==0 for v in (lo[0],hi[0],lo[1])) and (hi[1]%4==0 or hi[1]==z1),p['name']+' on the 4-stud tile grid')
+        else:
+            p=byname[g+'_Floor'];check(p['pos']==[220,29.5,(z0+z1)/2] and p['size']==[72,1,z1-z0],g+' floor top/bounds')
     for p in D['parts']:
         if p['group']=='Ceiling' and p['material']=='ceiling':check(abs(p['pos'][1]-p['size'][1]/2-46)<EPS,p['name']+' ceiling underside')
         if p['name'].startswith('PanelFrame'):check(p['size']==[8,.5,4],p['name']+' recessed panel size')

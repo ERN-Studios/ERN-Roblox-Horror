@@ -1,10 +1,10 @@
 {
   "passed": true,
-  "parts": 1899,
+  "parts": 1917,
   "counts": {
     "Arrival": 168,
     "Ceiling": 90,
-    "Concourse": 75,
+    "Concourse": 93,
     "DarkWing": 225,
     "Furniture": 138,
     "Shop1": 53,
@@ -21,7 +21,7 @@
   "notes": [
     "Continuous 20-wide x5-high corridor: 459 centreline nodes; minimum sampled obstacle clearance 10.005344; whole-edge proof: 0.01-stud samples, 0.005-stud Lipschitz bound.",
     "Full-width terminal strip verified from [245.5, 30, -632.5] to tape-base south tangent z=-622.1; 20 wide, 10.4 long, 5 high. No 20-wide passage through poles 12 apart.",
-    "Opposed coplanar joining faces >1 sq.stud: 1415 (flagged in qa.json; internal contact surfaces, not overlapping visible faces).",
+    "Opposed coplanar joining faces >1 sq.stud: 1473 (flagged in qa.json; internal contact surfaces, not overlapping visible faces).",
     "Same-facing submerged base contacts >1 sq.stud: 12 (flagged in qa.json; full coverage by the opaque basin floor verified)."
   ],
   "axis_proof": [
@@ -2231,8 +2231,68 @@
     ],
     [
       "Concourse_Border182",
-      "Concourse_Floor",
-      279.0
+      "Concourse_Floor0_0",
+      20.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor1_0",
+      32.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor2_0",
+      24.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor3_0",
+      16.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor4_0",
+      8.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor5_0",
+      60.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor6_0",
+      4.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor7_0",
+      16.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor8_0",
+      20.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor9_0",
+      4.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor10_0",
+      32.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor11_0",
+      4.0
+    ],
+    [
+      "Concourse_Border182",
+      "Concourse_Floor12_0",
+      39.0
     ],
     [
       "DarkWing_Border182",
@@ -3010,154 +3070,289 @@
       16.0
     ],
     [
-      "Concourse_Floor",
-      "DarkWing_Floor",
+      "Concourse_Floor0_0",
+      "Concourse_Floor1_0",
       72.0
     ],
     [
-      "Concourse_Floor",
-      "PlantTub0",
-      10.0629
-    ],
-    [
-      "Concourse_Floor",
-      "PlantTub2",
-      10.0629
-    ],
-    [
-      "Concourse_Floor",
-      "TapeBase1",
-      1.879
-    ],
-    [
-      "Concourse_Floor",
-      "StandCarpet_2_1",
-      86.6025
-    ],
-    [
-      "Concourse_Floor",
-      "StandCarpet_3_-1",
-      86.6025
-    ],
-    [
-      "Concourse_Floor",
-      "StandCarpet_2_-1",
-      86.6025
-    ],
-    [
-      "Concourse_Floor",
-      "StandCarpet_3_1",
-      86.6025
-    ],
-    [
-      "Concourse_Floor",
-      "StageDeck",
-      690.0
-    ],
-    [
-      "Concourse_Floor",
+      "Concourse_Floor0_0",
       "ArrivalMat",
       492.8
     ],
     [
-      "Concourse_Floor",
-      "TapeBase2",
-      1.879
+      "Concourse_Floor0_0",
+      "Concourse_Border258",
+      20.0
     ],
     [
-      "Concourse_Floor",
-      "StandCarpet_1_1",
-      86.6025
+      "Concourse_Floor1_0",
+      "Concourse_Floor2_0",
+      72.0
     ],
     [
-      "Concourse_Floor",
-      "StandCarpet_4_-1",
-      86.6025
+      "Concourse_Floor1_0",
+      "Concourse_Border258",
+      32.0
     ],
     [
-      "Concourse_Floor",
+      "Concourse_Floor2_0",
+      "Concourse_Floor3_0",
+      72.0
+    ],
+    [
+      "Concourse_Floor2_0",
       "PlanterArrival_Tub",
       72.0
     ],
     [
-      "Concourse_Floor",
-      "PlanterNorth_Tub",
+      "Concourse_Floor2_0",
+      "Concourse_Border258",
+      24.0
+    ],
+    [
+      "Concourse_Floor3_0",
+      "Concourse_Floor4_0",
       72.0
     ],
     [
-      "Concourse_Floor",
-      "StageStep0",
-      12.0
+      "Concourse_Floor3_0",
+      "PlantTub0",
+      1.6472
     ],
     [
-      "Concourse_Floor",
-      "StageStep1",
-      12.0
+      "Concourse_Floor3_0",
+      "Concourse_Border258",
+      16.0
     ],
     [
-      "Concourse_Floor",
-      "StageStep2",
-      12.0
+      "Concourse_Floor4_0",
+      "Concourse_Floor5_0",
+      8.0
     ],
     [
-      "Concourse_Floor",
-      "TapeBase3",
-      1.879
+      "Concourse_Floor4_0",
+      "PlantTub0",
+      8.4156
     ],
     [
-      "Concourse_Floor",
-      "StandCarpet_0_-1",
-      86.6025
+      "Concourse_Floor4_0",
+      "Concourse_Floor5_1",
+      56.0
     ],
     [
-      "Concourse_Floor",
-      "StandCarpet_0_1",
-      86.6025
+      "Concourse_Floor4_0",
+      "Concourse_Floor5_2",
+      8.0
     ],
     [
-      "Concourse_Floor",
-      "StandCarpet_1_-1",
-      86.6025
-    ],
-    [
-      "Concourse_Floor",
-      "StandCarpet_4_1",
-      86.6025
-    ],
-    [
-      "Concourse_Floor",
-      "StandCarpet_5_-1",
-      86.6025
-    ],
-    [
-      "Concourse_Floor",
-      "StandCarpet_5_1",
-      86.6025
-    ],
-    [
-      "Concourse_Floor",
-      "TapeBase4",
-      1.879
-    ],
-    [
-      "Concourse_Floor",
-      "TapeBase5",
-      1.879
-    ],
-    [
-      "Concourse_Floor",
-      "PlantTub3",
-      10.0629
-    ],
-    [
-      "Concourse_Floor",
+      "Concourse_Floor4_0",
       "PlantTub1",
       5.0314
     ],
     [
-      "Concourse_Floor",
+      "Concourse_Floor4_0",
       "Concourse_Border258",
-      279.0
+      8.0
+    ],
+    [
+      "Concourse_Floor5_0",
+      "Concourse_Floor6_0",
+      8.0
+    ],
+    [
+      "Concourse_Floor5_0",
+      "Concourse_Floor5_1",
+      60.0
+    ],
+    [
+      "Concourse_Floor6_0",
+      "Concourse_Floor7_0",
+      12.0
+    ],
+    [
+      "Concourse_Floor6_0",
+      "Concourse_Floor5_1",
+      56.0
+    ],
+    [
+      "Concourse_Floor6_0",
+      "Concourse_Floor7_1",
+      16.0
+    ],
+    [
+      "Concourse_Floor6_0",
+      "Concourse_Floor7_2",
+      16.0
+    ],
+    [
+      "Concourse_Floor6_0",
+      "Concourse_Floor7_3",
+      16.0
+    ],
+    [
+      "Concourse_Floor6_0",
+      "Concourse_Floor7_4",
+      12.0
+    ],
+    [
+      "Concourse_Floor6_0",
+      "Concourse_Floor5_2",
+      8.0
+    ],
+    [
+      "Concourse_Floor6_0",
+      "Concourse_Border258",
+      4.0
+    ],
+    [
+      "Concourse_Floor7_0",
+      "Concourse_Floor8_0",
+      12.0
+    ],
+    [
+      "Concourse_Floor7_0",
+      "PlantTub2",
+      5.0314
+    ],
+    [
+      "Concourse_Floor7_0",
+      "Concourse_Floor7_1",
+      16.0
+    ],
+    [
+      "Concourse_Floor8_0",
+      "Concourse_Floor9_0",
+      72.0
+    ],
+    [
+      "Concourse_Floor8_0",
+      "PlantTub2",
+      5.0314
+    ],
+    [
+      "Concourse_Floor8_0",
+      "Concourse_Floor7_1",
+      16.0
+    ],
+    [
+      "Concourse_Floor8_0",
+      "Concourse_Floor7_2",
+      16.0
+    ],
+    [
+      "Concourse_Floor8_0",
+      "PlanterNorth_Tub",
+      36.0
+    ],
+    [
+      "Concourse_Floor8_0",
+      "Concourse_Floor7_3",
+      16.0
+    ],
+    [
+      "Concourse_Floor8_0",
+      "Concourse_Floor7_4",
+      12.0
+    ],
+    [
+      "Concourse_Floor8_0",
+      "PlantTub3",
+      5.0314
+    ],
+    [
+      "Concourse_Floor8_0",
+      "Concourse_Border258",
+      20.0
+    ],
+    [
+      "Concourse_Floor9_0",
+      "Concourse_Floor10_0",
+      72.0
+    ],
+    [
+      "Concourse_Floor9_0",
+      "PlanterNorth_Tub",
+      36.0
+    ],
+    [
+      "Concourse_Floor9_0",
+      "Concourse_Border258",
+      4.0
+    ],
+    [
+      "Concourse_Floor10_0",
+      "Concourse_Floor11_0",
+      72.0
+    ],
+    [
+      "Concourse_Floor10_0",
+      "Concourse_Border258",
+      32.0
+    ],
+    [
+      "Concourse_Floor11_0",
+      "Concourse_Floor12_0",
+      72.0
+    ],
+    [
+      "Concourse_Floor11_0",
+      "Concourse_Border258",
+      4.0
+    ],
+    [
+      "Concourse_Floor12_0",
+      "DarkWing_Floor",
+      72.0
+    ],
+    [
+      "Concourse_Floor12_0",
+      "TapeBase1",
+      1.879
+    ],
+    [
+      "Concourse_Floor12_0",
+      "StageDeck",
+      690.0
+    ],
+    [
+      "Concourse_Floor12_0",
+      "TapeBase2",
+      1.879
+    ],
+    [
+      "Concourse_Floor12_0",
+      "StageStep0",
+      12.0
+    ],
+    [
+      "Concourse_Floor12_0",
+      "StageStep1",
+      12.0
+    ],
+    [
+      "Concourse_Floor12_0",
+      "StageStep2",
+      12.0
+    ],
+    [
+      "Concourse_Floor12_0",
+      "TapeBase3",
+      1.879
+    ],
+    [
+      "Concourse_Floor12_0",
+      "TapeBase4",
+      1.879
+    ],
+    [
+      "Concourse_Floor12_0",
+      "TapeBase5",
+      1.879
+    ],
+    [
+      "Concourse_Floor12_0",
+      "Concourse_Border258",
+      39.0
     ],
     [
       "DarkWing_Floor",
@@ -3213,6 +3408,76 @@
       "directory_BoardFrame",
       "directory_BoardFace",
       216.0
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_2_1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_3_-1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_2_-1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_3_1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_1_1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_4_-1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_0_-1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_0_1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_1_-1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_4_1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_5_-1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "StandCarpet_5_1",
+      86.6025
+    ],
+    [
+      "Concourse_Floor5_1",
+      "Concourse_Floor5_2",
+      60.0
+    ],
+    [
+      "Concourse_Floor7_1",
+      "Concourse_Floor7_2",
+      16.0
     ],
     [
       "CeilingGap200_-890",
@@ -3980,6 +4245,11 @@
       10.7156
     ],
     [
+      "Concourse_Floor7_2",
+      "Concourse_Floor7_3",
+      16.0
+    ],
+    [
       "Counter0_Body_Miter1",
       "Counter0_Top_Miter1",
       4.6188
@@ -4380,6 +4650,11 @@
       1.1868
     ],
     [
+      "Concourse_Floor7_3",
+      "Concourse_Floor7_4",
+      16.0
+    ],
+    [
       "Counter1_Body_Miter-1",
       "Counter1_Top_Miter-1",
       4.6188
@@ -4775,6 +5050,16 @@
       20.0
     ],
     [
+      "Concourse_Floor7_4",
+      "PlantTub3",
+      5.0314
+    ],
+    [
+      "Concourse_Floor7_4",
+      "Concourse_Border258",
+      16.0
+    ],
+    [
       "CeilingStrip244",
       "Shop2_PierColumn0_5",
       16.0
@@ -4813,6 +5098,11 @@
       "CeilingStrip244",
       "Column1_-630_5",
       16.0
+    ],
+    [
+      "Concourse_Floor5_2",
+      "Concourse_Border258",
+      60.0
     ],
     [
       "PlantTub1",
@@ -9819,7 +10109,7 @@
   },
   "route_min_clearance": 10.005343572311752,
   "route_edge_margin": 0.001,
-  "json_sha256": "8363695cf995baf9786dc4bcdbbd09d8f0909234de77b480e8c4795d6256531a",
+  "json_sha256": "38d3cd40d13ebfce296dc8e1728a4865c06f2b9ca9630e06540178fad06c177c",
   "limitations": [
     "Static offline geometry checks; Roblox runtime, lighting parity, gameplay and multiplayer require main agent QA.",
     "The verified radius10 centreline joins a full-width flat-ended terminal strip to the tape bases; seven poles 12 apart prevent a 20-wide corridor through the tape line."

@@ -2305,3 +2305,20 @@ shows every other player: a blue outline through walls where the client has thei
 and the distance in studs from server positions (so it works beyond streaming range). It was a separate switch,
 off by default. Level 6 Dev ESP no longer draws players for an account that has this. NOT tested with a second
 player: Studio had one.
+
+## 2026-10-12 (evening) - the mall's floor: four-stud tiles and the patterns of 1990s malls
+
+Owner on the first tile floor: "Gulvet ligner lidt et badeværelses gulv nu, gør tiles større og lav de her grimme
+random pattern fra ref billeder" (six photographs). `tools/lobby_mall/floor_tiles.py` now draws every floor sheet's
+colour, bump and gloss map from one description (128 px a tile, thin grey joint, glazed tile 0.10 / grout 0.86);
+`build_mall.py` writes them and lays the lit hall in rows (`Concourse_Floor<row>_<cell>`), every edge on a multiple
+of 4 studs. A tile is 4 studs (it was 2). From the entrance: plain, HARLEQUIN diamonds (teal, tan, cream, slate;
+z -880..-848, the spawn stands on it), plain, stepped green/pink BANDS (-824..-808), black and white CHECKER round
+the stand (x 192..248, z -800..-740), two terracotta INLAYS (-736..-720), a black row, RED/GREY checker under the
+chairs (-696..-664), a black row, plain to the tape. Tan band along both walls; shop queue floors and the dark wing
+are plain.
+ENGINE FACT, measured in play: a MaterialVariant's sheet is laid from the WORLD's origin, not from the part (joints
+of separate floor parts run through each other, and a 16-stud part standing on a multiple of 16 shows one whole
+sheet). So pattern edges only have to stand on tile multiples, and the importer's OFFSET must stay a multiple of 4
+(the inlays need x 496 and 528: OFFSET 300). `upload_textures.py` reuses an id when two maps are the same picture
+(plain, checker and red/grey share bump and gloss). The lamps' sheen plates are unchanged.

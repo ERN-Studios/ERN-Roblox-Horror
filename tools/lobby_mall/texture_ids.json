@@ -15,9 +15,24 @@
   "damask_colour": "18b2fcaaf1c95dafcd60328ebd8993f9d5155ff66b2f0844cd4e4027208e6201",
   "damask_normal": "468b39d13a8af4d3a6f26487084c152beec2a9c79b4da3d0408c04f1c3c9f1f8",
   "damask_roughness": "7607d95f55f4ab1355b86c3a4b7a1145621f8c231f035f6ccc4237df270392db",
-  "floor_tile_colour": "2ba0ee935bb6c2d413f57237ac0a33a9fef8a42758b26b076781842e049a3eee",
-  "floor_tile_normal": "2cbda6bdf7086f3f57d1f6d664241df8eb40309a9cff350eaa6aaacbc1f29e17",
-  "floor_tile_roughness": "db2610d48d520120394702393d4582e130321f31aa6c9c2194c126d4e288b57f",
+  "floor_bands_colour": "aa04606861d4589c71e2ab8778f7a92aea2147204aa2ed2480ad742d859cdbf0",
+  "floor_bands_normal": "77af311250fe4019634f61d8e9ca21c28a9d58f44d81e0a22c615f637ae04b42",
+  "floor_bands_roughness": "d91a7164fcd53b841f1756b61555fc33ea4549cb37577341b11981b0b414c97b",
+  "floor_checker_colour": "e8a6fc779e468571202c649f28b0802ff9522756f0a01c0266ba5cd8510c0275",
+  "floor_checker_normal": "d1cac801c4117cf72493ee0aa6ab5671397d3d6628d0e2701031eefaafbc2e1a",
+  "floor_checker_roughness": "0229b0dd7645953a948fefe04cb725e769e2ef9e53b9588d33384a4d19a8c73b",
+  "floor_harlequin_colour": "08406c9c7d0344b1fac72602f1432a43cd981e18b38045a12e2aaddd70445beb",
+  "floor_harlequin_normal": "af2c787fce4246c5e53d1bb340249b571af8717ae0ca48ddbc9501b467fe7360",
+  "floor_harlequin_roughness": "cd5ff1d1bcf63e53050e69dc6bc5ba6bcdecc38ea1bd6c681e38d453d28c067d",
+  "floor_inlay_colour": "7c7cc3933b9b586e37aacd315068d0f5601b89a041c99130badfbead63c663de",
+  "floor_inlay_normal": "0a4737033f64d08a00bfde9b300f3e1215fda8c86ad93be70b2d4327e9b89e86",
+  "floor_inlay_roughness": "fa4e81b2909ec4d96c840e481b373e4735ecc464066d6519c9f2344cb8d05c51",
+  "floor_redgrey_colour": "2f045705eeebaf88d5817dcf9f9b22b6be969b9765700d6b5b05837b1f888e2e",
+  "floor_redgrey_normal": "d1cac801c4117cf72493ee0aa6ab5671397d3d6628d0e2701031eefaafbc2e1a",
+  "floor_redgrey_roughness": "0229b0dd7645953a948fefe04cb725e769e2ef9e53b9588d33384a4d19a8c73b",
+  "floor_tile_colour": "3196b157216cf89b0d1e23dfd3cb511d33875656daf562d48cd00894412eb7e8",
+  "floor_tile_normal": "d1cac801c4117cf72493ee0aa6ab5671397d3d6628d0e2701031eefaafbc2e1a",
+  "floor_tile_roughness": "0229b0dd7645953a948fefe04cb725e769e2ef9e53b9588d33384a4d19a8c73b",
   "hazard_colour": "80bc39fb9dca23877085beab432042ab1c674c8bfe5b2dc903c520f2d085bd62",
   "hazard_normal": "63a0f94b1f109beb8279a0dfa4944e849342b341b5642a958c68f8944fcf908a",
   "hazard_roughness": "b732e585a3edfdc20ae3328fcce04b9af570a61f408ea2dcc63a348b90a32a8b",
@@ -75,10 +90,35 @@
   "normal": 114210578379518,
   "roughness": 106223322182700
  },
+ "floor_bands": {
+  "colour": 121843144653391,
+  "normal": 81464237073976,
+  "roughness": 105297170180546
+ },
+ "floor_checker": {
+  "colour": 74363330103619,
+  "normal": 119393351139238,
+  "roughness": 137398307058419
+ },
+ "floor_harlequin": {
+  "colour": 85051127321062,
+  "normal": 112034613600039,
+  "roughness": 125671827892054
+ },
+ "floor_inlay": {
+  "colour": 106433966775615,
+  "normal": 105502131643774,
+  "roughness": 109267327852329
+ },
+ "floor_redgrey": {
+  "colour": 78964882563426,
+  "normal": 119393351139238,
+  "roughness": 137398307058419
+ },
  "floor_tile": {
-  "colour": 110770653626913,
-  "normal": 140255728893280,
-  "roughness": 76807765693649
+  "colour": 109583541279628,
+  "normal": 119393351139238,
+  "roughness": 137398307058419
  },
  "hazard": {
   "colour": 127922287741035,

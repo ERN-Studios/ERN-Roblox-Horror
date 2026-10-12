@@ -31,17 +31,8 @@ def textures():
     for key,base in [('floor_tile',(229,223,209)),('plaster',(195,185,146)),('oak',(122,91,51)),('ceiling',(183,181,157)),('damask',(174,154,65)),('beige_carpet',(152,137,98)),('stand_carpet',(120,91,47)),('triangle_carpet',(67,48,61)),('road_carpet',(66,78,59)),('small_tile',(179,199,185)),('pegboard',(180,168,120)),('puzzle_mat',(30,96,112)),('black_ceiling',(31,32,30)),('pad',(26,61,47)),('brass',(136,111,62)),('sign_face',(236,226,160)),('static',(113,115,103)),('stage_carpet',(44,75,68)),('hazard',(230,190,36)),('pool_suit',(160,200,204)),('survey_suit',(222,211,164)),('false_suit',(231,212,162))]:
         im=save(key,base,2.5 if key not in ['static','beige_carpet','stand_carpet'] else 8);d=ImageDraw.Draw(im)
         if key=='floor_tile':
-            # 2026-10-12 (owner, with three photographs of dead malls: "gulvet skal laves om ... med tiles og de skal
-            # være glossy, og brug bump map til at give perspektiv til fugerne"). Big pale square tiles with dark
-            # joints: four by four on the sheet, 128 px a tile, a 5 px joint centred on every boundary. It was
-            # speckled terrazzo. The gloss and the depth of the joints are make_pbr.py's maps.
-            for i in range(6200):rng.integers(0,n,2);rng.integers(1,3)   # the terrazzo's draws, kept so every later texture comes out the same
-            tone=np.random.default_rng(1012).normal(0,2.4,(4,4))
-            a=np.asarray(im).astype(float)+np.kron(tone,np.ones((128,128)))[...,None]
-            edge=np.minimum(np.minimum(xx%128,127-xx%128),np.minimum(yy%128,127-yy%128))     # px to the nearest tile boundary
-            a[edge<=3]=a[edge<=3]*.55+np.array([62,58,52])*.45
-            a[edge<=2]=(62,58,52)
-            im=Image.fromarray(np.uint8(np.clip(a,0,255)));d=ImageDraw.Draw(im)
+            # The floors are floor_tiles.py's (2026-10-12): this sheet and the pattern sheets are written after the loop.
+            for i in range(6200):rng.integers(0,n,2);rng.integers(1,3)   # the first floor's draws, kept so every later texture comes out the same
         elif key=='static':
             a=np.repeat(np.clip(119+rng.normal(0,34,(n,n,1))-((yy%4)==0)[...,None]*22,20,230),3,axis=2)
             im=Image.fromarray(a.astype(np.uint8))
@@ -111,16 +102,20 @@ def textures():
         # Flat OpenGL normal and matte roughness maps; deliberately no glossy finish.
         Image.new('RGB',(512,512),(128,128,255)).save(out/(key+'_normal.png'))
         Image.new('L',(512,512),235 if key!='small_tile' else 214).save(out/(key+'_roughness.png'))
-    print('TEXTURES: 22 sets, deterministic 512px PNGs')
+    # The tile floors: colour, bump and gloss from one description (the only surfaces whose three maps are real here).
+    import floor_tiles
+    for key in floor_tiles.SHEETS:
+        for kind,pixels in zip(('','_normal','_roughness'),floor_tiles.sheet(key)):Image.fromarray(pixels).save(out/(key+kind+'.png'),compress_level=9)
+    print(f'TEXTURES: {22+len(floor_tiles.SHEETS)-1} sets, deterministic PNGs')
 
 def design():
     D={'version':1,'units':'studs','bounds':{'min':[125,15,-902],'max':[315,50,-419]},'materials':{},'parts':[],'signs':[],'lights':[],'anchors':{}}
     palette={
-      'floor_tile':('SmoothPlastic',(229,223,209),8),'border':('Concrete',(94,71,45),8),'plaster':('Plaster',(195,185,146),8),'oak':('WoodPlanks',(122,91,51),8),'ceiling':('Concrete',(183,181,157),4),'damask':('Fabric',(174,154,65),6),'beige_carpet':('Carpet',(152,137,98),6),'stand_carpet':('Carpet',(120,91,47),6),'triangle_carpet':('Carpet',(67,48,61),8),'road_carpet':('Carpet',(66,78,59),16),'small_tile':('Concrete',(179,199,185),4),'pegboard':('Wood',(180,168,120),4),'puzzle_mat':('Fabric',(30,96,112),12),'black_ceiling':('Concrete',(31,32,30),4),'pad':('SmoothPlastic',(26,61,47),14.8),'brass':('Metal',(136,111,62),4),'sign_face':('SmoothPlastic',(236,226,160),40),'static':('SmoothPlastic',(113,115,103),3),
+      'floor_tile':('SmoothPlastic',(229,223,209),16),'floor_checker':('SmoothPlastic',(130,128,124),16),'floor_redgrey':('SmoothPlastic',(150,112,118),16),'floor_bands':('SmoothPlastic',(190,184,176),16),'floor_inlay':('SmoothPlastic',(192,128,112),16),'floor_harlequin':('SmoothPlastic',(132,138,132),32),'border':('Concrete',(94,71,45),8),'plaster':('Plaster',(195,185,146),8),'oak':('WoodPlanks',(122,91,51),8),'ceiling':('Concrete',(183,181,157),4),'damask':('Fabric',(174,154,65),6),'beige_carpet':('Carpet',(152,137,98),6),'stand_carpet':('Carpet',(120,91,47),6),'triangle_carpet':('Carpet',(67,48,61),8),'road_carpet':('Carpet',(66,78,59),16),'small_tile':('Concrete',(179,199,185),4),'pegboard':('Wood',(180,168,120),4),'puzzle_mat':('Fabric',(30,96,112),12),'black_ceiling':('Concrete',(31,32,30),4),'pad':('SmoothPlastic',(26,61,47),14.8),'brass':('Metal',(136,111,62),4),'sign_face':('SmoothPlastic',(236,226,160),40),'static':('SmoothPlastic',(113,115,103),3),
       'frame':('Metal',(62,58,46),4),'text':('SmoothPlastic',(72,66,54),4),'teal':('Plaster',(93,129,121),4),'mauve':('Plaster',(137,106,109),4),'skirt':('Concrete',(98,76,49),4),'cream':('SmoothPlastic',(188,174,124),4),'black':('SmoothPlastic',(18,20,18),4),'glass':('Glass',(58,64,56),4),'water':('Glass',(18,69,68),4),'orange':('Plaster',(165,82,35),4),'navy':('Plaster',(23,32,58),4),'red':('Fabric',(137,30,34),4),'rose':('SmoothPlastic',(175,119,146),4),'yellow':('Fabric',(200,160,34),4),'blue':('Fabric',(47,103,163),4),'green':('Fabric',(55,118,66),4),'purple':('Fabric',(109,52,135),4),'pale_blue':('Fabric',(122,175,186),4),'cloth':('Fabric',(211,196,144),8),'vinyl':('SmoothPlastic',(76,48,30),4),'metal':('Metal',(111,108,86),4),'light':('Neon',(238,225,155),4),'cyan':('Neon',(44,183,209),4),'magenta':('Neon',(206,44,151),4),'grey':('Metal',(125,123,107),4),'stage_carpet':('Carpet',(44,75,68),6),'hazard':('SmoothPlastic',(230,190,36),1.1)}
     palette.update({'detector_green':('Neon',(80,210,77),4),'velvet':('Fabric',(96,27,40),4),'case_glass':('Glass',(184,178,139),4),'amber':('Neon',(220,155,52),4),'gold':('Metal',(159,131,61),4),'olive':('Fabric',(133,143,90),4),'charcoal':('Fabric',(36,38,35),4),'wraith':('Fabric',(62,35,78),4),'pool_suit':('Fabric',(160,200,204),3),'survey_suit':('Fabric',(222,211,164),3),'false_suit':('Fabric',(231,212,162),3)})
     palette.update({'cardboard':('Cardboard',(150,118,78),4),'net':('Fabric',(14,14,13),4)})
-    textured=set(['floor_tile','plaster','oak','ceiling','damask','beige_carpet','stand_carpet','triangle_carpet','road_carpet','small_tile','pegboard','puzzle_mat','black_ceiling','pad','brass','sign_face','static','stage_carpet','hazard','pool_suit','survey_suit','false_suit'])
+    textured=set(['floor_tile','floor_checker','floor_redgrey','floor_bands','floor_inlay','floor_harlequin','plaster','oak','ceiling','damask','beige_carpet','stand_carpet','triangle_carpet','road_carpet','small_tile','pegboard','puzzle_mat','black_ceiling','pad','brass','sign_face','static','stage_carpet','hazard','pool_suit','survey_suit','false_suit'])
     for k,(base,c,tile) in palette.items():D['materials'][k]={'base':base,'colour_map':f'textures/{k}.png' if k in textured else None,'normal_map':f'textures/{k}_normal.png' if k in textured else None,'roughness_map':f'textures/{k}_roughness.png' if k in textured else None,'studs_per_tile':tile}
     names=set()
     def part(n,g,pos,size,m='plaster',rot=(0,0,0),shape='Block',col=None,collide=True,transparency=0,glow=False):
@@ -167,7 +162,29 @@ def design():
             for j,dx in enumerate((-5,5)):box(f'{n}_Leg{k}_{j}','Furniture',x+dx,31,z+dz,.4,1.75,1.5,'frame')
     # Floor slabs meet at edges; concourse has a continuous brown border.
     for g,z0,z1 in [('Concourse',-900,-621),('DarkWing',-621,-421)]:
-        box(g+'_Floor',g,220,29.5,(z0+z1)/2,72,1,z1-z0,'floor_tile')
+        if g=='Concourse':
+            # 2026-10-12 (owner: bigger tiles and "de her grimme random pattern fra ref billeder"). The lit hall's floor
+            # is laid in rows from the entrance to the tape; every edge stands on a multiple of 4 studs, which is one
+            # tile, and the two inlays stand on whole 16-stud sheets (x 196 and 228 are 496 and 528 after the
+            # importer's 300). Rows: (z0, z1, [(x0, x1, material, tint)]).
+            F,ALL='floor_tile',(184,256)
+            black=(58,56,58)
+            rows=[(-900,-880,[(*ALL,F,None)]),
+                  (-880,-848,[(*ALL,'floor_harlequin',None)]),                                  # the entrance court
+                  (-848,-824,[(*ALL,F,None)]),
+                  (-824,-808,[(*ALL,'floor_bands',None)]),
+                  (-808,-800,[(*ALL,F,None)]),
+                  (-800,-740,[(184,192,F,None),(192,248,'floor_checker',None),(248,256,F,None)]),  # round the stand
+                  (-740,-736,[(*ALL,F,None)]),
+                  (-736,-720,[(184,196,F,None),(196,212,'floor_inlay',None),(212,228,F,None),(228,244,'floor_inlay',None),(244,256,F,None)]),
+                  (-720,-700,[(*ALL,F,None)]),
+                  (-700,-696,[(*ALL,F,black)]),
+                  (-696,-664,[(*ALL,'floor_redgrey',None)]),                                    # under the chairs
+                  (-664,-660,[(*ALL,F,black)]),
+                  (-660,-621,[(*ALL,F,None)])]
+            for r,(za,zb,cells) in enumerate(rows):
+                for c,(xa,xb,m,tint) in enumerate(cells):box(f'Concourse_Floor{r}_{c}',g,(xa+xb)/2,29.5,(za+zb)/2,xb-xa,1,zb-za,m,col=tint)
+        else:box(g+'_Floor',g,220,29.5,(z0+z1)/2,72,1,z1-z0,'floor_tile')
         # the band along each wall: the same tile in the warm tan of the third photograph (it was a plain brown strip)
         for x in (182,258):box(f'{g}_Border{x}',g,x,29.5,(z0+z1)/2,4,1,z1-z0,'floor_tile',col=(208,164,128))
     # Entrance and end wall.
