@@ -2819,3 +2819,15 @@ LightInfluence 0 and Brightness 2.2, on a near-black board (26,17,12); the price
 their words carry. This covers the sale signs at the stand (band, danglers, counter bursts, standees) and the HAPPY
 HALLOWEEN banners, which had the same problem. Checked in play from the spawn, in front of the stand and behind it:
 every line reads. Not published.
+
+## 2026-10-13 - picture set 3: seventeen more, with bigger subjects and the Halloween lobby (`artifacts/promo-20261013-set3`)
+
+Owner, after looking at set 2's folder: "Du må lige lave nogle flere der er bedre og tilføj dem til samme mappe".
+Codex (gpt-6.1-sol, Medium, image tool), one run of fifteen minutes, no capacity errors; brief in `brief.md` (it reuses
+set 2's look and references and names what was weak there: mostly-black frames, small subjects, one render-like
+picture, no story), today's Halloween lobby screenshots in `refs_halloween/`. Eight thumbnails (13-20), five icons
+(G-K), three gallery pictures (7-9) and a Halloween cover (3). `tools/promo/finish_ingame3.py` finishes them like set
+2 and ADDS them to `~/Desktop/Backrooms Stay Quiet - Nye billeder 2026-10-13` with continuing numbers and two overview
+sheets of their own ("0 Oversigt - NYE ..."); the folder holds 82 files. Mean brightness 24-99 (set 2 had four under
+16). Honest notes: the Halloween shop and hall are the generator's version of the lobby (the stand's top and the
+light are not exactly the game's); the Level 2 picture is bright and clean. Nothing uploaded.

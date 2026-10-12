@@ -1,0 +1,348 @@
+{
+  "pictures": [
+    {
+      "name": "T13_halloween_lobby",
+      "refs": [
+        "artifacts/promo-20261013-set3/refs_halloween/lobby_hall_from_spawn_happy_halloween_banner.jpg",
+        "artifacts/promo-20261013-set3/refs_halloween/lanterns_at_a_pier_close.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_back.png"
+      ],
+      "scene": "Player-height view of the Halloween dead 1990s mall hall. Four yellow hazmat players walking in, small against the immense hall but together about 40% frame height, warmly lit by nearby plastic jack-o-lanterns. Violet-dark hall, cream backlit POOLROOMS and OFFICE signs, cream walls with teal/mauve stripes, glossy patterned tiles, warm orange pools occupying lower half. Orange/black/purple pennants, hanging rubber bats and bedsheet ghosts. Exact central glowing banner text HAPPY HALLOWEEN. No other text. Simple shapes exactly like hall reference. Story: team entering the ominous decorated hall.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. Player-height view of the Halloween dead 1990s mall hall. Four yellow hazmat players walking in, small against the immense hall but together about 40% frame height, warmly lit by nearby plastic jack-o-lanterns. Violet-dark hall, cream backlit POOLROOMS and OFFICE signs, cream walls with teal/mauve stripes, glossy patterned tiles, warm orange pools occupying lower half. Orange/black/purple pennants, hanging rubber bats and bedsheet ghosts. Exact central glowing banner text HAPPY HALLOWEEN. No other text. Simple shapes exactly like hall reference. Story: team entering the ominous decorated hall.",
+      "status": "accepted",
+      "qa": [
+        "Scene: four suited players enter the Halloween mall beneath the correct banner.",
+        "References: hall geometry, pennants, pumpkins and avatar proportions match.",
+        "Readability: warm floor and large foreground suits remain distinct at 150px.",
+        "Checks: dim violet hall, no interface; primary sign texts are correct.",
+        "Weakness: distant shop details soften; foreground boots approach the crop boundary."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/T13_halloween_lobby_raw.png"
+    },
+    {
+      "name": "T14_halloween_lanterns",
+      "refs": [
+        "artifacts/promo-20261013-set3/refs_halloween/tape_with_lantern_row_and_dark_wing.jpg",
+        "artifacts/promo-20261013-set3/refs_halloween/lanterns_at_a_pier_close.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_front.png"
+      ],
+      "scene": "Low close camera: THREE large simple plastic jack-o-lanterns, glowing triangular faces, dominate foreground at 45% height. One chunky hazmat player crouches beside them, head turned past plain yellow barrier tape into black wing. Smaller lantern row leads into darkness beyond tape. No lettering on tape or walls, frame signs out. Orange floor pool and player mask visibly lit, violet dark mall, cream square pier teal/mauve bands. Story: player investigating forbidden wing.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. Low close camera: THREE large simple plastic jack-o-lanterns, glowing triangular faces, dominate foreground at 45% height. One chunky hazmat player crouches beside them, head turned past plain yellow barrier tape into black wing. Smaller lantern row leads into darkness beyond tape. No lettering on tape or walls, frame signs out. Orange floor pool and player mask visibly lit, violet dark mall, cream square pier teal/mauve bands. Story: player investigating forbidden wing.",
+      "status": "accepted",
+      "qa": [
+        "Scene: crouched player with three lanterns beside the taped dark wing.",
+        "References: banded pier, truss, lantern row and chunky avatar preserved.",
+        "Readability: orange foreground covers over half the image; player is large.",
+        "Checks: no signs or UI; low-detail lantern faces read at 150px.",
+        "Weakness: the player faces the nearest lantern more than the far wing."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/T14_halloween_lanterns_raw.png"
+    },
+    {
+      "name": "T15_l1_lunge",
+      "refs": [
+        "artifacts/promo-20261013-ingame/refs_new/l1_lights_off_torch_beam_wider.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/l1_entity_real_body_side_lit_sheet.jpg",
+        "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg"
+      ],
+      "scene": "Level 1 all ceiling lamps OFF. First person black mitten and small black torch at bottom right. Bulky hunched BLACK hooded Entity mid-leap INTO camera torch beam, arms wide with long claw hands, heavy boots airborne, two small RED eyes, no mouth. Its entire lunging body fills 67% image height centered. Torch brightly exposes charcoal-black geometric body planes and yellow wall/carpet over at least half frame; background outside torch black. No lit ceiling fixtures. Immediate attack story. Entity must retain huge hunched shoulders and bulky boots of reference, not thin ghost. Critical: Entity face is completely featureless black inside hood except two red eyes. NO gas mask, filter, nose, mouth, backpack tanks. Black draped hood garment with broad hump and long claws as reference.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. Level 1 all ceiling lamps OFF. First person black mitten and small black torch at bottom right. Bulky hunched BLACK hooded Entity mid-leap INTO camera torch beam, arms wide with long claw hands, heavy boots airborne, two small RED eyes, no mouth. Its entire lunging body fills 67% image height centered. Torch brightly exposes charcoal-black geometric body planes and yellow wall/carpet over at least half frame; background outside torch black. No lit ceiling fixtures. Immediate attack story. Entity must retain huge hunched shoulders and bulky boots of reference, not thin ghost. Critical: Entity face is completely featureless black inside hood except two red eyes. NO gas mask, filter, nose, mouth, backpack tanks. Black draped hood garment with broad hump and long claws as reference.",
+      "status": "accepted",
+      "qa": [
+        "Scene: airborne Entity lunges into a first-person torch.",
+        "References: bulky hood, featureless face, claws and boots retained after correction.",
+        "Readability: large silhouette and red eyes against exposed yellow walls.",
+        "Checks: all ceiling fixtures off, no HUD/text, clear immediate attack.",
+        "Weakness: body exceeds the requested two-thirds slightly; knit texture is simplified."
+      ],
+      "tries": 2,
+      "output": "artifacts/promo-20261013-set3/raw/T15_l1_lunge_raw.png"
+    },
+    {
+      "name": "T16_l1_the_fuse",
+      "refs": [
+        "artifacts/promo-20261007/refs/l1_05_zyntra_fuse_relay_wall_cabinet.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/l1_dim_one_panel_left_on_rest_dark.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_front.png",
+        "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg"
+      ],
+      "scene": "Level 1 DIM. Side view large 65%-height hazmat player at right pulling a long cream cylindrical fuse with brown endcaps out of the reference cream rectangular wall relay cabinet; amber cabinet glow illuminates player, wall and floor over right half. Frame or obscure cabinet's text strip so NO text visible. Behind player down corridor at left a bulky hunched black hood Entity watches under the ONE dim lit ceiling panel, amber eyes, featureless face; other panels off. Strong one-glance story: busy player unaware of watcher. Plain game texture and hard-edged room.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. Level 1 DIM. Side view large 65%-height hazmat player at right pulling a long cream cylindrical fuse with brown endcaps out of the reference cream rectangular wall relay cabinet; amber cabinet glow illuminates player, wall and floor over right half. Frame or obscure cabinet's text strip so NO text visible. Behind player down corridor at left a bulky hunched black hood Entity watches under the ONE dim lit ceiling panel, amber eyes, featureless face; other panels off. Strong one-glance story: busy player unaware of watcher. Plain game texture and hard-edged room.",
+      "status": "accepted",
+      "qa": [
+        "Scene: large side-view player pulls a fuse while the Entity watches.",
+        "References: cream relay, cylindrical fuse, yellow room and avatar match.",
+        "Readability: bright amber interaction fills half the image; watcher silhouette clear.",
+        "Checks: only one ceiling panel on, no lettering/UI, simple game geometry.",
+        "Weakness: fuse extraction leaves a second cylinder-like portion in the socket."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/T16_l1_the_fuse_raw.png"
+    },
+    {
+      "name": "T17_l3_manager_close",
+      "refs": [
+        "artifacts/promo-20261007/refs/l3_02_mall_manager_look_reference_bind_pose_red_balloon_head.jpg",
+        "artifacts/promo-20261007/refs/l3_04_party_room_road_carpet_cd_on_folding_table_player.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_front.png"
+      ],
+      "scene": "Level 3 party room: camera beside terrified hiding hazmat player, mask huge low foreground half beneath folding table edge. Tall thin Mall Manager bends over table straight toward camera, huge glossy RED BALLOON head with NO FACE in upper half, orange/cream vertically striped shirt, blank name tag, pale long arms red gloves planted on tabletop. Tight close view, balloon and player each readable instantly. Warm practical ceiling lamp clearly lights table, balloon, player and road-map carpet, cream/orange walls black lower band and dark ceiling, paper cups and balloons behind. No facial features on red balloon. Story: hiding player being found. Correction: pull camera back slightly and lower Manager's bent head so the ENTIRE red balloon is inside y=120 to y=460 with dark ceiling margin above; no head crop. Keep hiding mask low at right not bottom-left. Reduce material detail to screenshot-simple textures, flat polygon arms and plain paper cups.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. Level 3 party room: camera beside terrified hiding hazmat player, mask huge low foreground half beneath folding table edge. Tall thin Mall Manager bends over table straight toward camera, huge glossy RED BALLOON head with NO FACE in upper half, orange/cream vertically striped shirt, blank name tag, pale long arms red gloves planted on tabletop. Tight close view, balloon and player each readable instantly. Warm practical ceiling lamp clearly lights table, balloon, player and road-map carpet, cream/orange walls black lower band and dark ceiling, paper cups and balloons behind. No facial features on red balloon. Story: hiding player being found. Correction: pull camera back slightly and lower Manager's bent head so the ENTIRE red balloon is inside y=120 to y=460 with dark ceiling margin above; no head crop. Keep hiding mask low at right not bottom-left. Reduce material detail to screenshot-simple textures, flat polygon arms and plain paper cups.",
+      "status": "accepted",
+      "qa": [
+        "Scene: Manager leans over folding table above a hiding masked player.",
+        "References: faceless red balloon, striped shirt, red gloves and road carpet match.",
+        "Readability: large mask and red head establish the hiding/finding story.",
+        "Checks: simplified polygon limbs, exposed room area, no text or HUD.",
+        "Weakness: balloon is smaller than requested and near the upper crop margin."
+      ],
+      "tries": 2,
+      "output": "artifacts/promo-20261013-set3/raw/T17_l3_manager_close_raw.png"
+    },
+    {
+      "name": "T18_l6_counter_runs",
+      "refs": [
+        "artifacts/promo-20261007/refs/l6_04_the_counter_face_closeup_party_hat.jpg",
+        "artifacts/promo-20261007/refs/l6_03_the_counter_side_full_body_at_post.jpg",
+        "artifacts/promo-20261007/refs/l6_07_inside_a_gallery_floor_and_ceiling.jpg"
+      ],
+      "scene": "First-person Level 6 padded blue/yellow narrow gallery corridor, black netting at sides and blue/green foam floor. Counter doll RUNNING directly at camera with arms out, one bare jointed foot raised, body 70% height centered inside crop-safe zone. EXACT faceted low-poly bald white porcelain head dark glass eyes rosy cheeks small CLOSED smile, striped paper party cone, faded orange/blue/cream tee, denim dungaree SHORTS, bare ball-jointed limbs. One ceiling lamp behind it. Camera torch illumination exposes face and blue/yellow padded walls over half frame. No hand necessary. Story: doll catches camera-player. No teeth, no new scary face, retain reference toy model.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. First-person Level 6 padded blue/yellow narrow gallery corridor, black netting at sides and blue/green foam floor. Counter doll RUNNING directly at camera with arms out, one bare jointed foot raised, body 70% height centered inside crop-safe zone. EXACT faceted low-poly bald white porcelain head dark glass eyes rosy cheeks small CLOSED smile, striped paper party cone, faded orange/blue/cream tee, denim dungaree SHORTS, bare ball-jointed limbs. One ceiling lamp behind it. Camera torch illumination exposes face and blue/yellow padded walls over half frame. No hand necessary. Story: doll catches camera-player. No teeth, no new scary face, retain reference toy model.",
+      "status": "accepted",
+      "qa": [
+        "Scene: Counter runs toward the first-person camera with reaching arms.",
+        "References: faceted porcelain, party cone, dungaree shorts and padded net gallery match.",
+        "Readability: white face and large running pose pop against blue/yellow padding.",
+        "Checks: exposed foreground, one lamp, no lettering or interface.",
+        "Weakness: doll fills more than 70% height; hat and toes are close to crop edges."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/T18_l6_counter_runs_raw.png"
+    },
+    {
+      "name": "T19_l2_wading",
+      "refs": [
+        "artifacts/promo-20261007/refs/l2new_01_area1_flooded_pillar_hall.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_front.png",
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_back.png"
+      ],
+      "scene": "Level 2 flooded pillar hall exactly reference geometry: chunky square white tiled pillars and basic stepped/vaulted openings, flat pale turquoise water plane with only simple game ripples, cream tile walls, simple diffuse daylight. TWO large stubby yellow-suit players wading thigh-deep in foreground/midground, visible upper bodies 45-55% image height, one turns toward teammate, both hold small torches illuminating nearby tiled pillar and wall. One-glance cautious team exploration, no enemy of any kind. Must look like a Roblox screenshot: low-detail repeated square tile texture, blocky columns, flat water with NO photoreal caustics, no cinematic architectural render. Keep shapes simple and hard-edged.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. Level 2 flooded pillar hall exactly reference geometry: chunky square white tiled pillars and basic stepped/vaulted openings, flat pale turquoise water plane with only simple game ripples, cream tile walls, simple diffuse daylight. TWO large stubby yellow-suit players wading thigh-deep in foreground/midground, visible upper bodies 45-55% image height, one turns toward teammate, both hold small torches illuminating nearby tiled pillar and wall. One-glance cautious team exploration, no enemy of any kind. Must look like a Roblox screenshot: low-detail repeated square tile texture, blocky columns, flat water with NO photoreal caustics, no cinematic architectural render. Keep shapes simple and hard-edged.",
+      "status": "accepted",
+      "qa": [
+        "Scene: two suited players wade through the flooded pillar hall with torches.",
+        "References: tiled cylindrical pillars and vaults, turquoise water, accurate avatars.",
+        "Readability: foreground player and two yellow light patches clearly visible.",
+        "Checks: no creature, simple tile texture, game-like water ripples, no UI/text.",
+        "Weakness: water is more reflective than the reference, though still visibly game-like."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/T19_l2_wading_raw.png"
+    },
+    {
+      "name": "T20_l1_back_to_back",
+      "refs": [
+        "artifacts/promo-20261013-ingame/refs_new/l1_lights_off_torch_beam_wider.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_front.png",
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_back.png",
+        "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg"
+      ],
+      "scene": "Level 1 OFF all ceiling lamps off. Slightly elevated oblique camera over FOUR chunky yellow hazmat players standing tightly BACK TO BACK at a four-way junction. Four handheld torches point outward in four different corridors, their plain cone LIGHT PATCHES across walls/carpet (no airborne rays). Team grouping spans 50% height. In ONLY ONE torch-lit corridor at right, CLOSE bulky black hood Entity with red eyes and long claw hands, 55% height, confronting that player. No other entity. Broad overlapping warm light patches expose carpet and wallpaper across half frame; darkness at corridor ends. Featureless Entity face, no mask/tanks. Clear surrounded-team story.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. Level 1 OFF all ceiling lamps off. Slightly elevated oblique camera over FOUR chunky yellow hazmat players standing tightly BACK TO BACK at a four-way junction. Four handheld torches point outward in four different corridors, their plain cone LIGHT PATCHES across walls/carpet (no airborne rays). Team grouping spans 50% height. In ONLY ONE torch-lit corridor at right, CLOSE bulky black hood Entity with red eyes and long claw hands, 55% height, confronting that player. No other entity. Broad overlapping warm light patches expose carpet and wallpaper across half frame; darkness at corridor ends. Featureless Entity face, no mask/tanks. Clear surrounded-team story.",
+      "status": "accepted",
+      "qa": [
+        "Scene: four players back to back with four torches and one close Entity.",
+        "References: chunky yellow players and hooded watcher in yellow maze.",
+        "Readability: central group spans half-height, broad warm patches reveal the junction.",
+        "Checks: no ceiling lamps on; one entity, no lettering/UI or volumetric haze.",
+        "Weakness: Entity is about one-third height rather than the requested larger threat."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/T20_l1_back_to_back_raw.png"
+    },
+    {
+      "name": "I07_icon_entity_face",
+      "square": true,
+      "refs": [
+        "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/l1_entity_real_body_side_lit_sheet.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/l1_dim_one_panel_left_on_rest_dark.jpg"
+      ],
+      "scene": "Square icon close chest-up of Level 1 Entity: huge bulky hunched black hood head fills most square, face completely featureless black with just TWO small glowing RED eyes. One long clawed hand beside face. Strong warm-white torch UP-LIGHT exposes hood rim, chest and polygon claws over at least half frame; DIM yellow damask wall behind separated from black body. No gas mask, no mouth, no teeth, no backpack. Simple textured low-poly game model. Eye pair and hood must read instantly at 150px. Output exactly 1254x1254.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Square 1254x1254. Face fills square, readable at 150px. Square icon close chest-up of Level 1 Entity: huge bulky hunched black hood head fills most square, face completely featureless black with just TWO small glowing RED eyes. One long clawed hand beside face. Strong warm-white torch UP-LIGHT exposes hood rim, chest and polygon claws over at least half frame; DIM yellow damask wall behind separated from black body. No gas mask, no mouth, no teeth, no backpack. Simple textured low-poly game model. Eye pair and hood must read instantly at 150px. Output exactly 1254x1254.",
+      "status": "accepted",
+      "qa": [
+        "Scene: hooded Entity face and raised claw in hard torch uplight.",
+        "References: broad hood, featureless face and long angular claws match.",
+        "Readability: two red eyes and illuminated hood fill the square at 150px.",
+        "Checks: dim room with one panel, no mask additions or lettering/UI.",
+        "Weakness: garment reads brown in warm light rather than pure pitch black."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/I07_icon_entity_face_raw.png"
+    },
+    {
+      "name": "I08_icon_manager_grin",
+      "square": true,
+      "refs": [
+        "artifacts/promo-20261007/refs/l3_02_mall_manager_look_reference_bind_pose_red_balloon_head.jpg",
+        "artifacts/promo-20261007/refs/l3_04_party_room_road_carpet_cd_on_folding_table_player.jpg"
+      ],
+      "scene": "Square 1254x1254 close icon of Mall Manager RED BALLOON head in three-quarter tilt, glossy torch highlight on left, entire balloon huge fills 75% square height and width, tied knot below above orange/cream vertical-striped shirt collar. Dark simple party room with a few balloons behind. Despite asset name 'grin', this referenced monster has NO FACE: no grin, mouth, eyes or features on red balloon. Plain game plastic red surface, simple realtime white highlight, no lens flare. Lit head covers over half frame and separates from dark backdrop.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Square 1254x1254. Face fills square, readable at 150px. Square 1254x1254 close icon of Mall Manager RED BALLOON head in three-quarter tilt, glossy torch highlight on left, entire balloon huge fills 75% square height and width, tied knot below above orange/cream vertical-striped shirt collar. Dark simple party room with a few balloons behind. Despite asset name 'grin', this referenced monster has NO FACE: no grin, mouth, eyes or features on red balloon. Plain game plastic red surface, simple realtime white highlight, no lens flare. Lit head covers over half frame and separates from dark backdrop.",
+      "status": "accepted",
+      "qa": [
+        "Scene: huge red balloon head with torch highlight and striped collar.",
+        "References: faceless balloon and orange party-room palette preserved.",
+        "Readability: red head dominates square and remains clear at 150px.",
+        "Checks: no invented grin, text, interface or cinematic effects.",
+        "Weakness: tool added a small reference-style player in the background."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/I08_icon_manager_grin_raw.png"
+    },
+    {
+      "name": "I09_icon_counter_corner",
+      "square": true,
+      "refs": [
+        "artifacts/promo-20261007/refs/l6_04_the_counter_face_closeup_party_hat.jpg",
+        "artifacts/promo-20261007/refs/l6_07_inside_a_gallery_floor_and_ceiling.jpg"
+      ],
+      "scene": "Square1254x1254 extreme close Counter doll peeking round BLUE padded vertical corner which covers left third. Visible half porcelain face HUGE in right two-thirds: ONE dark glass eye, rosy cheek and half of tiny CLOSED smile, bald faceted white head and tip of striped paper cone hat. One porcelain jointed hand grips edge at lower-left of face. Warm practical lamp light exposes white face and blue/yellow padding over half square; dark net gallery behind. EXACT low-poly reference face, no teeth, realistic skin or hair. Story: doll finding hiding camera-player.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Square 1254x1254. Face fills square, readable at 150px. Square1254x1254 extreme close Counter doll peeking round BLUE padded vertical corner which covers left third. Visible half porcelain face HUGE in right two-thirds: ONE dark glass eye, rosy cheek and half of tiny CLOSED smile, bald faceted white head and tip of striped paper cone hat. One porcelain jointed hand grips edge at lower-left of face. Warm practical lamp light exposes white face and blue/yellow padding over half square; dark net gallery behind. EXACT low-poly reference face, no teeth, realistic skin or hair. Story: doll finding hiding camera-player.",
+      "status": "accepted",
+      "qa": [
+        "Scene: Counter peeks around blue padding with one eye and a gripping hand.",
+        "References: faceted porcelain face, closed smile and netted gallery match.",
+        "Readability: large pale face sharply separates from blue corner at 150px.",
+        "Checks: warm practical lighting, no extra entity, lettering or UI.",
+        "Weakness: party-hat tip is cropped; vinyl texture is more detailed than the screenshot."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/I09_icon_counter_corner_raw.png"
+    },
+    {
+      "name": "I10_icon_mask_and_eyes",
+      "square": true,
+      "refs": [
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_front.png",
+        "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg"
+      ],
+      "scene": "Square1254x1254 close black gas mask filling frame inside mustard yellow hood, camera slightly below. EXACT two large ROUND lenses, single round front filter. In EACH lens independently a clearly readable reflection of the SAME TWO RED EYES of a hooded Entity plus a bright warm-white torch beam landing on yellow wallpaper: two eyes in left lens AND two eyes in right lens, not one per lens. Reflections large simple shapes, readable at150px. Warm torch bounce exposes hood/mask rims over more than half square; dark background. Stubby game avatar, flat/simple textures no photoreal scratches. Story: imminent threat reflected in player's mask. Correction: each lens reflection is an EXTREME CLOSEUP of hood and two red eyes ONLY, not a full-body distant Entity. Each pair of red eyes spans HALF lens width, with two red disks each 12% lens width. Warm torch patch behind reflected head, reflected ceiling lamps ALL OFF. Preserve exact gas mask.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Square 1254x1254. Face fills square, readable at 150px. Square1254x1254 close black gas mask filling frame inside mustard yellow hood, camera slightly below. EXACT two large ROUND lenses, single round front filter. In EACH lens independently a clearly readable reflection of the SAME TWO RED EYES of a hooded Entity plus a bright warm-white torch beam landing on yellow wallpaper: two eyes in left lens AND two eyes in right lens, not one per lens. Reflections large simple shapes, readable at150px. Warm torch bounce exposes hood/mask rims over more than half square; dark background. Stubby game avatar, flat/simple textures no photoreal scratches. Story: imminent threat reflected in player's mask. Correction: each lens reflection is an EXTREME CLOSEUP of hood and two red eyes ONLY, not a full-body distant Entity. Each pair of red eyes spans HALF lens width, with two red disks each 12% lens width. Warm torch patch behind reflected head, reflected ceiling lamps ALL OFF. Preserve exact gas mask.",
+      "status": "accepted",
+      "qa": [
+        "Scene: close gas mask with a reflected pair of Entity eyes in each lens.",
+        "References: yellow hood, two round lenses and round filter match.",
+        "Readability: enlarged eye pairs remain four distinct red dots at 150px.",
+        "Checks: reflected ceiling unlit, warm torch patches, no text/UI.",
+        "Weakness: torch appears as reflected wall illumination rather than a distinct cone."
+      ],
+      "tries": 2,
+      "output": "artifacts/promo-20261013-set3/raw/I10_icon_mask_and_eyes_raw.png"
+    },
+    {
+      "name": "I11_icon_halloween",
+      "square": true,
+      "refs": [
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_front.png",
+        "artifacts/promo-20261013-set3/refs_halloween/lanterns_at_a_pier_close.jpg",
+        "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg"
+      ],
+      "scene": "Square1254x1254 seasonal icon. Close yellow hazmat player waist-up, mask fills upper middle; holds one big glowing plastic jack-o-lantern in BOTH black mitten hands at chest filling lower half. Strong orange face glow lights mask, hood and gloves: bright subject covers two-thirds square. Behind RIGHT shoulder in deep violet-dark mall, ONLY two small red Entity eyes and faint bulky hood outline. No second pumpkin or player. Simple low-poly plastic pumpkin exactly reference and toy avatar, no photoreal cloth. No signs or text. One-glance story: unsuspecting player with lantern, threat behind.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Square 1254x1254. Face fills square, readable at 150px. Square1254x1254 seasonal icon. Close yellow hazmat player waist-up, mask fills upper middle; holds one big glowing plastic jack-o-lantern in BOTH black mitten hands at chest filling lower half. Strong orange face glow lights mask, hood and gloves: bright subject covers two-thirds square. Behind RIGHT shoulder in deep violet-dark mall, ONLY two small red Entity eyes and faint bulky hood outline. No second pumpkin or player. Simple low-poly plastic pumpkin exactly reference and toy avatar, no photoreal cloth. No signs or text. One-glance story: unsuspecting player with lantern, threat behind.",
+      "status": "accepted",
+      "qa": [
+        "Scene: suited player holds glowing pumpkin with Entity behind shoulder.",
+        "References: toy avatar, simple lantern and bulky hood silhouette match.",
+        "Readability: large orange pumpkin and lit mask dominate; red eyes visible at 150px.",
+        "Checks: two mitten hands, dim violet lobby, no text or UI.",
+        "Weakness: Entity body is more visible than the requested faint outline."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/I11_icon_halloween_raw.png"
+    },
+    {
+      "name": "G07_halloween_shop",
+      "refs": [
+        "artifacts/promo-20261013-set3/refs_halloween/shop_front_revive_and_sale_standees_glowing_orange.jpg",
+        "artifacts/promo-20261013-set3/refs_halloween/shop_cartons_and_suits_close.jpg",
+        "artifacts/promo-20261013-set3/refs_halloween/shop_stand_wider_with_danglers.jpg"
+      ],
+      "scene": "Gallery environment only no drama: close three-quarter view of hexagonal WOODEN SHOP & SUPPLIES stand in Halloween mall, counter cartons, small rectangular equipment display cartons (NO label text), two reference suit mannequins on circular wooden plinths (yellow hazmat suits black masks), glowing deep-orange black standees. Exact ONLY text: central cream backlit SHOP & SUPPLIES, top HALLOWEEN SALE, left standee REVIVE then 3 FOR 1, right standee 66.6% OFF EVERYTHING. All other product signs turned away, occluded or outside frame; NO other lettering. Orange lanterns at stand corners and warm floor pools light lower two-thirds; dim violet ceiling with orange/black/purple pennants and rubber bats, black-white checker tile. Stand fills 65% height, simple screenshot geometry/textures. Correction: NO walking player in foreground, ONLY two stationary suits on plinths. NO hanging lantern fixtures, use reference plain bulb globe lamps on rods. Crop closer so absolutely no background station signs or tiny labels visible. Keep all requested main sign spelling.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. Gallery environment only no drama: close three-quarter view of hexagonal WOODEN SHOP & SUPPLIES stand in Halloween mall, counter cartons, small rectangular equipment display cartons (NO label text), two reference suit mannequins on circular wooden plinths (yellow hazmat suits black masks), glowing deep-orange black standees. Exact ONLY text: central cream backlit SHOP & SUPPLIES, top HALLOWEEN SALE, left standee REVIVE then 3 FOR 1, right standee 66.6% OFF EVERYTHING. All other product signs turned away, occluded or outside frame; NO other lettering. Orange lanterns at stand corners and warm floor pools light lower two-thirds; dim violet ceiling with orange/black/purple pennants and rubber bats, black-white checker tile. Stand fills 65% height, simple screenshot geometry/textures. Correction: NO walking player in foreground, ONLY two stationary suits on plinths. NO hanging lantern fixtures, use reference plain bulb globe lamps on rods. Crop closer so absolutely no background station signs or tiny labels visible. Keep all requested main sign spelling.",
+      "status": "accepted",
+      "qa": [
+        "Scene: Halloween shop stand, cartons, two suit displays and glowing standees.",
+        "References: wooden stand, checker tiles, pennants, pumpkins and bulb lamps match.",
+        "Readability: lit stand fills most image, orange signs remain clear.",
+        "Checks: all visible lettering matches allowed exact texts; no UI or wandering player.",
+        "Weakness: displays are simplified and symmetrical rather than the reference arrangement."
+      ],
+      "tries": 2,
+      "output": "artifacts/promo-20261013-set3/raw/G07_halloween_shop_raw.png"
+    },
+    {
+      "name": "G08_l4_cinema",
+      "refs": [
+        "artifacts/promo-20261007/refs/board_six_levels.jpg",
+        "artifacts/promo-20261007/refs/l4_01_round_start_power_off_red_emergency_light_player.jpg"
+      ],
+      "scene": "Gallery: empty Level4 cinema lobby exactly LOWER LEFT panel of board reference (use only that panel, not collage). Navy walls, magenta/cyan neon strips, carpet of pink/blue triangles over dotted grid, star-point ceiling. Central circular canopy with magenta neon ring supported by simple columns, red benches, plain arcade cabinets further back. NO people, no entity, no story drama, no text anywhere; any screen is blank color and all signs framed away. Camera low player height close enough that ring/columns dominate 60% height. Neon practical lighting clearly exposes carpet and central architecture over lower two-thirds, dark ceiling. Simple low-detail Roblox mall geometry, NOT photoreal architectural render. Output1536x1024. Mandatory correction: DELETE all characters from composition. This image is a vacant cinema architectural screenshot. No yellow object, no avatar, no player, no mannequin. Foreground ONLY patterned carpet, bottom-left calm carpet.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. Gallery: empty Level4 cinema lobby exactly LOWER LEFT panel of board reference (use only that panel, not collage). Navy walls, magenta/cyan neon strips, carpet of pink/blue triangles over dotted grid, star-point ceiling. Central circular canopy with magenta neon ring supported by simple columns, red benches, plain arcade cabinets further back. NO people, no entity, no story drama, no text anywhere; any screen is blank color and all signs framed away. Camera low player height close enough that ring/columns dominate 60% height. Neon practical lighting clearly exposes carpet and central architecture over lower two-thirds, dark ceiling. Simple low-detail Roblox mall geometry, NOT photoreal architectural render. Output1536x1024. Mandatory correction: DELETE all characters from composition. This image is a vacant cinema architectural screenshot. No yellow object, no avatar, no player, no mannequin. Foreground ONLY patterned carpet, bottom-left calm carpet.",
+      "status": "accepted",
+      "qa": [
+        "Scene: empty neon cinema lobby with circular canopy, benches and arcade cabinets.",
+        "References: navy walls, cyan/magenta strips, triangle carpet and star ceiling match.",
+        "Readability: exposed carpet and neon canopy make the place clear at tile size.",
+        "Checks: retry removed unwanted player; no entity, text or UI.",
+        "Weakness: carpet texture and column highlights are somewhat more detailed than reference."
+      ],
+      "tries": 2,
+      "output": "artifacts/promo-20261013-set3/raw/G08_l4_cinema_raw.png"
+    },
+    {
+      "name": "G09_l5_void",
+      "refs": [
+        "artifacts/promo-20261007/refs/l5_05_teal_pillar_field_player_on_pillar_top.jpg"
+      ],
+      "scene": "Gallery environment only: Level5 TEAL pillar field exactly reference. Tall plain rectangular teal matte-plastic cuboid columns at staggered heights rising from absolute BLACK abyss, small square top platforms make jumping route, immense smooth teal walls with simple soft light pools near top. Close oblique wide game camera places tall lit teal pillar at right third and smaller stepping columns through center, readable clean silhouette. NO player, avatar, mannequin, entity, monster, furnishings or text. Only environment. NO stairs added, no rails, no fog. At least HALF image clearly lit teal geometric surfaces, black gaps define deadly void. Basic Roblox primitive parts and flat material, slight contrast edit.1536x1024.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. Gallery environment only: Level5 TEAL pillar field exactly reference. Tall plain rectangular teal matte-plastic cuboid columns at staggered heights rising from absolute BLACK abyss, small square top platforms make jumping route, immense smooth teal walls with simple soft light pools near top. Close oblique wide game camera places tall lit teal pillar at right third and smaller stepping columns through center, readable clean silhouette. NO player, avatar, mannequin, entity, monster, furnishings or text. Only environment. NO stairs added, no rails, no fog. At least HALF image clearly lit teal geometric surfaces, black gaps define deadly void. Basic Roblox primitive parts and flat material, slight contrast edit.1536x1024.",
+      "status": "accepted",
+      "qa": [
+        "Scene: empty teal pillar route over black void.",
+        "References: cuboid pillars, smooth monochrome walls and top light pools closely match.",
+        "Readability: large teal planes occupy over half frame; black gaps are obvious.",
+        "Checks: no creature, player, invented props, text or UI.",
+        "Weakness: far stepping tops become tiny at 150px, as expected for an environment view."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/G09_l5_void_raw.png"
+    },
+    {
+      "name": "C03_cover_halloween",
+      "refs": [
+        "artifacts/promo-20261013-set3/refs_halloween/lobby_hall_from_spawn_happy_halloween_banner.jpg",
+        "artifacts/promo-20261013-set3/refs_halloween/tape_with_lantern_row_and_dark_wing.jpg",
+        "artifacts/promo-20261013-set3/refs_halloween/lanterns_at_a_pier_close.jpg",
+        "artifacts/promo-20261013-ingame/refs_new/player_suit_model_back.png",
+        "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg"
+      ],
+      "scene": "1536x1024 landscape cover: Halloween mall hall recedes toward BLACK dark wing. THREE chunky yellow suited players in foreground from behind holding torches, bodies about45% frame height located between y=430 and y=900. Lit pumpkin rows along BOTH sides cast broad warm orange pools on glossy patterned tiles lower half. Far down center between last lanterns ONE bulky hunched hooded black Entity silhouette with two RED eyes (distant as requested). Team aims torch illumination toward threat, no visible airborne rays. DIM violet hall, cream walls teal/mauve stripes. IMPORTANT upper THIRD y=0..340 calm almost-black ceiling, no lights, signs, pennants or decorations across title area. Sparse decoration only lower sides: hanging bats, pennants, bedsheet ghosts. All signage turned away or outside frame: NO text. Bottom-left calm shadow/tile. Simple screenshot look, crisp hard edges, no atmospheric haze.",
+      "prompt": "Create a lightly edited Roblox in-game screenshot, chunky low-detail geometry, simple repeating flat textures, crisp hard edges, basic realtime lighting. NOT key art, illustration, photoreal render: no haze, rays, grain, flare, depth blur, realistic cloth, invented monsters, HUD, watermark or logos. Readable at 150px wide: a clearly lit connected area covers at least one third of frame, large subject separates instantly. Dark corners but exposed subjects. Players match reference: stubby three-head-tall mustard yellow hooded hazmat avatars, black round twin-lens gas mask and round filter, mitten gloves, chunky boots, backpack with two tanks. Only reference-existing signs when explicitly requested; otherwise no text. Landscape 1536x1024, important action within middle 80% height, bottom-left sixth calm floor/shadow. 1536x1024 landscape cover: Halloween mall hall recedes toward BLACK dark wing. THREE chunky yellow suited players in foreground from behind holding torches, bodies about45% frame height located between y=430 and y=900. Lit pumpkin rows along BOTH sides cast broad warm orange pools on glossy patterned tiles lower half. Far down center between last lanterns ONE bulky hunched hooded black Entity silhouette with two RED eyes (distant as requested). Team aims torch illumination toward threat, no visible airborne rays. DIM violet hall, cream walls teal/mauve stripes. IMPORTANT upper THIRD y=0..340 calm almost-black ceiling, no lights, signs, pennants or decorations across title area. Sparse decoration only lower sides: hanging bats, pennants, bedsheet ghosts. All signage turned away or outside frame: NO text. Bottom-left calm shadow/tile. Simple screenshot look, crisp hard edges, no atmospheric haze.",
+      "status": "accepted",
+      "qa": [
+        "Scene: three rear-view players face a distant Entity between lantern rows.",
+        "References: banded mall pillars, patterned tiles, pumpkins and suited team match.",
+        "Readability: warm lit foreground covers half frame; silhouette/eyes signal danger.",
+        "Checks: central upper third dark for title; no signage, UI or haze.",
+        "Weakness: central player boots are cropped; side decorations enter upper-third edges."
+      ],
+      "tries": 1,
+      "output": "artifacts/promo-20261013-set3/raw/C03_cover_halloween_raw.png"
+    }
+  ],
+  "tool": "built-in image_gen"
+}
