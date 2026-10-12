@@ -2479,3 +2479,23 @@ to the default worked. Add further creators as lines in that table.
   lit at the new ambient.
   Importer gotcha, met again: a `%` in a comment inside a Luau template is a Python format error, and it fails
   AFTER the model has been destroyed and half rebuilt. Rerun the importer at once when it stops.
+
+## 2026-10-13 - is the mall lobby heavier than the tunnel lobby it replaced? Measured: no
+
+Owner: "make sure that the new lobby doesn't fuck with load speed or client FPS". Same Mac, same Studio session,
+standing at the lobby spawn (client `Stats`, five seconds each; the tunnel lobby brought back for the comparison
+with `workspace.LobbyUseTunnel`, then cleared):
+
+| at the spawn | mall lobby | tunnel lobby |
+|---|---|---|
+| lobby on screen (LobbyLoading) | 10.9 s, 23 assets | 18.0 s, 35 assets |
+| scene draw calls | 181 | 195 |
+| triangles | 131,000 | 163,000 |
+| parts on the client | 2,114 | 2,605 |
+| lights | 41 | 120 |
+| frames a second | 15.1 | 14.9 |
+
+The frame rate is this Mac's ceiling in Studio, not the lobby's cost: it was 14.9 with 41 draw calls on screen (mid
+hall) and 14.2 with 324 (at Shop & Supplies, the heaviest view: six suit models and ten product crates). Server side
+nothing was added that runs per frame; the mall has 24 queue stations, as the tunnel lobby had, and no mesh bake at
+server start. Nothing needed changing. Not measured: a phone, a live server with several players.
