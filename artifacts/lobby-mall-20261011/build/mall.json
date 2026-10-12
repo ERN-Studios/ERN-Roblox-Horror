@@ -2047,7 +2047,7 @@
         255,
         255
       ],
-      "material": "floor_tile",
+      "material": "beige_carpet",
       "transparency": 0,
       "collide": true,
       "glow": false
@@ -3758,7 +3758,7 @@
         255,
         255
       ],
-      "material": "floor_tile",
+      "material": "small_tile",
       "transparency": 0,
       "collide": true,
       "glow": false
@@ -6774,7 +6774,7 @@
         255,
         255
       ],
-      "material": "floor_tile",
+      "material": "road_carpet",
       "transparency": 0,
       "collide": true,
       "glow": false
@@ -9703,7 +9703,7 @@
         255,
         255
       ],
-      "material": "floor_tile",
+      "material": "triangle_carpet",
       "transparency": 0,
       "collide": true,
       "glow": false
@@ -14053,7 +14053,7 @@
         255,
         255
       ],
-      "material": "floor_tile",
+      "material": "puzzle_mat",
       "transparency": 0,
       "collide": true,
       "glow": false

@@ -214,8 +214,12 @@ def design():
         # x at depth d into the showcase: 0 is its front edge (where the queue zone ends), 26 the back wall
         dep=(lambda d:138-d) if west else (lambda d:302+d)
         # The Void is one flat rose from the concourse edge to the back wall (W07), queue zone included
-        box(g+'_QueueFloor',g,front+(-21 if west else 21),29.5,z,42,1,58,'rose' if level==5 else 'floor_tile')
         floor={'OFFICE':'beige_carpet','POOLROOMS':'small_tile','MALL PARTY':'road_carpet','CINEMA':'triangle_carpet','THE VOID':'rose','PLAY ZONE':'puzzle_mat'}[name]
+        # 2026-10-13 (owner: "the floor at every level queue up area matches some of the floor of the level and not
+        # tiles, the tiles stop right at the entry to the level"): the queue zone wears the level's own floor from the
+        # shop front inward (it was the hall's tile). The Poolrooms' is tile, but the pool's. The importer lays Level 3's
+        # real city car carpet over the whole of MALL PARTY.
+        box(g+'_QueueFloor',g,front+(-21 if west else 21),29.5,z,42,1,58,floor)
         if level==5:
             # The void is a flush black strip, not a pit: the first build's pit was five studs deep with nothing to
             # climb out on, in a room players walk into. Rose floor, the black strip, rose floor.

@@ -83,6 +83,16 @@ def slices(p):
     return [dict(p, name=f"{p['name']}_s{k}", pos=[p['pos'][0], p['pos'][1], start + step * (k + 0.5)],
                  size=[p['size'][0], p['size'][1], step]) for k in range(n)]
 data['parts'] = [piece for p in data['parts'] for piece in slices(p)]
+
+# CITY_CARPET_20261013 (owner: "For the level 3 I specifically want the city car carpet on the floor"). MALL PARTY's
+# queue floor and showcase floor become ONE part, so that Level 3's own carpet picture (a Texture, 52 studs a repeat,
+# as Level 3 World Builder lays it) runs across the whole shop without restarting at a seam.
+shop3 = [p for p in data['parts'] if p['name'] in ('Shop3_QueueFloor', 'Shop3_ShowFloor')]
+assert len(shop3) == 2
+lo = min(p['pos'][0] - p['size'][0] / 2 for p in shop3); hi = max(p['pos'][0] + p['size'][0] / 2 for p in shop3)
+data['parts'] = [p for p in data['parts'] if p not in shop3]
+data['parts'].append(dict(shop3[0], name='Shop3_Floor', pos=[(lo + hi) / 2, shop3[0]['pos'][1], shop3[0]['pos'][2]],
+                          size=[hi - lo, shop3[0]['size'][1], shop3[0]['size'][2]], city_carpet=True))
 dark = next(p for p in data['parts'] if p['name'].startswith('PanelLens') and not p['glow'])
 for l in panels:
     lens = by_name[l['name'].replace('PanelLight', 'PanelLens')]
@@ -170,6 +180,16 @@ for _, p in ipairs(HttpService:JSONDecode([==[%s]==])) do
 	if m.ids and m.ids.colour and not p.glow then part.MaterialVariant = "Mall " .. p.material end
 	part.Transparency = p.transparency or 0
 	part:SetAttribute("MallMaterial", p.material)
+	if p.city_carpet then
+		local assets = game:GetService("ReplicatedStorage"):FindFirstChild("Level 3 Assets")
+		local slot = assets and assets:FindFirstChild("CityPlayCarpetTexture")
+		part.Material, part.MaterialVariant, part.Color = Enum.Material.Carpet, "", Color3.fromRGB(190, 188, 166)
+		local carpet = Instance.new("Texture")
+		carpet.Name, carpet.Face = "CityCarpet", Enum.NormalId.Top
+		carpet.Texture = (slot and slot:IsA("StringValue") and slot.Value ~= "") and slot.Value or "rbxassetid://75635502248205"
+		carpet.StudsPerTileU, carpet.StudsPerTileV = 52, 52
+		carpet.Parent = part
+	end
 	part.Parent = group
 	n += 1
 end

@@ -10339,7 +10339,7 @@
   },
   "route_min_clearance": 10.005343572311752,
   "route_edge_margin": 0.001,
-  "json_sha256": "be4b2dca96a142da4fd382b4ed7baab9422241ad8e3f97c0b4fa615c5f01a44d",
+  "json_sha256": "efc3e077fc8cd3a95c2bc6dffd44dec806ee29ab13b281e2d6b1335a8cc7d982",
   "limitations": [
     "Static offline geometry checks; Roblox runtime, lighting parity, gameplay and multiplayer require main agent QA.",
     "The verified radius10 centreline joins a full-width flat-ended terminal strip to the tape bases; seven poles 12 apart prevent a 20-wide corridor through the tape line."

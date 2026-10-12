@@ -2499,3 +2499,21 @@ The frame rate is this Mac's ceiling in Studio, not the lobby's cost: it was 14.
 hall) and 14.2 with 324 (at Shop & Supplies, the heaviest view: six suit models and ten product crates). Server side
 nothing was added that runs per frame; the mall has 24 queue stations, as the tunnel lobby had, and no mesh bake at
 server start. Nothing needed changing. Not measured: a phone, a live server with several players.
+
+## 2026-10-13 - mall: every queue area wears its level's floor; MALL PARTY the city car carpet (`CITY_CARPET_20261013`)
+
+Owner: "Make sure the floor at every level queue up area matches some of the floor of the level and not tiles, the
+tiles stop right at the entry to the level. Of course the poolrooms can have tiles, but the tiles that match the
+level. For the level 3 I specifically want the city car carpet on the floor."
+
+- `build_mall.py`: `Shop<n>_QueueFloor` no longer takes the hall's tile. Per shop: OFFICE `beige_carpet`,
+  POOLROOMS `small_tile` (the level's own small pool tile), MALL PARTY `road_carpet`, CINEMA `triangle_carpet`,
+  THE VOID `rose`, PLAY ZONE `puzzle_mat`. The hall's tile ends on the shop's front line.
+- `import_mall.py`: in MALL PARTY the queue floor and the showcase floor are merged into ONE part, `Shop3_Floor`,
+  and it wears Level 3's real city carpet as a `Texture` on the top face (slot
+  `ReplicatedStorage["Level 3 Assets"].CityPlayCarpetTexture`, else `rbxassetid://75635502248205`; 52 studs a
+  repeat, Carpet coloured 190,188,166, as in the level). One part so the roads run unbroken from the entry to the
+  back wall; a material variant would have been laid from the world origin and cut differently.
+- Checked in play from each entry (pictures `fl2_*` in `artifacts/mobile-qa-20261012`): six different floors, tile
+  ends at each entry, the city carpet covers the whole MALL PARTY shop under all four pads. `check_mall.py` passes
+  (1969 parts, 0 errors); the model in Studio has 2107 parts. Not published (the owner publishes).
