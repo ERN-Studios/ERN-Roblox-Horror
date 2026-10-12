@@ -31894,7 +31894,7 @@
       "glow": true
     },
     {
-      "name": "PriceAdvancedEquipment_Frame",
+      "name": "PriceEmergencyReentry_Frame",
       "group": "Stand",
       "shape": "Block",
       "pos": [
@@ -31923,7 +31923,7 @@
       "glow": false
     },
     {
-      "name": "PriceAdvancedEquipment_Face",
+      "name": "PriceEmergencyReentry_Face",
       "group": "Stand",
       "shape": "Block",
       "pos": [
@@ -31952,18 +31952,18 @@
       "glow": false
     },
     {
-      "name": "Product1_FlagshipTier",
+      "name": "Product1_KeyCushion",
       "group": "Stand",
       "shape": "Block",
       "pos": [
-        221.2,
-        32.7,
+        220.0,
+        32.8,
         -780.9903810567665
       ],
       "size": [
-        6.4,
-        0.12,
-        2.65
+        2.4,
+        0.3,
+        2.0
       ],
       "rot": [
         0.0,
@@ -31981,18 +31981,18 @@
       "glow": false
     },
     {
-      "name": "Product1_TorchStand",
+      "name": "Product1_ReentryKey",
       "group": "Stand",
       "shape": "Block",
       "pos": [
-        222.8,
-        32.82,
+        220.0,
+        33.005,
         -780.9903810567665
       ],
       "size": [
         1.2,
-        0.12,
-        0.6
+        0.08,
+        1.7
       ],
       "rot": [
         0.0,
@@ -32000,86 +32000,28 @@
         0.0
       ],
       "color": [
-        255,
-        255,
-        255
+        159,
+        131,
+        61
       ],
-      "material": "brass",
+      "material": "gold",
       "transparency": 0,
       "collide": true,
       "glow": false
     },
     {
-      "name": "Product1_TorchBody",
+      "name": "Product1_ReentryStripe",
       "group": "Stand",
       "shape": "Block",
       "pos": [
-        222.8,
-        33.12,
-        -780.9903810567665
+        220.0,
+        33.07,
+        -781.4403810567666
       ],
       "size": [
-        2.1,
-        0.55,
-        0.65
-      ],
-      "rot": [
-        0.0,
-        180.0,
-        0.0
-      ],
-      "color": [
-        36,
-        38,
-        35
-      ],
-      "material": "charcoal",
-      "transparency": 0,
-      "collide": true,
-      "glow": false
-    },
-    {
-      "name": "Product1_TorchHead",
-      "group": "Stand",
-      "shape": "Cylinder",
-      "pos": [
-        221.69,
-        33.12,
-        -780.9903810567665
-      ],
-      "size": [
-        0.18,
-        0.68,
-        0.68
-      ],
-      "rot": [
-        0.0,
-        180.0,
-        0.0
-      ],
-      "color": [
-        111,
-        108,
-        86
-      ],
-      "material": "metal",
-      "transparency": 0,
-      "collide": true,
-      "glow": false
-    },
-    {
-      "name": "Product1_TorchLens",
-      "group": "Stand",
-      "shape": "Cylinder",
-      "pos": [
-        221.58,
-        33.12,
-        -780.9903810567665
-      ],
-      "size": [
+        1.1,
         0.05,
-        0.52,
-        0.52
+        0.2
       ],
       "rot": [
         0.0,
@@ -32087,330 +32029,11 @@
         0.0
       ],
       "color": [
-        238,
-        225,
-        155
+        18,
+        20,
+        18
       ],
-      "material": "light",
-      "transparency": 0,
-      "collide": false,
-      "glow": true
-    },
-    {
-      "name": "Product1_TorchBeam-1",
-      "group": "Stand",
-      "shape": "Wedge",
-      "pos": [
-        219.925,
-        32.93,
-        -780.9903810567665
-      ],
-      "size": [
-        0.5,
-        0.38,
-        3.2
-      ],
-      "rot": [
-        -0.0,
-        -90.00000000000001,
-        180.0
-      ],
-      "color": [
-        238,
-        225,
-        155
-      ],
-      "material": "light",
-      "transparency": 0.88,
-      "collide": false,
-      "glow": true
-    },
-    {
-      "name": "Product1_TorchBeam1",
-      "group": "Stand",
-      "shape": "Wedge",
-      "pos": [
-        219.925,
-        33.309999999999995,
-        -780.9903810567665
-      ],
-      "size": [
-        0.5,
-        0.38,
-        3.2
-      ],
-      "rot": [
-        -0.0,
-        -90.00000000000001,
-        -0.0
-      ],
-      "color": [
-        238,
-        225,
-        155
-      ],
-      "material": "light",
-      "transparency": 0.88,
-      "collide": false,
-      "glow": true
-    },
-    {
-      "name": "Product1_Battery",
-      "group": "Stand",
-      "shape": "Cylinder",
-      "pos": [
-        217.0,
-        33.08,
-        -779.6903810567666
-      ],
-      "size": [
-        0.92,
-        0.56,
-        0.56
-      ],
-      "rot": [
-        0.0,
-        0.0,
-        90.0
-      ],
-      "color": [
-        200,
-        160,
-        34
-      ],
-      "material": "yellow",
-      "transparency": 0,
-      "collide": true,
-      "glow": false
-    },
-    {
-      "name": "Product1_BatteryCap",
-      "group": "Stand",
-      "shape": "Cylinder",
-      "pos": [
-        217.0,
-        33.575,
-        -779.6903810567666
-      ],
-      "size": [
-        0.07,
-        0.32,
-        0.32
-      ],
-      "rot": [
-        0.0,
-        0.0,
-        90.0
-      ],
-      "color": [
-        111,
-        108,
-        86
-      ],
-      "material": "metal",
-      "transparency": 0,
-      "collide": false,
-      "glow": false
-    },
-    {
-      "name": "Product1_StaminaCanister",
-      "group": "Stand",
-      "shape": "Cylinder",
-      "pos": [
-        215.85,
-        32.97,
-        -780.9903810567665
-      ],
-      "size": [
-        0.66,
-        0.54,
-        0.54
-      ],
-      "rot": [
-        0.0,
-        0.0,
-        90.0
-      ],
-      "color": [
-        47,
-        103,
-        163
-      ],
-      "material": "blue",
-      "transparency": 0,
-      "collide": true,
-      "glow": false
-    },
-    {
-      "name": "Product1_Swatch0",
-      "group": "Stand",
-      "shape": "Block",
-      "pos": [
-        216.075,
-        32.85,
-        -781.9903810567665
-      ],
-      "size": [
-        0.65,
-        0.12,
-        0.9
-      ],
-      "rot": [
-        0.0,
-        155.0,
-        0.0
-      ],
-      "color": [
-        200,
-        160,
-        34
-      ],
-      "material": "yellow",
-      "transparency": 0,
-      "collide": false,
-      "glow": false
-    },
-    {
-      "name": "Product1_Swatch1",
-      "group": "Stand",
-      "shape": "Block",
-      "pos": [
-        215.965,
-        32.85,
-        -781.9903810567665
-      ],
-      "size": [
-        0.65,
-        0.12,
-        0.9
-      ],
-      "rot": [
-        0.0,
-        165.0,
-        0.0
-      ],
-      "color": [
-        122,
-        175,
-        186
-      ],
-      "material": "pale_blue",
-      "transparency": 0,
-      "collide": false,
-      "glow": false
-    },
-    {
-      "name": "Product1_Swatch2",
-      "group": "Stand",
-      "shape": "Block",
-      "pos": [
-        215.855,
-        32.85,
-        -781.9903810567665
-      ],
-      "size": [
-        0.65,
-        0.12,
-        0.9
-      ],
-      "rot": [
-        0.0,
-        175.0,
-        0.0
-      ],
-      "color": [
-        188,
-        174,
-        124
-      ],
-      "material": "cream",
-      "transparency": 0,
-      "collide": false,
-      "glow": false
-    },
-    {
-      "name": "Product1_Swatch3",
-      "group": "Stand",
-      "shape": "Block",
-      "pos": [
-        215.745,
-        32.85,
-        -781.9903810567665
-      ],
-      "size": [
-        0.65,
-        0.12,
-        0.9
-      ],
-      "rot": [
-        0.0,
-        185.0,
-        0.0
-      ],
-      "color": [
-        36,
-        38,
-        35
-      ],
-      "material": "charcoal",
-      "transparency": 0,
-      "collide": false,
-      "glow": false
-    },
-    {
-      "name": "Product1_Swatch4",
-      "group": "Stand",
-      "shape": "Block",
-      "pos": [
-        215.635,
-        32.85,
-        -781.9903810567665
-      ],
-      "size": [
-        0.65,
-        0.12,
-        0.9
-      ],
-      "rot": [
-        0.0,
-        195.0,
-        0.0
-      ],
-      "color": [
-        109,
-        52,
-        135
-      ],
-      "material": "purple",
-      "transparency": 0,
-      "collide": false,
-      "glow": false
-    },
-    {
-      "name": "Product1_Swatch5",
-      "group": "Stand",
-      "shape": "Block",
-      "pos": [
-        215.525,
-        32.85,
-        -781.9903810567665
-      ],
-      "size": [
-        0.65,
-        0.12,
-        0.9
-      ],
-      "rot": [
-        0.0,
-        205.0,
-        0.0
-      ],
-      "color": [
-        255,
-        255,
-        255
-      ],
-      "material": "false_suit",
+      "material": "black",
       "transparency": 0,
       "collide": false,
       "glow": false
@@ -34794,7 +34417,7 @@
       "glow": false
     },
     {
-      "name": "PriceEmergencyReentry_Frame",
+      "name": "PriceAdvancedEquipment_Frame",
       "group": "Stand",
       "shape": "Block",
       "pos": [
@@ -34823,7 +34446,7 @@
       "glow": false
     },
     {
-      "name": "PriceEmergencyReentry_Face",
+      "name": "PriceAdvancedEquipment_Face",
       "group": "Stand",
       "shape": "Block",
       "pos": [
@@ -35113,18 +34736,18 @@
       "glow": false
     },
     {
-      "name": "Product4_KeyCushion",
+      "name": "Product4_FlagshipTier",
       "group": "Stand",
       "shape": "Block",
       "pos": [
         223.1,
-        32.8,
+        32.7,
         -759.0096189432335
       ],
       "size": [
-        2.4,
-        0.3,
-        2.0
+        3.2,
+        0.12,
+        2.65
       ],
       "rot": [
         0.0,
@@ -35142,59 +34765,262 @@
       "glow": false
     },
     {
-      "name": "Product4_ReentryKey",
+      "name": "Product4_Battery",
       "group": "Stand",
-      "shape": "Block",
+      "shape": "Cylinder",
       "pos": [
-        223.1,
-        33.005,
-        -759.0096189432335
+        222.2,
+        33.08,
+        -760.1096189432334
       ],
       "size": [
-        1.2,
-        0.08,
-        1.7
+        0.92,
+        0.56,
+        0.56
       ],
       "rot": [
         0.0,
-        3.508354649267438e-15,
-        0.0
+        0.0,
+        90.0
       ],
       "color": [
-        159,
-        131,
-        61
+        200,
+        160,
+        34
       ],
-      "material": "gold",
+      "material": "yellow",
       "transparency": 0,
       "collide": true,
       "glow": false
     },
     {
-      "name": "Product4_ReentryStripe",
+      "name": "Product4_BatteryCap",
       "group": "Stand",
-      "shape": "Block",
+      "shape": "Cylinder",
       "pos": [
-        223.1,
-        33.07,
-        -758.5596189432334
+        222.2,
+        33.575,
+        -760.1096189432334
       ],
       "size": [
-        1.1,
-        0.05,
-        0.2
+        0.07,
+        0.32,
+        0.32
       ],
       "rot": [
         0.0,
-        3.508354649267438e-15,
+        0.0,
+        90.0
+      ],
+      "color": [
+        111,
+        108,
+        86
+      ],
+      "material": "metal",
+      "transparency": 0,
+      "collide": false,
+      "glow": false
+    },
+    {
+      "name": "Product4_StaminaCanister",
+      "group": "Stand",
+      "shape": "Cylinder",
+      "pos": [
+        223.1,
+        32.97,
+        -759.0096189432335
+      ],
+      "size": [
+        0.66,
+        0.54,
+        0.54
+      ],
+      "rot": [
+        0.0,
+        0.0,
+        90.0
+      ],
+      "color": [
+        47,
+        103,
+        163
+      ],
+      "material": "blue",
+      "transparency": 0,
+      "collide": true,
+      "glow": false
+    },
+    {
+      "name": "Product4_Swatch0",
+      "group": "Stand",
+      "shape": "Block",
+      "pos": [
+        223.725,
+        32.85,
+        -758.1096189432334
+      ],
+      "size": [
+        0.65,
+        0.12,
+        0.9
+      ],
+      "rot": [
+        0.0,
+        -24.999999999999996,
         0.0
       ],
       "color": [
-        18,
-        20,
-        18
+        200,
+        160,
+        34
       ],
-      "material": "black",
+      "material": "yellow",
+      "transparency": 0,
+      "collide": false,
+      "glow": false
+    },
+    {
+      "name": "Product4_Swatch1",
+      "group": "Stand",
+      "shape": "Block",
+      "pos": [
+        223.835,
+        32.85,
+        -758.1096189432334
+      ],
+      "size": [
+        0.65,
+        0.12,
+        0.9
+      ],
+      "rot": [
+        0.0,
+        -14.999999999999996,
+        0.0
+      ],
+      "color": [
+        122,
+        175,
+        186
+      ],
+      "material": "pale_blue",
+      "transparency": 0,
+      "collide": false,
+      "glow": false
+    },
+    {
+      "name": "Product4_Swatch2",
+      "group": "Stand",
+      "shape": "Block",
+      "pos": [
+        223.945,
+        32.85,
+        -758.1096189432334
+      ],
+      "size": [
+        0.65,
+        0.12,
+        0.9
+      ],
+      "rot": [
+        0.0,
+        -4.9999999999999964,
+        0.0
+      ],
+      "color": [
+        188,
+        174,
+        124
+      ],
+      "material": "cream",
+      "transparency": 0,
+      "collide": false,
+      "glow": false
+    },
+    {
+      "name": "Product4_Swatch3",
+      "group": "Stand",
+      "shape": "Block",
+      "pos": [
+        224.055,
+        32.85,
+        -758.1096189432334
+      ],
+      "size": [
+        0.65,
+        0.12,
+        0.9
+      ],
+      "rot": [
+        0.0,
+        5.0000000000000036,
+        0.0
+      ],
+      "color": [
+        36,
+        38,
+        35
+      ],
+      "material": "charcoal",
+      "transparency": 0,
+      "collide": false,
+      "glow": false
+    },
+    {
+      "name": "Product4_Swatch4",
+      "group": "Stand",
+      "shape": "Block",
+      "pos": [
+        224.165,
+        32.85,
+        -758.1096189432334
+      ],
+      "size": [
+        0.65,
+        0.12,
+        0.9
+      ],
+      "rot": [
+        0.0,
+        15.000000000000004,
+        0.0
+      ],
+      "color": [
+        109,
+        52,
+        135
+      ],
+      "material": "purple",
+      "transparency": 0,
+      "collide": false,
+      "glow": false
+    },
+    {
+      "name": "Product4_Swatch5",
+      "group": "Stand",
+      "shape": "Block",
+      "pos": [
+        224.275,
+        32.85,
+        -758.1096189432334
+      ],
+      "size": [
+        0.65,
+        0.12,
+        0.9
+      ],
+      "rot": [
+        0.0,
+        25.000000000000004,
+        0.0
+      ],
+      "color": [
+        255,
+        255,
+        255
+      ],
+      "material": "false_suit",
       "transparency": 0,
       "collide": false,
       "glow": false
@@ -57138,7 +56964,7 @@
     },
     {
       "name": "CounterHeader0",
-      "text": "ADVANCED EQUIPMENT",
+      "text": "EMERGENCY RE-ENTRY",
       "style": "box",
       "pos": [
         220.0,
@@ -57157,8 +56983,8 @@
       "part": "CounterHeader0_Face"
     },
     {
-      "name": "PriceAdvancedEquipment",
-      "text": "ADVANCED EQUIPMENT - 149 ROBUX",
+      "name": "PriceEmergencyReentry",
+      "text": "EMERGENCY RE-ENTRY - 29 ROBUX",
       "style": "plain",
       "pos": [
         220.0,
@@ -57174,7 +57000,7 @@
         0.0,
         -1.0
       ],
-      "part": "PriceAdvancedEquipment_Face"
+      "part": "PriceEmergencyReentry_Face"
     },
     {
       "name": "CounterHeader1",
@@ -57298,7 +57124,7 @@
     },
     {
       "name": "CounterHeader3",
-      "text": "PACKS",
+      "text": "EQUIPMENT & PACKS",
       "style": "box",
       "pos": [
         220.0,
@@ -57337,8 +57163,8 @@
       "part": "PriceExpeditionPack_Face"
     },
     {
-      "name": "PriceEmergencyReentry",
-      "text": "EMERGENCY RE-ENTRY",
+      "name": "PriceAdvancedEquipment",
+      "text": "ADVANCED EQUIPMENT - 149 ROBUX",
       "style": "plain",
       "pos": [
         223.1,
@@ -57354,7 +57180,7 @@
         0.0,
         1.0
       ],
-      "part": "PriceEmergencyReentry_Face"
+      "part": "PriceAdvancedEquipment_Face"
     },
     {
       "name": "CounterHeader4",
@@ -58972,8 +58798,13 @@
     },
     "shop_spots": [
       {
-        "key": "AdvancedEquipment",
+        "key": "EmergencyReentry",
         "pos": [
+          220.0,
+          30.02,
+          -789.4903810567666
+        ],
+        "crate": [
           220.0,
           30.12,
           -785.4903810567665
@@ -58982,6 +58813,11 @@
       {
         "key": "EntityDetector",
         "pos": [
+          236.87916512459884,
+          30.02,
+          -779.7451905283833
+        ],
+        "crate": [
           233.4150635094611,
           30.12,
           -777.7451905283833
@@ -58990,6 +58826,11 @@
       {
         "key": "EntityShield",
         "pos": [
+          234.82916512459883,
+          30.02,
+          -756.7041053161005
+        ],
+        "crate": [
           231.3650635094611,
           30.12,
           -758.7041053161005
@@ -58998,6 +58839,11 @@
       {
         "key": "SpeedPotion",
         "pos": [
+          236.87916512459884,
+          30.02,
+          -760.2548094716167
+        ],
+        "crate": [
           233.4150635094611,
           30.12,
           -762.2548094716167
@@ -59006,6 +58852,11 @@
       {
         "key": "RouteMarker",
         "pos": [
+          238.92916512459885,
+          30.02,
+          -763.8055136271329
+        ],
+        "crate": [
           235.46506350946112,
           30.12,
           -765.8055136271329
@@ -59015,13 +58866,23 @@
         "key": "ExpeditionPack",
         "pos": [
           216.9,
+          30.02,
+          -750.5096189432334
+        ],
+        "crate": [
+          216.9,
           30.12,
           -754.5096189432335
         ]
       },
       {
-        "key": "EmergencyReentry",
+        "key": "AdvancedEquipment",
         "pos": [
+          223.1,
+          30.02,
+          -750.5096189432334
+        ],
+        "crate": [
           223.1,
           30.12,
           -754.5096189432335
@@ -59030,6 +58891,11 @@
       {
         "key": "Tokens4",
         "pos": [
+          201.57083487540115,
+          30.02,
+          -762.9394882233485
+        ],
+        "crate": [
           205.03493649053888,
           30.12,
           -764.9394882233485
@@ -59038,6 +58904,11 @@
       {
         "key": "Tokens20",
         "pos": [
+          204.67083487540117,
+          30.02,
+          -757.5701307198849
+        ],
+        "crate": [
           208.1349364905389,
           30.12,
           -759.5701307198849
@@ -59046,6 +58917,11 @@
       {
         "key": "Supporter",
         "pos": [
+          204.67083487540117,
+          30.02,
+          -782.4298692801151
+        ],
+        "crate": [
           208.1349364905389,
           30.12,
           -780.4298692801151
@@ -59054,6 +58930,11 @@
       {
         "key": "CosmeticEquipment",
         "pos": [
+          201.57083487540115,
+          30.02,
+          -777.0605117766515
+        ],
+        "crate": [
           205.03493649053888,
           30.12,
           -775.0605117766515

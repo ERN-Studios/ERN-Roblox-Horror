@@ -391,12 +391,14 @@ def design():
         t=math.radians(-90+i*60);N=np.array([math.cos(t),0,math.sin(t)]);T=np.cross([0,1,0],N)
         yaw=math.degrees(math.atan2(N[0],N[2]));carpet_ap=20*math.sqrt(3)/2
         part(f'CarpetEdge{i}','Stand',C+N*(carpet_ap-.045)+[0,30.13,0],(19.9,.08,.09),'brass',rot=(0,yaw,0))
-    headers=['ADVANCED EQUIPMENT','ENTITY DETECTOR','ITEMS','PACKS','RESEARCH TOKENS','SUPPORTER']
+    # SHOP_FRONT_20261013 (owner): the re-entry stands at the FRONT of the shop, facing the spawn, and Advanced Equipment took
+    # its old place beside the Expedition Pack; the torch-with-beam demo on the counter is gone
+    headers=['EMERGENCY RE-ENTRY','ENTITY DETECTOR','ITEMS','EQUIPMENT & PACKS','RESEARCH TOKENS','SUPPORTER']
     offers=[
-      [('AdvancedEquipment','ADVANCED EQUIPMENT - 149 ROBUX',0)],
+      [('EmergencyReentry','EMERGENCY RE-ENTRY - 29 ROBUX',0)],
       [('EntityDetector','ZYNTRA ENTITY DETECTOR - 149 ROBUX',0)],
       [('EntityShield','ENTITY SHIELD - 5 TOKENS',-4.1),('SpeedPotion','SPEED POTION - 3 TOKENS',0),('RouteMarker','ROUTE MARKER PACK - 2 TOKENS',4.1)],
-      [('ExpeditionPack','EXPEDITION PACK - 69 ROBUX',-3.1),('EmergencyReentry','EMERGENCY RE-ENTRY',3.1)],
+      [('ExpeditionPack','EXPEDITION PACK - 69 ROBUX',-3.1),('AdvancedEquipment','ADVANCED EQUIPMENT - 149 ROBUX',3.1)],
       [('Tokens4','4 TOKENS',-3.1),('Tokens20','20 TOKENS',3.1)],
       [('Supporter','ZYNTRA SUPPORTER - 99 ROBUX',-3.1),('CosmeticEquipment','GLOWSTICK CUSTOMIZER - 99 ROBUX',3.1)]]
     for i in range(6):
@@ -429,22 +431,13 @@ def design():
         for key,txt,u in offers[i]:
             width=12.0 if len(offers[i])==1 else (3.75 if len(offers[i])==3 else 5.8)
             sign('Price'+key,txt,'plain',at(u,32.02,ap+.33),(width,.45),N,'Stand')
-            shop_spots.append({'key':key,'pos':at(u,30.12,ap+2.5).tolist()})
+            # the ring a player stands in is 4 studs further out than the carton that hovers over the counter's edge
+            # (owner: "so they dont have to stand right inside the box to buy it"); it lies on the hall's floor, off the carpet
+            shop_spots.append({'key':key,'pos':at(u,30.02,ap+6.5).tolist(),'crate':at(u,30.12,ap+2.5).tolist()})
         if i==0:
-            item('FlagshipTier',-1.2,32.70,mid,(6.4,.12,2.65),'velvet')
-            item('TorchStand',-2.8,32.82,mid,(1.2,.12,.6),'brass')
-            item('TorchBody',-2.8,33.12,mid,(2.1,.55,.65),'charcoal')
-            item('TorchHead',-1.69,33.12,mid,(.18,.68,.68),'metal',shape='Cylinder')
-            item('TorchLens',-1.58,33.12,mid,(.05,.52,.52),'light',shape='Cylinder',glow=True,collide=False)
-            # A two-wedge taper expresses the torch beam using the permitted primitives.
-            for sg in (-1,1):
-                R=np.column_stack([-N*sg,np.array([0,sg,0]),T])
-                part(f'Product1_TorchBeam{sg}','Stand',at(.075,33.12+sg*.19,mid),(.5,.38,3.2),'light',rot=angles(R),shape='Wedge',transparency=.88,glow=True,collide=False)
-            round_item('Battery',3.0,33.08,inner_ap+.7,.28,.92,'yellow')
-            round_item('BatteryCap',3.0,33.575,inner_ap+.7,.16,.07,'metal',collide=False)
-            round_item('StaminaCanister',4.15,32.97,mid,.27,.66,'blue')
-            for k,m in enumerate(('yellow','pale_blue','cream','charcoal','purple','false_suit')):
-                item(f'Swatch{k}',4.2+(k-2.5)*.11,32.85,mid+1.0,(.65,.12,.90),m,rot=(0,yaw+(k-2.5)*10,0),collide=False)
+            item('KeyCushion',0,32.80,mid,(2.4,.30,2.0),'velvet')
+            item('ReentryKey',0,33.005,mid,(1.2,.08,1.7),'gold')
+            item('ReentryStripe',0,33.07,mid+.45,(1.1,.05,.20),'black',collide=False)
         elif i==1:
             item('DetectorStand',-2.2,32.79,mid,(1.5,.25,1.1),'brass')
             item('Detector',-2.2,33.18,inner_ap+1.15,(2.15,.75,1.0),'charcoal',rot=(-18,yaw,0))
@@ -472,9 +465,12 @@ def design():
             item('KeyCard',-3.95,32.90,mid,(.66,.14,1.04),'gold')
             item('KitShield',-2.5,32.96,inner_ap+1.08,(.75,.53,.75),'grey')
             for k in range(3):item(f'KitMarker{k}',-3.8+k*.58,32.99,mid+.8,(.32,.48,.32),'orange',shape='Wedge')
-            item('KeyCushion',3.1,32.80,mid,(2.4,.30,2.0),'velvet')
-            item('ReentryKey',3.1,33.005,mid,(1.2,.08,1.7),'gold')
-            item('ReentryStripe',3.1,33.07,mid+.45,(1.1,.05,.20),'black',collide=False)
+            item('FlagshipTier',3.1,32.70,mid,(3.2,.12,2.65),'velvet')
+            round_item('Battery',2.2,33.08,inner_ap+.9,.28,.92,'yellow')
+            round_item('BatteryCap',2.2,33.575,inner_ap+.9,.16,.07,'metal',collide=False)
+            round_item('StaminaCanister',3.1,32.97,mid,.27,.66,'blue')
+            for k,m in enumerate(('yellow','pale_blue','cream','charcoal','purple','false_suit')):
+                item(f'Swatch{k}',4.0+(k-2.5)*.11,32.85,mid+.9,(.65,.12,.90),m,rot=(0,yaw+(k-2.5)*10,0),collide=False)
         elif i==4:
             for pile,u,total in [(0,-3.1,7),(1,3.1,22)]:
                 item(f'TokenBox{pile}',u,32.74,mid,(3.1,.20,2.8),'velvet')

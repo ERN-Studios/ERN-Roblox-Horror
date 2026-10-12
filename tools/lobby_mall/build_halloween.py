@@ -536,14 +536,9 @@ def layout():
         b = math.radians(60 * k + 30)
         corner = (math.sin(b), -math.cos(b))
         burst('Dangler%d' % k, cx + corner[0] * 13.5, 47.0, cz + corner[1] * 13.5, corner, 2.1, ['66.6%', 'OFF'] if k % 2 == 0 else ['HALLOWEEN', 'SALE'], line=CEIL, two=True)
-        vx, vz = cx + corner[0] * 23.2, cz + corner[1] * 23.2
-        pumpkin(vx, vz, 'L', corner, light=k % 2 == 0)
-        pumpkin(vx - corner[1] * 2.3, vz + corner[0] * 2.3, 'S', corner)
-        if k % 2 == 1: put('balloon_bunch', vx + corner[1] * 1.6, FLOOR + 0.05, vz - corner[0] * 1.6, corner, 1.0)
-        else: put('pail', vx + corner[1] * 2.0, FLOOR, vz - corner[0] * 2.0, corner, 1.0)
+    # no pumpkins, pails or balloons right beside the shop (owner, 2026-10-13)
     a_frame('StandeeSaleSouth', 214.4, -791.6, (0, -1), [SALE, '66.6% OFF', 'EVERYTHING'])
     a_frame('StandeeReentrySouth', 225.6, -791.6, (0, -1), [REENTRY, THREE, 'HALLOWEEN ONLY'])
-    a_frame('StandeeReentryNorth', 227.8, -748.6, (0, 1), [REENTRY, THREE, 'HALLOWEEN ONLY'])
     a_frame('StandeeSaleNorth', 212.2, -748.6, (0, 1), [SALE, '66.6% OFF', 'EVERYTHING'])
 
     # --- the big banner the arriving player sees, and banners on the free walls

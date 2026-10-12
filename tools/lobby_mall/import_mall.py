@@ -453,6 +453,8 @@ local spots = folder("ShopSpots")
 for _, spot in ipairs(a.shop_spots) do
 	local m = marker(spots, spot.key, v3(spot.pos), Vector3.new(3.8, 0.2, 3.8))
 	m:SetAttribute("ShopItemKey", spot.key)
+	-- SHOP_FRONT_20261013: the ring lies in front of the counter; the carton hovers further in, over the counter's edge
+	if spot.crate then m:SetAttribute("CrateAt", v3(spot.crate)) end
 	local g = Instance.new("SurfaceGui")
 	g.Name, g.Face, g.SizingMode, g.PixelsPerStud, g.LightInfluence = "SpotRing", Enum.NormalId.Top, Enum.SurfaceGuiSizingMode.PixelsPerStud, 30, 1
 	g.MaxDistance = 70

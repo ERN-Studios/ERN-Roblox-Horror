@@ -2659,3 +2659,23 @@ med armene naturligt nede og så sørge for at de spinner stille og roligt på d
   Client` turns each suit about its plinth's middle, one turn in 26 seconds, for everybody (a slow turn is no
   flashing); the VIEW SKIN prompt stays on the plinth. Checked in play: arms down on all six, front then back seven
   seconds apart, no console errors. Not published.
+
+## 2026-10-13 - the shop's front: re-entry forward, bigger pictures, rings in front, no torch demo (`SHOP_FRONT_20261013`)
+
+Owner: "i want the advanced equipment and 3x reentry swap places so the 3x reentry are in the front of the shop. The
+new boxes are cool, but the image is too small ... No pumpkins right beside the shop please. Then i want you to make
+sure the ring ... to see the product and buy it is moved closer to the player so they dont have to stand right inside
+the box to buy it. The advanced equipment flashlight demo remove that".
+
+- `build_mall.py`: the front counter (facing the spawn) is `EMERGENCY RE-ENTRY` with the key card on its cushion and
+  the plate `EMERGENCY RE-ENTRY - 29 ROBUX` (the price plates' refresher now prints its real price); Advanced
+  Equipment stands beside the Expedition Pack on the far counter, now headed `EQUIPMENT & PACKS`, with its battery,
+  canister and swatches but WITHOUT the torch and its beam (six parts gone; 1927 parts).
+- Buy rings: `shop_spots[].pos` is 6.5 studs out from the counter (it was 2.5), on the hall's floor just off the
+  carpet; `shop_spots[].crate` keeps the carton where it was, over the counter's edge. `import_mall.py` writes it on
+  the spot as `CrateAt`, `LobbyShopDisplay` hangs the carton there. A player now stands 4 studs in FRONT of the
+  carton. `check_mall.py` proves both distances. Tested in play on four spots: `ZyntraShopFocus` is the right key.
+- Cartons: the product's picture is the label now, about 80 % of the face's height (it was under half); the name is
+  only on the sign over the carton.
+- Halloween (`build_halloween.py`): no pumpkins, pails or balloons at the stand's corners; the re-entry standee
+  stands at the front only (183 props, 301 parts, 27 lantern lights).

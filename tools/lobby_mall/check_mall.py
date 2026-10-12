@@ -210,8 +210,9 @@ def main():
     check(len(A['skin_plinths'])==6 and {q['skin'] for q in A['skin_plinths']}==skins,'6 exact skin plinth keys')
     for spot in A['shop_spots']:
         plate=next(s for s in D['signs'] if s['name']=='Price'+spot['key'])
-        expected=np.array(plate['pos'])+np.array(plate['normal'])*(2.5-.33);expected[1]=30.12
-        check(set(spot)=={'key','pos'} and np.allclose(spot['pos'],expected),spot['key']+' buy spot 2.5 out from counter/plate')
+        expected=np.array(plate['pos'])+np.array(plate['normal'])*(6.5-.33);expected[1]=30.02
+        crate=np.array(plate['pos'])+np.array(plate['normal'])*(2.5-.33);crate[1]=30.12
+        check(set(spot)=={'key','pos','crate'} and np.allclose(spot['pos'],expected) and np.allclose(spot['crate'],crate),spot['key']+' buy ring 6.5 out from counter/plate, its carton 2.5 out')
     for a in A['skin_plinths']:
         p=byname['SkinPlinth'+a['skin']]
         check(set(a)=={'skin','pos','facing'} and np.allclose(a['pos'],np.array(p['pos'])+[0,.5,0]),a['skin']+' plinth top')
@@ -250,8 +251,8 @@ def main():
     check(signtexts.count('SHOP & SUPPLIES')==6,'six stand signs')
     for k in range(1,5):check(signtexts.count(f'STATION {k}')==6,f'station{k} signs')
     allowed={'OFFICE','POOLROOMS','MALL PARTY','CINEMA','THE VOID','PLAY ZONE','WELCOME','GRAND OPENING','SHOP & SUPPLIES','DIRECTORY'}|{f'STATION {k}' for k in range(1,5)}
-    product_texts=['ADVANCED EQUIPMENT','ENTITY DETECTOR','ITEMS','PACKS','RESEARCH TOKENS','SUPPORTER',
-      'ADVANCED EQUIPMENT - 149 ROBUX','ZYNTRA ENTITY DETECTOR - 149 ROBUX','ENTITY SHIELD - 5 TOKENS','SPEED POTION - 3 TOKENS','ROUTE MARKER PACK - 2 TOKENS','EXPEDITION PACK - 69 ROBUX','EMERGENCY RE-ENTRY','4 TOKENS','20 TOKENS','ZYNTRA SUPPORTER - 99 ROBUX','GLOWSTICK CUSTOMIZER - 99 ROBUX',
+    product_texts=['EMERGENCY RE-ENTRY','ENTITY DETECTOR','ITEMS','EQUIPMENT & PACKS','RESEARCH TOKENS','SUPPORTER',
+      'ADVANCED EQUIPMENT - 149 ROBUX','ZYNTRA ENTITY DETECTOR - 149 ROBUX','ENTITY SHIELD - 5 TOKENS','SPEED POTION - 3 TOKENS','ROUTE MARKER PACK - 2 TOKENS','EXPEDITION PACK - 69 ROBUX','EMERGENCY RE-ENTRY - 29 ROBUX','4 TOKENS','20 TOKENS','ZYNTRA SUPPORTER - 99 ROBUX','GLOWSTICK CUSTOMIZER - 99 ROBUX',
       'BASELINE YELLOW - FREE','POOL SERVICE - 25 TOKENS','SUBURB SURVEY - 75 TOKENS','BLACKSITE DIRECTOR - 300 TOKENS','STATIC WRAITH - 99 ROBUX','FALSE SUN - 149 ROBUX']
     allowed.update(product_texts)
     for txt in product_texts:check(signtexts.count(txt)==1,'exact stand sign '+txt)

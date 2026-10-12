@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-12T16:44:57.458904+00:00",
+  "capturedAtUtc": "2026-10-12T17:03:40.782342+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -2126,8 +2126,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/LobbyShopDisplay.ModuleScript.lua",
-      "bytes": 33748,
-      "sha256": "f9b1918221cce7b4223241bbc6bca1c64a047ee99cdaf7f390b2c7ad97798de5",
+      "bytes": 33877,
+      "sha256": "e4bbbd5d10e95876e6da3b4afe82a02a6dcf4f67473d9bd4ce2683a6a6886bcb",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

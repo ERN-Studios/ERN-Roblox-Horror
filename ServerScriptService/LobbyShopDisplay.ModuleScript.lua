@@ -487,7 +487,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 						gui.LightInfluence, gui.Brightness, gui.MaxDistance, gui.Active = 0.45, 1, 70, false
 						local label = Instance.new("Frame")
 						label.Name, label.BorderSizePixel = "Label", 0
-						label.Position, label.Size = UDim2.fromScale(0.09, 0.17), UDim2.fromScale(0.82, 0.75)
+						label.Position, label.Size = UDim2.fromScale(0.05, 0.14), UDim2.fromScale(0.9, 0.82)
 						label.BackgroundColor3 = Color3.fromRGB(240, 232, 204)
 						local rim = Instance.new("UIStroke")
 						rim.Color, rim.Thickness = Color3.fromRGB(62, 58, 46), 2
@@ -495,31 +495,30 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 						for i, colour in ipairs({Color3.fromRGB(52, 140, 128), Color3.fromRGB(222, 142, 156), Color3.fromRGB(118, 96, 160)}) do
 							local stripe = Instance.new("Frame")      -- the mall's own stripe band, as on its walls
 							stripe.Name, stripe.BorderSizePixel, stripe.BackgroundColor3 = "Stripe" .. i, 0, colour
-							stripe.Position, stripe.Size = UDim2.fromScale(0, 0.03 + (i - 1) * 0.045), UDim2.fromScale(1, 0.036)
+							stripe.Position, stripe.Size = UDim2.fromScale(0, 0.012 + (i - 1) * 0.024), UDim2.fromScale(1, 0.02)
 							stripe.Parent = label
 						end
 						local picture = Instance.new("ImageLabel")
 						picture.Name, picture.BorderSizePixel = "Picture", 0
-						picture.AnchorPoint, picture.Position, picture.Size = Vector2.new(0.5, 0), UDim2.fromScale(0.5, 0.2), UDim2.fromScale(0.56, 0.56 * 0.82 / 0.75)
+						-- owner, 2026-10-13: "the image is too small, so make the picture fill more on the boxes": the picture is
+						-- the label now (it was under half the face); the name is on the sign over the carton
+						picture.AnchorPoint, picture.Position, picture.Size = Vector2.new(0.5, 0), UDim2.fromScale(0.5, 0.1), UDim2.fromScale(0.86 * 0.82 / 0.9, 0.86)
 						picture.BackgroundColor3 = Color3.fromRGB(28, 30, 30)
 						picture.Image = art and art.Texture or ""
 						local frame = Instance.new("UIStroke")
 						frame.Color, frame.Thickness = Color3.fromRGB(62, 58, 46), 2
 						frame.Parent = picture
 						picture.Parent = label
-						local text = Instance.new("TextLabel")
-						text.Name, text.BackgroundTransparency = "Name", 1
-						text.Position, text.Size = UDim2.fromScale(0.04, 0.825), UDim2.fromScale(0.92, 0.17)
-						text.FontFace = Font.new("rbxasset://fonts/families/Oswald.json", Enum.FontWeight.Bold)
-						text.TextColor3, text.TextScaled = Color3.fromRGB(72, 66, 54), true
-						text.Text = (string.gsub(title, " ", utf8.char(160)))
-						text.Parent = label
 						label.Parent = gui
 						gui.Parent = box
 					end
 					box.Name = "MallCrate_" .. key
 					box.Size = Vector3.one * MALL_CRATE
-					local at = spot.Position + Vector3.new(0, MALL_CRATE_UP, 0)
+					-- SHOP_FRONT_20261013 (owner: the ring "is moved closer to the player so they dont have to stand right
+					-- inside the box to buy it"): the spot is the ring on the floor; the carton hangs where the build says
+					local under = spot:GetAttribute("CrateAt")
+					under = typeof(under) == "Vector3" and under or spot.Position
+					local at = Vector3.new(under.X, spot.Position.Y + 0.1, under.Z) + Vector3.new(0, MALL_CRATE_UP, 0)
 					local outward = middle and (spot.Position - middle.Position) * Vector3.new(1, 0, 1) or Vector3.zAxis
 					box.CFrame = CFrame.lookAt(at, at + (outward.Magnitude > 0.1 and outward.Unit or Vector3.zAxis))
 					-- MALL_FINISH_20261013 (owner: "kasserne i shoppen har en hover effekt, hvor de bouncer lidt op og
