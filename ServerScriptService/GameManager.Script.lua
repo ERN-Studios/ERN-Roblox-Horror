@@ -4112,7 +4112,7 @@ if not IS_RESERVED_ROUND_SERVER then
  local r3Models = setmetatable({}, {__mode = "k"})
  local function bindR3(model)
   -- MALL_LOBBY_20261012 (owner: a mall lobby beside this one, "fully functional like our current lobby", three
-  -- pads a level): its 18 pads are stations of this same engine under their own ids (201-218, QueueBridge.BuildMall).
+  -- pads a level): its pads (24 since 2026-10-12, four a level) are stations of this same engine under their own ids (201-224, QueueBridge.BuildMall).
   local mall = model.Name == "LobbyMallPreview"
   if not model:IsA("Model") or model.Parent ~= workspace then return end
   if not mall and (model.Name ~= "LobbyReimaginedPreview" or model:GetAttribute("LobbyReimaginedOwned") ~= true) then return end

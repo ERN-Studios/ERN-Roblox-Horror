@@ -12,7 +12,7 @@
 --   the real lobby).
 --   When nobody has been in or near the mall for PARK_AFTER seconds it is parked again. Parked or not, the model
 --   is the same instance, so what other scripts keep in it (the leaderboard sheets, the shop crates) stays put;
---   GameManager's queue stations 201-218 are bound when it comes out and retired when it goes back.
+--   GameManager's queue stations 201-224 are bound when it comes out and retired when it goes back.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")

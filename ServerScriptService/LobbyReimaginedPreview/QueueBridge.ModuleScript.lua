@@ -53,11 +53,11 @@ function Bridge.Build(model)
 end
 
 -- MALL_LOBBY_20261012 (owner: a mall lobby beside this one, "fully functional like our current lobby", with THREE
--- pads a level). Its pads are stations of the same engine under their own ids, 201-218, so the 24 above are not
+-- pads a level; FOUR, two by two, since 2026-10-12). Its pads are stations of the same engine under their own ids, 201-224, so the 24 above are not
 -- touched and both lobbies queue at once. A pad is a zone under its own bay Model exactly as above (ChamberFloor,
 -- CircularBayDiameter, QueueRenderOwner with QueueTitle and QueueSubtitle); tools/lobby_mall/import_mall.py makes them.
--- Clearing the model's MallQueuesReady attribute takes all 18 out of service.
-local MALL_NAME, MALL_FIRST, MALL_PER, MALL_COUNT = "LobbyMallPreview", 201, 3, 18
+-- Clearing the model's MallQueuesReady attribute takes all 24 out of service.
+local MALL_NAME, MALL_FIRST, MALL_PER, MALL_COUNT = "LobbyMallPreview", 201, 4, 24
 
 function Bridge.IsMall(model)
 	return typeof(model) == "Instance" and model:IsA("Model") and model.Name == MALL_NAME

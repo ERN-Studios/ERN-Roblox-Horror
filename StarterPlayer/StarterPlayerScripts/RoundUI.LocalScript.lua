@@ -1041,10 +1041,10 @@ applyQueueDeviceLayout()
 UIDevice.Changed:Connect(applyQueueDeviceLayout)
 
 local queueStation = nil
--- MALL_LOBBY_20261012: the mall lobby's pads are stations 201-218 of the same engine; a player reads the pad's own 1-3
+-- MALL_LOBBY_20261012: the mall lobby's pads are stations 201-224 of the same engine; a player reads the pad's own 1-4
 local function stationLabel(n)
  n = tonumber(n)
- return if n and n >= 201 and n <= 218 then (n - 201) % 3 + 1 else n
+ return if n and n >= 201 and n <= 224 then (n - 201) % 4 + 1 else n
 end
 local queueSizeValue = 6
 local queuePrivacyValue = "public"

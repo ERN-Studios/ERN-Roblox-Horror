@@ -1,18 +1,18 @@
 {
   "passed": true,
-  "parts": 1917,
+  "parts": 1959,
   "counts": {
     "Arrival": 168,
     "Ceiling": 90,
     "Concourse": 93,
-    "DarkWing": 225,
+    "DarkWing": 231,
     "Furniture": 138,
-    "Shop1": 53,
-    "Shop2": 98,
-    "Shop3": 95,
-    "Shop4": 83,
-    "Shop5": 55,
-    "Shop6": 182,
+    "Shop1": 59,
+    "Shop2": 104,
+    "Shop3": 101,
+    "Shop4": 89,
+    "Shop5": 61,
+    "Shop6": 188,
     "Stage": 83,
     "Stand": 539,
     "Tape": 15
@@ -21,7 +21,7 @@
   "notes": [
     "Continuous 20-wide x5-high corridor: 459 centreline nodes; minimum sampled obstacle clearance 10.005344; whole-edge proof: 0.01-stud samples, 0.005-stud Lipschitz bound.",
     "Full-width terminal strip verified from [245.5, 30, -632.5] to tape-base south tangent z=-622.1; 20 wide, 10.4 long, 5 high. No 20-wide passage through poles 12 apart.",
-    "Opposed coplanar joining faces >1 sq.stud: 1473 (flagged in qa.json; internal contact surfaces, not overlapping visible faces).",
+    "Opposed coplanar joining faces >1 sq.stud: 1509 (flagged in qa.json; internal contact surfaces, not overlapping visible faces).",
     "Same-facing submerged base contacts >1 sq.stud: 12 (flagged in qa.json; full coverage by the opaque basin floor verified)."
   ],
   "axis_proof": [
@@ -133,9 +133,9 @@
       "name": "Shop1_Pad1",
       "shape": "Cylinder",
       "pos": [
-        166.0,
+        170.0,
         30.3,
-        -859.0
+        -852.0
       ],
       "size": [
         0.6,
@@ -150,85 +150,85 @@
       "max_error": 0.0,
       "roblox_corners": [
         [
-          173.4,
+          177.4,
           30.0,
-          -866.4
+          -859.4
         ],
         [
-          173.4,
+          177.4,
           30.0,
-          -851.6
+          -844.6
         ],
         [
-          158.6,
+          162.6,
           30.0,
-          -866.4
+          -859.4
         ],
         [
-          158.6,
+          162.6,
           30.0,
-          -851.6
+          -844.6
         ],
         [
-          173.4,
+          177.4,
           30.6,
-          -866.4
+          -859.4
         ],
         [
-          173.4,
+          177.4,
           30.6,
-          -851.6
+          -844.6
         ],
         [
-          158.6,
+          162.6,
           30.6,
-          -866.4
+          -859.4
         ],
         [
-          158.6,
+          162.6,
           30.6,
-          -851.6
+          -844.6
         ]
       ],
       "blender_corners": [
         [
-          173.4,
-          -866.4,
+          177.4,
+          -859.4,
           30.0
         ],
         [
-          173.4,
-          -851.6,
+          177.4,
+          -844.6,
           30.0
         ],
         [
-          158.6,
-          -866.4,
+          162.6,
+          -859.4,
           30.0
         ],
         [
-          158.6,
-          -851.6,
+          162.6,
+          -844.6,
           30.0
         ],
         [
-          173.4,
-          -866.4,
+          177.4,
+          -859.4,
           30.6
         ],
         [
-          173.4,
-          -851.6,
+          177.4,
+          -844.6,
           30.6
         ],
         [
-          158.6,
-          -866.4,
+          162.6,
+          -859.4,
           30.6
         ],
         [
-          158.6,
-          -851.6,
+          162.6,
+          -844.6,
           30.6
         ]
       ]
@@ -790,6 +790,26 @@
       26.0
     ],
     [
+      "PartyBox0",
+      "PartyBox2",
+      1.96
+    ],
+    [
+      "VoidBlock0",
+      "Shop5_Pit",
+      10.0
+    ],
+    [
+      "VoidBlock1",
+      "Shop5_Pit",
+      10.0
+    ],
+    [
+      "Shop5_Pit",
+      "Shop5_Ledge",
+      58.0
+    ],
+    [
       "DeadShop0_0_Floor",
       "DeadShop0_0_Pier0_0",
       6.0
@@ -1140,29 +1160,29 @@
       11.0
     ],
     [
-      "PartyBox0",
-      "PartyBox2",
-      1.96
-    ],
-    [
-      "VoidBlock0",
-      "Shop5_Pit",
-      10.0
-    ],
-    [
-      "VoidBlock1",
-      "Shop5_Pit",
-      10.0
-    ],
-    [
-      "Shop5_Pit",
-      "Shop5_Ledge",
-      58.0
-    ],
-    [
       "Shop5_Ledge",
       "Shop5_QueueFloor",
       58.0
+    ],
+    [
+      "Shop1_QueueFloor",
+      "Shop1_Pad3",
+      170.0752
+    ],
+    [
+      "Shop1_QueueFloor",
+      "Shop1_Pad4",
+      170.0752
+    ],
+    [
+      "Shop1_QueueFloor",
+      "Shop1_StationBase3",
+      1.747
+    ],
+    [
+      "Shop1_QueueFloor",
+      "Shop1_StationBase4",
+      1.747
     ],
     [
       "Shop1_QueueFloor",
@@ -1176,22 +1196,12 @@
     ],
     [
       "Shop1_QueueFloor",
-      "Shop1_Pad3",
-      170.0752
-    ],
-    [
-      "Shop1_QueueFloor",
       "Shop1_StationBase1",
       1.747
     ],
     [
       "Shop1_QueueFloor",
       "Shop1_StationBase2",
-      1.747
-    ],
-    [
-      "Shop1_QueueFloor",
-      "Shop1_StationBase3",
       1.747
     ],
     [
@@ -1211,6 +1221,26 @@
     ],
     [
       "Shop3_QueueFloor",
+      "Shop3_Pad3",
+      170.0752
+    ],
+    [
+      "Shop3_QueueFloor",
+      "Shop3_Pad4",
+      170.0752
+    ],
+    [
+      "Shop3_QueueFloor",
+      "Shop3_StationBase3",
+      1.747
+    ],
+    [
+      "Shop3_QueueFloor",
+      "Shop3_StationBase4",
+      1.747
+    ],
+    [
+      "Shop3_QueueFloor",
       "Shop3_Pad1",
       170.0752
     ],
@@ -1221,22 +1251,12 @@
     ],
     [
       "Shop3_QueueFloor",
-      "Shop3_Pad3",
-      170.0752
-    ],
-    [
-      "Shop3_QueueFloor",
       "Shop3_StationBase1",
       1.747
     ],
     [
       "Shop3_QueueFloor",
       "Shop3_StationBase2",
-      1.747
-    ],
-    [
-      "Shop3_QueueFloor",
-      "Shop3_StationBase3",
       1.747
     ],
     [
@@ -1256,6 +1276,26 @@
     ],
     [
       "Shop5_QueueFloor",
+      "Shop5_Pad3",
+      170.0752
+    ],
+    [
+      "Shop5_QueueFloor",
+      "Shop5_Pad4",
+      170.0752
+    ],
+    [
+      "Shop5_QueueFloor",
+      "Shop5_StationBase3",
+      1.747
+    ],
+    [
+      "Shop5_QueueFloor",
+      "Shop5_StationBase4",
+      1.747
+    ],
+    [
+      "Shop5_QueueFloor",
       "Shop5_Pad1",
       170.0752
     ],
@@ -1266,22 +1306,12 @@
     ],
     [
       "Shop5_QueueFloor",
-      "Shop5_Pad3",
-      170.0752
-    ],
-    [
-      "Shop5_QueueFloor",
       "Shop5_StationBase1",
       1.747
     ],
     [
       "Shop5_QueueFloor",
       "Shop5_StationBase2",
-      1.747
-    ],
-    [
-      "Shop5_QueueFloor",
-      "Shop5_StationBase3",
       1.747
     ],
     [
@@ -1400,6 +1430,11 @@
       20.4
     ],
     [
+      "Shop1_Fascia",
+      "Shop1_Bulkhead",
+      104.0
+    ],
+    [
       "Shop3_Pier0_0",
       "Shop3_Pier0_1",
       6.0
@@ -1498,6 +1533,11 @@
       "Shop3_Pier1_5",
       "Shop3_PierColumn1_5",
       20.4
+    ],
+    [
+      "Shop3_Fascia",
+      "Shop3_Bulkhead",
+      104.0
     ],
     [
       "Shop5_Pier0_0",
@@ -1600,6 +1640,11 @@
       20.4
     ],
     [
+      "Shop5_Fascia",
+      "Shop5_Bulkhead",
+      104.0
+    ],
+    [
       "ConcourseWall0_0_0",
       "ConcourseWall0_0_1",
       60.0
@@ -1647,7 +1692,7 @@
     [
       "ConcourseWall0_0_5",
       "Column0_-890_5",
-      43.2
+      62.4
     ],
     [
       "ConcourseWall0_1_0",
@@ -1767,12 +1812,12 @@
     [
       "ConcourseWall0_3_5",
       "DeadWall0_0_5",
-      21.6
+      31.2
     ],
     [
       "ConcourseWall0_3_5",
       "Column0_-630_5",
-      43.2
+      62.4
     ],
     [
       "DeadShop0_0_Pier0_0",
@@ -1876,6 +1921,11 @@
     ],
     [
       "DeadShop0_0_Fascia",
+      "DeadShop0_0_Bulkhead",
+      104.0
+    ],
+    [
+      "DeadShop0_0_Fascia",
       "DeadShop0_0_PierColumn0_5",
       4.0
     ],
@@ -1883,6 +1933,16 @@
       "DeadShop0_0_Fascia",
       "DeadShop0_0_PierColumn1_5",
       4.0
+    ],
+    [
+      "DeadShop0_0_Bulkhead",
+      "DeadShop0_0_PierColumn0_5",
+      4.8
+    ],
+    [
+      "DeadShop0_0_Bulkhead",
+      "DeadShop0_0_PierColumn1_5",
+      4.8
     ],
     [
       "DeadShop0_1_Pier0_0",
@@ -1986,6 +2046,11 @@
     ],
     [
       "DeadShop0_1_Fascia",
+      "DeadShop0_1_Bulkhead",
+      104.0
+    ],
+    [
+      "DeadShop0_1_Fascia",
       "DeadShop0_1_PierColumn0_5",
       4.0
     ],
@@ -1993,6 +2058,16 @@
       "DeadShop0_1_Fascia",
       "DeadShop0_1_PierColumn1_5",
       4.0
+    ],
+    [
+      "DeadShop0_1_Bulkhead",
+      "DeadShop0_1_PierColumn0_5",
+      4.8
+    ],
+    [
+      "DeadShop0_1_Bulkhead",
+      "DeadShop0_1_PierColumn1_5",
+      4.8
     ],
     [
       "DeadShop0_2_Pier0_0",
@@ -2096,6 +2171,11 @@
     ],
     [
       "DeadShop0_2_Fascia",
+      "DeadShop0_2_Bulkhead",
+      44.0
+    ],
+    [
+      "DeadShop0_2_Fascia",
       "DeadShop0_2_PierColumn0_5",
       4.0
     ],
@@ -2103,6 +2183,16 @@
       "DeadShop0_2_Fascia",
       "DeadShop0_2_PierColumn1_5",
       4.0
+    ],
+    [
+      "DeadShop0_2_Bulkhead",
+      "DeadShop0_2_PierColumn0_5",
+      4.8
+    ],
+    [
+      "DeadShop0_2_Bulkhead",
+      "DeadShop0_2_PierColumn1_5",
+      4.8
     ],
     [
       "DeadWall0_0_0",
@@ -2357,7 +2447,7 @@
     [
       "EntranceWest_5",
       "EntranceLintel",
-      5.0
+      9.8
     ],
     [
       "DarkEnd_0",
@@ -2437,12 +2527,12 @@
     [
       "DarkEnd_5",
       "DeadShop0_2_PierColumn1_5",
-      43.2
+      62.4
     ],
     [
       "DarkEnd_5",
       "DeadShop1_2_PierColumn1_5",
-      43.2
+      62.4
     ],
     [
       "DarkEnd_5",
@@ -3847,7 +3937,7 @@
     [
       "EntranceLintel",
       "EntranceEast_5",
-      5.0
+      9.8
     ],
     [
       "StandCarpet_2_1",
@@ -3856,7 +3946,7 @@
     ],
     [
       "StandCarpet_2_1",
-      "SkinPlinthFalseSun",
+      "SkinPlinthBaselineYellow",
       8.0932
     ],
     [
@@ -3881,7 +3971,7 @@
     ],
     [
       "StandCarpet_3_-1",
-      "SkinPlinthFalseSun",
+      "SkinPlinthBaselineYellow",
       8.0932
     ],
     [
@@ -4061,7 +4151,7 @@
     ],
     [
       "StandCarpet_2_-1",
-      "SkinPlinthStaticWraith",
+      "SkinPlinthPoolService",
       8.0932
     ],
     [
@@ -4086,7 +4176,7 @@
     ],
     [
       "StandCarpet_3_1",
-      "SkinPlinthBaselineYellow",
+      "SkinPlinthStaticWraith",
       8.0932
     ],
     [
@@ -4175,12 +4265,12 @@
       8.68
     ],
     [
-      "SkinPlinthBaselineYellow",
+      "SkinPlinthStaticWraith",
       "StandCarpet_4_-1",
       8.0932
     ],
     [
-      "SkinPlinthStaticWraith",
+      "SkinPlinthPoolService",
       "StandCarpet_1_1",
       8.0932
     ],
@@ -4481,7 +4571,7 @@
     ],
     [
       "StandCarpet_4_1",
-      "SkinPlinthPoolService",
+      "SkinPlinthFalseSun",
       8.0932
     ],
     [
@@ -4506,7 +4596,7 @@
     ],
     [
       "StandCarpet_5_-1",
-      "SkinPlinthPoolService",
+      "SkinPlinthFalseSun",
       8.0932
     ],
     [
@@ -5680,6 +5770,11 @@
       4.0
     ],
     [
+      "DeadShop1_0_PierColumn0_5",
+      "DeadShop1_0_Bulkhead",
+      4.8
+    ],
+    [
       "DeadShop1_0_PierColumn1_0",
       "DeadShop1_0_PierColumn1_1",
       16.0
@@ -5733,6 +5828,11 @@
       "DeadShop1_0_PierColumn1_5",
       "DeadShop1_0_Fascia",
       4.0
+    ],
+    [
+      "DeadShop1_0_PierColumn1_5",
+      "DeadShop1_0_Bulkhead",
+      4.8
     ],
     [
       "DeadShop1_1_PierColumn0_0",
@@ -5790,6 +5890,11 @@
       4.0
     ],
     [
+      "DeadShop1_1_PierColumn0_5",
+      "DeadShop1_1_Bulkhead",
+      4.8
+    ],
+    [
       "DeadShop1_1_PierColumn1_0",
       "DeadShop1_1_PierColumn1_1",
       16.0
@@ -5843,6 +5948,11 @@
       "DeadShop1_1_PierColumn1_5",
       "DeadShop1_1_Fascia",
       4.0
+    ],
+    [
+      "DeadShop1_1_PierColumn1_5",
+      "DeadShop1_1_Bulkhead",
+      4.8
     ],
     [
       "DeadShop1_2_PierColumn0_0",
@@ -5900,6 +6010,11 @@
       4.0
     ],
     [
+      "DeadShop1_2_PierColumn0_5",
+      "DeadShop1_2_Bulkhead",
+      4.8
+    ],
+    [
       "DeadShop1_2_PierColumn1_0",
       "DeadShop1_2_PierColumn1_1",
       16.0
@@ -5955,6 +6070,11 @@
       4.0
     ],
     [
+      "DeadShop1_2_PierColumn1_5",
+      "DeadShop1_2_Bulkhead",
+      4.8
+    ],
+    [
       "Column1_-890_0",
       "Column1_-890_1",
       16.0
@@ -6002,7 +6122,7 @@
     [
       "Column1_-890_5",
       "ConcourseWall1_0_5",
-      43.2
+      62.4
     ],
     [
       "Column1_-630_0",
@@ -6052,7 +6172,7 @@
     [
       "Column1_-630_5",
       "ConcourseWall1_3_5",
-      43.2
+      62.4
     ],
     [
       "Shop2_QueueFloor",
@@ -6066,21 +6186,6 @@
     ],
     [
       "Shop2_QueueFloor",
-      "Shop2_StationBase1",
-      1.747
-    ],
-    [
-      "Shop2_QueueFloor",
-      "Shop2_StationBase2",
-      1.747
-    ],
-    [
-      "Shop2_QueueFloor",
-      "Shop2_StationBase3",
-      1.747
-    ],
-    [
-      "Shop2_QueueFloor",
       "Shop2_Pad1",
       170.0752
     ],
@@ -6091,8 +6196,33 @@
     ],
     [
       "Shop2_QueueFloor",
+      "Shop2_StationBase1",
+      1.747
+    ],
+    [
+      "Shop2_QueueFloor",
+      "Shop2_StationBase2",
+      1.747
+    ],
+    [
+      "Shop2_QueueFloor",
       "Shop2_Pad3",
       170.0752
+    ],
+    [
+      "Shop2_QueueFloor",
+      "Shop2_Pad4",
+      170.0752
+    ],
+    [
+      "Shop2_QueueFloor",
+      "Shop2_StationBase3",
+      1.747
+    ],
+    [
+      "Shop2_QueueFloor",
+      "Shop2_StationBase4",
+      1.747
     ],
     [
       "Shop2_QueueFloor",
@@ -6251,6 +6381,11 @@
     ],
     [
       "Shop2_Fascia",
+      "Shop2_Bulkhead",
+      104.0
+    ],
+    [
+      "Shop2_Fascia",
       "Shop2_Ceiling",
       26.0
     ],
@@ -6266,21 +6401,6 @@
     ],
     [
       "Shop4_QueueFloor",
-      "Shop4_StationBase1",
-      1.747
-    ],
-    [
-      "Shop4_QueueFloor",
-      "Shop4_StationBase2",
-      1.747
-    ],
-    [
-      "Shop4_QueueFloor",
-      "Shop4_StationBase3",
-      1.747
-    ],
-    [
-      "Shop4_QueueFloor",
       "Shop4_Pad1",
       170.0752
     ],
@@ -6291,8 +6411,33 @@
     ],
     [
       "Shop4_QueueFloor",
+      "Shop4_StationBase1",
+      1.747
+    ],
+    [
+      "Shop4_QueueFloor",
+      "Shop4_StationBase2",
+      1.747
+    ],
+    [
+      "Shop4_QueueFloor",
       "Shop4_Pad3",
       170.0752
+    ],
+    [
+      "Shop4_QueueFloor",
+      "Shop4_Pad4",
+      170.0752
+    ],
+    [
+      "Shop4_QueueFloor",
+      "Shop4_StationBase3",
+      1.747
+    ],
+    [
+      "Shop4_QueueFloor",
+      "Shop4_StationBase4",
+      1.747
     ],
     [
       "Shop4_QueueFloor",
@@ -6451,6 +6596,11 @@
     ],
     [
       "Shop4_Fascia",
+      "Shop4_Bulkhead",
+      104.0
+    ],
+    [
+      "Shop4_Fascia",
       "Shop4_Ceiling",
       26.0
     ],
@@ -6466,21 +6616,6 @@
     ],
     [
       "Shop6_QueueFloor",
-      "Shop6_StationBase1",
-      1.747
-    ],
-    [
-      "Shop6_QueueFloor",
-      "Shop6_StationBase2",
-      1.747
-    ],
-    [
-      "Shop6_QueueFloor",
-      "Shop6_StationBase3",
-      1.747
-    ],
-    [
-      "Shop6_QueueFloor",
       "Shop6_Pad1",
       170.0752
     ],
@@ -6491,8 +6626,33 @@
     ],
     [
       "Shop6_QueueFloor",
+      "Shop6_StationBase1",
+      1.747
+    ],
+    [
+      "Shop6_QueueFloor",
+      "Shop6_StationBase2",
+      1.747
+    ],
+    [
+      "Shop6_QueueFloor",
       "Shop6_Pad3",
       170.0752
+    ],
+    [
+      "Shop6_QueueFloor",
+      "Shop6_Pad4",
+      170.0752
+    ],
+    [
+      "Shop6_QueueFloor",
+      "Shop6_StationBase3",
+      1.747
+    ],
+    [
+      "Shop6_QueueFloor",
+      "Shop6_StationBase4",
+      1.747
     ],
     [
       "Shop6_QueueFloor",
@@ -6651,6 +6811,11 @@
     ],
     [
       "Shop6_Fascia",
+      "Shop6_Bulkhead",
+      104.0
+    ],
+    [
+      "Shop6_Fascia",
       "Shop6_Ceiling",
       26.0
     ],
@@ -6777,7 +6942,7 @@
     [
       "ConcourseWall1_3_5",
       "DeadWall1_0_5",
-      21.6
+      31.2
     ],
     [
       "DeadShop1_0_Floor",
@@ -6938,6 +7103,11 @@
       "DeadShop1_0_Pier1_4",
       "DeadShop1_0_Pier1_5",
       6.0
+    ],
+    [
+      "DeadShop1_0_Fascia",
+      "DeadShop1_0_Bulkhead",
+      104.0
     ],
     [
       "DeadShop1_0_Fascia",
@@ -7106,6 +7276,11 @@
     ],
     [
       "DeadShop1_1_Fascia",
+      "DeadShop1_1_Bulkhead",
+      104.0
+    ],
+    [
+      "DeadShop1_1_Fascia",
       "DeadShop1_1_Ceiling",
       26.0
     ],
@@ -7243,6 +7418,11 @@
       "DeadShop1_2_Pier1_4",
       "DeadShop1_2_Pier1_5",
       6.0
+    ],
+    [
+      "DeadShop1_2_Fascia",
+      "DeadShop1_2_Bulkhead",
+      44.0
     ],
     [
       "DeadShop1_2_Fascia",
@@ -10109,7 +10289,7 @@
   },
   "route_min_clearance": 10.005343572311752,
   "route_edge_margin": 0.001,
-  "json_sha256": "38d3cd40d13ebfce296dc8e1728a4865c06f2b9ca9630e06540178fad06c177c",
+  "json_sha256": "588463921fdc91be511ceb92bab1e712fd6b6b52570a1c66f56a4fb48ac8459a",
   "limitations": [
     "Static offline geometry checks; Roblox runtime, lighting parity, gameplay and multiplayer require main agent QA.",
     "The verified radius10 centreline joins a full-width flat-ended terminal strip to the tape bases; seven poles 12 apart prevent a 20-wide corridor through the tape line."

@@ -238,7 +238,7 @@ for _, l in ipairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do
 		light = nil
 	elseif l.kind == "panel" then
 		light = Instance.new("PointLight")
-		light.Brightness, light.Range = l.state == "on" and 0.4 or 0.12, 34
+		light.Brightness, light.Range = l.state == "on" and 0.4 or 0.12, 40
 		host.CFrame = host.CFrame - Vector3.new(0, 1.6, 0)
 	elseif l.name:sub(1, 8) == "SkinSpot" then
 		light = Instance.new("SpotLight")
@@ -312,7 +312,7 @@ for _, pad in ipairs(a.pads) do
 	local zone = marker(bay, "QueueZone", at + Vector3.new(0, 0.4, 0), Vector3.new(pad.radius * 2, 1, pad.radius * 2))
 	zone.CFrame = CFrame.lookAt(zone.Position, zone.Position + out)
 	zone.Color = AMBER
-	zone:SetAttribute("MallQueueId", 200 + (pad.level - 1) * 3 + pad.station)
+	zone:SetAttribute("MallQueueId", 200 + (pad.level - 1) * 4 + pad.station)
 	zone:SetAttribute("LevelNumber", pad.level)
 	zone:SetAttribute("QueueDisplayIndex", pad.station)
 	zone:SetAttribute("QueueRadius", pad.radius)

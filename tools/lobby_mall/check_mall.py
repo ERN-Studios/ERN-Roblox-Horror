@@ -128,7 +128,7 @@ def main():
         check(math.isfinite(m['studs_per_tile']) and m['studs_per_tile']>0,k+' tile scale')
         for field in ('colour_map','normal_map','roughness_map'):
             if m[field]:check(m[field].startswith('textures/') and (OUT/m[field]).is_file(),k+' missing '+field)
-    A=D['anchors'];pads=A['pads'];check(len(pads)==18,'18 pads')
+    A=D['anchors'];pads=A['pads'];check(len(pads)==24,'24 pads (four a level, two by two; 2026-10-12)')
     byname={p['name']:p for p in D['parts']}
     for g,z0,z1 in [('Concourse',-900,-621),('DarkWing',-621,-421)]:
         for x in (182,258):
@@ -145,11 +145,12 @@ def main():
         else:
             p=byname[g+'_Floor'];check(p['pos']==[220,29.5,(z0+z1)/2] and p['size']==[72,1,z1-z0],g+' floor top/bounds')
     for p in D['parts']:
-        if p['group']=='Ceiling' and p['material']=='ceiling':check(abs(p['pos'][1]-p['size'][1]/2-46)<EPS,p['name']+' ceiling underside')
+        if p['group']=='Ceiling' and p['material']=='ceiling':check(abs(p['pos'][1]-p['size'][1]/2-50.8)<EPS,p['name']+' ceiling underside (20.8 above the floor since 2026-10-12)')
         if p['name'].startswith('PanelFrame'):check(p['size']==[8,.5,4],p['name']+' recessed panel size')
     for i in range(1,7):
-        z=-840+80*((i-1)//2);x=166 if i%2 else 274
-        for k,dz in enumerate((-19,0,19),1):
+        z=-840+80*((i-1)//2)
+        for k,(row,dz) in enumerate(((10,-12),(10,12),(32,-12),(32,12)),1):
+            x=180-row if i%2 else 260+row
             found=[a for a in pads if a['level']==i and a['station']==k]
             check(len(found)==1 and found[0]['pos']==[x,30.6,z+dz] and found[0]['radius']==7.4,f'pad {i}/{k} anchor')
             p=byname[f'Shop{i}_Pad{k}'];check(p['shape']=='Cylinder' and p['size']==[.6,14.8,14.8] and p['pos']==[x,30.3,z+dz],f'pad {i}/{k} geometry')
@@ -157,12 +158,12 @@ def main():
                 if q['hi'][1]<=30.6+EPS or q['lo'][1]>=39.6-EPS:continue
                 if distance([x,z+dz],q['poly'])<7.4-EPS:errors.append(f'pad {i}/{k} clearance: '+q['p']['name'])
         front=180 if i%2 else 260
-        floor=byname[f'Shop{i}_QueueFloor'];check(floor['size']==[27,1,58] and floor['pos']==[166.5 if i%2 else 273.5,29.5,z],f'Shop{i} queue floor 27x58')
+        floor=byname[f'Shop{i}_QueueFloor'];check(floor['size']==[42,1,58] and floor['pos']==[159 if i%2 else 281,29.5,z],f'Shop{i} queue floor 42x58')
         fascia=byname[f'Shop{i}_Fascia'];check(fascia['size']==[2,4,52] and fascia['pos'][1]==44,f'Shop{i} fascia')
         for k in range(2):
             col=[q for q in geom if q['p']['name'].startswith(f'Shop{i}_PierColumn{k}_')]
             if col:
-                lo=np.min([q['lo'] for q in col],axis=0);hi=np.max([q['hi'] for q in col],axis=0);check(np.allclose(hi-lo,[4,16,4]),f'Shop{i} pier column{k} 4x4')
+                lo=np.min([q['lo'] for q in col],axis=0);hi=np.max([q['hi'] for q in col],axis=0);check(np.allclose(hi-lo,[4,20.8,4]),f'Shop{i} pier column{k} 4x4')
             else:check(False,f'Shop{i} pier column{k} absent')
         ceiling=byname[f'Shop{i}_Ceiling'];check(ceiling['pos'][1]-ceiling['size'][1]/2==44,f'Shop{i} 14-high interior')
         sign=next(s for s in D['signs'] if s['name']==f'Shop{i}_Sign');check(sign['size']==[40,3.2],f'Shop{i} sign box')
@@ -245,8 +246,8 @@ def main():
     signtexts=[s['text'] for s in D['signs']]
     for txt in ('1 OFFICE','2 POOLROOMS','3 MALL PARTY','4 CINEMA','5 THE VOID','6 PLAY ZONE','WELCOME','GRAND OPENING','DIRECTORY'):check(signtexts.count(txt)==1,'sign '+txt)
     check(signtexts.count('SHOP & SUPPLIES')==6,'six stand signs')
-    for k in range(1,4):check(signtexts.count(f'STATION {k}')==6,f'station{k} signs')
-    allowed={'1 OFFICE','2 POOLROOMS','3 MALL PARTY','4 CINEMA','5 THE VOID','6 PLAY ZONE','WELCOME','GRAND OPENING','SHOP & SUPPLIES','DIRECTORY'}|{f'STATION {k}' for k in range(1,4)}
+    for k in range(1,5):check(signtexts.count(f'STATION {k}')==6,f'station{k} signs')
+    allowed={'1 OFFICE','2 POOLROOMS','3 MALL PARTY','4 CINEMA','5 THE VOID','6 PLAY ZONE','WELCOME','GRAND OPENING','SHOP & SUPPLIES','DIRECTORY'}|{f'STATION {k}' for k in range(1,5)}
     product_texts=['ADVANCED EQUIPMENT','ENTITY DETECTOR','ITEMS','PACKS','RESEARCH TOKENS','SUPPORTER',
       'ADVANCED EQUIPMENT - 149 ROBUX','ZYNTRA ENTITY DETECTOR - 149 ROBUX','ENTITY SHIELD - 5 TOKENS','SPEED POTION - 3 TOKENS','ROUTE MARKER PACK - 2 TOKENS','EXPEDITION PACK - 69 ROBUX','EMERGENCY RE-ENTRY','4 TOKENS','20 TOKENS','ZYNTRA SUPPORTER - 99 ROBUX','GLOWSTICK CUSTOMIZER - 99 ROBUX',
       'BASELINE YELLOW - FREE','POOL SERVICE - 25 TOKENS','SUBURB SURVEY - 75 TOKENS','BLACKSITE DIRECTOR - 300 TOKENS','STATIC WRAITH - 99 ROBUX','FALSE SUN - 149 ROBUX']
@@ -378,7 +379,7 @@ def main():
     counts={g:sum(p['group']==g for p in D['parts']) for g in sorted(groups)}
     evidence={'passed':not errors,'parts':len(D['parts']),'counts':counts,'errors':errors,'notes':notes,'axis_proof':proofs,'opposed_coplanar_joins':joins,'hidden_coplanar_contacts':hidden_contacts,'visible_coplanar_overlaps':faces,'solid_overlaps':overlaps,'route':path,'route_radius':radius,'terminal_strip':{'min':[path[-1][0]-10,30.2,path[-1][2]],'max':[path[-1][0]+10,35.2,-622.1]} if path else None,'route_min_clearance':minimum if path else None,'route_edge_margin':safety,'json_sha256':hashlib.sha256((OUT/'mall.json').read_bytes()).hexdigest(),'limitations':['Static offline geometry checks; Roblox runtime, lighting parity, gameplay and multiplayer require main agent QA.','The verified radius10 centreline joins a full-width flat-ended terminal strip to the tape bases; seven poles 12 apart prevent a 20-wide corridor through the tape line.']}
     (OUT/'qa.json').write_text(json.dumps(evidence,indent=2)+'\n')
-    lines=[('PASS' if not errors else 'FAIL')+f': {len(D["parts"])} parts / {len(D["signs"])} signs / {len(D["lights"])} lights',f'18 pad cylinders, radius12 spawn, six 52x12 openings, clear dark floor, exact signs/lights, bounds, shape contract.',*notes,f'Large solid overlaps: {len(overlaps)}; same-facing coplanar face overlaps >1: {len(faces)}.',f'Axis test maximum error: {max(p["max_error"] for p in proofs):.3e}',*errors]
+    lines=[('PASS' if not errors else 'FAIL')+f': {len(D["parts"])} parts / {len(D["signs"])} signs / {len(D["lights"])} lights',f'24 pad cylinders, radius12 spawn, six 52x12 openings, clear dark floor, exact signs/lights, bounds, shape contract.',*notes,f'Large solid overlaps: {len(overlaps)}; same-facing coplanar face overlaps >1: {len(faces)}.',f'Axis test maximum error: {max(p["max_error"] for p in proofs):.3e}',*errors]
     (OUT/'checks.txt').write_text('\n'.join(lines)+'\n');print('\n'.join(lines[:8]));print('\n'.join(errors[:65]));print(f'{len(errors)} errors');return 0 if not errors else 1
 
 if __name__=='__main__':sys.exit(main())

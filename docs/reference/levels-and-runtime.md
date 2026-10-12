@@ -2322,3 +2322,19 @@ of separate floor parts run through each other, and a 16-stud part standing on a
 sheet). So pattern edges only have to stand on tile multiples, and the importer's OFFSET must stay a multiple of 4
 (the inlays need x 496 and 528: OFFSET 300). `upload_textures.py` reuses an id when two maps are the same picture
 (plain, checker and red/grey share bump and gloss). The lamps' sheen plates are unchanged.
+
+## 2026-10-12 (night) - mall: four pads two by two, a 30 % higher hall, the Robux skins in front
+
+Owner: "Ryk alle queue up bays indad ... så der er 4 pads som er placeret 2x2 lige som i den nuværende lobby med gå
+afstand i midten"; "placer 2 af de skins der koster robux i fronten"; "højere til loftet. 30% højere".
+- Every shop is 15 studs deeper (x 112..180 and 260..328; model bounds x 110..330 before the importer's 300): the
+  queue zone is 42 deep and holds FOUR pads, rows 10 and 32 studs in from the shop front, 12 either side of the
+  middle: a cross of floor 9.2 wide down the middle and 7.2 between the rows. Stations 1 and 2 are the front row;
+  each post stands 9.6 out on its pad's outer side. The showcase behind is unchanged.
+- Queue ids are 201-224, four a level (`QueueBridge` MALL_PER 4, MALL_COUNT 24; RoundUI `stationLabel`; importer).
+  Tested in play: 24 stations registered, the dialog on station 3 of Level 1.
+- The hall (and the dark wing) is 20.8 studs high (it was 16): `CEIL = 50.8` in build_mall.py. The shops keep
+  their 14-stud ceilings behind a bulkhead over each front; model bounds top y 56. I read "højere til loftet" as
+  the hall's ceiling; the shops' own were not asked for.
+- Shop & Supplies: Static Wraith and False Sun stand on the two corners that face the entrance; the other four
+  round the back as before.

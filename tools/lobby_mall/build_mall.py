@@ -108,8 +108,11 @@ def textures():
         for kind,pixels in zip(('','_normal','_roughness'),floor_tiles.sheet(key)):Image.fromarray(pixels).save(out/(key+kind+'.png'),compress_level=9)
     print(f'TEXTURES: {22+len(floor_tiles.SHEETS)-1} sets, deterministic PNGs')
 
+# 2026-10-12 (owner: "Der skal også være højere til loftet. 30% højere"): the hall was 16 studs from floor to ceiling
+# and is 20.8. The shops keep their own 14-stud ceilings behind a bulkhead over each front, as shops in a mall do.
+CEIL=50.8;WALL_Y=(30+CEIL)/2;WALL_H=CEIL-30
 def design():
-    D={'version':1,'units':'studs','bounds':{'min':[125,15,-902],'max':[315,50,-419]},'materials':{},'parts':[],'signs':[],'lights':[],'anchors':{}}
+    D={'version':1,'units':'studs','bounds':{'min':[110,15,-902],'max':[330,56,-419]},'materials':{},'parts':[],'signs':[],'lights':[],'anchors':{}}
     palette={
       'floor_tile':('SmoothPlastic',(229,223,209),16),'floor_checker':('SmoothPlastic',(130,128,124),16),'floor_redgrey':('SmoothPlastic',(150,112,118),16),'floor_bands':('SmoothPlastic',(190,184,176),16),'floor_inlay':('SmoothPlastic',(192,128,112),16),'floor_harlequin':('SmoothPlastic',(132,138,132),32),'border':('Concrete',(94,71,45),8),'plaster':('Plaster',(195,185,146),8),'oak':('WoodPlanks',(122,91,51),8),'ceiling':('Concrete',(183,181,157),4),'damask':('Fabric',(174,154,65),6),'beige_carpet':('Carpet',(152,137,98),6),'stand_carpet':('Carpet',(120,91,47),6),'triangle_carpet':('Carpet',(67,48,61),8),'road_carpet':('Carpet',(66,78,59),16),'small_tile':('Concrete',(179,199,185),4),'pegboard':('Wood',(180,168,120),4),'puzzle_mat':('Fabric',(30,96,112),12),'black_ceiling':('Concrete',(31,32,30),4),'pad':('SmoothPlastic',(26,61,47),14.8),'brass':('Metal',(136,111,62),4),'sign_face':('SmoothPlastic',(236,226,160),40),'static':('SmoothPlastic',(113,115,103),3),
       'frame':('Metal',(62,58,46),4),'text':('SmoothPlastic',(72,66,54),4),'teal':('Plaster',(93,129,121),4),'mauve':('Plaster',(137,106,109),4),'skirt':('Concrete',(98,76,49),4),'cream':('SmoothPlastic',(188,174,124),4),'black':('SmoothPlastic',(18,20,18),4),'glass':('Glass',(58,64,56),4),'water':('Glass',(18,69,68),4),'orange':('Plaster',(165,82,35),4),'navy':('Plaster',(23,32,58),4),'red':('Fabric',(137,30,34),4),'rose':('SmoothPlastic',(175,119,146),4),'yellow':('Fabric',(200,160,34),4),'blue':('Fabric',(47,103,163),4),'green':('Fabric',(55,118,66),4),'purple':('Fabric',(109,52,135),4),'pale_blue':('Fabric',(122,175,186),4),'cloth':('Fabric',(211,196,144),8),'vinyl':('SmoothPlastic',(76,48,30),4),'metal':('Metal',(111,108,86),4),'light':('Neon',(238,225,155),4),'cyan':('Neon',(44,183,209),4),'magenta':('Neon',(206,44,151),4),'grey':('Metal',(125,123,107),4),'stage_carpet':('Carpet',(44,75,68),6),'hazard':('SmoothPlastic',(230,190,36),1.1)}
@@ -188,53 +191,58 @@ def design():
         # the band along each wall: the same tile in the warm tan of the third photograph (it was a plain brown strip)
         for x in (182,258):box(f'{g}_Border{x}',g,x,29.5,(z0+z1)/2,4,1,z1-z0,'floor_tile',col=(208,164,128))
     # Entrance and end wall.
-    wall('EntranceWest','Arrival',190,38,-900.5,20,16,1)
-    wall('EntranceEast','Arrival',250,38,-900.5,20,16,1)
-    box('EntranceLintel','Arrival',220,43.5,-900.5,40,5,1)
+    wall('EntranceWest','Arrival',190,WALL_Y,-900.5,20,WALL_H,1)
+    wall('EntranceEast','Arrival',250,WALL_Y,-900.5,20,WALL_H,1)
+    box('EntranceLintel','Arrival',220,(41+CEIL)/2,-900.5,40,CEIL-41,1)
     for i,x in enumerate((210,230)):
         box(f'Door{i}','Arrival',x,35.5,-900.5,19.5,11,.2,'glass')
         box(f'DoorFrame{i}','Arrival',x+9.85,35.5,-900.5,.2,11,.4,'frame')
         box(f'DoorHandle{i}','Arrival',x+7,35.4,-900.2,.18,2,.18,'brass')
-    wall('DarkEnd','DarkWing',220,38,-420.5,80,16,1)
+    wall('DarkEnd','DarkWing',220,WALL_Y,-420.5,80,WALL_H,1)
     box('ArrivalMat','Arrival',220,30.05,-891,28,.1,17.6,'vinyl')
-    for x in (214.5,225.5):box(f'WelcomeRod{x}','Arrival',x,44.635,-886.12,.1,2.73,.1,'brass')
+    for x in (214.5,225.5):box(f'WelcomeRod{x}','Arrival',x,(43.27+CEIL)/2,-886.12,.1,CEIL-43.27,.1,'brass')
     sign('Welcome','WELCOME','box',(220,42.35,-886.3),(12,1.6),(0,0,-1),'Arrival')
     # Shop architecture and exhibits.
     shops=[(1,True,-840,'OFFICE','damask'),(2,False,-840,'POOLROOMS','small_tile'),(3,True,-760,'MALL PARTY','orange'),(4,False,-760,'CINEMA','navy'),(5,True,-680,'THE VOID','rose'),(6,False,-680,'PLAY ZONE','plaster')]
     pads=[]
     for level,west,z,name,mat in shops:
-        g=f'Shop{level}';a,b=(127,180) if west else (260,313);front=b if west else a;back=a if west else b;show=(a+13 if west else b-13);padx=166 if west else 274
-        # Floor 26-stud showcase + 27-stud queue. Void has a real recessed pit.
+        g=f'Shop{level}';a,b=(112,180) if west else (260,328);front=b if west else a;back=a if west else b;show=(a+13 if west else b-13)
+        # Floor: the 26-stud showcase at the back and a 42-stud queue zone (it was 27: 2026-10-12, the owner asked for
+        # four pads two by two with room to walk between them, so every shop is 15 studs deeper).
         # x at depth d into the showcase: 0 is its front edge (where the queue zone ends), 26 the back wall
-        dep=(lambda d:153-d) if west else (lambda d:287+d)
+        dep=(lambda d:138-d) if west else (lambda d:302+d)
         # The Void is one flat rose from the concourse edge to the back wall (W07), queue zone included
-        box(g+'_QueueFloor',g,(a+b)/2+(13 if west else -13),29.5,z,27,1,58,'rose' if level==5 else 'floor_tile')
+        box(g+'_QueueFloor',g,front+(-21 if west else 21),29.5,z,42,1,58,'rose' if level==5 else 'floor_tile')
         floor={'OFFICE':'beige_carpet','POOLROOMS':'small_tile','MALL PARTY':'road_carpet','CINEMA':'triangle_carpet','THE VOID':'rose','PLAY ZONE':'puzzle_mat'}[name]
         if level==5:
             # The void is a flush black strip, not a pit: the first build's pit was five studs deep with nothing to
             # climb out on, in a room players walk into. Rose floor, the black strip, rose floor.
-            box(g+'_Ledge',g,151,29.5,z,4,1,58,'rose');box(g+'_Pit',g,145,29.5,z,8,1,58,'black');box(g+'_BackFloor',g,134,29.5,z,14,1,58,'rose')
+            box(g+'_Ledge',g,a+24,29.5,z,4,1,58,'rose');box(g+'_Pit',g,a+18,29.5,z,8,1,58,'black');box(g+'_BackFloor',g,a+7,29.5,z,14,1,58,'rose')
         elif level==2:box(g+'_BasinFloor',g,show,28.55,z,26,.5,58,'small_tile',col=(52,86,90));box(g+'_Water',g,show,29.4,z,26,1.2,56,'water',transparency=.12,collide=True)
         else:box(g+'_ShowFloor',g,show,29.5,z,26,1,58,floor)
         # W04: the pool hall is dark, its tile only pale on the columns
         tint={2:(84,124,126)}.get(level)
         box(g+'_BackWall',g,back+(-.5 if west else .5),37,z,1,14,58,mat,col=tint)
         for k,zz in enumerate((z-29.5,z+29.5)):
-            box(f'{g}_Side{k}',g,(a+b)/2,37,zz,53,14,1,mat,col=tint)
+            box(f'{g}_Side{k}',g,(a+b)/2,37,zz,b-a,14,1,mat,col=tint)
             wall(f'{g}_Pier{k}',g,front+(-1 if west else 1),36,z+(-27.5 if k==0 else 27.5),2,12,3)
             # Full 4x4 pier column sits on the concourse side. Its inner edge
             # remains at +/-26, preserving the 52-stud opening behind it.
-            wall(f'{g}_PierColumn{k}',g,front+(2 if west else -2),38,z+(-28 if k==0 else 28),4,16,4)
+            wall(f'{g}_PierColumn{k}',g,front+(2 if west else -2),WALL_Y,z+(-28 if k==0 else 28),4,WALL_H,4)
         box(g+'_Fascia',g,front+(-1 if west else 1),44,z,2,4,52,'oak')
+        box(g+'_Bulkhead',g,front+(-1 if west else 1),(46+CEIL)/2,z,2,CEIL-46,52)          # the hall's wall over the shop front
         normal=(1,0,0) if west else (-1,0,0)
         sign(g+'_Sign',f'{level} {name}','box',(front+(.31 if west else -.31),43.9,z),(40,3.2),normal,g)
-        box(g+'_Ceiling',g,(a+b)/2+(-1 if west else 1),44.25,z,51,.5,58,'rose' if level==5 else 'ceiling',col=(104,128,126) if level==2 else None)
-        for k,dz in enumerate((-19,0,19),1):
-            zz=z+dz;cyl(f'{g}_Pad{k}',g,padx,30.3,zz,7.4,.6,'pad')
+        box(g+'_Ceiling',g,(a+b)/2+(-1 if west else 1),44.25,z,b-a-2,.5,58,'rose' if level==5 else 'ceiling',col=(104,128,126) if level==2 else None)
+        # Four pads, two by two, as in the present lobby: rows 10 and 32 studs in from the shop front, 12 either side of
+        # the shop's middle. That leaves a cross of floor to walk on between them: 9.2 studs wide down the middle and
+        # 7.2 between the rows. Stations 1 and 2 are the front row. Each pad's post stands on its outer side, out of the cross.
+        for k,(row,dz) in enumerate(((10,-12),(10,12),(32,-12),(32,12)),1):
+            padx=front+(-row if west else row);zz=z+dz;cyl(f'{g}_Pad{k}',g,padx,30.3,zz,7.4,.6,'pad')
             # Texture is an inlay, no extra overlapping discs.
-            px=padx+(8.8 if west else -8.8)
-            cyl(f'{g}_StationBase{k}',g,px,30.15,zz,.75,.3,'frame');box(f'{g}_StationPost{k}',g,px,32.15,zz,.16,4,.16,'brass')
-            sign(f'{g}_Station{k}',f'STATION {k}','station',(px+(.2 if west else -.2),34.05,zz),(3.2,1.3),normal,g)
+            pz=zz+(-9.6 if dz<0 else 9.6)           # clear of the pad: the plate is 3.44 wide
+            cyl(f'{g}_StationBase{k}',g,padx,30.15,pz,.75,.3,'frame');box(f'{g}_StationPost{k}',g,padx,32.15,pz,.16,4,.16,'brass')
+            sign(f'{g}_Station{k}',f'STATION {k}','station',(padx+(.2 if west else -.2),34.05,pz),(3.2,1.3),normal,g)
             pads.append({'level':level,'station':k,'pos':[padx,30.6,zz],'radius':7.4})
         # One recessed fluorescent in each back zone; cool Poolrooms only.
         if level!=5:
@@ -244,8 +252,8 @@ def design():
                 for dz in (-19,19):box(f'{g}_Panel{dz}',g,lamp,43.92,z+dz,8,.12,4,'light',glow=True)
             light(g+'_ShowLight','showcase',(lamp,43.7,z),(164,208,204) if level==2 else (240,222,143),{2:2.6,4:3.2}.get(level,7.0),45)
         if level==1:
-            box('OfficePillar',g,show+3,37,z-10,3,14,3,'damask');box('OfficeCabinet',g,128.51,35.2,z+15,3,5.6,8,'grey')
-            for dz in (-2,2):box(f'OfficeCabinetHandle{dz}',g,130.1,35.2,z+15+dz,.15,1.4,.15,'frame')
+            box('OfficePillar',g,show+3,37,z-10,3,14,3,'damask');box('OfficeCabinet',g,a+1.51,35.2,z+15,3,5.6,8,'grey')
+            for dz in (-2,2):box(f'OfficeCabinetHandle{dz}',g,a+3.1,35.2,z+15+dz,.15,1.4,.15,'frame')
         elif level==2:
             # W04: rows of white-tiled round columns with flared tops standing in dark water, going back into the dim
             for k,(d,dz) in enumerate([(d,dz) for d in (5,13,21) for dz in (-21,-7,7,21)]):
@@ -254,7 +262,7 @@ def design():
                     cyl(f'PoolCapital{k}_{j}',g,xx,42.9+(j+.5)*1.1/3,z+dz,r,1.1/3,'small_tile')
         elif level==3:
             # Black lower wall is adjacent, not embedded in the orange back wall.
-            box('PartyBand',g,127.10,31.3,z,.18,2.6,58,'black')
+            box('PartyBand',g,a+.10,31.3,z,.18,2.6,58,'black')
             for k,dz in enumerate((-28.90,28.90)):
                 box(f'PartySideBand{k}',g,show+.10,31.3,z+dz,25.8,2.6,.18,'black')
             box('PartyTable',g,show+3,33.6,z,5,.25,26,'cream')
@@ -265,21 +273,21 @@ def design():
             for k in range(9):cyl(f'PartyCup{k}',g,show+3,34.05,z-10+k*2.5,.23,.6,'red',collide=False)
             for bunch,dz in enumerate((-20,20)):
                 for k in range(5):
-                    xx=131+(k%2)*1.7;yy=38.5+(k//2)*1.6;zz=z+dz+(k%2)*.8
+                    xx=a+4+(k%2)*1.7;yy=38.5+(k//2)*1.6;zz=z+dz+(k%2)*.8
                     ball(f'Balloon{bunch}_{k}',g,xx,yy,zz,.8,['yellow','blue','green','red','purple'][k],collide=True)
-                    beam(f'BalloonString{bunch}_{k}',g,(131,33,z+dz),(xx,yy-.8,zz),.05,'cream',collide=False)
+                    beam(f'BalloonString{bunch}_{k}',g,(a+4,33,z+dz),(xx,yy-.8,zz),.05,'cream',collide=False)
             # W05: the staff door in the back wall and the boxes somebody left
-            box('PartyDoor',g,127.3,34.6,z+12,.2,9.2,4.6,'black');box('PartyDoorKnob',g,127.52,34.2,z+10.3,.24,.34,.34,'brass',collide=False)
+            box('PartyDoor',g,a+.3,34.6,z+12,.2,9.2,4.6,'black');box('PartyDoorKnob',g,a+.52,34.2,z+10.3,.24,.34,.34,'brass',collide=False)
             for k,(d,dz,yy,sz) in enumerate([(20.5,-14,31.1,2.2),(18.2,-16.4,30.8,1.6),(20.4,-14.1,32.9,1.4)]):
                 box(f'PartyBox{k}',g,dep(d),yy,z+dz,sz,sz,sz,'cardboard')
         elif level==4:
             # W06: the pale screen in a black frame, a pink line over a cyan line round the navy walls, two short rows of seats
-            box('CinemaScreenFrame',g,312.75,38,z,.2,7.2,19.4,'black');box('CinemaScreen',g,312.5,38,z,.18,6,18,'light',glow=True);light('CinemaScreenLight','showcase',(311.8,38,z),(218,213,177),3.0,38)
+            box('CinemaScreenFrame',g,b-.25,38,z,.2,7.2,19.4,'black');box('CinemaScreen',g,b-.5,38,z,.18,6,18,'light',glow=True);light('CinemaScreenLight','showcase',(b-1.2,38,z),(218,213,177),3.0,38)
             for k,(yy,matn) in enumerate(((39.9,'magenta'),(38.9,'cyan'))):
-                for side,dz in enumerate((-28.85,28.85)):box(f'CinemaNeon{k}_{side}',g,300,yy,z+dz,25,.12,.12,matn,glow=True,collide=False)
-                for side,dz in enumerate((-19.4,19.4)):box(f'CinemaNeonBack{k}_{side}',g,312.9,yy,z+dz,.12,.12,18.6,matn,glow=True,collide=False)
-            light('CinemaNeonLight0','neon',(300,39.4,z-27.6),palette['magenta'][1],2.2,40);light('CinemaNeonLight1','neon',(300,39.4,z+27.6),palette['cyan'][1],2.2,40)
-            for row,xx in enumerate((294,303)):
+                for side,dz in enumerate((-28.85,28.85)):box(f'CinemaNeon{k}_{side}',g,show,yy,z+dz,25,.12,.12,matn,glow=True,collide=False)
+                for side,dz in enumerate((-19.4,19.4)):box(f'CinemaNeonBack{k}_{side}',g,b-.1,yy,z+dz,.12,.12,18.6,matn,glow=True,collide=False)
+            light('CinemaNeonLight0','neon',(show,39.4,z-27.6),palette['magenta'][1],2.2,40);light('CinemaNeonLight1','neon',(show,39.4,z+27.6),palette['cyan'][1],2.2,40)
+            for row,xx in enumerate((b-19,b-10)):
                 for k,zz in enumerate((z-9,z-3,z+3,z+9)):
                     box(f'CinemaSeat{row}_{k}',g,xx,32,zz,2.8,.55,3.4,'red');box(f'CinemaBack{row}_{k}',g,xx-1.65,33.8,zz,.5,3.6,3.4,'red')
                     box(f'CinemaBase{row}_{k}',g,xx,30.85,zz,1.5,1.15,2,'black')
@@ -287,9 +295,9 @@ def design():
             # W07: beyond the black strip a long low wall with two blocks before it and one globe lamp on a stem
             # a shade deeper than the room: under the hall's even light one flat rose swallowed them
             deep=tuple(int(v*.84) for v in palette['rose'][1])
-            box('VoidWall',g,137,31.25,z,3,2.5,34,'rose',col=deep)
-            for k,dz in enumerate((-9,9)):box(f'VoidBlock{k}',g,141,32.5,z+dz,4,5,5,'rose',col=deep)
-            box('VoidRod',g,137,34.5,z,.12,4,.12,'rose');ball('VoidGlobe',g,137,37.05,z,.55,'light',collide=False,glow=True);light('VoidLamp','globe',(137,37.05,z),(234,208,170),12,42)
+            box('VoidWall',g,a+10,31.25,z,3,2.5,34,'rose',col=deep)
+            for k,dz in enumerate((-9,9)):box(f'VoidBlock{k}',g,a+14,32.5,z+dz,4,5,5,'rose',col=deep)
+            box('VoidRod',g,a+10,34.5,z,.12,4,.12,'rose');ball('VoidGlobe',g,a+10,37.05,z,.55,'light',collide=False,glow=True);light('VoidLamp','globe',(a+10,37.05,z),(234,208,170),12,42)
         elif level==6:
             # W08 and Level 6 itself: a soft-play frame. Padded posts in four colours on a grid, bars at two heights,
             # padded decks in some bays, black netting on the front, a red tube slide, a cube with holes, hanging rollers.
@@ -325,7 +333,7 @@ def design():
     # Continuous concourse wall segments between open shopfronts; repeated dead modules north.
     spans=[(-900,-870),(-810,-790),(-730,-710),(-650,-621)]
     for side,x in enumerate((179,261)):
-        for k,(a,b) in enumerate(spans):wall(f'ConcourseWall{side}_{k}','Concourse',x,38,(a+b)/2,2,16,b-a)
+        for k,(a,b) in enumerate(spans):wall(f'ConcourseWall{side}_{k}','Concourse',x,WALL_Y,(a+b)/2,2,WALL_H,b-a)
     for side,west in enumerate((True,False)):
         a,b=(127,180) if west else (260,313);front=b if west else a;back=a if west else b
         for k,(z0,z1) in enumerate([(-609,-551),(-529,-471),(-449,-421)]):
@@ -335,30 +343,31 @@ def design():
             for j,zz in enumerate((z0-0.5,z1+0.5)):
                 box(f'DeadShop{side}_{k}_Side{j}','DarkWing',(a+b)/2,37,zz,53,14,1,'plaster')
                 wall(f'DeadShop{side}_{k}_Pier{j}','DarkWing',front+(-1 if west else 1),36,zz+(.5 if j==0 else -.5)+(1.5 if j==0 else -1.5),2,12,3)
-                wall(f'DeadShop{side}_{k}_PierColumn{j}','DarkWing',front+(2 if west else -2),38,(z0+2 if j==0 else z1-2),4,16,4)
+                wall(f'DeadShop{side}_{k}_PierColumn{j}','DarkWing',front+(2 if west else -2),WALL_Y,(z0+2 if j==0 else z1-2),4,WALL_H,4)
             box(f'DeadShop{side}_{k}_Fascia','DarkWing',front+(-1 if west else 1),44,z,2,4,max(.05,length-6),'oak')
+            box(f'DeadShop{side}_{k}_Bulkhead','DarkWing',front+(-1 if west else 1),(46+CEIL)/2,z,2,CEIL-46,max(.05,length-6))
             box(f'DeadShop{side}_{k}_Ceiling','DarkWing',(a+b)/2+(-1 if west else 1),44.25,z,51,.5,length,'ceiling')
-        for k,(z0,z1) in enumerate([(-621,-610),(-550,-530),(-470,-450)]):wall(f'DeadWall{side}_{k}','DarkWing',179 if west else 261,38,(z0+z1)/2,2,16,z1-z0)
+        for k,(z0,z1) in enumerate([(-621,-610),(-550,-530),(-470,-450)]):wall(f'DeadWall{side}_{k}','DarkWing',179 if west else 261,WALL_Y,(z0+z1)/2,2,WALL_H,z1-z0)
     # 4x4 columns occupy closed wall bays only, preserving the exact 52-stud shop openings.
     for side,x in enumerate((182,258)):
         for z in range(-890,-420,20):
             if any(abs(z-c)<29 for c in (-840,-760,-680,-580,-500,-435)):continue
             pier_centres=[c+d for c in (-840,-760,-680,-580,-500) for d in (-28,28)]+[-447,-423]
             if any(abs(z-p)<4 for p in pier_centres):continue
-            wall(f'Column{side}_{z}','Concourse' if z<-621 else 'DarkWing',x,38,z,4,16,4)
+            wall(f'Column{side}_{z}','Concourse' if z<-621 else 'DarkWing',x,WALL_Y,z,4,WALL_H,4)
     # Ceiling: cut panels out of the slab, not placed coplanar on top of it.
     dead={(240,-830),(200,-750),(240,-690),(200,-650),(240,-650)}
-    for x0,x1 in [(180,196),(204,236),(244,260)]:box(f'CeilingStrip{x0}','Ceiling',(x0+x1)/2,46.25,-760.5,x1-x0,.5,279,'ceiling')
+    for x0,x1 in [(180,196),(204,236),(244,260)]:box(f'CeilingStrip{x0}','Ceiling',(x0+x1)/2,CEIL+.25,-760.5,x1-x0,.5,279,'ceiling')
     for x in (200,240):
         last=-900
         for z in range(-890,-629,20):
-            if z-2>last:box(f'CeilingGap{x}_{z}','Ceiling',x,46.25,(last+z-2)/2,8,.5,z-2-last,'ceiling')
-            box(f'PanelFrame{x}_{z}','Ceiling',x,46.25,z,8,.5,4,'frame')
-            box(f'PanelLens{x}_{z}','Ceiling',x,45.94,z,7.8,.12,3.8,'grey' if (x,z) in dead else 'light',glow=(x,z) not in dead)
-            if (x,z) not in dead:light(f'PanelLight{x}_{z}','panel',(x,45.72,z),b=.35 if (x,z)==(200,-810) else (6.5 if z==-670 else 3.8),r=48 if z==-670 else 39,state='dim_flicker' if (x,z)==(200,-810) else 'on')
+            if z-2>last:box(f'CeilingGap{x}_{z}','Ceiling',x,CEIL+.25,(last+z-2)/2,8,.5,z-2-last,'ceiling')
+            box(f'PanelFrame{x}_{z}','Ceiling',x,CEIL+.25,z,8,.5,4,'frame')
+            box(f'PanelLens{x}_{z}','Ceiling',x,CEIL-.06,z,7.8,.12,3.8,'grey' if (x,z) in dead else 'light',glow=(x,z) not in dead)
+            if (x,z) not in dead:light(f'PanelLight{x}_{z}','panel',(x,CEIL-.28,z),b=.35 if (x,z)==(200,-810) else (6.5 if z==-670 else 3.8),r=48 if z==-670 else 39,state='dim_flicker' if (x,z)==(200,-810) else 'on')
             last=z+2
-        box(f'CeilingEnd{x}','Ceiling',x,46.25,(last-621)/2,8,.5,-621-last,'ceiling')
-    box('DarkCeiling','Ceiling',220,46.25,-521,80,.5,200,'ceiling')
+        box(f'CeilingEnd{x}','Ceiling',x,CEIL+.25,(last-621)/2,8,.5,-621-last,'ceiling')
+    box('DarkCeiling','Ceiling',220,CEIL+.25,-521,80,.5,200,'ceiling')
     # Enlarged 1990s RMU. Six counter trapezoids tile an exact closed ring.
     # Side 1 is south; subsequent sides go counter-clockwise in plan.
     C=np.array([220.,0.,-770.]);outer_r=15.;ap=outer_r*math.sqrt(3)/2
@@ -493,12 +502,14 @@ def design():
         # Shallow sign faces fill each face of the 2.4-high hexagonal fascia.
         sign(f'StandSign{i}','SHOP & SUPPLIES','box',C+N*(7*math.sqrt(3)/2+.05)+[0,42.22,0],(6.42,2.16),N,'Stand')
     hexagon('StandCanopy','Stand',220,43.51,-770,7,.16,'oak')
-    skins=[('BaselineYellow','BASELINE YELLOW - FREE','yellow',-120),
-           ('PoolService','POOL SERVICE - 25 TOKENS','pool_suit',-60),
+    # 2026-10-12 (owner: "placer 2 af de skins der koster robux i fronten og resten rundt om som nu"): the two front
+    # corners, which face the entrance (-120 and -60), are Static Wraith's and False Sun's.
+    skins=[('StaticWraith','STATIC WRAITH - 99 ROBUX','wraith',-120),
+           ('FalseSun','FALSE SUN - 149 ROBUX','false_suit',-60),
            ('SuburbSurvey','SUBURB SURVEY - 75 TOKENS','survey_suit',0),
            ('BlacksiteDirector','BLACKSITE DIRECTOR - 300 TOKENS','charcoal',60),
-           ('StaticWraith','STATIC WRAITH - 99 ROBUX','wraith',120),
-           ('FalseSun','FALSE SUN - 149 ROBUX','false_suit',180)]
+           ('PoolService','POOL SERVICE - 25 TOKENS','pool_suit',120),
+           ('BaselineYellow','BASELINE YELLOW - FREE','yellow',180)]
     for index,(skin,txt,mat,theta) in enumerate(skins):
         t=math.radians(theta);N=np.array([math.cos(t),0,math.sin(t)]);T=np.cross([0,1,0],N)
         yaw=math.degrees(math.atan2(N[0],N[2]));rot=(0,yaw,0);foot=C+N*17.5+[0,31.12,0]
