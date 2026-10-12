@@ -135,7 +135,7 @@ for i, item in ipairs(HttpService:JSONDecode([==[%s]==])) do
 		if item.light then
 			local light = Instance.new("PointLight")
 			light.Name, light.Color, light.Shadows = "Lantern", Color3.fromRGB(255, 150, 60), false
-			light.Brightness, light.Range = (z > TAPE_Z) and 1.4 or 1.0, 7 + 4 * item.scale[1]
+			light.Brightness, light.Range = (z > TAPE_Z) and 1.6 or 1.5, 8 + 4 * item.scale[1]      -- HALLOWEEN_DUSK_20261013: the hall is dim now, the lanterns carry it
 			light.Parent = face
 		end
 		face.Parent = model.Props
@@ -181,7 +181,7 @@ local function write(part, face, lines, w, h, inset, far, weights, border)
 	local g = Instance.new("SurfaceGui")
 	g.Name, g.Face, g.SizingMode = "SaleSign", face, Enum.SurfaceGuiSizingMode.PixelsPerStud
 	g.PixelsPerStud = math.clamp(math.floor(110 / tallest), 10, 160)      -- TextScaled stops at 100 px
-	g.LightInfluence, g.MaxDistance, g.ClipsDescendants = 1, far, true
+	g.LightInfluence, g.MaxDistance, g.ClipsDescendants = 0.4, far, true      -- HALLOWEEN_DUSK_20261013: the hall is dim; a sale sign must still read
 	if border then
 		local edge = Instance.new("Frame")
 		edge.Name, edge.BackgroundTransparency, edge.Size, edge.Position = "Edge", 1, UDim2.fromScale(0.94, 0.94), UDim2.fromScale(0.03, 0.03)

@@ -456,7 +456,7 @@ def layout():
         r = {'L': 1.6, 'M': 1.1, 'S': 0.7}[size]
         jitter = rnd.uniform(-0.35, 0.35)
         face = (face[0] * math.cos(jitter) - face[1] * math.sin(jitter), face[0] * math.sin(jitter) + face[1] * math.cos(jitter))
-        put('pumpkin', x, y, z, face, r, lit=lit, light=light, collide=size != 'S')
+        put('pumpkin', x, y, z, face, r, lit=lit, light=light or size == 'L', collide=size != 'S')   # every big lantern carries a light (HALLOWEEN_DUSK_20261013)
 
     def hang(kind, x, y, z, face=(0, -1), scale=1.0, **more):
         put(kind, x, y, z, face, scale, line=CEIL, **more)

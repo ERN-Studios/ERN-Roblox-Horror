@@ -12,6 +12,10 @@ local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 
 local LENS_ON, LENS_OFF = Color3.fromRGB(246, 240, 214), Color3.fromRGB(120, 118, 108)
+-- cool and low, so that the lanterns' orange is the warm thing in the room (a first try with warm panels turned
+-- the whole hall amber and the lanterns disappeared in it)
+local DUSK_PANEL, DUSK_SHEEN = 0.3, 0.25
+local DUSK_LIGHT, DUSK_LENS = Color3.fromRGB(196, 200, 236), Color3.fromRGB(150, 152, 178)
 
 local mall, crates, lamps, discs = nil, {}, {}, {}
 local function bind(model)
@@ -38,6 +42,27 @@ local function bind(model)
 		if light then
 			table.insert(lamps, {light = light, bright = light.Brightness, lens = ceiling and ceiling:FindFirstChild(tostring(host:GetAttribute("Lens"))),
 				on = true, next = 0, burst = 0})
+		end
+	end
+	-- HALLOWEEN_DUSK_20261013 (owner: "a bit darker in the lobby to give it that spooky, cozy halloween vibe so the
+	-- jack o lanterns pop"). While the Halloween dressing stands in the mall, the hall's own ceiling panels burn low
+	-- and cool on this client (their light, their lenses and the sheen they lay on the floor); RoundUI lowers the
+	-- ambient light to a dusk. Nothing is changed on the server, so taking the dressing out puts the light back.
+	-- The wing's dying lamps are left alone. Safe to run again: every regular value is remembered on the instance.
+	if mall:FindFirstChild("Halloween") then
+		for _, host in ipairs(lights and lights:GetChildren() or {}) do
+			local light = host:FindFirstChildWhichIsA("Light")
+			if light and host.Name:sub(1, 10) == "PanelLight" and host.Name:sub(1, 14) ~= "PanelLightWing" and host:GetAttribute("Flicker") ~= true then
+				local regular = light:GetAttribute("RegularBrightness") or light.Brightness
+				light:SetAttribute("RegularBrightness", regular)
+				light.Brightness = regular * DUSK_PANEL
+				light.Color = DUSK_LIGHT
+				local lens = ceiling and ceiling:FindFirstChild((host.Name:gsub("PanelLight", "PanelLens")))
+				if lens and lens.Material == Enum.Material.Neon then lens.Color = DUSK_LENS end
+			end
+			for _, d in ipairs(host:GetDescendants()) do
+				if d:IsA("SurfaceGui") and d.Name == "Sheen" then d.Brightness = DUSK_SHEEN end
+			end
 		end
 	end
 end

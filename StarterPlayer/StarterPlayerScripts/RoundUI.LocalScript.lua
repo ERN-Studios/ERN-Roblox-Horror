@@ -367,6 +367,9 @@ function revisedLobbyLighting.contains(inMaze)
    -- dark as this pass makes the tunnel.
    local reach = mall:GetAttribute("ReachFrame")
    revisedLobbyLighting.mallLight = typeof(reach) == "CFrame" and math.clamp(1 - (at.Z - reach.Position.Z) / 140, 0, 1) or 1
+   -- HALLOWEEN_DUSK_20261013 (owner: "a bit darker in the lobby to give it that spooky, cozy halloween vibe so the
+   -- jack o lanterns pop"): while the Halloween dressing stands in the mall the hall's ambient light is a dusk.
+   revisedLobbyLighting.mallDusk = mall:FindFirstChild("Halloween") ~= nil
    return true
   end
  end
@@ -444,7 +447,8 @@ function revisedLobbyLighting.apply(mazeGrade)
  end
  for property, value in pairs(revisedLobbyLighting.values) do
   if property == "Ambient" and revisedLobbyLighting.mallLight then
-   value = value:Lerp(Color3.fromRGB(150, 143, 118), revisedLobbyLighting.mallLight)   -- MALL_LIGHT_20261012; DIMMER_20261013: it was 196,187,154
+   value = value:Lerp(revisedLobbyLighting.mallDusk and Color3.fromRGB(76, 68, 94) or Color3.fromRGB(150, 143, 118),
+    revisedLobbyLighting.mallLight)   -- MALL_LIGHT_20261012; DIMMER_20261013: it was 196,187,154; HALLOWEEN_DUSK_20261013
   end
   Lighting[property]=value
   -- Record engine-normalized readback (e.g. Float32 brightness .600000023).

@@ -2612,3 +2612,21 @@ price read back. Records: `artifacts/store-prices-halloween-20261013/before.json
 - **To end the sale:** `python3 tools/promo/halloween_prices.py --restore` (needs a signed-in Creator Dashboard tab in
   Chrome) puts the regular prices back from `before.json`. The switch in `ZyntraConfig` ends the token prices and the
   3-for-1 by itself on 2026-11-02 00:00 UTC; it cannot restore prices on Roblox.
+
+## 2026-10-13 - Halloween dusk: the dressed lobby is dimmer so the lanterns carry it (`HALLOWEEN_DUSK_20261013`)
+
+Owner: "Can you make it a bit darker in the lobby to give it that spooky, cozy halloween vibe so the jack o lanterns
+pop". Only while `LobbyMallPreview.Halloween` exists, and only on the client (nothing on the server changes, so
+`install_halloween.py --remove` puts the old light back):
+- `RoundUI`: the hall's ambient light goes from 150,143,118 to a cool dusk, 76,68,94 (`revisedLobbyLighting.mallDusk`).
+- `Lobby Mall Client`: the 17 hall panels burn at 30 % in a cool white (196,200,236), their lenses go grey-violet and
+  the sheen they lay on the floor drops to 0.25. The wing's dying lamps, the shops' own lamps and the backlit shop
+  signs are untouched, so the shops and the signs now glow out of the gloom.
+- `build_halloween.py` / `install_halloween.py`: every big lantern carries a PointLight (36 instead of 22), brightness
+  1.5, range 8 + 4 x its size, no shadows; the sale signs take 40 % of the room's light instead of all of it, so they
+  still read.
+- Measured in play: the hall's picture is 45 % darker (mean brightness 133 -> 72 from the spawn, 134 -> 76 at the
+  stand). A first try with WARM dim panels made the whole hall amber and the lanterns vanished in it: the room has to
+  be cool for the orange to pop.
+- Frame rate, compared inside one session by switching the dressing and its lights off and on: 14.8 / 15.0 / 14.5 /
+  13.7 with, 15.0 / 13.2 / 14.5 / 15.1 without: no difference this Mac can show. Not measured on a phone.
