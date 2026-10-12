@@ -4329,9 +4329,8 @@ do
 		local free = credits > 0 and player:GetAttribute("ZyntraFreeReentry") == true
 		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or free and "YOU HAVE 1 FREE RE-ENTRY \u{B7} USE IT" or credits > 0
 			and ("USE RE-ENTRY \u{B7} " .. credits .. " OWNED")
-			-- HALLOWEEN_SALE_20261013: three for the price of one (ZyntraStore publishes the number a purchase banks)
-			or (((tonumber(player:GetAttribute("ZyntraReentryGrant")) or 1) > 1 and ("BUY " .. player:GetAttribute("ZyntraReentryGrant") .. " RE-ENTRIES \u{B7} R$ ") or "BUY RE-ENTRY \u{B7} R$ ")
-				.. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
+			-- REENTRY_BONUS_20261013 (owner: "just have that say buy 1 reentry"): one re-entry, sale or not
+			or ("BUY RE-ENTRY \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
 		local colour = credits > 0 and Color3.fromRGB(68,221,196) or Color3.fromRGB(232,160,36)
 		for _, node in ipairs(pd.reentry:GetDescendants()) do
 			if node:IsA("UIStroke") then node.Color = colour end
@@ -4525,6 +4524,25 @@ do
 		if pd.card then pd.applyLayout() end
 	end)
 	player:GetAttributeChangedSignal("InRound"):Connect(function() if player:GetAttribute("InRound") ~= true then pd.hide() end end)
+	-- REENTRY_BONUS_20261013 (owner: after the purchase "have them respawn and tell them they got 2 extra for free").
+	-- ZyntraMonetization stamps the gift on the Player when a re-entry purchase banks more than the one that was
+	-- bought. Said once per purchase in the round's feed, when the buyer is standing in the round again.
+	player:GetAttributeChangedSignal("ZyntraReentryBonusAt"):Connect(function()
+		local stamp, extra = player:GetAttribute("ZyntraReentryBonusAt"), tonumber(player:GetAttribute("ZyntraReentryBonus")) or 0
+		if not stamp or extra < 1 then return end
+		task.spawn(function()
+			for _ = 1, 60 do
+				if player:GetAttribute("ZyntraReentryBonusAt") ~= stamp then return end
+				local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+				if hum and hum.Health > 0 and player:GetAttribute("InRound") == true then break end
+				task.wait(0.5)
+			end
+			task.wait(2)
+			if player:GetAttribute("ZyntraReentryBonusAt") == stamp and completion.Hud then
+				completion.Hud.Feed({Kind = "SYSTEM", Detail = ("HALLOWEEN GIFT: %d extra re-entr%s for free."):format(extra, extra == 1 and "y" or "ies"), Key = "reentrybonus"})
+			end
+		end)
+	end)
 	for _, attr in ipairs({"ZyntraReentryUsed", "ZyntraReentryCredits", "ZyntraFreeReentry", "ZyntraReentryPrice", "DevRespawnBusy"}) do
 		player:GetAttributeChangedSignal(attr):Connect(pd.refresh)
 	end

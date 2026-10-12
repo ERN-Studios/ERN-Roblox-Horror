@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-12T20:25:02.899245+00:00",
+  "capturedAtUtc": "2026-10-12T20:37:34.132668+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -2438,8 +2438,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 224032,
-      "sha256": "92cb11a8d1a043d0df7df41529332399c85439878f160b51d6df2728bac33373",
+      "bytes": 224648,
+      "sha256": "8abd2c9b23bc77abfe641777015ad69c2012f7eb68a287d024376b809df05879",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4453,8 +4453,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 250678,
-      "sha256": "b7f8545494bfade18772cc0fae3f192eec11b52a7f4e9d6b9933c3375b3a6ff0",
+      "bytes": 251694,
+      "sha256": "7af3b4694833d84ae1e100c14d8205244b7467d4adc53ca514e6d2b59dcde3e7",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4644,8 +4644,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 67145,
-      "sha256": "50d55e5a97a153c5e95e91b43d2d417e2a5ff3b480dca5c0d7ba3339a7a6343a",
+      "bytes": 67113,
+      "sha256": "633a21fbe0717d023dad58bb75deca3d3a9e351659174187c6edc2ee86f73348",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

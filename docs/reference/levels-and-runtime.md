@@ -2767,3 +2767,19 @@ was missing.
   and since its `artifacts/` and `assets/` were deleted that listed 4,865 files each time (0.3 GB a run). The deleted
   files are now marked skip-worktree there (`git update-index --skip-worktree`); the scan lists 4.
 
+
+## 2026-10-13 - the death screen sells ONE re-entry; the two extras are a gift told afterwards (`REENTRY_BONUS_20261013`)
+
+Owner, from the live game: "when you die it says 'buy 3 reentry' just have that say buy 1 reentry and then have them
+respawn and tell them they got 2 extra for free".
+
+- `ZyntraStore` and `RoundUI`'s death card: the button reads `BUY RE-ENTRY` with the price again, sale or not (for a
+  day it read `BUY 3 RE-ENTRIES`). Nothing else about the purchase changed: it still banks three while the sale runs
+  and the fresh credit still spends itself if the buyer is dead in a live round.
+- `ZyntraMonetization`: the purchase message is "Re-entry bought. Halloween gift: 2 extra re-entries for free.", and
+  a fresh grant of more than one stamps `ZyntraReentryBonus` / `ZyntraReentryBonusAt` on the Player.
+- `RoundUI`: on that stamp it waits until the buyer stands in the round again, then two seconds, and says
+  "HALLOWEEN GIFT: 2 extra re-entries for free." in the round's feed. Checked in a Level 1 round by stamping the
+  attributes: the line appears. Not tested: a real purchase (Studio cannot take Robux). Not published.
+- Left as ordered earlier: the shop's own signs ("RE-ENTRY 3 FOR 1") and the product's shop name "Emergency
+  Re-entry x3".

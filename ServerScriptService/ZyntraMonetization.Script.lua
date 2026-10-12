@@ -4584,8 +4584,14 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			return true, "+" .. entry.Product.TokenGrant .. " Zyntra Research Tokens", "success"
 		elseif entry.Product.ReentryGrant then
 			data.ReentryCredits += entry.Product.ReentryGrant
-			-- HALLOWEEN_SALE_20261013: three for the price of one while the sale runs (ZyntraConfig.HalloweenSale)
-			return true, ("+%d Emergency Re-entry credit%s"):format(entry.Product.ReentryGrant, entry.Product.ReentryGrant == 1 and "" or "s"), "success"
+			-- HALLOWEEN_SALE_20261013: three for the price of one while the sale runs (ZyntraConfig.HalloweenSale).
+			-- REENTRY_BONUS_20261013 (owner: the button must say "buy 1 reentry ... and tell them they got 2 extra
+			-- for free"): the player buys ONE; the others are a gift they hear about after the purchase.
+			local extra = entry.Product.ReentryGrant - 1
+			if extra > 0 then
+				return true, ("Re-entry bought. Halloween gift: %d extra re-entr%s for free."):format(extra, extra == 1 and "y" or "ies"), "success"
+			end
+			return true, "+1 Emergency Re-entry credit", "success"
 		end
 		return true, "Purchase recorded.", "success"
 	end)
@@ -4599,6 +4605,11 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			task.spawn(function()
 				if reentryEligible(player) then useReentry(player) end
 			end)
+			-- REENTRY_BONUS_20261013: RoundUI says it in the round's own feed once the buyer stands again
+			if entry.Product.ReentryGrant > 1 then
+				player:SetAttribute("ZyntraReentryBonus", entry.Product.ReentryGrant - 1)
+				player:SetAttribute("ZyntraReentryBonusAt", os.clock())
+			end
 		end
 		-- The grant is committed and this is its FIRST time: the only moment a
 		-- purchase is real. Never when the prompt opens.

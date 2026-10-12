@@ -582,9 +582,9 @@ local function updateReentry()
 	player:SetAttribute("ZyntraFreeReentry", free)
 	reentryButton.Text = free and "YOU HAVE 1 FREE RE-ENTRY  //  USE IT" or credits > 0
 		and ("USE RE-ENTRY CREDIT  //  " .. credits .. " OWNED")
-		-- HALLOWEEN_SALE_20261013: one purchase banks three while the sale runs, and the button says so
-		or ((Config.Products.EmergencyReentry.ReentryGrant > 1 and ("BUY " .. Config.Products.EmergencyReentry.ReentryGrant .. " RE-ENTRIES  //  ") or "BUY RE-ENTRY  //  ")
-			.. tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$")
+		-- REENTRY_BONUS_20261013 (owner: "just have that say buy 1 reentry"): the button sells ONE re-entry, sale or
+		-- not; the Halloween extras are told after the purchase (it read "BUY 3 RE-ENTRIES" for a day)
+		or ("BUY RE-ENTRY  //  " .. tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$")
 	do
 		local boughtAt = player:GetAttribute("ZyntraReentryBoughtAt")
 		if boughtAt and credits > 0 then                       -- BUY_IS_REENTER_20261011: the bought credit has landed
