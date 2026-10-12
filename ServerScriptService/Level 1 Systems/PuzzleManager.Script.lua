@@ -69,7 +69,8 @@ local FUSES_PER_BOX = 1      -- fuses each box needs
 local SPAWN_MULT    = Master.Effective("L1_FuseSpawnMultiplier", 2)  -- fuses spawned = needed x this
 local FLICK_PER_FUSE = 0.6   -- FlickerBoost added per fuse inserted
 local SPEED_PER_FUSE = Master.Effective("L1_SpeedPerFuse", 0.06)  -- EntitySpeedMul added per fuse
-local END_SPEED_MUL  = 1.3   -- entity speed once the exit opens (finale boost)
+local END_SPEED_MUL  = 1.15  -- entity speed once the exit opens (finale boost). LEVEL1_EASIER_20261013: it was 1.3; with the chase
+                             -- speed of 23.5 the finale is 27, just over the sprint of 26, instead of 35 against 26
 local ENTITY_AREA_CELLS = 5  -- entity appears ~this many cells from the box
 local EDGE_BAND      = 3      -- levers/exit spawn within this many cells of an edge
 local RELAY_HOLD_TIME = 1.8   -- deliberate extraction interaction
@@ -1570,6 +1571,55 @@ local function startPuzzle()
 		status:FireAllClients("lever", active, #session.levers, 0, true)
 	end
 	session.broadcastLeverStatus = broadcastLeverStatus
+
+	-- L1_COMPASS_20261013 (owner: Level 1 "too hard ... make it easier and obvious on what to do"). The objective
+	-- card of Levels 3 and 4 points at the next thing and says how far it is; Level 1's only did so for the exit.
+	-- Twice a second every player in the round is told the NEAREST thing their own next step needs: a relay that
+	-- still holds a fuse while their hands are empty, a fuse box that is not full while they carry one (or when no
+	-- relay is left), a lever that is not pulled once the boxes are full. `Level1ObjectiveTarget` (a Vector3) and
+	-- `Level1ObjectiveKind` on the Player; PuzzleUI hands them to RoundHud's compass. The server knows where
+	-- everything is; a client only has what has streamed in round it.
+	do
+		local owning = session
+		task.spawn(function()
+			while session == owning and owning.active do
+				for _, player in ipairs(Players:GetPlayers()) do
+					local target, kind
+					local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+					if root and root:IsA("BasePart") and player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") ~= true then
+						local best
+						local function consider(position, what)
+							local distance = (position - root.Position).Magnitude
+							if not best or distance < best then best, target, kind = distance, position, what end
+						end
+						if owning.stage == "fuses" then
+							if (owning.carried[player] or 0) == 0 then
+								for _, relay in ipairs(owning.relays) do
+									if not relay.extracted and relay.model and relay.model.Parent then consider(relay.model:GetPivot().Position, "relay") end
+								end
+							end
+							if not target then
+								for _, box in ipairs(owning.boxes) do
+									if not box.complete and box.body and box.body.Parent then consider(box.body.Position, "box") end
+								end
+							end
+						elseif owning.stage == "levers" then
+							for _, lever in ipairs(owning.levers) do
+								if not lever.latched and lever.plate and lever.plate.Parent then consider(lever.plate.Position, "lever") end
+							end
+						end
+					end
+					if player:GetAttribute("Level1ObjectiveTarget") ~= target then player:SetAttribute("Level1ObjectiveTarget", target) end
+					if player:GetAttribute("Level1ObjectiveKind") ~= kind then player:SetAttribute("Level1ObjectiveKind", kind) end
+				end
+				task.wait(0.5)
+			end
+			for _, player in ipairs(Players:GetPlayers()) do
+				player:SetAttribute("Level1ObjectiveTarget", nil)
+				player:SetAttribute("Level1ObjectiveKind", nil)
+			end
+		end)
+	end
 
 	-- keep the interactive stations (boxes / levers / exit) well apart from
 	-- EACH OTHER, not just within their own type — one shared avoid list

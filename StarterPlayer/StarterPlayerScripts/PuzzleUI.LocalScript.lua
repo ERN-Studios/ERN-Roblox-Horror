@@ -11,6 +11,21 @@ local exitOpen, begun = false, false
 -- RELAY_FINDABLE_20261010 (puzzle-client): keep proximity work outside the objective receiver seam.
 local nearRelay = false
 
+-- L1_COMPASS_20261013 (owner: Level 1 must be "easier and obvious on what to do"). The card's compass row, which
+-- Levels 3 and 4 already use and Level 1 only had for the exit, points at the nearest thing the next step needs and
+-- says how far it is. PuzzleManager works it out per player (Level1ObjectiveTarget / Level1ObjectiveKind); a spectator
+-- reads the player they watch. Pin keeps the row under the collapsed bar on a phone, as the exit's row is.
+local function nextTarget()
+    local who = player
+    if player:GetAttribute("Spectating") == true then
+        local id = player:GetAttribute("SpectateTargetUserId")
+        who = type(id) == "number" and Players:GetPlayerByUserId(id) or nil
+    end
+    local target = who and who:GetAttribute("Level1ObjectiveTarget")
+    if typeof(target) ~= "Vector3" then return {State = "locating"}, nil end
+    return {State = "locked", Target = target, Pin = true}, who:GetAttribute("Level1ObjectiveKind")
+end
+
 -- B4_LEVEL1_STATE_BEGIN: count state is data, no longer hidden in old labels.
 local function puzzleObjective()
     if exitOpen then
@@ -21,13 +36,16 @@ local function puzzleObjective()
     if leverPhase then
         -- LEVER_PATH_20261010 (puzzle-client): explain the return trip before the cable junction.
         return {Level = 1, Title = "PULL THE LEVERS", Count = leverActive, Goal = leverTotal,
-            Tag = "LEVERS", Lines = {"Go back along the cable from the fuse box.", "Where it splits, follow the moving current."},
+            Tag = "LEVERS", Lines = {"Follow the compass to the lever.", "It is awake now. Stay quiet."},
             Status = {Text = "Levers stay on. No time limit.", Kind = "info"},
+            Compass = (nextTarget()),
             Done = leverTotal > 0 and leverActive >= leverTotal}
     end
     -- LEVER_PATH_20261010 (puzzle-client): teach extraction, insertion and the way back in order.
-    local guidance = carriedFuses > 0 and "Follow a colored cable to a fuse box." or "Find a fuse relay under the amber lights."
-    local nextStep = carriedFuses > 0 and "Insert the fuse. Then go back the same way." or "Pull the fuse out. Carry it to a fuse box."
+    local compass, kind = nextTarget()
+    local toBox = carriedFuses > 0 or kind == "box"
+    local guidance = toBox and "Follow the compass to the fuse box." or "Follow the compass to a fuse relay."
+    local nextStep = carriedFuses > 0 and "Insert the fuse to power the box." or toBox and "A teammate carries the fuse." or "Pull the fuse out. Carry it to a fuse box."
     -- A watched player's private carried count is not part of PuzzleStatus's broadcast contract.
     local spectating = player:GetAttribute("Spectating") == true
     if spectating then
@@ -37,6 +55,7 @@ local function puzzleObjective()
         Tag = "FUSE BOXES", Lines = {guidance, nextStep},
         Status = carriedFuses == 0 and nearRelay and not spectating
             and {Text = "A fuse relay is close.", Kind = "warning"} or nil,
+        Compass = compass,
         Done = boxCurrent >= boxGoal}
 end
 -- B4_LEVEL1_STATE_END
@@ -148,6 +167,9 @@ workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
     if workspace:GetAttribute("RoundActive") ~= true then resetRoundHud() else publishObjective() end
 end)
 workspace:GetAttributeChangedSignal("ExitPos"):Connect(publishObjective)
+-- L1_COMPASS_20261013: a new nearest target is a target update, not a new objective (the card does not re-open for it)
+player:GetAttributeChangedSignal("Level1ObjectiveTarget"):Connect(publishObjective)
+player:GetAttributeChangedSignal("Level1ObjectiveKind"):Connect(publishObjective)
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(publishObjective)
 for _, name in ipairs({"InRound", "Escaped", "Spectating", "SpectateTargetUserId"}) do
     player:GetAttributeChangedSignal(name):Connect(publishObjective)

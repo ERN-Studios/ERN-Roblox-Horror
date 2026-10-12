@@ -53,15 +53,15 @@ expect(RoundHud.State.Title, 'RESTORE THE POWER', 'begin title')
 expect(RoundHud.State.Count, 0, 'begin boxes')
 expect(RoundHud.State.Goal, 3, 'server box goal')
 -- LEVER_PATH_20261010 (puzzle-client): pin both actions and keep every guide line within the card budget.
-expect(RoundHud.State.Lines[1], 'Find a fuse relay under the amber lights.', 'no fuse guidance')
+expect(RoundHud.State.Lines[1], 'Follow the compass to a fuse relay.', 'no fuse guidance')
 expect(RoundHud.State.Lines[2], 'Pull the fuse out. Carry it to a fuse box.', 'no fuse extraction guidance')
 nearRelay = true
 publishObjective()
 expect(RoundHud.State.Status.Text, 'A fuse relay is close.', 'nearby relay status')
 expect(RoundHud.State.Status.Kind, 'warning', 'nearby relay warning')
 applyPuzzleStatus('carry', 2)
-expect(RoundHud.State.Lines[1], 'Follow a colored cable to a fuse box.', 'carried fuse next action')
-expect(RoundHud.State.Lines[2], 'Insert the fuse. Then go back the same way.', 'carried fuse return guidance')
+expect(RoundHud.State.Lines[1], 'Follow the compass to the fuse box.', 'carried fuse next action')
+expect(RoundHud.State.Lines[2], 'Insert the fuse to power the box.', 'carried fuse return guidance')
 expect(RoundHud.State.Status, nil, 'carried fuse suppresses nearby relay status')
 applyPuzzleStatus('boxes', 2, 3)
 expect(RoundHud.State.Count, 2, 'boxes update')
@@ -73,14 +73,14 @@ expect(RoundHud.State.Title, 'PULL THE LEVERS', 'phase transition')
 expect(RoundHud.State.Count, 0, 'lever reset')
 applyPuzzleStatus('lever', 2, 4, 8, true)
 expect(RoundHud.State.Count, 2, 'latched levers update')
-expect(RoundHud.State.Lines[1], 'Go back along the cable from the fuse box.', 'lever return guidance')
-expect(RoundHud.State.Lines[2], 'Where it splits, follow the moving current.', 'lever junction guidance')
+expect(RoundHud.State.Lines[1], 'Follow the compass to the lever.', 'lever return guidance')
+expect(RoundHud.State.Lines[2], 'It is awake now. Stay quiet.', 'lever junction guidance')
 expect(RoundHud.State.Status.Text, 'Levers stay on. No time limit.', 'no invented countdown')
 expect(RoundHud.State.Status.Kind, 'info', 'lever persistence is informational')
 for _, line in ipairs({
-    'Find a fuse relay under the amber lights.', 'Pull the fuse out. Carry it to a fuse box.',
-    'Follow a colored cable to a fuse box.', 'Insert the fuse. Then go back the same way.',
-    'Go back along the cable from the fuse box.', 'Where it splits, follow the moving current.',
+    'Follow the compass to a fuse relay.', 'Pull the fuse out. Carry it to a fuse box.',
+    'Follow the compass to the fuse box.', 'Insert the fuse to power the box.',
+    'Follow the compass to the lever.', 'It is awake now. Stay quiet.',
 }) do expect(#line <= 43, true, 'guide line fits card: ' .. line) end
 applyPuzzleStatus('msg', 'You have no fuses')
 expect(RoundHud.Rows[1].Detail, 'You have no fuses', 'private refusal survives')

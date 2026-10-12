@@ -202,7 +202,10 @@ local SIGHT_ANGLE       = math.rad(135) -- half-angle of the vision cone
 local HEAR_RANGE        = Master.Effective("L1_EntityHearRange", 220)
 local SPEED_LURK        = Master.Effective("L1_EntityLurkSpeed", 8)
 local SPEED_INVESTIGATE = 8     -- heard a player: normal walk, never a proximity speed-up
-local SPEED_CHASE       = Master.Effective("L1_EntityChaseSpeed", 27.2)  -- sprint is 26
+-- LEVEL1_EASIER_20261013 (owner: "Gør level 1 nemmere"): 23.5, it was 27.2. The Entity now only exists once every fuse box
+-- is full, where PuzzleManager's EntitySpeedMul already stands at its cap of 1.1: 23.5 x 1.1 = 25.9, a hair under the
+-- player's sprint of 26. Running works while the stamina lasts; the lunge, a corner or an empty stamina bar still kill.
+local SPEED_CHASE       = Master.Effective("L1_EntityChaseSpeed", 23.5)
 local SPEED_LOST        = 17    -- alert search pace after LOS is broken
 local SEARCH_TIME       = 12
 local TRACK_TIME        = Master.Effective("L1_EntityTrackSeconds", 5)     -- keeps your live position this long after losing sight

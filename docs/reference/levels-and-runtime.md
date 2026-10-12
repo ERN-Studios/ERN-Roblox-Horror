@@ -2705,3 +2705,36 @@ Push with `tools/mac_merge_push.py` and test a Level 1 round when the place is o
 Recommended against: moving Level 1 to the end (it is the game's face in the icon, the ads and the name, and the
 difficulty would still be there). Proposed, waiting for a yes: a standing objective line with a count, a light at
 every relay and box that shows down a corridor, a chase speed under the sprint on this level.
+
+## 2026-10-13 - Level 1 easier, in the HUD's own language (`L1_COMPASS_20261013`, `LEVEL1_EASIER_20261013`) - NOT IN STUDIO YET
+
+Owner, after the analysis above: "Så gør det men husk vores UI, det skal matche vores nye UI, så den skal du lige
+analysere først. Gør level 1 nemmere."
+
+**What the UI already is.** The round HUD is `ReplicatedStorage.RoundHud` (Figma through Framewisp into
+`ZyntraHUD.Templates`, mounted, never drawn by hand). Level 1 already wears its objective card (`PuzzleUI` ->
+`RoundHud.SetObjective`: title, count, tag, two guide lines, a status row). The card has a COMPASS row ("23 m", a
+needle, the level's accent); Levels 3 and 4 use it for every step, Level 1 used it for the exit only and otherwise
+described cues in the room ("under the amber lights", "follow a colored cable"). On a phone the card collapses after
+six seconds and only an exit compass stays under the bar. So nothing new is drawn: Level 1 is given the compass it
+was missing.
+
+- `PuzzleManager`: twice a second each player in the round gets `Level1ObjectiveTarget` (Vector3) and
+  `Level1ObjectiveKind`: the nearest relay that still holds a fuse while their hands are empty, the nearest fuse box
+  that is not full while they carry one (or when no relay is left), the nearest lever not pulled once the boxes are
+  full. The server works it out because a client only has what has streamed in round it.
+- `PuzzleUI`: the card's compass points there in the fuse and lever phases (a spectator reads the watched player's);
+  the two lines say "Follow the compass to a fuse relay." / "... to the fuse box." / "... to the lever." and the
+  action to do there (all within the card's 43 characters). `Compass.Pin = true`.
+- `RoundHud.pinsExit`: a locked compass with `Pin` stays under the collapsed bar on touch, as the exit's does.
+- `EntityAI`: chase speed 23.5 (it was 27.2; with the fuse multiplier's cap of 1.1 that is 25.9 against the sprint of
+  26). `PuzzleManager`: the finale's multiplier 1.15 (it was 1.3: 27 instead of 35). The lunge is unchanged (its 28
+  studs were the owner's own request). With `ENTITY_AFTER_FUSES_20261013` the Entity is not in the maze before the
+  last fuse box is full.
+- Offline: `test_objective_receivers` (205 checks) and `test_level1_team_prompts` pass with the new wording;
+  `test_round_hud` (185) and `test_round_hud_local` (497) pass; `test_round_hud_shared` fails on
+  "collapsed exit pill keeps its compass" BEFORE this change too (HEAD fails the same check). All four files compile.
+- **Not pushed, not played:** Studio still had "Hamster Power Tycoon" open and swap was 5.3 of 6.1 GB, so the
+  game's place was not opened beside it. To do when the place is open: push `PuzzleManager`, `EntityAI`,
+  `PuzzleUI`, `RoundHud`; check `Master.GetOverride("L1_EntityChaseSpeed")` is nil (a stored override would beat the
+  new default); play a Level 1 round and photograph the card on a computer and at a phone's size.

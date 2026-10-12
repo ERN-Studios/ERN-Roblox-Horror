@@ -520,7 +520,11 @@ end
 -- placeObjective asks TopRightPanel for on touch.
 local function pinsExit(state, parts, root)
 	local bar, row = parts.Bar, parts.Compass
-	if not bar or not row or not exitLocked(state) then return false end
+	-- L1_COMPASS_20261013: a caller may ask for the same for its own locked compass (Compass.Pin = true): Level 1's
+	-- way to the next relay, box or lever is the whole help a new phone player has
+	local compass = state and state.Compass
+	local pinned = compass ~= nil and compass.Pin == true and compass.State == "locked" and typeof(compass.Target) == "Vector3"
+	if not bar or not row or not (exitLocked(state) or pinned) then return false end
 	local need = bar.Size.Y.Offset + row.Size.Y.Offset
 	if state.Status and state.Status.Kind == "danger" and parts.StatusRow then need += parts.StatusRow.Size.Y.Offset end
 	return UIDevice.TopRightPanel(root.Size.X.Offset + 16, need).Height >= need
