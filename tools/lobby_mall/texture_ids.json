@@ -1,20 +1,20 @@
 {
  "_sha256": {
   "beige_carpet_colour": "09894254bc4a720127bdfd2640539899520c16c28783c07eb2ccfab4daec10d5",
-  "beige_carpet_normal": "bee2fe3f6b913bb67959d62b5868927ff7fa782c74b1f4842469ab85feda3ce9",
-  "beige_carpet_roughness": "a434347db9603409b7edd0bed13a402f125f481c5ff0a145da06392c41ca4d81",
+  "beige_carpet_normal": "cadccb53ad6907e4121e9ddee2635bfd2b6a15348cbba0d6908986217992dc2c",
+  "beige_carpet_roughness": "f21db3c651debba95f9c2b161afcffb0b1ffc68ee81dd65a995a03aa4fe80395",
   "black_ceiling_colour": "f9a90822931571c6cd422173ad7c31077ffd8694b2b7bed4037a643e55568fc5",
-  "black_ceiling_normal": "5115c6582449323a2dff6e6561036cb0c336e531308d4ac4b253fa8ce00e595a",
-  "black_ceiling_roughness": "ea396b762a137d1ffebcca7b724031a87bafefa6f3085f7f54738b0112bc1918",
+  "black_ceiling_normal": "2720d51c8aa81f3f2b6551bb85ad7c107f43b7659bde9f9579d45644cc712bb4",
+  "black_ceiling_roughness": "f5aedf24b55fb6fb65e77babc7b797622073ced8bcb358bfc264feee9ef009de",
   "brass_colour": "997ec24f1c35c4df7c5fe7062930ee8d8b013b3529642b00b841a4ccd51e3a3e",
-  "brass_normal": "35ce130fd769a083859d27832ca3d4ab34682c3bbbb7e8c8f383ce39ccb1fac6",
-  "brass_roughness": "446fdfc41fd8621cb92f45ff47878f333da072843f9d2c502c296dc54092c0ad",
+  "brass_normal": "f5e92889db5279f2868749ef6c4486cb1b58139e988a64ea62aec49386cea3de",
+  "brass_roughness": "1e2c519e7e9cd6e23736e0d9b5270f4da99ea881edd43cfe63b603e9f95a68b2",
   "ceiling_colour": "ab0bc2e952d124f077c6181d62119aefb138f343842b09c4a652089b69338ee8",
-  "ceiling_normal": "ef41669e1b412a99828c97477448d6580a4e7b15a0ad2ec67e250821d13b1363",
-  "ceiling_roughness": "69a51b6ee00a0f72bcf4477a8d59ccde62aad4472ca05bfc5a79f92db4866817",
+  "ceiling_normal": "135bf2cdc4c0a6e2aa3f12a962c2a8d6650bc857bebece89ed0ec876d530161c",
+  "ceiling_roughness": "94aee06760654123a389855471a6ee59831852f373952707cf940ac8ddf011cd",
   "damask_colour": "18b2fcaaf1c95dafcd60328ebd8993f9d5155ff66b2f0844cd4e4027208e6201",
-  "damask_normal": "468b39d13a8af4d3a6f26487084c152beec2a9c79b4da3d0408c04f1c3c9f1f8",
-  "damask_roughness": "7607d95f55f4ab1355b86c3a4b7a1145621f8c231f035f6ccc4237df270392db",
+  "damask_normal": "ff637bd67e59e37593988180e14925fc617299038f6e91a527fd5f21ee5c4469",
+  "damask_roughness": "29de7ec84ce9841b6a0d30fde119f0bd02c4e436bf62f3451f85d4b0f82351ed",
   "floor_bands_colour": "aa04606861d4589c71e2ab8778f7a92aea2147204aa2ed2480ad742d859cdbf0",
   "floor_bands_normal": "77af311250fe4019634f61d8e9ca21c28a9d58f44d81e0a22c615f637ae04b42",
   "floor_bands_roughness": "d91a7164fcd53b841f1756b61555fc33ea4549cb37577341b11981b0b414c97b",
@@ -34,61 +34,61 @@
   "floor_tile_normal": "d1cac801c4117cf72493ee0aa6ab5671397d3d6628d0e2701031eefaafbc2e1a",
   "floor_tile_roughness": "0229b0dd7645953a948fefe04cb725e769e2ef9e53b9588d33384a4d19a8c73b",
   "hazard_colour": "80bc39fb9dca23877085beab432042ab1c674c8bfe5b2dc903c520f2d085bd62",
-  "hazard_normal": "63a0f94b1f109beb8279a0dfa4944e849342b341b5642a958c68f8944fcf908a",
-  "hazard_roughness": "b732e585a3edfdc20ae3328fcce04b9af570a61f408ea2dcc63a348b90a32a8b",
+  "hazard_normal": "0005d220c7f3d7dfa889fbcbab2467d63e24e3fca46d06687d5e68a0972125a9",
+  "hazard_roughness": "7b0ba4cc98667a6aeb29aad86e62e83b9bba94aaa3bfbec140f608ba974d0fd7",
   "oak_colour": "9f0000e4d42f0859d6a58ef30c7618226052500b28c0084eb783e61c7ef05080",
-  "oak_normal": "5b23a0ef10835e33cb257cbe2961f0999512d2de2532f185fd23490a24a34a08",
-  "oak_roughness": "7326d5998d11c16b98587cc34fcd3625871253357f473a2026333c6f6f6f5f69",
+  "oak_normal": "859d2e7524d439da152bde4892c6f251a0095829b69357e4e3689a5647d99361",
+  "oak_roughness": "e7f3d93094bf1f9a128704051c563220767b4613ac649748e6bd5dfd81a95c27",
   "pegboard_colour": "a2a1959c62694747feb9d5dedc9bd5cb4602c812fa8feaa92c20872225982166",
-  "pegboard_normal": "a66a72d850a0761f9c35d03b6e66f50de7ac3178aaaaff7152f017b938a86371",
-  "pegboard_roughness": "8e12c7db37180fc54dc56b875f1a024a841e30487da6c51716f7ded58568b081",
+  "pegboard_normal": "bb193ece21a9f5873aae6a37fe5c4a9687f9246b8f419db0fd34349b2bf04445",
+  "pegboard_roughness": "d6c26317049fe2048798ed36332ebd8990455fd054b9d6abb849bf6f91b3323e",
   "plaster_colour": "6d2c40ba7288b9b2e2de04f77a6d419677569350f1eb9f158d09e4e01d03ede5",
-  "plaster_normal": "8f21002e4927b429e9771e0d9cdf48cfa4f429632da9960a265c4df2607aadf9",
-  "plaster_roughness": "267ce22ebd36d00fb282d6cf94bf5f0e6c494639121d687873a92e121b65c6a3",
+  "plaster_normal": "1fcee9c17b3a67e1b3da5c99c95f6739f2b3d2830fdd1756451566c5600981bb",
+  "plaster_roughness": "5f6bb941b124b6702bfac15639d8f332e6ff222539a8d509aa43dcff95750f0d",
   "puzzle_mat_colour": "9d4399e737e621e895caab647fe070a3433f6d318255cfb941c3119fe60dcef1",
-  "puzzle_mat_normal": "5ba572f5454f237a56d1061ad311eaff2c5391aa2a79f56db4e94dd768d5eec2",
-  "puzzle_mat_roughness": "81216be18ddd3218dad283eff3aaa9e23ce1f906afbdba876d5e1835ad8b2316",
+  "puzzle_mat_normal": "c5db964b6d8083a00051b269b548fd91f9ccf6c05002ef19a4a826bdc9bc5057",
+  "puzzle_mat_roughness": "88539920a87e517fc495f7a0538c66382afba069397e470dae48260f3c0411bb",
   "road_carpet_colour": "6818783b77041c2912eb1939dcef957326377099a44c1a50f25e35c21e0734e7",
-  "road_carpet_normal": "8b9433dd56f95b81a361e29dd68de49f42a34787965534add0065f3ea476deb0",
-  "road_carpet_roughness": "30229e750842abfbf84b9dec42adfe7549c4d506e67c2b9b415fc06587f6e203",
+  "road_carpet_normal": "b0075e08e07eb7b182bedb56edd1da24de7e2af5b48084b62a057f2dac6c6638",
+  "road_carpet_roughness": "b47e28ea1e7afb07d55d9cde20840a3099106303c966fd211060397a350dccc3",
   "sheen_colour": "f8c4c56ba9b814a615aa622ab99fd458c24a234e9beb47f0328682494e8b5acf",
   "small_tile_colour": "fa4a1119679208b7737488b2227170c0d74a74274f1d6d7689e8ea3fbae6d717",
-  "small_tile_normal": "2c007cb82f51d14c21318216cb0987dcc518b1121f44a592666d812485504304",
-  "small_tile_roughness": "d5a6e16baaf5e6c10c629ac5a6962e1940ea28c62f0936ee6619176d44d1e671",
+  "small_tile_normal": "7ad58757b2ed5821781d0db5e7ceed94388ef278a4b2c1d6ca4461a9e0cef3c8",
+  "small_tile_roughness": "a585a82dc0aa9903ad53a1f8e93d2ab9e3c2e5dd57c70c17d154adbf7ca66cef",
   "stage_carpet_colour": "7e3c65f9a17b49e899595ee8fe2629049e505ec9a3c28e3b5eb5e6e6e53316ba",
-  "stage_carpet_normal": "6f5164eaa853e3c49cee772034d2c6f43af04552e5e8c79640c3c97017f1e4e7",
-  "stage_carpet_roughness": "f227ad35b7fb43ab992aa4bc2f620142df9547968b8a4b82c39e9c0cdaa3767d",
+  "stage_carpet_normal": "9a17ac95131ff944b65d4dfca62859b8e6dc7e0574d8f241fcec600478cdb1e1",
+  "stage_carpet_roughness": "30229e750842abfbf84b9dec42adfe7549c4d506e67c2b9b415fc06587f6e203",
   "stand_carpet_colour": "0ec1638d985d2ff7695480f1d78c3ade1b1bb86b99b607f56da88c8d18a39ddd",
-  "stand_carpet_normal": "c50078ceb95868f76c898060ae117f5555b939b4c2bfd07f857e60648968e67e",
-  "stand_carpet_roughness": "b4056e59af70928d4ec34d14cc095e73f886b340a6997f4ed70dccfdb2152eb1",
+  "stand_carpet_normal": "b42bee0e6ee34b1ca5367806cb2b58dfbd2357d20b687cae718b8416172a398a",
+  "stand_carpet_roughness": "a434347db9603409b7edd0bed13a402f125f481c5ff0a145da06392c41ca4d81",
   "triangle_carpet_colour": "2b2458ee0d8fbb878fa5e4a23a072461826ab9220d353b4f2756d47e8c8882c1",
-  "triangle_carpet_normal": "0d6667793dba6f742c93bd308cbb4bfe0062b6cf77708e7310f0efc6dbfadb54",
-  "triangle_carpet_roughness": "b47e28ea1e7afb07d55d9cde20840a3099106303c966fd211060397a350dccc3"
+  "triangle_carpet_normal": "766608af92ba001bebc76b764e05ec99ce93e19cb58d7c2182da2cdcd6ff4332",
+  "triangle_carpet_roughness": "b4056e59af70928d4ec34d14cc095e73f886b340a6997f4ed70dccfdb2152eb1"
  },
  "beige_carpet": {
   "colour": 73224556312562,
-  "normal": 83795805599849,
-  "roughness": 77826637530360
+  "normal": 105439700384588,
+  "roughness": 117296316621415
  },
  "black_ceiling": {
   "colour": 115575872798484,
-  "normal": 90691915224462,
-  "roughness": 74549528611015
+  "normal": 102238071781804,
+  "roughness": 108152931762915
  },
  "brass": {
   "colour": 105823231245313,
-  "normal": 131687407381688,
-  "roughness": 73942590317996
+  "normal": 78644926887607,
+  "roughness": 137552989723364
  },
  "ceiling": {
   "colour": 125110992127796,
-  "normal": 99678171371377,
-  "roughness": 121584585045485
+  "normal": 136519615271362,
+  "roughness": 106217146372243
  },
  "damask": {
   "colour": 118872243433309,
-  "normal": 114210578379518,
-  "roughness": 106223322182700
+  "normal": 71545244131897,
+  "roughness": 84688498724914
  },
  "floor_bands": {
   "colour": 121843144653391,
@@ -122,55 +122,55 @@
  },
  "hazard": {
   "colour": 127922287741035,
-  "normal": 129633645586007,
-  "roughness": 127189655057844
+  "normal": 87269222081203,
+  "roughness": 140415289998119
  },
  "oak": {
   "colour": 115310223960061,
-  "normal": 86906485740202,
-  "roughness": 88360657758511
+  "normal": 124424579949578,
+  "roughness": 87760551374472
  },
  "pegboard": {
   "colour": 74465505860189,
-  "normal": 107660298387661,
-  "roughness": 104922186057280
+  "normal": 82094123545814,
+  "roughness": 80340337097477
  },
  "plaster": {
   "colour": 74942286051997,
-  "normal": 129693755034438,
-  "roughness": 74555483120788
+  "normal": 77892852971520,
+  "roughness": 119632503958331
  },
  "puzzle_mat": {
   "colour": 108626940604722,
-  "normal": 104534033300631,
-  "roughness": 91248391373949
+  "normal": 80676087011146,
+  "roughness": 135812384374390
  },
  "road_carpet": {
   "colour": 109226722956729,
-  "normal": 73155792266968,
-  "roughness": 132624109646859
+  "normal": 119765165168888,
+  "roughness": 114333744593633
  },
  "sheen": {
   "colour": 71825726978586
  },
  "small_tile": {
   "colour": 129508222020952,
-  "normal": 105096545074321,
-  "roughness": 135478128530034
+  "normal": 89448567107956,
+  "roughness": 92587811498210
  },
  "stage_carpet": {
   "colour": 71579347541344,
-  "normal": 84627291913951,
-  "roughness": 87418255401545
+  "normal": 135681391821211,
+  "roughness": 112847870470943
  },
  "stand_carpet": {
   "colour": 132057975445393,
-  "normal": 116497883808014,
-  "roughness": 82642193060819
+  "normal": 73225847515716,
+  "roughness": 127873572189526
  },
  "triangle_carpet": {
   "colour": 110958820294066,
-  "normal": 125607338246536,
-  "roughness": 127043142744194
+  "normal": 80480663098978,
+  "roughness": 140141316356034
  }
 }

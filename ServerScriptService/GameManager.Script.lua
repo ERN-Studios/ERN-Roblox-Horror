@@ -685,6 +685,7 @@ local function buildLobby()
  workspace:SetAttribute("LobbySpawnMigrationReady", false)
  workspace:SetAttribute("LobbySpawnMigrationError", nil)
  local originalSpawn = spawn.CFrame
+ local usedMall = false
  local ok, problem = pcall(function()
   local folder = script.Parent:FindFirstChild("LobbyReimaginedPreview")
   local builder = folder and folder:FindFirstChild("Builder")
@@ -700,6 +701,49 @@ local function buildLobby()
   until os.clock() >= deadline
   assert(shop and shop:IsA("Model") and (tonumber(shop:GetAttribute("ShopItemCount")) or 0) > 0,
    "Original lobby shop did not finish before revised lobby startup")
+  -- MALL_IS_LOBBY_20261013 (owner: "Lav fuld replacement til den nye lobby"). The mall lobby (Workspace.
+  -- LobbyMallPreview, a static model saved in the place) IS the lobby: players spawn on its spawn point and the
+  -- tunnel lobby is not built at all, so its mesh bake no longer runs at server start. The first lobby above is
+  -- still built for its shop boxes, the supporters board and the spawn pad. If the mall is missing or not ready,
+  -- the tunnel lobby is built as before; workspace.LobbyUseTunnel = true asks for that on purpose (the mall is
+  -- then parked and previewed by Lobby Mall Preview).
+  local mall = workspace:FindFirstChild("LobbyMallPreview")
+  local mallAnchors = mall and mall:IsA("Model") and mall:FindFirstChild("Anchors")
+  local mallSpawn = mallAnchors and mallAnchors:FindFirstChild("Spawn")
+  if workspace:GetAttribute("LobbyUseTunnel") ~= true and mallSpawn and mallSpawn:IsA("BasePart")
+   and mall:GetAttribute("MallQueuesReady") == true then
+   local position = mallSpawn.Position + Vector3.new(0, .4, 0)
+   local params = RaycastParams.new()
+   params.FilterType = Enum.RaycastFilterType.Include
+   params.FilterDescendantsInstances = {mall}
+   params.RespectCanCollide = true
+   for _, dx in ipairs({-2, 0, 2}) do
+    for _, dz in ipairs({-2, 0, 2}) do
+     local hit = workspace:Raycast(position + Vector3.new(dx, 12, dz), Vector3.new(0, -18, 0), params)
+     assert(hit and hit.Instance.CanCollide and hit.Normal.Y > .7
+      and math.abs(hit.Position.Y - position.Y) < 2, "Mall lobby spawn floor is incomplete")
+    end
+   end
+   assert(spawn.Parent == lobby and lobby.Parent == workspace, "Canonical lobby spawn changed during startup")
+   spawn.CFrame = CFrame.lookAt(position, position + Vector3.zAxis)          -- looking down the concourse
+   spawn:SetAttribute("LobbySpawnFloorModelName", "LobbyMallPreview")
+   spawn:SetAttribute("LobbySpawnRevision", 4)
+   workspace:SetAttribute("LobbySpawnMigrationReady", true)
+   -- the supporters board's live renderer is the first lobby's; it is kept, out of sight under the mall's floor,
+   -- and Level Leaderboards pins a paper copy of it to the mall's directory board
+   for _, descendant in ipairs(lobby:GetDescendants()) do
+    if descendant.Name == "ZyntraDonationLeaderboardBoard" and descendant:IsA("Model") then
+     for _, part in ipairs(descendant:GetDescendants()) do
+      if part:IsA("BasePart") then part.Transparency = 1; part.CanCollide = false; part.CanQuery = false; part.CanTouch = false end
+     end
+     descendant:PivotTo(CFrame.new(mallSpawn.Position.X, mallSpawn.Position.Y - 22, mallSpawn.Position.Z + 100))
+     descendant.Parent = mallAnchors
+     break
+    end
+   end
+   usedMall = true
+   return
+  end
   local revised = require(builder).Build()
   assert(revised and revised:IsA("Model") and revised.Parent == workspace
    and revised.Name == "LobbyReimaginedPreview" and revised:GetAttribute("LobbyReimaginedOwned") == true

@@ -34,7 +34,7 @@ task.spawn(function()
 			if character.Parent == nil or player:GetAttribute("InRound") == true then return end
 			local lobby = workspace:FindFirstChild("ServerLobby")
 			local spawn = lobby and lobby:FindFirstChild("LobbySpawn")
-			local stage = workspace:FindFirstChild("LobbyReimaginedPreview")
+			local stage = workspace:FindFirstChild("LobbyReimaginedPreview") or workspace:FindFirstChild("LobbyMallPreview")   -- MALL_IS_LOBBY_20261013
 			local camera = workspace.CurrentCamera
 			if spawn and spawn:IsA("BasePart") and stage and camera and camera.CameraType == Enum.CameraType.Custom
 				and (root.Position - spawn.Position).Magnitude <= 30 then
@@ -730,6 +730,12 @@ task.spawn(function()
 		local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
 		for _, item in ipairs(lobby and lobby:GetDescendants() or {}) do
 			if item:IsA("BasePart") and item:GetAttribute("R3QueueId") ~= nil then table.insert(pads, item) end
+		end
+		-- MALL_IS_LOBBY_20261013: the mall lobby's pads (its queue zones carry MallQueueId)
+		local mall = workspace:FindFirstChild("LobbyMallPreview")
+		local bays = mall and mall:FindFirstChild("Anchors") and mall.Anchors:FindFirstChild("QueueBays")
+		for _, item in ipairs(bays and bays:GetDescendants() or {}) do
+			if item:IsA("BasePart") and item:GetAttribute("MallQueueId") ~= nil then table.insert(pads, item) end
 		end
 	end
 	local function flat(a, b) return Vector3.new(a.X - b.X, 0, a.Z - b.Z).Magnitude end

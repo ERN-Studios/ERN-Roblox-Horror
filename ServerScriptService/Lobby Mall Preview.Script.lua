@@ -23,11 +23,15 @@ local PARK_AFTER, NEAR = 45, 60
 
 local mall = workspace:FindFirstChild("LobbyMallPreview")
 if not (mall and mall:IsA("Model")) then return end
-mall.Parent = ServerStorage                 -- first, before anything that can wait
+-- MALL_IS_LOBBY_20261013: since the owner's "fuld replacement" the mall IS the lobby (GameManager spawns players in
+-- it) and this script only has one job left: a round server has no lobby, so the mall is deleted there. Parking and
+-- the E preview below are the FALLBACK: they run only when workspace.LobbyUseTunnel = true brings the tunnel lobby back.
 if ServerKind.IsRoundServer() then
 	mall:Destroy()
 	return
 end
+if workspace:GetAttribute("LobbyUseTunnel") ~= true then return end
+mall.Parent = ServerStorage                 -- first, before anything that can wait
 workspace:SetAttribute("MallPreview", "MALL_PREVIEW_20261012")
 
 local anchors = mall:WaitForChild("Anchors")

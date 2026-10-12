@@ -247,7 +247,10 @@ do
 	local lamps, lampsFor = nil, nil
 	local function collect()
 		local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
-		if not lobby or lobby:GetAttribute("Ready") ~= true then return nil end
+		if not lobby or lobby:GetAttribute("Ready") ~= true then
+			lobby = workspace:FindFirstChild("LobbyMallPreview")          -- MALL_IS_LOBBY_20261013: the mall's own lamps
+			if not lobby then return nil end
+		end
 		if lamps and lampsFor == lobby then return lamps end
 		lamps, lampsFor = {}, lobby
 		for _, d in ipairs(lobby:GetDescendants()) do

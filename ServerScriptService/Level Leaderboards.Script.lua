@@ -101,11 +101,21 @@ end
 ---------------------------------------------------------------------------------------------------------------
 if ServerKind.IsRoundServer() then return end       -- a round server has no lobby to hang boards in
 
-local lobby = workspace:WaitForChild("LobbyReimaginedPreview", 180)
-if not lobby then return end
+-- MALL_IS_LOBBY_20261013: when the mall is the lobby there is no tunnel lobby to wait for (GameManager says which
+-- by the spawn pad's LobbySpawnFloorModelName once LobbySpawnMigrationReady is set); the lists then hang only on the
+-- mall's notice boards (buildMallSheet below).
+local lobby
 do
 	local began = os.clock()
-	while lobby:GetAttribute("Ready") ~= true and os.clock() - began < 120 do task.wait(0.5) end
+	while workspace:GetAttribute("LobbySpawnMigrationReady") ~= true and workspace:GetAttribute("LobbySpawnMigrationError") == nil
+		and os.clock() - began < 180 do task.wait(0.5) end
+	local first = workspace:FindFirstChild("ServerLobby")
+	local pad = first and first:FindFirstChild("LobbySpawn")
+	if not (pad and pad:GetAttribute("LobbySpawnFloorModelName") == "LobbyMallPreview") then
+		lobby = workspace:WaitForChild("LobbyReimaginedPreview", 180)
+		if not lobby then return end
+		while lobby:GetAttribute("Ready") ~= true and os.clock() - began < 300 do task.wait(0.5) end
+	end
 end
 
 -- The lobby's own signage: pale mint lettering, Gotham, dark teal metal.
@@ -221,6 +231,7 @@ local function buildFace(panel, face, level, look)
 end
 
 local function buildBoard(level)
+	if not lobby then return nil end
 	local signs, pads = lobby:FindFirstChild("LevelGateSigns"), lobby:FindFirstChild("PreviewQueuePads")
 	local header = signs and signs:FindFirstChild("LEVEL " .. level .. " Door Header")
 	local bay = pads and pads:FindFirstChild("QueueBay_Level" .. level)
@@ -356,10 +367,11 @@ task.spawn(function()
 	if not (board and board:IsA("BasePart")) then return end
 	local source
 	for _ = 1, 90 do
-		for _, d in ipairs(lobby:GetDescendants()) do
-			if d:IsA("SurfaceGui") and d.Name == "DonationLeaderboardDisplay" then source = d; break end
-		end
-		if source then break end
+		-- the live board: in the tunnel lobby, or (MALL_IS_LOBBY_20261013) kept out of sight under the mall
+		local kept = (lobby or anchors):FindFirstChild("ZyntraDonationLeaderboardBoard", true)
+		source = kept and kept:FindFirstChild("DonationLeaderboardDisplay", true)
+		if source and source:IsA("SurfaceGui") then break end
+		source = nil
 		task.wait(2)
 	end
 	if not source then return end

@@ -439,7 +439,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 	-- MALL_CRATES_20261012 (owner: in the mall lobby's shop the items "are not that visible, make a crate with the
 	-- item, just like in the first version of the lobby, shrink it a little down and have them hover over the
 	-- circles where the item is sold and a sign over it"). One copy of each box above its buy spot in
-	-- LobbyMallPreview.Anchors.ShopSpots, smaller, standing still (no client bob), without its lamp and its top
+	-- LobbyMallPreview.Anchors.ShopSpots, smaller, bobbing by Lobby Mall Client, without its lamp and its top
 	-- and bottom pictures, with the item's name on a cream sign over it. Made before ShopItemCount is set, which
 	-- is what GameManager waits for before it removes the first lobby and this wall with it. The mall model may
 	-- be parked in ServerStorage (Lobby Mall Preview).
@@ -478,6 +478,10 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 					local at = spot.Position + Vector3.new(0, MALL_CRATE_UP, 0)
 					local outward = middle and (spot.Position - middle.Position) * Vector3.new(1, 0, 1) or Vector3.zAxis
 					box.CFrame = CFrame.lookAt(at, at + (outward.Magnitude > 0.1 and outward.Unit or Vector3.zAxis))
+					-- MALL_FINISH_20261013 (owner: "kasserne i shoppen har en hover effekt, hvor de bouncer lidt op og
+					-- ned"): Lobby Mall Client bobs each about this pose, each a little out of step with the next
+					box:SetAttribute("MallCrateOrigin", box.CFrame)
+					box:SetAttribute("MallCratePhase", (#crates:GetChildren() * 2.399) % (math.pi * 2))
 					box.Parent = crates
 					local sign = Instance.new("BillboardGui")
 					sign.Name = "MallCrateSign"

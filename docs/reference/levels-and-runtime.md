@@ -2366,3 +2366,44 @@ gold lenses, a 1990s camcorder on a pole pointing forward, an aerial). In Studio
   server (Studio does not save), phones, how it looks on other clients.
 - Tool quirk: `mac_merge_push.py` with LUAU_COMPILE_BIN set fails on `Zyntra Dev L4` (luau-compile's output is not
   UTF-8 for that file); push that file with the variable unset after compiling it by hand.
+
+## 2026-10-13 - THE MALL IS THE LOBBY (`MALL_IS_LOBBY_20261013`), and its last four additions
+
+Owner: "Begynd at bytte lobby, den nuværende med den nye mall lobby ... Lav fuld replacement til den nye lobby når alt
+det er gjort." In Studio, unpublished.
+
+**The swap.** `GameManager.buildLobby` stands the spawn pad on the mall's spawn (`LobbySpawnFloorModelName =
+"LobbyMallPreview"`) and does NOT build the tunnel lobby (no mesh bake at server start; the lobby is on screen in
+about 11-20 s in Studio). The first lobby is still built for its shop boxes and supporters board and then emptied;
+the supporters board's live renderer is kept out of sight under the mall and copied to the directory board.
+`workspace.LobbyUseTunnel = true` brings the tunnel lobby back (the mall is then parked and previewed by E, as
+before); a missing or unready mall model also falls back to it. `Lobby Mall Preview` now only deletes the mall on
+round servers unless that switch is set. The mall model is static and saved in the place: a publish carries it.
+Adapted to the mall as lobby: `ReplicatedFirst/Lobby Loading Screen` (it waited for the tunnel lobby's `Ready` for
+ever: "STREAMING THE LOBBY ... taking longer"), `Bootstrap` monitor, `Level Leaderboards`, `Lobby Tunnel Reach`
+(server and client), `First Entry Guide` (camera aim and the START LEVEL 1 HERE marker find mall pads),
+`Friend Boost Client` and `UIRegression` (lobby bounds), `Level6PreviewAccess` and `Level6PreviewTransport` (the
+floor model a returning body lands on), `Lobby DJ Client` (lamps), `LunaTribute` (Luna's bed and plate stand against
+the east wall between Poolrooms and Cinema; her strolls are in the hall).
+NOT carried over, because they belong to the tunnel lobby's own build: its ceiling sweeps and party button, the
+Level 3 gate flicker, the Level 6 bay dressing, the dev gates (R4DevGateController), the fence and road cases.
+Tested in Studio play, one player: spawn in the mall, 24 stations, a Level 1 round from station 201, Level 6 from
+station 221, shop card, DJ prompt, seven board sheets, the creature past the tape, Luna in her bed. NOT tested:
+coming BACK to the lobby after a round or from Levels 5/6, Level 5 from a mall pad, two players, a phone, a live
+server.
+The loading screen in Studio differed from git (another session's edit, MeshContent-based census); the working file
+is now Studio's text plus the mall change.
+
+**Before the swap (`MALL_FINISH_20261013`).**
+- LEVEL SIGNS seen through walls: `Anchors.LevelMarkers.Level1..6`, one over each shop front; `Lobby Mall Client`
+  (new LocalScript) hangs a BillboardGui on each (AlwaysOnTop) in the L4 UI style: tile #161D20 plate, line stroke,
+  rail-teal bar, "LEVEL n" in Montserrat Heavy cream, the level's name in Roboto Mono teal.
+- CRATES bob (0.32 studs, each out of step; attributes `MallCrateOrigin` / `MallCratePhase`).
+- DYING LAMPS: of the hall's panels the importer makes six more dead and five more flicker (seeded draw: 11 lit,
+  6 flickering, 6 dead); the client stutters lamp and lens. ReduceFlashing = steady dim lamps and still crates.
+- THE TAPE: `Anchors.TapeBlocker`, one unseen block wall to wall, 3.5 studs high: a walk stops at it (measured
+  z -622.0), a jump clears it (reached -600.7) and the creature wakes.
+`qa.py shot` does not capture always-on-top BillboardGuis (the signs were photographed with AlwaysOnTop off).
+Checkout gotcha: `git sparse-checkout add <dir>` reapplies the cone and REMOVES tracked files that were added with
+`git add --sparse` outside it (they stay in git; add their folders to the cone to get them back), and deletes
+ignored folders inside them (`textures_pbr`: rerun `make_pbr.py`).

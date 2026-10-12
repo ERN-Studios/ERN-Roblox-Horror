@@ -13,6 +13,15 @@ repeat
  local model = workspace:FindFirstChild("LobbyReimaginedPreview")
  local lobby = workspace:FindFirstChild("ServerLobby")
  local spawn = lobby and lobby:FindFirstChild("LobbySpawn")
+ -- MALL_IS_LOBBY_20261013: the mall lobby is the public lobby; the tunnel lobby is then not built at all
+ if workspace:GetAttribute("LobbySpawnMigrationReady") == true and spawn and spawn:IsA("SpawnLocation")
+  and spawn:GetAttribute("LobbySpawnFloorModelName") == "LobbyMallPreview" and workspace:FindFirstChild("LobbyMallPreview") then
+  script:SetAttribute("PreviewReady", true)
+  script:SetAttribute("PreviewError", nil)
+  script:SetAttribute("BuildSeconds", os.clock() - began)
+  script:SetAttribute("BuildStatus", "Public lobby ready (mall)")
+  return
+ end
  if workspace:GetAttribute("LobbySpawnMigrationReady") == true and model and model:IsA("Model")
   and model:GetAttribute("LobbyReimaginedOwned") == true and model:GetAttribute("Ready") == true
   and spawn and spawn:IsA("SpawnLocation") and spawn:GetAttribute("LobbySpawnRevision") == 4

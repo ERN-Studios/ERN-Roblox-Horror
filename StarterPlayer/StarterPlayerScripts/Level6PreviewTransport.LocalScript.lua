@@ -35,7 +35,7 @@ remote.OnClientEvent:Connect(function(nonce, target, modelName)
 	end
 	if type(nonce) ~= "string" or typeof(target) ~= "Vector3"
 		or (modelName ~= "Level 6 Indoor Playground" and modelName ~= "ServerLobby"
-			and modelName ~= "LobbyReimaginedPreview") then return end
+			and modelName ~= "LobbyReimaginedPreview" and modelName ~= "LobbyMallPreview") then return end   -- MALL_IS_LOBBY_20261013
 	generation += 1
 	local token = generation
 	task.spawn(function()

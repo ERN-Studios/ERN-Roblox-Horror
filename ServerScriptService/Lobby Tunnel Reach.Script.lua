@@ -129,7 +129,13 @@ local function place()
 	local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
 	local set = lobby and lobby:GetAttribute("Ready") == true and lobby:FindFirstChild("InfiniteTunnelEnd")
 	local cf = set and set:GetAttribute("ReachFrame")
-	if typeof(cf) ~= "CFrame" then return false end
+	if typeof(cf) ~= "CFrame" then
+		-- MALL_IS_LOBBY_20261013: no tunnel lobby on this server: the creature lives past the mall's tape
+		local mall = workspace:FindFirstChild("LobbyMallPreview")
+		set = mall and workspace:GetAttribute("LobbySpawnMigrationReady") == true and mall
+		cf = set and set:GetAttribute("ReachFrame")
+		if typeof(cf) ~= "CFrame" then return false end
+	end
 	frame, FENCE, GROUND = cf, set:GetAttribute("ReachFence"), set:GetAttribute("ReachGround")
 	root:SetAttribute("Frame", frame)
 	root:SetAttribute("Fence", FENCE)

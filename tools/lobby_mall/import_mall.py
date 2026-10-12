@@ -39,6 +39,26 @@ for key, m in data['materials'].items():
         mean = list(im.getpixel((0, 0)))
     materials[key] = {'base': m['base'], 'mean': mean, 'tile': TILE.get(key) or m.get('studs_per_tile') or 4, 'ids': TEXTURES.get(key)}
 
+# MALL_FINISH_20261013 (owner: "randomly sluk flere lys i loftet og lad nogle blinke at random som en døende
+# fluorescent lampe"). Of the hall's lit panels, six more are dead and five flicker (the build's one dim panel too);
+# the draw is seeded, so a re-import gives the same ceiling. A dead panel's lens is grey like the build's own dead
+# ones and it has no lamp and no sheen; a flickering one keeps its lamp, and Lobby Mall Client makes it stutter.
+import random
+panels = [l for l in data['lights'] if l['kind'] == 'panel']
+steady = [l for l in panels if l['state'] == 'on']
+pick = random.Random(20261013).sample(steady, 11)
+for l in pick[:6]: l['state'] = 'dead'
+for l in pick[6:] + [l for l in panels if l['state'] == 'dim_flicker']: l['state'] = 'flicker'
+by_name = {p['name']: p for p in data['parts']}
+dark = next(p for p in data['parts'] if p['name'].startswith('PanelLens') and not p['glow'])
+for l in panels:
+    lens = by_name[l['name'].replace('PanelLight', 'PanelLens')]
+    l['lens'] = lens['name']
+    if l['state'] == 'dead':
+        lens['glow'], lens['material'], lens['color'] = False, dark['material'], dark['color']
+data['lights'] = [l for l in data['lights'] if l['state'] != 'dead']
+print('ceiling panels:', {s: sum(1 for l in panels if l['state'] == s) for s in ('on', 'flicker', 'dead')})
+
 s = studio_io.Studio()
 J = lambda v: json.dumps(v, separators=(',', ':'))
 
@@ -238,7 +258,7 @@ for _, l in ipairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do
 		light = nil
 	elseif l.kind == "panel" then
 		light = Instance.new("PointLight")
-		light.Brightness, light.Range = l.state == "on" and 0.4 or 0.12, 40
+		light.Brightness, light.Range = 0.4, 40
 		host.CFrame = host.CFrame - Vector3.new(0, 1.6, 0)
 	elseif l.name:sub(1, 8) == "SkinSpot" then
 		light = Instance.new("SpotLight")
@@ -271,7 +291,7 @@ for _, l in ipairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do
 		plate.Parent = model.Lights
 	end
 	host:SetAttribute("MallLight", l.kind)
-	if l.state ~= "on" then host:SetAttribute("Flicker", true) end
+	if l.state == "flicker" then host:SetAttribute("Flicker", true); host:SetAttribute("Lens", l.lens) end
 	if light then
 		host.Parent = model.Lights
 		n += 1
@@ -385,9 +405,23 @@ anchors:SetAttribute("TapeZ", a.tape_z)
 model:SetAttribute("ReachFrame", CFrame.new(v3({a.spawn[1], a.spawn[2], a.tape_z})))
 model:SetAttribute("ReachFence", 1)
 model:SetAttribute("ReachGround", a.dark_wing.max[3] - a.tape_z)
--- the tape is a line, not a wall: the owner's whole point is that you can walk past it
+-- MALL_FINISH_20261013 (owner: "collision effekt på tape og pæle ... så man ikke kan gå igennem det, men sagtens hoppe
+-- over"). The tape itself is a ribbon 3 studs up, which a walking body went under and between the poles. One unseen
+-- block from wall to wall, floor to the tape's top edge: it stops a walk and a jump (6.4 studs) clears it.
 for _, d in ipairs(model.Parts.Tape:GetChildren()) do
 	if d.Name == "DangerTape" then d.CanCollide = false end
+end
+local blocker = marker(anchors, "TapeBlocker", Vector3.new(a.spawn[1] + offset.X, a.spawn[2] + 1.75, a.tape_z), Vector3.new(80, 3.5, 0.6))
+blocker.CanCollide = true
+-- MALL_FINISH_20261013 (owner: signs seen through walls saying LEVEL 1, LEVEL 2 ... "så folk ikke er i tvivl om hvor
+-- de andre levels er"). One host over each shop front; Lobby Mall Client hangs the sign on it in the game's UI style.
+local markers = folder("LevelMarkers")
+local LEVEL_NAMES = {"OFFICE", "POOLROOMS", "MALL PARTY", "CINEMA", "THE VOID", "PLAY ZONE"}
+for level = 1, 6 do
+	local west = level %% 2 == 1
+	local host = marker(markers, "Level" .. level, Vector3.new((west and 181.2 or 258.8) + offset.X, 47.3, -840 + 80 * math.floor((level - 1) / 2)))
+	host:SetAttribute("LevelNumber", level)
+	host:SetAttribute("LevelName", LEVEL_NAMES[level])
 end
 -- the six skins: the game's own suit model on each plinth when its template is in the place
 local plinths, placed, standIns = folder("SkinPlinths"), 0, 0

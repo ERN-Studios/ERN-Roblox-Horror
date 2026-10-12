@@ -2419,6 +2419,11 @@ function Fit.liveLobbyEligible(roundBefore): boolean
 		if revised and revised:IsA("Model") and revised:GetAttribute("LobbyReimaginedOwned") == true
 			and revised:GetAttribute("Ready") == true then lobby = revised end
 	end
+	-- MALL_IS_LOBBY_20261013: the mall lobby is the lobby when the spawn pad stands in it
+	if spawn and spawn:IsA("SpawnLocation") and spawn:GetAttribute("LobbySpawnFloorModelName") == "LobbyMallPreview" then
+		local mall = workspace:FindFirstChild("LobbyMallPreview")
+		if mall and mall:IsA("Model") then lobby = mall end
+	end
 	local character = Players.LocalPlayer.Character
 	local root = character and character:FindFirstChild("HumanoidRootPart")
 	if not (lobby and lobby:IsA("Model") and root) then return false end

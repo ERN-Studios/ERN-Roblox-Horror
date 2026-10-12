@@ -317,7 +317,7 @@ local function stepTaken(dt)
 			camera.CameraType = Enum.CameraType.Custom
 			if humanoid then camera.CameraSubject = humanoid end
 			camera.FieldOfView = taken.fov
-			local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
+			local lobby = workspace:FindFirstChild("LobbyReimaginedPreview") or workspace:FindFirstChild("LobbyMallPreview")   -- MALL_IS_LOBBY_20261013
 			local toward = body and lobby and (lobby:GetPivot().Position - body.Position) * Vector3.new(1, 0, 1)
 			if toward and toward.Magnitude > 1 then
 				toward = toward.Unit
