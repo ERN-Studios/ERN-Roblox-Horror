@@ -2460,3 +2460,22 @@ published, ZyntraMonetization gives the suit AND equips it in one saved write wi
 No production data was touched from here; it happens on a live server when he next joins. Tested in Studio play
 with the Studio account put on the list for one session (then removed): the suit was on at load, and EquipSkin back
 to the default worked. Add further creators as lines in that table.
+
+## 2026-10-13 - a hold ring that can be seen; the mall's light 30 % down with five tired panels
+
+- `HOLD_RING_20261013` (owner, of the ring that fills while E is held, e.g. EXTRACT FUSE: "meget mere tydelig og
+  tykkere ... en lysere farve"). `RoundHud.Ring`: stroke 4 px (it was 2) and the circle is inset by the stroke's
+  thickness. A UIStroke lies OUTSIDE its frame and each half of the ring sits in a clipping mask, so the old ring, on
+  a circle the size of the slot, showed only its inner edge. `Found Footage HUD` paints it pale mint (170,255,240;
+  it was rail teal). The ring is shared with the round's exit chip (Round Exit Client), which gets the thickness and
+  keeps its teal. Looked at as four test rings drawn on screen in play (25/50/75/100 %); a prompt plate itself
+  cannot be photographed by `qa.py shot`.
+- `DIMMER_20261013` (owner: "dim the lights down by 30% in the lobby and make some light be even darker"). Measured
+  on two fixed views of the hall, mean luminance fell from 161 to 109 and from 174 to 122 (-32 % and -30 %).
+  RoundUI's ambient in the mall is 150,143,118 (it was 196,187,154); a lit hall panel is now a SpotLight cone down
+  from the ceiling (brightness 1.5, angle 125, range 60: a PointLight 27 studs up gave the floor almost nothing, so
+  the hall was all ambient); five of the seventeen lit panels (seeded draw) are tired: 0.4, a duller lens, a faint
+  sheen, steady. Shop washes and skin spots are 30 % down. On a device that drops local lamps the hall is evenly
+  lit at the new ambient.
+  Importer gotcha, met again: a `%` in a comment inside a Luau template is a Python format error, and it fails
+  AFTER the model has been destroyed and half rebuilt. Rerun the importer at once when it stops.

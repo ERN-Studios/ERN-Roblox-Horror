@@ -444,7 +444,7 @@ function revisedLobbyLighting.apply(mazeGrade)
  end
  for property, value in pairs(revisedLobbyLighting.values) do
   if property == "Ambient" and revisedLobbyLighting.mallLight then
-   value = value:Lerp(Color3.fromRGB(196, 187, 154), revisedLobbyLighting.mallLight)   -- MALL_LIGHT_20261012
+   value = value:Lerp(Color3.fromRGB(150, 143, 118), revisedLobbyLighting.mallLight)   -- MALL_LIGHT_20261012; DIMMER_20261013: it was 196,187,154
   end
   Lighting[property]=value
   -- Record engine-normalized readback (e.g. Float32 brightness .600000023).

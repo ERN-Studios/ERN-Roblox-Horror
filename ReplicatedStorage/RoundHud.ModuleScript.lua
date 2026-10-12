@@ -327,6 +327,11 @@ end
 
 -- Two clipped semicircles. UIGradient rotates the visible half within each fixed mask; no uploaded
 -- image, timer or tween is owned here. A caller's hold clock can reset/reverse the same sweep.
+-- HOLD_RING_20261013 (owner, of the ring that fills while E is held on a fuse: "meget mere tydelig og tykkere ...
+-- en lysere farve ... slightly tykkere"). The stroke is RING_THICKNESS px (it was 2) and is drawn INSIDE the slot:
+-- a UIStroke lies outside its frame and each half is clipped by its mask, so the old ring, on a circle the size of
+-- the slot, lost all but its inner edge. The circle is now inset by the stroke's own thickness.
+local RING_THICKNESS = 4
 function RoundHud.Ring(slot)
 	if not slot then return function() end end
 	local halves = {}
@@ -338,12 +343,13 @@ function RoundHud.Ring(slot)
 		mask.Parent = slot
 		local circle = Instance.new("Frame")
 		circle.BackgroundTransparency, circle.BorderSizePixel = 1, 0
-		circle.Size, circle.Position = UDim2.fromScale(2, 1), UDim2.fromScale(index == 1 and 0 or -1, 0)
+		circle.Size = UDim2.new(2, -2 * RING_THICKNESS, 1, -2 * RING_THICKNESS)
+		circle.Position = UDim2.new(index == 1 and 0 or -1, RING_THICKNESS, 0, RING_THICKNESS)
 		circle.Parent = mask
 		local corner = Instance.new("UICorner")
 		corner.CornerRadius, corner.Parent = UDim.new(1, 0), circle
 		local stroke = Instance.new("UIStroke")
-		stroke.Thickness, stroke.ApplyStrokeMode, stroke.Parent = 2, Enum.ApplyStrokeMode.Border, circle
+		stroke.Thickness, stroke.ApplyStrokeMode, stroke.Parent = RING_THICKNESS, Enum.ApplyStrokeMode.Border, circle
 		local gradient = Instance.new("UIGradient")
 		gradient.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0),
 			NumberSequenceKeypoint.new(0.499, 0), NumberSequenceKeypoint.new(0.501, 1), NumberSequenceKeypoint.new(1, 1)})

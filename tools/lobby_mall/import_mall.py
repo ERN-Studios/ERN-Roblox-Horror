@@ -54,6 +54,11 @@ for l in pick[:6]: l['state'] = 'dead'
 tape = data['anchors']['tape_z']
 for l in panels:
     if l['state'] == 'dim_flicker': l['state'] = 'flicker' if l['pos'][2] > tape else 'on'
+# DIMMER_20261013 (owner: "dim the lights down by 30% in the lobby and make some light be even darker"). Five of the
+# hall's seventeen lit panels (a second seeded draw) are tired tubes: a third of a lamp's light, a duller lens, a
+# faint sheen. They are steady: only the wing flickers. The other lamps and the hall's ambient light are turned down
+# in the Luau below and in RoundUI.
+for l in random.Random(20261014).sample([l for l in panels if l['state'] == 'on' and l['pos'][2] <= tape], 5): l['dim'] = True
 by_name = {p['name']: p for p in data['parts']}
 for l in panels: l['wing'] = l['pos'][2] > data['anchors']['tape_z']
 
@@ -270,6 +275,7 @@ print(s.luau('''
 local model = workspace:FindFirstChild("%s")
 local offset = Vector3.new(%s)
 local FLOOR_Y, SHEEN = %s, %s
+local PANEL_ON, PANEL_DIM = 1.5, 0.4
 local n = 0
 for _, l in ipairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do
 	local host = Instance.new("Part")
@@ -286,19 +292,26 @@ for _, l in ipairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do
 	-- the ceiling round it; it was a SpotLight down plus a PointLight up), one a shop, the cinema's, the Void's and
 	-- a spot on each suit. The counters' product lamps and the stand's globes have none: the globes are Neon.
 	local skip = l.name:sub(1, 12) == "ProductLight" or l.name:sub(1, 9) == "StandLamp"
-	local strength = 0.3 * math.sqrt(l.brightness)
+	local strength = 0.21 * math.sqrt(l.brightness)          -- DIMMER_20261013: every lamp 30 percent down
 	local light
 	if skip then
 		light = nil
 	elseif l.kind == "panel" then
-		light = Instance.new("PointLight")
-		light.Brightness, light.Range = 0.5, 50                    -- the ceiling is 27 studs up
-		if l.wing then light.Brightness = 1.3 end              -- past the tape a lamp is most of the light there is
+		if l.wing then
+			light = Instance.new("PointLight")
+			light.Brightness, light.Range = 1.3, 50            -- past the tape a lamp is most of the light there is
+		else
+			-- DIMMER_20261013: a cone down from 27 studs up, so that a tired tube leaves a darker stretch of hall
+			-- under it (a PointLight that high gave the floor next to nothing, and the hall was all ambient)
+			light = Instance.new("SpotLight")
+			light.Face, light.Angle, light.Range = Enum.NormalId.Front, 125, 60
+			light.Brightness = l.dim and PANEL_DIM or PANEL_ON
+		end
 		host.CFrame = host.CFrame - Vector3.new(0, 1.6, 0)
 	elseif l.name:sub(1, 8) == "SkinSpot" then
 		light = Instance.new("SpotLight")
 		light.Face, light.Angle = Enum.NormalId.Front, 70
-		light.Brightness, light.Range = 1.4, l.range
+		light.Brightness, light.Range = 1.0, l.range
 	else
 		light = Instance.new("PointLight")
 		light.Brightness, light.Range = strength, math.min(l.range, 40)
@@ -306,6 +319,11 @@ for _, l in ipairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do
 	if light then
 		light.Color, light.Shadows = colour, false
 		light.Parent = host
+	end
+	if l.dim then
+		local lens = model.Parts.Ceiling:FindFirstChild(l.lens)
+		if lens then lens.Color = Color3.fromRGB(150, 144, 118) end
+		host:SetAttribute("Dim", true)
 	end
 	-- FLOOR_GLOSS_20261012 (owner: the floor tiles "skal være glossy"). The tile's roughness map is glossy, but
 	-- the engine draws no reflection of a lamp in a floor here. So every lit panel lays a soft sheen on the tiles
@@ -320,7 +338,7 @@ for _, l in ipairs(game:GetService("HttpService"):JSONDecode([==[%s]==])) do
 		g.LightInfluence, g.Brightness, g.MaxDistance, g.Active = 0, 1, 170, false
 		local picture = Instance.new("ImageLabel")
 		picture.BackgroundTransparency, picture.Size, picture.Image = 1, UDim2.fromScale(1, 1), SHEEN
-		picture.ImageColor3, picture.ImageTransparency = Color3.fromRGB(255, 252, 240), 0.2
+		picture.ImageColor3, picture.ImageTransparency = Color3.fromRGB(255, 252, 240), l.dim and 0.8 or 0.4
 		picture.Parent = g
 		g.Parent = plate
 		plate.Parent = model.Lights

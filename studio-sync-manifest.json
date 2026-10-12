@@ -6,7 +6,7 @@
     "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
     "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
   },
-  "capturedAtUtc": "2026-10-12T11:19:41.223359+00:00",
+  "capturedAtUtc": "2026-10-12T11:36:26.583716+00:00",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "datamodel": "Edit",
@@ -193,8 +193,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
-      "bytes": 79034,
-      "sha256": "37c29eeaeecd58b8490a4ecd3af7417a4fa13e8cc2bf927b7e3797ea04befe3f",
+      "bytes": 79580,
+      "sha256": "6688ccd1674a63a4da9832b92e9ab941076c174324c99b225bc282276a5d53c2",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3502,8 +3502,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Found Footage HUD.LocalScript.lua",
-      "bytes": 22328,
-      "sha256": "ca3eaf116eca6398205b1a3e84e6ca4ae1e8455ff471074848d072c9933e8ec0",
+      "bytes": 22599,
+      "sha256": "d0adff332c7d7588ba5a9133806d63d0d5b88f7962b0ea12ed7c4c8cbbd4cf10",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4453,8 +4453,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 249976,
-      "sha256": "d59b859ed0bca83f9627f25a4401de11aff8d39f1e3d177b757296aa76256b33",
+      "bytes": 250013,
+      "sha256": "68ab82577a419c74e8a66731ce7b06d50857fbc81866a9982565ae23263f764f",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
