@@ -48,7 +48,12 @@ panels = [l for l in data['lights'] if l['kind'] == 'panel']
 steady = [l for l in panels if l['state'] == 'on']
 pick = random.Random(20261013).sample(steady, 11)
 for l in pick[:6]: l['state'] = 'dead'
-for l in pick[6:] + [l for l in panels if l['state'] == 'dim_flicker']: l['state'] = 'flicker'
+# FLICKER_ONLY_PAST_TAPE_20261013 (owner: "The lights in the lobby should only flicker past the do not cross point").
+# In the hall every lamp that is on is steady (five drawn above used to flicker, and the build's one dim panel);
+# the six dead ones stay dead. Only the dark wing's five panels are dying tubes.
+tape = data['anchors']['tape_z']
+for l in panels:
+    if l['state'] == 'dim_flicker': l['state'] = 'flicker' if l['pos'][2] > tape else 'on'
 by_name = {p['name']: p for p in data['parts']}
 for l in panels: l['wing'] = l['pos'][2] > data['anchors']['tape_z']
 

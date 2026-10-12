@@ -2444,3 +2444,8 @@ Owner's three points, in Studio (unpublished).
   surface-mounted panels over the first 80 studs all flicker (lamp 1.3); RoundUI's ambient for a player walking in
   falls to the dark pass over 140 studs (it was 30). The glossy tile floor mirrors what is ahead, so from the tape
   the wing's floor reads dark at once while its walls and ceiling fade.
+
+**2026-10-13, later (`FLICKER_ONLY_PAST_TAPE_20261013`).** Owner: "The lights in the lobby should only flicker past
+the do not cross point". In the hall every lit panel is steady (17 lit, 6 dead, none flickering); only the dark
+wing's five panels flicker. Measured in play: over 4 s no hall lamp changed brightness, all five wing lamps did.
+
