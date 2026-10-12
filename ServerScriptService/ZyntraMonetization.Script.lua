@@ -905,6 +905,10 @@ local function normalizeProfile(data)
 	data.Grants.Supporter = data.Grants.Supporter == true
 	data.Grants.AdvancedEquipment = data.Grants.AdvancedEquipment == true
 	data.Grants.WelcomeTokens = data.Grants.WelcomeTokens == true or nil
+	-- CREATOR_GIFT_LIST_20261013: the one-time marker of a listed Creator suit (ZyntraSkins.CreatorGifts)
+	for key, value in pairs(data.Grants) do
+		if type(key) == "string" and string.sub(key, 1, 12) == "CreatorGift_" then data.Grants[key] = value == true or nil end
+	end
 	-- Receipt acknowledgement must be permanent. Roblox can retry any unresolved
 	-- PurchaseId long after the original purchase; pruning old IDs would allow a
 	-- delayed retry to grant the product and donation total a second time.
@@ -2588,6 +2592,34 @@ local function refreshPasses(player)
 		end
 		warn("[Zyntra] Developer suit sync still unsaved after retries for userId", player.UserId)
 	end)
+
+	-- CREATOR_GIFT_LIST_20261013 (owner: a named creator "has the new skin" and wears it "as default"). An account on
+	-- ZyntraSkins.CreatorGifts gets its Creator suit once, equipped, on its first load after this ships; the marker is
+	-- saved in the same write, so the suit is never put back on after they switch away or a developer takes it. The
+	-- same retries as the developer suit above; a profile that is already marked costs no write.
+	local giftSkin = Skins.CreatorGifts and Skins.CreatorGifts[player.UserId]
+	if giftSkin and Skins.Get(giftSkin) then
+		local marker = "CreatorGift_" .. giftSkin
+		task.spawn(function()
+			for _, delaySeconds in ipairs({0, 5, 20, 60}) do
+				if delaySeconds > 0 then task.wait(delaySeconds) end
+				local giftSession = sessions[player]
+				if not giftSession or giftSession.closing or not player.Parent then return end
+				if giftSession.data.Grants[marker] == true then return end
+				local saved = mutateIdempotent(player, function(data)
+					if data.Grants[marker] == true then return false end
+					if not Skins.ApplyCreatorGift(data.Skins, giftSkin) then return false end
+					data.Grants[marker] = true
+					return true, "The CREATOR GOLD skin is yours and you are wearing it. Change suits under SHOP > SKINS.", "success"
+				end)
+				if saved then
+					print(string.format("[Zyntra] Creator gift: userId=%d skin=%s", player.UserId, giftSkin))
+					return
+				end
+			end
+			warn("[Zyntra] Creator gift still unsaved after retries for userId", player.UserId)
+		end)
+	end
 
 	-- TOKEN_EARNER_20260924: six passes, one tier. Each ownership is published
 	-- like any other pass; earning code reads only the resolved tier.

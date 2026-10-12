@@ -2449,3 +2449,14 @@ Owner's three points, in Studio (unpublished).
 the do not cross point". In the hall every lit panel is steady (17 lit, 6 dead, none flickering); only the dark
 wing's five panels flicker. Measured in play: over 4 s no hall lamp changed brightness, all five wing lamps did.
 
+
+## 2026-10-13 - a creator on the gift list: Epicwizrdcat (`CREATOR_GIFT_LIST_20261013`)
+
+Owner: "Make sure that this person has the new skin: Epicwizrdcat ... toggled on from now so if he wants to switch
+back then he has to do it from the skins tab". `ZyntraSkins.CreatorGifts = {[1931934638] = "CreatorGold"}` (the
+account's UserId, looked up from the name on users.roblox.com): on the account's first profile load after this is
+published, ZyntraMonetization gives the suit AND equips it in one saved write with the marker
+`Grants.CreatorGift_CreatorGold`. Once only: switching away in the Skins tab sticks, and so does a developer's TAKE.
+No production data was touched from here; it happens on a live server when he next joins. Tested in Studio play
+with the Studio account put on the list for one session (then removed): the suit was on at load, and EquipSkin back
+to the default worked. Add further creators as lines in that table.

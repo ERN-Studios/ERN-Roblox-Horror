@@ -165,6 +165,25 @@ function Skins.SetCreator(state, skinId, owned)
 	return true
 end
 
+-- CREATOR_GIFT_LIST_20261013 (owner: "Make sure that this person has the new skin: Epicwizrdcat ... toggled on from
+-- now so if he wants to switch back then he has to do it from the skins tab"). Accounts that are given a Creator suit
+-- the first time their profile loads after this ships, WEARING it. By UserId (a name can change). It happens once per
+-- account and suit (ZyntraMonetization keeps the marker Grants.CreatorGift_<SkinId>), so a suit they switch away from
+-- in the Skins tab stays off, and one a developer takes back stays taken. A developer can still give it to anybody
+-- else on a server with GIVE CREATOR SKIN.
+Skins.CreatorGifts = {
+	[1931934638] = "CreatorGold", -- Epicwizrdcat
+}
+
+-- The one-time gift above, inside a server-owned mutation. Owns the suit and puts it on. Returns whether it changed.
+function Skins.ApplyCreatorGift(state, skinId)
+	local item = Skins.Get(skinId)
+	if not item or item.Kind ~= "Creator" or type(state) ~= "table" or type(state.Owned) ~= "table" then return false end
+	state.Owned[skinId] = true
+	state.Equipped = skinId
+	return true
+end
+
 function Skins.Public(state)
 	state = Skins.Normalize(state)
 	return {Owned = state.Owned, Equipped = state.Equipped}
