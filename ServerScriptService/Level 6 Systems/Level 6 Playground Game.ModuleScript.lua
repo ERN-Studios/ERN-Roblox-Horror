@@ -35,7 +35,15 @@ local CONFIG = {
 	SeekSeconds = 75,
 	TagsToWin = 3,
 	DunkRadius = 7, DunkSafeDistance = 22,
-	WalkSpeed = 9, ChaseSpeed = 40, EscapeChaseSpeed = 24,   -- seen = as good as dead (owner, 2026-10-03); furious once the exit opens
+	-- CHASE_SPEED_20261013 (owner: "Make her run speed a little faster than the player, its too fast now"): 28 against the
+	-- player's sprint of 26. It was 40 ("seen = as good as dead", 2026-10-03).
+	WalkSpeed = 9, ChaseSpeed = 28, EscapeChaseSpeed = 24,   -- furious once the exit opens
+	-- DARK_ROUND_20261013 (owner: "a round randomly can be in dark mode with the lights turned off"). From the second
+	-- count on, a round has this chance of being played with the hall's lights out: the lights die with a sound, the
+	-- Counter says so (`l6_lights_out_line`), and the players are told not to use their flashlights. The post's red
+	-- ring is not one of the hall's lamps and stays lit. `Level6DevDark` on the map model forces the next round dark
+	-- (Studio only).
+	DarkRoundChance = 1 / 3, DarkFromRound = 2,
 	SightRange = 75, CatchDistance = 5.2, HideRadius = 4.5, HiddenSpotRange = 9,
 	NoiseSpeed = 18, NoiseRange = 45, LoseSightSeconds = 15, CheckPause = 3.3,   -- CheckPause = the Search_Look clip
 	-- Owner, 2026-10-04: the level is won over THREE searches in each of which every living player touches the
@@ -1129,9 +1137,11 @@ function Session:ringTick()
 	local now, mode = realClock(), nil
 	if now < ring.greenUntil then mode = "green"
 	elseif self.phase == "escape" or self.phase == "over" then mode = "off"
+	-- POST_ALWAYS_20261013 (owner: "The post cant be touched now all the time and when more than 1 people are alive fix
+	-- that"): the post is open for the whole search, wherever the Counter is. It used to close whenever it was within
+	-- 30 studs, and a touch calls it back to the post, so with two players alive the second one found it shut.
 	elseif self.phase == "seek" and not self.partyOn and not self.wipedAt
-		and now - (self.partyEndedAt or -10) > 1   -- same settling second the touch itself waits out after the party
-		and flat(self:feet() - self.info.home).Magnitude >= CONFIG.ArenaDunkSafeDistance then mode = "red"
+		and now - (self.partyEndedAt or -10) > 1 then mode = "red"   -- same settling second the touch itself waits out after the party
 	else mode = "dim" end
 	if mode ~= ring.mode and (mode == "green" or mode == "off" or ring.mode == "green"
 		or now - ring.changedAt >= CONFIG.PostRing.MinChange) then self:ringShow(mode) end
@@ -1253,6 +1263,19 @@ function Session:countPhase()
 	self:goHome("count")
 	if not self.active then return end
 	self.phase = "count"
+	-- DARK_ROUND_20261013: is this one played with the lights out?
+	local forced = RunService:IsStudio() and self.info.model:GetAttribute("Level6DevDark") == true
+	if forced then self.info.model:SetAttribute("Level6DevDark", nil) end
+	self.dark = forced or (self.round >= CONFIG.DarkFromRound and math.random() < CONFIG.DarkRoundChance)
+	self.info.model:SetAttribute("Level6Dark", self.dark)
+	if self.dark then
+		broadcast(self, "lightsout")          -- the client kills the lamps, plays the sound and writes the warning
+		task.wait(2.4)                        -- the breaker and the power dying (2.8 s); it speaks into the last of it
+		if not self.active or self.phase ~= "count" then return end
+		local seconds = self:say("l6_lights_out_line", true)
+		task.wait((seconds or 2.5) + 0.4)
+		if not self.active or self.phase ~= "count" then return end
+	end
 	if self.round == 1 then
 		-- the welcome: quiet for a few seconds once everyone is in, the PA chime, then its announcement
 		task.wait(CONFIG.IntroSilence)
@@ -1271,7 +1294,7 @@ function Session:countPhase()
 	if not self.active or self.phase ~= "count" then return end
 	self:pose("Count_Loop")
 	local seconds = self:say(CONFIG.CountLines[math.min(self.round, #CONFIG.CountLines)], true) or 20
-	broadcast(self, "round", self.round, self.dunks, self:target(), seconds)
+	broadcast(self, "round", self.round, self.dunks, self:target(), seconds, self.dark)
 	if self.round >= 3 then
 		for player in pairs(self.players) do achieve(player, "L6Survivor") end
 	end
@@ -1443,7 +1466,6 @@ end
 function Session:seekPhase()
 	self.phase = "seek"
 	local deadline = clock() + (self.info.arena and CONFIG.ArenaSeekSeconds or CONFIG.SeekSeconds)
-	local safeDistance = self.info.arena and CONFIG.ArenaDunkSafeDistance or CONFIG.DunkSafeDistance
 	local result = "timeup"
 	local brain = task.spawn(function() self:seekBrain(deadline) end)
 	local lastTimer = -1
@@ -1502,7 +1524,6 @@ function Session:seekPhase()
 			self.farSince = nil
 		end
 		-- dunks
-		local feet = self:feet()
 		local home = self.info.home
 		-- POST_RING_20261010 (owner): the cord is the touch boundary; stale party-slot positions must settle first.
 		local reach = self.ring and CONFIG.PostRing.Reach or CONFIG.DunkRadius
@@ -1512,8 +1533,8 @@ function Session:seekPhase()
 			local root = rootOf(player)
 			if not state.caught and not state.dunked then
 				allDunked = false
-				if root and settled and flat(root.Position - home).Magnitude <= reach and math.abs(root.Position.Y - home.Y) < 9
-					and flat(feet - home).Magnitude >= safeDistance then
+				-- POST_ALWAYS_20261013: no distance from the Counter is asked any more (see ringTick)
+				if root and settled and flat(root.Position - home).Magnitude <= reach and math.abs(root.Position.Y - home.Y) < 9 then
 					state.dunked = true
 					self.dunks = self:tagged()
 					-- POST_RING_20261010 (owner): only a counted touch turns green; the id identifies its card on the client.
@@ -2071,6 +2092,9 @@ function Session:run()
 		self:countPhase()
 		if not self.active or self:count() == 0 then break end
 		local result = self:seekPhase()
+		-- DARK_ROUND_20261013: "lights out for this round" - they come back the moment the search is over
+		self.dark = false
+		self.info.model:SetAttribute("Level6Dark", false)
 		if result == "won" then self:escapePhase(); break end
 		if result == "wiped" then
 			if self:wipeWindow() then continue end   -- somebody re-entered: it counts again
@@ -2093,6 +2117,7 @@ end
 function Session:finish()
 	self.active = false
 	self.phase = "over"
+	self.info.model:SetAttribute("Level6Dark", false)          -- DARK_ROUND_20261013
 	for player in pairs(self.players) do
 		if player.Parent == Players then
 			roundStatus:FireClient(player, "partydownclear")

@@ -651,13 +651,27 @@ task.spawn(function()
 		end
 	end
 end)
+-- DARK_ROUND_20261013 (owner: "message on screen that do not use your flashlight")
+local function darkNow()
+	local model = workspace:FindFirstChild(MODEL_NAME)
+	return model ~= nil and model:GetAttribute("Level6Dark") == true
+end
+local function postText()
+	return darkNow() and "Lights out: do not use your flashlight. Step into the red ring round the post. Everyone alive, three searches in a row."
+		or "Step into the red ring round the post. Everyone alive, three searches in a row. Do not let it see you."
+end
 local function touched(count, target)
 	local model = workspace:FindFirstChild(MODEL_NAME)
 	local wins, needed = model and model:GetAttribute("Level6Wins") or 0, model and model:GetAttribute("Level6WinsNeeded") or 3
 	return string.format("TOUCHED %d / %d   ·   ROUNDS %d / %d", count or 0, target or 0, wins, needed)
 end
-event.OnClientEvent:Connect(function(kind, a, b, c, d)
-	if kind == "paused" then
+event.OnClientEvent:Connect(function(kind, a, b, c, d, e)
+	if kind == "lightsout" then
+		-- DARK_ROUND_20261013 (owner): the hall's lights go out for this round (the tick near the end fades the lamps
+		-- while Level6Dark is set), with the breaker sound and the warning on screen
+		oneShot("l6_lights_out", 0.9)
+		status("LIGHTS OUT  ·  DO NOT USE YOUR FLASHLIGHT", 7, Color3.fromRGB(255, 150, 60))
+	elseif kind == "paused" then
 		countLabel.Text, statusLabel.Text, dunkLabel.Text, timerLabel.Text = "", "", "", ""
 		hintLabel.Text = "Free roam: hide and seek is paused."
 		objective(nil)
@@ -669,7 +683,7 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 			dunked = false
 			markerMode = "post"
 			-- POST_RING_20261010 (owner): the floor ring shows where a touch counts.
-			objective("TOUCH THE POST", "Step into the red ring round the post. Everyone alive, three searches in a row. Do not let it see you.")
+			objective("TOUCH THE POST", postText())
 		elseif d == "arrival" then
 			-- ARENA_20261006: a party arrives in the tunnel, looking straight at the PLAY ZONE sign; the round starts
 			-- when they are through the gate. No card here: it sits exactly where the sign is.
@@ -687,8 +701,8 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		dunkLabel.Text = touched(b, c)
 		markerMode = nil
 		music.wanted = true
-		objective("HIDE!", "It is counting. Find a hiding place.")
-		status("ROUND " .. tostring(a) .. "  ·  HIDE!", 3, Color3.fromRGB(255, 230, 90))
+		objective("HIDE!", e == true and "Lights out. Do not use your flashlight. Find a hiding place." or "It is counting. Find a hiding place.")
+		status("ROUND " .. tostring(a) .. (e == true and "  ·  LIGHTS OUT  ·  HIDE!" or "  ·  HIDE!"), 3, Color3.fromRGB(255, 230, 90))
 		hintLabel.Text = ""
 		timerLabel.Text = ""
 	elseif kind == "count" then
@@ -701,7 +715,7 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		hintLabel.Text = ""
 		markerMode = "post"
 		-- POST_RING_20261010 (owner): the floor ring shows where a touch counts.
-		objective("TOUCH THE POST", "Step into the red ring round the post. Everyone alive, three searches in a row. Do not let it see you.")
+		objective("TOUCH THE POST", postText())
 		task.delay(2.2, function() if countLabel.Text == "READY OR NOT . . ." then countLabel.Text = "" end end)
 	elseif kind == "party" then
 		if a then status("PARTY MODE  ·  30 SECONDS", 5, Color3.fromRGB(255, 64, 176)) else status("Back to hiding.", 3, Color3.fromRGB(255, 90, 90)) end
@@ -805,6 +819,14 @@ end)
 -- ---------------------------------------------------------------------------------------
 -- lighting: dim warehouse night, cold fluorescent pools, a little haze
 local finale = 0      -- 0 = normal hall, 1 = fully red; eases over a few seconds (the tick near the end drives it)
+-- DARK_ROUND_20261013 (owner: "a round randomly can be in dark mode with the lights turned off"). `darkness` eases
+-- 0..1 while the server holds Level6Dark on the map (the tick near the end drives it); darkBefore keeps what each
+-- lamp was. Under this place's lighting the picture is exposure plus the grade, so both go down with the lamps.
+local darkness, darkEase, darkBefore = 0, 0, {}
+-- Measured in play: at 7 % of the lamps and the exposure down the hall was plain black and could not be played
+-- without the flashlight the players are told to leave off. The lamps keep a seventh of their light and the
+-- exposure stays where it is: the shapes of the frame can still be made out, the tubes themselves are dead.
+local DARK = {Left = 0.14, Exposure = 0, Contrast = 0.06, Tube = Color3.fromRGB(26, 24, 22)}
 local LOOK = {
 	Ambient = Color3.fromRGB(74, 76, 82), OutdoorAmbient = Color3.fromRGB(0, 0, 0), Brightness = 0,
 	ClockTime = 0, FogColor = Color3.fromRGB(62, 66, 68), FogStart = 0, FogEnd = 520,   -- a grey haze, not black
@@ -867,6 +889,7 @@ local function applyLighting(on)
 		local arena = isArena()
 		for k, v in pairs(LOOK) do
 			if k == "ExposureCompensation" and arena then v = ARENA_LOOK.ExposureCompensation end
+			if k == "ExposureCompensation" then v += DARK.Exposure * darkEase end
 			if not (k == "ExposureCompensation" and finale > 0) then Lighting[k] = v end
 		end
 		-- other controllers put the lobby's Atmosphere back; with a black sky it swallows the whole hall
@@ -975,6 +998,8 @@ task.spawn(function()
 				end
 			end
 			table.clear(litBefore)
+			table.clear(darkBefore)                              -- DARK_ROUND_20261013: the lamps went with the replica
+			darkness, darkEase = 0, 0
 			if exitLamp.bulb and exitLamp.bulb.Parent then exitLamp.bulb.Brightness = exitLamp.base end
 			exitLamp.bulb, exitLamp.base = nil, 0
 		end
@@ -990,6 +1015,44 @@ task.spawn(function()
 		end
 		musicTick(dt)
 		movementTick(on)
+
+		-- DARK_ROUND_20261013: a round with the lights out. Every lamp of the hall fades to a trace of itself and its
+		-- tube goes dark, in under a second, and comes back the same way. The finale's red keeps its own book of what
+		-- was lit: the dark is undone in full in the same tick the finale begins, before that book is written.
+		do
+			local wantDark = on and model:GetAttribute("Level6Dark") == true and not enraged
+			darkness = (enraged or not on) and 0 or math.clamp(darkness + (wantDark and dt / 0.7 or -dt / 1.2), 0, 1)
+			darkEase = darkness * darkness * (3 - 2 * darkness)
+			if model and (darkness > 0 or next(darkBefore)) then
+				for _, folderName in ipairs(FINALE_FOLDERS) do
+					local folder = model:FindFirstChild(folderName)
+					if folder then
+						for _, d in ipairs(folder:GetDescendants()) do
+							local isLight = d:IsA("Light")
+							if isLight or (d:IsA("BasePart") and d.Material == Enum.Material.Neon) then
+								local before = darkBefore[d]
+								if darkness > 0 then
+									if before == nil then
+										before = {d.Color, isLight and d.Brightness or 0}
+										darkBefore[d] = before
+									end
+									if isLight then d.Brightness = before[2] * (1 - (1 - DARK.Left) * darkEase)
+									else d.Color = before[1]:Lerp(DARK.Tube, darkEase) end
+								elseif before ~= nil then
+									if isLight then d.Brightness = before[2] else d.Color = before[1] end
+									darkBefore[d] = nil
+								end
+							end
+						end
+					end
+				end
+				if darkness <= 0 then table.clear(darkBefore) end
+				if grade and finale <= 0 and not enraged then
+					local arena = model:GetAttribute("Arena") == true
+					grade.Contrast = (arena and ARENA_LOOK.Contrast or -0.17) + DARK.Contrast * darkEase
+				end
+			end
+		end
 
 		-- the red finale: no red wash over the picture. The hall goes dark and only the ceiling fixtures stay on,
 		-- as tight red spotlights; every other lamp fades out. Eases in over about four seconds.

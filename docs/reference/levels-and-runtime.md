@@ -2831,3 +2831,42 @@ picture, no story), today's Halloween lobby screenshots in `refs_halloween/`. Ei
 sheets of their own ("0 Oversigt - NYE ..."); the folder holds 82 files. Mean brightness 24-99 (set 2 had four under
 16). Honest notes: the Halloween shop and hall are the generator's version of the lobby (the stand's top and the
 light are not exactly the game's); the Level 2 picture is bright and clean. Nothing uploaded.
+
+## 2026-10-13 - Level 6: a slower Counter, a post that is always open, rounds with the lights out (`CHASE_SPEED_20261013`, `POST_ALWAYS_20261013`, `DARK_ROUND_20261013`)
+
+Owner: "Level 6: Make her run speed a little faster than the player, its too fast know. The post cant be touched now
+all the time and when more than 1 people are alive fix that. Make sure a round randomly can be in dark mode with the
+lights turned off. Use elevenlabs to make the turn off sound and have the entity say "Lights out for this round" And
+message on screen that do not use your flashight."
+
+- **Speed.** `CONFIG.ChaseSpeed` 40 -> 28 (the player sprints at 26, `NoiseReporter`). `EscapeChaseSpeed` 24 and the
+  finale's speed are untouched. Measured in play: 23-28 studs a second while chasing.
+- **Post.** A touch used to count only with the Counter at least 30 studs from the post (22 in the old hall), and the
+  ring was red only then. A counted touch calls the Counter back to the post (`self.noise = home`), so with two
+  players alive the second one always found the post shut. Both conditions are gone: the ring is red, and a touch
+  counts, for the whole search (after the party's settling second). Played: a touch counted with the Counter 16 studs
+  away. `DunkSafeDistance` / `ArenaDunkSafeDistance` are left in CONFIG and no longer read.
+- **Dark rounds.** From the second count on (`DarkFromRound = 2`: my choice, the first round is the lesson) a round has
+  a chance of `DarkRoundChance = 1/3` (my number) to be played with the lights out. The server sets `Level6Dark` on
+  the map model, sends `"lightsout"`, waits 2.4 s, says `l6_lights_out_line`, then counts as usual; the `"round"` word
+  carries the flag as its fifth value. The attribute goes false the moment the search ends (any result) and in
+  `finish()`. Client: the breaker sound `l6_lights_out`, the line `LIGHTS OUT  ·  DO NOT USE YOUR FLASHLIGHT` (7 s),
+  the same sentence in the HIDE! and TOUCH THE POST cards, and a `darkness` ease in the lamp tick: every Light under
+  the finale's folders keeps 14 % of its brightness, every Neon tube goes dark, the grade loses a little haze. First
+  try (7 %, exposure -0.9) was plain black and unplayable without the flashlight. The post's ring is not one of those
+  lamps and stays lit. The dark is undone in the tick the red finale begins, before the finale writes its own book of
+  what was lit. `Level6DevDark = true` on the map model forces the next count dark (Studio only).
+  The flashlight sentence is a message only: nothing punishes a player who switches it on. Not asked, not built.
+- **Sounds.** ElevenLabs through Codex (flow "stayquiet l6 lights out 20261013"; `assets/level6-lights-out-20261013`,
+  prompts in `notes*.md`, raw takes are not kept in git). Line: the voice "Demonic child for level 6", take 1 of 4
+  (2.66 s), chosen by length and loudness curve; takes 3 and 4 carry an extra sound after the sentence. Effect: the
+  first prompt was over the connector's 450 characters, the second gave four takes that hum to the very end, the
+  third ("switch slams off, hum drops and dies") gave `C1`: clunk, then the power dying, cut to 2.75 s and brought
+  under full scale (it came 4 dB over). NOBODY HAS LISTENED TO EITHER: picked from the curves. Uploaded to the group
+  with `tools/level6_playground/upload_lights_out.py` (ids in `lights_out_ids.json`: 140610511322128 and
+  80084731258597), installed as Sounds in `ReplicatedStorage.Level6Counter.Voice` by its `install` output.
+- Also: four interface labels in Studio still said re-entry (`ZyntraHUD...PartyDownCard(.Touch).Reentry`, the
+  Expedition Pack's row, the Records intro). They now say REVIVE / Revive.
+- Played in Studio, one player: lit round, forced dark round (lamps out, text, cards, lights back when the search
+  ended), touch with the Counter near, chase speed. NOT played: two players at the post, a phone, a random (not
+  forced) dark round, the sounds themselves. Nothing published.
